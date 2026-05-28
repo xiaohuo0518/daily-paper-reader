@@ -25,3 +25,55 @@ subscriptions:
     stage: A
     diff_threshold_pct: 15
   keyword_recall_mode: or
+  intent_profiles:
+    - tag: ur
+      description: 查找宇树G1人形机器人的数据集构建、故障诊断、错误分析以及边缘端部署的相关论文
+      enabled: true
+      paper_sources:
+        - arxiv
+      keywords:
+        - keyword: Unitree G1 humanoid
+          keyword_cn: 宇树G1人形
+          query: Unitree G1 humanoid robot dataset construction
+        - keyword: humanoid robot dataset
+          keyword_cn: 人形机器人数据集
+          query: humanoid robot dataset construction
+        - keyword: fault diagnosis robot
+          keyword_cn: 机器人故障诊断
+          query: fault diagnosis for humanoid robots
+        - keyword: edge deployment robot
+          keyword_cn: 机器人边缘部署
+          query: edge deployment for humanoid robots
+        - keyword: robot dataset construction
+          keyword_cn: 机器人数据集构建
+          query: dataset construction for robotics
+        - keyword: fault detection humanoid
+          keyword_cn: 人形机器人故障检测
+          query: fault detection in humanoid robots
+      intent_queries:
+        - query: fault diagnosis and error analysis for humanoid robots
+          query_cn: 人形机器人故障诊断与错误分析
+          enabled: true
+          source: manual
+          note: ''
+        - query: edge deployment of Unitree robots research
+          query_cn: 宇树机器人边缘端部署研究
+          enabled: true
+          source: manual
+          note: ''
+      updated_at: '2026-05-28T03:52:21.307Z'
+source_backends:
+  arxiv:
+    papers_table: arxiv_papers
+    use_vector_rpc: true
+    vector_rpc: match_arxiv_papers
+    vector_rpc_exact: match_arxiv_papers_exact
+    use_bm25_rpc: true
+    bm25_rpc: match_arxiv_papers_bm25
+    sync_table: arxiv_sync_status
+    sync_success_value: success
+    schema: public
+    kind: supabase
+    enabled: true
+    url: https://lyucdwgefyfbmaiopjbk.supabase.co
+    anon_key: sb_publishable_lX-oi64Uxyd7SIVv3_w2Uw_MTOojeKq
