@@ -1,0 +1,560 @@
+Title: SPRINT: Efficient Spectral Priors for Humanoid Athletic Sprints
+
+URL Source: https://arxiv.org/pdf/2605.28549v1
+
+Published Time: Thu, 28 May 2026 01:41:13 GMT
+
+Number of Pages: 8
+
+Markdown Content:
+# SPRINT: Efficient Spectral Priors for Humanoid Athletic Sprints 
+
+Yantong Wei 1,†, Kaihong Huang 1,†, Hainan Pan 1, Jiawei Luo 1, Jiawei Zhou 1,Ziyan Mai 1, Zhiwen Zeng 1, Yaonan Wang 2, Huimin Lu 1,∗
+
+Abstract — The pursuit of humanoid athletic sprints is hin-dered by a scarcity of humanoid-viable kinematic reference data and the inability of existing frameworks to maintain stability during sprints. To overcome these limitations, we introduce SPRINT, a novel framework driven by efficient, frequency-adaptive spectral priors. By characterizing the fundamental periodicity of human locomotion in the frequency domain using a reference library of five discrete motion sequences, these priors generate kinematically feasible joint trajectories across a broad velocity spectrum, successfully extrapolating to speeds that exceed the reference distribution. Guided by these pretrained priors, the SPRINT policy achieves zero-shot sim-to-real transfer in field experiments on the Unitree G1 platform, reaching a peak sprinting velocity of 6 m/s and demonstrating seamless gait transitions while preserving biomimetic natu-ralness. Ultimately, this work establishes frequency-adaptive spectral priors as a highly data-efficient foundation for hu-manoid athletic sprints. The project page is available at https: //anonymous.4open.science/w/SPRINT-138A/ .
+
+Index Terms — Reinforcement Learning, Humanoid Robots, High-Speed Locomotion. 
+
+I. I NTRODUCTION 
+
+# ATHLETIC sprinting represents a critical frontier in humanoid high-speed locomotion. However, realizing stable, high-velocity performance is hindered by a scarcity of kinematic reference data viable for humanoid robots. Fur-thermore, training robust control policies is complicated by the dual necessity of maintaining tracking precision during high dynamic sprints and executing seamless gait transitions across a broad velocity spectrum. Reinforcement Learning (RL) is widely utilized to train complex robotic skills [1], [2]. While reward-based optimiza-tion facilitates basic task completion, objective-driven train-ing yields feasible locomotion patterns that lack biomimetic naturalness. Adversarial Motion Priors (AMP) mitigate this limitation by motivating robots to mimic human demonstra-tions [3], [4]. However, adversarial frameworks are prone to training instability and mode collapse during high-speed sprints, due to the scarcity of corresponding kinematic reference data [5]. Similarly, alternative imitation learning approaches [6]–[9] achieve robust tracking in highly dynamic scenarios but remain limited in their capacity to support continuous velocity scaling and seamless gait transitions. Furthermore, hybrid strategies, such as Adaptive Imitated   
+
+> 1Y. Wei, K. Huang, H. Pan, J. Luo, J. Zhou, Z. Mai, Z. Zeng and H. Lu are with the College of Intelligence Science and Technology, National University of Defense Technology, China.
+> 2Y. Wang is with the School of Artificial Intelligence and Robotics, Hunan University, China.
+> †Co-first author, ∗Corresponding author. (a) Walking (1m/s) (b) Jogging (2m/s) (c) Sprinting (6m/s)
+
+Fig. 1: Versatile humanoid locomotion. SPRINT supports a wide range of natural gaits, including walking, jogging, and sprinting. 
+
+Central Pattern Generators (AI-CPG) [10], remain restricted to peak speeds below 4 m/s in simulation, leaving a critical gap in physical, highly dynamic athletic performance. Frequency-adaptive spectral priors form the core of the SPRINT framework, providing fine-grained kinematic guid-ance to ensure authentic athletic form during high-speed locomotion. We train these spectral priors using a reference library of only five motion sequences (428 frames, 14 s) comprising discrete walking, jogging, and running gaits. By characterizing the inherent periodicity of human loco-motion in the frequency domain, we effectively overcome data scarcity. The spectral priors map rhythmic features into kinematically feasible joint trajectories across a broad velocity spectrum, successfully extrapolating to speeds that exceed the reference distribution. The SPRINT framework employs a hierarchical architec-ture integrating high-level spectral priors with low-level sta-bilization. The pretrained frequency-adaptive spectral priors generate joint trajectories that serve as the primary kinematic reference, while the low-level stabilization employs resid-ual actions to compensate for unmodeled system dynamics and environmental disturbances. In simulation, the SPRINT policy achieves a peak sprinting velocity of 6 m/s while preserving high biomimetic naturalness. Through dynamics randomization and observation noise modeling, we success-fully execute zero-shot sim-to-real transfer to the physical Unitree G1 platform (Fig. 1). Ultimately, extensive field experiments validate the capability of the SPRINT policy to execute versatile humanoid locomotion and seamless gait transitions across a broad velocity spectrum. 
+
+> arXiv:2605.28549v1 [cs.RO] 27 May 2026
+
+Our contributions are summarized as follows:  
+
+> •
+
+Frequency-Adaptive Spectral Priors : We introduce efficient spectral priors capable of generating kinemat-ically feasible joint trajectories for high-speed sprints.  
+
+> •
+
+SPRINT Policy : By integrating the pretrained priors with residual actions, we achieve robust humanoid lo-comotion and enable seamless gait transitions across a velocity spectrum of 0 to 6 m/s.  
+
+> •
+
+Extensive Field Validation : We demonstrate zero-shot sim-to-real transfer on the Unitree G1 platform, veri-fying the framework’s capability to execute high-speed sprints while preserving biomimetic naturalness. II. R ELATED WORK 
+
+A. Learning-based Humanoid Locomotion 
+
+Reinforcement learning (RL) has emerged as a lead-ing paradigm for robotic locomotion, obviating the heavy reliance on precise analytical dynamics models tradition-ally required by classical methods [11]. For instance, RL has empowered the bipedal robot Cassie to master high-dimensional, nonlinear dynamics during high-speed running at 5 m/s [12]. Furthermore, recent advances in full-body humanoid control leverage frameworks like Humanoid-Gym [13] to enhance environmental adaptability and locomotion robustness. However, these strategies often rely on manual reward engineering, which yields feasible but unnatural movements, as the optimization process prioritizes basic task completion over biomimetic naturalness. To overcome this inherent lack of biomimetic naturalness, we introduce frequency-adaptive spectral priors that provide fine-grained kinematic guidance to ensure authentic athletic form during high-speed locomotion. 
+
+B. Data-driven Motion Generation 
+
+Data-driven motion generation in computer animation em-ploys Variational Autoencoders (VAEs) [14], Transformers [15], and diffusion models [16] to synthesize humanoid pose sequences from text or video. However, these sequences are kinematically infeasible for direct robotic control due to morphological and physical constraints. In robotics, gen-erative architectures such as the Generative Motion Prior (GMP) [17] guide control policies by predicting future trajectories from current states. The Conditional Motion Generator (CMG) [18] achieves natural walking and running at speeds up to 2.5 m/s on the Unitree G1 platform, and the Adaptive Imitated Central Pattern Generator (AI-CPG) [10] bridges distinct gaits via frequency-domain analysis. Despite facilitating rhythmic feedforward patterns, AI-CPG remains confined to idealized simulations and peak speeds below 4 m/s. Bound by fixed reference trajectories, these models fail to extrapolate to the dynamic regimes of athletic sprinting. To overcome these limitations, we formulate a highly efficient, frequency-conditioned latent space to train our spectral priors, enabling robust velocity extrapolation far beyond the reference distribution. 
+
+C. Imitation from Human Motion 
+
+Integrating authentic athletic form into robotic controllers requires high-fidelity kinematic reference data directly appli-cable to humanoid robots. Adversarial Motion Priors (AMP) [19], [20] address this challenge by treating retargeted human demonstrations as a target distribution for policy guidance. While AMP achieves locomotion with high biomimetic naturalness, it is prone to training instability in high-speed scenarios due to the scarcity of sprinting reference data [5]. This inherent data bottleneck has motivated the development of alternative imitation learning frameworks focused on robust motion tracking [6]–[9]. Although these specialized frameworks successfully execute highly dynamic motions, they remain constrained to predefined kinematic trajectories, lacking the adaptability required for continuous velocity tran-sitions. The SPRINT framework resolves these limitations by integrating frequency-adaptive spectral priors with residual actions, simultaneously achieving athletic agility and robust stability across a continuous velocity spectrum of 0 to 6 m/s. III. M ETHODOLOGY 
+
+As illustrated in Fig. 2, the SPRINT framework consists of three primary stages: reference library construction, spectral prior training, and SPRINT policy training. Initially, we utilize spectral analysis to extract rhythmic features from the curated reference library. These features subsequently form the foundation for training the frequency-adaptive spec-tral priors. During policy training, these pretrained priors generate the primary kinematic reference trajectories, while residual actions compensate for environmental disturbances. 
+
+A. Reference Library Construction (Stage I) 
+
+The objective of Stage I is to construct a highly curated, kinematically feasible reference library that provides the inductive bias required to train the spectral priors. Initially, we extract discrete human locomotion patterns from the LAFAN1 dataset [21]. To bridge the morphological gap between these human demonstrations and the target robot, we design a comprehensive four-step curation pipeline: 
+
+1) Morphological Retargeting . We leverage the GMR framework [22] to bridge the morphological discrepancies between human demonstrations and target humanoid robots. 
+
+2) Joint Selection . We isolate a 10-DoF joint subset J , to efficiently model rhythmic dynamics. This subset comprises the hip pitch, knee, and ankle pitch joints for lower-limb propulsion, alongside the shoulder pitch and elbow joints to capture the upper-limb swing necessary for balance. 
+
+3) Data Normalization . We extract five single-cycle gait sequences, standardizing each to a 10 s duration. Subse-quently, we apply Fourier resampling to increase the tempo-ral resolution from 30 Hz to 60 Hz, followed by a Savitzky-Golay filter to eliminate high-frequency kinematic noise. 
+
+4) Spectral Analysis . We employ a Fast Fourier Transform (FFT) to compute the Power Spectral Density (PSD) for each joint in J . This analysis identifies the primary frequencies (e.g., fw, fj , fr ) and reveals a half-cycle phase offset with nearly identical amplitudes between contralateral limbs. Stage II. Spectral Prior Training Stage I. Reference Library Construction FFT Retarget                                   
+
+> Human Demonstration (Walk | Jog | Run) Humanoid Demonstration (Walk | Jog | Run) 10-DoF Joint Trajectories Primary Frequency ( f w| f j| f r)fw= 0.68 Hz fj= 1.25 Hz Spectral Priors Feature -wise Linear Modulation ( γ,β)Rhythmic Formulation
+> 𝑠𝑖𝑛 (2 𝜋𝑓𝑡 )
+> 𝑐𝑜𝑠 (2 𝜋𝑓𝑡 )
+> 𝑠𝑖𝑛 (4 𝜋𝑓𝑡 )
+> 𝑐𝑜𝑠 (4 𝜋𝑓𝑡 )
+> 𝑠𝑖𝑛 (12 𝜋𝑓𝑡 )
+> 𝑐𝑜𝑠 (12 𝜋𝑓𝑡 )
+> Frequency (f)KL Divergence Loss Latent Space Distribution (𝜇 ,𝑙𝑜𝑔 𝜎 2)VAE
+> z
+> Periodic Joint Trajectories Reference Library Reconstraction Loss Spectral Priors Command ( v)Frequency ( f)Actor Critic
+> ot st
+> PD Controller Robot
+> τ
+> Map PPO
+> ares
+> θ
+> qref qtarget
+
+Stage III. SPRINT Policy Training Task Prior Guidance Feet Guidance Regularization Rewards                   
+
+> x( t, f )
+> 𝒉 (0) 𝒉 (𝑙 )(𝑳 𝒓𝒆𝒄 )(𝑳 𝑲𝑳 )
+> Context Vector c
+> Time
+> （t）
+> [z, f]Select fr= 1.58 Hz
+> Generate ZXY
+> Latent Encoding Composite Loss Function
+> 𝑳 =𝑳 𝒓𝒆𝒄 +𝜷 𝑲𝑳 𝑳 𝑲𝑳
+
+Fig. 2: Three-stage workflow of the SPRINT framework. In Stage I, rhythmic features are extracted from retargeted humanoid demonstrations via spectral analysis. In Stage II , these rhythmic features form the basis for training the frequency-adaptive spectral priors. In Stage III , a hierarchical control structure is employed, coupling high-level spectral priors with low-level stabilization. 
+
+Collectively, this curation pipeline yields a highly repre-sentative reference library of periodic 10-DoF joint trajec-tories. Comprising exactly five sequences that encompass walking, jogging, and running gaits, this reference library establishes a precise kinematic mapping between velocities ({0.66 , 1.10 , 2.29 , 2.87 , 3.40 } m/s) and primary frequencies ({0.68 , 0.86 , 1.25 , 1.36 , 1.58 } Hz). Ultimately, this curated reference library provides the essential inductive bias re-quired to train the frequency-adaptive spectral priors. 
+
+B. Spectral Prior Training (Stage II) 
+
+The objective of Stage II is to train frequency-adaptive spectral priors capable of generating kinematically feasible joint trajectories across a continuous velocity spectrum. To achieve this, we formulate a neural architecture that maps temporal phase structures and target frequencies directly to high-fidelity joint trajectories. The training pipeline for the spectral priors is structured into four sequential phases: 
+
+1) Frequency-Conditioned Latent Encoding . To capture the gait styles associated with varying speeds, we employ a Variational Autoencoder (VAE) [23] to map the target frequency f into a continuous latent space. The encoder network predicts the parameters of a multivariate Gaussian distribution, specifically the mean vector μ and the log-variance vector log σ2, parameterizing the conditional pos-terior distribution q(z|f ) = N (μ, diag (σ2)) . To ensure dif-ferentiability during backpropagation, we apply the standard reparameterization trick to sample the latent style vector z:
+
+z = μ + σ ⊙ ϵ, (1) where ϵ ∼ N (0, I) represents standard Gaussian noise, and 
+
+⊙ denotes the element-wise product. 
+
+2) Multi-Harmonic Rhythmic Formulation . To capture the periodicity inherent in human locomotion, we formalize the temporal gait structure as a multi-harmonic vector. Given a continuous time variable t ∈ [0 , 10] s and a target frequency 
+
+f , we define the instantaneous phase as ϕ = 2πf t . To accurately model complex, non-sinusoidal joint trajectories, we expand this phase into K = 6 harmonic components, yielding the spectral vector x(t, f ) ∈ R2K :
+
+x(t, f ) = sin( ϕ) cos( ϕ) · · · sin( Kϕ ) cos( Kϕ )⊤ ,
+
+(2) This multi-harmonic vector serves as the initial input state 
+
+h(0) for the generative decoder network. 
+
+3) Context-Modulated Trajectory Generation . We achieve trajectory generation by fusing the rhythmic input with the sampled latent style. Initially, a context vector c = [ z, f ] is formed by concatenating the latent vector and the frequency. This context vector drives a Feature-wise Linear Modulation (FiLM) generator [24] to compute scaling factors γ(l) and offsets β(l) for each hidden layer l of the trajectory decoder. To guarantee numerical stability and prevent signal saturation across deep layers, we bound these modulation parameters using hyperbolic tangent functions: 
+
+γ(l) = 1 + 0 .1 tanh( W (l) 
+
+> γ
+
+c + b(l) 
+
+> γ
+
+), (3) 
+
+β(l) = 0 .1 tanh( W (l) 
+
+> β
+
+c + b(l) 
+
+> β
+
+), (4) where W (l) 
+
+> γ
+
+, W (l) 
+
+> β
+
+, b(l) 
+
+> γ
+
+, and b(l) 
+
+> β
+
+denote the layer-specific trainable weight matrices and bias vectors of the FiLM network. The decoder sequentially processes the initial multi-harmonic input h(0) through hidden layers equipped with SiLU activations ( σ). At each layer l, the corresponding FiLM parameters linearly modulate the intermediate features: 
+
+h(l) = σ(γ(l) ⊙ W (l)h(l−1) + β(l)), (5) where W (l) represents the standard layer weights. This modulated forward pass maps the periodic signals into high-fidelity trajectories for the 10-DoF joint subset J .
+
+4) Composite Optimization . To ensure kinematic track-ing while maintaining a well-structured latent space, we optimize the architecture using a composite loss function: 
+
+L = Lrec + βKL LKL . The reconstruction loss ( Lrec ) eval-uates the generator’s performance by computing the Mean Squared Error (MSE) between the generated trajectories and the reference library. Simultaneously, the Kullback-Leibler (KL) divergence loss ( LKL ), weighted by the hyperparameter 
+
+βKL , regularizes the predicted distribution parameters ( μ and 
+
+log σ2) toward a standard normal prior N (0, I). We isolate the structural regularization of the latent space, thereby ensuring robust convergence during spectral prior training. 
+
+C. SPRINT Policy Training (Stage III) 
+
+The objective of Stage III is to train a policy capable of executing high-speed sprints while preserving the biomimetic naturalness established by the pretrained spectral priors. To overcome the unnatural locomotion patterns associated with objective-driven RL, we formulate the high-speed locomo-tion problem as a Partially Observable Markov Decision Process (POMDP). We solve this POMDP utilizing a hier-archical residual control architecture optimized via Proximal Policy Optimization (PPO) [25]. The training pipeline for this policy is structured into three sequential phases: 
+
+1) SPRINT Policy Formulation . To maximize the expected cumulative discounted reward J(θ) =
+
+Eτ ∼πθ
+
+hPTt=0 γtrt
+
+i
+
+, the SPRINT policy decouples kinematic generation from dynamic stabilization. We utilize the frozen, pretrained spectral priors as a robust kinematic baseline. These priors generate biomimetic reference joint trajectories, denoted as qref . Consequently, the RL policy πθ outputs a residual action ares , modulated by a scalar gain α, to compensate for unmodeled system dynamics. The final target joint position tracked by the PD controller is defined as: 
+
+qtarget = qref + αares . (6) This hierarchical structure leverages the spectral priors, thereby efficiently constraining the RL exploration space to focus exclusively on reactive stabilization. 
+
+TABLE I: Definitions of Feet Guidance and Regularization Rewards                                                                      
+
+> Reward Term Definition Weights
+> Close Feet Penalty max(0 , d min − | yl−yr|)−100 .0
+> Feet Air Height PI(air )·exp
+> 
+> −|hi−href |
+> σ
+> 
+> 5.0
+> Low Speed Air I(vt<1.5) ·I(both air )−6.0
+> High Speed Ground I(vt>3.0) ·I(both ground )−3.0
+> Feet Ground Parallel Pexp( −∥ gfoot
+> xy ∥)·I(contact )1.0
+> Feet Slide Penalty P∥vtangent feet ∥ · I(contact )−10 .0
+> Alive Bonus 1−I(terminated )1.0
+> Torque Penalty P∥τi∥2−5×10 −6
+> Joint Accel Penalty P∥¨qi∥2−2×10 −8
+> Joint Limits Penalty PI(qi/∈[qmin , q max ]) −10 .0
+> Joint Vel Penalty P∥˙qi∥2−5×10 −4
+> R-P Ang Vel Penalty ∥ωxy ∥2−0.5
+> Base Height Penalty ∥zbase −ztarget ∥2−30 .0
+
+2) Reward Design . A composite reward function r is designed to balance task tracking precision, biomimetic naturalness, and hardware safety constraints: 
+
+r = rtask + rprior + rfeet + rreg . (7)  
+
+> •
+
+Task Reward (rtask = rv + rω ): To mitigate desta-bilizing transients during rapid acceleration, the linear velocity reward rv tracks a smoothly filtered command 
+
+˜vcmd  
+
+> x,t
+
+, bounded by an acceleration limit a:
+
+˜vcmd  
+
+> x,t
+
+= ˜ vcmd  
+
+> x,t −1
+
++ clip (vcmd  
+
+> x
+
+− ˜vcmd 
+
+> x,t −1
+
+, −a∆t, a ∆t). (8) The tracking precision for both the filtered linear veloc-ity ˜vcmd  
+
+> x,t
+
+and the raw angular velocity ωcmd  
+
+> z
+
+is evaluated using exponential kernels: 
+
+rv = wv exp − ∥˜vcmd  
+
+> x,t
+
+− v∥2
+
+σv
+
+!
+
+, (9) 
+
+rω = wω exp 
+
+
+
+− ∥ωcmd  
+
+> z
+
+− ω∥2
+
+σω
+
+
+
+. (10)  
+
+> •
+
+Prior Guidance Reward (rprior ): To ensure the policy adheres to the human-like gait, this term penalizes deviations from the baseline spectral prior trajectories 
+
+qref  
+
+> j
+
+across the 10-DoF joint subset J :
+
+rprior = wp
+
+X
+
+> j∈J
+
+exp − ∥qj − qref  
+
+> j
+
+∥2
+
+σq
+
+!
+
+. (11)  
+
+> •
+
+Feet Guidance Reward (rfeet ): High-speed locomotion requires precise regulation of the stance and swing phases. We enforce a velocity-dependent minimum flight time target ttarget , derived from the command frequency fcmd and the required swing phase duty cycle: 
+
+ttarget = Dswing 
+
+fcmd 
+
+, (12) where Dswing = 0 .4 represents the predefined proportion of the swing phase relative to the total gait cycle. By comparing the accumulated actual air time tair to this target, the reward encourages sufficient swing duration for solving complex ground interactions: 
+
+ra = wa
+
+X I(air ) max(0 , t target − tair ). (13)  
+
+> •
+
+Regularization Reward (rreg ): Maintaining equilibrium during sprints requires a forward shift of the center of mass. To induce this behavior, the torso pitch penalty adaptively constrains the projected gravity component 
+
+gx. It establishes a speed-dependent forward tilt target 
+
+gf = 0 .1+0 .05 vcmd  
+
+> x
+
+to facilitate propulsion and dynamic balance, while penalizing any backward tilt ( gb = 0 ): 
+
+rt = wt (max(0 , g x − gf ) + max(0 , g b − gx)) 2 . (14) Comprehensive details of all supplementary feet guidance and regularization terms are summarized in Table I. 
+
+3) Sim-to-Real Transfer Strategy . To bridge the sim-to-real gap, we integrate an Asymmetric Actor-Critic (AAC) ar-chitecture [26], progressive curriculum learning, and dynam-ics randomization. The AAC framework facilitates policy optimization through structured informational asymmetry. The actor network, tailored for real-time onboard deploy-ment, processes exclusively a proprioceptive observation vector ot (comprising angular velocity, projected gravity, task commands, joint kinematics, and the previous residual action ares 
+
+> t−1
+
+). Conversely, the critic network evaluates a privileged state vector st, which augments ot with the linear velocity and the reference trajectories generated by the spec-tral priors. Concurrently, a progressive curriculum learning scheme gradually scales target velocity commands, while dy-namics randomization perturbs key physical properties (e.g., mass, ground friction, and motor latency). Collectively, these techniques profoundly enhance the policy’s resilience to environmental disturbances, ensuring the physical hardware deployment strictly preserves the biomimetic naturalness. IV. E XPERIMENTAL EVALUATION 
+
+We evaluate the SPRINT framework through extensive simulations in Isaac Gym and physical deployments on the Unitree G1 platform. Specifically, the evaluation is struc-turally designed to address the following three questions:  
+
+> •
+
+How do the spectral priors outperform conventional motion generative models, and how does this advan-tage manifest as enhanced tracking precision, training efficiency, and biomimetic naturalness?  
+
+> •
+
+How do the integral components of the SPRINT frame-work (i.e., prior guidance, residual control, progressive curriculum learning, and the AAC architecture) syner-gize to guarantee high-speed locomotion?  
+
+> •
+
+Does the SPRINT policy demonstrate zero-shot sim-to-real transfer during sprints and gait transitions? 
+
+A. Experimental Setup 
+
+1) Simulation Environment . We conduct highly paral-lelized policy training within the NVIDIA Isaac Gym envi-ronment [27], operating at a physics simulation frequency of 200 Hz and a control update rate of 50 Hz. The pol-icy network architecture comprises a Multilayer Perceptron (MLP) with 256 hidden units for state feature extraction, coupled with a 64-unit Long Short-Term Memory (LSTM) module to capture complex temporal dynamics. To stabilize early-stage learning, we employ a progressive curriculum that gradually expands the velocity command sampling space from static standing to sprints. Specifically, this curriculum scales the target commands up to maximum bounds of 
+
+vcmd  
+
+> x
+
+∈ [0 , 6] m/s (corresponding to f ∈ [0 .6, 2.3] Hz) and 
+
+ωcmd  
+
+> z
+
+∈ [−0.7, 0.7] rad/s. Leveraging the inherent efficiency of Isaac Gym’s tensorized physics engine, the complete policy converges in approximately 6.5 hours on a single NVIDIA RTX 4090 GPU. 
+
+2) Evaluation Metrics . To rigorously validate the SPRINT framework, we distinguish the performance of the spectral generator from that of the final control policy. Accordingly, the evaluation metrics span three core dimensions: spectral prior fidelity ( Lrec and EBA ), biomimetic naturalness (FID) to evaluate both the prior and the policy, and tracking precision (Eqpos and Evel ) to quantify the policy.  
+
+> •
+
+Reconstruction Loss (Lrec ): This metric calculates the Mean Squared Error (MSE) between the joint trajecto-ries q generated by the spectral priors and the curated reference library qlib  
+
+> j
+
+across the np = 5 predefined frequencies for the joint subset J with nj = 10 :
+
+Lrec = 1
+
+njnp
+
+X
+
+> j∈J
+
+X 
+
+> f∈F p
+
+ qj (f ) − qlib  
+
+> j
+
+(f )2 , (15) where Fp = {0.68 , 0.86 , 1.25 , 1.36 , 1.58 } Hz denotes the primary frequency set of the reference library.  
+
+> •
+
+Boundary Amplitude Error (EBA ): This metric eval-uates the spectral priors’ extrapolation reliability at the 
+
+ne = 2 extreme frequencies ( Fe = {0.6, 2.3} Hz) relative to the reference boundaries fb:
+
+EBA = 1
+
+njne
+
+X
+
+> j∈J
+
+X 
+
+> f∈F e
+
+Amp j (f ) − Amp j (fb) . (16)  
+
+> •
+
+Fr´ echet Inception Distance (FID) : We apply this met-ric at two levels: prior-level naturalness (comparing gen-erated prior distributions against the reference library) and policy-level naturalness (measuring the discrep-ancy between spectral prior trajectories and actual joint trajectories). The FID [28] evaluates the distributional similarity of motion sequences: FID = ∥μ − μw∥2 + tr 
+
+
+
+Σ + Σ w − 2(ΣΣ w) 12
+
+
+
+, (17) where (μ, Σ) and (μw, Σw) denote the statistics of the reference and target distributions, respectively. Lower values indicate superior morphological similarity.  
+
+> •
+
+Imitation Error (Eqpos ): This metric computes the Mean Absolute Error (MAE) between the actual joint positions qj and the spectral reference qref  
+
+> j
+
+:
+
+Eqpos = 1
+
+njnc
+
+X
+
+> j∈J
+
+X 
+
+> vcmd
+> x∈V c
+
+qj (vcmd  
+
+> x
+
+) − qref  
+
+> j
+
+(vcmd  
+
+> x
+
+) , (18) where Vc comprises commanded velocity sampled from 
+
+0 to 6 m/s at 0.1 m/s increments, and nc denotes the number of elements in Vc. 
+
+> •
+
+Velocity Tracking Error (Evel ): This metric measures the absolute deviation between the commanded longi-tudinal velocity vcmd  
+
+> x
+
+and the actual velocity v:
+
+Evel = 1
+
+nc
+
+X 
+
+> vcmd
+> x∈V c
+
+vcmd  
+
+> x
+
+− v . (19) 
+
+B. Comparative Analysis             
+
+> TABLE II: Quantitative Comparison of Motion Generators
+> Motion Generator Lrec ↓FID ↓EBA ↓
+> AI-CPG [10] 0.0015 0.0042 0.7452
+> Spectral Priors 0.0006 0.0008 0.0447
+
+1) Spectral Priors Advantage . The frequency-adaptive spectral priors outperform the AI-CPG baseline across track-ing accuracy, biomimetic naturalness, and extrapolation reli-ability. As detailed in TABLE II, our method achieves reduc-tions in reconstruction loss, the FID, and boundary amplitude f 1 = 0.60 Hz f w = 0.68 Hz f 2 = 0.97 Hz f j = 1.25 Hz f 3 = 1.41 Hz f r = 1.58 Hz f 4 = 2.30 Hz Walking gait Jogging gait Running gait Transition Transition Lower speed Higher speed Generated trajectories Reference data                                    
+
+> Elbow [rad] -0.60 -0.20 0.20 -0.40 0.00 0.40 0.50 1.50 2.00 1.00 2.50 -1.55 -0.65 -0.20 -1.10 0.25 -0.30 0.30 0.90 0.00 0.60 1.20 -0.75 -0.05 0.65 -0.40 0.30 1.00 Hip P [rad] Knee [rad] Ankle p [rad] Shoulder p [rad] 012345Time [s] 012345Time [s] 012345Time [s] 012345Time [s] 012345Time [s] 012345Time [s] 012345Time [s]
+
+Fig. 3: Evaluation of frequency-adaptive spectral priors. First row : Morphological adaptability enables seamless gait synthesis across diverse humanoid scales. Second row : Generated trajectories (blue) precisely align with discrete reference data (red) at the predefined reference frequencies ( fw , fj , fr ), ensuring accurate reconstruction. Meanwhile, bounded joint amplitudes at transitional and out-of-distribution frequencies ( f1, f2, f3, f4) confirm robust extrapolation capabilities. 
+
+error. The first row of Fig. 3 visually highlights the intrinsic morphological adaptability of these priors. This adaptability facilitates direct deployment across diverse humanoid scales (including 1.7 m, 1.3 m and 1.1 m) without necessitating platform-specific retargeting. Furthermore, as demonstrated in the second row of Fig. 3, the near-perfect alignment between the joint trajectories generated by spectral priors and the reference library indicates that the priors maintain kinematic precision across the predefined frequencies (e.g., 
+
+fw, fj , fr ). Ultimately, the nearly identical amplitudes con-firm robust extrapolation to out-of-distribution frequencies. 
+
+2) SPRINT Policy Advantage . SPRINT resolves the in-herent trade-off between biomimetic naturalness and precise command execution during sprints. As evidenced by the quantitative metrics in TABLE III and the tracking per-formance in Fig. 4, SPRINT achieves the highest average velocity while maintaining the lowest FID, imitation error and velocity tracking error. In contrast, RL frameworks like Humanoid-Gym [13] impose rigid velocity constraints and yield unnatural movements, whereas AMP [20] and AI-CPG [10] encounter motion instability during high-speed sprints and require prolonged optimization cycles. By con-straining the RL exploration space using frequency-adaptive spectral priors and residual actions, SPRINT mitigates this instability. Furthermore, this restricted exploration acceler-ates learning, achieving stable locomotion at 4 m/s in 3 hours and full convergence for a 6 m/s sprint in approximately 6.5 hours. Ultimately, this rapid convergence and robust stability demonstrate the practical viability of SPRINT policy for seamless gait transitions and high-speed sprints. 
+
+Fig. 4: Comparison of velocity tracking performance. While base-line frameworks exhibit low error at moderate speeds, they en-counter destabilizing oscillations or experience failure during high-speed sprints. The SPRINT policy maintains bounded dynamic tracking precision across the entire continuous velocity spectrum, achieving stable locomotion at extreme velocities up to 6.0 m/s. 
+
+C. Ablation Studies 
+
+We conduct ablation experiments to rigorously quantify the individual contributions of SPRINT’s core modules. By systematically ablating specific components, we evaluate their distinct impact on the overall dynamic performance, as summarized in TABLE IV. 
+
+1) Effect without rprior . Ablating the spectral prior guid-ance reward degrades the overall motion quality, evidenced TABLE III: Quantitative Comparison with Baseline Methods                                                                            
+
+> Method Max vavg (m/s) ↑Convergence Time (h) ↓FID ↓Eqpos ↓Evel ↓
+> vcmd
+> x∈[0 ,4] m/s vcmd
+> x∈[0 ,5] m/s vcmd
+> x∈[0 ,6] m/s Humanoid-Gym [13] 3.9048 4.5 ––2.3196 0.5283 0.0385
+> AMP [20] 4.7512 34.5 37 –1.7330 0.4652 0.1061 AI-CPG [10] 4.8208 914 –0.8831 0.2277 0.0802
+> SPRINT 5.9648 34.5 6.5 0.8035 0.1868 0.0657 (a) (b) (c) (d) 0.0 0.5 1.0 1.5 2.0 2.5 0.0 0.5 1.0 1.5 2.0 2.5 0.0 0.5 1.0 1.5 2.0 2.5 Left Right Left Right Left Right Time [s] Time [s] Time [s]
+
+Fig. 5: Hardware validation of seamless gait transitions. First row : Time-lapse sequence capturing continuous acceleration on the Unitree G1 platform. Second row : Foot contact states confirming distinct locomotion patterns: (b) running and (c) jogging with clear flight phases, contrasted against (d) walking with a double-support phase. TABLE IV: Ablation Study Results                                
+
+> Method Max vavg (m/s) ↑FID ↓Eqpos ↓Evel ↓
+> SPRINT w/o rprior 6.0596 12.2305 1.0178 0.0932 SPRINT w/o Curriculum 4.4810 1.3285 0.2336 0.1789 SPRINT w/o Residual 5.9631 2.3285 0.4150 0.1179 SPRINT w/o AAC 5.4624 0.8777 0.1880 0.0755
+> SPRINT 5.9648 0.8035 0.1868 0.0657
+
+by an increased Imitation Error and FID, despite the robot achieving a peak velocity of 6.06 m/s. Without the guidance of spectral priors, the agent optimizes purely for forward velocity, adopting unnatural movements to maximize speed. This confirms that frequency-adaptive spectral priors are cru-cial for maintaining biomimetic naturalness during sprints. 
+
+2) Effect without Curriculum . Removing the progressive curriculum destabilizes training and restricts the maximum achievable speed, which drops to 4.48 m/s alongside a sharp rise in velocity tracking error. Directly exposing the agent to high-speed sprints from the onset creates an extremely challenging optimization landscape. Lacking the guidance of simpler tasks, the policy becomes trapped in suboptimal local minima, demonstrating that incremental task scaling is essential for acquiring stable sprinting behaviors. 
+
+3) Effect without Residual . Replacing residual control with absolute joint position targets reduces motion natural-ness and tracking accuracy, reflected in elevated FID and tracking errors. This degradation occurs because predicting absolute positions directly expands the policy’s exploration space. Conversely, SPRINT’s residual architecture leverages spectral priors to strictly constrain exploration space, facili-tating the stabilization required for athletic sprints. 
+
+4) Effect without AAC . Ablating the AAC architecture prevents the framework from achieving peak sprinting per-formance, evidenced by a drop in speed to 5.46 m/s and reduced tracking precision. The absence of privileged en-vironmental information impairs the critic network’s value estimation, compromising its ability to effectively guide the actor network. This highlights the necessity of privileged state feedback for mastering high-speed locomotion skills. 
+
+D. Hardware Experiment 
+
+TABLE V: Sim-to-Real Transfer Performance on Unitree G1                                                
+
+> vcmd
+> x
+> (m/s) FID Eqpos vavg (m/s) Sim Real Sim Real Sim Real 10.9931 1.0379 0.1912 0.1976 0.9090 0.9199 20.7622 0.7867 0.1748 0.1852 1.9465 1.9031 30.4991 0.4764 0.1564 0.1536 2.9717 2.9340 40.6934 0.7342 0.1829 0.1885 4.0029 4.0606 50.8920 0.8547 0.2154 0.2191 5.0887 5.0323 61.1344 1.0970 0.2485 0.2510 5.9648 5.9143 Mean Error 0.0346 0.0052 0.0428
+
+1) Zero-Shot Sim-to-Real Transfer . In TABLE V, real-world deployment results closely mirror the simulated met-rics across speed, imitation accuracy, and biomimetic nat-uralness. This highly consistent performance across the continuous velocity spectrum is directly attributed to the synergy between the frequency-adaptive spectral priors and the hierarchical residual control architecture. By compen-sating for environmental disturbances, the SPRINT policy also guarantees the robust physical execution of sprints, as visually validated in Fig. 1. 
+
+2) Continuous Gait Transitions . The robot utilizes a uni-fied SPRINT policy to track continuous velocity commands and execute seamless gait transitions. As shown in the first row of Fig. 5, SPRINT policy enables smooth accelera-tion from static standing to a 4 m/s running gait through intermediate walking and jogging states. Furthermore, foot contact states (second row of Fig. 5) reveal a transition from a double-support phase during walking to an aerial phase during jogging and running. Ultimately, these results validate SPRINT as an effective framework for enabling seamless gait transitions on physical humanoid robots. V. C ONCLUSION 
+
+The SPRINT framework employs frequency-adaptive spectral priors to achieve humanoid athletic sprints using a curated reference library of only five motion sequences. The spectral priors leverage the inherent periodicity of human locomotion to map discrete reference data onto a continuous kinematic manifold. This representation enables the gener-ation of joint trajectories across a broad velocity spectrum, extrapolating to speeds that significantly exceed the reference distribution. Extensive field experiments on the Unitree G1 platform demonstrate that the SPRINT policy achieves a peak sprinting velocity of 6 m/s while maintaining seamless gait transitions and high biomimetic naturalness. Ultimately, these results establish frequency-adaptive spectral priors as a highly efficient foundation for humanoid athletic sprints. REFERENCES [1] I. Radosavovic, T. Xiao, B. Zhang, T. Darrell, J. Malik, and K. Sreenath, “Real-world humanoid locomotion with reinforcement learning,” Science Robotics , vol. 9, no. 89, p. eadi9579, 2024. [2] Z. Li, X. B. Peng, P. Abbeel, S. Levine, G. Berseth, and K. Sreenath, “Reinforcement learning for versatile, dynamic, and robust bipedal locomotion control,” The International Journal of Robotics Research ,vol. 44, no. 5, pp. 840–888, 2025. [3] Q. Zhang, P. Cui, D. Yan, J. Sun, Y. Duan, G. Han, W. Zhao, W. Zhang, Y. Guo, A. Zhang, et al. , “Whole-body humanoid robot locomotion with human reference,” in 2024 IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS) , pp. 11225–11231, 2024. [4] A. Tang, T. Hiraoka, N. Hiraoka, F. Shi, K. Kawaharazuka, K. Kojima, K. Okada, and M. Inaba, “Humanmimic: Learning natural locomo-tion and transitions for humanoid robot via wasserstein adversarial imitation,” in 2024 IEEE International Conference on Robotics and Automation (ICRA) , pp. 13107–13114, 2024. [5] M. Arjovsky, S. Chintala, and L. Bottou, “Wasserstein generative ad-versarial networks,” in International conference on machine learning ,pp. 214–223, 2017. [6] T. He, J. Gao, W. Xiao, Y. Zhang, Z. Wang, J. Wang, Z. Luo, G. He, N. Sobanbab, C. Pan, et al. , “Asap: Aligning simulation and real-world physics for learning agile humanoid whole-body skills,” arXiv preprint arXiv:2502.01143 , 2025. [7] X. B. Peng, P. Abbeel, S. Levine, and M. Van de Panne, “Deepmimic: Example-guided deep reinforcement learning of physics-based char-acter skills,” ACM Transactions On Graphics (TOG) , vol. 37, no. 4, pp. 1–14, 2018. [8] Z. Chen, M. Ji, X. Cheng, X. Peng, X. B. Peng, and X. Wang, “Gmt: General motion tracking for humanoid whole-body control,” arXiv preprint arXiv:2506.14770 , 2025. [9] Q. Liao, T. E. Truong, X. Huang, G. Tevet, K. Sreenath, and C. K. Liu, “Beyondmimic: From motion tracking to versatile humanoid control via guided diffusion, 2025,” arXiv preprint arXiv:2508.08241 .[10] G. Li, A. Ijspeert, and M. Hayashibe, “Ai-cpg: Adaptive imitated central pattern generators for bipedal locomotion learned through reinforced reflex neural networks,” IEEE Robotics and Automation Letters , vol. 9, no. 6, pp. 5190–5197, 2024. [11] A. Herdt, H. Diedam, P.-B. Wieber, D. Dimitrov, K. Mombaur, and M. Diehl, “Online walking motion generation with automatic footstep placement,” Advanced Robotics , vol. 24, no. 5-6, pp. 719–737, 2010. [12] D. Crowley, J. Dao, H. Duan, K. Green, J. Hurst, and A. Fern, “Optimizing bipedal locomotion for the 100m dash with comparison to human running,” in 2023 IEEE International Conference on Robotics and Automation (ICRA) , pp. 12205–12211, 2023. [13] X. Gu, Y.-J. Wang, and J. Chen, “Humanoid-gym: Reinforcement learning for humanoid robot with zero-shot sim2real transfer,” arXiv preprint arXiv:2404.05695 , 2024. [14] C. Guo, X. Zuo, S. Wang, S. Zou, Q. Sun, A. Deng, M. Gong, and L. Cheng, “Action2motion: Conditioned generation of 3d human motions,” in Proceedings of the 28th ACM international conference on multimedia , pp. 2021–2029, 2020. [15] M. Petrovich, M. J. Black, and G. Varol, “Temos: Generating diverse human motions from textual descriptions,” in European conference on computer vision , pp. 480–497, 2022. [16] G. Tevet, S. Raab, B. Gordon, Y. Shafir, D. Cohen-or, and A. H. Bermano, “Human motion diffusion model,” in The Eleventh Interna-tional Conference on Learning Representations , 2023. [17] H. Zhang, L. Zhang, Z. Chen, L. Chen, Y. Wang, and R. Xiong, “Natural humanoid robot locomotion with generative motion prior,” in 2025 IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS) , pp. 6622–6629, 2025. [18] Q. Li, C. Zhu, Y. Wu, X. Yuan, Z. Zhang, J. Yang, and Y. Liu, “Run: Residual policy for natural humanoid locomotion,” arXiv preprint arXiv:2509.20696 , 2025. [19] I. J. Goodfellow, J. Pouget-Abadie, M. Mirza, B. Xu, D. Warde-Farley, S. Ozair, A. Courville, and Y. Bengio, “Generative adversarial nets,” 
+
+Advances in neural information processing systems , vol. 27, 2014. [20] X. B. Peng, Z. Ma, P. Abbeel, S. Levine, and A. Kanazawa, “Amp: Adversarial motion priors for stylized physics-based character con-trol,” ACM Transactions on Graphics (ToG) , vol. 40, no. 4, pp. 1–20, 2021. [21] F. G. Harvey, M. Yurick, D. Nowrouzezahrai, and C. Pal, “Robust mo-tion in-betweening,” ACM Transactions on Graphics (TOG) , vol. 39, no. 4, pp. 60–1, 2020. [22] J. P. Araujo, Y. Ze, P. Xu, J. Wu, and C. K. Liu, “Retargeting matters: General motion retargeting for humanoid motion tracking,” 
+
+arXiv preprint arXiv:2510.02252 , 2025. [23] J. Won, D. Gopinath, and J. Hodgins, “Physics-based character controllers using conditional vaes,” ACM Transactions on Graphics (TOG) , vol. 41, no. 4, pp. 1–12, 2022. [24] E. Perez, F. Strub, H. De Vries, V. Dumoulin, and A. Courville, “Film: Visual reasoning with a general conditioning layer,” in Proceedings of the AAAI conference on artificial intelligence , vol. 32, 2018. [25] J. Schulman, F. Wolski, P. Dhariwal, A. Radford, and O. Klimov, “Proximal policy optimization algorithms,” arXiv preprint arXiv:1707.06347 , 2017. [26] L. Pinto, M. Andrychowicz, P. Welinder, W. Zaremba, and P. Abbeel, “Asymmetric actor critic for image-based robot learning,” RSS , 2018. [27] V. Makoviychuk, L. Wawrzyniak, Y. Guo, M. Lu, K. Storey, M. Mack-lin, D. Hoeller, N. Rudin, A. Allshire, A. Handa, et al. , “Isaac gym: High performance gpu-based physics simulation for robot learning,” 
+
+arXiv preprint arXiv:2108.10470 , 2021. [28] M. Heusel, H. Ramsauer, T. Unterthiner, B. Nessler, and S. Hochreiter, “Gans trained by a two time-scale update rule converge to a local nash equilibrium,” Advances in neural information processing systems ,vol. 30, 2017.

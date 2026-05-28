@@ -6,61 +6,43 @@
 </div>
 
 ## 每次日报
-- 最新运行日期：2026-04-29 ~ 2026-05-28
-- 运行时间：2026-05-28 04:17:19 UTC
+- 最新运行日期：2026-05-28
+- 运行时间：2026-05-28 21:27:36 UTC
 - 运行状态：成功
-- 本次总论文数：13
-- 精读区：5
-- 速读区：8
+- 本次总论文数：7
+- 精读区：3
+- 速读区：4
 
 ### 今日简报（AI）
-本期聚焦具身智能与机器人安全，精读两篇高分工作分别涉及可扩展VLA数据集和人形机器人安全测试。  
-最值得关注的方向：大规模行为数据集（SABER）推动真实世界VLA适配，以及对抗性压力测试揭示人形机器人安全滤波器弱点。  
-建议普通读者关注密集语言标注如何提升机器人指令理解，以及规避操作多样性的锚点适应方法。
-- 详情：[/20260429-20260528/README](/20260429-20260528/README)
+1) 今日精选7篇人形机器人研究，重点精读10分全身运动数据生成方案与8分视频模仿学习动态重定向。  
+2) 最值得关注《HumanoidMimicGen》的全身规划数据生成，以及《Direct Dynamic Retargeting》将视频模仿高效迁移至人形体的方法。  
+3) 建议后续可探索《Imagine2Real》的零样本物体交互或《SPRINT》的奔跑快速控制，拓展人形机器人实际部署能力。
+- 详情：[/202605/28/README](/202605/28/README)
 
 ### 精读区论文标签
-1. [SABER: A Scalable Action-Based Embodied Dataset for Real-World VLA Adaptation](/20260429-20260528/2605.09613v1-saber-a-scalable-action-based-embodied-dataset-for-real-world-vla-adaptation)  
-   标签：评分：9.0/10、query:ur
-   evidence：可扩展的基于动作的具身数据集用于真实世界VLA适应
-2. [Adversarial Stress Testing of SPARK Humanoid Safety Filters](/20260429-20260528/2605.19009v1-adversarial-stress-testing-of-spark-humanoid-safety-filters)  
-   标签：评分：9.0/10、query:ur
-   evidence：对SPARK人形安全滤波器进行压力测试，包含与宇树G1相关的G1SportMode基准
-3. [Learning while Deploying: Fleet-Scale Reinforcement Learning for Generalist Robot Policies](/20260429-20260528/2605.00416v1-learning-while-deploying-fleet-scale-reinforcement-learning-for-generalist-robot-policies)  
+1. [HumanoidMimicGen: Data Generation for Loco-Manipulation via Whole-Body Planning](/202605/28/2605.27724v1-humanoidmimicgen-data-generation-for-loco-manipulation-via-whole-body-planning)  
+   标签：评分：10.0/10、query:ur
+   evidence：人形机器人全身运动操作数据生成方法
+2. [Direct Dynamic Retargeting for Humanoid Imitation Learning from Videos](/202605/28/2605.23762v1-direct-dynamic-retargeting-for-humanoid-imitation-learning-from-videos)  
    标签：评分：8.0/10、query:ur
-   evidence：面向机器人策略持续部署和改进的车队级强化学习框架
-4. [BifrostUMI: Bridging Robot-Free Demonstrations and Humanoid Whole-Body Manipulation](/20260429-20260528/2605.03452v1-bifrostumi-bridging-robot-free-demonstrations-and-humanoid-whole-body-manipulation)  
+   evidence：从视频直接动态重定向生成人形机器人数据
+3. [FineVLA: Fine-Grained Instruction Alignment for Steerable Vision-Language-Action Policies](/202605/28/2605.27284v1-finevla-fine-grained-instruction-alignment-for-steerable-vision-language-action-policies)  
    标签：评分：8.0/10、query:ur
-   evidence：面向人形机器人的无机器人数据收集框架
-5. [ORICF -- Open Robotics Inference and Control Framework](/20260429-20260528/2605.09656v1-oricf----open-robotics-inference-and-control-framework)  
-   标签：评分：8.0/10、query:ur
-   evidence：开放机器人推理与控制框架，支持边缘卸载
+   evidence：统一10个机器人数据集的细粒度VLA监督数据构建工具
 
 ### 速读区论文标签
-1. [Escaping the Diversity Trap in Robotic Manipulation via Anchor-Centric Adaptation](/20260429-20260528/2605.07381v1-escaping-the-diversity-trap-in-robotic-manipulation-via-anchor-centric-adaptation)  
+1. [Imagine2Real: Towards Zero-shot Humanoid-Object Interaction via Video Generative Priors](/202605/28/2605.22272v1-imagine2real-towards-zero-shot-humanoid-object-interaction-via-video-generative-priors)  
    标签：评分：7.0/10、query:ur
-   evidence：机器人数据收集策略
-2. [How to Instruct Your Robot: Dense Language Annotations Power Robot Policy Learning](/20260429-20260528/2605.17077v1-how-to-instruct-your-robot-dense-language-annotations-power-robot-policy-learning)  
+   evidence：利用视频先验生成人机交互数据
+2. [ProgVLA: Progress-Aware Robot Manipulation Skill Learning](/202605/28/2605.28231v1-progvla-progress-aware-robot-manipulation-skill-learning)  
    标签：评分：7.0/10、query:ur
-   evidence：提出密集多方面标注方法用于机器人演示数据集构建
-3. [EgoTraj: Real-World Egocentric Human Trajectory Dataset for Multimodal Prediction](/20260429-20260528/2605.19004v1-egotraj-real-world-egocentric-human-trajectory-dataset-for-multimodal-prediction)  
+   evidence：一个紧凑型VLA模型，专为在严格计算预算下高效处理而设计，适用于边缘部署
+3. [SPRINT: Efficient Spectral Priors for Humanoid Athletic Sprints](/202605/28/2605.28549v1-sprint-efficient-spectral-priors-for-humanoid-athletic-sprints)  
    标签：评分：7.0/10、query:ur
-   evidence：用于人形机器人的自我中心人类轨迹数据集
-4. [Retrieve-then-Steer: Online Success Memory for Test-Time Adaptation of Generative VLAs](/20260429-20260528/2605.10094v1-retrieve-then-steer-online-success-memory-for-test-time-adaptation-of-generative-vlas)  
+   evidence：利用人形运动序列参考库为宇树机器人生成运动轨迹，解决了数据稀缺问题
+4. [Tabero: Learning Gentle Manipulation with Closed-Loop Force Feedback from Vision, Touch, and Language](/202605/28/2605.27886v1-tabero-learning-gentle-manipulation-with-closed-loop-force-feedback-from-vision-touch-and-language)  
    标签：评分：6.0/10、query:ur
-   evidence：在线测试时自适应用于VLA模型在持续环境中的部署
-5. [VISOR: A Vision-Language Model-based Test Oracle for Testing Robot](/20260429-20260528/2605.10408v1-visor-a-vision-language-model-based-test-oracle-for-testing-robot)  
-   标签：评分：6.0/10、query:ur
-   evidence：基于视觉语言模型的机器人测试预言用于故障检测
-6. [VISOR: A Vision-Language Model-based Test Oracle for Testing Robots](/20260429-20260528/2605.10408v2-visor-a-vision-language-model-based-test-oracle-for-testing-robots)  
-   标签：评分：6.0/10、query:ur
-   evidence：基于视觉语言模型的机器人测试预言用于故障检测
-7. [RIO: Flexible Real-Time Robot I/O for Cross-Embodiment Robot Learning](/20260429-20260528/2605.11564v1-rio-flexible-real-time-robot-io-for-cross-embodiment-robot-learning)  
-   标签：评分：6.0/10、query:ur
-   evidence：跨硬件的机器人控制、数据格式化和策略部署框架
-8. [Unified Walking, Running, and Recovery for Humanoids via State-Dependent Adversarial Motion Priors](/20260429-20260528/2605.18611v1-unified-walking-running-and-recovery-for-humanoids-via-state-dependent-adversarial-motion-priors)  
-   标签：评分：6.0/10、query:ur
-   evidence：在宇树G1上实现行走、奔跑和跌倒恢复的统一策略，涉及错误分析与恢复
+   evidence：数据高效管道，利用机器人操作轨迹生成视觉-触觉-语言任务，用于数据集构建
 
 
 <div class="dpr-home-promo-card">
