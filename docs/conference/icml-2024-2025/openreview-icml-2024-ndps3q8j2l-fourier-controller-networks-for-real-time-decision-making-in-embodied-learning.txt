@@ -1,0 +1,1110 @@
+Title: Fourier Controller Networks for Real-Time Decision-Making in  Embodied Learning
+
+URL Source: https://openreview.net/pdf?id=nDps3Q8j2l
+
+Number of Pages: 20
+
+Markdown Content:
+# Fourier Controller Networks for Real-Time Decision-Making in Embodied Learning 
+
+Hengkai Tan 1 Songming Liu 1 Kai Ma 1 Chengyang Ying 1 Xingxing Zhang 1 Hang Su 1 Jun Zhu 1
+
+## Abstract 
+
+Transformer has shown promise in reinforcement learning to model time-varying features for ob-taining generalized low-level robot policies on diverse robotics datasets in embodied learning. However, it still suffers from the issues of low data efficiency and high inference latency. In this paper, we propose to investigate the task from a new perspective of the frequency domain. We first observe that the energy density in the frequency domain of a robot’s trajectory is mainly concen-trated in the low-frequency part. Then, we present the Fourier Controller Network (FCNet), a new network that uses Short-Time Fourier Transform (STFT) to extract and encode time-varying fea-tures through frequency domain interpolation. In order to do real-time decision-making, we fur-ther adopt FFT and Sliding DFT methods in the model architecture to achieve parallel training and efficient recurrent inference. Extensive results in both simulated (e.g., D4RL) and real-world environments (e.g., robot locomotion) demon-strate FCNet’s substantial efficiency and effective-ness over existing methods such as Transformer, e.g., FCNet outperforms Transformer on multi-environmental robotics datasets of all types of sizes (from 1.9M to 120M). The project page and code can be found https://thkkk.github.io/fcnet. 
+
+## 1. Introduction 
+
+Reinforcement Learning (RL) has been widely used in em-bodied learning scenarios (Lee et al., 2020a; Brohan et al., 2023), where agents interact with and learn from complex, 
+
+> 1
+
+Department of Computer Science and Technology, Institute for AI, Tsinghua-Bosch Joint ML Center, THBI Lab, BNRist Center, Tsinghua University, Beijing, 100084, China. Correspon-dence to: Hang Su <suhangss@tsinghua.edu.cn >, Jun Zhu <dc-szj@tsinghua.edu.cn >.
+
+Proceedings of the 41 st International Conference on Machine Learning , Vienna, Austria. PMLR 235, 2024. Copyright 2024 by the author(s). 0 50 100       
+
+> Frequency Mode
+> 0.0%
+> 20.0%
+> 40.0%
+> 60.0%
+> 80.0%
+> Energy Density
+> (a) Rotation with Constant Angular Acceleration
+> energy of object
+> 050 100
+> Frequency Mode
+> 0.0%
+> 20.0%
+> 40.0%
+> 60.0%
+> 80.0%
+> 100.0%
+> Energy Density
+> (b) Simple Harmonic Motion
+> energy of object
+> 050 100
+> Frequency Mode
+> 0.0%
+> 20.0%
+> 40.0%
+> 60.0%
+> 80.0%
+> 100.0%
+> Energy Density
+> (c) Base Angular Velocity of Aliengo
+> energy of X
+> energy of Y
+> energy of Z
+> 050 100
+> Frequency Mode
+> 0.0%
+> 10.0%
+> 20.0%
+> 30.0%
+> 40.0%
+> 50.0%
+> Energy Density
+> (d) Each Joint Angle of walker
+> energy of thigh joint
+> energy of leg joint
+> energy of foot joint
+
+Figure 1. Energy density (normalized to 0% ∼ 100% for all modes) in the frequency domain of different physical quantities across various motions. We choose n = 256 as the context length in the time domain. The time domain data represented in each of the four plots include: (a) Rotational motion with constant angular acceleration. (b) Simple harmonic motion. (c) Body an-gular velocity during a quadrupedal robot’s run. (d) Joint angle of walker2d-expert-v2 in D4RL dataset. 
+
+dynamic physical environments. Representative examples include robotic arm manipulation (Gu et al., 2017; Kalash-nikov et al., 2018; Lee et al., 2021), legged robot loco-motion in various challenging terrains (Lee et al., 2020a; Rudin et al., 2022; Agarwal et al., 2023), dexterous ma-nipulation (Gupta et al., 2016; Rajeswaran et al., 2017; Andrychowicz et al., 2020) and multi-task policies learn-ing (Kumar et al., 2022; Kalashnikov et al., 2021; Yu et al., 2020). Most of these RL methods use MLPs or RNNs to learn robotic control policies. Recently, a growing body of efforts has been devoted to pre-training on large-scale robotic datasets to obtain more generalized policies that can apply to various tasks (Reed et al., 2022; Jiang et al., 2022; Brohan et al., 2022; 2023; Chebotar et al., 2023; Fu et al., 2024). Among various architectures, Transformer has been widely adopted because of its ability to model time-1Fourier Controller Networks for Real-Time Decision-Making in Embodied Learning                                              
+
+> Table 1. Comparision of Different Architectures. The energy density distribution of states in the frequency domain is often concentrated in the lowest mmodes, where m≪n. The term bin the RetNet line represents the chunk size, which is set to 512 in the paper(Sun et al., 2023). INFERENCE COST TRAINING COST MEMORY PARALLEL TRAINING PERFORMANCE
+> MLP ( HISTORY )O(n)O(n)O(n)✔✘
+> RNN O(1) O(n)O(n)✘✔
+> TRANSFORMER O(n)O(n2)O(n2)✔✔
+> RET NET O(1) O(nb )O(n)✔✔
+> FCN ET O(m)O(mn (log n+m)) O(nm )✔✔✔
+
+varying features and handle large-scale sequential robotics data. In particular, DT (Chen et al., 2021) is a pioneering and simple method that uses Transformer to directly model the trajectory sequence in RL auto-regressively, compared to traditional offline RL algorithms (Kumar et al., 2020) which use many mathematical tricks to learn from offline data. The simplicity of the DT structure inspires follow-up work to use the attention mechanism to model the tempo-ral features of diverse robotic trajectories. For instance, Gato (Reed et al., 2022) serializes the Atari, Gym, chat, and image datasets (1.5T tokens) all into flat sequences for input to a Transformer, by utilizing its high capacity. RT-1 (Bro-han et al., 2022) also utilizes Transformer for its multi-task integration capability for imitation learning on 130K expert trajectories of robotic control. One common feature of the existing works on Transformer is that they mainly focus on modeling the time-varying features of robotic trajectories in time domain by drawing a direct analogy with that in modeling natural language sentences. We argue that this is insufficient for embodied learning, and instead we explore its unique features from the new angle of frequency domain . Specifically, we take a close examination on embodied learning in the frequency domain and observe that the energy density distribution of a robot’s state sequence is mainly concentrated in the low-frequency part, as shown in Fig. 1. This is due to the inherent conti-nuity and smoothness in natural physical phenomena and robot motor motion (Kashiri et al., 2018). However, existing works on Transformer and its variants directly model trajec-tories in the time domain, resulting in various issues. First, the data efficiency of existing Transformer architectures is low. They typically rely on large-scale data for good per-formance, while real-world physical data collection can be costly and time-consuming (Brohan et al., 2022; Padalkar et al., 2023; Fu et al., 2024). For instance, the dataset in RT-1 (Brohan et al., 2022) and subsequent work (Brohan et al., 2023) requires 17 months to gather 130k episodes, out of reach for most research labs. Moreover, Transformer-based models cannot intrinsically reduce the computation complexity (e.g., O(n) for inference) and often struggle with the real-time processing requirements (i.e., low infer-ence latency). For example, the inference frequency of such models is often around 3Hz (Brohan et al., 2022). However, a typical frequency of real-world legged robot control is above 50 Hz (Lee et al., 2020a). Therefore, it is crucial to reduce the model’s time complexity through algorithmic optimization, especially considering the constraints of robot hardware. To address the aforementioned issues, we propose a new architecture of Fourier Controller Network (FCNet) based on the key observation in the frequency domain. FCNet grounds the inductive bias in robotic control inspired by the Fourier transform. We conceptualize low-level continuous control as a sequential decision-making problem. Our neural model is adept at predicting subsequent actions by analyz-ing a historical window of state data, as depicted in Fig. 3. Guided by the observation in the frequency domain and the inductive reasoning that differential dynamics are simplified in the frequency domain (as suggested by (Trefethen, 1996)), FCNet introduces a causal spectral convolution (CSC) block. It employs the Short-Time Fourier Transform (STFT) and linear transform for efficient feature extraction in the fre-quency domain , distinct from Transformer and other preva-lent architectures. As shown in Fig. 2, we focus on the 
+
+m lowest modes, with m strategically selected to be ≪ n,where n is the length of the state window. Consequently, the high-frequency part in the frequency domain is filtered, allowing us to focus solely on these m lowest modes. The CSC makes efficient training and inference possible, and has also been shown to have good performance in experiments. Furthermore, to achieve efficient parallel training and infer-ence, which necessitates causality in the model’s sequential outputs (dependent only on previous inputs) and the rapid generation of each output token for real-time response, we introduce parallel training based on Fast Fourier transform (FFT), and recurrent inference based on sliding discrete Fourier transform (Sliding DFT) in FCNet. As outlined in Table 1, the FCNet demonstrates a computational com-plexity of O(mn log n + m2n) in parallel training setups, and O(m) for single-step inference. This efficiency marks a significant speed advantage over traditional Transformer models, enabling handling the complexities of real-time 2Fourier Controller Networks for Real-Time Decision-Making in Embodied Learning 
+
+continuous control in dynamic environments. We extensively evaluate FCNet in various settings. First, in the classic offline RL environments such as D4RL (Fu et al., 2020), FCNet outperforms Transformer, MLP-based meth-ods as well as RetNet (Sun et al., 2023) which is a represen-tative State Space Model (SSMs) and potential successor to Transformer. This shows strong feature extraction capabili-ties of FCNet from series of state data. Second, we evaluate Transformer and FCNet on a multi-environment robotics dataset. The results show that FCNet significantly outper-forms Transformer with limited data, and also has lower inference latency and good scalability. We also verify the robustness of FCNet in real-world robots. Finally, we test the inference latency of the Transformer (with KV cache) and FCNet under different hyperparameter settings related to model structure. The results show that the upward curve of the inference latency of FCNet is significantly slower than that of Transformer as the context length, number of layers, and hidden size are improved. This demonstrates the efficiency of the inference of FCNet. 
+
+## 2. Background 
+
+2.1. Preliminary 
+
+Real-world robotics control is often formulated as a Markov decision process (MDP) (S, A, T , r, γ ), where S ⊆ Rds
+
+and A ⊆ Rda denote the state space and action space, re-spectively; T is the transition probability; r is the reward function; and γ ∈ (0 , 1) is a discount factor. The goal of robot control is to get a parameterized policy π to take actions for interacting with the environment. Even in the fully-observed setting, the consideration of multi-task will introduce partial-observability (Lee et al., 2020b; Ghosh et al., 2021; Ying et al., 2023), which demands encoding enough history information in the model. Following pre-vious work (Chen et al., 2021; Agarwal et al., 2023), we consider policies that map historical trajectories into action spaces at = π(s≤t, a <t ) and maximize the accumulated expected rewards, i.e., 
+
+Eτ ∼πθ [R(τ )] = Eτ ∼πθ
+
+" ∞X
+
+> i=0
+
+γir(si, a i)
+
+#
+
+, (1) where τ represents the trajectory of states and actions, defined as τ = {s0, a 0, s 1, a 1, . . . }. As acquiring the robotics dataset in the real world can be expensive, a well-used alternative method is to utilize expert datasets 
+
+D = {τ |τ ∼ πβ , τ = ( s0, a 0, . . . , s T , a T )} for imita-tion learning, or offline datasets D = {τ |τ ∼ πβ , τ =(s0, a 0, r 0, . . . , s T , a T , r T )} for offline RL. Here πβ is an unknown behavior policy. We aim to train a policy πθ using the dataset, with the goal of maximizing the expected return 
+
+Eτ ∼πθ [R(τ )] .For expert datasets that do not include reward information, our objective is to ensure that the behavior of the trained policy πθ closely aligns with the expert behavior policy πβ .Thus, the optimization objective can be summarized as 
+
+L(θ) = 1
+
+T |D|
+
+X 
+
+> τ∈DT
+
+X
+
+> i=0
+
+d(ai, ˆai), (2) where ˆai is the action derived from πθ , ai is the action in τ ,and d is the distance function. Typically, when πθ takes into account historical trajectories, it employs a context window of length n representing the extent of historical dependen-cies, i.e., at = πθ (st−n+1: t, a t−n+1: t−1). In practice, we can choose d in Eq. (2) as the mean-squared error (MSE) for deterministic actions, and the Kullback-Leibler (KL) Divergence for stochastic actions. For offline datasets that include reward information, one method is to incorporate the return-to-go, i.e., the suffix of the reward sequence, into the policy’s sequence input. This often results in a policy with higher performance than the original behavior policy in the dataset, as the results of DT (Chen et al., 2021) show. 
+
+Time Complexity of Transformer In addition to the DT just mentioned, there is a lot of work on pre-training robotics datasets using Transformer (Reed et al., 2022; Jiang et al., 2022; Brohan et al., 2022; 2023; Chebotar et al., 2023), and they all use trajectories analogous to language as input to Transformer. The training time complexity of the Trans-former model is O(n2dh + nd 2
+
+> h
+
+), where n is the length of both the input and output sequences and dh is the hidden di-mension. The inference time complexity of the Transformer with KV cache is O(nd h + d2
+
+> h
+
+). In scenarios where dh is relatively stable, we primarily consider the impact of n on time complexity. Consequently, the training and inference time complexities of the Transformer can be simplified to 
+
+O(n2) and O(n), respectively. 
+
+2.2. Motivation 
+
+As previously mentioned, existing architectures such as Transformer mainly focus on modeling the time-varying features of robotic trajectories in the time domain, through mechanisms such as attention. However, they do not take into account the special properties embedded in robotic control in the frequency domain. Below, we start with simple physical motions to illustrate the significance of modeling temporal features in the frequency domain. Consider the motion of a mass along the x-axis as a simple example. We assume knowledge of the mass’s state at n
+
+distinct moments. The complexity of describing its motion depends on the nature of the movement. For a particle at rest, only the initial position x0 is needed. In uniform linear mo-tion, both the initial position x0 and velocity v are required. 3Fourier Controller Networks for Real-Time Decision-Making in Embodied Learning 
+
+For uniformly accelerated linear motion, three quantities are essential: initial position x0, initial velocity v, and accel-eration a, resulting in the equation x = x0 + v0t + at 2/2.Similarly, simple harmonic motion, which is common in na-ture, requires amplitude A, angular frequency ω, and phase 
+
+ϕ for the equation x = A sin ( ωt + ϕ). In fact, real motor movements are typically smooth to minimize energy losses and to facilitate their application in robotic arms (Kashiri et al., 2018). For instance, uniformly accelerated motion is employed in the trapezoidal acceleration and deceleration curves of motors, and simple harmonic motion (or sinu-soidal function) is used in the S-curves of motors, both common in motor motion. This insight leads us to recognize that natural object motion often adheres to physical principles, like energy conserva-tion, and optimal trajectories are typically smooth, possibly with minor irregularities. Viewing this from a data-driven standpoint, if we have details on a mass’s position, velocity, and other states at n moments, the quantity of informa-tion embedded in this does not need to be described using 
+
+O(n) level parameters. In fact, a significantly smaller set of parameters might be adequate for accurate representation. Similarly, complex rigid structures such as robots can also be approximated in this manner, given that robots are com-posed of rigid components like joints and links. Typically, a robot’s state includes various parameters such as motor position, motor velocity, and body angular velocity, among others. The flexible motion of the robot can be character-ized by a limited set of physical quantities. However, the measured state variables often contain a significant amount of high-frequency noise, due to sensor uncertainties. There-fore, we propose to transform the state representation of the object on n moments into the frequency domain, rather than modeling the trajectories in the time domain. By filtering out high-frequency components and retaining low-frequency ones, we can more accurately capture the essential motion information of the object. Indeed, as demonstrated in Fig. 1, both the common mechan-ical motions and the motions of real robots show a consistent pattern in the frequency domain, namely, their energy den-sity distributions predominantly reside in a low-frequency region. This observation aligns with our hypothesis. Addi-tionally, our empirical analyses reveal that in various scenar-ios, the number m of significant low-frequency modes for robot states is much smaller than n. We empirically set the value m ≪ n in the experiment. Consequently, this allows us to model state sequences over time with reduced com-plexity compared to the Transformer, thanks to frequency domain interpolation. 
+
+## 3. Fourier Controllers 
+
+We now formally introduce Fourier Controller Network (FCNet) for efficient robotic control. FCNet incorporates an inductive bias about frequency domain features and aims to minimize the time complexity of both training and inference. 
+
+3.1. Overall Architecture 
+
+As shown in Fig. 2, FCNet comprises a position-wise en-coder P : Rds → Rdh , L identical stacked Fourier layers, and a position-wise decoder Q : Rdh → Rda , where both P
+
+and Q are parameterized by feed-forward networks (FFNs) and dh denotes the hidden dimension. Each Fourier layer consists of two primary modules: a causal spectral convo-lution (CSC) block and a position-wise FFN block. Given an input window of historical states, denoted as X0 := [x00, . . . , x0
+
+> n−1
+
+]⊤ ∈ Rn×ds where x0 
+
+> i
+
+:= si for ∀0 ≤ i < n ,our model outputs the predicted actions for corresponding time steps: XL+2 := [ xL+2 0 , . . . , xL+2  
+
+> n−1
+
+]⊤ ∈ Rn×da with 
+
+xL+2  
+
+> i
+
+:= (ˆ ai) for ∀0 ≤ i < n . The computation process of the FCNet is: 
+
+X1 ∈ Rn×dh = P (X0),
+
+Y l = gelu(CSC(LN( Xl))) + Xl,
+
+Xl+1 = FFN(LN( Y l)) + Y l,
+
+XL+2 ∈ Rn×da = Q(XL),
+
+(3) where l ∈ { 1, . . . , L }, LN( ·) is the LayerNorm (Ba et al., 2016), and P is a single-layer FFN, while FFN( ·) and Q are two-layer FFNs. gelu( ·) refers to the Gaussian Error Linear Unit (GELU) activation (Hendrycks & Gimpel, 2016). Of note, the parameters for each layer’s FFN( ·) are not shared. In order to leverage good scalability of sequence model-ing (Brown et al., 2020), we can supervise the action of the policy output XL+2 in a supervised learning manner(Chen et al., 2021). Based on Eq. (2), the training objective can be formulated as: 
+
+L(θ) = 1
+
+|D|
+
+X 
+
+> τ∈D
+
+d(a0: n, X L+2 ). (4) 
+
+3.2. Causal Spectral Convolution 
+
+In order to model time-varying features in the frequency domain, in this subsection, we delve into the mechanism of causal spectral convolution (CSC) block, which is a train-able block and utilizes the Short-Time Fourier Transform (STFT) to efficiently extract and encode time-varying fea-tures. It is nontrivial to encode because it is necessary to ensure that the output is causal. Given an input sequence 
+
+X := [ x0, . . . , xn−1]⊤ ∈ Rn×dh , the output of the CSC 4Fourier Controller Networks for Real-Time Decision-Making in Embodied Learning Inputs  P
+
+> Layer Norm
+> Causal Spectral
+> Convolution
+
++
+
+σ
+
+> Layer Norm
+> Feed Forward
+
++ Q Outputs 
+
+× L   
+
+> STFT
+> Clipped Modes ෡𝑿
+> Linear Transform
+> & ISTFT
+> Output Sequence YInput Sequence X
+
+𝒎 ≪ 𝒏 
+
+clipped 
+
+Figure 2. The overall model architecture of FCNet. In order to ensure efficient training and inference, we cannot apply Fourier transform to all history trajectories, but instead apply STFT to a window of historical data of length n to filter high-frequency part in the frequency domain, and then apply linear transform and inverse STFT back to the time domain. That is, the CSC block comes in the frequency domain to model temporal features, while the FFN is used to model features on the hidden dimension. P is point-wise encoder and Q is point-wise decoder mentioned in Sec. 3.1. σ is the activation function. 
+
+yn−1 ∈ Rdh can be formalized as: 
+
+ˆxk = F(X)( k), ˆxk ∈ Cdh , 0 ≤ k < m, 
+
+ˆY = W ˆX, ˆX = [ ˆ x0, . . . , ˆxm−1]⊤,
+
+ˆY = [ ˆ y0, . . . , ˆym−1]⊤,
+
+yn−1 = F−1( ˆZ)( n − 1) , ˆZ = [ ˆ z0, . . . , ˆzn−1]⊤,
+
+(5) where ˆX, ˆY ∈ Cm×dh and ˆZ ∈ Cn×dh . 1 ≤ m ≤ 1 + 
+
+⌊n/ 2⌋ is a hyper-parameter denoting the number of modes preserved in the frequency domain, W ∈ Cm×m is the weight matrix, and Z is obtained by extending Y according to the conjugate symmetry of real series: 
+
+ˆzk =
+
+
+
+ˆyk, 0 ≤ k < m, 
+
+ˆyn−k, n − m + 1 ≤ k < n, 
+
+0, otherwise .
+
+(6) Here, F and F−1 denote the Discrete Fourier Transform (DFT) and its inverse (IDFT): 
+
+F(X)( k) = 
+
+> n−1
+
+X
+
+> i=0
+
+xi exp 
+
+
+
+− j2πn ki 
+
+
+
+,
+
+F−1( ˆZ)( i) = 1
+
+n
+
+> n−1
+
+X
+
+> k=0
+
+ˆzk exp 
+
+ j2πn ki 
+
+
+
+,
+
+(7) where j = √−1 is the imaginary unit. In Eq. (5) , we start by encoding the input sequence via the DFT, where only low-frequency components are preserved while high-frequency noises are filtered by using only m
+
+DFTs, according to the smoothness of the physical states. Then, a linear transform is applied in the frequency domain, followed by an IDFT back to the physical domain. It is noted that the output yn−1 only depends on the history 
+
+xi, i ≤ n − 1, ensuring the causality of the prediction. 
+
+3.3. Parallel Training 
+
+Parallelization significantly speeds up model training by distributing tasks across multiple processors, especially for large datasets. Here we fully parallelize the FCNet train-ing to improve efficiency. The FFN can be easily paral-lelized by matrix partitioning, and thus we mainly discuss the parallelization of the CSC block (see Appendix A for its schematic diagram). The CSC block involves opera-tions that are inherently sequential, and it is nontrivial to parallelize due to dependencies between operations. 
+
+Representation of computation process. Adopting this approach, for a given input sequence X := [x0, . . . , xn−1]⊤ ∈ Rn×dh , the CSC block outputs in par-allel Y := [ y0, . . . , yn−1]⊤ ∈ Rn×dh , where yk is solely 5Fourier Controller Networks for Real-Time Decision-Making in Embodied Learning 𝑎 𝑡 −1              
+
+> 𝑟 𝑡
+> 𝑠 𝑡
+> 𝑎 𝑡
+> 𝑟 𝑡 +1
+> 𝑠 𝑡 +1
+> 𝑎 𝑡 +𝑛 −2
+> 𝑟 𝑡 +𝑛 −1
+> 𝑠 𝑡 +𝑛 −1
+> 𝑎 𝑡 +𝑛 −1
+> 𝑟 𝑡 +𝑛
+> 𝑠 𝑡 +𝑛
+> 𝑇 =𝑡 +𝑛 −1
+> 𝑇 =𝑡 +𝑛
+> 𝐼𝑛𝑓𝑒𝑟𝑒𝑛𝑐𝑒 :sliding 𝑤𝑖𝑛𝑑𝑜 𝑤 𝑠𝑖𝑧𝑒 =𝑛
+
+𝐹𝑜𝑢𝑟𝑖𝑒𝑟 𝐶𝑜𝑛𝑡𝑟𝑜𝑙𝑙𝑒𝑟 𝑁𝑒𝑡𝑤𝑜𝑟𝑘      
+
+> 𝑎 𝑡
+> 𝑟 𝑡 +1
+> 𝑠 𝑡 +1
+> 𝑎 𝑡 +1
+> 𝑟 𝑡 +2
+> 𝑠 𝑡 +2
+> 𝑎 𝑡 +𝑛 −1
+> 𝑟 𝑡 +𝑛
+> 𝑠 𝑡 +𝑛
+> 𝑎 𝑡 +𝑛
+> 𝑟 𝑡 +𝑛 +1
+> 𝑠 𝑡 +𝑛 +1
+> 𝑙𝑖𝑛𝑒𝑎𝑟 𝑑𝑒𝑐𝑜𝑑𝑒𝑟
+> 𝑎𝑐𝑡𝑖𝑜𝑛
+> 𝑟𝑒𝑤𝑎𝑟𝑑
+> 𝑠𝑡𝑎𝑡𝑒
+> 𝑃𝑎𝑟𝑎𝑙𝑙𝑒𝑙 𝑇𝑟𝑎𝑖𝑛𝑖𝑛𝑔 :𝑤𝑖𝑛𝑑𝑜 𝑤 𝑠𝑖𝑧𝑒 =𝑛
+
+Figure 3. Consider MDP as a sequence modeling problem. Es-pecially in a continuous state space like embodied learning, it makes sense to perform Fourier-based modeling and training in the frequency domain of time-domain sequences within a window 
+
+[t, t + n − 1] . In the inference phase T = t + n − 1 → T = t + n,the sliding window in Sec. 3.4 is utilized for efficient inference. 
+
+dependent on xi for i ≤ k. Our goal is to compute each 
+
+yt (0 ≤ t < n ) quickly and in parallel. Consider that we are computing the output yt (0 ≤ t < n ) at moment t. yt
+
+can only depend on xi (i ≤ t) for causality. Therefore, the 
+
+ˆX in the frequency domain for each yt is distinct. We use 
+
+ˆX(t) to denote the ˆX corresponding to yt. From Eq. (5) and Eq. (7), we have: 
+
+ˆx(t) 
+
+> k
+
+=
+
+> t
+
+X
+
+> i=t−n+1
+
+xi exp 
+
+
+
+− j2πn ki 
+
+
+
+, (8) To simplify the expression, we let uk = exp ( j2πn k) and 
+
+u = [ u0, . . . , u m−1]⊤ ∈ Cm. Each ˆx(t) 
+
+> k
+
+can be expressed in terms of its previous ˆxk:
+
+ˆx(t) 
+
+> k
+
+= uk( ˆ x(t−1)  
+
+> k
+
++ xt − xt−n) = uk( ˆ x(t−1)  
+
+> k
+
++ ft),
+
+⇒ ˆX(t) = u ⊙ ( ˆX(t−1) + 1mf ⊤ 
+
+> t
+
+),
+
+(9) where ft = xt − xt−n ∈ Rdh can be computed in paral-lel, ˆX(t) = [ ˆ x(t)0 , . . . , ˆx(t)
+
+> m−1
+
+]⊤ ∈ Cm×dh and ⊙ means Hadamard product or element-wise product. The above equation can be computed recursively for each ˆX(t).After determining ˆX(t) for 0 ≤ t < n , we can obtain 
+
+ˆY (t), ˆZ(t), y t, 0 ≤ t < n using Eq. (5) and Eq. (6). 
+
+Parallel training. The representation in Eq. (8) has time complexity O(md hn2) in parallel and Eq. (9) has a serial 
+
+O(md hn) time complexity. Here, we seek to find a training process that can be parallelized with low time complexity. Let us dissect the recursive formula given in Eq. (9) for 
+
+ˆX(t) where 0 ≤ t < n . We have 
+
+ˆX(t) = u◦t ⊙ ˆX(0) +
+
+> t−1
+
+X
+
+> i=0
+
+u◦(i+1) f ⊤
+
+> t−i
+
+, (10) where u◦t means u ⊙ u ⊙ · · · ⊙ u
+
+| {z } 
+
+> telements
+
+. Let 
+
+Ai = [( u◦(i+1) )×dh ] ∈ Cm×dh , 0 ≤ i < n − 1,
+
+Bi = [( f ⊤ 
+
+> i
+
+)×m] ∈ Cm×dh , 1 ≤ i < n, (11) and for special case An−1 = An−2, B0 = ˆX(0) ∈ Cm×dh .From Eq. (10) we get: 
+
+ˆX(t) =
+
+> t
+
+X
+
+> i=0
+
+Ai ⊙ Bt−i, 0 ≤ t < n, (12) which is a typical form of FFT convolution { ˆX(t)} =
+
+{Ai} ∗ { Bi} where ∗ represents linear convolution. We can compute all ˆX(t), 0 ≤ t < n by FFT with time complexity O(md hn log n) in parallel . The fast par-allel computation of the IDFT is homogeneous. Thus the training time complexity of the whole CSC block is 
+
+O(md hn log n + m2dhn) because of the computation of 
+
+ˆY (t) = W ˆX(t), 0 ≤ t < n . Therefore, the total train-ing time complexity is O(md hn log n + m2dhn + nd 2
+
+> h
+
+) or reduced to O(mn log n + m2n).Furthermore, FCNet exhibits a memory complexity of 
+
+O(mnd h) (can be reduced to O(mn )) during training due to the storage for ˆx(t) 
+
+> k
+
+(where 0 ≤ t < n and 0 ≤ k < m ). 
+
+3.4. Reprensentation of Recurrent Inference 
+
+Efficient real-time inference is important for the deployment of robots (Sandha et al., 2021). It is difficult to utilize time-domain information to achieve efficient inference. Therefore we utilize the cache of frequency domain information for fast inference. During inference, supposing that we cache the results computed in the last time step, the CSC can recurrently compute the current output yn−1 given a newly coming xn−1 using Sliding DFT (as well as Eq. (9)): 
+
+ˆxk = exp 
+
+ j2πn k
+
+
+
+( ˆ x′ 
+
+> k
+
+− x−1 + xn−1), (13) where 0 ≤ k < m . After obtaining ˆx0, . . . , ˆxm−1, we compute yn−1 as in Eq. (5). Here, ˆx′ 
+
+> k
+
+is the result cached in the last time step, which is equal to F(X′)( k), X′ := [x−1, . . . , xn−2]⊤. Because we cached the ˆx′ 
+
+> k
+
+in the last time step, the time complexity of Eq. (13) is O(md h) in-stead of O(md hn).After computing ˆX = [ ˆ x0, . . . , ˆxm−1]⊤, the ˆY = W ˆX
+
+and F−1( ˆZ)( n − 1) part in Eq. (5) can be preprocessed by 6Fourier Controller Networks for Real-Time Decision-Making in Embodied Learning 
+
+calculating the result of multiplying W by the correspond-ing vector of F−1( ˆZ)( n − 1) in advance. Therefore, the total inference time complexity is O(md h + d2
+
+> h
+
+) (where 
+
+O(d2
+
+> h
+
+) corresponds to FFN), further reduced to O(m). This mechanism is advantageous for rapid inference since it al-lows for the generation of actions sequentially during the evaluation of an embodied agent. 
+
+## 4. Experiments 
+
+In this section, we conduct extensive experiments to evaluate the performance and efficiency of FCNet. Initially, FCNet’s effectiveness in fine continuous control is compared against Transformer and RetNet (a current SSM architecture) using the D4RL offline RL benchmark. Next, FCNet and Trans-former are assessed on a multi-environment legged robot locomotion dataset via imitation learning, highlighting FC-Net’s adaptability across various environments, particularly with scarce data. Finally, we investigate the inference ef-ficiency of FCNet compared to Transformer under diverse model structure hyperparameter settings. 
+
+4.1. Evaluation in Offline RL 
+
+To evaluate FCNet in the D4RL (Fu et al., 2020) offline RL tasks, we employ a broad range of baselines featuring various network architectures such as MLP, Transformer, and RetNet. We start with classic MLP-based methods like Behavior Cloning (BC), CQL (Kumar et al., 2020), BEAR (Kumar et al., 2019), BRAC-v (Wu et al., 2019), and AWR (Peng et al., 2019). Additionally, we incorpo-rate the transformer-based method DT (Chen et al., 2021) and the RetNet-based method DT-RetNet, which replaces the Transformer architecture in DT into RetNet. In D4RL evaluations, FCNet follows some design strategies of DT, i.e., concatenating action, return-to-go (normalized, with 
+
+1.0 indicating an expert policy), and state into a single token 
+
+(a⊤, R ⊤, s ⊤)⊤, and then predicts the next token autoregres-sively. As shown in Table 2, our FCNet is competitive with DT, and significantly surpasses other methods. Particularly, FCNet outperforms DT-RetNet, suggesting that FCNet’s inductive bias for robotic control has more powerful feature extraction capability and performance compared to SSMs. In addition to locomotion tasks, we expand our investigation to encompass manipulation tasks, specifically the Adroit suite in the D4RL dataset, which comprises various robotic arm manipulation challenges and are not harmonic, distinct from locomotion tasks. Our results, as detailed in the Ta-ble 3, demonstrate the performance of FCNet in comparison with DT, BC, and CQL. FCNet beats DT on 9 of the 12 manipulation tasks in D4RL-Adroit. These results highlight FCNet’s robust performance across a range of tasks, outper-forming DT, BC, and CQL in the domain of manipulation. This demonstrates the broad applicability of our approach beyond locomotion tasks. 
+
+4.2. Evaluation in Legged Robot Locomotion 
+
+To test FCNet on the more challenging multi-environment legged robot locomotion, we introduce a new, substan-tially larger dataset than that in D4RL. Compared with Transformer-based methods in this dataset, our focus is to showcase FCNet’s strong fitting ability even with limited data, and further real-time inference on a real-world robot. 
+
+Multi-Environment Legged Robotics Dataset. In order to evaluate the performance of the policy in modeling his-torical information sequences in a complex multi-task envi-ronment, which is rarely available in previous d4rl datasets, We develop a multi-environment legged robot locomotion dataset, which covers various skills (e.g., standing, rush-ing, crawling, squeezing, tilting, and running), and differ-ent terrains (e.g., rough terrain, stairs, slopes, and obsta-cles), following Rudin et al. (2022). The dataset is collected in Isaacgym (Makoviychuk et al., 2021) by some expert-performance RL policies which have demonstrated strong performance in the real world. It is noteworthy that this dataset is designed for practical robotics applications. Mod-els trained using this dataset can be directly deployed on real-world legged robots (e.g., Unitree Aliengo) to perform a variety of locomotive skills across diverse terrains. The test version of the dataset contains the aforementioned skills and terrains, with 320,000 trajectories and 60M steps. 1
+
+Evaluation on Simulator. To assess FCNet’s effective-ness on multi-environment robotic datasets, we first perform imitation learning on this dataset. Our comparison focuses on Transformer, as other model architectures like RetNet and MLP have been demonstrated to be less effective in Sec. 4.1. We report the performances of FCNet and Trans-former across various dataset sizes in Fig. 4, where FCNet consistently outperforms Transformer. Notably, when the dataset size is comparable to that of D4RL (1M ∼ 3M), Transformer’s performance is markedly low, whereas FC-Net still delivers promising results even with limited data. This underscores that FCNet, with its inductive bias tailored for robotic control, is more adept at modeling real-world robot trajectories than Transformer. Given the constraints of end-side device performance and the real-time control requirements for robots, it’s crucial that the inference latency of an embodied model is kept minimal when deployed in real-world scenarios (e.g., < 20 ms for quadruped robot). 
+
+Real-World Applications. We further deploy FCNet on real-world robots to evaluate its real-time inference ability 
+
+> 1We make some of the data public on the project page.
+
+7Fourier Controller Networks for Real-Time Decision-Making in Embodied Learning 
+
+Table 2. Results in D4RL-Mujoco . For all algorithms, we report the performance with mean and variance under three random seeds. 
+
+Task Name FCNet(Ours) DT DT-RetNet BC CQL BEAR BRAC-v AWR 
+
+> HALFCHEETAH
+
+-MEDIUM -EXPERT 91 .2 ± 0.3 86 .8 ± 1.3 91 .4 ± 1.2 35 .8 62 .4 53 .4 41 .9 52 .7
+
+> WALKER
+
+2D-MEDIUM -EXPERT 108 .8 ± 0.1 108 .1 ± 0.2 79 .1 ± 1.8 6.4 98 .7 40 .1 81 .6 53 .8
+
+> HOPPER
+
+-MEDIUM -EXPERT 110 .5 ± 0.5 107 .6 ± 1.8 102 .9 ± 5.6 111 .9 111 .0 96 .3 0.8 27 .1
+
+> HALFCHEETAH
+
+-MEDIUM 42 .9 ± 0.4 42 .6 ± 0.1 43 .2 ± 0.4 36 .1 44 .4 41 .7 46 .3 37 .4
+
+> WALKER
+
+2D-MEDIUM 75 .2 ± 0.5 74 .0 ± 1.4 73 .3 ± 4.3 6.6 79 .2 59 .1 81 .1 17 .4
+
+> HOPPER
+
+-MEDIUM 57 .8 ± 6.0 67 .6 ± 1.0 74 .1 ± 5.3 29 .0 58 .0 52 .1 31 .1 35 .9
+
+> HALFCHEETAH
+
+-MEDIUM -REPLAY 39 .8 ± 0.8 36 .6 ± 0.8 17 .2 ± 4.3 38 .4 46 .2 38 .6 47 .7 40 .3
+
+> WALKER
+
+2D-MEDIUM -REPLAY 63 .5 ± 7.5 66 .6 ± 3.0 32 .4 ± 6.6 11 .3 26 .7 19 .2 0.9 15 .5
+
+> HOPPER
+
+-MEDIUM -REPLAY 85 .8 ± 1.7 82 .7 ± 7.0 58 .4 ± 2.8 11 .8 48 .6 33 .7 0.6 28 .4
+
+Average 75 .1 74 .7 63 .6 46 .4 63 .9 48 .2 36 .9 34 .3
+
+Table 3. Results in D4RL-Adroit . For FCNet and DT, we report the performance with mean and variance under five random seeds. Other scores are reported by the D4RL paper. 
+
+FCNet (Ours) DT BC CQL 
+
+> PEN
+
+-HUMAN 57 .7 ± 11 .1 −0.2 ± 1.8 34.4 37.5 
+
+> HAMMER
+
+-HUMAN 1.2 ± 0.0 0.3 ± 0.0 1.5 4.4 
+
+> DOOR
+
+-HUMAN 0.4 ± 0.5 0.1 ± 0.0 0.5 9.9 
+
+> RELOCATE
+
+-HUMAN 0.2 ± 0.2 0.0 ± 0.0 0.0 0.2 
+
+> PEN
+
+-CLONED 50 .4 ± 24 .1 22 .7 ± 17 .1 56.9 39.2 
+
+> HAMMER
+
+-CLONED 0.2 ± 0.0 0.3 ± 0.0 0.8 2.1 
+
+> DOOR
+
+-CLONED −0.2 ± 0.0 0.1 ± 0.0 -0.1 0.4 
+
+> RELOCATE
+
+-CLONED −0.2 ± 0.0 −0.3 ± 0.0 -0.1 -0.1 
+
+> PEN
+
+-EXPERT 108 .0 ± 11 .3 110 .4 ± 20 .9 85.1 107.0 
+
+> HAMMER
+
+-EXPERT 121 .1 ± 6.1 89 .7 ± 24 .6 125.6 86.7 
+
+> DOOR
+
+-EXPERT 102 .9 ± 2.9 95 .5 ± 5.7 34.9 101.5 
+
+> RELOCATE
+
+-EXPERT 50 .0 ± 6.0 15 .3 ± 3.6 101.3 95.0 
+
+Average 41.0 27.8 36.7 40.3 1.9M 3.8M 7.5M 15M 30M 60M 120M 
+
+> Dataset Size (in millions)
+> 20
+> 15
+> 10
+> 5
+> 0
+> 5
+> 10
+> Performance(Mean Return)
+> Expert Performance (10.589)
+> Fourier Controller
+> Transformer
+> Clipping Threshold (-20)
+
+Figure 4. The performance of each model on the legged robotics dataset (measured by mean return, averaging the results across 1500*3 trajectories). For all future experiments, the 60M-step dataset is utilized as the standard reference. 
+
+and generalizability. Training on the 60M-step dataset men-tioned in Sec. 4.2, our FCNet shows great adaptability on a variety of terrains not seen in the dataset, such as ice, deep snow, and steep slopes. The FCNet-controlled robot moves fluidly, likely due to the filtering of high-frequency noise. In terms of computational efficiency, FCNet achieves a low 
+
+Figure 5. Deploying FCNet to real-world legged robots. 
+
+inference latency ( ∼2ms) on less powerful end-side devices, a critical factor for practical deployment. Conversely, the Transformer model, in our tests, does not perform as well in real-world settings due to issues like lower returns, less smooth output, and longer inference times, leading to less fluid motion and suboptimal performance in indoor scenar-ios such as stair climbing, turning, and navigating grassy terrains. More images and videos of these tests are available in the Appendix D and supplementary materials. 8Fourier Controller Networks for Real-Time Decision-Making in Embodied Learning 0 200 400 600 800 1000         
+
+> Context Length
+> 4.0
+> 4.5
+> 5.0
+> 5.5
+> 6.0
+> 6.5
+> 7.0
+> 7.5
+> Inference Latency (ms)
+> (a) Inference Latency vs Context Length
+> Fourier Controller
+> Transformer
+> 510 15 20 25 30
+> n_layer
+> 5
+> 10
+> 15
+> 20
+> 25
+> 30
+> 35
+> 40
+> 45
+> Inference Latency (ms)
+> (b) Inference Latency vs n_layer
+> Fourier Controller
+> Transformer
+> 500 1000 1500 2000
+> hidden_size
+> 5
+> 10
+> 15
+> 20
+> 25
+> Inference Latency (ms)
+> (c) Inference Latency vs hidden_size
+> Fourier Controller
+> Transformer
+
+Figure 6. The CPU inference latency of FCNet and Transformer under various hyperparameter settings about structure. 
+
+4.3. Low Inference Latency 
+
+To assess FCNet’s advantage in inference efficiency, par-ticularly its capability to extract and encode time-varying features via frequency domain interpolation, we conduct a comparative analysis with Transformer under various hyper-parameter settings. This is done by randomizing input data and initialized weights. We use the empirical value of m in FCNet as min {2.5 log n, ⌊ n 
+
+> 2
+
+⌋ + 1 }, where n is the context length. In Fig. 6 (a), as the context length increases, FCNet’s inference latency remains relatively stable, whereas Trans-former’s latency continues to grow significantly, even with a KV cache. This trend can be attributed to Transformer’s inherent O(n) inference complexity. In Fig. 6(b) and (c), the inference latencies of FCNet and Transformer are examined as the number of layers and hid-den sizes are increased. The results demonstrate that despite the growth in these hyperparameters, the increase in FC-Net’s inference latency is substantially smaller compared to that of the Transformer. When the model has as many as 32 layers or a hidden size of 2048, FCNet maintains a significant speed advantage, being 3 to 5 times faster than the Transformer. Importantly, even under these conditions, FCNet’s inference latency remains below 20ms. This sug-gests that FCNet, even with an increased number of model parameters, can still meet the requirements for low inference latency. This is a crucial factor for real-time applications in robotics where quick and responsive control is essential. More comprehensive experiments on ablation study on FC-Net and Transformer are included in Appendix B, varying the parameter count (controlled by the number of layers and hidden size) and context length. 
+
+## 5. Conclusion and Limitations 
+
+In this paper, we present the Fourier Controller Network (FCNet), an innovative model reshaping embodied learning with a focus on frequency domain analysis. FCNet emerges as a distinctive Fourier-based structure, ingeniously incor-porating inductive biases for robotic control, and is adeptly designed to minimize time complexity in embodied learn-ing architectures. This design empowers FCNet to extract features with high accuracy, facilitating decision-making in embodied learning through frequency domain interpo-lation. FCNet excels in training efficiency, showcasing a training complexity of O(mn log n + m2n), and remark-able inference efficiency at O(m). These developments not only boost the model’s effectiveness but also greatly re-duce computational requirements. Our results highlight the promise of frequency domain analysis in embodied learning and pave the way for further investigations into pre-training FCNet on extensive robotics datasets, potentially enhancing its generalization abilities significantly. However, our work has the following limitations: First, we did not validate the scalability of FCNet on a larger embod-ied dataset. We hope that future scalable methods, such as the attention mechanism, can be adapted in the frequency domain. Second, although we validate the utility of FCNet on complex terrain locomotion and manipulation, we do not consider those scenarios where high-frequency information may be important. Also, we have not yet extended to mul-timodal inputs. We hope that combining FCNet for online RL training, incorporating multimodal inputs, and scaling FCNet are directions for future exploration. 
+
+## Acknowledgements 
+
+This work was supported by the National Key Research and Development Program of China (No. 2020AAA0106302), NSFC Projects (Nos. 92248303, 92370124, 62350080, 62276149, U2341228, 62061136001, 62076147), BNRist (BNR2022RC01006), Tsinghua Institute for Guo Qiang, and the High Performance Computing Center, Tsinghua University. J. Zhu was also supported by the XPlorer Prize. We would like to thank Ronghua Hu and Zhuang Zhang for their help in real-world legged robot experiments. We would also like to thank Hao Guo, Muyan Hu, Weilin Zhao, Xinning Zhou, and Huayu Chen for their useful comments. 9Fourier Controller Networks for Real-Time Decision-Making in Embodied Learning 
+
+## Impact Statement 
+
+This paper presents work whose goal is to advance the field of Machine Learning. The development and implementa-tion of Fourier Controller Networks (FCNet) for real-time decision-making in embodied learning have the potential to significantly enhance the efficiency and effectiveness of robotic systems. The application of FCNet in various fields could lead to advancements in automation and intelligent systems, influencing sectors like healthcare, manufacturing, and service industries. 
+
+## References 
+
+Agarwal, A., Kumar, A., Malik, J., and Pathak, D. Legged locomotion in challenging terrains using egocentric vi-sion. In Conference on Robot Learning , pp. 403–415. PMLR, 2023. Ahn, M., Dwibedi, D., Finn, C., Arenas, M. G., Gopalakr-ishnan, K., Hausman, K., Ichter, B., Irpan, A., Joshi, N., Julian, R., et al. Autort: Embodied foundation models for large scale orchestration of robotic agents. arXiv preprint arXiv:2401.12963 , 2024. Andrychowicz, O. M., Baker, B., Chociej, M., Jozefowicz, R., McGrew, B., Pachocki, J., Petron, A., Plappert, M., Powell, G., Ray, A., et al. Learning dexterous in-hand manipulation. The International Journal of Robotics Research , 39(1):3–20, 2020. Ba, J. L., Kiros, J. R., and Hinton, G. E. Layer normalization. 
+
+arXiv preprint arXiv:1607.06450 , 2016. Bousmalis, K., Vezzani, G., Rao, D., Devin, C., Lee, A. X., Bauza, M., Davchev, T., Zhou, Y., Gupta, A., Raju, A., et al. Robocat: A self-improving foundation agent for robotic manipulation. arXiv preprint arXiv:2306.11706 ,2023. Brohan, A., Brown, N., Carbajal, J., Chebotar, Y., Dabis, J., Finn, C., Gopalakrishnan, K., Hausman, K., Herzog, A., Hsu, J., et al. Rt-1: Robotics transformer for real-world control at scale. arXiv preprint arXiv:2212.06817 , 2022. Brohan, A., Brown, N., Carbajal, J., Chebotar, Y., Chen, X., Choromanski, K., Ding, T., Driess, D., Dubey, A., Finn, C., et al. Rt-2: Vision-language-action models transfer web knowledge to robotic control. arXiv preprint arXiv:2307.15818 , 2023. Brown, T., Mann, B., Ryder, N., Subbiah, M., Kaplan, J. D., Dhariwal, P., Neelakantan, A., Shyam, P., Sastry, G., Askell, A., et al. Language models are few-shot learners. 
+
+Advances in Neural Information Processing Systems , 33: 1877–1901, 2020. Chebotar, Y., Vuong, Q., Hausman, K., Xia, F., Lu, Y., Irpan, A., Kumar, A., Yu, T., Herzog, A., Pertsch, K., et al. Q-transformer: Scalable offline reinforcement learning via autoregressive q-functions. In Conference on Robot Learning , pp. 3909–3928. PMLR, 2023. Chen, L., Lu, K., Rajeswaran, A., Lee, K., Grover, A., Laskin, M., Abbeel, P., Srinivas, A., and Mordatch, I. De-cision transformer: Reinforcement learning via sequence modeling. Advances in Neural Information Processing Systems , 34:15084–15097, 2021. Chen, R. T., Rubanova, Y., Bettencourt, J., and Duvenaud, D. K. Neural ordinary differential equations. Advances in Neural Information Processing Systems , 31, 2018. Child, R., Gray, S., Radford, A., and Sutskever, I. Gen-erating long sequences with sparse transformers. arXiv preprint arXiv:1904.10509 , 2019. Dai, Z., Yang, Z., Yang, Y., Carbonell, J., Le, Q. V., and Salakhutdinov, R. Transformer-xl: Attentive language models beyond a fixed-length context. arXiv preprint arXiv:1901.02860 , 2019. Dao, T. Flashattention-2: Faster attention with bet-ter parallelism and work partitioning. arXiv preprint arXiv:2307.08691 , 2023. Dao, T., Fu, D., Ermon, S., Rudra, A., and R ´e, C. Flashat-tention: Fast and memory-efficient exact attention with io-awareness. Advances in Neural Information Process-ing Systems , 35:16344–16359, 2022. Fellows, M., Ciosek, K., and Whiteson, S. Fourier pol-icy gradients. In International Conference on Machine Learning , pp. 1486–1495. PMLR, 2018. Feng, G., Zhang, H., Li, Z., Peng, X. B., Basireddy, B., Yue, L., Song, Z., Yang, L., Liu, Y., Sreenath, K., et al. Gen-loco: Generalized locomotion controllers for quadrupedal robots. In Conference on Robot Learning , pp. 1893–1903. PMLR, 2023. Fu, D. Y., Dao, T., Saab, K. K., Thomas, A. W., Rudra, A., and R ´e, C. Hungry hungry hippos: Towards lan-guage modeling with state space models. arXiv preprint arXiv:2212.14052 , 2022. Fu, J., Kumar, A., Nachum, O., Tucker, G., and Levine, S. D4rl: Datasets for deep data-driven reinforcement learning. arXiv preprint arXiv:2004.07219 , 2020. Fu, Z., Zhao, T. Z., and Finn, C. Mobile aloha: Learning bimanual mobile manipulation with low-cost whole-body teleoperation. arXiv preprint arXiv:2401.02117 , 2024. 10 Fourier Controller Networks for Real-Time Decision-Making in Embodied Learning 
+
+Ghosh, D., Rahme, J., Kumar, A., Zhang, A., Adams, R. P., and Levine, S. Why generalization in rl is difficult: Epis-temic pomdps and implicit partial observability. Advances in Neural Information Processing Systems , 34:25502– 25515, 2021. Gu, A. and Dao, T. Mamba: Linear-time sequence modeling with selective state spaces. arXiv preprint arXiv:2312.00752 , 2023. Gu, J., Kirmani, S., Wohlhart, P., Lu, Y., Arenas, M. G., Rao, K., Yu, W., Fu, C., Gopalakrishnan, K., Xu, Z., et al. Rt-trajectory: Robotic task generalization via hindsight trajectory sketches. arXiv preprint arXiv:2311.01977 ,2023. Gu, S., Holly, E., Lillicrap, T., and Levine, S. Deep rein-forcement learning for robotic manipulation with asyn-chronous off-policy updates. In 2017 IEEE international conference on robotics and automation (ICRA) , pp. 3389– 3396. IEEE, 2017. Gupta, A., Eppner, C., Levine, S., and Abbeel, P. Learn-ing dexterous manipulation for a soft robotic hand from human demonstrations. In 2016 IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS) , pp. 3786–3793. IEEE, 2016. Hao, Z., Liu, S., Zhang, Y., Ying, C., Feng, Y., Su, H., and Zhu, J. Physics-informed machine learning: A survey on problems, methods and applications. arXiv preprint arXiv:2211.08064 , 2022. He, Z., Yang, M., Feng, M., Yin, J., Wang, X., Leng, J., and Lin, Z. Fourier transformer: Fast long range modeling by removing sequence redundancy with fft operator. arXiv preprint arXiv:2305.15099 , 2023. Hendrycks, D. and Gimpel, K. Gaussian error linear units (gelus). arXiv preprint arXiv:1606.08415 , 2016. Janner, M., Li, Q., and Levine, S. Offline reinforcement learning as one big sequence modeling problem. Ad-vances in Neural Information Processing Systems , 34: 1273–1286, 2021. Jiang, Y., Gupta, A., Zhang, Z., Wang, G., Dou, Y., Chen, Y., Fei-Fei, L., Anandkumar, A., Zhu, Y., and Fan, L. Vima: General robot manipulation with multimodal prompts. In 
+
+NeurIPS 2022 Foundation Models for Decision Making Workshop , 2022. Kalashnikov, D., Irpan, A., Pastor, P., Ibarz, J., Herzog, A., Jang, E., Quillen, D., Holly, E., Kalakrishnan, M., Van-houcke, V., et al. Scalable deep reinforcement learning for vision-based robotic manipulation. In Conference on Robot Learning , pp. 651–673. PMLR, 2018. Kalashnikov, D., Varley, J., Chebotar, Y., Swanson, B., Jonschkowski, R., Finn, C., Levine, S., and Hausman, K. Mt-opt: Continuous multi-task robotic reinforcement learning at scale. arXiv preprint arXiv:2104.08212 , 2021. Karniadakis, G. E., Kevrekidis, I. G., Lu, L., Perdikaris, P., Wang, S., and Yang, L. Physics-informed machine learning. Nature Reviews Physics , 3(6):422–440, 2021. Kashiri, N., Abate, A., Abram, S. J., Albu-Schaffer, A., Clary, P. J., Daley, M., Faraji, S., Furnemont, R., Garabini, M., Geyer, H., et al. An overview on principles for energy efficient robot locomotion. Frontiers in Robotics and AI ,5:129, 2018. Katharopoulos, A., Vyas, A., Pappas, N., and Fleuret, F. Transformers are rnns: Fast autoregressive transformers with linear attention. In International conference on ma-chine learning , pp. 5156–5165. PMLR, 2020. Kitaev, N., Kaiser, Ł., and Levskaya, A. Reformer: The efficient transformer. arXiv preprint arXiv:2001.04451 ,2020. Kumar, A., Fu, J., Soh, M., Tucker, G., and Levine, S. Stabilizing off-policy q-learning via bootstrapping error reduction. Advances in Neural Information Processing Systems , 32, 2019. Kumar, A., Zhou, A., Tucker, G., and Levine, S. Con-servative q-learning for offline reinforcement learning. 
+
+Advances in Neural Information Processing Systems , 33: 1179–1191, 2020. Kumar, A., Singh, A., Ebert, F., Nakamoto, M., Yang, Y., Finn, C., and Levine, S. Pre-training for robots: Offline rl enables learning new tasks from a handful of trials. arXiv preprint arXiv:2210.05178 , 2022. Lai, H., Zhang, W., He, X., Yu, C., Tian, Z., Yu, Y., and Wang, J. Sim-to-real transfer for quadrupedal locomotion via terrain transformer. In 2023 IEEE International Con-ference on Robotics and Automation (ICRA) , pp. 5141– 5147. IEEE, 2023. Lee, A. X., Devin, C. M., Zhou, Y., Lampe, T., Bousmalis, K., Springenberg, J. T., Byravan, A., Abdolmaleki, A., Gileadi, N., Khosid, D., et al. Beyond pick-and-place: Tackling robotic stacking of diverse shapes. In 5th Annual Conference on Robot Learning , 2021. Lee, J., Hwangbo, J., Wellhausen, L., Koltun, V., and Hutter, M. Learning quadrupedal locomotion over challenging terrain. Science robotics , 5(47):eabc5986, 2020a. Lee, K., Seo, Y., Lee, S., Lee, H., and Shin, J. Context-aware dynamics model for generalization in model-based reinforcement learning. In International Conference on Machine Learning , pp. 5757–5766. PMLR, 2020b. 11 Fourier Controller Networks for Real-Time Decision-Making in Embodied Learning 
+
+Lee-Thorp, J., Ainslie, J., Eckstein, I., and Ontanon, S. Fnet: Mixing tokens with fourier transforms. arXiv preprint arXiv:2105.03824 , 2021. Li, Z., Kovachki, N., Azizzadenesheli, K., Liu, B., Bhat-tacharya, K., Stuart, A., and Anandkumar, A. Fourier neural operator for parametric partial differential equa-tions. arXiv preprint arXiv:2010.08895 , 2020. Makoviychuk, V., Wawrzyniak, L., Guo, Y., Lu, M., Storey, K., Macklin, M., Hoeller, D., Rudin, N., Allshire, A., Handa, A., et al. Isaac gym: High performance gpu-based physics simulation for robot learning. arXiv preprint arXiv:2108.10470 , 2021. Margolis, G. B. and Agrawal, P. Walk these ways: Tun-ing robot control for generalization with multiplicity of behavior. In Conference on Robot Learning , pp. 22–31. PMLR, 2023. Nguyen, T., Pham, M., Nguyen, T., Nguyen, K., Osher, S., and Ho, N. Fourierformer: Transformer meets gen-eralized fourier integral theorem. Advances in Neural Information Processing Systems , 35:29319–29335, 2022. Padalkar, A., Pooley, A., Jain, A., Bewley, A., Herzog, A., Irpan, A., Khazatsky, A., Rai, A., Singh, A., Brohan, A., et al. Open x-embodiment: Robotic learning datasets and rt-x models. arXiv preprint arXiv:2310.08864 , 2023. Peng, B., Alcaide, E., Anthony, Q., Albalak, A., Arcadinho, S., Cao, H., Cheng, X., Chung, M., Grella, M., GV, K. K., et al. Rwkv: Reinventing rnns for the transformer era. 
+
+arXiv preprint arXiv:2305.13048 , 2023. Peng, X. B., Kumar, A., Zhang, G., and Levine, S. Advantage-weighted regression: Simple and scalable off-policy reinforcement learning. arXiv preprint arXiv:1910.00177 , 2019. Poli, M., Massaroli, S., Nguyen, E., Fu, D. Y., Dao, T., Baccus, S., Bengio, Y., Ermon, S., and R ´e, C. Hyena hierarchy: Towards larger convolutional language models. 
+
+arXiv preprint arXiv:2302.10866 , 2023. Qi, C. R., Su, H., Mo, K., and Guibas, L. J. Pointnet: Deep learning on point sets for 3d classification and segmenta-tion. In Proceedings of the IEEE conference on computer vision and pattern recognition , pp. 652–660, 2017. Radosavovic, I., Xiao, T., Zhang, B., Darrell, T., Malik, J., and Sreenath, K. Learning humanoid locomotion with transformers. arXiv preprint arXiv:2303.03381 , 2023. Rajeswaran, A., Kumar, V., Gupta, A., Vezzani, G., Schul-man, J., Todorov, E., and Levine, S. Learning complex dexterous manipulation with deep reinforcement learning and demonstrations. arXiv preprint arXiv:1709.10087 ,2017. Reed, S., Zolna, K., Parisotto, E., Colmenarejo, S. G., Novikov, A., Barth-Maron, G., Gimenez, M., Sulsky, Y., Kay, J., Springenberg, J. T., et al. A generalist agent. 
+
+arXiv preprint arXiv:2205.06175 , 2022. Rudin, N., Hoeller, D., Reist, P., and Hutter, M. Learning to walk in minutes using massively parallel deep rein-forcement learning. In Conference on Robot Learning ,pp. 91–100. PMLR, 2022. Sandha, S. S., Garcia, L., Balaji, B., Anwar, F., and Sri-vastava, M. Sim2real transfer for deep reinforcement learning with stochastic state transition delays. In Confer-ence on Robot Learning , pp. 1066–1083. PMLR, 2021. Schulman, J., Wolski, F., Dhariwal, P., Radford, A., and Klimov, O. Proximal policy optimization algorithms. 
+
+arXiv preprint arXiv:1707.06347 , 2017. Sun, Y., Dong, L., Huang, S., Ma, S., Xia, Y., Xue, J., Wang, J., and Wei, F. Retentive network: A successor to transformer for large language models. arXiv preprint arXiv:2307.08621 , 2023. Trefethen, L. N. Finite difference and spectral methods for ordinary and partial differential equations. 1996. Vaswani, A., Shazeer, N., Parmar, N., Uszkoreit, J., Jones, L., Gomez, A. N., Kaiser, Ł., and Polosukhin, I. Atten-tion is all you need. Advances in Neural Information Processing Systems , 30, 2017. Wen, Y., Wan, Z., Zhou, M., Hou, S., Cao, Z., Le, C., Chen, J., Tian, Z., Zhang, W., and Wang, J. On realiza-tion of intelligent decision-making in the real world: A foundation decision model perspective. arXiv preprint arXiv:2212.12669 , 2022. Wu, Y., Tucker, G., and Nachum, O. Behavior regu-larized offline reinforcement learning. arXiv preprint arXiv:1911.11361 , 2019. Xiao, G., Tian, Y., Chen, B., Han, S., and Lewis, M. Ef-ficient streaming language models with attention sinks. Sep 2023. Xiong, H., Mendonca, R., Shaw, K., and Pathak, D. Adap-tive mobile manipulation for articulated objects in the open world. arXiv preprint arXiv:2401.14403 , 2024. Xu, Z., Zeng, A., and Xu, Q. Fits: Modeling time series with 10 k parameters, 2024. Ye, M., Kuang, Y., Wang, J., Rui, Y., Zhou, W., Li, H., and Wu, F. State sequences prediction via fourier trans-form for representation learning. Advances in Neural Information Processing Systems , 36, 2024. 12 Fourier Controller Networks for Real-Time Decision-Making in Embodied Learning 
+
+Ying, C., Hao, Z., Zhou, X., Su, H., Liu, S., Li, J., Yan, D., and Zhu, J. Reward informed dreamer for task gen-eralization in reinforcement learning. arXiv preprint arXiv:2303.05092 , 2023. Yu, C., Zhang, W., Lai, H., Tian, Z., Kneip, L., and Wang, J. Multi-embodiment legged robot control as a sequence modeling problem. In 2023 IEEE International Confer-ence on Robotics and Automation (ICRA) , pp. 7250–7257. IEEE, 2023. Yu, T., Kumar, S., Gupta, A., Levine, S., Hausman, K., and Finn, C. Gradient surgery for multi-task learning. 
+
+Advances in Neural Information Processing Systems , 33: 5824–5836, 2020. Zhang, S., Tong, H., Xu, J., and Maciejewski, R. Graph convolutional networks: a comprehensive review. Com-putational Social Networks , 6(1):1–23, 2019. 13 Fourier Controller Networks for Real-Time Decision-Making in Embodied Learning 
+
+## A. Related Work 
+
+RL in Robotic Control. Designing general algorithms and models to control real-world robots, like robotic arms and legged robots, has always been a focus of research. With the development of Deep Reinforcement Learning, a promising method is to train a general policy via interacting with different dynamics, of which the trained agent can adapt to changes in physical properties, even in some extreme conditions (Schulman et al., 2017; Lee et al., 2020a; Rudin et al., 2022; Margolis & Agrawal, 2023; Feng et al., 2023; Agarwal et al., 2023; Lai et al., 2023; Yu et al., 2023; Radosavovic et al., 2023; Xiong et al., 2024). More recently, pretraining on diverse datasets has shown promise in designing general models. DT (Chen et al., 2021) and TT (Janner et al., 2021) treat offline RL as a sequence modeling problem by treating the rewards, states and actions as a sequence so that the Transformer autoregressively generates the next token such as action token. Borrowing these ideas, an array of works (Reed et al., 2022; Brohan et al., 2022; 2023; Jiang et al., 2022; Bousmalis et al., 2023; Wen et al., 2022; Padalkar et al., 2023; Chebotar et al., 2023; Fu et al., 2024; Ahn et al., 2024; Gu et al., 2023) utilize Transformer (Vaswani et al., 2017) for pretraining on a larger dataset with multiple decision-making and robotics control tasks, demonstrating strong performance and revealing the generalization that comes with increased model parameters and data size. Among them, RT-2 (Brohan et al., 2023) uses Internet-scale data to pre-train a Robotics Transformer model with imitation learning methods, and deploys RT-2 on real-world robots for tabletop tasks, which can perform well even in unseen environments. However, the large scale of parameters in these models results in high inference latency, which limits their application in real-world robots, thus designing scalable and efficient inference network architecture is significant in this field. 
+
+Efficient Variants of Transformer Architecture. Transformer (Vaswani et al., 2017) has been heavily used in Natural Language Processing (NLP) tasks since it was proposed. It models the relationship between two by two elements in the context window through the attention mechanism. Due to its high inference time complexity, some works trying to speed up the inference of Transformer such as KV cache, FlashAttention(Dao et al., 2022; Dao, 2023) and StreamingLLM (Xiao et al., 2023) are proposed to make Transformer have higher speed in inference. However, these works are difficult to achieve theoretically lower complexity while maintaining the same performance. (Child et al., 2019; Kitaev et al., 2020) improves the efficiency of Transformer when dealing with long sequence tasks by improving the attention mechanism, but they do not make improvements in terms of feature extraction capability and inference time complexity. Similarly, Dai et al. makes efforts for the efficiency of the Transformer on long sequences of text. Meanwhile, many variants of Transformer such as (Katharopoulos et al., 2020; Peng et al., 2023; Fu et al., 2022; Poli et al., 2023; Sun et al., 2023; Gu & Dao, 2023) have been proposed in order to achieve lower time complexity of inference. However, the inductive bias of these model architectures is not appropriate for embodied learning tasks, and it is difficult to achieve strong performance using limited data training. We choose one of the representative State Space Models (SSMs) for experimental validation to demonstrate this. FNet (Lee-Thorp et al., 2021), Fourier Transformer (He et al., 2023), and FourierFormer (Nguyen et al., 2022) explore combining Fourier transforms and Transformer, but do not incorporate feature extraction with low time complexity in the frequency domain, as well as a lack of real-time inference validation on real-world robots. 
+
+Introducing Physical Prior in Machine Learning. When dealing with real-world physics, including robotics, it is essential to introduce physical priors into the machine-learning process to decrease data demand and improve models’ performance (Karniadakis et al., 2021; Hao et al., 2022). For example, PointNet (Qi et al., 2017) and Graph Convolutional Networks (GCN) (Zhang et al., 2019) make the network architecture permutation-invariant utilizing permutation-invariant operation like summation. And NeuralODE (Chen et al., 2018) designs an architecture that naturally conforms to ordinary differential equations (ODEs). Fourier neural operator (Li et al., 2020) takes advantage of the symmetry of the differentiation in the time domain and the multiplication in the frequency domain to design a network structure that can efficiently solve partial differential equations (PDEs). Also, FITS (Xu et al., 2024) discards the high-frequency portion of the time series that has little effect on the time series and fits the time series through a linear layer in the frequency domain. Due to the smoothing properties of most physical phenomena, such structures are also ideal for filtering noise in data. Ye et al.; Fellows et al. introduce Fourier analysis in reinforcement learning, but do not introduce multi-layer stacked structure for complex pattern learning. 
+
+Schematic of the CSC block A detailed schematic of the CSC block, illustrating the computation of y0, y 1, . . . , y n−1, is shown in Fig. 7. 14 Fourier Controller Networks for Real-Time Decision-Making in Embodied Learning 𝑥 −𝑛 +1, … , 𝑥 −1 , 𝑥 0 , 𝑥 1 , … , 𝑥 𝑛 −1
+
+# 𝑦 0, 𝑦 1 , … , 𝑦 𝑛 −1Output: 
+
+# ෠𝑋 (0) =
+
+# ො𝑥 0
+
+> (0)
+
+# ⋮
+
+# ො𝑥 𝑚 −1
+
+> (0)
+
+# ෠𝑋 (𝑛 −1) =
+
+# ො𝑥 0
+
+> (𝑛 −1)
+
+# ⋮
+
+# ො𝑥 𝑚 −1
+
+> (𝑛 −1)
+> ⋯
+
+# ෠𝑌 (0)
+
+# መ𝑍 (0)
+
+# Input: 
+
+# ෠𝑌 (𝑛 −1)
+
+# መ𝑍 (𝑛 −1)     
+
+> ⋯
+> ⋯
+> ⋯
+> 𝑊 𝑊
+> ℱℱ
+> ℱ−1ℱ−1
+> Figure 7. CSC block diagram for computing y0, y 1, . . . , y n−1.
+
+## B. Ablation Study 
+
+Varying Model Structures In Fig. 8, FCNet shows consistent superiority in both performance and inference latency over the Transformer across various structures, encompassing different numbers of layers and hidden sizes. Notably, with fewer parameters, FCNet exhibits a robust fitting ability, significantly outperforming Transformer. This implies its effectiveness even in scenarios demanding compact models. As the model scales up, FCNet maintains greater stability. 
+
+Varying Context Lengths Fig. 9 illustrates how FCNet and Transformer perform under various context lengths. With in-creasing context length, FCNet shows improved performance with relatively stable inference times. In contrast, Transformer does not display the same level of efficiency. Moreover, considering the diverse terrains and historical data in the dataset, context is crucial for policy learning. Experiments reducing Transformer’s context length (e.g., to 8) result in completely ineffective policies. 
+
+## C. Experimental Details 
+
+C.1. D4RL 
+
+The hyperparameters of FCNet for D4RL are shown in Table 4. 
+
+C.2. Multi-Environment Legged Robot Locomotion Dataset Generation 
+
+The multi-environment legged robot locomotion dataset is an expert dataset, collected in Isaacgym (Makoviychuk et al., 2021) by some expert-performance RL policies which have demonstrated strong performance in the real-world legged robot (i.e., Unitree Aliengo). It covers various skills (commands from the remote control, e.g., standing, rushing, crawling, squeezing, tilting, and running), and different terrains (e.g., rough terrain, stairs, slopes, and obstacles), following Rudin et al. (2022). The vector of commands issued by the remote control is concated in the state for each time step. Terrain-related information is privileged information, i.e., inaccessible, and thus needs to be approximated by historical information to learn an optimal policy. The components of the state include motor velocity, motor position, body angular velocity, and remote control commands. The action in the dataset corresponds to the motor position control of the robot. The test version of the dataset contains the aforementioned skills and terrains, with 320,000 trajectories and totaling 60M steps, generated by expert policy. Each trajectory includes the robot’s standing and walking on each terrain. To maintain 15 Fourier Controller Networks for Real-Time Decision-Making in Embodied Learning 
+
+Table 4. Hyperparameters of FCNet for OpenAI Gym (D4RL) experiments. 
+
+Hyperparameter Value 
+
+Number of layers 4
+
+Number of modes m 10 
+
+hidden dimension 128 for the last decoder Q
+
+512 , otherwise Nonlinearity function GeLU Batch size 128 
+
+Context length K 64 HalfCheetah, Hopper, Walker Return-to-go conditioning 1.15 medium-expert 
+
+1.0 medium, medium-replay Adam β (0 .9, 0.98) 
+
+Adam ϵ 10 −9
+
+LR scheduler get cosine schedule with warmup Learning rate 5 × 10 −3
+
+Weight decay 10 −4
+
+Epoch 50 Learning rate decay Linear warmup for first 20% training steps 
+
+both the quantity and diversity of trajectories, we have set an average length of 192 for each trajectory. This length is chosen to comprehensively capture the robot’s range of motions, including standing and walking, across various terrains. 
+
+C.3. Multi-Environment Legged Robot Locomotion 
+
+In this experiment, we keep the number of parameters of FCNet and Transformer roughly equal (790k parameters). The hyperparameters of FCNet for the multi-environment legged robot locomotion dataset are shown in Table 5. 
+
+Table 5. Hyperparameters of FCNet for multi-environment legged robot locomotion experiments. 
+
+Hyperparameter Value 
+
+Number of layers 4
+
+Number of modes m 10 
+
+hidden dimension 128 for the last decoder Q
+
+256 , otherwise Nonlinearity function GeLU Batch size 1024 
+
+Context length K 64 
+
+Adam β (0 .9, 0.98) 
+
+Adam ϵ 10 −9
+
+LR scheduler get cosine schedule with warmup Learning rate 5 × 10 −3
+
+Epoch 50 Learning rate decay Linear warmup for first 20% training steps 
+
+The hyperparameters of Transformer for the multi-environment legged robot locomotion dataset are shown in Table 6. Other ablation experiments are modified from these hyperparameters. It is also guaranteed that the number of FCNet and Transformer model parameters is close to equal. A robust sim-to-real FCNet model which we deploy in the real-world legged robot (i.e., Unitree Aliengo for video capture) is trained from the 60M-step dataset with the metrics shown in Table 7. We choose m = 10 and n = 64 here ( n denotes the context length). In fact, better results might be obtained with larger n.16 Fourier Controller Networks for Real-Time Decision-Making in Embodied Learning                              
+
+> Table 6. Hyperparameters of Transformer for multi-environment legged robot locomotion experiments.
+> Hyperparameter Value
+> Number of layers 4
+> Number of modes m10
+> hidden dimension 128 for the last decoder Q
+> 256 , otherwise Nonlinearity function GeLU Batch size 1024
+> Context length K64
+> LR scheduler get cosine schedule with warmup optimizer Lion Learning rate 5×10 −3
+> Epoch 50 Weight decay 10 −4
+> Learning rate decay Linear warmup for first 20% training steps
+> Table 7. Metrics of sim-to-real FCNet model.
+> Metrics Value
+> Number of model trainable parameters 787 ,852
+> Loss of training 0.000408
+> Loss of test 0.000420
+> Mean return in simulator 10 .060 /10 .589
+
+C.3.1. D ETAILS OF OBSERVATION AND ACTION 
+
+We provide detailed information about the observations and actions used in FCNet for the multi-environment legged robotics locomotion task: • Observations: 
+
+– Projected gravity (3-dimensional), 
+
+– Joint velocity (12-dimensional), 
+
+– Sine values of joint position (12-dimensional), 
+
+– Cosine values of joint position (12-dimensional), 
+
+– Body angular velocity (12-dimensional), 
+
+– Last action (12-dimensional), 
+
+– Command (16-dimensional) • Actions 
+
+– Expected joint position (12-dimensional). Of note, each ’12-dimensional’ parameter corresponds to the 12 motors that drive the quadruped robot, including the motors for the hips, thighs, and calves of each of the four legs. C.3.2. S IM -TO -REAL GAP 
+
+FCNet is pre-trained solely on simulator data before being directly deployed on a real robot to navigate a variety of terrains. This zero-shot transfer leads to robust real-world locomotion, despite the inherent sim-to-real gap. 
+
+Sim-to-real gap The discrepancies between simulators and real-world environments can be seen in areas like state space (differences in robot mechanics), action space (issues like overshooting due to high torque), and transition dynamics 17 Fourier Controller Networks for Real-Time Decision-Making in Embodied Learning 
+
+(terrain inconsistencies). Additionally, real-world scenarios demand low inference latency to ensure smooth operation - a requirement often not necessary in simulations. To bridge this gap, we focus on two main areas: data collection and inference. 
+
+Data collection High-quality data is vital. We use reward shaping to guide data generation, avoiding illegal states or actions. The data also needs to encompass a wide range of commands and terrains, achievable through domain randomization, to ensure the model closely aligns with real-world scenarios. 
+
+Inference Post-data collection, engineering efforts such as integrating sensor data into the state and relaying neural network outputs to motor actions become critical. The key to successful sim-to-real transition is the neural network’s inference latency. Given FCNet’s low complexity in this regard, we efficiently address the sim-to-real challenge during deployment. C.3.3. H IGH -LEVEL CONTROLLER 
+
+The robot’s actions, such as moving backward and forward, turning left and right, spinning, standing, crouching, and sprinting, are directed by human operators via remote control. These commands, constituting part of the observation, are interpreted by the policy network, which then translates them into low-level actions executed by the robot. 
+
+C.4. Low Inference Latency 
+
+All our tests for inference latency only target the last action in each context length window, as this ensures that the maximum inference latency of the robot does not exceed a certain hardware threshold when deployed. The testing procedure incorporates three random number seeds, with each seed conducting 10 episodes and subsequently calculating the average of CPU inference latency using torch.profiler , to ensure a small variance. In the experiments of Fig. 6, when we change a hyperparameter, other hyperparameters remain at their default values: 
+
+Context Length = 64 , n layer = 4 , hidden size = 256 .It is worth noting that we tested the model’s inference latency on the CPU since many robots lack GPUs, and energy consumption considerations make lightweight deployment crucial. Our test environment is shown in Table 8:          
+
+> Table 8. Information on the latency measurement environment.
+> Value
+> Warm Up 500 dummy state inputs CPU Intel(R) Xeon(R) Silver 4210 CPU @ 2.20GHz Memory Configured Clock Speed 2400MHz OS Ubuntu 18.04.5 LTS, Linux 4.15.0-135-generic Python 3.8.18 GCC 8.4.0 Torch Version 1.12.1
+
+Furthermore, in the Ablation Study detailed in Appendix B, we consistently measure the inference latency of 8 models simultaneously to ensure environmental consistency across each set of experimental data. 
+
+## D. Real-World Applications 
+
+We provide a more detailed image (i.e., video screen capture) in Fig. 10 of real-world robot deployments, as a supplement to Sec. 4.2. It also includes the comparison of FCNet and Transformer. In this image, it can be seen that the robot corresponding to Transformer appears to fall in scenarios such as going upstairs indoors and going downstairs indoors. We put a more detailed video with more tests in the supplementary material. 18 Fourier Controller Networks for Real-Time Decision-Making in Embodied Learning 0.12M 0.41M ~1.5M 
+
+Model Parameters 
+
+0
+
+2
+
+4
+
+6
+
+8
+
+10 
+
+> Performance(Mean Return)
+
+Layer 2: Model Performance vs. Model Parameters 
+
+> Fourier Controller
+> Transformer
+
+0.12M 0.41M ~1.5M 
+
+Model Parameters 
+
+0
+
+1
+
+2
+
+3
+
+4
+
+> Inference Latency (ms)
+
+Layer 2: Inference Latency vs. Parameters 
+
+> Fourier Controller
+> Transformer
+
+0.23M 0.79M ~2.9M 
+
+Model Parameters 
+
+0
+
+2
+
+4
+
+6
+
+8
+
+10 
+
+> Performance(Mean Return)
+
+Layer 4: Model Performance vs. Model Parameters 
+
+> Fourier Controller
+> Transformer
+
+0.23M 0.79M ~2.9M 
+
+Model Parameters 
+
+0
+
+2
+
+4
+
+6
+
+8
+
+> Inference Latency (ms)
+
+Layer 4: Inference Latency vs. Parameters 
+
+> Fourier Controller
+> Transformer
+
+~0.45M ~1.5M ~5.7M 
+
+Model Parameters 
+
+0
+
+2
+
+4
+
+6
+
+8
+
+10 
+
+> Performance(Mean Return)
+> -84.689
+
+Layer 8: Model Performance vs. Model Parameters 
+
+> Fourier Controller
+> Transformer
+
+~0.45M ~1.5M ~5.7M 
+
+Model Parameters 
+
+0.0 
+
+2.5 
+
+5.0 
+
+7.5 
+
+10.0 
+
+12.5 
+
+15.0 
+
+> Inference Latency (ms)
+
+Layer 8: Inference Latency vs. Parameters 
+
+> Fourier Controller
+> Transformer
+
+Figure 8. The performance and CPU inference latency of each model on the legged robotics dataset (measured by mean return). The horizontal axis indicates the model’s parameter count, adjustable by varying the number of layers and hidden size in both Transformer and Fourier Controller. Throughout these experiments, hyperparameters like the learning rate remained constant. Notably, in the Transformer experiments with n layer=8 and approximately 5.7M model parameters, a high learning rate induces oscillations in the training process. 
+
+19 Fourier Controller Networks for Real-Time Decision-Making in Embodied Learning 32 64 96 128 160 
+
+Context Length 
+
+> 0
+> 2
+> 4
+> 6
+> 8
+> 10
+> 12
+> Performance (Mean Return)
+
+Model Performance vs Context Length     
+
+> Fourier Controller
+> Transformer
+> 32 64 96 128 160
+
+Context Length 
+
+> 0
+> 1
+> 2
+> 3
+> 4
+> 5
+> 6
+> Inference Latency (ms)
+
+Model Inference Latency vs Context Length 
+
+> Fourier Controller
+> Transformer
+
+Figure 9. The performance and CPU inference latency of each model on the legged robotics dataset (measured by mean return). The horizontal axis indicates the context length of the model. This study extends the experiment shown in Fig. 4, where we vary the context length and then evaluate over 1500 × 3 trajectories, averaging both return and inference latency. We refrained from testing longer sequence lengths because doing so, while keeping the total data volume constant, would decrease the number of trajectories, further leading to data insufficiency. 
+
+Figure 10. Deploying FCNet to real-world legged robots. 
+
+20
