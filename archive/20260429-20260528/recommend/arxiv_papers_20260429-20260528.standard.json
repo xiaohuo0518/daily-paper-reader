@@ -1,0 +1,561 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-05-28T04:10:11.731255+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 1,
+    "deep_divecandidates": 5,
+    "deep_cap": 6,
+    "deep_selected": 5,
+    "quick_candidates": 8,
+    "quick_skim_target": 11,
+    "quick_selected": 8
+  },
+  "deep_dive": [
+    {
+      "id": "2605.09613v1",
+      "source": "arxiv",
+      "title": "SABER: A Scalable Action-Based Embodied Dataset for Real-World VLA Adaptation",
+      "abstract": "Robotic deployment in real-world environments depends on rich, domain-specific action data as much as on strong model architecture. General-purpose robot foundation models show modest performance in complex unseen tasks such as manipulation in a retail domain when applied out of the box. The root cause is a data gap: retail environments are structurally absent from general robot pretraining distributions, and the path to filling that gap through teleoperation is prohibitively expensive, logistically constrained, and difficult to scale. We introduce SABER, a high-fidelity retail robotics action dataset built from over 100 hours of natural in-store capture across multiple real grocery environments. Egocentric footage from head-mounted cameras records fine-grained hand activity at the point of interaction, while exocentric 360-degree scene footage from DreamVu's ALIA camera simultaneously observes all actors and activities across the entire space. This combination yields a uniquely complete picture of human retail behavior: dexterous hand activity, whole-body motion, and scene dynamics, all captured without staging, scripting, or teleoperation overhead. The SABER corpus contains 44.8K training samples across three action representation streams: 25K latent action sequences via LAPA-style encoding, 18.6K dexterous hand-pose trajectories retargeted to robot joint space, and 1.2K whole-body synchronized motion sequences retargeted to a humanoid embodiment. When applied to GR00T N1.6 via a shared-backbone multi-task post-training recipe, SABER yields a mean success rate of 29.3% across ten retail manipulation tasks -- more than 2.19x over fine-tuning baselines (13.4%). SABER demonstrates that the path to capable retail robots runs through better data, which can be collected today, at scale, without a robot in the loop. The dataset and code are available at https://dreamvu.ai/saber",
+      "authors": [
+        "Narsimha Menga",
+        "Parikshit Sakurikar",
+        "Amirreza Rouhi",
+        "Satya Sai Reddy",
+        "Anirudh Govil",
+        "Sri Harsha Chittajallu",
+        "Rajat Aggarwal",
+        "Anoop Namboodiri",
+        "Sashi Reddi"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.CV"
+      ],
+      "published": "2026-05-10T15:51:01+00:00",
+      "link": "https://arxiv.org/pdf/2605.09613v1",
+      "tags": [
+        "keyword:ur",
+        "query:ur"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "scalable action-based embodied dataset for real-world VLA adaptation",
+      "llm_evidence_cn": "可扩展的基于动作的具身数据集用于真实世界VLA适应",
+      "llm_evidence": "可扩展的基于动作的具身数据集用于真实世界VLA适应",
+      "canonical_evidence": "可扩展的基于动作的具身数据集用于真实世界VLA适应",
+      "llm_tldr_en": "SABER provides a high-fidelity retail robotics action dataset from natural in-store capture, addressing the data gap for real-world VLA adaptation and enabling scalable dataset construction for robotics.",
+      "llm_tldr_cn": "通用机器人基础模型在复杂零售场景中性能有限，根本原因是数据鸿沟。本文构建SABER数据集，通过100多小时真实店内自然采集获得高保真动作数据，覆盖多家杂货环境。该数据集填充了零售领域的空白，为机器人领域适应提供了可扩展的数据集构建范例，显著降低了遥操作收集成本。",
+      "llm_tldr": "通用机器人基础模型在复杂零售场景中性能有限，根本原因是数据鸿沟。本文构建SABER数据集，通过100多小时真实店内自然采集获得高保真动作数据，覆盖多家杂货环境。该数据集填充了零售领域的空白，为机器人领域适应提供了可扩展的数据集构建范例，显著降低了遥操作收集成本。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2605.19009v1",
+      "source": "arxiv",
+      "title": "Adversarial Stress Testing of SPARK Humanoid Safety Filters",
+      "abstract": "Humanoid robots are difficult to deploy safely because they have high-dimensional bodies, many collision constraints, and must operate near people and obstacles. Safety filters help by modifying a nominal control action when it may violate collision-avoidance constraints. Still, nominal benchmark scores do not fully show how these filters behave in harder environments. In this work, we study the robustness of SPARK humanoid safety filters through replication and stress testing. We replicate the SPARK benchmark case G1SportMode_D1_WG_SO_v1 in MuJoCo and evaluate RSSA, RSSS, SSA, CBF, PFM, and SMA under controlled random seeds. We also built a post-processing pipeline that converts raw SPARK logs into goal-tracking, minimum-distance, and collision-step metrics. Our results show that some methods track the goal more closely, while others reduce collision steps more effectively. The stress tests further indicate that safety behavior can change under obstacle crowding, noisy distance estimates, and delayed obstacle information. These findings suggest that humanoid autonomy should be evaluated beyond nominal performance, using metrics that expose failure modes before deployment.",
+      "authors": [
+        "Saurav Ghosh",
+        "Abdou Sow",
+        "Luke Zhang"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "eess.SY"
+      ],
+      "published": "2026-05-18T18:32:45+00:00",
+      "link": "https://arxiv.org/pdf/2605.19009v1",
+      "tags": [
+        "keyword:ur",
+        "query:ur"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "Stress testing of SPARK humanoid safety filters, including G1SportMode related to Unitree G1",
+      "llm_evidence_cn": "对SPARK人形安全滤波器进行压力测试，包含与宇树G1相关的G1SportMode基准",
+      "llm_evidence": "对SPARK人形安全滤波器进行压力测试，包含与宇树G1相关的G1SportMode基准",
+      "canonical_evidence": "对SPARK人形安全滤波器进行压力测试，包含与宇树G1相关的G1SportMode基准",
+      "llm_tldr_en": "Adversarial stress testing of SPARK humanoid safety filters, evaluating robustness under hard environments with a pipeline converting logs to fault metrics.",
+      "llm_tldr_cn": "人形机器人部署面临安全挑战，安全滤波器需在困难环境中验证鲁棒性。本文对SPARK人形安全滤波器进行复制和压力测试，在MuJoCo中复现了包含G1SportMode的基准，评估多种安全算法。构建了从原始日志到目标跟踪、最小距离和碰撞步数指标的后处理流水线，为故障诊断和安全性分析提供了基准。",
+      "llm_tldr": "人形机器人部署面临安全挑战，安全滤波器需在困难环境中验证鲁棒性。本文对SPARK人形安全滤波器进行复制和压力测试，在MuJoCo中复现了包含G1SportMode的基准，评估多种安全算法。构建了从原始日志到目标跟踪、最小距离和碰撞步数指标的后处理流水线，为故障诊断和安全性分析提供了基准。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "fault diagnosis for humanoid robots",
+      "matched_requirement_id": "req-3",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2605.00416v1",
+      "source": "arxiv",
+      "title": "Learning while Deploying: Fleet-Scale Reinforcement Learning for Generalist Robot Policies",
+      "abstract": "Generalist robot policies increasingly benefit from large-scale pretraining, but offline data alone is insufficient for robust real-world deployment. Deployed robots encounter distribution shifts, long-tail failures, task variations, and human correction opportunities that fixed demonstration datasets cannot fully capture. We present Learning While Deploying (LWD), a fleet-scale offline-to-online reinforcement learning framework for continual post-training of generalist Vision-Language-Action (VLA) policies. Starting from a pretrained VLA policy, LWD closes the loop between deployment, shared physical experience, policy improvement, and redeployment by using autonomous rollouts and human interventions collected across a robot fleet. To stabilize learning from heterogeneous, sparse-reward fleet data, LWD combines Distributional Implicit Value Learning (DIVL) for robust value estimation with Q-learning via Adjoint Matching (QAM) for policy extraction in flow-based VLA action generators. We validate LWD on a fleet of 16 dual-arm robots across eight real-world manipulation tasks, including semantic grocery restocking and 3--5 minute long-horizon tasks. A single generalist policy improves as fleet experience accumulates, reaching an average success rate of 95%, with the largest gains on long-horizon tasks.",
+      "authors": [
+        "Yi Wang",
+        "Xinchen Li",
+        "Pengwei Xie",
+        "Pu Yang",
+        "Buqing Nie",
+        "Yunuo Cai",
+        "Qinglin Zhang",
+        "Chendi Qu",
+        "Jeffrey Wu",
+        "Jianheng Song",
+        "Xinlin Ren",
+        "Jingshun Huang",
+        "Mingjie Pan",
+        "Siyuan Feng",
+        "Zhi Chen",
+        "Jianlan Luo"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-05-01T05:20:26+00:00",
+      "link": "https://arxiv.org/pdf/2605.00416v1",
+      "tags": [
+        "keyword:ur",
+        "query:ur"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "fleet-scale RL framework for continual deployment and improvement of robot policies",
+      "llm_evidence_cn": "面向机器人策略持续部署和改进的车队级强化学习框架",
+      "llm_evidence": "面向机器人策略持续部署和改进的车队级强化学习框架",
+      "canonical_evidence": "面向机器人策略持续部署和改进的车队级强化学习框架",
+      "llm_tldr_en": "Presents Learning While Deploying (LWD), a fleet-scale offline-to-online RL framework that closes the loop between deployment, shared experience, and policy improvement, directly supporting edge deployment for humanoid robots.",
+      "llm_tldr_cn": "针对通用机器人策略在部署中遇到分布偏移、长尾故障等问题，提出学习即部署（LWD）框架。该框架从预训练视觉-语言-动作策略出发，利用车队中的自主回滚和人工干预数据，在部署中持续进行策略改进。实现了从离线到在线的循环迭代，显著提升部署后性能。该工作直接服务于人形机器人边缘端部署场景，为策略的持续适应和错误修正提供了系统方案。",
+      "llm_tldr": "针对通用机器人策略在部署中遇到分布偏移、长尾故障等问题，提出学习即部署（LWD）框架。该框架从预训练视觉-语言-动作策略出发，利用车队中的自主回滚和人工干预数据，在部署中持续进行策略改进。实现了从离线到在线的循环迭代，显著提升部署后性能。该工作直接服务于人形机器人边缘端部署场景，为策略的持续适应和错误修正提供了系统方案。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "edge deployment for humanoid robots",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2605.03452v1",
+      "source": "arxiv",
+      "title": "BifrostUMI: Bridging Robot-Free Demonstrations and Humanoid Whole-Body Manipulation",
+      "abstract": "High-quality data collection is a fundamental cornerstone for training humanoid whole-body visuomotor policies. Current data acquisition paradigms predominantly rely on robot teleoperation, which is often hindered by limited hardware accessibility and low operational efficiency. Inspired by the Universal Manipulation Interface (UMI), we propose BifrostUMI, a portable, efficient, and robot-free data collection framework tailored for humanoid robots. BifrostUMI leverages lightweight VR devices to capture human demonstrations as sparse keypoint trajectories while simultaneously recording wrist-mounted visual data. These multimodal data are subsequently utilized to train a high-level policy network that predicts future keypoint trajectories conditioned on the captured visual features. Through a robust keypoint retargeting pipeline, keypoint trajectories are precisely mapped onto the robot's morphology and executed via a whole-body controller. This approach enables the seamless transfer of diverse and agile behaviors from natural human demonstrations to humanoid embodiments. We demonstrate the efficacy and versatility of the proposed framework across two distinct experimental scenarios.",
+      "authors": [
+        "Chenhao Yu",
+        "Hongwu Wang",
+        "Youhao Hu",
+        "Jiachen Zhang",
+        "Yuanyuan Li",
+        "Shaqi Luo"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-05-05T07:35:09+00:00",
+      "link": "https://arxiv.org/pdf/2605.03452v1",
+      "tags": [
+        "keyword:ur",
+        "query:ur"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "robot-free data collection framework for humanoid robots",
+      "llm_evidence_cn": "面向人形机器人的无机器人数据收集框架",
+      "llm_evidence": "面向人形机器人的无机器人数据收集框架",
+      "canonical_evidence": "面向人形机器人的无机器人数据收集框架",
+      "llm_tldr_en": "BifrostUMI enables efficient data collection for humanoid whole-body manipulation using VR devices and robot-free demonstrations, training policies with keypoint trajectory prediction.",
+      "llm_tldr_cn": "针对人形机器人数据采集依赖遥操作导致效率低下的问题，BifrostUMI提出一种便携、高效的无机器人数据收集方案。利用轻量级VR设备记录人类演示的稀疏关键点轨迹和腕部视觉数据，训练出预测未来轨迹的策略。该方法无需真实机器人即可生成大量训练数据，实验证明其训练的策略能在真实人形机器人上完成复杂全身操作，大幅降低了数据门槛。",
+      "llm_tldr": "针对人形机器人数据采集依赖遥操作导致效率低下的问题，BifrostUMI提出一种便携、高效的无机器人数据收集方案。利用轻量级VR设备记录人类演示的稀疏关键点轨迹和腕部视觉数据，训练出预测未来轨迹的策略。该方法无需真实机器人即可生成大量训练数据，实验证明其训练的策略能在真实人形机器人上完成复杂全身操作，大幅降低了数据门槛。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "humanoid robot dataset construction",
+      "matched_requirement_id": "req-2",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2605.09656v1",
+      "source": "arxiv",
+      "title": "ORICF -- Open Robotics Inference and Control Framework",
+      "abstract": "Recent advances in artificial intelligence (AI) have enabled effective perception and language models for robots, but their deployment remains computationally expensive, increasing latency and energy use. This work presents the Open Robotics Inference and Control Framework (ORICF), a modular, declarative, and model-agnostic platform for composing multimodal robotic inference pipelines. ORICF integrates input/output (I/O) adapters, pluggable inference back ends, and post-processing logic, while lightweight YAML specifications allow models, hardware targets, and data channels to be changed without code modification. The framework also supports edge offloading, i.e., executing inference on nearby external computers instead of onboard the robot. ORICF is evaluated on a mobile robot that answers spoken queries about people detected in its camera stream by combining automatic speech recognition (ASR), a large language model (LLM), and a convolutional neural network (CNN) detector through Robot Operating System 2 (ROS2). Compared with onboard execution, ORICF-based edge deployment reduces robot-side compute utilization by up to 83.16% and estimated energy consumption by 65.8%, while preserving modularity and reproducibility.",
+      "authors": [
+        "Andrés Meseguer Valenzuela",
+        "Luís Miguel Bartolín Arnau"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-05-10T17:08:16+00:00",
+      "link": "https://arxiv.org/pdf/2605.09656v1",
+      "tags": [
+        "keyword:ur",
+        "query:ur"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "open robotics inference and control framework with edge offloading support",
+      "llm_evidence_cn": "开放机器人推理与控制框架，支持边缘卸载",
+      "llm_evidence": "开放机器人推理与控制框架，支持边缘卸载",
+      "canonical_evidence": "开放机器人推理与控制框架，支持边缘卸载",
+      "llm_tldr_en": "ORICF provides a modular, model-agnostic framework for multimodal robotic inference pipelines with edge offloading, directly enabling edge deployment for humanoid robots.",
+      "llm_tldr_cn": "机器人感知和语言模型部署计算成本高。本文提出ORICF框架，采用模块化声明式架构，通过YAML配置灵活组合多模态推理流水线，并支持边缘卸载（在附近计算机而非机载执行推理）。该框架降低了边缘部署门槛，为人形机器人边缘端推理提供了即用平台。",
+      "llm_tldr": "机器人感知和语言模型部署计算成本高。本文提出ORICF框架，采用模块化声明式架构，通过YAML配置灵活组合多模态推理流水线，并支持边缘卸载（在附近计算机而非机载执行推理）。该框架降低了边缘部署门槛，为人形机器人边缘端推理提供了即用平台。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "edge deployment for humanoid robots",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "quick_skim": [
+    {
+      "id": "2605.07381v1",
+      "source": "arxiv",
+      "title": "Escaping the Diversity Trap in Robotic Manipulation via Anchor-Centric Adaptation",
+      "abstract": "While Vision-Language-Action (VLA) models offer broad general capabilities, deploying them on specific hardware requires real-world adaptation to bridge the embodiment gap. Since robot demonstrations are costly, this adaptation must often occur under a strict data budget. In this work, we identify a critical diversity trap: the standard heuristic of \"maximizing coverage\" by collecting diverse, single-shot demonstrations can be self-defeating due to non-vanishing estimation noise. We formalize this phenomenon as a Coverage--Density Trade-off. By decomposing the policy error into estimation (density) and extrapolation (coverage) terms, we characterize an interior optimal allocation of unique conditions for a fixed budget. Guided by this analysis, we propose Anchor-Centric Adaptation (ACA), a two-stage framework that first stabilizes a policy skeleton through repeated demonstrations at core anchors, then selectively expands coverage to high-risk boundaries via teacher-forced error mining and constrained residual updates. Real-robot experiments validate our trade-off framework and demonstrate that ACA significantly improves task reliability and success rates over standard diverse sampling strategies under the same budget.",
+      "authors": [
+        "Yanzhe Chen",
+        "Kevin Yuchen Ma",
+        "Qi Lv",
+        "Yiqi Lin",
+        "Zechen Bai",
+        "Chen Gao",
+        "Mike Zheng Shou"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.AI"
+      ],
+      "published": "2026-05-08T07:35:24+00:00",
+      "link": "https://arxiv.org/pdf/2605.07381v1",
+      "tags": [
+        "keyword:ur",
+        "query:ur"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "data collection strategy for robotics",
+      "llm_evidence_cn": "机器人数据收集策略",
+      "llm_evidence": "机器人数据收集策略",
+      "canonical_evidence": "机器人数据收集策略",
+      "llm_tldr_en": "Identifies a diversity trap in robot data collection and proposes anchor-centric adaptation for efficient dataset construction under a budget.",
+      "llm_tldr_cn": "该工作发现机器人数据收集中存在多样性陷阱：在有限预算下最大化覆盖范围反而导致策略性能下降。通过形式化覆盖-密度权衡，提出锚点中心适应方法，优化数据分配，在模拟和真实实验中验证了高效数据集构建的可行性，为机器人数据集构建提供了理论指导。",
+      "llm_tldr": "该工作发现机器人数据收集中存在多样性陷阱：在有限预算下最大化覆盖范围反而导致策略性能下降。通过形式化覆盖-密度权衡，提出锚点中心适应方法，优化数据分配，在模拟和真实实验中验证了高效数据集构建的可行性，为机器人数据集构建提供了理论指导。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2605.10094v1",
+      "source": "arxiv",
+      "title": "Retrieve-then-Steer: Online Success Memory for Test-Time Adaptation of Generative VLAs",
+      "abstract": "Vision-Language-Action (VLA) models show strong potential for general-purpose robotic manipulation, yet their closed-loop reliability often degrades under local deployment conditions. Existing evaluations typically treat test episodes as independent zero-shot trials. However, real robots often operate repeatedly in the same or slowly changing environments, where successful executions provide environment-verified evidence of reliable behavior patterns. We study this persistent-deployment setting, asking whether a partially competent frozen VLA can improve its reliability by reusing its successful test-time experience. We propose an online success-memory guided test-time adaptation framework for generative VLAs. During deployment, the robot stores progress-calibrated successful observation-action segments in a long-term memory. At inference, it retrieves state-relevant action chunks, filters inconsistent candidates via trajectory-level consistency, and aggregates them into an elite action prior. To incorporate this prior into action generation, we introduce confidence-adaptive prior guidance, which injects the elite prior into an intermediate state of the flow-matching action sampler and adjusts the guidance strength based on retrieval confidence. This design allows the frozen VLA to exploit environment-specific successful experience while preserving observation-conditioned generative refinement. This retrieve-then-steer mechanism enables lightweight, non-parametric test-time adaptation without requiring parameter updates. Simulation and real-world experiments show improved task success and closed-loop stability, especially in long-horizon and multi-stage tasks.",
+      "authors": [
+        "Jianchao Zhao",
+        "Huoren Yang",
+        "Hu Yusong",
+        "Yuyang Gao",
+        "Qiguan Ou",
+        "Cong Wan",
+        "SongLin Dong",
+        "Zhiheng Ma",
+        "Yihong Gong"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.AI"
+      ],
+      "published": "2026-05-11T07:11:10+00:00",
+      "link": "https://arxiv.org/pdf/2605.10094v1",
+      "tags": [
+        "keyword:ur",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "online test-time adaptation for VLA deployment in persistent environments",
+      "llm_evidence_cn": "在线测试时自适应用于VLA模型在持续环境中的部署",
+      "llm_evidence": "在线测试时自适应用于VLA模型在持续环境中的部署",
+      "canonical_evidence": "在线测试时自适应用于VLA模型在持续环境中的部署",
+      "llm_tldr_en": "Proposes online success-memory guided test-time adaptation for generative VLAs, improving reliability by reusing successful experiences during deployment.",
+      "llm_tldr_cn": "针对封闭循环VLA模型在本地部署中可靠性下降的问题，该论文提出在线成功记忆引导的测试时自适应框架。机器人部署中复用历史成功经历，无需重新训练即可提升表现。实验证明该方法在持续部署场景下显著提高了任务成功率，推动了机器人边缘部署的实用化。",
+      "llm_tldr": "针对封闭循环VLA模型在本地部署中可靠性下降的问题，该论文提出在线成功记忆引导的测试时自适应框架。机器人部署中复用历史成功经历，无需重新训练即可提升表现。实验证明该方法在持续部署场景下显著提高了任务成功率，推动了机器人边缘部署的实用化。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "edge deployment for humanoid robots",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2605.17077v1",
+      "source": "arxiv",
+      "title": "How to Instruct Your Robot: Dense Language Annotations Power Robot Policy Learning",
+      "abstract": "Scaling robot policy learning is bottlenecked by the cost of collecting demonstrations, while language annotations for existing demonstrations are comparatively cheap. We study language density as a lever for extracting more signal from a fixed robot or egocentric-video corpus. We introduce DeMiAn (Dense Multi-aspect Annotation), a two-stage approach that first re-labels demonstration segments with VLM-generated annotations along four complementary aspects: physical motion, scene composition, arm pose, and reasoning. A learned instructor then maps a task description and initial scene snapshot to a task-appropriate annotation at deployment, running asynchronously so generation latency is hidden behind policy execution. Across over 1M robot manipulation clips and 50K EgoVerse human-egocentric videos, DeMiAn improves both a vision-language-action policy and a video-based world-action model without collecting new demonstrations. On RoboCasa, the instructor raises success by 5 points over a task-only baseline and comes within 3 points of a per-task oracle. No fixed annotation aspect dominates across tasks, showing that selecting the right dense language matters. DeMiAn also improves composite-task and out-of-distribution performance, and shifts the compute-performance frontier in both mid-training and post-training after accounting for annotation-generation FLOPs. These results position dense re-annotation as a practical scaling lever for robot policy learning.",
+      "authors": [
+        "Bosung Kim",
+        "Ruiyi Wang",
+        "David Acuna",
+        "Jaehun Jung",
+        "Alexander Trevithick",
+        "Brandon Cui",
+        "Yejin Choi",
+        "Prithviraj Ammanabrolu"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.AI"
+      ],
+      "published": "2026-05-16T16:52:08+00:00",
+      "link": "https://arxiv.org/pdf/2605.17077v1",
+      "tags": [
+        "keyword:ur",
+        "query:ur"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "dense multi-aspect annotation method for robot demonstration datasets",
+      "llm_evidence_cn": "提出密集多方面标注方法用于机器人演示数据集构建",
+      "llm_evidence": "提出密集多方面标注方法用于机器人演示数据集构建",
+      "canonical_evidence": "提出密集多方面标注方法用于机器人演示数据集构建",
+      "llm_tldr_en": "Introduces DeMiAn, a two-stage approach that re-labels robot demonstration segments with VLM-generated annotations across four aspects, enabling efficient dataset construction and improving policy learning.",
+      "llm_tldr_cn": "针对机器人策略学习中演示数据成本高但语言标注相对廉价的问题，提出DeMiAn方法。该方法首先生成包含运动、场景、手臂姿势和推理四个方面的密集标注，然后学习一个指导器在部署时生成任务适配标注。在超过100万机器人交互样本上验证了密集语言标注对策略学习的提升效果，为机器人数据集构建提供了高效标注框架。",
+      "llm_tldr": "针对机器人策略学习中演示数据成本高但语言标注相对廉价的问题，提出DeMiAn方法。该方法首先生成包含运动、场景、手臂姿势和推理四个方面的密集标注，然后学习一个指导器在部署时生成任务适配标注。在超过100万机器人交互样本上验证了密集语言标注对策略学习的提升效果，为机器人数据集构建提供了高效标注框架。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2605.10408v1",
+      "source": "arxiv",
+      "title": "VISOR: A Vision-Language Model-based Test Oracle for Testing Robot",
+      "abstract": "Testing robots requires assessing whether they perform their intended tasks correctly, dependably, and with high quality, a challenge known as the test oracle problem in software testing. Traditionally, this assessment relies on task-specific symbolic oracles for task correctness and on human manual evaluation of robot behavior, which is time-consuming, subjective, and error-prone. To address this, we propose VISOR, a Vision-Language Model (VLM)-based approach for automated test oracle assessment that eliminates the need of expensive human evaluations. VISOR performs automated evaluation of task correctness and quality, addressing the limitations of existing symbolic test oracles, which are task-specific and provide pass/fail judgments without explicitly quantifying task quality. Given the inherent uncertainty in VLMs, VISOR also explicitly quantifies its own uncertainty during test assessments. We evaluated VISOR using two VLMs, i.e., GPT and Gemini, across four robotic tasks on over 1,000 videos. Results show that Gemini achieves higher recall while GPT achieves higher precision. However, both models show low correlation between uncertainty and correctness, which prevents using uncertainty as a correctness predictor.",
+      "authors": [
+        "Prasun Saurabh",
+        "Pablo Valle",
+        "Aitor Arrieta",
+        "Shaukat Ali",
+        "Paolo Arcaini"
+      ],
+      "primary_category": "cs.SE",
+      "categories": [
+        "cs.SE",
+        "cs.RO"
+      ],
+      "published": "2026-05-11T11:46:57+00:00",
+      "link": "https://arxiv.org/pdf/2605.10408v1",
+      "tags": [
+        "keyword:ur",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "VLM-based test oracle for robot fault detection",
+      "llm_evidence_cn": "基于视觉语言模型的机器人测试预言用于故障检测",
+      "llm_evidence": "基于视觉语言模型的机器人测试预言用于故障检测",
+      "canonical_evidence": "基于视觉语言模型的机器人测试预言用于故障检测",
+      "llm_tldr_en": "VISOR uses a VLM to automatically evaluate robot task correctness and quality, addressing the test oracle problem and enabling automated fault detection.",
+      "llm_tldr_cn": "机器人测试面临预言难题，传统方法依赖人类评估或任务特定符号预言，耗时且主观。本文提出VISOR，一种基于视觉语言模型的自动测试预言方法，能够评估机器人任务正确性和质量，无需人工干预。实验表明VISOR可有效检测机器人行为中的故障，为故障诊断提供了自动化工具。",
+      "llm_tldr": "机器人测试面临预言难题，传统方法依赖人类评估或任务特定符号预言，耗时且主观。本文提出VISOR，一种基于视觉语言模型的自动测试预言方法，能够评估机器人任务正确性和质量，无需人工干预。实验表明VISOR可有效检测机器人行为中的故障，为故障诊断提供了自动化工具。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "fault detection in humanoid robots",
+      "matched_requirement_id": "req-6",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2605.19004v1",
+      "source": "arxiv",
+      "title": "EgoTraj: Real-World Egocentric Human Trajectory Dataset for Multimodal Prediction",
+      "abstract": "Accurately forecasting human trajectories from an egocentric perspective plays a central role in applications such as humanoid robotics, wearable sensing systems, and assistive navigation. However, progress in this direction remains limited due to the scarcity of egocentric trajectory datasets collected in real-world environments. Addressing this need, we introduce EgoTraj, an egocentric multimodal open dataset recorded using Meta Quest Pro (MQPro). EgoTraj contains 75 sequences of human navigation collected from multiple MQPro wearers in real-world urban environments. Each recording provides synchronized RGB video along with ground-truth data, including continuous time-synchronized 6-degree-of-freedom head poses, per-frame 3D eye gaze vectors, scene annotations. To the best of our knowledge, EgoTraj differs from typical egocentric trajectory datasets by capturing long-horizon, self-directed navigation across diverse urban routes with broad participant diversity. To demonstrate the potential of the dataset, we benchmark several state-of-the-art methods for egocentric trajectory prediction and conduct ablation studies to analyze the contributions of gaze, scene, and motion cues. The results highlight the utility of EgoTraj for AR-based perception, navigation, and assistive systems. The EgoTraj dataset, code, and EgoViz Dashboard are publicly available at https://github.com/yehiahmad/EgoTraj.",
+      "authors": [
+        "Ahmad Yehia",
+        "Abduallah Mohamed",
+        "Tianyi Wang",
+        "Jiseop Byeon",
+        "Kun Qian",
+        "Junfeng Jiao",
+        "Christian Claudel"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV",
+        "cs.LG",
+        "cs.RO"
+      ],
+      "published": "2026-05-18T18:26:51+00:00",
+      "link": "https://arxiv.org/pdf/2605.19004v1",
+      "tags": [
+        "keyword:ur"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "egocentric human trajectory dataset for humanoid robotics",
+      "llm_evidence_cn": "用于人形机器人的自我中心人类轨迹数据集",
+      "llm_evidence": "用于人形机器人的自我中心人类轨迹数据集",
+      "canonical_evidence": "用于人形机器人的自我中心人类轨迹数据集",
+      "llm_tldr_en": "EgoTraj provides a real-world egocentric human trajectory dataset with 75 sequences from Meta Quest Pro, enabling multimodal prediction for humanoid robotics.",
+      "llm_tldr_cn": "针对自我中心轨迹数据集稀缺的问题，本文提出了EgoTraj数据集，使用Meta Quest Pro在真实城市环境中收集了75段人类导航序列，包含RGB视频、头部姿态和3D眼动等多模态数据。实验表明该数据集可用于训练和评估轨迹预测模型，为人形机器人等应用提供支撑。",
+      "llm_tldr": "针对自我中心轨迹数据集稀缺的问题，本文提出了EgoTraj数据集，使用Meta Quest Pro在真实城市环境中收集了75段人类导航序列，包含RGB视频、头部姿态和3D眼动等多模态数据。实验表明该数据集可用于训练和评估轨迹预测模型，为人形机器人等应用提供支撑。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "humanoid robot dataset construction",
+      "matched_requirement_id": "req-2",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2605.10408v2",
+      "source": "arxiv",
+      "title": "VISOR: A Vision-Language Model-based Test Oracle for Testing Robots",
+      "abstract": "Testing robots requires assessing whether they perform their intended tasks correctly, dependably, and with high quality, a challenge known as the test oracle problem in software testing. Traditionally, this assessment relies on task-specific symbolic oracles for task correctness and on human manual evaluation of robot behavior, which is time-consuming, subjective, and error-prone. To address this, we propose VISOR, a Vision-Language Model (VLM)-based approach for automated test oracle assessment that eliminates the need of expensive human evaluations. VISOR performs automated evaluation of task correctness and quality, addressing the limitations of existing symbolic test oracles, which are task-specific and provide pass/fail judgments without explicitly quantifying task quality. Given the inherent uncertainty in VLMs, VISOR also explicitly quantifies its own uncertainty during test assessments. We evaluated VISOR using two VLMs, i.e., GPT and Gemini, across four robotic tasks on over 1,000 videos. Results show that Gemini achieves higher recall while GPT achieves higher precision. However, both models show low correlation between uncertainty and correctness, which prevents using uncertainty as a correctness predictor.",
+      "authors": [
+        "Prasun Saurabh",
+        "Pablo Valle",
+        "Aitor Arrieta",
+        "Shaukat Ali",
+        "Paolo Arcaini"
+      ],
+      "primary_category": "cs.SE",
+      "categories": [
+        "cs.SE",
+        "cs.RO"
+      ],
+      "published": "2026-05-11T11:46:57+00:00",
+      "link": "https://arxiv.org/pdf/2605.10408v2",
+      "tags": [
+        "keyword:ur",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "VLM-based test oracle for robot fault detection",
+      "llm_evidence_cn": "基于视觉语言模型的机器人测试预言用于故障检测",
+      "llm_evidence": "基于视觉语言模型的机器人测试预言用于故障检测",
+      "canonical_evidence": "基于视觉语言模型的机器人测试预言用于故障检测",
+      "llm_tldr_en": "VISOR uses a VLM to automatically evaluate robot task correctness and quality, addressing the test oracle problem and enabling automated fault detection.",
+      "llm_tldr_cn": "机器人测试面临预言难题，传统方法依赖人类评估或任务特定符号预言，耗时且主观。本文提出VISOR，一种基于视觉语言模型的自动测试预言方法，能够评估机器人任务正确性和质量，无需人工干预。实验表明VISOR可有效检测机器人行为中的故障，为故障诊断提供了自动化工具。",
+      "llm_tldr": "机器人测试面临预言难题，传统方法依赖人类评估或任务特定符号预言，耗时且主观。本文提出VISOR，一种基于视觉语言模型的自动测试预言方法，能够评估机器人任务正确性和质量，无需人工干预。实验表明VISOR可有效检测机器人行为中的故障，为故障诊断提供了自动化工具。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "fault detection in humanoid robots",
+      "matched_requirement_id": "req-6",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2605.11564v1",
+      "source": "arxiv",
+      "title": "RIO: Flexible Real-Time Robot I/O for Cross-Embodiment Robot Learning",
+      "abstract": "Despite recent efforts to collect multi-task, multi-embodiment datasets, to design recipes for training Vision-Language-Action models (VLAs), and to showcase these models on different robot platforms, generalist cross-embodiment robot capabilities remains a largely elusive ideal. Progress is limited by fragmented infrastructure: most robot code is highly specific to the exact setup the user decided on, which adds major overhead when attempting to reuse, recycle, or share artifacts between users. We present RIO (Robot I/O), an open source Python framework that provides flexible, lightweight components for robot control, teleoperation, data formatting, sensor configuration, and policy deployment across diverse hardware platforms and morphologies. RIO provides abstractions that enable users to make any choice and to switch between them, with minimal reconfiguration effort. We validate RIO on VLA deployment workflows across three morphologies (single-arm, bimanual, humanoid) and four hardware platforms with varying grippers and cameras. Using teleoperated data collected with RIO, we fine-tune state-of-the-art VLAs including $π_{0.5}$ and GR00T on household tasks such as pick-and-place, folding, and bowl scrubbing. By open sourcing all our efforts, we hope the community can accelerate their pace of robot learning on real-world robot hardware. Additional details at: https://robot-i-o.github.io",
+      "authors": [
+        "Pablo Ortega-Kral",
+        "Eliot Xing",
+        "Arthur Bucker",
+        "Vernon Luk",
+        "Junseo Kim",
+        "Owen Kwon",
+        "Angchen Xie",
+        "Nikhil Sobanbabu",
+        "Yifu Yuan",
+        "Megan Lee",
+        "Deepam Ameria",
+        "Bhaswanth Ayapilla",
+        "Jaycie Bussell",
+        "Guanya Shi",
+        "Jonathan Francis",
+        "Jean Oh"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-05-12T05:49:52+00:00",
+      "link": "https://arxiv.org/pdf/2605.11564v1",
+      "tags": [
+        "keyword:ur",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "framework for robot control, data formatting, and policy deployment across hardware",
+      "llm_evidence_cn": "跨硬件的机器人控制、数据格式化和策略部署框架",
+      "llm_evidence": "跨硬件的机器人控制、数据格式化和策略部署框架",
+      "canonical_evidence": "跨硬件的机器人控制、数据格式化和策略部署框架",
+      "llm_tldr_en": "RIO provides flexible, lightweight components for robot control, teleoperation, data formatting, and policy deployment, enabling cross-embodiment learning.",
+      "llm_tldr_cn": "针对机器人领域软件碎片化问题，RIO提出一个开源Python框架，提供控制、遥操作、数据格式化和策略部署的即插即用组件。它支持多种机器人形态，标准化数据接口，大幅降低跨平台复用的开销。实验表明RIO能简化数据采集和部署流程，促进通用机器人学习。",
+      "llm_tldr": "针对机器人领域软件碎片化问题，RIO提出一个开源Python框架，提供控制、遥操作、数据格式化和策略部署的即插即用组件。它支持多种机器人形态，标准化数据接口，大幅降低跨平台复用的开销。实验表明RIO能简化数据采集和部署流程，促进通用机器人学习。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2605.18611v1",
+      "source": "arxiv",
+      "title": "Unified Walking, Running, and Recovery for Humanoids via State-Dependent Adversarial Motion Priors",
+      "abstract": "We propose a unified reinforcement learning framework that enables a single policy to perform walking, running, and fall recovery on the Unitree G1 humanoid robot, validated on physical hardware without any explicit mode-switching command at deployment. The framework extends Adversarial Motion Priors (AMP) by replacing the conventional global reference distribution with a state-dependent gate that routes each training transition to one of two discriminators: a dedicated recovery discriminator and a velocity-conditioned locomotion discriminator that jointly covers walking and running. The gate is defined by a single fixed threshold on projected gravity: the recovery discriminator is activated when body tilt exceeds approximately $37^\\circ$ from vertical ($|g_z+1|>0.6$); otherwise the locomotion discriminator is used, with the normalized commanded velocity serving as a condition that selects the appropriate reference trajectory between walk and run clips. Only three LAFAN1 reference clips are required to regularize the complete behavior set. At deployment, a single frozen ONNX policy executes at 50\\,Hz with no runtime mode logic; hardware experiments demonstrate successful recovery from both prone and supine falls and smooth walk-to-run transitions under the same controller.",
+      "authors": [
+        "Yidan Lu",
+        "Yichao Zhong",
+        "Liu Zhao",
+        "Wanyue Li",
+        "Peng Lu"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-05-18T16:21:57+00:00",
+      "link": "https://arxiv.org/pdf/2605.18611v1",
+      "tags": [
+        "keyword:ur",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "unified walking, running, and fall recovery on Unitree G1, addressing error analysis and recovery",
+      "llm_evidence_cn": "在宇树G1上实现行走、奔跑和跌倒恢复的统一策略，涉及错误分析与恢复",
+      "llm_evidence": "在宇树G1上实现行走、奔跑和跌倒恢复的统一策略，涉及错误分析与恢复",
+      "canonical_evidence": "在宇树G1上实现行走、奔跑和跌倒恢复的统一策略，涉及错误分析与恢复",
+      "llm_tldr_en": "Proposes a unified RL framework for humanoid locomotion and fall recovery, validated on Unitree G1, using state-dependent adversarial motion priors to distinguish locomotion and recovery modes without explicit switching.",
+      "llm_tldr_cn": "该论文针对人形机器人的行走、奔跑和跌倒恢复提出统一强化学习框架。通过状态依赖的对抗运动先验，用基于投影重力的固定阈值门控两个判别器（恢复判别器和速度条件移动判别器），无需显式模式切换指令即可在宇树G1实体机器人上实现多种运动。该工作为错误分析（跌倒恢复）提供了方法基础，对故障诊断和错误分析具有启示意义。",
+      "llm_tldr": "该论文针对人形机器人的行走、奔跑和跌倒恢复提出统一强化学习框架。通过状态依赖的对抗运动先验，用基于投影重力的固定阈值门控两个判别器（恢复判别器和速度条件移动判别器），无需显式模式切换指令即可在宇树G1实体机器人上实现多种运动。该工作为错误分析（跌倒恢复）提供了方法基础，对故障诊断和错误分析具有启示意义。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "fault diagnosis and error analysis for humanoid robots",
+      "matched_requirement_id": "req-7",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    }
+  ]
+}

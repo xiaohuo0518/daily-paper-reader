@@ -6,64 +6,61 @@
 </div>
 
 ## 每次日报
-- 最新运行日期：2026-05-19 ~ 2026-05-28
-- 运行时间：2026-05-28 04:04:19 UTC
+- 最新运行日期：2026-04-29 ~ 2026-05-28
+- 运行时间：2026-05-28 04:17:19 UTC
 - 运行状态：成功
-- 本次总论文数：14
-- 精读区：6
+- 本次总论文数：13
+- 精读区：5
 - 速读区：8
 
 ### 今日简报（AI）
-1) 今日精读聚焦人形机器人可扩展操控学习与技能预测蒸馏两项高分工作，速读覆盖域自适应遥操作及持续学习等前沿挑战。  
-2) 最值得关注的方向：SUGAR框架实现人形全身联动操控的泛化能力，以及技能预测蒸馏的小模型高效集成。  
-3) 建议普通读者重点了解VLA模型如何应对连续学习中的遗忘问题，同时留意无线遥操作的通信率优化方案。
-- 详情：[/20260519-20260528/README](/20260519-20260528/README)
+本期聚焦具身智能与机器人安全，精读两篇高分工作分别涉及可扩展VLA数据集和人形机器人安全测试。  
+最值得关注的方向：大规模行为数据集（SABER）推动真实世界VLA适配，以及对抗性压力测试揭示人形机器人安全滤波器弱点。  
+建议普通读者关注密集语言标注如何提升机器人指令理解，以及规避操作多样性的锚点适应方法。
+- 详情：[/20260429-20260528/README](/20260429-20260528/README)
 
 ### 精读区论文标签
-1. [SUGAR: A Scalable Human-Video-Driven Generalizable Humanoid Loco-Manipulation Learning Framework](/20260519-20260528/2605.20373v1-sugar-a-scalable-human-video-driven-generalizable-humanoid-loco-manipulation-learning-framework)  
+1. [SABER: A Scalable Action-Based Embodied Dataset for Real-World VLA Adaptation](/20260429-20260528/2605.09613v1-saber-a-scalable-action-based-embodied-dataset-for-real-world-vla-adaptation)  
    标签：评分：9.0/10、query:ur
-   evidence：从人类视频构建人形机器人数据集
-2. [To Select or not to Select, that is the Question: Distilling Robot Skill Prediction into a Small Ensemble](/20260519-20260528/2605.21242v1-to-select-or-not-to-select-that-is-the-question-distilling-robot-skill-prediction-into-a-small-ensemble)  
+   evidence：可扩展的基于动作的具身数据集用于真实世界VLA适应
+2. [Adversarial Stress Testing of SPARK Humanoid Safety Filters](/20260429-20260528/2605.19009v1-adversarial-stress-testing-of-spark-humanoid-safety-filters)  
    标签：评分：9.0/10、query:ur
-   evidence：构建了用于机器人技能预测的合成任务-技能数据集，直接对应机器人数据集构建需求
-3. [Mechanisms of Misgeneralization in Physical Sequence Modeling](/20260519-20260528/2605.20299v1-mechanisms-of-misgeneralization-in-physical-sequence-modeling)  
+   evidence：对SPARK人形安全滤波器进行压力测试，包含与宇树G1相关的G1SportMode基准
+3. [Learning while Deploying: Fleet-Scale Reinforcement Learning for Generalist Robot Policies](/20260429-20260528/2605.00416v1-learning-while-deploying-fleet-scale-reinforcement-learning-for-generalist-robot-policies)  
    标签：评分：8.0/10、query:ur
-   evidence：解决了物理序列建模中数据集构建的陷阱问题
-4. [RED: Adaptive Real-Time DAG Scheduling for Robotic Inference under Environmental Dynamics](/20260519-20260528/2605.24044v1-red-adaptive-real-time-dag-scheduling-for-robotic-inference-under-environmental-dynamics)  
+   evidence：面向机器人策略持续部署和改进的车队级强化学习框架
+4. [BifrostUMI: Bridging Robot-Free Demonstrations and Humanoid Whole-Body Manipulation](/20260429-20260528/2605.03452v1-bifrostumi-bridging-robot-free-demonstrations-and-humanoid-whole-body-manipulation)  
    标签：评分：8.0/10、query:ur
-   evidence：自适应实时调度，适用于资源受限机器人平台的边缘部署
-5. [MuGen: Multi-Skill Generative Locomotion Controller for Humanoid Robots](/20260519-20260528/2605.24592v1-mugen-multi-skill-generative-locomotion-controller-for-humanoid-robots)  
+   evidence：面向人形机器人的无机器人数据收集框架
+5. [ORICF -- Open Robotics Inference and Control Framework](/20260429-20260528/2605.09656v1-oricf----open-robotics-inference-and-control-framework)  
    标签：评分：8.0/10、query:ur
-   evidence：使用VQ-VAE的数据驱动人形机器人多技能运动框架
-6. [Orion: Enabling Self-adaptive Memory Management for On-device Online Continual Learning](/20260519-20260528/2605.26473v1-orion-enabling-self-adaptive-memory-management-for-on-device-online-continual-learning)  
-   标签：评分：8.0/10、query:ur
-   evidence：机器人边缘端部署的在线持续学习
+   evidence：开放机器人推理与控制框架，支持边缘卸载
 
 ### 速读区论文标签
-1. [Domain-Adaptive Communication-Rate Optimization for Sim-to-Real Humanoid-Robot Wireless XR Teleoperation](/20260519-20260528/2605.19293v1-domain-adaptive-communication-rate-optimization-for-sim-to-real-humanoid-robot-wireless-xr-teleoperation)  
+1. [Escaping the Diversity Trap in Robotic Manipulation via Anchor-Centric Adaptation](/20260429-20260528/2605.07381v1-escaping-the-diversity-trap-in-robotic-manipulation-via-anchor-centric-adaptation)  
    标签：评分：7.0/10、query:ur
-   evidence：优化人形机器人遥操作通信以收集数据
-2. [Factored Diffusion Policies:Compositionally Generalized Robot Control with a Single Score Network](/20260519-20260528/2605.22596v1-factored-diffusion-policiescompositionally-generalized-robot-control-with-a-single-score-network)  
+   evidence：机器人数据收集策略
+2. [How to Instruct Your Robot: Dense Language Annotations Power Robot Policy Learning](/20260429-20260528/2605.17077v1-how-to-instruct-your-robot-dense-language-annotations-power-robot-policy-learning)  
    标签：评分：7.0/10、query:ur
-   evidence：通过组合泛化减少机器人数据收集的训练任务预算
-3. [Can VLA Models Learn from Real-World Data Continually without Forgetting?](/20260519-20260528/2605.26820v1-can-vla-models-learn-from-real-world-data-continually-without-forgetting)  
+   evidence：提出密集多方面标注方法用于机器人演示数据集构建
+3. [EgoTraj: Real-World Egocentric Human Trajectory Dataset for Multimodal Prediction](/20260429-20260528/2605.19004v1-egotraj-real-world-egocentric-human-trajectory-dataset-for-multimodal-prediction)  
    标签：评分：7.0/10、query:ur
-   evidence：构建真实机器人持续学习数据集
-4. [LiteViLNet: Lightweight Vision-LiDAR Fusion Network for Efficient Road Segmentation](/20260519-20260528/2605.21007v1-litevilnet-lightweight-vision-lidar-fusion-network-for-efficient-road-segmentation)  
+   evidence：用于人形机器人的自我中心人类轨迹数据集
+4. [Retrieve-then-Steer: Online Success Memory for Test-Time Adaptation of Generative VLAs](/20260429-20260528/2605.10094v1-retrieve-then-steer-online-success-memory-for-test-time-adaptation-of-generative-vlas)  
    标签：评分：6.0/10、query:ur
-   evidence：面向边缘部署的轻量级融合网络
-5. [Imagine2Real: Towards Zero-shot Humanoid-Object Interaction via Video Generative Priors](/20260519-20260528/2605.22272v2-imagine2real-towards-zero-shot-humanoid-object-interaction-via-video-generative-priors)  
+   evidence：在线测试时自适应用于VLA模型在持续环境中的部署
+5. [VISOR: A Vision-Language Model-based Test Oracle for Testing Robot](/20260429-20260528/2605.10408v1-visor-a-vision-language-model-based-test-oracle-for-testing-robot)  
    标签：评分：6.0/10、query:ur
-   evidence：人形机器人利用视频生成先验进行交互
-6. [Any2Any: Efficient Cross-Embodiment Transfer for Humanoid Whole-Body Tracking](/20260519-20260528/2605.23733v1-any2any-efficient-cross-embodiment-transfer-for-humanoid-whole-body-tracking)  
+   evidence：基于视觉语言模型的机器人测试预言用于故障检测
+6. [VISOR: A Vision-Language Model-based Test Oracle for Testing Robots](/20260429-20260528/2605.10408v2-visor-a-vision-language-model-based-test-oracle-for-testing-robots)  
    标签：评分：6.0/10、query:ur
-   evidence：跨本体迁移实现人形全身跟踪，仅需少量数据
-7. [SFG-ROS: A Resource-Aware Framework for Dense Multi-Agent Perception](/20260519-20260528/2605.23832v1-sfg-ros-a-resource-aware-framework-for-dense-multi-agent-perception)  
+   evidence：基于视觉语言模型的机器人测试预言用于故障检测
+7. [RIO: Flexible Real-Time Robot I/O for Cross-Embodiment Robot Learning](/20260429-20260528/2605.11564v1-rio-flexible-real-time-robot-io-for-cross-embodiment-robot-learning)  
    标签：评分：6.0/10、query:ur
-   evidence：多智能体感知的资源感知部署框架
-8. [HyperSim: A Holistic Sim-To-Real Framework For Robust Robotic Manipulation](/20260519-20260528/2605.26638v1-hypersim-a-holistic-sim-to-real-framework-for-robust-robotic-manipulation)  
+   evidence：跨硬件的机器人控制、数据格式化和策略部署框架
+8. [Unified Walking, Running, and Recovery for Humanoids via State-Dependent Adversarial Motion Priors](/20260429-20260528/2605.18611v1-unified-walking-running-and-recovery-for-humanoids-via-state-dependent-adversarial-motion-priors)  
    标签：评分：6.0/10、query:ur
-   evidence：机器人操作数据集构建的合成数据生成
+   evidence：在宇树G1上实现行走、奔跑和跌倒恢复的统一策略，涉及错误分析与恢复
 
 
 <div class="dpr-home-promo-card">
