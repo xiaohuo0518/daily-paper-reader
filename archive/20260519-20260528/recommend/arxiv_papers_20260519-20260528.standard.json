@@ -1,0 +1,588 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-05-28T03:57:15.164582+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 1,
+    "deep_divecandidates": 6,
+    "deep_cap": 6,
+    "deep_selected": 6,
+    "quick_candidates": 8,
+    "quick_skim_target": 11,
+    "quick_selected": 8
+  },
+  "deep_dive": [
+    {
+      "id": "2605.20373v1",
+      "source": "arxiv",
+      "title": "SUGAR: A Scalable Human-Video-Driven Generalizable Humanoid Loco-Manipulation Learning Framework",
+      "abstract": "Building humanoid robots capable of generalizable whole-body loco-manipulation in the real world remains a fundamental challenge. Existing methods either rely on laborious task-specific reward engineering, rigidly replay reference motions that fail to generalize, or depend on costly teleoperation that limits scalability. While human videos capture diverse human behaviors, motion priors inferred from them are inherently imperfect, suffering from occlusion, contact artifacts, and retargeting errors that render them unsuitable for direct policy learning. To address this, we present SUGAR, a scalable data-driven framework that converts diverse human videos into deployable humanoid loco-manipulation skills, without any task-specific reward engineering or reference-motion conditioning at inference. SUGAR proceeds in three stages. First, a fully automated pipeline extracts kinematic interaction priors including human-object motion trajectories and contact labels from unstructured human videos. Second, a privileged physics-based refiner uses a unified mimic reward and progressive state pool to transform imperfect priors into physically feasible, high-fidelity skills. Third, refined skills are distilled into a hierarchical autonomous policy consisting of a command generator and a command tracker. We evaluate SUGAR on six representative loco-manipulation tasks in simulation and real-world humanoid hardware. Our method substantially outperforms reference-tracking baselines, and performance scales clearly with the amount of human video data. It also achieves zero-shot real-world transfer with reliable closed-loop execution, autonomous failure recovery, and stable long-horizon performance under external perturbations. Project Page: https://tianshuwu.github.io/sugar-humanoid/",
+      "authors": [
+        "Tianshu Wu",
+        "Xiangqi Kong",
+        "Yue Chen",
+        "Qize Yu",
+        "Hang Ye",
+        "Jia Li",
+        "Yizhou Wang",
+        "Hao Dong"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.AI",
+        "cs.CV"
+      ],
+      "published": "2026-05-19T18:24:05+00:00",
+      "link": "https://arxiv.org/pdf/2605.20373v1",
+      "tags": [
+        "keyword:ur",
+        "query:ur"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "humanoid dataset construction from video",
+      "llm_evidence_cn": "从人类视频构建人形机器人数据集",
+      "llm_evidence": "从人类视频构建人形机器人数据集",
+      "canonical_evidence": "从人类视频构建人形机器人数据集",
+      "llm_tldr_en": "SUGAR converts diverse human videos into deployable humanoid loco-manipulation skills without task-specific engineering, addressing dataset scarcity.",
+      "llm_tldr_cn": "针对人形机器人全身操作技能泛化难的问题，SUGAR提出一种可扩展的数据驱动框架，利用人类视频自动生成可部署的运动技能。该方法无需任务特定的工程化设计，通过处理视频中的遮挡和重定向误差，显著提升了技能在真实世界的泛化能力。实验表明，该框架在多种操作任务中达到高成功率，为构建大规模人形机器人行为数据集提供了新范式。",
+      "llm_tldr": "针对人形机器人全身操作技能泛化难的问题，SUGAR提出一种可扩展的数据驱动框架，利用人类视频自动生成可部署的运动技能。该方法无需任务特定的工程化设计，通过处理视频中的遮挡和重定向误差，显著提升了技能在真实世界的泛化能力。实验表明，该框架在多种操作任务中达到高成功率，为构建大规模人形机器人行为数据集提供了新范式。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "humanoid robot dataset construction",
+      "matched_requirement_id": "req-2",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2605.21242v1",
+      "source": "arxiv",
+      "title": "To Select or not to Select, that is the Question: Distilling Robot Skill Prediction into a Small Ensemble",
+      "abstract": "As robot fleets become more heterogeneous, including humanoids, rovers, quadrupeds, and drones, selecting the right robot for a task becomes a core systems problem. We study robot skill prediction: mapping a natural-language task description to the physical capabilities required to execute it, such as fly, wheels, legs, surface water, under water and hands. Since labelled data that maps natural-language task descriptions to robot's physical capabilities does not exist, we construct a synthetic task-to-skill dataset using LLM-assisted generation and targeted label auditing. Trained on this data, a ~133M-parameter ensemble of two fine-tuned sentence encoders (mpnet + MiniLM) reaches 83.5% task-to-skill matching on a stratified 200 task dataset, outperforming Kimi K2 (1T MoE) at 72.0%, GPT-OSS-120B at 71.5%, and Llama-4-Scout-17B at 69.0% under the same zero-shot prompt. These results suggest that, for fixed robot skill taxonomies, small specialized models trained on synthetic data can outperform much larger general-purpose LLMs for fleet-level task routing.",
+      "authors": [
+        "Haechan Mark Bong",
+        "Simon Roy",
+        "Euhid Aman",
+        "Giovanni Beltrame"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-05-20T14:32:38+00:00",
+      "link": "https://arxiv.org/pdf/2605.21242v1",
+      "tags": [
+        "keyword:ur",
+        "query:ur"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "constructs synthetic task-to-skill dataset for robot skill prediction; directly aligns with dataset construction for robotics",
+      "llm_evidence_cn": "构建了用于机器人技能预测的合成任务-技能数据集，直接对应机器人数据集构建需求",
+      "llm_evidence": "构建了用于机器人技能预测的合成任务-技能数据集，直接对应机器人数据集构建需求",
+      "canonical_evidence": "构建了用于机器人技能预测的合成任务-技能数据集，直接对应机器人数据集构建需求",
+      "llm_tldr_en": "Proposes a method to construct a synthetic dataset mapping natural-language tasks to robot capabilities using LLM-assisted generation, and distills a small ensemble for skill prediction. Achieves 83.5% matching accuracy.",
+      "llm_tldr_cn": "针对机器人技能预测中缺乏标注数据的问题，提出利用大语言模型辅助生成合成数据集，将自然语言任务描述映射到机器人物理能力（如飞行、轮式、腿式等）。训练了一个约1.33亿参数的小型集成模型（两个句子编码器），在测试集上达到83.5%的匹配准确率。该工作为机器人任务选择提供了低成本的数据构建方法，并展示了蒸馏的有效性。",
+      "llm_tldr": "针对机器人技能预测中缺乏标注数据的问题，提出利用大语言模型辅助生成合成数据集，将自然语言任务描述映射到机器人物理能力（如飞行、轮式、腿式等）。训练了一个约1.33亿参数的小型集成模型（两个句子编码器），在测试集上达到83.5%的匹配准确率。该工作为机器人任务选择提供了低成本的数据构建方法，并展示了蒸馏的有效性。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2605.20299v1",
+      "source": "arxiv",
+      "title": "Mechanisms of Misgeneralization in Physical Sequence Modeling",
+      "abstract": "Generative sequence models are often trained to plan motion in physical domains, from robotics to mechanical simulations. When constructing a dataset to train such a model, engineers may curate demonstrations to specify how trajectories should be distributed over a physical quantity like travel distance or mechanical energy. For example, a roboticist building a maze navigation agent might choose demonstrations whose travel distances cover a fixed range uniformly, hoping to constrain the agent's expected power usage. We find that standard deep learning can violate this intent: each generated trajectory can seem plausible on its own, but the aggregate distribution over the physical quantity is wrong. We call this failure physical misgeneralization, and develop an account of its mechanism. Using controlled synthetic tasks, we show that physical misgeneralization arises when local errors typical of the model class propagate through the physical measurement to shift the recovered distribution. We estimate these errors with a data deviation kernel, and we use it to predict which physical quantities gain or lose mass in both our synthetic and more applied maze navigation and double-pendulum motion tasks. Finally, our mechanistic interpretation helps identify which mitigation strategies are structurally promising, and we use it to propose a kernel-informed intervention.",
+      "authors": [
+        "Kento Nishi",
+        "Raphael Tang",
+        "Karun Kumar",
+        "Core Francisco Park",
+        "Hidenori Tanaka"
+      ],
+      "primary_category": "cs.LG",
+      "categories": [
+        "cs.LG",
+        "cs.AI",
+        "cs.RO"
+      ],
+      "published": "2026-05-19T12:34:16+00:00",
+      "link": "https://arxiv.org/pdf/2605.20299v1",
+      "tags": [
+        "keyword:ur"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "addresses dataset construction pitfalls in physical sequence modeling",
+      "llm_evidence_cn": "解决了物理序列建模中数据集构建的陷阱问题",
+      "llm_evidence": "解决了物理序列建模中数据集构建的陷阱问题",
+      "canonical_evidence": "解决了物理序列建模中数据集构建的陷阱问题",
+      "llm_tldr_en": "Identifies and analyzes a failure mode in constructing datasets for training generative sequence models in robotics, where the aggregate distribution over a physical quantity is misrepresented.",
+      "llm_tldr_cn": "该论文揭示了在构建机器人数据集以训练生成序列模型时出现的一种错误泛化现象。工程师精心策划的演示数据可能导致模型生成轨迹的物理量分布偏离预期。作者将此问题定义为物理错误泛化，并深入分析了其机制，为机器人数据集构建提供了重要警示和指导。这对于构建高质量的人形机器人数据集具有直接参考价值。",
+      "llm_tldr": "该论文揭示了在构建机器人数据集以训练生成序列模型时出现的一种错误泛化现象。工程师精心策划的演示数据可能导致模型生成轨迹的物理量分布偏离预期。作者将此问题定义为物理错误泛化，并深入分析了其机制，为机器人数据集构建提供了重要警示和指导。这对于构建高质量的人形机器人数据集具有直接参考价值。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2605.24044v1",
+      "source": "arxiv",
+      "title": "RED: Adaptive Real-Time DAG Scheduling for Robotic Inference under Environmental Dynamics",
+      "abstract": "Robots deployed in dynamic environments must contend with environment-driven changes that reshape computation at runtime: new tasks may appear, precedence relations can shift, and overall workload structure evolves, all of which degrade performance, especially when multi-task inference is required under tight resource and real-time budgets. We present RED, a real-time scheduling framework for multi-task deep neural network workloads on resource-constrained robotic platforms that adapts to Robotic Environmental Dynamics (RED) while preserving end-to-end timing guarantees under modeling assumptions. The core of RED is a deadline-aware scheduler that assigns intermediate sub-deadlines, allowing it to accommodate evolving computation graphs and asynchronous inference induced by unpredictable conditions. The framework also supports flexible deployment of MIMONet (multi-input multi-output neural networks), commonly used in multi-tasking robots to alleviate memory pressure through weight sharing. RED explicitly leverages this shared-parameter property via a workload refinement and graph-reconstruction procedure that aligns MIMONet structure with schedulability requirements, improving compatibility and efficiency. We implement RED on NVIDIA Jetson family platforms and on an Apple M-series MacBook and evaluate it on navigation-oriented workloads representative of real robotic scenarios. Experiments show consistent gains over existing methods in throughput, deadline satisfaction, robustness to interference, adaptability, and runtime overhead.",
+      "authors": [
+        "Zexin Li",
+        "Tao Ren",
+        "Johnathan Liu",
+        "Xiaoxi He",
+        "Cong Liu"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.SE",
+        "eess.SY"
+      ],
+      "published": "2026-05-21T20:44:39+00:00",
+      "link": "https://arxiv.org/pdf/2605.24044v1",
+      "tags": [
+        "keyword:ur",
+        "query:ur"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "adaptive real-time scheduling for robotic inference on resource-constrained platforms",
+      "llm_evidence_cn": "自适应实时调度，适用于资源受限机器人平台的边缘部署",
+      "llm_evidence": "自适应实时调度，适用于资源受限机器人平台的边缘部署",
+      "canonical_evidence": "自适应实时调度，适用于资源受限机器人平台的边缘部署",
+      "llm_tldr_en": "RED proposes a deadline-aware scheduler for multi-task DNN inference on resource-constrained robots, adapting to runtime environmental dynamics while preserving timing guarantees, directly enabling edge deployment on humanoid robots.",
+      "llm_tldr_cn": "针对机器人在动态环境中多任务推理面临的计算图变化和资源限制问题，本文提出RED自适应实时调度框架，通过截止时间感知的子deadline分配和动态优先级调整，在资源受限的机器人平台上保证端到端时序约束，并适应环境变化。该框架可直接应用于人形机器人的边缘端部署场景，实验表明在保证实时性的同时显著提升推理效率。",
+      "llm_tldr": "针对机器人在动态环境中多任务推理面临的计算图变化和资源限制问题，本文提出RED自适应实时调度框架，通过截止时间感知的子deadline分配和动态优先级调整，在资源受限的机器人平台上保证端到端时序约束，并适应环境变化。该框架可直接应用于人形机器人的边缘端部署场景，实验表明在保证实时性的同时显著提升推理效率。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "edge deployment for humanoid robots",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2605.24592v1",
+      "source": "arxiv",
+      "title": "MuGen: Multi-Skill Generative Locomotion Controller for Humanoid Robots",
+      "abstract": "This paper presents MuGen, a data-driven framework for learning and deploying multi-skill locomotion on humanoid robots. MuGen enables a robot to perform expressive motions like humans under the guidance of example motion sequences. To achieve this, we employ vector-quantized autoencoders (VQ-VAEs) trained with model-based reinforcement learning, resulting in a generative representation of locomotion that captures key patterns of human motion from hours of heterogeneous human performance data. We employ a teacher-student learning framework and develop a new policy distillation strategy to enable a deployable student policy learning this efficient latent representation. This policy allows the robot to track and mimic unseen human motions and further enables the robot to reuse the learned latent space for other tasks. We demonstrate the effectiveness of our framework through a diverse set of motions and accurate execution.",
+      "authors": [
+        "Yusen Feng",
+        "Xiang Wang",
+        "Heyuan Yao",
+        "Zixi Kang",
+        "Xinyu Huo",
+        "Boyang Yu",
+        "Pengyun Qiu",
+        "Ruijie Zhao",
+        "Baoquan Chen",
+        "Libin Liu"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-05-23T14:06:06+00:00",
+      "link": "https://arxiv.org/pdf/2605.24592v1",
+      "tags": [
+        "keyword:ur",
+        "query:ur"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "data-driven framework for multi-skill locomotion on humanoid robots using VQ-VAEs",
+      "llm_evidence_cn": "使用VQ-VAE的数据驱动人形机器人多技能运动框架",
+      "llm_evidence": "使用VQ-VAE的数据驱动人形机器人多技能运动框架",
+      "canonical_evidence": "使用VQ-VAE的数据驱动人形机器人多技能运动框架",
+      "llm_tldr_en": "MuGen learns a generative locomotion representation from heterogeneous human motion data via VQ-VAE and teacher-student distillation, enabling humanoid robots to track unseen motions.",
+      "llm_tldr_cn": "针对人形机器人多技能运动学习，MuGen提出数据驱动框架，利用向量量化变分自编码器（VQ-VAE）从大量异构人类运动数据中提取运动生成表示，并通过教师-学生蒸馏策略部署到实体机器人，使机器人能跟踪并模仿未见过的复杂人类动作，为构建人形机器人运动数据集提供了有效技术。",
+      "llm_tldr": "针对人形机器人多技能运动学习，MuGen提出数据驱动框架，利用向量量化变分自编码器（VQ-VAE）从大量异构人类运动数据中提取运动生成表示，并通过教师-学生蒸馏策略部署到实体机器人，使机器人能跟踪并模仿未见过的复杂人类动作，为构建人形机器人运动数据集提供了有效技术。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "humanoid robot dataset construction",
+      "matched_requirement_id": "req-2",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2605.26473v1",
+      "source": "arxiv",
+      "title": "Orion: Enabling Self-adaptive Memory Management for On-device Online Continual Learning",
+      "abstract": "Online continual learning (OCL) enables real-time adaptation to new data, making it crucial for dynamic robotic applications. However, its practical deployment is hindered by memory constraints in resource-limited systems, which affect key trade-offs in training latency, plasticity, and stability. Unlike offline parameter tuning, which cannot account for the dynamic shift in memory pressure and workload complexity as OCL progresses, an online and self-adaptive approach is essential for robust on-device deployment. This paper proposes Orion, a holistic framework designed to co-optimize training latency, plasticity, and stability of state-of-the-art OCL models under strict memory constraints, enabling feasible on-device deployment. At its core, Orion leverages URGE, a unified runtime indicator grounded in the ``Buckets effect'' principle that system performance is bounded by its scarcest resource, to dynamically reallocate memory across OCL components by jointly coordinating batch processing, replay buffers, and optimization strategies at both the OS and application level. Furthermore, Orion introduces system-level data prefetching techniques to maximize efficiency. A system prototype of Orion has been implemented using the widely adopted \\texttt{Avalanche-lib} and thoroughly evaluated across a diverse range of OCL algorithms, benchmarks, and hardware platforms commonly used in autonomous robotic applications. To further demonstrate its practical utility, Orion is integrated into a realistic autonomous navigational robot powered by OCL. The results show that Orion achieves significant training speedups while maintaining balanced performance and effectively adapting to various scenarios, all with minimal runtime, memory, and energy overhead, making Orion a practical solution for on-device continual learning.",
+      "authors": [
+        "Zexin Li",
+        "Nikil Dutt",
+        "Cong Liu"
+      ],
+      "primary_category": "eess.SY",
+      "categories": [
+        "eess.SY"
+      ],
+      "published": "2026-05-26T02:31:19+00:00",
+      "link": "https://arxiv.org/pdf/2605.26473v1",
+      "tags": [
+        "keyword:ur",
+        "query:ur"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "edge deployment of on-device continual learning for robots",
+      "llm_evidence_cn": "机器人边缘端部署的在线持续学习",
+      "llm_evidence": "机器人边缘端部署的在线持续学习",
+      "canonical_evidence": "机器人边缘端部署的在线持续学习",
+      "llm_tldr_en": "Orion enables self-adaptive memory management for on-device online continual learning, directly addressing edge deployment for resource-limited robots.",
+      "llm_tldr_cn": "该论文提出Orion框架，通过自适应的内存管理策略，在资源受限的嵌入式设备上实现在线持续学习的训练延迟、可塑性和稳定性的协同优化。这直接支持人形机器人的边缘端部署需求，使得机器人能够在实时环境中持续学习新技能。",
+      "llm_tldr": "该论文提出Orion框架，通过自适应的内存管理策略，在资源受限的嵌入式设备上实现在线持续学习的训练延迟、可塑性和稳定性的协同优化。这直接支持人形机器人的边缘端部署需求，使得机器人能够在实时环境中持续学习新技能。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "edge deployment of Unitree robots research",
+      "matched_requirement_id": "req-8",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "quick_skim": [
+    {
+      "id": "2605.19293v1",
+      "source": "arxiv",
+      "title": "Domain-Adaptive Communication-Rate Optimization for Sim-to-Real Humanoid-Robot Wireless XR Teleoperation",
+      "abstract": "Wireless extended reality (XR) teleoperation provides embodied interaction capability for collecting humanoid robot demonstrations, but the large-scale adoption is restricted by the overhead of high-frequency motion transmission. This paper develops a system framework that integrates sampling, transmission, interpolation, and reconstruction and formulates a communication-rate optimization that aims to minimize the communication energy while maintaining the reconstruction accuracy of robot motion trajectories through dimension-wise sampling-rate control. Since acquiring real-time feedback from physical robots is limited by hardware costs, it is necessary to solve the problem through simulator interaction with offline real-domain data correction. To guide sim-to-real adaptation, we provide a PAC-Bayes generalization characterization that reveals the effects of latent density-ratio estimation, finite-sample deviation, and encoder bias. Building on this analysis, we propose a proximal policy optimization (PPO) method with density-ratio weighting and trust-region regularization. Experiments on public humanoid teleoperation dataset show that the proposed method improves the tradeoff between reconstruction error and communication energy consumption under sim-to-real distribution shift. We further analyze the effectiveness of the proposed algorithm across various wireless channels and dynamic motion trajectories.",
+      "authors": [
+        "Caolu Xu",
+        "Zhiyong Chen",
+        "Meixia Tao",
+        "Li Song",
+        "Feng Yang",
+        "Wenjun Zhang"
+      ],
+      "primary_category": "cs.IT",
+      "categories": [
+        "cs.IT",
+        "cs.LG",
+        "cs.RO"
+      ],
+      "published": "2026-05-19T03:13:09+00:00",
+      "link": "https://arxiv.org/pdf/2605.19293v1",
+      "tags": [
+        "keyword:ur",
+        "query:ur"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "optimizes communication for humanoid robot teleoperation for data collection",
+      "llm_evidence_cn": "优化人形机器人遥操作通信以收集数据",
+      "llm_evidence": "优化人形机器人遥操作通信以收集数据",
+      "canonical_evidence": "优化人形机器人遥操作通信以收集数据",
+      "llm_tldr_en": "Optimizes communication rate for wireless XR teleoperation of humanoid robots to enable efficient data collection by balancing reconstruction accuracy and energy.",
+      "llm_tldr_cn": "该论文针对无线XR遥操作人形机器人时高频运动传输开销大的问题，提出域自适应通信率优化框架。通过维度级采样率控制，在保证轨迹重建精度的同时最小化通信能耗。方法利用模拟器进行离线优化，解决了物理硬件成本限制，为人形机器人示范收集（数据集构建）提供了高效边缘端部署方案。",
+      "llm_tldr": "该论文针对无线XR遥操作人形机器人时高频运动传输开销大的问题，提出域自适应通信率优化框架。通过维度级采样率控制，在保证轨迹重建精度的同时最小化通信能耗。方法利用模拟器进行离线优化，解决了物理硬件成本限制，为人形机器人示范收集（数据集构建）提供了高效边缘端部署方案。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "humanoid robot dataset construction",
+      "matched_requirement_id": "req-2",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2605.21007v1",
+      "source": "arxiv",
+      "title": "LiteViLNet: Lightweight Vision-LiDAR Fusion Network for Efficient Road Segmentation",
+      "abstract": "Road segmentation is a fundamental perception task for autonomous driving and intelligent robotic systems, requiring both high accuracy and real-time inference, especially for deployment on resource-constrained edge devices. Existing multi-modal road segmentation methods often rely on heavy transformer-based encoders to achieve state-of-the-art performance, but their enormous computational cost prohibits real-time deployment on embedded platforms. To address this dilemma, we propose \\textbf{LiteViLNet}, a lightweight multi-modal network that fuses RGB texture information and LiDAR geometric information for efficient road segmentation. Specifically, we design a dual-stream lightweight encoder and depth-wise separable convolutions to extract hierarchical features from both modalities with minimal parameters. We further propose a Multi-Scale Feature Fusion Module (MSFM) to facilitate cross-modal interaction at different levels, and a large-kernel-bridge module to capture long-range dependencies with linear complexity. Extensive experiments on the KITTI Road dataset and real-world applications demonstrate that LiteViLNet achieves a promising balance between accuracy and efficiency. Notably, with only 14.04M parameters, our model attains a 96.36\\% MaxF score, ranking the best among all CNN-based methods and being comparable to larger transformer-based models, and runs at 163.79 FPS in model-only inference on RTX 4060 Ti (22.18 FPS on Jetson Orin NX). It outperforms numerous heavy-weight methods in inference speed while maintaining highly competitive accuracy, fully validating the potential of LiteViLNet for real-time embedded deployment in autonomous driving and intelligent robotics.",
+      "authors": [
+        "Daojie Peng",
+        "Bingtao Wang",
+        "Fulong Ma",
+        "Liang Zhang",
+        "Jun Ma"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV",
+        "cs.RO"
+      ],
+      "published": "2026-05-20T10:44:06+00:00",
+      "link": "https://arxiv.org/pdf/2605.21007v1",
+      "tags": [
+        "keyword:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "lightweight fusion network for edge deployment",
+      "llm_evidence_cn": "面向边缘部署的轻量级融合网络",
+      "llm_evidence": "面向边缘部署的轻量级融合网络",
+      "canonical_evidence": "面向边缘部署的轻量级融合网络",
+      "llm_tldr_en": "LiteViLNet proposes a lightweight multi-modal network for road segmentation on resource-constrained edge devices, relevant to edge deployment for robots.",
+      "llm_tldr_cn": "该论文提出LiteViLNet轻量级多模态融合网络，专为资源受限的边缘设备设计，实现高效的道路分割。所采用的双流轻量编码器和深度可分离卷积等技术可迁移至人形机器人的边缘感知部署，降低计算需求。",
+      "llm_tldr": "该论文提出LiteViLNet轻量级多模态融合网络，专为资源受限的边缘设备设计，实现高效的道路分割。所采用的双流轻量编码器和深度可分离卷积等技术可迁移至人形机器人的边缘感知部署，降低计算需求。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "edge deployment for humanoid robots",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2605.22596v1",
+      "source": "arxiv",
+      "title": "Factored Diffusion Policies:Compositionally Generalized Robot Control with a Single Score Network",
+      "abstract": "Robotic tasks are typically specified by a tuple of factors, such as the object to be grasped, the obstacles to be avoided, the color of the target, and so on. Collecting expert demonstrations for every combination of factor values grows combinatorially. We present factored diffusion policies: a single shared diffusion network trained with per-factor null-token dropout, whose score decomposes additively across factors at inference. Under approximate conditional independence between factors given the action-observation pair, this composition approximates the true joint score with a bounded uniform error, reducing the training-task budget from a product of factor cardinalities to a sum. A trajectory-tube certificate chains this score-level bound through the reverse-time sampling ODE and a contracting tracking controller into a closed-loop state-trajectory tube whose radius factors into an ODE-sensitivity constant and a per-factor score-error budget. Unlike compositional-diffusion methods for control that combine separately trained networks, we use one shared network. Drone racing experiments confirm both the generalization bound and the certificate. On state-based multi-gate racing, the factored policy passes 90% of held-out gates -- matching an oracle -- while a K-network composition baseline collapses to 3%; on vision-based single-gate traversal, it transfers zero-shot to an unseen venue with +11.7pp success-rate gain and 2.4X crash-rate reduction.",
+      "authors": [
+        "Sayan Mitra",
+        "Ege Yuceel",
+        "Noah Giles",
+        "Abhishek Pai"
+      ],
+      "primary_category": "cs.LG",
+      "categories": [
+        "cs.LG"
+      ],
+      "published": "2026-05-21T15:13:27+00:00",
+      "link": "https://arxiv.org/pdf/2605.22596v1",
+      "tags": [
+        "keyword:ur",
+        "query:ur"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "reduces training-task budget for robot data collection via compositional generalization",
+      "llm_evidence_cn": "通过组合泛化减少机器人数据收集的训练任务预算",
+      "llm_evidence": "通过组合泛化减少机器人数据收集的训练任务预算",
+      "canonical_evidence": "通过组合泛化减少机器人数据收集的训练任务预算",
+      "llm_tldr_en": "Proposes a single diffusion network that decomposes across task factors, reducing the need for combinatorial data collection.",
+      "llm_tldr_cn": "该论文提出一种分解扩散策略，通过因子条件独立假设将评分网络分解为加性组合，从而大幅减少训练所需的数据组合数量。在机器人控制任务中，该方法将训练任务预算从因子基数的乘积降为求和，显著降低了数据集构建成本。这对于人形机器人等复杂系统的数据集构建具有重要的方法论价值。",
+      "llm_tldr": "该论文提出一种分解扩散策略，通过因子条件独立假设将评分网络分解为加性组合，从而大幅减少训练所需的数据组合数量。在机器人控制任务中，该方法将训练任务预算从因子基数的乘积降为求和，显著降低了数据集构建成本。这对于人形机器人等复杂系统的数据集构建具有重要的方法论价值。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2605.22272v2",
+      "source": "arxiv",
+      "title": "Imagine2Real: Towards Zero-shot Humanoid-Object Interaction via Video Generative Priors",
+      "abstract": "Whole-body Humanoid-Object Interaction (HOI) is bottlenecked by the scarcity of high-fidelity 3D data. While video generative priors offer a promising alternative, existing methods suffer from \\textit{Representation Misalignment} due to their reliance on geometric priors (e.g., explicit CAD models), and \\textit{Retargeting Complexity} arising from intensive morphing and morphological mismatch. We propose Imagine2Real, a zero-shot HOI framework for flexible, geometry-free interaction. To resolve misalignment, we formulate robot and object motions as unified 4D point trajectories. To overcome retargeting complexity, our Keypoints Tracker tracks only sparse critical points (base, hands, and object), entirely bypassing the error-amplifying retargeting process. To maintain natural gaits despite these sparse signals, we utilize the latent space of a Behavior Foundation Model (BFM) as the tracker's search domain. Using a progressive training strategy, Imagine2Real learns robust behaviors with simple tracking rewards, enabling zero-shot physical deployment within a motion capture(mocap) system.",
+      "authors": [
+        "Jiahe Chen",
+        "ZiRui Wang",
+        "Feiyu Jia",
+        "Xiao Chen",
+        "Xiaojie Niu",
+        "Weishuai Zeng",
+        "Tianfan Xue",
+        "Xiaowei Zhou",
+        "Jiangmiao Pang",
+        "Jingbo Wang"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.CV"
+      ],
+      "published": "2026-05-21T10:15:39+00:00",
+      "link": "https://arxiv.org/pdf/2605.22272v2",
+      "tags": [
+        "keyword:ur",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "humanoid robot uses video generative priors for interaction",
+      "llm_evidence_cn": "人形机器人利用视频生成先验进行交互",
+      "llm_evidence": "人形机器人利用视频生成先验进行交互",
+      "canonical_evidence": "人形机器人利用视频生成先验进行交互",
+      "llm_tldr_en": "Imagine2Real achieves zero-shot humanoid-object interaction by leveraging video generative priors, bypassing the need for 3D data.",
+      "llm_tldr_cn": "针对人形物体交互中3D数据稀缺的问题，Imagine2Real提出零样本框架，利用视频生成先验，将机器人和物体运动统一为4D点轨迹，仅需跟踪稀疏关键点，避免了复杂的重定向。实验证明，该方法无需预训练即可实现灵活交互，为人形机器人数据高效利用提供了新思路。",
+      "llm_tldr": "针对人形物体交互中3D数据稀缺的问题，Imagine2Real提出零样本框架，利用视频生成先验，将机器人和物体运动统一为4D点轨迹，仅需跟踪稀疏关键点，避免了复杂的重定向。实验证明，该方法无需预训练即可实现灵活交互，为人形机器人数据高效利用提供了新思路。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "humanoid robot dataset construction",
+      "matched_requirement_id": "req-2",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2605.26820v1",
+      "source": "arxiv",
+      "title": "Can VLA Models Learn from Real-World Data Continually without Forgetting?",
+      "abstract": "Vision-language-action (VLA) models provide a promising foundation for general-purpose robotics. However, their successful deployment in real-world scenarios requires the ability to continually acquire new skills while retaining previously learned behaviors. While pioneering research has studied the continual learning of VLA models in narrowly simulated environments, this challenge remains largely unexplored under realistic conditions. To address this limitation, we construct a real-world continual learning dataset comprising four sequential manipulation tasks, spanning rigid-object pick-and-place, contact-rich pressing, and deformable-object folding. Using this dataset, we conduct comprehensive experiments and find that VLA models suffer significant catastrophic forgetting when continually learning from heterogeneous real-world demonstrations. We then systematically evaluate experience replay and uncover key implementation factors that govern its success. In summary, this work provides the first empirical study of real-world continual VLA learning and offers practical guidance for deploying long-lived robot policies.",
+      "authors": [
+        "Jiarun Zhu",
+        "Yijun Hong",
+        "Xiaoquan Sun",
+        "Zetian Xu",
+        "Mingqi Yuan",
+        "Zhiyong Wang",
+        "Wenjun Zeng",
+        "Jiayu Chen"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-05-26T10:39:02+00:00",
+      "link": "https://arxiv.org/pdf/2605.26820v1",
+      "tags": [
+        "keyword:ur",
+        "query:ur"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "builds real-world dataset for robot continual learning",
+      "llm_evidence_cn": "构建真实机器人持续学习数据集",
+      "llm_evidence": "构建真实机器人持续学习数据集",
+      "canonical_evidence": "构建真实机器人持续学习数据集",
+      "llm_tldr_en": "Constructs a real-world continual learning dataset with four sequential manipulation tasks to study VLA model forgetting, relevant to dataset construction for robotics.",
+      "llm_tldr_cn": "该论文构建了一个包含四种连续操作任务的真实世界持续学习数据集，研究VLA模型在真实条件下的遗忘问题。该数据集构建方法可直接应用于机器人数据集构建需求，尤其适用于需要持续学习能力的系统。",
+      "llm_tldr": "该论文构建了一个包含四种连续操作任务的真实世界持续学习数据集，研究VLA模型在真实条件下的遗忘问题。该数据集构建方法可直接应用于机器人数据集构建需求，尤其适用于需要持续学习能力的系统。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2605.23733v1",
+      "source": "arxiv",
+      "title": "Any2Any: Efficient Cross-Embodiment Transfer for Humanoid Whole-Body Tracking",
+      "abstract": "Whole-body tracking (WBT) models have become a key foundation for humanoid robots, enabling them to imitate diverse motions with high fidelity. Training such models from scratch requires large-scale data and computation, making rapid deployment on new humanoid platforms costly. This raises a natural question: Can pretrained WBT models transfer across embodiments with minimal adaptation? To answer this question, we propose Any2Any, a paradigm that efficiently transfers an existing WBT specialist to a new humanoid embodiment with only a small amount of data and compute. Any2Any first performs kinematic alignment between source and target humanoids, aligning their input and output spaces so that the pretrained source policy can be meaningfully reused on the target embodiment.Any2Any then performs dynamics adaptation by applying lightweight parameter-efficient fine-tuning (PEFT) components to selected dynamics-sensitive modules, preserving useful behavioral priors while enabling targeted adaptation to the target robot. Extensive experiments on multiple humanoid platforms and pretrained backbones show that Any2Any substantially accelerates convergence and reduces training cost compared with training from scratch, while achieving competitive or superior tracking performance. Notably, using only 1% of the compute and data required for full training, Any2Any successfully transfers Sonic models pre-trained on Unitree G1 to LimX Oli and LimX Luna. These results suggest that pretrained WBT specialists can be efficiently reused across embodiments, providing a scalable path toward deploying humanoid whole-body control on new robots.",
+      "authors": [
+        "Ming Yang",
+        "Tao Yu",
+        "Feng Li",
+        "Hua Chen"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.AI"
+      ],
+      "published": "2026-05-22T15:10:42+00:00",
+      "link": "https://arxiv.org/pdf/2605.23733v1",
+      "tags": [
+        "keyword:ur",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "cross-embodiment transfer for humanoid whole-body tracking with minimal data",
+      "llm_evidence_cn": "跨本体迁移实现人形全身跟踪，仅需少量数据",
+      "llm_evidence": "跨本体迁移实现人形全身跟踪，仅需少量数据",
+      "canonical_evidence": "跨本体迁移实现人形全身跟踪，仅需少量数据",
+      "llm_tldr_en": "Any2Any efficiently transfers pretrained whole-body tracking models to new humanoid embodiments using kinematic alignment and minimal adaptation data, reducing deployment cost.",
+      "llm_tldr_cn": "针对人形机器人全身跟踪模型训练数据需求大的问题，Any2Any提出跨本体迁移范式，通过运动学对齐源与目标人形机器人的输入输出空间，仅需少量数据和计算即可复用预训练策略，显著降低了新平台部署成本，对构建高效数据集有启发意义。",
+      "llm_tldr": "针对人形机器人全身跟踪模型训练数据需求大的问题，Any2Any提出跨本体迁移范式，通过运动学对齐源与目标人形机器人的输入输出空间，仅需少量数据和计算即可复用预训练策略，显著降低了新平台部署成本，对构建高效数据集有启发意义。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "humanoid robot dataset construction",
+      "matched_requirement_id": "req-2",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2605.23832v1",
+      "source": "arxiv",
+      "title": "SFG-ROS: A Resource-Aware Framework for Dense Multi-Agent Perception",
+      "abstract": "Deploying heterogeneous multi-agent robot fleets for collaborative perception requires robust data exchange and scalable software architectures. However, standard ROS 2 implementations often suffer from network saturation, namespace collisions, and severe computational overhead when distributing dense sensor streams across devices. To address these bottlenecks, we present SFG-ROS, a resource-aware multi-agent software framework designed for dynamic fleet deployments. SFG-ROS addresses these challenges through three primary contributions. First, schema-driven traffic routing isolates high-frequency intra-agent traffic from the global network using a programmatic fully qualified name schema and targeted Fast DDS routing. Second, an on-demand centralized decoding pipeline automatically offloads high-bandwidth sensor data decompression, eliminating redundant processing across local consumer nodes. Finally, a hardware-agnostic container pipeline dynamically adapts to heterogeneous accelerators, seamlessly bridging development environments with zero-touch, field-ready execution. We evaluate the framework using a fleet of wheeled and legged robots equipped with LiDAR and stereo depth cameras. Experimental results show SFG-ROS bounds network traffic to $\\mathcal{O}(1)$ and, by replacing redundant decompression with lightweight IPC, reduces the per-subscriber CPU scaling penalty by 72.3\\% versus standard ROS 2, all while maintaining low latency. Finally, we publish SFG-ROS under a permissive license, available via \\href{https://iis-esslingen.github.io/sfg-ros}{iis-esslingen.github.io/sfg-ros}.",
+      "authors": [
+        "Constantin Blessing",
+        "Elias Geiger",
+        "Jakob Häringer",
+        "Dennis Grewe",
+        "Markus Enzweiler"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-05-22T16:41:12+00:00",
+      "link": "https://arxiv.org/pdf/2605.23832v1",
+      "tags": [
+        "keyword:ur",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "resource-aware framework for multi-agent perception deployment",
+      "llm_evidence_cn": "多智能体感知的资源感知部署框架",
+      "llm_evidence": "多智能体感知的资源感知部署框架",
+      "canonical_evidence": "多智能体感知的资源感知部署框架",
+      "llm_tldr_en": "SFG-ROS is a resource-aware multi-agent software framework addressing network saturation and computational overhead for edge deployment of robotic fleets.",
+      "llm_tldr_cn": "该论文提出SFG-ROS框架，通过模式驱动流量路由和按需集中去同步，解决多机器人协作感知中的网络饱和与计算开销问题。该框架适用于人形机器人团队的边缘部署，提高了数据传输和处理的效率。",
+      "llm_tldr": "该论文提出SFG-ROS框架，通过模式驱动流量路由和按需集中去同步，解决多机器人协作感知中的网络饱和与计算开销问题。该框架适用于人形机器人团队的边缘部署，提高了数据传输和处理的效率。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "edge deployment for humanoid robots",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2605.26638v1",
+      "source": "arxiv",
+      "title": "HyperSim: A Holistic Sim-To-Real Framework For Robust Robotic Manipulation",
+      "abstract": "Scaling data volume and diversity is critical for generalizing embodied intelligence. While synthetic data generation offers a scalable alternative to expensive physical data acquisition, transferring robotic manipulation policies from simulation to the real world (sim-to-real) remains a formidable challenge due to the domain gap. This paper presents HyperSim, a holistic framework spanning from synthetic data generation to policy training and seamless real-world deployment. To systematically bridge the sim-to-real gap, HyperSim is realized through three core pillars: high-fidelity environment synthesis, adversarial trajectory generation, and sim-and-real co-training. Collectively, these modules address domain discrepancies by enhancing visual fidelity, expanding data coverage, and enforcing domain-invariant representations. We rigorously validate HyperSim through a large-scale empirical study involving 400 real-world task executions across two representative manipulation models. Assessed across three fine-grained metrics, our complete pipeline achieves remarkable sim-to-real success rates of 80% and 95% with ACT and π_{0}, respectively. Furthermore, policies trained on our adversarial trajectories exhibit significantly enhanced robustness against dynamic uncertainties, achieving a 35% higher completion rate under physical perturbations.",
+      "authors": [
+        "Junyi Dong",
+        "Haotian Luo",
+        "Ziwei Xu",
+        "Shengwei Bian",
+        "Heng Zhang",
+        "Sitong Mao",
+        "Jingyi Guo",
+        "Yang Xu",
+        "Wenhao Chen",
+        "Qiuyu Feng",
+        "Yao Mu",
+        "Ping Luo",
+        "Shunbo Zhou",
+        "Xiaodong Wu"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-05-26T07:19:04+00:00",
+      "link": "https://arxiv.org/pdf/2605.26638v1",
+      "tags": [
+        "keyword:ur",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "synthetic data generation for robotic manipulation dataset construction",
+      "llm_evidence_cn": "机器人操作数据集构建的合成数据生成",
+      "llm_evidence": "机器人操作数据集构建的合成数据生成",
+      "canonical_evidence": "机器人操作数据集构建的合成数据生成",
+      "llm_tldr_en": "HyperSim provides a holistic sim-to-real framework for robotic manipulation, generating synthetic data and training policies for real-world deployment.",
+      "llm_tldr_cn": "该论文针对机器人操作中仿真到现实迁移的域差距，提出HyperSim全流程框架。框架包含高保真环境合成、对抗轨迹生成和仿真-真实联合训练三大支柱，从根本上弥合视觉和物理域差距。实验表明该方法能有效提升策略的泛化能力，为机器人数据集构建（特别是合成数据）提供了可规模化方案。",
+      "llm_tldr": "该论文针对机器人操作中仿真到现实迁移的域差距，提出HyperSim全流程框架。框架包含高保真环境合成、对抗轨迹生成和仿真-真实联合训练三大支柱，从根本上弥合视觉和物理域差距。实验表明该方法能有效提升策略的泛化能力，为机器人数据集构建（特别是合成数据）提供了可规模化方案。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    }
+  ]
+}

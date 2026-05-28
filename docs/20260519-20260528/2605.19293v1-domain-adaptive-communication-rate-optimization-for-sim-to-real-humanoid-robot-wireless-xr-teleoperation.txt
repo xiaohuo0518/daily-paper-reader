@@ -1,0 +1,1701 @@
+Title: Domain-Adaptive Communication-Rate Optimization for Sim-to-Real Humanoid-Robot Wireless XR Teleoperation
+
+URL Source: https://arxiv.org/pdf/2605.19293v1
+
+Published Time: Wed, 20 May 2026 00:34:13 GMT
+
+Number of Pages: 13
+
+Markdown Content:
+> 1
+
+# Domain-Adaptive Communication-Rate Optimization for Sim-to-Real Humanoid-Robot Wireless XR Teleoperation 
+
+Caolu Xu, Zhiyong Chen, Senior Member, IEEE , Meixia Tao, Fellow, IEEE , Li Song, Senior Member, IEEE ,Feng Yang, and Wenjun Zhang, Fellow, IEEE 
+
+Abstract —Wireless extended reality (XR) teleoperation pro-vides embodied interaction capability for collecting humanoid robot demonstrations, but the large-scale adoption is restricted by the overhead of high-frequency motion transmission. This paper develops a system framework that integrates sampling, transmission, interpolation, and reconstruction and formulates a communication-rate optimization that aims to minimize the com-munication energy while maintaining the reconstruction accuracy of robot motion trajectories through dimension-wise sampling-rate control. Since acquiring real-time feedback from physical robots is limited by hardware costs, it is necessary to solve the problem through simulator interaction with offline real-domain data correction. To guide sim-to-real adaptation, we provide a PAC-Bayes generalization characterization that reveals the effects of latent density-ratio estimation, finite-sample deviation, and encoder bias. Building on this analysis, we propose a proximal policy optimization (PPO) method with density-ratio weighting and trust-region regularization. Experiments on public humanoid teleoperation dataset show that the proposed method improves the tradeoff between reconstruction error and communication energy consumption under sim-to-real distribution shift. We further analyze the effectiveness of the proposed algorithm across various wireless channels and dynamic motion trajectories. 
+
+Index Terms —Wireless XR teleoperation, sim-to-real, domain-adaptive, proximal policy optimization. 
+
+I. I NTRODUCTION 
+
+Embodied intelligence has recently emerged as a highly promising direction in both industry and academia. Represen-tative paradigms, such as vision-language-action (VLA) [1] and world models (WMs) [2], rely on large-scale demon-stration data to train generalizable embodied policies. In this context, extended reality (XR) enables wireless teleoperation through immersive interaction and intuitive human interfaces [3], [4], making it particularly suitable for scalable collection of high-quality human demonstrations. Despite these advantages, wireless XR teleoperation still faces several critical challenges. From the communication perspective, accurate motion reconstruction requires high-frequency motion sampling and transmission. Such frequent updates impose non-negligible energy consumption on the battery-powered XR device. In addition, wireless channels are inherently time-varying due to user mobility, blockage, and interference, which further complicates reliable low-latency 
+
+The authors are with the Cooperative Medianet Innovation Center, the School of Information Science and Electronic Engineering, Shanghai Jiao Tong University, Shanghai 200240, China (e-mail: {021034910015, zhiy-ongchen, mxtao, song li, yangfeng, zhangwenjun }@sjtu.edu.cn). 
+
+transmission. Different dimensions contribute unequally to robot-side reconstruction fidelity, implying that uniform full-rate transmission of all components can be energy-inefficient. From the learning perspective, the evaluation metric is the execution performance of physical robots in real-world envi-ronments. However, large-scale real-world interaction is often impractical for training communication-aware teleoperation policies due to safety constraints, high hardware costs, and limited data collection efficiency. As a result, policy training is typically conducted in simulation environments, where abun-dant rollouts can be generated efficiently. Nevertheless, the discrepancy between simulated and real-world environments introduces a sim-to-real distribution shift, which may degrade policy performance during real deployment. These challenges motivate the need to design a wireless XR teleoperation framework that jointly balances device resource consumption and motion reconstruction accuracy, while ex-plicitly accounting for the sim-to-real gap. 
+
+A. Related Work 
+
+Recently, several works have investigated wireless XR systems. For XR video streaming, latency optimization of prediction, communication, and computing was studied in [5], while cross-frame resource allocation with proactive caching for 360 ◦ video was investigated in [6]. For interactive XR, wireless multiplayer systems with edge computing were mod-eled in [7], and an edge-device collaborative framework leveraging foreground-background separation was developed in [8]. Beyond XR services, synchronization between physical devices and digital models in the metaverse has been studied to enable timely and accurate model updates [9], [10]. These studies demonstrate the importance of cross-layer resource management for wireless XR. However, most existing works focus on media transmission or system-level coordination, and few have investigated wireless transmission for robot motion reconstruction while explicitly considering the sim-to-real gap in XR teleoperation. In humanoid robot learning, sim-to-real transfer has become an important topic. Reinforcement learning (RL) algorithms have been widely used to train humanoid control policies for whole-body skills, motion imitation, and recovery behaviors. HoST [11] learns standing-up control for humanoids across diverse postures, demonstrating the potential of RL-based policies for real-world humanoid recovery tasks. ASAP [12] 
+
+> arXiv:2605.19293v1 [cs.IT] 19 May 2026 2Simulated robot Physical robot
+> Execution module XR device
+> Evaluation
+> Interaction
+> Human motion
+> transmission
+> Pose sensing
+> Sampling
+> Interpolation
+> Reconstruction
+> Simulation (source domain)
+> Real world (target domain)
+> Sim-to-real
+> distribution shift
+> Dimension -wise
+> sampling -rate control
+> Sim -to -real transfer
+
+Fig. 1: Overview of the proposed sim-to-real wireless XR teleoperation framework for humanoid robot. uses real-world data to mitigate dynamics mismatch and improve the transferability of humanoid skills learned in simu-lation, while Humanoid Policy [13] studies cross-embodiment learning from human and humanoid demonstrations. More recently, DoorMan [14] investigates humanoid pixel-to-action policy transfer and shows that vision-based loco-manipulation policies trained in simulation can be transferred to real humanoids for articulated-object interaction. These methods primarily aim to enhance the transferability of humanoid manipulation and locomotion skills. In contrast, our work focuses on communication-rate policy learning in wireless XR teleoperation. Specifically, the policy is trained mainly using simulator rollouts, while offline real-world teleoperation trajectories are used to characterize deployment bias and mitigate the sim-to-real distribution shift. Domain adaptation has shown promise in addressing dis-tribution shifts in communication systems, such as mmWave-based human activity recognition [15], collaborative learning on mobile edge devices [16], and cross-domain wireless lo-calization under non-line-of-sight conditions [17]. In general, domain adaptation aims to transfer knowledge from a source domain, where effective model training is feasible, to a target domain with a different distribution, by reducing source-target discrepancy. Representative techniques include instance reweighting and density-ratio estimation [18], [19], as well as discrepancy-based feature alignment approaches such as maximum mean discrepancy (MMD) and correlation align-ment [20]–[22]. In this paper, domain adaptation provides a principled way to correct simulator-induced bias using offline real-domain trajectories, preserving the effectiveness of com-munication rate decisions without requiring online interaction with the physical robot during policy training. Compared with existing methods developed for model adaptation under relatively fixed input-output mappings, wireless XR teleopera-tion involves sequential communication control, where current decisions affect subsequent system states and performance. This motivates domain-adaptive policy learning rather than direct application of conventional domain adaptation methods. 
+
+B. Contributions 
+
+In this paper, we investigate sim-to-real communication-rate optimization in wireless XR teleoperation for humanoid robot. The main contributions are summarized as follows.  
+
+> •
+
+We propose a sim-to-real wireless XR teleoperation framework that considers dimension-wise motion sam-pling, energy-aware wireless communication, robot re-construction, and platform execution. Based on this framework, we formulate a long-term communication rate optimization problem that balances the motion-reconstruction accuracy and device communication en-ergy under sim-to-real distribution shift.  
+
+> •
+
+We develop a PAC-Bayes [23] generalization characteri-zation with latent density-ratio estimation and encoder-induced representation bias. This characterization de-composes the real-domain performance gap into the importance-weighted empirical risk, density-ratio approx-imation error, finite-sample deviation, and encoder repre-sentation bias. This analysis provides theoretical guidance for designing the representation learning and policy op-timization procedure.  
+
+> •
+
+We introduce latent density-ratio correction into proxi-mal policy optimization (PPO) [24] for communication-rate optimization and develop a domain-adaptive training framework. First, an encoder is initialized through a MMD-based warm-up on simulator samples and offline real-domain trajectories. The initialized encoder is then frozen to provide a stable latent space for density-ratio estimation and importance-weighted PPO. Finally, with the policy network fixed, the encoder is fine-tuned using trust-region regularization [25] and weighted MMD, improving latent alignment while preventing un-controlled representation drift. The experimental results demonstrate that the proposed algorithm achieves a bet-ter reconstruction-energy tradeoff than baseline methods under sim-to-real distribution shift. The rest of this paper is organized as follows. Section II presents the system model and formulates the sim-to-real communication-rate optimization problem. Section III pro-vides the PAC-Bayes generalization analysis with latent den-sity ratio and representation bias. Section IV develops the domain-adaptive policy optimization algorithm. Section Vpresents simulation results. Section VI concludes the paper. II. S YSTEM MODEL AND PROBLEM FORMULATION 
+
+In this section, we present a framework for the sim-to-real wireless XR teleoperation system. As illustrated in 3
+
+Fig. 1, the XR device first captures human motion trajectories through pose sensing, followed by dimension-wise sampling for communication-efficient transmission. The sampled human motion data are transmitted to the execution module, where interpolation and reconstruction are performed to recover robot motions. The system aims to achieve accurate, real-time motion reconstruction on the physical robot while reducing unnecessary device communication energy under time-varying wireless conditions and the sim-to-real distribution shift. 
+
+A. Framework and Cross-System Architecture 
+
+The timeline of the proposed framework is shown in Fig. 2. The teleoperation process is described on three time scales: continuous physical time ν for the raw XR motion, decision slots t for sampling-rate control, and execution indices t† for simulation or robot updates, where † ∈ { sim , real } denotes the execution platform. The decision process is modeled in discrete slots indexed by 
+
+t, where each slot has duration τs and corresponds to interval 
+
+Tt = [( t − 1) τs, tτ s). (1) At the beginning of slot t, sampling rates are selected and remain effective over Tt.
+
+XR and robot configuration spaces: ν ∈ R+ denotes con-tinuous physical time. The human motion trajectory captured by the XR device is denoted by 
+
+qxr (ν) = qxr 1 (ν), . . . , q xr  
+
+> Jxr
+
+(ν)⊤ ∈ RJxr , ν ∈ R+, (2) where Jxr is the number of tracked XR sampling dimension. The humanoid robot configuration space is represented by 
+
+qrb ∈ RJrb , (3) where Jrb is the number of controllable robot joints. In gen-eral, Jxr ̸ = Jrb , and the two spaces have different kinematic structures. 
+
+Execution time scales: The execution platform is indi-cated by † ∈ { sim , real }, with sim and real corresponding to the simulated and physical robot, respectively. For platform 
+
+†, the execution frequency is f†, the execution period is 
+
+τ† = 1 /f †, and the execution index is t† ∈ Z+.To satisfy the update requirements of platform †, the XR motion trajectory is aligned to the execution grid. For the ideal reference trajectory, each sampling dimension is assumed to be transmitted over a lossless channel at its highest admissible rate. Let f max  
+
+> j
+
+denote the highest admissible rate of the j-th sampling dimension, and let T max  
+
+> j
+
+= 1/f max  
+
+> j
+
+be the corresponding sampling period. The reference sampling-time set Vmax  
+
+> j
+
+consists of equally spaced physical instants with interval T max  
+
+> j
+
+. For each dimension j, the ideal interpolated XR trajectory is defined as 
+
+qxr  
+
+> j
+
+(t†) = Iref 
+
+> j, †
+
+ t†τ†;   ν, q xr  
+
+> j
+
+(ν) : ν ∈ V max 
+
+> j
+
+ , (4) where Iref  
+
+> j, †
+
+(·) is the reference interpolation operator that eval-uates the j-th XR sampling dimension at execution instant 
+
+t†τ† from the reference samples. Stacking all dimensions gives 
+
+qxr (t†) = qxr 1 (t†), . . . , q xr  
+
+> Jxr
+
+(t†)⊤.
+
+Retargeting operator: The mapping from the XR sample space to the robot joint space is denoted by 
+
+R : RJxr → RJrb . (5) Then the ideal robot joint trajectory on platform † is 
+
+qrb ⋆(t†) = R qxr (t†), † ∈ { sim , real }. (6) The specific realization of R, such as inverse kinematics, does not affect the subsequent analysis. 
+
+B. Sampling, Transmission, Interpolation, and Reconstruction Dimension-wise sampling rates: To account for different motion characteristics and transmission requirements across sampling dimensions, we allow the admissible sampling-rate set to depend on the dimension index. At the beginning of the slot t, the sampling rate assigned to the j-th sampling dimension is denoted by fj (t), where 
+
+fj (t) ∈ F j = {0, f (1)  
+
+> j
+
+, . . . , f (Fj ) 
+
+> j
+
+}, j = 1 , . . . , J xr . (7) Here, Fj is the admissible sampling-rate set of the j-th XR sampling dimension, and Fj is the number of nonzero rate levels. The nonzero rate levels are ordered as 0 < f (1)  
+
+> j
+
+< · · · <f (Fj ) 
+
+> j
+
+= f max  
+
+> j
+
+. In particular, fj (t) = 0 indicates that there is no transmission of dimension j in slot t. The dimension-wise sampling rate in slot t is 
+
+f (t) = f1(t), . . . , f Jxr (t)⊤. (8) Given fj (t), let Vj (t) ⊆ Tt denote the set of physical time stamps at which samples of the j-th XR dimension are received within slot t. If fj (t) = 0 , no sample of dimension j
+
+is transmitted and Vj (t) = ∅. If fj (t) > 0, Vj (t) is generated by the sampling clock associated with rate fj (t) over Tt.Thus, t indexes the decision slot, whereas ν ∈ V j (t) denotes a physical time stamp used for interpolation of the j-th XR sampling dimension. 
+
+Wireless transmission and energy cost: We consider a orthogonal frequency division multiplexing (OFDM) wireless link with total bandwidth B and use an equivalent-link rate model after subcarrier aggregation. Let P (t) denote the total transmit power of the XR device in slot t. The equivalent channel gain g(t) captures the time-varying wireless condi-tions. We assume that g(t) is available at the beginning of slot t. N0 denotes the spectral density of noise power. The transmission rate C(t) in slot t is given by 
+
+C(t) = B log 2
+
+
+
+1 + P (t)g(t)
+
+N0B
+
+
+
+. (9) Let d = [ d1, . . . , d Jxr ]⊤ denote the payload-size vector for one update of the XR samples, where dj is the number of bits transmitted for one update of dimension j. Given the sampling-rate vector f (t) in slot t, the transmission load over the slot is 
+
+D(t) = τsd⊤f (t). (10) The transmission constraint in slot t is given by 
+
+D(t) ≤ τsC(t). (11) 4Sense                                 
+
+> Sampling
+> Transmission
+> 𝑡 =1𝑡 =2𝑡 =3
+> Continuous physical time 𝜈
+> Joint -wise sampling -rate control
+> Decision slot 𝑡
+> XR device
+> Execution module
+> Interpolation
+> 𝑓 2(3)=0
+> Dim 1
+> Dim 2
+> Dim 𝐽 xr
+> Joint 1
+> Joint 2
+> Joint 𝐽 xr
+> ⋯⋯
+> ⋯ ⋯
+> Execution index 𝑡 sim
+> Dim 1
+> Dim 𝐽 xr
+> ⋯
+> Reconstruction
+> Joint 1
+> Joint 𝐽 rb
+> ⋯
+> ⋯
+> Execution index 𝑡 real
+> Simulated robot
+> Interpolation
+> Dim 1
+> Dim 𝐽 xr
+> ⋯
+> ⋯
+> Reconstruction
+> Joint 1
+> Joint 𝐽 rb
+> ⋯
+> ⋯
+> Physical robot
+> 𝜏 real
+> 𝜏 sim
+> 𝜏 s
+> ⋯
+
+Fig. 2: Timeline of the proposed wireless XR teleoperation framework. Effective communication energy is not limited to the radio frequency (RF) transmit power. In addition to RF transmit power, packetization, protocol-related, and other communica-tion pipeline overheads also contribute to the energy consump-tion of XR device. For tractability, these additional overheads are incorporated through an effective energy coefficient ζ ≥ 1.The effective communication energy in slot t is defined as 
+
+E(t) = ζτ sP (t). (12) 
+
+Sample interpolation: For the j-th XR sampling di-mension, the sample received at the execution module at physical instant ν ∈ V j (t) is denoted by ˜qxr  
+
+> j
+
+(ν). To match the execution time scale of platform †, the received XR samples are interpolated on the execution grid. For each dimension 
+
+j, the reconstructed XR sample value at execution index t† is obtained from the samples received no later than the execution instant t†τ†
+
+ˆqxr  
+
+> j
+
+(t†) = Ij, † t†τ†;
+
+ ν, ˜qxr  
+
+> j
+
+(ν) : ν ∈ [
+
+> t≥1
+
+Vj (t), ν ≤ t†τ†
+
+!
+
+,
+
+(13) where Ij, †(·) denotes the interpolation operator for dimension 
+
+j on platform †. If no prior sample is available, an initial pose is used. Stacking all reconstructed dimensions gives the interpolated XR trajectory ˆqxr (t†) = ˆqxr 1 (t†), . . . , ˆqxr  
+
+> Jxr
+
+(t†)⊤.
+
+Reconstruction error: The reconstructed robot joint tra-jectory is obtained by applying the retargeting operator to the interpolated XR motion 
+
+ˆqrb (t†) = R ˆqxr (t†). (14) Since the reconstruction fidelity is evaluated on the execu-tion time scale, the joint reconstruction error is defined as 
+
+ejoint (t†) = W1/2 ˆqrb (t†) − qrb ⋆(t†) 22
+
+PJrb  
+
+> j=1
+
+wj
+
+!1/2
+
+, (15) where W = diag( w1, . . . , w Jrb ) with wj ≥ 0 is the joint-importance weighting matrix, and qrb ⋆(t†) is the ideal robot joint trajectory defined in (6). To obtain a slot-level fidelity measure, the execution-level errors falling within slot t are accumulated over the associated execution indices 
+
+N†(t) = {t† ∈ Z+ : t†τ† ∈ [( t − 1) τs, tτ s)} . (16) 5
+
+The reconstruction cost on platform † in slot t is defined as 
+
+E†(t) = 1
+
+|N †(t)|
+
+X
+
+> t†∈N †(t)
+
+ejoint (t†). (17) 
+
+C. Sim-to-Real Objective and Problem Formulation 
+
+Let Msim and Mreal denote the simulated and real teleop-eration systems, respectively. The objective is to determine the sequence {f (t)}t≥1 that minimizes the average teleoperation cost on the real system. With the reconstruction cost Ereal (t)
+
+in (17) and the effective communication energy cost E(t) in (12), the real-system performance criterion is defined as 
+
+Jreal = lim  
+
+> T→∞
+
+1
+
+T EMreal 
+
+" TX
+
+> t=1
+
+(Ereal (t) + λE E(t)) 
+
+#
+
+, (18) where λE > 0 is a weighting coefficient that balances teleoperation accuracy and energy consumption, and EMreal [·]
+
+denotes the expectation with respect to the probability distri-bution induced by Mreal .During policy training, the real teleoperation system Mreal 
+
+is not treated as an interactive environment. Instead, it provides offline real-domain trajectories, while the simulator Msim can be queried repeatedly to generate rollouts under candidate communication rate policies. The discrepancy between the simulator-induced distribution and the offline real domain distribution is incorporated through a density-ratio correction. For each slot t, let χt denote the random variable induced by the teleoperation process. The probability distributions of 
+
+χt under Mreal and Msim are denoted by Preal ,t and Psim ,t ,respectively. Both domains share the same robot kinematic model, action space, and state representation, while their distri-butions may differ due to sensing noise, actuation uncertainty, and unmodeled physical effects. Assuming Preal ,t ≪ Psim ,t ,the Radon–Nikodym derivative of Preal ,t with respect to Psim ,t 
+
+exists [26]. The density-ratio weight in slot t is defined as 
+
+ιt = dPreal ,t 
+
+dPsim ,t 
+
+(χt), (19) which gives the importance weight for converting the expec-tation under Msim into that under Mreal .Accordingly, the sim-to-real problem is formulated as 
+
+P0 : min    
+
+> f(t),P (t)
+
+lim  
+
+> T→∞
+
+1
+
+T EMsim 
+
+" TX
+
+> t=1
+
+ιt (Esim (t) + λE E(t)) 
+
+#
+
+s.t. (7) , (11) ,
+
+where λE > 0 is a coefficient that calibrates the relative scale of the two terms in the unified objective, and EMsim [·] denotes the expectation with respect to the probability distribution induced by Msim .For any given f (t), the effective communication energy E(t)
+
+in (12) is monotonically increasing in P (t). Therefore, the minimum energy required to support the transmission load 
+
+D(t) is attained when (11) holds with equality, 
+
+Preq (t) = N0Bg(t)
+
+
+
+2 D(t) 
+
+> Bτs
+
+− 1
+
+
+
+, (20) and the corresponding minimum update energy cost is 
+
+Ereq (t) = ζτ s
+
+N0Bg(t)
+
+
+
+2 D(t) 
+
+> Bτs
+
+− 1
+
+
+
+. (21) Substituting (20) and (21) into P0, an equivalent problem is obtained as 
+
+P1 : min   
+
+> f(t)
+
+lim  
+
+> T→∞
+
+1
+
+T EMsim 
+
+" TX
+
+> t=1
+
+ιt (Esim (t) + λE Ereq (t)) 
+
+#
+
+s.t. fj (t) ∈ F j , ∀j, ∀t ≥ 1. (22) 
+
+D. Reinforcement Learning Reformulation 
+
+The optimization problem P1 is a stochastic sequential decision problem over an infinite horizon. Due to the dis-crete sampling-rate decisions, the nonlinear communication energy model, and the coupled reconstruction cost induced by sampling, interpolation, and reconstruction, it is more suitably addressed through RL. Accordingly, P1 is reformulated as a Markov decision process (MDP). The policy π is learned in simulation and deployed at the execution module for slot-wise decision making. 
+
+State: The latest available execution index before the beginning of slot t on platform † is denoted by 
+
+¯t†(t) = max {t† ∈ Z≥0 : t†τ† ≤ (t − 1) τs} . (23) Accordingly, the most recent reconstructed robot joint position available at slot t is ˆqrb (¯ t†(t)) . ˆvrb (t) and ˆarb (t) denote the current reconstructed robot joint velocity and acceleration, respectively. The reconstructed robot joint velocity and ac-celeration are defined by 
+
+ˆvrb (t) = ˆqrb (¯ t†(t)) − ˆqrb (¯ t†(t) − 1) 
+
+τ†
+
+, (24) 
+
+ˆarb (t) = ˆqrb (¯ t†(t)) − 2ˆ qrb (¯ t†(t) − 1) + ˆ qrb (¯ t†(t) − 2) 
+
+τ 2
+
+> †
+
+.
+
+(25) For the first two execution instants, the missing historical terms are initialized using the initial robot state. To characterize the dimension-wise transmission load in the previous slot, define 
+
+κ(t − 1) = τs d ⊙ f (t − 1) , (26) where ⊙ denotes the Hadamard product, and f (t − 1) is the sampling-rate vector selected in the previous slot. The state at slot t is then defined as 
+
+xt =
+
+h
+
+g(t), ˆqrb (¯ t†(t)) ⊤ , ˆvrb (t)⊤, ˆarb (t)⊤, κ(t − 1) ⊤i⊤
+
+.
+
+(27) 
+
+Action: The action at slot t is the dimension-wise sampling-rate decision 
+
+at = f (t). (28) 
+
+Reward: In the simulator Msim , the instantaneous reward is defined as the negative cost 
+
+rt = − (Esim (t) + λE Ereq (t)) . (29) The density-ratio ιt in P1 is incorporated as an importance weight in Section IV-B, rather than being absorbed into rt.6
+
+III. PAC-B AYES GENERALIZATION ANALYSIS WITH 
+
+LATENT DENSITY RATIO AND REPRESENTATION BIAS 
+
+A. Setup and Notation 
+
+We consider a sim-to-real RL problem induced by the MDP reformulation in Section II-D. A parameterized encoder 
+
+Ωθ maps the state xt in (27) into a latent representation 
+
+zt = Ωθ (xt) ∈ Z, and the policy operates in the latent space. For notational simplicity, we write x ∈ X and a as generic realizations of the state xt in (27) and the action 
+
+at in (28), respectively. The simulator and the real system induce state distributions over X , denoted by Psim and Preal ,respectively. Since the encoder Ωθ maps state samples from both simulator and real domain into a common latent space, it is trained on mixed-domain samples to construct a shared latent representation across the two domains. Let H be a hypothesis class, where each h ∈ H comprises the parameters of encoder Ωθ , policy πψ , value function Vω ,
+
+h = ( θ, ψ, ω ). (30) The simulator and real datasets are denoted by 
+
+D† = {τ † 
+
+> i
+
+}N†
+
+> i=1
+
+, τ † 
+
+> i
+
+= ( x†
+
+> i, 1
+
+, . . . , x † 
+
+> i,T †
+> i
+
+), † ∈ { sim , real }. (31) In the dataset D†, τ † 
+
+> i
+
+is the i-th trajectory, N† is the number of trajectories, and T † 
+
+> i
+
+denotes the length of the i-th trajectory. Define the simulator and real sample sets as 
+
+X† = {x† 
+
+> i,t
+
+| 1 ≤ i ≤ N†, 1 ≤ t ≤ T † 
+
+> i
+
+}, † ∈ { sim , real }, (32) with size n† = |X †|. Here, t denotes the decision-slot index, consistent with Section II. To separate representation warm-up from density-ratio esti-mation, the simulator samples are divided into a warm-up set 
+
+Sh and a ratio-estimation set Sι
+
+Sh ∪ S ι = Xsim , Sh ∩ S ι = ∅. (33) The encoder warm-up is performed on Sh ∪ X real , while density-ratio estimation uses Sι and Xreal .
+
+B. Population Risks on Real Domain 
+
+The population risk of a hypothesis h ∈ H under distribu-tion Preal is defined as 
+
+R(h) = Ex∼Preal 
+
+L(h, x ), (34) where L(h, x ) ∈ [0 , 1] is a bounded loss. The slot-level density-ratio weight ιt in (19) is defined on χt
+
+for the objective formulation. For the generalization analysis, we use the real-to-simulator density ratio over X
+
+ι⋆ 
+
+> X
+
+(x) = dPreal 
+
+dPsim 
+
+(x). (35) When x = xt, this ratio is evaluated at the state sample generated in decision slot t.We assume that Preal is absolutely continuous with respect to Psim , denoted by Preal ≪ Psim . This assumption means that any event in X with zero probability under Psim also has zero probability under Preal . It guarantees the existence of the Radon–Nikodym derivative in (35). By construction, the real-domain risk can be rewritten as 
+
+R(h) = Ex∼Psim 
+
+ι⋆ 
+
+> X
+
+(x)L(h, x ). (36) Since the policy operates in latent space, for a given encoder 
+
+Ωθ , we consider the latent distributions P θ 
+
+> sim
+
+= Psim ◦Ω−1 
+
+> θ
+
+and 
+
+P θ 
+
+> real
+
+= Preal ◦ Ω−1 
+
+> θ
+
+. The corresponding latent density ratio is denoted by 
+
+ι⋆θ (z) = dP θ
+
+> real
+
+dP θ
+
+> sim
+
+(z), z = Ω θ (x). (37) In implementation, an estimator ˆι(z) is fitted in the latent space using kernel-based density-ratio estimation methods, e.g., uLSIF and KLIEP. For notational simplicity, we omit the dependence of ˆι on the encoder parameter θ when the encoder is clear from the context. 
+
+C. Importance-Weighted PAC–Bayes Deviation Analysis 
+
+After the density-ratio estimator ˆι is fitted using Sι and 
+
+Xreal in the frozen reference latent space, it is treated as fixed in the subsequent deviation analysis. If the raw estimator takes negative values, it is clipped to be nonnegative before normalization, and we still use ˆι to denote the resulting nonnegative estimator in the deviation analysis. The analysis is interpreted for a fixed encoder used to construct the latent space at the corresponding training stage; the dependence on the encoder is captured by ει(θ, ˆι) and εenc (θ). Let Bsim 
+
+denote a simulator rollout batch collected after fitting ˆι. The estimated weights are normalized to have unit mean over Bsim ,and we reuse ˆι to denote the normalized estimator. The real-domain risk (36) is approximated by 
+
+bR(h) = 1
+
+|B sim |
+
+X
+
+> x∈B sim
+
+ˆι(Ω θ (x)) L(h, x ). (38) Following standard importance-weighted analysis, we de-compose 
+
+R(h) = Ex∼Psim [ˆ ι(Ω θ (x)) L(h, x )]+ 
+
+Ex∼Psim [( ι⋆ 
+
+> X
+
+(x) − ˆι(Ω θ (x))) L(h, x )] . (39) The density-ratio estimation error is defined as 
+
+ει(θ, ˆι) = sup 
+
+> h∈H
+
+|Ex∼Psim [( ι⋆ 
+
+> X
+
+(x) − ˆι(Ω θ (x))) L(h, x )] | . (40) For a data-dependent posterior Q over H, define 
+
+R(Q) = Eh∼Q[R(h)] , bR(Q) = Eh∼Q[ bR(h)] . (41) Consider a prior P that is chosen independently of the simulator samples used in the empirical risk estimate, and a data-dependent posterior Q over H. For any confidence parameter δ ∈ (0 , 1) , let C > 0 be a universal constant appear-ing in PAC–Bayes inequalities [23]. The standard importance-weighted PAC-Bayes analysis gives the following deviation 
+
+|Eh∼QEx∼Psim [ˆ ι(Ω θ (x)) L(h,x )] − bR(Q)| ≲
+
+s
+
+KL( Q∥P ) + ln( C/δ )2neff (ˆ ι) . (42) 7
+
+Here, the effective sample size is computed from the normal-ized weights as 
+
+neff (ˆ ι) = 
+
+ P  
+
+> x∈B sim
+
+ˆι(Ω θ (x)) 2
+
+P 
+
+> x∈B sim
+
+ˆι2(Ω θ (x)) . (43) Combining (38)–(43) and introducing a representation dis-crepancy associated with the learned encoder, we obtain the following real-domain generalization characterization 
+
+R(Q) ≲ bR(Q) + ει(θ, ˆι)+
+
+s
+
+KL( Q∥P ) + ln( C/δ )2neff (ˆ ι) + εenc (θ). (44) where εenc (θ) denotes the representation discrepancy induced by using the learned encoder Ωθ in place of an ideal encoder. 
+
+D. Encoder Bias 
+
+Let Ω⋆ denote an ideal encoder under which the real-to-simulator density ratio is sufficiently smooth and well approx-imated in the latent space. Define the encoder discrepancy as 
+
+ϵΩ(θ) = Ex∼Preal [∥Ωθ (x) − Ω⋆(x)∥]. (45) Assume that the loss L is Lz –Lipschitz with respect to the latent representation. Then, by a standard Lipschitz argument, 
+
+εenc (θ) ≤ Lz ϵΩ(θ). (46) Substituting (45) into (44), we obtain the following instan-tiated real-domain generalization characterization 
+
+R(Q) ≲ bR(Q) + ει(θ, ˆι)+
+
+s
+
+KL( Q∥P ) + ln( C/δ )2neff (ˆ ι) + Lz ϵΩ(θ). (47) This characterization identifies four contributing terms to the real-domain generalization error: (i) the importance-weighted risk of the real domain bR(Q);(ii) density-ratio approximation error ει(θ, ˆι), induced by approximating the target ratio ι⋆ 
+
+> X
+
+with the latent-space esti-mator ˆι(Ω θ (x)) ;(iii) the PAC–Bayes deviation term, which captures finite-sample uncertainty through KL( Q∥P ) and neff (ˆ ι);(iv) the encoder representation bias Lz ϵΩ(θ) induced by the mismatch between Ωθ and Ω⋆.IV. S IM -TO -R EAL DOMAIN -A DAPTIVE POLICY 
+
+OPTIMIZATION 
+
+Building upon the PAC-Bayes analysis, we design a struc-tured training framework that addresses the density-ratio esti-mation error and the encoder representation term identified above. The overall procedure consists of three phases: an encoder warm-up phase followed by two training stages. 1) Warm-up: The encoder is initialized on Sh ∪X real by min-imizing an MMD based warm-up objective. This phase provides a shared latent representation for simulator and real-domain samples. 2) Stage 1: With the encoder frozen at θ0, a latent real-to-simulator density ratio ˆι is estimated and used as the importance weight. The communication-rate policy is then optimized in the latent state space using PPO. 3) Stage 2: The encoder is unfrozen and fine-tuned with a trust-region regularization centered at θ0 and a latent alignment objective based on weighted MMD. During this stage, the policy and value networks are kept fixed, and only the encoder parameter θ is updated. After encoder fine-tuning, the reference encoder is updated by setting θ0 ← θ, and policy optimization continues in the next outer iteration. The illustration of algorithm architecture is shown in Fig. 3. The warm-up phase initializes a coherent latent space. Stage 1 fixes the encoder to enable stable density-ratio estimation and reliable policy optimization in the latent space. Stage 2 then allows controlled encoder refinement through trust-region regularization, aiming to improve cross-domain alignment while keeping the latent representation close to the Stage 1 reference space. Together, these stages separate representation learning into a stable initialization phase and a subsequent regulated adaptation phase. The following subsections detail each component of the training framework. 
+
+A. Encoder Warm-up 
+
+We employ a multi-layer perceptron (MLP) as the en-coder Ωθ . Given simulator and real-domain minibatches 
+
+{ˇxsim  
+
+> u
+
+}nw,s 
+
+> u=1
+
+⊂ Sh and {ˇxreal  
+
+> v
+
+}nw,r 
+
+> v=1
+
+⊂ Xreal , their latent representations are defined as 
+
+ˇzsim  
+
+> u
+
+= Ω θ (ˇ xsim  
+
+> u
+
+), ˇzreal  
+
+> v
+
+= Ω θ (ˇ xreal  
+
+> v
+
+). (48) We use an MMD loss to reduce the initial discrepancy between the simulator and real-domain latent distributions: 
+
+L0MMD (θ) = 1
+
+nw,s2
+
+X
+
+> u,u ′
+
+ϖ ˇzsim  
+
+> u
+
+, ˇzsim 
+
+> u′
+
+− 2
+
+nw,snw,r
+
+X
+
+> u,v
+
+ϖ ˇzsim  
+
+> u
+
+, ˇzreal 
+
+> v
+
+
+
++ 1
+
+nw,r2
+
+X
+
+> v,v ′
+
+ϖ  ˇzreal  
+
+> v
+
+, ˇzreal 
+
+> v′
+
+ , (49) where ϖ(z, z ′) is a Gaussian mixture kernel defined on the latent space, 
+
+ϖ(z, z ′) = 
+
+> L
+
+X
+
+> ℓ=1
+
+αℓ exp 
+
+
+
+− ∥z − z′∥2
+
+2σ2
+
+> ℓ
+
+
+
+, (50) where σℓ > 0 controls the kernel width and αℓ > 0 denotes the mixture weight satisfying PLℓ=1 αℓ = 1 .The warm-up objective is 
+
+Lwarm (θ) = λ0MMD L0MMD (θ) + λreg ∥θ∥22, (51) where λ0MMD , λ reg are nonnegative coefficients and ∥θ∥22 is a regularization term. The warm-up on Sh ∪ X real provides a coherent latent representation across the simulator and the real domains. After optimizing Lwarm (θ) in the warm-up phase, we denote the encoder parameter by θ0, and the initialized encoder by Ωθ0 .8Simulator domain  
+
+> Real domain
+> Legend
+> Updated
+> Frozen
+
+## × Stop -gradient                              
+
+> Warm -up set 𝒮 h
+> Ratio -estimation set 𝒮 𝜄
+> 𝜒 real
+> Encoder warm -up
+> Encoder Ω𝜃
+> Stage 1: Latent density -ratio PPO
+> 𝐿 MMD
+> 0
+> Warm -up objective
+> 𝐿 warm (𝜃 )
+> Reference encoder Ω𝜃 0
+> Simulator latent Real latent
+> Initial latent alignment
+> Stage 2: Encoder fine -tuning
+> Simulator
+> latent
+> Real
+> latent
+> Weighted
+> simulator latent
+> Real
+> latent
+> Aligned
+> simulator latent
+> Encoder Ω𝜃 0and estimator Ƹ𝜄 (𝑧 )
+> are frozen after Stage 1Set 𝜃 0←𝜃 for next iteration
+> Weighted
+> simulator latent
+> Distribution -shift correction
+> Weighted latent alignment
+> Reference
+> encoder Ω𝜃 0
+> Density -ratio
+> estimator Ƹ𝜄 (𝑧 )
+> Trust
+> region
+> Policy 𝜋 𝜓
+> ℬsim
+> Weighted PPO
+> 𝜋 𝜓 ,𝑉 𝜔
+> Update 𝜓 ,𝜔
+> 𝑧 =Ω𝜃 0(𝑥 )𝑤 𝑡
+> Current
+> encoder Ω𝜃
+> Weight ഥ𝑤 u
+> Encoder objective
+> 𝐿 enc (𝜃 )
+> Update 𝜃
+
+## ×    
+
+> Closer match
+> Update 𝜃
+> Repeat Stage 1 and Stage 2 for iterations
+> 𝑧 =Ω𝜃 (𝑥 )Refresh simulator
+> samples
+> 𝐿 MMD (𝜃 )
+> Ƹ
+> 𝜄 (𝑧 )
+> Ω𝜃 0
+> Ω𝜃 0
+
+Fig. 3: Illustration of proposed sim-to-real domain-adaptive policy optimization algorithm architecture. 
+
+B. Latent-Space PPO 
+
+In Stage 1, the general characterization in Section III is instantiated with the frozen encoder Ωθ0 . All simulator and real samples are first mapped into the corresponding reference latent space. The simulator and real latent sample sets are defined as 
+
+Z† = z† 
+
+> i,t
+
+= Ω θ0 (x†
+
+> i,t
+
+) , † ∈ { sim , real }, (52) where i indexes trajectories and t denotes the decision slot within each trajectory. To optimize the sim-to-real control objective in P1, a latent density ratio ˆι(z) is estimated 
+
+ˆι(z) ≈ dP θ0
+
+> real
+
+dP θ0
+
+> sim
+
+(z), (53) where P θ0 
+
+> sim
+
+and P θ0 
+
+> real
+
+are the latent distributions induced by the frozen encoder Ωθ0 . The estimator ˆι(z) is fitted using latent samples by uLSIF or KLIEP [18], [19]. Detailed descriptions of uLSIF and KLIEP are provided in the Appendix. For each iteration, simulator trajectories are collected as 
+
+(x1, a 1, r 1, . . . , x T ), where the horizon T may vary across trajectories. Each state is mapped to latent space zt = Ω θ0 (xt).Generalized advantage estimation (GAE) is computed along the trajectory: 
+
+δt = rt + γV ω (zt+1 ) − Vω (zt), (54) 
+
+At = 
+
+> T−t
+
+X
+
+> ℓ=0
+
+(γλ GAE )ℓ δt+ℓ. (55) Following the convention in Section III-C, ˆι denotes the nonnegative density-ratio estimator after clipping when neces-sary. The real-to-simulator density ratio provides the normal-ized importance weight 
+
+wt = ˆι(zt)
+
+Et[ˆ ι(zt)] , (56) where Et[·] denotes the average over the rollout batch. The policy and value networks are updated by minimizing the following weighted PPO loss: 
+
+LPPO (ψ, ω ) = Lpol (ψ) − μent Lent (ψ) + μval Lval (ω), (57) where μent and μval are positive constants; the clipped policy loss is 
+
+Lpol (ψ) = −Et
+
+wt min  ρtAt, clip( ρt, 1 − ϵ, 1 + ϵ)At
+
+ ,
+
+(58) with the importance sampling ratio 
+
+ρt = πψ (at | zt)
+
+πψold (at | zt) ; (59) the entropy regularization term is defined as 
+
+Lent (ψ) = −Et
+
+"X
+
+> at
+
+(πψ (at|zt) log πψ (at|zt)) 
+
+#
+
+; (60) the value function term is 
+
+Lval (ω) = Et
+
+h
+
+wt (Vω (zt) − Gt)2i
+
+, (61) where Gt = At+Vωold (zt) denotes the value target constructed from generalized advantage estimation (GAE) [27]. Since the encoder remains fixed at θ0, the representation bias term Lz ϵΩ(θ0) is fixed, and the density-ratio estimation is performed in a fixed latent space. Thus, the learned posterior 
+
+Qstage1 follows the characterization in (47): 
+
+R(Qstage1 ) ≲ bR(Qstage1 ) + ει(θ0, ˆι)+
+
+s
+
+KL( Qstage1 ∥P ) + ln( C/δ )2neff (ˆ ι) + Lz ϵΩ(θ0). (62) 9
+
+C. Trust-Region Encoder Fine-tuning 
+
+In Stage 2, the encoder parameters are unfrozen. To prevent uncontrolled drift in the latent space, which would compromise both policy optimization and density-ratio estimation, we introduce an explicit trust-region regularization. Specifically, a quadratic penalty centered at θ0 is imposed, where the coefficient β > 0 controls the strength of the trust region, 
+
+min  
+
+> θ
+
+Lenc (θ) = λMMD LMMD (θ) + β∥θ − θ0∥22. (63) Within each outer iteration, θ0 is kept fixed and serves as the trust-region anchor. Here, LMMD (θ) measures the discrepancy between the weighted simulator latent samples and the real latent samples. To keep encoder fine-tuning data consistent with the latest policy, we refresh simulator-state minibatches by rolling out 
+
+Msim with the frozen policy πψ (·| Ωθ0 (x)) obtained from Stage 1. Given minibatches {xsim  
+
+> u
+
+}nt,s  
+
+> u=1
+
+and {xreal  
+
+> v
+
+}nt,r 
+
+> v=1
+
+, the latent representations are 
+
+zsim  
+
+> u
+
+= Ω θ (xsim  
+
+> u
+
+), z real  
+
+> v
+
+= Ω θ (xreal  
+
+> v
+
+). (64) For the simulator minibatch, the stabilized weight is computed in the reference latent space using the encoder Ωθ0 , under which the density-ratio estimator was fitted 
+
+¯wu = ˆι(Ω θ0 (xsim  
+
+> u
+
+)) max P nt,s 
+
+> s=1
+
+ˆι(Ω θ0 (xsim  
+
+> s
+
+)) , ϵ w
+
+, (65) where ϵw > 0 is used only to avoid numerical degeneracy when all estimated weights are close to zero. The estimator ˆι
+
+is fixed after Stage 1, while the kernel evaluations in LMMD (θ)
+
+use the current encoder Ωθ . Thus, LMMD (θ) can update the encoder while the importance weights remain tied to the reference latent space. 
+
+LMMD (θ) = X
+
+> u,u ′
+
+¯wu ¯wu′ ϖ(zsim  
+
+> u
+
+, z sim  
+
+> u′
+
+)− 2
+
+nt,r
+
+X
+
+> u,v
+
+¯wuϖ(zsim  
+
+> u
+
+, z real  
+
+> v
+
+)+ 1
+
+nt,r2
+
+X
+
+> v,v ′
+
+ϖ zreal  
+
+> v
+
+, z real 
+
+> v′
+
+ . (66) The policy and encoder optimization are intentionally de-coupled to preserve training stability. In Stage 1, the weighted PPO objective in (57) updates (ψ, ω ), under the frozen refer-ence encoder Ωθ0 . In Stage 2, πψ is a frozen policy with input 
+
+Ωθ0 (x) to refresh simulator-state minibatches. The objective in (63) is then optimized using the current encoder Ωθ for the MMD kernel evaluations, while the importance weights remain computed in the reference latent space. Therefore, no PPO gradient is propagated into the encoder during Stage 2. This separation avoids mutual interference between policy optimization and latent-space alignment. We now establish a stability result showing that bounded encoder drift introduces a controlled perturbation to the real-domain risk. Since Stage 2 freezes the policy and value networks, the posterior variation in this stage is induced only by the encoder parameter θ, while ψ and ω are treated as fixed components inherited from Stage 1. 
+
+Assumption 1 (Lipschitz continuity with respect to encoder parameters): For any two encoders Ωθ and Ωθ0 satisfying ∥θ−
+
+θ0∥2 ≤ κ, and for any policy parameter ψ and value parameter 
+
+ω, the loss function satisfies 
+
+L(( θ, ψ, ω ), x )−L(( θ0, ψ, ω ), x ) ≤ Lθ ∥θ−θ0∥2, ∀x ∼ Preal .
+
+This condition holds, for instance, when the loss is Lipschitz continuous with respect to the latent representation and the encoder is Lipschitz continuous with respect to its parameters. 
+
+Proposition 1 (Stability under bounded encoder drift): Let 
+
+Qstage2 denote the posterior after Stage 2, and let Q0stage2 
+
+denote the posterior obtained from Qstage2 by replacing the encoder parameter θ with θ0 while keeping (ψ, ω ) unchanged. Suppose that Stage 2 satisfies ∥θ − θ0∥2 ≤ κ almost surely under Qstage2 . Then, under Assumption 1, 
+
+R(Qstage2 ) ≤ R(Q0stage2 ) + Lθ κ. (67) 
+
+Proof: For any h = (θ, ψ, ω ) sampled from Qstage2 ,define h0 = ( θ0, ψ, ω ) by replacing the encoder parameter 
+
+θ with θ0 while keeping (ψ, ω ) unchanged. By Assumption 1, 
+
+L(h, x ) − L(h0, x ) ≤ Lθ ∥θ − θ0∥2 ≤ Lθ κ.
+
+Taking expectation over x ∼ Preal and h ∼ Qstage2 gives (67). Proposition 1 justifies the trust-region design in (63). Stage 2 allows the encoder to adapt through the MMD objective, while the proximal penalty β∥θ − θ0∥22 discourages large deviations from the Stage 1 encoder. This design limits abrupt latent-space drift that could invalidate the learned density-ratio estimator and destabilize policy optimization. In practice, β is gradually decayed across outer iterations, enabling conserva-tive encoder updates at the early stage and increased flexibility after the policy and density-ratio estimator have stabilized. After Stage 2, the reference encoder is updated by setting 
+
+θ0 ← θ, and the next iteration re-estimates the latent density ratio and continues weighted PPO training under the updated reference encoder. The overall procedure of the proposed algorithm is presented in Algorithm 1. V. S IMULATION RESULTS 
+
+A. Environment Settings 
+
+Since human motion states in XR teleoperation usually evolve continuously over a second-level time scale, we adopt a relatively low-frequency decision frequency to reduce the addi-tional overhead induced by receiving dimension-wise control at the XR device and avoid undesirable control oscillations induced by frequently sampling-rate switching. Specifically, the decision frequency is 5 Hz, i.e., τs = 200 ms. Motivated by high-rate XR tracking modes in commercial XR devices, 
+
+f max  
+
+> j
+
+= 120 Hz and Fj = {0, 30 , 60 , 120 } Hz. The execution frequencies of the simulated and real platforms are set to 
+
+fsim = 120 Hz and freal = 30 Hz, i.e., τsim = 8 .3 ms, 
+
+τreal = 33 .3 ms, T = 2000 . All experiments were performed on an NVIDIA RTX 3070 GPU and Ubuntu 22.04. 10 
+
+Algorithm 1 Sim-to-Real Domain-Adaptive Policy Optimiza-tion  
+
+> 1:
+
+Initialize: Interactive simulator environment Msim ;datasets Dsim , Dreal ; simulator-sample split (Sh, Sι);warm-up steps K0; global iterations K1; Stage 1 iterations 
+
+K2; Stage 2 iterations K3; trust-region weight β0; decay factor μ; regularization coefficient λreg ; MMD coefficient 
+
+λ0MMD ; weighted MMD coefficient λMMD . 
+
+> 2:
+
+Warm-up:  
+
+> 3:
+
+for k0 = 1 · · · K0 do  
+
+> 4:
+
+Sample warm-up minibatches from Sh and X real . 
+
+> 5:
+
+Update encoder parameter θ by minimizing (51).  
+
+> 6:
+
+end for  
+
+> 7:
+
+Set initial encoder parameter θ0 ← θ. 
+
+> 8:
+
+Initialize PPO policy and value parameters (ψ, ω ). 
+
+> 9:
+
+Set β ← β0. 
+
+> 10:
+
+for k1 = 1 · · · K1 do  
+
+> 11:
+
+Stage 1. Frozen encoder with latent density-ratio estimation and PPO:  
+
+> 12:
+
+Freeze encoder at θ ← θ0. 
+
+> 13:
+
+Estimate latent real-to-simulator density ratio ˆι(·) using uLSIF or KLIEP in the Appendix.  
+
+> 14:
+
+for k2 = 1 · · · K2 do  
+
+> 15:
+
+Roll out simulator trajectories in Msim using πψ (· | 
+
+z) with z = Ω θ0 (x), and collect the batch Bsim . 
+
+> 16:
+
+Compute GAE advantages At and real-to-simulator importance weights wt by (54)–(56).  
+
+> 17:
+
+Update (ψ, ω ) by minimizing the weighted PPO objective (57) with density ratio (59).  
+
+> 18:
+
+end for  
+
+> 19:
+
+Stage 2. Encoder fine-tuning with trust region and weighted MMD:  
+
+> 20:
+
+Unfreeze encoder θ, while keeping θ0, ˆι, ψ, and ω fixed.  
+
+> 21:
+
+for k3 = 1 · · · K3 do  
+
+> 22:
+
+Roll out simulator trajectories in Msim using the policy πψ (· | z), where z = Ω θ0 (x). Collect simula-tor minibatches {xsim  
+
+> u
+
+}nt,s
+
+> u=1
+
+, and collect real-domain minibatches {xreal  
+
+> v
+
+}nt,r 
+
+> v=1
+
+from X real . 
+
+> 23:
+
+Encode them using the current encoder as zsim  
+
+> u
+
+=Ωθ (xsim  
+
+> u
+
+), zreal  
+
+> v
+
+= Ω θ (xreal  
+
+> v
+
+). 
+
+> 24:
+
+Compute the stabilized weights ¯wu using the frozen 
+
+Ωθ0 and ˆι according to (65).  
+
+> 25:
+
+Compute the weighted MMD loss in (66).  
+
+> 26:
+
+Update the encoder parameter θ by minimizing (63).  
+
+> 27:
+
+end for  
+
+> 28:
+
+Set θ0 ← θ. 
+
+> 29:
+
+Decay trust-region weight β ← μβ . 
+
+> 30:
+
+end for  
+
+> 31:
+
+return encoder Ωθ and policy πψ .
+
+1) Communication parameter setup: Following the 3GPP TR 38.901 indoor-office channel model [28], the path-loss model supports both LOS and NLOS conditions, with the user mobility set to 3 km/h. For room-scale indoor XR teleoperation, we consider the distance in [3 , 30] m and 
+
+fc = 7 GHz. To account for shadow fading and occasional human-body or device blockage, we generate the channel gain 
+
+10 lg g(t) ∈ [−105 , −55] dB . N0 is set to -174 dBm/Hz, 
+
+B = 100 MHz. ζ = 3 × 10 4 and λE = 5 .
+
+2) Real-world and simulator platform: The real-domain dataset Dreal is constructed based on Humanoid Everyday, a comprehensive public dataset that contains motion data collected by Apple Vision Pro [4] and humanoid robot data recorded in real-world task scenarios [29]. For Dsim , we develop a customized simulation environment named wire-less xr teleoperate based on the unitree sim isaaclab in the Unitree toolkit xr teleoperate [30]. The underlying simulator is built on NVIDIA Isaac Sim 4.5.0 and Isaac Lab. To ensure that the simulator in unitree sim isaaclab matches the robot embodiment, end-effector type, and task category of the Humanoid Everyday real-world dataset, we use the same Unitree G1-29DoF humanoid robot equipped with Dex3 dexterous hands [30] in both the real-world and simula-tion domains, and select similar tabletop manipulation tasks. The take out the lid of the spray bottle g1 scenario in Hu-manoid Everyday is used to construct Dreal . In the uni-tree sim isaaclab environment, the Isaac-PickPlace-Cylinder-G129-Dex3-Joint task is used to construct the interactive simulator Msim and collect Dsim .In Humanoid Everyday, qxr includes the 9-dimensional op-erator head orientation, the 16-dimensional left and right wrist poses, and the 7-dimensional left and right Dex3 dexterous-hand actions, i.e., total dimensions Jxr = 55 . Since the type of each sampling-rate dimension is float64, dj = 64 bits. The execution-side qrb is constructed from the G1-Dex3 joint states, including 7 joints for each arm, 7 joints for each hand, 6 joints for each leg, and 3 waist joints. Hence, the robot-side has totally Jrb = 43 joints. Considering that tabletop manipulation task is mainly sensitive to arm and dexterous-hand motions, we set wj to 1.0 for arm joints, 1.5 for hand joints, 0.5 for leg joints, 0.75 for waist joints in W. Since all trajectories in Humanoid Everyday are recorded at 30 Hz, the motion data collected by Apple Vision Pro are also recorded at 30 Hz. In practice, Apple Vision Pro [4] can support a 90 Hz sampling rate, while Meta Quest 3 [3] also provides a 120 Hz high-rate mode. Therefore, we adopt an emulation method of sampling-rate levels. Specifically, four normalized raw-rate levels, i.e., {0, 10 , 20 , 30 } Hz, are first constructed from the original 30 Hz motion records through temporal downsampling. These rate levels are then mapped to the target XR communication-rate set Fj = {0, 30 , 60 , 120 }
+
+Hz. Under this mapping, the resulting sampled data are further processed through the sampling, transmission, interpolation, and reconstruction pipelines defined in Section II. This design enables the public 30 Hz dataset to preserve the reconstruction-error differences among different sampling-rate levels, while matching the transmission load of high-rate XR teleoperation. 
+
+3) Algorithm design details: L = 5 , λ0MMD = 1 , λreg =10 −5, αℓ = 0 .2, σℓ = 2 ℓ−3σ0, where σ0 is the pairwise dis-tance median after merging simulator and real latent samples in Section IV-A. γ = 0 .99 , ϵ = 0 .2, λGAE = 0 .95 in Section IV-B. ϵw = 10 −8 in Section IV-C. Iterations K0 = 500 ,
+
+K1 = 25 , K2 = 40 , K3 = 10 , trust-region β0 = 1 , μ = 0 .95 .11 0 250 500 750 1000 
+
+Training episode     
+
+> 50 70 90 110 130 150
+> Total reconstruction error (rad)
+> DR-PPO-uLSIF DR-PPO-KLIEP
+> (a) Total reconstruction error in each episode. 0250 500 750 1000
+
+Training episode 
+
+> 810 12 14 16 18 20
+> Total communication energy (J)
+> DR-PPO-uLSIF DR-PPO-KLIEP
+> (b) Total effective communication energy in each episode.
+
+Fig. 4: Training convergence. 
+
+B. Performance Evaluation 
+
+The training convergence is shown in Fig. 4. The total reconstruction error and total effective communication energy are accumulated over T slots within each episode. DR-PPO-uLSIF and DR-PPO-KLIEP denote two weighted PPO algo-rithms using different density-ratio estimation methods. Both methods eventually reach similar performance. In comparison, DR-PPO-uLSIF converges faster and achieves slightly better performance, whereas DR-PPO-KLIEP exhibits larger fluctua-tions during training. The faster and smoother convergence of DR-PPO-uLSIF is mainly attributed to the more stable density-ratio estimates produced by least-squares fitting, while KLIEP is more sensitive to sample variability. Three baselines are included in Fig. 5 for ablation. PPO-MMD performs PPO training with MMD-based latent do-main but without density-ratio reweighting. Unweighted PPO 
+
+removes importance weighting and is trained without real-world data. FT directly adopts full-rate transmission without learning policy. The wireless channel condition in dB is given by 10 lg g(t). According to Fig. 5a, the proposed DR-PPO-uLSIF and DR-PPO-KLIEP methods achieve significantly lower reconstruction errors than other policy methods. Un-weighted PPO performs the worst due to sim-to-real dis-tribution mismatch. Although FT attains the lowest recon-struction error under severely degraded channel conditions, its energy cost becomes prohibitive. As shown in Fig. 5b, when 10 lg g(t) = −105 dB , the energy consumption of 105 55 95 85 75 65         
+
+> Wireless channel condition (dB)
+> 35 40 50 60 70 80 90 100
+> Total reconstruction error (rad)
+> PO-uLSIF PDR-PO-KLIEP PDR--MMD PPO Oeighted PP Unw FT
+> (a) Total reconstruction error of different algorithms. 105 55 95 85 75 65
+> Wireless channel condition (dB)
+> 10 2
+> 10 1
+> 10 0
+> 10 1
+> 10 2
+> Total communication energy (J)  DR-PPO-uLSIF PO-KLIEP DR-P PPO-MMD Unweighted PPO FT
+> (b) Total effective communication energy of different algorithms.
+
+Fig. 5: Performance comparison under different channel gains. FT is tens of times higher than that of the policy-learning methods. Moreover, Fig. 5b shows that DR-PPO-uLSIF and DR-PPO-KLIEP reduce the effective communication energy to approximately half of that required by Unweighted PPO and PPO-MMD when the channel deteriorates to −105 dB . As the channel improves, the proposed methods adaptively exploit the more favorable transmission condition by allocating higher sampling rates, thereby achieving a better tradeoff between reconstruction accuracy and long-term communication energy efficiency. Fig. 6 present the dimension-wise sampling-rate decisions obtained by the DR-PPO-uLSIF under the channel condition 
+
+10 lg g(t) = −80 dB . The two figures correspond to the same 
+
+10000 ms time segment. The associated motion trajectories are extracted from take out the lid of the spray bottle g1, which is held out for validation. By comparing two subfigures, it can be observed that the sampling rates in Fig. 6b are significantly higher than those in Fig. 6a. This is because the 10-th dimension, qxr 10 (ν) in Fig. 6a, is the pose value of the left-wrist in rotation matrix, whereas the 50-th dimension, 
+
+qxr 50 (ν) in Fig. 6b is an angle value of the right Dex3 dexterous hand. Compared with the wrist component, the dexterous-hand component contains higher frequency motion, and therefore requires a higher sampling rate to preserve reconstruction accuracy. In Fig. 6a, it can be observed that the sampling rate increases when the pose value exhibits larger temporal variations. These results demonstrate that the DR-PPO-uLSIF algorithm can learn motion-adaptive sampling-rate decisions 12 Dim 10           
+
+> 02000 4000 6000 8000 10000
+> Time (ms)
+> 0.4
+> 0.5
+> 0.6
+> 0.7
+> Pose value in rotation matrix
+> 0
+> 30
+> 60
+> 120
+> Sampling-rate control (Hz)
+> (a) Trajectory and sampling-rate decisions of Dimension 10. Dim 50
+> 02000 4000 6000 8000 10000
+> Time (ms)
+> 0.8
+> 0.7
+> 0.6
+> 0.5
+> 0.4
+> Angle value (rad)
+> 0
+> 30
+> 60
+> 120
+> Sampling-rate control (Hz)
+> (b) Trajectory and sampling-rate decisions of Dimension 50.
+
+Fig. 6: Dimension-wise sampling-rate decisions generated by DR-PPO-uLSIF. and effectively respond to time-varying XR motion dynamics. VI. C ONCLUSION 
+
+This paper investigated sim-to-real communication-rate op-timization for humanoid-robot wireless XR teleoperation. We developed a unified framework integrating motion sampling, wireless transmission, and simulator-physical execution to address the coupled challenges of energy efficiency and sim-to-real mismatch. By establishing a PAC-Bayes generaliza-tion characterization based on latent density-ratio estimation and representation bias, we provided theoretical insights into robust policy transfer under distribution shift. Building on this analysis, we proposed a domain-adaptive RL framework with latent density-ratio corrected PPO and trust-region reg-ularization. Experimental results demonstrated superior en-ergy–reconstruction tradeoffs and enhanced robustness under diverse wireless environments and dynamic humanoid mo-tion trajectories. These findings highlight the importance of integrating theoretical generalization analysis with domain-adaptive communication intelligence for future wireless em-bodied AI systems. APPENDIX : D ENSITY RATIO ESTIMATION IN 
+
+LATENT SPACE 
+
+This appendix summarizes the density-ratio estimation pro-cedures used in Stage 1. The goal is to estimate the real-to-simulator density ratio in the latent space induced by the frozen encoder Ωθ0 . Let {˜xsim  
+
+> u
+
+}nι,s  
+
+> u=1
+
+and {˜xreal  
+
+> v
+
+}nι,r  
+
+> v=1
+
+denote the simulator and real-domain samples used for density-ratio estimation, obtained from Sι and Xreal , respectively. Their latent representations under Ωθ0 are 
+
+˜zsim  
+
+> u
+
+= Ω θ0 (˜ xsim  
+
+> u
+
+), ˜zreal  
+
+> v
+
+= Ω θ0 (˜ xreal  
+
+> v
+
+). (68) For † ∈ { sim , real }, the latent distribution induced by z =Ωθ0 (x) with x ∼ P† is defined as 
+
+P θ0 
+
+> †
+
+= P† ◦ Ω−1 
+
+> θ0
+
+. (69) Since Preal ≪ Psim , the pushforward distributions also satisfy P θ0 
+
+> real
+
+≪ P θ0
+
+> sim
+
+. The target real-to-simulator density ratio in the latent space is defined as 
+
+ι⋆θ0 (z) := dP θ0
+
+> real
+
+dP θ0
+
+> sim
+
+(z). (70) To approximate the target ratio in (70), we use a kernel basis model with M basis functions. Let ξ = [ ξ1, . . . , ξ M ]⊤ denote the coefficient vector, where ξm is the coefficient of the m-th basis function. The parametric density-ratio model is 
+
+ιξ (z) = 
+
+> M
+
+X
+
+> m=1
+
+ξmϕm(z), ϕ m(z) = ϖ(z, c m), (71) where {cm}Mm=1 are kernel centers and ϖ(·, ·) is the kernel function. The feature vector is defined as 
+
+ϕ(z) = [ ϕ1(z), . . . , ϕ M (z)] ⊤. (72) Once the coefficient vector is estimated by uLSIF or KLIEP, denoted by ˆξ, the latent density-ratio estimator used in Sec-tion IV-B is given by ˆι(z) = ιˆξ (z). This estimator is the raw density-ratio estimate. Its clipping and normalization are performed separately in Sections III-C, IV-B, and IV-C. 
+
+A.1 uLSIF: Unconstrained Least-Squares Importance Fitting 
+
+uLSIF estimates ι⋆θ0 (z) by solving the regularized least-squares objective 
+
+min 
+
+> ξ
+
+12 Ez∼P θ0sim 
+
+[ιξ (z)2] − Ez∼P θ0real 
+
+[ιξ (z)] + λι
+
+2 ∥ξ∥22, (73) where λι > 0 is the ℓ2 regularization weight. Using samples 
+
+{˜zsim  
+
+> u
+
+}nι, s 
+
+> u=1
+
+and {˜zreal  
+
+> v
+
+}nι, r
+
+> v=1
+
+, we minimize 
+
+LuLSIF (ξ) = 12nι, s
+
+> nι, s
+
+X
+
+> u=1
+
+ιξ (˜ zsim  
+
+> u
+
+)2 − 1
+
+nι, r
+
+> nι, r
+
+X
+
+> v=1
+
+ιξ (˜ zreal  
+
+> v
+
+)+ λι
+
+2 ∥ξ∥22.
+
+(74) Define the empirical matrices 
+
+Hm,n = 1
+
+nι, s
+
+> nι, s
+
+X
+
+> u=1
+
+ϕm(˜ zsim  
+
+> u
+
+)ϕn(˜ zsim  
+
+> u
+
+), m, n ∈ { 1, . . . , M }, (75) 
+
+hm = 1
+
+nι, r
+
+> nι, r
+
+X
+
+> v=1
+
+ϕm(˜ zreal  
+
+> v
+
+), m ∈ { 1, . . . , M }. (76) 13 
+
+Then, we have 
+
+LuLSIF (ξ) = 12 ξ⊤Hξ − ξ⊤h + λι
+
+2 ∥ξ∥22, (77) 
+
+ˆξ = ( H + λιI)−1h. (78) In implementation, we optionally clip ιˆξ (z) to be nonnegative. 
+
+A.2 KLIEP: Kullback–Leibler Importance Estimation Proce-dure 
+
+KLIEP estimates ι⋆θ0 (z) by minimizing KL divergence be-tween the target latent distribution and the reweighted simu-lator latent distribution. Up to constants independent of ξ,
+
+max  
+
+> ξ
+
+Ez∼P θ0real 
+
+ log ιξ (z) (79) s.t. Ez∼P θ0sim 
+
+ιξ (z) = 1 , (80) 
+
+ξ ⪰ 0. (81) Using samples {˜zsim  
+
+> u
+
+}nι,s  
+
+> u=1
+
+and {˜zreal  
+
+> v
+
+}nι,r 
+
+> v=1
+
+, the objective is denoted by 
+
+LKLIEP (ξ) = − 1
+
+nι, r
+
+> nι, r
+
+X
+
+> v=1
+
+log  ξ⊤ϕ(˜ zreal  
+
+> v
+
+)
+
++ ς 1
+
+nι, s
+
+> nι, s
+
+X
+
+> u=1
+
+ξ⊤ϕ(˜ zsim  
+
+> u
+
+)−1
+
+! 
+
+> 2
+
++ λι
+
+2 ∥ξ∥22, (82) where ς > 0 controls the constraint penalty, and (82) is under the constraint ξ ⪰ 0.The gradient of (82) with respect to ξm is given by 
+
+∂L KLIEP 
+
+∂ξ m
+
+= − 1
+
+nι, r
+
+> nι, r
+
+X
+
+> v=1
+
+ϕm(˜ zreal  
+
+> v
+
+)
+
+ξ⊤ϕ(˜ zreal  
+
+> v
+
+)+ 2 ς 1
+
+nι, s
+
+> nι, s
+
+X
+
+> u=1
+
+ξ⊤ϕ(˜ zsim  
+
+> u
+
+)−1
+
+!
+
+1
+
+nι, s
+
+> nι, s
+
+X
+
+> u=1
+
+ϕm(˜ zsim  
+
+> u
+
+)
+
+!
+
++ λιξm. (83) In practice, (82) is optimized by a constrained quasi-Newton method (e.g., L-BFGS-B) to enforce ξ ≥ 0 [31]. REFERENCES [1] K. Black, M. Y. Galliker, and S. Levine, “Real-time execution of action chunking flow policies,” in Proc. Adv. Neural Inf. Process. Syst. (NeurIPS) , 2026. [2] L. Li, Q. Zhang, Y. Luo, S. Yang, R. Wang, F. Han, M. Yu, Z. Gao, N. Xue, X. Zhu et al. , “Causal world modeling for robot control,” arXiv preprint arXiv:2601.21998 , 2026. [3] “Meta Quest 3”, (2025), https://www.meta.com/quest/quest-3/. [4] “Apple Vision Pro”, https://www.apple.com/apple-vision-pro/. [5] X. Wei, C. Yang, and S. Han, “Prediction, communication, and com-puting duration optimization for vr video streaming,” IEEE Trans. Commun. , vol. 69, no. 3, pp. 1947–1959, 2021. [6] Q. Cheng, H. Shan, W. Zhuang, L. Yu, Z. Zhang, and T. Quek, “Design and analysis of mec- and proactive caching-based 360 ◦ mobile vr video streaming,” IEEE Trans. Multimedia , vol. 24, pp. 1529–1544, 2022. [7] Z. Chen, H. Zhu, L. Song, D. He, and B. Xia, “Wireless multiplayer interactive virtual reality game systems with edge computing: Modeling and optimization,” IEEE Trans. Wireless Commun. , vol. 21, no. 11, pp. 9684–9699, 2022. [8] C. Xu, Z. Chen, M. Tao, and W. Zhang, “Wireless multi-user interactive virtual reality in metaverse with edge-device collaborative computing,” 
+
+IEEE Trans. Wireless Commun. , pp. 1–1, 2025. [9] Z. Meng, K. Chen, Y. Diao, C. She, G. Zhao, M. A. Imran, and B. Vucetic, “Task-oriented cross-system design for timely and accurate modeling in the metaverse,” IEEE J. Sel. Areas Commun. , vol. 42, no. 3, pp. 752–766, 2024. [10] Z. Meng, C. She, G. Zhao, and D. De Martini, “Sampling, communica-tion, and prediction co-design for synchronizing the real-world device and digital model in metaverse,” IEEE J. Sel. Areas Commun. , vol. 41, no. 1, pp. 288–300, 2023. [11] T. Huang, J. Ren, H. Wang, Z. Wang, Q. Ben, M. Wen, X. Chen, J. Li, and J. Pang, “Learning Humanoid Standing-up Control across Diverse Postures,” in Proc. Robot. Sci. Syst. (RSS) , Los Angeles, CA, USA, June 2025. [12] T. He, J. Gao, W. Xiao, Y. Zhang, Z. Wang, J. Wang, Z. Luo, G. He, N. Sobanbabu, C. Pan, Z. Yi, G. Qu, K. Kitani, J. Hodgins, L. J. Fan, Y. Zhu, C. Liu, and G. Shi, “Asap: Aligning simulation and real-world physics for learning agile humanoid whole-body skills,” in Proc. Robot. Sci. Syst. (RSS) , 2025. [13] R.-Z. Qiu, S. Yang, X. Cheng, C. Chawla, J. Li, T. He, G. Yan, L. Paulsen, G. Yang, S. Yi, G. Shi, and X. Wang, “Humanoid policy ∼
+
+human policy,” Proc. Conf. Robot Learn. (CoRL) , 2025. [14] H. Xue, T. He, Z. Wang, Q. Ben, W. Xiao, Z. Luo, X. Da, F. Casta˜ neda, G. Shi, S. Sastry, L. J. Fan, and Y. Zhu, “Opening the sim-to-real door for humanoid pixel-to-action policy transfer,” 2026, accepted to Proc. IEEE Conf. Comput. Vis. Pattern Recognit. (CVPR). [15] C. Zhao, G. Fang, H. Ding, X. Liu, F. Wang, G. Wang, K. Zhao, Z. Wang, and W. Xi, “Federated multi-source domain adaptation for mmwave-based human activity recognition,” IEEE Trans. Mobile Com-put. , vol. 24, no. 8, pp. 7283–7296, 2025. [16] X. Zhou, Y. Tian, and X. Wang, “Mec-da: Memory-efficient collabora-tive domain adaptation for mobile edge devices,” IEEE Trans. Mobile Comput. , vol. 23, no. 5, pp. 3923–3937, 2024. [17] P. Chen, K. Zhang, S. Gao, K. He, and J. Lv, “Achieving cross-domain NLOS localization via edge-assisted semi-supervised learning,” IEEE Trans. Wireless Commun. , vol. 24, no. 9, pp. 7424–7436, 2025. [18] M. Sugiyama, S. Nakajima, H. Kashima, P. von B¨ unau, and M. Kawan-abe, “Direct importance estimation with model selection and its applica-tion to covariate shift adaptation,” Ann. Inst. Stat. Math. , vol. 60, no. 4, pp. 699–746, 2008. [19] T. Kanamori, S. Hido, and M. Sugiyama, “A least-squares approach to direct importance estimation,” J. Mach. Learn. Res. , vol. 10, pp. 1391– 1445, 2009. [20] A. Gretton, K. M. Borgwardt, M. J. Rasch, B. Sch¨ olkopf, and A. Smola, “A kernel two-sample test,” J. Mach. Learn. Res. , vol. 13, no. 25, pp. 723–773, 2012. [21] M. Long, Y. Cao, J. Wang, and M. I. Jordan, “Learning transferable features with deep adaptation networks,” in Proc. Int. Conf. Mach. Learn. (ICML) , vol. 37, 2015, pp. 97–105. [22] B. Sun and K. Saenko, “Deep CORAL: Correlation alignment for deep domain adaptation,” in Proc. Eur. Conf. Comput. Vis. Workshops (ECCVW) . Springer, 2016, pp. 443–450. [23] M. Seeger, “Pac-bayesian generalisation error bounds for gaussian process classification,” J. Mach. Learn. Res. , vol. 3, pp. 233–269, 2002. [24] J. Schulman, F. Wolski, P. Dhariwal, A. Radford, and O. Klimov, “Proximal policy optimization algorithms,” arXiv:1707.06347 , 2017. [25] J. Schulman, S. Levine, P. Abbeel, M. I. Jordan, and P. Moritz, “Trust region policy optimization,” in Proc. Int. Conf. Mach. Learn. (ICML) ,vol. 37, 2015, pp. 1889–1897. [26] G. B. Folland, Real Analysis: Modern Techniques and Their Applica-tions , 2nd ed. New York, NY, USA: John Wiley & Sons, 1999. [27] J. Schulman, P. Moritz, S. Levine, M. Jordan, and P. Abbeel, “High-dimensional continuous control using generalized advantage estimation,” in Proc. Int. Conf. Learn. Represent. (ICLR) , 2016. [28] 3GPP, “ETSI TR 138 901 V16.1.0: 5G; Study on channel model for frequencies from 0.5 to 100 GHz (3GPP TR 38.901 version 16.1.0 release 16)”, European Telecomm. Std. Institute (ETSI), 2020. https://www.etsi.org/deliver/etsi tr/138900 138999/138901/16.01.00 60/ tr 138901v160100p.pdf. [29] Z. Zhao, H. Jing, X. Liu, J. Mao, A. Jha, H. Yang, R. Xue, S. Zakharor, V. Guizilini, and Y. Wang, “Humanoid everyday: A comprehensive robotic dataset for open-world humanoid manipulation,” arXiv preprint arXiv:2510.08807 , 2025. [30] Unitree Robotics, “XR-Teleoperate: An open-source teleoperation framework and data collection toolkit for embodied intelligence,” https://github.com/unitreerobotics/xr teleoperate, 2024. [31] C. Zhu, R. H. Byrd, P. Lu, and J. Nocedal, “Algorithm 778: L-bfgs-b: Fortran subroutines for large-scale bound-constrained optimization,” 
+
+ACM Trans. Math. Softw. , vol. 23, no. 4, pp. 550–560, 1997.

@@ -1,0 +1,887 @@
+Title: RED: Adaptive Real-Time DAG Scheduling for Robotic Inference under Environmental Dynamics
+
+URL Source: https://arxiv.org/pdf/2605.24044v1
+
+Published Time: Tue, 26 May 2026 00:05:47 GMT
+
+Number of Pages: 39
+
+Markdown Content:
+# RED: Adaptive Real-Time DAG Scheduling for Robotic Inference under Environmental Dynamics 
+
+Zexin Li 1, Tao Ren 2, Johnathan Liu 3, Xiaoxi He 4, and Cong Liu 11University of California, Riverside, USA , {zli536,congl }@ucr.edu 
+
+> 2
+
+University of Pittsburgh, USA , tar118@pitt.edu 
+
+> 3
+
+University of Maryland, Baltimore County, USA , jliu13@umbc.edu 
+
+> 4
+
+University of Macau, Macau SAR, China , hexiaoxi@um.edu.mo 
+
+Abstract 
+
+Robots deployed in dynamic environments must contend with environment-driven changes that reshape computation at runtime: new tasks may appear, precedence relations can shift, and overall workload structure evolves, all of which degrade performance, especially when multi-task inference is required under tight resource and real-time budgets. We present RED, a real-time scheduling framework for multi-task deep neural network workloads on resource-constrained robotic platforms that adapts to Robotic Environmental Dynamics (RED) while preserving end-to-end timing guarantees under modeling assumptions. The core of RED is a deadline-aware scheduler that assigns intermediate sub-deadlines, allowing it to accommodate evolving computation graphs and asynchronous inference induced by unpredictable conditions. The framework also supports flexible deployment of MIMONet (multi-input multi-output neural networks), commonly used in multi-tasking robots to alleviate memory pressure through weight sharing. RED explicitly leverages this shared-parameter property via a workload refinement and graph-reconstruction procedure that aligns MIMONet structure with schedulability require-ments, improving compatibility and efficiency. We implement RED on NVIDIA Jetson family platforms and on an Apple M-series MacBook and evaluate it on navigation-oriented workloads representative of real robotic scenarios. Experiments show consistent gains over existing meth-ods in throughput, deadline satisfaction, robustness to interference, adaptability, and runtime overhead. 
+
+Keywords: Autonomous Embedded Systems, Deep Neural Networks 
+
+# 1 Introduction 
+
+Robotic platforms increasingly execute multiple , often correlated , deep neural networks (DNNs) in parallel to deliver end-to-end perception, prediction, and control. This multi-task inference pattern appears in personal assistants that localize places while detecting acoustics [57], autonomous vehicles processing front/side/rear views [94, 15], and home hubs interpreting emotion from speech and faces [110, 44], building on decades of work on multi-DNN pipelines [19, 30, 72, 94, 55]. Deployed robots must, however, satisfy tight memory, compute, and timing budgets [97, 111, 11, 56, 36, 37, 21, 112, 113, 106, 103, 102, 101, 107, 105, 108, 109, 104, 35]. Even a single modern DNN can saturate an embedded GPU; co-locating several while meeting strict end-to-end deadlines is difficult. 1
+
+> arXiv:2605.24044v1 [cs.RO] 21 May 2026
+
+Weight sharing has emerged as a pragmatic way to lift efficiency for correlated tasks [45, 44, 57]. Practical pipelines often reuse encoders while branching into task-specific heads: single-input multi-output (SIMONet), multi-input single-output (MISONet), or the combination, multi-input multi-output (MIMONet). MIMONet is particularly attractive on embedded hardware because it reduces parameter count and memory pressure by sharing large backbone features across tasks [66]. Yet two realities complicate real-time operation on robots. First, environmental dynamics —moving obstacles, new objects of interest, or sensor dropouts—change the workload graph online: tasks appear or disappear, dependencies shift, and computational demand fluctuates. Second, heteroge-neous sensing and control loops introduce asynchrony : even when tasks are correlated, their arrivals and service times rarely align. Our case studies (Sec. 2) show that these effects trigger deadline misses despite ample instantaneous GPU headroom, and that generic DAG schedulers, agnostic to MIMONet’s shared-&-partitionable structure, leave substantial performance on the table. We introduce RED, a real-time scheduling framework for multi-task DNN inference on resource-constrained robots that explicitly adapts to Robotic Environmental Dynamics (RED) while empir-ically preserving timing behaviors. RED rests on three pillars. (i) An intermediate-deadline policy assigns sub-deadlines across the DAG and re-computes them online to track execution variability and graph changes, enabling EDF-based dispatching that is robust to asynchronous arrivals. (ii) A MIMONet-aware DAG refinement and reassignment procedure reconstructs the computation into encoder/decoder sub-tasks, co-schedules tasks to reuse shared-encoder results, and realigns sub-deadlines to cut blocking and recomputation. (iii) An on-demand synchronization mecha-nism, implemented with lightweight global and local synchronizers, avoids periodic, unnecessary barriers and reduces cross-node overhead. Beyond MIMONet-friendly pipelines, RED models non-partitionable kernels as atomic DAG nodes with contention-aware sub-deadlines (Sec. 4.5) and incorporates burst management that monitors GPU utilization, queue length, and deadline slack to shed low-criticality work under overload (Sec. 4.6). The design naturally extends to multi-DAG settings, batching same-height nodes to raise parallelism while preserving schedulability (Fig. 6). We implement RED atop PyTorch and target single-GPU embedded systems commonly used in robotics. Our prototypes run on NVIDIA Jetson Nano, TX2, AGX Xavier, and AGX Orin, and we validate portability on Apple M-series laptops. We further integrate RED with ROS 2 and NVIDIA IoT AI, deploying an end-to-end camera pipeline within a single MIMONet node to mini-mize inter-node communication (Sec. 5.3). Evaluation spans navigation-oriented mini-benchmarks, heterogeneous deadline budgets, QoE preferences, injected interference, and extended scenarios (Sec. 5). Results show consistent gains in throughput and real-time correctness with low overhead. This article extends our prior conference paper [67] in the following ways: (a) a formal task / DAG model with Definitions 1–6, the RED-Schedulability Problem statement, Propositions 1–2, Lemma 1, and Corollary 1 ( §3); (b) the effective parallelism factor ρ and the per-level capacity bound that incorporates it; (c) the on-demand synchronization layer with the formal precedence-preservation lemma; (d) burst-task management with ProactiveDrop and the criticality-score formulation; (e) extended evaluation including the M-series MacBook non-partitionable case study; (f) ROS 2 integration and the deployment-oriented overhead and adaptability analyses. 
+
+Contributions. 
+
+1. A MIMONet-aware real-time scheduler. We combine proportional intermediate-deadline assignment with online re-assignment and EDF dispatch, then refine and reassign deadlines over encoder/decoder splits to exploit weight sharing and reduce blocking (Secs. 4.1–9). 2. Systems mechanisms for dynamic robotics. We design on-demand synchronization with global/local synchronizers (Fig. 6b), extend support to non-partitionable tasks via contention-2aware sub-deadlines, and introduce burst-task management that preserves high-criticality dead-lines under overload (Secs. 4.4, 4.5, 4.6). 3. Robust integration and evaluation. RED integrates with ROS 2 and commodity runtimes, runs on four Jetson platforms and Apple M-series, and improves key metrics across diverse scenarios: versus EDF, it lowers deadline misses by 40.5%, reduces response time by 24.7%, and raises QoE by 34.8%; within ROS 2, it achieves 32.7% shorter response time and 67.3% fewer deadline misses than a ROS 2 EDF scheduler, while incurring low memory and runtime overhead (Secs. 5.2, 5.3, 5.5). Beyond the conference version [67], this article contributes: 1. A formal system model ( §3): Definitions 1–6, Problem (RED-Schedulability), Propositions 1–2, Lemma 1, Corollary 1, with proof sketches. 2. The effective parallelism factor ρ and the per-level capacity bound that incorporates it. 3. The serialisation-margin term ξv in the MIMONet refinement schedulability proposition (Propo-sition 2). 4. The on-demand synchronization layer with formal precedence-preservation lemma (Lemma 1). 5. Burst-task management with ProactiveDrop and the criticality-score formulation ( §4.6). 6. Extended evaluation including the M-series MacBook non-partitionable case study ( §6.3) and ROS 2 integration ( §5.3). Together these constitute approximately 35% additional technical material vs the conference ver-sion, addressing the journal scope and directly responding to the prior-round reviewer concern that the approach “mainly combines well-known strategies”. 
+
+# 2 Background and Motivational Case Study 
+
+Table 1: Models used in our navigation workloads. Each entry lists the reference implementation and dataset. For embedded realism, some models are downscaled (e.g., YOLOv5n for detection; UNet channels reduced to 1 /4).                                     
+
+> Task Model Dataset FLOPs Params Mem arm Mem x86
+> Lane Detection ENet [80] KITTI [34] 4.111G 3.666M 3329MB 3796MB / 2073MB Segmentation UNet [84] KITTI [34] 2.655G 1.943M 3359MB 3752MB / 1261MB Cruise Control AutoPilot [9] Dave [78] 0.465G 2.489M 3680MB 3864MB / 1139MB Object Detection YOLO [83] KITTI [34] 0.283G 5.286M 3593MB 3754MB / 1159MB Multi-tasks MIMONet [66] KITTI [34] 6.704G 10.465M 3718MB 3739MB / 1611MB
+
+This section motivates our design by examining how multi-input multi-output neural networks (MIMONet) behave in robotic settings subject to workload drift and timing pressure. We high-light three stressors—dynamic workload restructuring, structural implications of MIMONet, and asynchronous inference—that together expose limitations of MIMONet-agnostic schedulers. 3A B A B C A BFigure 1: Environmental changes reshape the workload DAG of a running robot. As dynamics intensify, we observe higher deadline-miss and drop rates and longer observed execution times; when dynamics subside, these effects recede. 
+
+Figure 2: MIMONet versus a traditional single-input/single-output (SISO) DNN. The shared en-coder (black dashed region in (b)) maps to black nodes in (d); task-specific decoders (red dashed regions) map to red nodes. This structure invites finer-grained DAG partitioning and MIMONet-aware scheduling. 
+
+2.1 Challenges due to Dynamically Changing Workloads 
+
+Robots operate amidst moving agents and evolving scenes. These changes can rewire the runtime workload DAG by adding or removing tasks and by altering precedence constraints, which in turn perturb timing behavior. We refitted a TurtleBot3 with an NVIDIA Jetson Nano and ran a three-task navigation pipeline derived from Table 1 while the robot shuttled between two waypoints. The execution unfolded in three phases. Initially, two dependent tasks, cruising control followed by segmentation, formed the DAG. When the robot encountered an obstacle at t = 3, an object-detection task was inserted; 4when the obstacle cleared at t = 6, the DAG reverted to its original form. Denote cruising control, segmentation, and detection by A, B, and C, with node deadlines 50 s, 30 s, and 50 s, respectively, derived from execution times under a 130 s end-to-end budget. During the obstacle phase, deadline behavior deteriorated sharply (Fig. 1). The miss/drop rate for B rose from 3.3% to 30.0%, yielding an average deadline-miss rate of 13.0% over (3 , 6) even though the GPU was not fully utilized. Because B is the sink of the DAG, its overruns violate the end-to-end deadline. After removing C at t = 6, B’s miss/drop rate fell to 2.2%. The lesson is straightforward: environmental dynamics reshape the workload DAG faster than naive schedulers can adapt, so timing guarantees require runtime mechanisms that react to structure as well as load. 
+
+Challenge 1. Dynamic environments induce online changes to task sets and dependencies. Meeting end-to-end deadlines demands a scheduler that adapts to these structural shifts in real time. 
+
+2.2 Challenges due to the MIMONet Architecture 
+
+Modern multi-task pipelines commonly share a feature encoder and branch into lightweight, task-specific heads. MIMONet consolidates this pattern into a single model with multiple inputs and out-puts (Fig. 2), improving memory efficiency and reuse of heavy backbone computation—properties that are highly attractive on embedded GPUs. These same properties introduce distinct scheduling considerations: 
+
+• Memory efficiency with shared parameters. Even minimal MIMONet configurations add only modest parameters relative to a comparable set of independent DNNs, while significantly reducing working-set size on both ARM and x86 platforms (Table 1). This makes MIMONet a natural fit for memory-constrained deployments. 
+
+• Naturally partitionable computation. A shared encoder followed by task-specific decoders yields a structure that maps cleanly to finer DAGs: encoder sub-tasks can be shared across mul-tiple heads, whereas decoders remain independent (Fig. 2(b,d)). Leveraging this partitionability enables co-scheduling to amortize encoder work, but it also raises new questions about when to merge or split sub-tasks and how to assign intermediate deadlines across the refined graph. 
+
+Challenge 2. While MIMONet’s structure saves memory and computation, it also requires sched-ulers to reason about encoder/decoder sharing and graph granularity. MIMONet-agnostic policies miss opportunities to reduce recomputation or may introduce avoidable stalls. 
+
+2.3 Challenges due to Asynchronous Inference 
+
+Asynchronous inference arises when tasks launch at different rates or with variable service times. This is common in robotics, where perception, planning, and control loops have distinct cadences and where sensors drift relative to one another. We evaluate a two-task scenario on TurtleBot3 in a cluttered space. Task A (cruising control) runs at 30 Hz; task B (object detection) runs at 33 Hz. Both have 30 ms per-instance deadlines (matching their nominal periods). We consider two cases: A and B independent, and A depending on B. In the independent case, response times distribute uniformly with low miss rates. With a dependency, the slight rate mismatch causes periodic alignment, bursts of contention, and signifi-cantly more deadline misses (Fig. 3). 
+
+Challenge 3. Dependencies within a DAG convert benign rate drift into cascaded blocking. For MIMONet pipelines, encoder sharing further couples tasks, making asynchrony a first-class concern for runtime resource management. 5Figure 3: Asynchrony amplifies timing risk. We compare response-time distributions and task out-comes under two settings: decoupled tasks and tasks with a dependency. Dependencies, combined with slightly different input rates, cause periodic contention and more deadline misses. 
+
+# 3 System Model and Problem Formulation 
+
+This section introduces the formal task model, definitions, and correctness properties on which the scheduler rests. 
+
+3.1 Platform and Workload Assumptions 
+
+We target single-GPU embedded robots, including the four NVIDIA Jetson generations evaluated in Sec. 5 and the Apple M-series unified-memory device evaluated in Sec. 6.3. The scheduler is preemptive at the granularity of CUDA kernels dispatched on independent streams; we do not assume intra-kernel preemption. CPU tasks (sensor preprocessing, ROS 2 callbacks) execute under the underlying PREEMPT RT -style Linux scheduler and are not the timing bottleneck on any of our platforms. Throughout this section, we assume a single GPU per platform. We summarise the GPU’s effective concurrency by a single platform constant ρ ≥ 1 — the effective parallelism factor 
+
+— capturing how many sub-tasks the GPU can usefully run concurrently for the kernels in our workload. We treat ρ as a profiled constant per platform (small for Nano/TX2, larger for AGX Orin) and use it below in the per-level capacity condition of the Problem statement (Sec. 3.4). 
+
+Message transmission between DAG nodes. Inter-node data movement is folded into the receiving node’s WCET ci rather than treated as a separate edge-cost term. Concretely: when predecessor u and successor v are dispatched on the same CUDA stream the dependency is enforced in-stream and incurs no explicit transfer; when u and v are on different streams of the same GPU we insert a cudaStreamWaitEvent barrier on the event recorded at u’s completion; CPU-to-GPU and GPU-to-CPU transitions use cudaMemcpyAsync issued before the receiving kernel launch. 6The corresponding event-wait or memcpy latency is observed during the offline profiling pass that determines cv, so the proportional rule of Definition 4 already accounts for transfer cost without requiring an explicit edge-weight model. 
+
+3.2 Task Model 
+
+A robotic application is modelled as a directed acyclic graph (DAG) 
+
+τ = ( V, E, D ), (1) where V = {v1, . . . , v n} is the set of compute nodes, E ⊆ V × V is the precedence relation, and 
+
+D ∈ R>0 is the end-to-end relative deadline. Each node vi carries a tuple 
+
+vi = ( ci, m i, κ i, π i, r i), (2) in which ci is the worst-case execution time (WCET) measured in isolation on the target platform, 
+
+mi is the GPU-memory footprint, κi ∈ { Partitionable , Atomic } records whether the node may be split (Sec. 4.5), πi ∈ { SharedEncoder , Decoder , Ordinary } records the node’s role in a MIMONet stage, and ri ∈ R≥0 is the predicted next-release timestamp used by the merge predicate of Sec. 4.3 (estimated from the periodic-arrival period Ti when the workload is periodic and from the last observed inter-arrival when it is sporadic). Edges encode precedence: ( vi, v j ) ∈ E denotes a directed edge vi → vj , i.e., vi is a predecessor of vj and vj cannot start until vi completes. This precedence-direction convention is used implicitly by the height function in Definition 2. A workload is a finite collection T = {τ (1) , . . . , τ (K)} of DAGs. Each DAG τ (k) is released at arrival time a(k) with absolute deadline a(k) + D(k). The DAG topology may mutate at run time when the environment changes (Sec. 2.1); when this happens, RED re-runs the assignment over the updated graph. 
+
+3.3 Definitions 
+
+Definition 1 (Source / Sink). A node v ∈ V is a source if its in-degree is zero; it is a sink if its out-degree is zero. 
+
+Definition 2 (Height). The height of a node v is 
+
+H(v) = 
+
+
+
+0 if v is a source ,
+
+1 + max  
+
+> (u,v )∈E
+
+H(u) otherwise. (3) The level set at height h is Lh = {v ∈ V : H(v) = h}, and Hmax (τ ) = max v∈V H(v). 
+
+Definition 3 (Critical-Path Cost). The cost of a source-to-sink path p = ( v1, . . . , v ℓ) is C(p) = Pℓj=1 cvj . The critical-path cost of τ is C⋆(τ ) = max p C(p) over all source-to-sink paths. 
+
+Definition 4 (Proportional Intermediate-Deadline Assignment). For DAG τ = ( V, E, D )with level sets L0, . . . , LHmax , the proportional intermediate deadline allocated to height h is 
+
+D(h) = D ·
+
+P 
+
+> v∈L h
+
+cv
+
+PHmax 
+
+> h′=0
+
+P 
+
+> v∈L h′
+
+cv
+
+. (4) The absolute sub-deadline of node vi at height h, given DAG release time a, is di = a+P 
+
+> h′≤h
+
+D(h′).
+
+Definition 5 (Intermediate-Deadline Schedulability). A workload T is intermediate-deadline schedulable on the target platform under EDF dispatch if every node vi completes by its absolute sub-deadline di when nodes are assigned per Definition 4. 7Definition 6 (MIMONet Refinement). Let v ∈ V be a MIMONet stage that decomposes into a shared encoder vE and q ≥ 1 task-specific decoders vD1 , . . . , v Dq with cvE = cenc  
+
+> v
+
+and 
+
+cvDj = cdec j 
+
+> v
+
+. The MIMONet refinement replaces v with the sub-DAG V ′(v) = {vE } ∪ { vDj }qj=1 
+
+and edges {(vE , v Dj )}qj=1 , splicing the new sources and sinks into the place that v occupied in E.The refined DAG is written τ ′ = Ref( τ ). 
+
+3.4 Problem Formulation 
+
+Problem (RED-Schedulability). Given a (possibly mutating) workload T on a single-GPU embedded platform with effective parallelism factor ρ (Sec. 3.1), design a scheduling policy Π that, after MIMONet refinement (Definition 6) and proportional intermediate-deadline assignment (Def-inition 4), dispatches nodes so that the absolute deadline a(k) +D(k) of every released DAG τ (k) ∈ T 
+
+is met whenever (i) per-node WCETs ci are respected at run time, (ii) for each level h the per-level capacity bound P 
+
+> v∈L h
+
+cv / ρ ≤ D(h) holds (the per-level work, distributed across the ρ-wide effective concurrency, fits in the level’s allotted interval), and (iii) the platform admits the node release pattern. When (i)–(iii) fail (Sec. 4.6), Π should preserve high-criticality completions and shed low-criticality work first. 
+
+3.5 Schedulability and Correctness 
+
+We now state the two correctness properties on which the RED policy rests, together with a supporting lemma on the on-demand synchronizer and a corollary for non-partitionable nodes. 
+
+Proposition 1 (End-to-End Deadline Preservation under Proportional Assignment). 
+
+Let τ = ( V, E, D ) be a DAG and let D(0) , . . . , D (Hmax ) be the proportional intermediate deadlines of Definition 4. If for every height h every node v ∈ L h completes within its assigned interval D(h)
+
+(measured from the latest completion time among its predecessors), then the longest source-to-sink path in τ completes within the end-to-end deadline D.
+
+Proof Sketch. The proof is by induction on h. Base case ( h = 0 ). Each source v ∈ L 0 completes within D(0) measured from release, so the cumulative time of any partial path of length 0 is at most 
+
+D(0) . Inductive step. Assume that every node at level h′ ≤ h − 1 completes within P 
+
+> h′≤h−1
+
+D(h′)
+
+from release. By the precedence rule, a node v ∈ L h starts no earlier than the maximum completion time of its predecessors, all of which lie at levels h′ < h . By the inductive hypothesis this start time is bounded by P 
+
+> h′≤h−1
+
+D(h′). By assumption, v completes within an additional interval D(h),so its absolute completion is bounded by P 
+
+> h′≤h
+
+D(h′). Since PHmax  
+
+> h=0
+
+D(h) = D by construction (Definition 4), every sink and therefore the entire DAG completes within D. ■
+
+Remark on Proposition 1. Proposition 1 is a composition statement: it shows that meeting per-node sub-deadlines is sufficient for the end-to-end deadline. The complementary question— when do per-node sub-deadlines actually hold under EDF dispatch on the target platform? —is answered by combining the proportional rule (Definition 4) with the per-level capacity condition (ii) of the Problem statement, which in turn invokes the platform’s effective parallelism factor ρ (Sec. 3.1). In the regime P 
+
+> v∈L h
+
+cv/ρ ≤ D(h), classical EDF schedulability bounds for parallel real-time tasks [4, 70] guarantee that nodes meet their sub-deadlines on the platform; Proposition 1 then composes these per-level guarantees up to the end-to-end deadline. We make this distinction explicit because the proposition and the per-level capacity condition together—not the proposition alone—constitute the schedulability argument. 
+
+Proposition 2 (MIMONet Refinement Preserves Schedulability with Serialisation Mar-gin). Let τ be a DAG with proportional intermediate deadlines and let τ ′ = Ref( τ ) be its MI-MONet refinement. For every refined stage v, write the refined critical-path cost as crefined  
+
+> v
+
+=8cenc  
+
+> v
+
++ max j cdec j 
+
+> v
+
++ ξv, where ξv ≥ 0 captures the residual decoder serialisation when GPU capacity is saturated; in the ideal regime ρ ≥ q the decoders fit in parallel and ξv = 0 , while in the worst case 
+
+ρ = 1 they serialise and ξv ≤ P 
+
+> j
+
+cdec j 
+
+> v
+
+− max j cdec j 
+
+> v
+
+. If τ is intermediate-deadline schedulable on the target platform, then τ ′ admits a proportional intermediate-deadline assignment under which it is intermediate-deadline schedulable on the same platform with at most P  
+
+> v∈refined( τ)
+
+ξv added to the critical-path cost of τ .
+
+Proof Sketch. For every refined stage v the longest path through the sub-DAG V ′(v) has cost 
+
+crefined  
+
+> v
+
+= cenc  
+
+> v
+
++ max j cdec j 
+
+> v
+
++ ξv. Refining v at height h produces an encoder vE at height h and decoders vDj at height h + 1; the heights of all nodes formerly at ≥ h + 1 are shifted by exactly one to absorb the new decoder layer, so per-level sums change only at the two affected heights. The refinement adds parallelism in the ideal regime ρ ≥ q (ξv = 0, no path lengthening); in the saturated regime ρ < q the residual ξv extends the critical path by at most P 
+
+> j
+
+cdec j 
+
+> v
+
+− max j cdec j
+
+> v
+
+(the worst-case decoder serialisation gap). Re-applying Definition 4 to τ ′ yields a new assignment whose per-level cost sums upper-bound the corresponding sums for τ at the matching height plus the per-level ξv contributions. EDF dispatch on τ ′ therefore meets every sub-deadline whenever it did on τ and the platform’s per-level capacity (Problem condition (ii) above) accommodates the additional ξv terms; Proposition 1 then yields end-to-end schedulability for τ ′ with the stated critical-path margin. ■
+
+Lemma 1 (On-Demand Synchronization Preserves Precedence). If the on-demand syn-chronization layer of Sec. 4.4 emits a barrier whenever (i) every node in a level set Lh has signalled completion, (ii) a shared-encoder output is about to be consumed by any decoder, or (iii) the per-handler FSM transitions from Running to Done , then no node vj begins execution before all its predecessors {u : ( u, v j ) ∈ E} have completed. 
+
+Proof Sketch. Each precedence edge ( u, v ) ∈ E falls into one of three cases. (a) u and v lie in the same DAG with H(u) < H (v). By Definition 2 the height function is monotone along E,so H(v) ≥ H(u) + 1; trigger (i) fires whenever every node at a level ≤ H(v) − 1 has signalled completion, so by transitivity u at H(u) ≤ H(v) − 1 has completed before any v ∈ L H(v) is dispatched. This case covers both adjacent-level edges and edges that skip multiple levels (e.g., a shortcut from L0 to L3 when other paths to the destination are longer). (b) u is a shared encoder and v is one of its decoders within the same refined sub-DAG: trigger (ii) emits the barrier exactly at the encoder-output broadcast point. (c) u has already returned control but its I/O drain is still in flight: trigger (iii) catches the FSM transition before downstream dispatch. Each emitted barrier is a CUDA-stream / thread-level barrier, so by transitivity the partial order on actual completions respects E. ■
+
+Corollary 1 (Empirical Non-Partitionable Schedulability Margin). Let v be a non-partitionable atomic node with deadline Dnp = WCET np + ∆ cont from Eq. (6) . The quantity ∆cont is computed offline by profiling v against the heaviest co-runner mix in T , where heaviness is operationally defined as the configuration that maximises the combined GPU-memory footprint P 
+
+> j
+
+mj over all simultaneously-runnable subsets of co-running nodes (with a tie-breaker on combined WCET P 
+
+> j
+
+cj ). When the deployed contention does not exceed the profiled ∆cont , v completes within Dnp .
+
+We label this corollary empirical because the premise that the profiled contention upper-bounds the deployed contention is itself empirical, not analytic; the analytic deadline guarantee therefore degrades to an empirical one whenever the deployed workload exceeds the profiled envelope. 9Figure 4: High-level architecture of RED. The framework blends intermediate-deadline scheduling, MIMONet-aware DAG refinement/reassignment, and on-demand synchronization to sustain timing guarantees under RED. 
+
+3.6 Computational Complexity 
+
+We summarise the asymptotic cost of the orchestration steps that the RED runtime performs at each release of a DAG τ = ( V, E, D ), in terms of the node count |V |, edge count |E|, the number of co-running DAGs K, the burst-management queue cap Qmax , and the sustained-overload window 
+
+W . (a) Proportional intermediate-deadline assignment per DAG (Definition 4): computing heights via topological sort costs O(|V | + |E|); computing the per-level cost sums and the closed-form D(h)
+
+takes O(|V |). Hence per-DAG cost is O(|V |+|E|). (b) MIMONet refinement and DynamicMerge 
+
+candidate selection per dispatch step (§4.3): pair-wise checking the merge predicate over the zero-indegree frontier S costs O(|S|2), or O(|S| log |S|) when S is first sorted by predicted release time 
+
+ri and the γ-window is swept linearly. In practice |S| ≪ | V | for the workloads in Sec. 5. (c) On-demand synchronization FSM transitions per dispatch cycle (§4.4): each handler FSM advances by O(1) per emitted barrier and the global synchronizer scans at most |V | handlers per cycle, so the per-cycle cost is O(|V |) amortised over the cycle. (d) Integrated Task Orchestration loop per release (Algorithm 2): for K co-running DAGs the per-release cost is O(K · (|V | + |E|)) for assignment, plus O(Qmax ) for the burst-monitor threshold and queue check, plus O(W · K) for the 
+
+W -tick sustained-overload window check. None of these dominate dispatch latency in practice (see overhead analysis in Tab. 5). 
+
+# 4 System Design 
+
+4.1 Overview 
+
+Motivated by the timing pitfalls in Sec. 2, we present RED, a scheduling framework that treats MIMONet workloads as first-class DAGs and reasons explicitly about structure, dynamics, and 10 asynchrony. Our primary deployment target is single-GPU embedded robots—e.g., NVIDIA Jetson Nano, TX2, Xavier, and Orin—where GPU time is the dominant resource for DNN inference. The design remains amenable to multi-GPU extensions with modest changes to placement and synchronization. As shown in Fig. 4, RED comprises three core mechanisms tightly integrated at runtime: ( i)an intermediate-deadline scheduler that adapts to online DAG changes and preserves end-to-end timing (Challenge 1); ( ii ) a MIMONet-guided refinement and deadline re assignment pass that exploits encoder/decoder structure to curb recomputation and blocking (Challenge 2); and ( iii )an event-driven synchronization layer that triggers only when useful, cutting cross-node overhead in asynchronous pipelines (Challenge 3). To widen applicability, we additionally support ( iv )indivisible, non-partitionable tasks as atomic DAG nodes with contention-aware deadlines, and ( v )burst management that preserves high-criticality tasks under overload. 
+
+• Intermediate-deadline policy. We allocate sub-deadlines across the DAG so that meeting per-node goals implies satisfaction of the end-to-end budget. The policy is simple to compute, robust to graph evolution, and effective in practice for embedded constraints. 
+
+• MIMONet-aware refinement & reassignment. We restructure the DAG to reflect shared encoders and task-specific decoders, then realign sub-deadlines to the refined graph. This exposes sharing opportunities and reduces stalls caused by coarse granularity. 
+
+• On-demand synchronization. Instead of periodic barriers, synchronization is emitted when structural or state changes warrant it, reducing needless handshakes and latency under asyn-chrony. 
+
+• Non-partitionable tasks. Atomic kernels are modeled as single nodes with intermediate dead-lines that incorporate worst-case execution and contention delay (Sec. 4.5). 
+
+• Burst handling. The runtime monitors GPU load, queue growth, and deadline slack to shed low-criticality work early when overload is detected (Sec. 4.6). By weaving these pieces together, RED sustains timing correctness in the face of workload reshaping, structural coupling from weight sharing, and misaligned task cadences. The effect is most visible in multi-DAG scenarios and under interference, where redundant compute and unnecessary barriers are eliminated without sacrificing schedulability. 
+
+4.2 Intermediate Deadline Assignment 
+
+Building on the task model and definitions of Sec. 3, RED assigns an intermediate deadline to every node so that meeting all sub-deadlines implies meeting the end-to-end constraint, with the formal guarantee given by Proposition 1. We adopt the proportional rule of Definition 4, restated here for reference: 
+
+D(h) = D ·
+
+P 
+
+> v∈L h
+
+cv
+
+PHmax 
+
+> h′=0
+
+P 
+
+> v∈L h′
+
+cv
+
+,
+
+> Hmax
+
+X
+
+> h=0
+
+D(h) = D. (5) Among plausible strategies, proportional allocation strikes a balance between simplicity and fidelity to per-node cost. Equal division— D(h) = D/ (Hmax + 1)—is appealing for its uniformity but penalizes long-running levels and inflates deadline violations under the same end-to-end budget. Proportional assignment instead tracks heterogeneity in cv and empirically reduces misses on every platform we evaluated (Sec. 5.2). Because every node vi ∈ L h depends only on predecessors at 11 Figure 5: Applying each RED component on a MIMONet-derived DAG. (a) Assign proportional intermediate deadlines to enable EDF-based dispatch. (b) Refine the graph along encoder/decoder boundaries and merge shareable work. (c) Reassign sub-deadlines online to shorten blocking times. 
+
+(d) Replace periodic barriers with on-demand synchronization to eliminate redundant coordination. strictly lower heights h′ < h (Definition 2), meeting per-level deadlines D(h) in order automatically preserves the partial order encoded by E: by the time level h is dispatched, every predecessor at level h′ < h has already met its sub-deadline, so the proportional rule composes with parallelism without violating any precedence edge. Consider the coarse DAG in Fig. 4 with overall budget D = 120 s and node costs cA = 20 s, 
+
+cB = 20 s, cC = 40 s arranged as the chain A → B → C (so A ∈ L 0, B ∈ L 1, C ∈ L 2). Applying Eq. (5) with total cost 20 + 20 + 40 = 80 s, the level shares become D(0) = 120 · 20 /80 = 30 s, 
+
+D(1) = 30 s, and D(2) = 60 s, summing exactly to D; precedence is honored because any node begins as soon as all its predecessors finish. After refinement (Fig. 5 (a) ), the same rule applies at the finer granularity and serves as the baseline for the reassignment step described next. For convenience, the worked example is summarised below as a small text-art DAG and a per-node table: 
+
+[A, c=20s] ---> [B, c=20s] ---> [C, c=40s] height 0 height 1 height 2 
+
+Node Height h Cost cv (s) Level share D(h) (s) Sub-deadline dv (s) 
+
+A 0 20 30 30 
+
+B 1 20 30 60 
+
+C 2 40 60 120 The sub-deadlines dv = a + P 
+
+> h′≤h
+
+D(h′) (with release a = 0) sum the level shares along the chain, so meeting each dv delivers the end-to-end D = 120 s by Proposition 1. 12 Algorithm 1: MIMONet DAG Refinement 
+
+Input : Task-dependency graph G
+
+Output : Refined graph G′, current frontier S, merged bundle eT
+
+Initialize: Granularity threshold γ 
+
+> 1
+
+G′ ← ∅  
+
+> 2
+
+while G̸ = ∅ do  
+
+> 3
+
+Topologically sort G 
+
+> 4
+
+S ← { v ∈ V | indegree( v) = 0 } 
+
+> 5
+
+eT ← DynamicMerge (S, γ ) // Coalesce near-synchronous subtasks  
+
+> 6
+
+G′ ← G′ ∪ eT 
+
+> 7
+
+G ← G \ S 
+
+> 8
+
+end  
+
+> 9
+
+return G′
+
+4.3 MIMONet-driven DAG Scheduling: Refinement and Re-Assignment 
+
+Fine-grained DAG refinement. MIMONet shares a heavy encoder across tasks and branches into lightweight decoders, preserving accuracy with fewer parameters [14, 71]. From a scheduling perspective, co-launching decoders that reuse the same encoder output eliminates redundant com-pute; launching them far apart forces recomputation. To exploit this, RED applies the MIMONet refinement of Definition 6: each MIMONet stage is replaced by a sub-DAG with one shared-encoder node and q decoder nodes, and the refined graph is used for all downstream scheduling. Propo-sition 2 shows that this refinement preserves schedulability whenever the encoder-decoder cost decomposition cv = cenc  
+
+> v
+
++ max j cdec j 
+
+> v
+
+holds. Formally, for the refined directed graph G = ( V ′, E ′) in topological order, the indegree is indegree( v) = {u ∈ V ′ : ( u, v ) ∈ E′} .
+
+Let S be all zero-indegree nodes at the current step. RED then runs the DynamicMerge routine over S, parameterised by a release-time skew threshold γ (default γ = 100 ms in our deployment): two sub-tasks u, v ∈ S are coalesced into a single dispatch unit if and only if (i) they share the same encoder (i.e., πu = πv = SharedEncoder and they refer to the same physical encoder weights), and (ii) their predicted release times satisfy |ru − rv| ≤ γ. The merged unit inherits the smaller of the two sub-deadlines so that EDF dispatch remains conservative, and the encoder output is computed once and broadcast to both decoders (Fig. 5 (b) ). Sub-tasks that do not satisfy (i)–(ii) are left unmerged and dispatched independently. 
+
+MIMONet-driven intermediate-deadline reassignment. After initial allocation, RED sched-ules nodes using EDF with their assigned sub-deadlines. We then recompute sub-deadlines at dis-patch points to reflect observed execution variability and graph updates (e.g., merges, arrivals, or removals). Concretely, the cost estimate cv used in Eq. (5) is replaced at each reassignment by a moving average over the last k observed completions of node v (in our implementation k = 8, falling back to the offline-profiled WCET on the first dispatch); this tightens the slack-tracking ac-curacy of Eq. (7) and reduces the number of pessimistic preemptions and conservative EDF priority inversions that the previous static cv would have triggered. At each reassignment, RED re-applies Eq. (5) to the residual graph (i.e., the sub-DAG of not-yet-completed nodes) using the remaining end-to-end budget D − telapsed ; by construction the new assignment again sums to the residual 13 (c) On -demand Synchronization  
+
+> 5Time
+> (b) Inter -DAG Refinement
+> B2
+> C1
+> A1
+> C2
+> E2
+> D3
+> F2
+> D1
+> D2
+> E1
+> F1
+> B2A1
+> τ1
+> τ2
+> G1
+> F3
+> G2
+> B2
+> C1
+> C2
+> E2
+> D3
+> F2
+> D’
+> F’
+> B2
+> A’ τ1
+> τ2
+> F3
+> G2
+> (a) Intra -DAG Refinement
+> B2
+> C1
+> C2
+> E2
+> D3
+> F2
+> D’
+> F’
+> B2
+> A’ τ1
+> τ2
+> F3
+> G2
+
+(a) Parallel execution across multiple DAGs. Intra-DAG merges amortize shared encoders; inter-DAG batching of same-height nodes raises parallelism; on-demand sync removes redundant waits. End        
+
+> Exception Finish Running
+> Start
+> Idle
+> Run
+> Excep
+> tion
+> Runtime Exception
+> Task Finished
+> Task Assigned
+> OOM Exception
+> Loading Exception
+> Load
+> Restart Shutdown
+
+(b) Handler finite-state machine: astate-transition diagram states cap-ture readiness, running, I/O, OOM, and completion to inform scheduling. Transitions are triggered by handler events. 
+
+Figure 6: Multi-DAG optimizations and control flow in RED. budget, so the end-to-end-budget invariant of Proposition 1 is preserved through every reassign-ment. This online reassignment shortens blocking on shared resources and reduces tail latency, particularly when measured execution deviates from cost estimates or when locks on shared GPU memory incur variable delays (Fig. 5(c)). 
+
+4.4 On-demand Synchronization 
+
+Synchronization is essential for correctness but expensive if overused. Fixed-interval barriers are simple to implement yet trigger regardless of need, inflating overhead and queuing delay. RED replaces these periodic barriers with on-demand events: synchronization occurs when frontier sets complete, when encoder outputs must be shared safely, or when a state transition influences down-stream dispatch (Fig. 5(d)). Crucially, on-demand synchronization still preserves correctness in the precedence-preservation sense formalised by Lemma 1 in Sec. 3.5: the optimisation only suppresses 
+
+unnecessary barriers (e.g., periodic barriers that fire when no precedence edge is yet ready to cross), never the required barriers identified by triggers (i)–(iii) of Lemma 1, so no node vj ever begins execution before all its predecessors {u : ( u, v j ) ∈ E} have completed. 
+
+Global and local synchronizers. A global synchronizer coordinates application-wide progress: it polls the scheduler, issues control signals to handlers, and collects completion feedback. Each handler maintains a local synchronizer backed by a compact FSM (Fig. 6b) that tracks inter-nal readiness, memory availability, and I/O states. Local transitions prompt notifications to the controller, enabling timely rescheduling decisions. Both synchronizers use lightweight spin-lock con-structs to minimize latency at the expense of modest CPU usage, a trade-off that proved beneficial on embedded SoCs. 
+
+Multi-DAG execution. In workloads with several DAGs, RED applies intra-DAG refinement to cut redundant compute and then batches independent nodes at the same height across DAGs to exploit parallel resources (Fig. 6a). Synchronization is deferred to height boundaries by default, and only emitted once all nodes at that level complete, further reducing coordination overhead. 
+
+4.5 Support for Non-partitionable Tasks 
+
+RED is designed to support a wide spectrum of heterogeneous workloads beyond its primary target of MIMONet-style pipelines. This includes general-purpose GPU workloads commonly found in 14 robotics, perception, and real-time analytics, in more realistic scenarios. In many such cases, tasks may be inherently non-partitionable due to algorithmic constraints, data dependencies, or monolithic kernel design. While MIMONet tasks lend themselves well to decomposition, more general GPU workloads, such as large monolithic DNN kernels or legacy GPU routines, may be atomic and cannot be split across processing units. Our system explicitly accounts for such non-partitionable tasks by modeling them as indivisible DAG nodes. Supporting non-partitionable tasks requires integrating them as atomic DAG nodes that cannot be further split. To guarantee their timely completion, we compute an intermediate deadline for each non-partitionable task as: 
+
+Dnp = WCET np + ∆ cont , (6) where Dnp is the intermediate deadline assigned to a non-partitionable (atomic) task, WCET np 
+
+denotes the worst-case execution time of that task when running in isolation, and ∆ cont represents the maximum delay due to resource contention (e.g., GPU memory arbitration, bus contention). By incorporating ∆ cont , we ensure any extra delay is anticipated. In our deployment, ∆ cont is obtained via offline profiling: during a one-time profiling pass on each platform we co-run the atomic node with the heaviest co-runner mix observed in T (the cross product of perception, segmentation, and detection workloads from Tab. 1) and record the maximum observed delay; the resulting ∆ cont is the upper bound used at run time. Corollary 1 in Sec. 3.5 then formalises the resulting schedulability margin. ∆ cont is therefore an empirical p99-style upper bound (we use the maximum observed delay across the profiling pass), and the resulting deadline guarantee for atomic nodes degrades gracefully to an empirical guarantee whenever the deployed contention exceeds the profiled envelope. During runtime, our framework enforces these deadlines by prioritizing tasks with smaller Dnp when contention is detected, thereby maintaining overall schedulability without splitting atomic tasks. 
+
+4.6 Burst Task Scenarios Management 
+
+In general deployment scenarios, runtime environments often exhibit dynamic and unpredictable workload patterns, due to factors such as sensor surges, external interrupts, or background kernel activities. To maintain robustness under such environmental uncertainty, RED incorporates a proactive burst-management mechanism that adaptively mitigates transient overloads through early response strategies. RED handles burst task scenarios through continuous monitoring of system health metrics, including GPU utilization ( UGPU ), queue length ( Qlen ), and deadline slack ( Si). We define: UGPU as current GPU usage percentage, Qlen as current length of the ready-task queue, and Si = Di − t as slack time for task i, where Di is its intermediate deadline and t is the elapsed time since its release. When a sustained overload is detected, i.e., UGPU > θ u or Qlen > Q max for at least W consecu-tive scheduler ticks, the scheduler invokes ProactiveDrop (Algorithm 2). In our deployment we set θu = 0 .90, Qmax = 8, and W = 3 ticks (each tick is one scheduler quantum, ≈ 5 ms on Jetson Orin); these defaults were tuned by hand on a held-out validation slice and are kept fixed across all evaluation scenarios. We do not claim a full sensitivity sweep over ( θu, Q max , W ); under the heavy-burst regime of Tab. 10, platform capacity rather than the threshold values dominates the miss-rate outcome, and porting these defaults to a substantially different platform would benefit from a brief calibration pass. Tasks are scored by criticality: 
+
+Ci = min 
+
+
+
+1, max  0, 1 − Si
+
+> di
+
+
+
+, (7) where di is the per-node intermediate sub-deadline (Definition 4) for partitionable nodes, or Dnp 
+
+15 Algorithm 2: Integrated Task Orchestration 
+
+Input : DAG Task τ , End-to-end deadline D, MIMONet Model M , Timing Requirements Treq 
+
+Output: Scheduled Task Execution  
+
+> 1
+
+τ ′ ← IntermediateDeadlineAssignment (τ, D );  
+
+> 2
+
+τ ′ ← MIMONetDAGRefinement (τ ′, M );  
+
+> 3
+
+InitializeSynchronizers (Treq );  
+
+> 4
+
+while not all tasks τi in τ ′ are completed do  
+
+> 5
+
+MonitorSystemMetrics ();  
+
+> 6
+
+if system overload detected then  
+
+> 7
+
+τ ′ ← ProactiveDrop (τ ′) 
+
+> 8
+
+end  
+
+> 9
+
+OnDemandSynchronization ();  
+
+> 10
+
+τnext ← NextTaskToSchedule (τ ′);  
+
+> 11
+
+τ ′ ← MIMONetDAGReAssignment (τ ′, τ next );  
+
+> 12
+
+ExecuteTask (τnext );  
+
+> 13
+
+end 
+
+from Eq. (6) for atomic nodes, and Si = di − t is the slack (clipped to [0 , d i] in the score so that already-missed tasks receive maximum criticality and over-slack tasks receive zero criticality). Tasks with lower Ci are dropped first, preserving high-criticality tasks. This mechanism ensures that, under burst conditions, tasks closest to their deadlines or with heavier workloads receive appropriate scheduling attention, thereby preserving timeliness and stability. We note that proactive shedding is a soft-real-time mechanism: when the platform is structurally under-provisioned (Sec. 6.4, Tab. 10), no scheduler can recover all deadlines, and the role of ProactiveDrop is to preserve the highest-criticality completions rather than to guarantee zero misses. Based on all modules above, the overall integrated task orchestration algorithm is presented in Algorithm 2. 
+
+# 5 Evaluation 
+
+In this section, we test our full implementation of RED on top of the PyTorch framework with an extensive set of evaluations. We explore its overall effectiveness under different deadline configura-tions, from tight to relaxed deadlines, across several hardware platforms with distinct characteristics (Sec. 5.2). This evaluation aims to demonstrate the general usability and flexibility of RED in a wide range of scenarios. Next, we delve into a practical case study, integrating RED with ROS2 on NVIDIA IoT AI, to understand its effectiveness and adaptability in real-world, complex situations (Sec. 5.3). This highlights how seamlessly our solution can be integrated with ROS, an aspect we introduced in the introduction. Additionally, we conduct a parameter study to demonstrate RED’s flexibility in handling varying deadline settings (Sec. 5.4). We then evaluate the computational overhead of the RED framework (Sec. 5.5), providing insight into its operational costs. 
+
+5.1 Experimental Setups 
+
+This section details a comprehensive evaluation setup, complete with varying hardware platforms, a diverse set of tasks, and a range of deadline configurations, designed to thoroughly test the RED framework under a variety of conditions. This breadth of testing helps ensure that RED can deliver 16 Table 2: Hardware platforms used in our experiments.                         
+
+> Nano TX2 Xavier Orin
+> CPU 4-core ARM 6-core ARM 8-core Armv8.2 12-core Armv8.2 Cortex-A57 CPU Cortex-A57 CPU Carmel CPU Cortex-A78AE @ 1.43GHz @ 1.70GHz @ 2.03GHz @ 2.20GHz GPU NV Maxwell GPU NV Volta GPU NV Volta GPU NV Ampere GPU Memory 4GB LPDDR4 8GB LPDDR4 16GB LPDDR4x 32GB LPDDR5 Storage 16GB eMMC 5.1 32GB eMMC 5.1 32GB eMMC 5.1 64GB eMMC 5.1
+
+consistent, high-quality performance across many potential use-cases in robotic navigation. 
+
+Testbeds. We use pre-trained models or train DNNs following the original paper’s setting on a server with Intel(R) Xeon(R) CPU E5-2650 and a GeForce RTX 2080 Ti GPU. We conduct forward inference experiments on four NVIDIA autonomous embedded platforms as shown in Table 2. These platforms are widely used in robotics research [82] applied as the mainboard of various well-known industrial robots, e.g., Duckiebot [75], SparkFun Jetbot [76], Waveshare Jetbot [77], etc. 
+
+Metrics. We evaluate our system’s performance primarily through three critical metrics: latency, deadline miss rate, and Quality of Experience (QoE) score. Latency is the time taken for a request to be processed and returned, with lower times indicating faster responses. The deadline miss rate is the proportion of tasks that fail to meet their specified deadlines, which we aim to minimize. Lastly, we define the QoE score (detailed in Eq.8) motivated by [55], providing a comprehensive measure of user satisfaction in soft real-time systems by considering aspects such as responsiveness, reliability, and overall service quality. 
+
+QoEScore (r) = 11 + eλ[max (0 , C r − Sr)] (8) Here, Cr represents the execution time of the inference task r, and Sr is the slack of task r. λ is a hyper-parameter controlling latency tolerance. This metric refers to the exponential distribution, and for this study, we set λ to 1. By closely monitoring and optimizing these metrics, we ensure a seamless and efficient user experience. 
+
+Baselines. We implement the RED scheduling framework (refer Sec. 4.1), which leverages a single MIMONet model to adhere to memory constraints in robotic embedded deployment. We compare RED against these baselines 1: (1) EDF [70]: a strict version of the classical earliest-deadline-first dispatch on the unrefined DAG; it is deadline-aware but MIMONet-agnostic, with no refinement and no on-demand synchronization, and serves as a deadline-aware lower-bound baseline against which the value of refinement and on-demand synchronization can be measured; (2) RED-FG :fine-grained MIMONet partitioning with proportional deadline assignment [79] followed by EDF dispatch; this isolates the contribution of MIMONet-aware DAG refinement (Definition 6) on top of EDF, with intermediate-deadline assignment held to its initial proportional values; (3) RED-IDA :RED-FG augmented with optimised online intermediate-deadline reassignment ( §9); this isolates the additional contribution of online deadline reassignment on top of the refined DAG and serves as the strongest ablation baseline; and (4) RED : the full system combining fine-grained DAG refinement, optimised online IDA, and the on-demand synchronization layer of §4.4, exposing the cumulative effect of all three pillars. We note that direct comparison against full real-time-DNN  
+
+> 1Recall that most of the existing DAG scheduling methods could not handle dynamically changing workloads and thus are not applicable to our problem scope. To our knowledge, one feasible solution to handle the dynami-cally changing workload scenario is the classical intermediate deadline assignment method designed for scheduling DAGs [79, 70], which we evaluated as one of the baselines.
+
+17 Nano TX2 Xavier Orin                   
+
+> 0.0
+> 2.5
+> 5.0
+> 7.5
+> 10.0
+> End To End Response Time [s]  Loose Deadline
+> Nano TX2 Xavier Orin
+> 0.0
+> 2.5
+> 5.0
+> 7.5
+> 10.0
+> End To End Response Time [s]  Tight Deadline
+> Nano TX2 Xavier Orin
+> 0.0
+> 0.2
+> 0.4
+> 0.6
+> 0.8
+> 1.0
+> Deadline Miss Rate [%]
+> Loose Deadline
+> Nano TX2 Xavier Orin
+> 0.4
+> 0.6
+> 0.8
+> 1.0
+> Deadline Miss Rate [%]
+> Tight Deadline
+> Nano TX2 Xavier Orin
+> 0.7
+> 0.8
+> 0.9
+> 1.0
+> QoE Score
+> Loose Deadline
+> Nano TX2 Xavier Orin
+> 0.2
+> 0.4
+> 0.6
+> 0.8
+> 1.0
+> QoE Score
+> Tight Deadline
+> EDF RED-FG RED-IDA RED
+
+Figure 7: Overall effectiveness of RED evaluated on four different resource-constrained intelligent robotic systems. RED optimizes throughput, real-time performance, and QoE, demonstrating substantial improvements over baseline methods. 100 125 150 175 200               
+
+> 0.00
+> 0.01
+> 0.02
+> Relative Frequency  Nano
+> 75 100 125 150 175 200
+> 0.00
+> 0.02
+> Relative Frequency  TX2
+> 30 40 50 60 70 80
+> 0.000
+> 0.025
+> 0.050
+> Relative Frequency  Xavier
+> 30 40 50 60
+> 0.00
+> 0.05
+> 0.10
+> Relative Frequency  Orin
+> EDF RED
+
+Figure 8: Response time histogram of RED across different embedded platforms compared to EDF. 0            
+
+> 5
+> 10
+> End To End Response Time [ms]
+> 7313ms Deadline
+> 0
+> 5
+> 10
+> 9750ms Deadline
+> 0
+> 5
+> 10
+> 12188ms Deadline
+> Light Medium Heavy Overload
+> 0
+> 25
+> 50
+> 75
+> 100
+> Deadline Miss Rate [%]
+> Workload Intensity
+> Light Medium Heavy Overload
+> 0
+> 25
+> 50
+> 75
+> 100
+> Workload Intensity
+> Light Medium Heavy Overload
+> 0
+> 25
+> 50
+> 75
+> 100
+> Workload Intensity
+> EDF RED-FG RED-IDA RED
+
+Figure 9: A practical case study on ROS2 in-volving a camera input with multiple inference outputs on Xavier. frameworks such as S 3DNN [114] and ApNet (RTSS’18) is not applicable: those systems target static, single-DNN inference pipelines and do not support MIMONet-style multi-input multi-output structures or graph mutation, so adapting them as baselines would require re-architecting their core dispatch logic and would no longer reflect their published behavior. 
+
+Minibenchmark. To examine the temporal correctness and throughput performance of the scheduling approach in a dynamic robotic environment, we establish a mini-benchmark employ-ing deep learning tasks as in Tab. 1. We configure a sequential three-stage task pipeline for two different driving scenarios: obstacle-free cruising and obstacle cruising. In the obstacle-free case, the three stages consist of (1) lane detection (L), (2) segmentation (S), and (3) cruise control (C). For obstacle cruising, the second stage is modified to include an additional object detection task, becoming segmentation + object detection (S+O), while stages one and three remain the same (L and C, respectively). Each scenario is executed ten times, forming an end-to-end pipeline where each stage must complete before the next begins. The end-to-end deadline for each deep learning task instance is platform-specific and based on worst-case execution time (WCET), tested under two configurations: tight and loose. Specifically, the tight and loose deadlines are set to 9815ms and 11325ms for Nano; 8400ms and 10080ms for TX2; 6500ms and 7315ms for Xavier; and 2400ms and 3600ms for Orin. We set the hyperparameter γ as 100ms. Notably, during these mini-benchmark workloads, GPU utilization consistently reaches nearly 100%, indicating that modern DNN infer-ence is highly GPU-intensive and can saturate the parallel compute capacity available on embedded hardware platforms. 18 5.2 Overall Effectiveness 
+
+In this section, we conduct a comprehensive evaluation study of RED, taking into account all its components. Our design aims to optimize system throughput, real-time performance, and quality of experience (QoE). 
+
+End-to-end Latency. As depicted in Fig. 7, RED consistently outperforms the baseline ap-proaches under all variant deadline settings. The average latency is reduced by 24.7%, 17.3%, and 14.2% compared to EDF, RED-IDA, and RED-FG, respectively, indicating that the full design of RED delivers a meaningful end-to-end latency reduction beyond what either subcomponent can achieve in isolation. Furthermore, RED-FG and RED-IDA both outperform EDF in seven out of eight settings, showing that finer-grained partitioning and intermediate deadline assignment are themselves generally beneficial. Delving into the details, we observe that RED-FG and RED-IDA significantly outperform EDF in all loose deadline settings, while under tight deadline settings they outperform EDF in three out of four cases correspondingly. This suggests that the subcomponents of RED are most effective when there is at least modest slack to exploit, whereas under very tight deadlines the search space for beneficial reordering and slack redistribution becomes narrower. To further demonstrate the effectiveness of our proposed RED, we show the histogram of task-level response time in the case of tight and loose deadline setting, respectively. As depicted in Fig. 8, the response time histogram of the proposed RED compared with EDF exhibits a clear leftward shift and a significantly lighter tail, illustrating that RED not only reduces mean latency but also compresses the distribution of response times, thereby improving latency robustness and temporal predictability across a wide range of operating conditions. The lighter right tail directly bounds the empirical p99 and p99.9 response times under RED below the corresponding EDF tail (the histogram’s rightmost non-zero bin in Fig. 8 sits to the left of EDF’s), which is the property that matters most for hard-deadline robotic control loops where the worst case dominates correctness. 
+
+Real-time Performance. Fig. 7 illustrates the deadline miss rate for different approaches tested on four embedded devices. The results reveal that our proposed RED achieves superior real-time performance, surpassing the baselines considerably. Specifically, RED significantly outperforms the baseline approaches under nearly all settings, with an average deadline miss rate lower than that of EDF, RED-IDA, and RED-FG by 40.5%, 37.8%, and 37.5%, respectively. Interestingly, we observe that merely applying finer-grained DAG partitioning (RED-FG) and further implementing optimized intermediate deadline assignments (RED-IDA) results in only marginal improvements over the EDF baseline, with decreases in miss rate of 4.8% and 4.4%, respectively. This limited benefit can be attributed to various factors, most notably the high synchronization overhead and the fact that these schemes still enforce rigid global ordering constraints even when the system is lightly loaded. In contrast, RED’s on-demand synchronization mechanism selectively synchronizes only when queueing or slack metrics indicate that a local delay is about to propagate, thereby avoiding unnecessary barriers. This design choice allows RED to retain the advantages of fine-grained partitioning and better deadline propagation, while eliminating much of the coordination overhead that otherwise erodes real-time performance. 
+
+Quality of Service. In the embedded system scenario, imposing a stringent deadline on the heavy MIMONet workload often results in missed deadlines, as shown in Fig. 7. This section investigates the potential of RED in enhancing the quality of experience (QoE) across various settings, following the methodology outlined in [55]. Fig. 7 presents the QoE for different approaches evaluated on four embedded devices. The findings demonstrate that RED consistently achieves superior QoE, significantly outperforming the baseline methods. In particular, RED surpasses the QoE scores of EDF, RED-IDA, and RED-FG on average by 34.8%, 34.2%, and 15.9%, respectively. In the loose deadline setting, RED exceeds others by a relatively smaller margin on average (13.1%, 9.8%, 19 and 1.4%), indicating that when timing pressure is low, all methods can maintain reasonably good user experience. Conversely, in the tight deadline setting, the baseline candidates exhibit markedly lower QoE, with RED significantly outperforming them on average by 76.4%, 84.7%, and 40.4%. Notably, in specific scenarios such as TX2-tight, EDF’s QoE score is a mere 0.222, while RED achieves a QoE of 1.0, which is approximately 4.5 × higher than the EDF baseline (1.0/0.222 = 4.50). This gap reflects not only fewer deadline misses, but also smoother frame pacing and fewer extreme slowdowns, which directly translate into more stable visual feedback and control responses. The headline averages above are computed across all four platforms and both deadline tightness levels (4 platforms × 2 deadline settings, n = 8 configurations); the per-configuration breakdown is reported in Fig. 7 and Tab. 4, where the win is uniform across configurations rather than driven by a few favorable cases. In summary, RED consistently delivers superior QoE across various settings in MIMONet workload systems, outperforming baseline methods by substantial margins, particularly under tight deadline constraints where users are most sensitive to latency spikes and visual or control jitter. 
+
+On-device overall effectiveness : RED effectively addresses all challenges outlined in Sec.2 for resource-constrained intelligent robotic systems. It optimizes throughput, real-time per-formance, and QoE in MIMONet workload systems, demonstrating substantial improvements over baseline methods, especially under tight deadline constraints. 
+
+5.3 A Practical Case Study on ROS2 
+
+We implemented a practical case study on the Robot Operating System 2 (ROS2) utilizing the open-source NVIDIA IoT AI framework [46]. Specifically, we focused on a realistic robotic application involving a camera input with multiple inference outputs, including lane detection, segmentation, cruise control, and object detection. And we comprehensively evaluate the effect of RED working under different GPU interference intensities. To support MIMONet’s inference, we modified the open-source library provided by NVIDIA. As shown in Fig. 9, unlike traditional single-task DNNs requiring deployment across multiple ROS nodes, we deployed the MIMONet model on a single ROS node. This modification significantly reduced the communication overhead intrinsic to ROS while enhancing the controllability of each module. Additionally, we simulate a camera mounted on a car, abstract as a node in ROS2. The MIMONet model processed this data to produce outputs for several deep learning models, as mentioned before. To conduct a fair comparison, we fully implement EDF, RED, and its ablations built on ROS2, strictly following our design. As depicted in Fig. 9. Quantitative results from this case study demonstrated the superior performance of the MIMONet model deployed on a single ROS node compared to traditional single-task DNNs deployed on multiple nodes. Compared to the EDF scheduler built upon ROS2, RED provides consistently lower deadline miss rates on average by 67.3% and 32.7% lower response time. These significant improvements underline the practical usability of MIMONet models in integrating with real-world ROS2 systems. We emphasize that in most interference scenarios, RED integrated with ROS2 consistently has better timing performance than all the ablations and baseline EDF by a large margin. 
+
+Practical Usability : This case study demonstrates the practical deployment of RED on ROS2-based robotic applications. RED significantly reduces latency and improves deadline compliance, highlighting the usability of RED in complex robotic navigation scenarios. 20 Table 3: End-to-end latency of different approaches under variant deadline settings on Xavier. A larger deadline-setting ID indicates a looser deadline. The best values are in bold. Deadline Setting ID 1 2 3 4 5 6EDF 5869 6807 6865 7760 8737 9694 RED-FG 5883 6006 6803 7856 8723 9688 RED-IDA 4950 4929 6691 7465 8313 9045 RED 4455 4435 4456 4500 5930 6779 
+
+Table 4: QoE scores of different approaches under variant hyperparameter settings across four embedded platforms. Larger λ indicates higher QoE requirements. The best values are in bold. Platform Nano TX2                                                                                                       
+
+> λ0.001 0.01 0.1 1.0 10.0 0.001 0.01 0.1 1.0 10.0 EDF 0.256 0.254 0.238 0.113 0.001 0.420 0.418 0.399 0.222 0.003 RED-FG 0.248 0.246 0.230 0.108 0.001 0.473 0.470 0.448 0.248 0.001 RED-IDA 0.306 0.304 0.285 0.140 0.002 0.638 0.636 0.615 0.395 0.001 RED 0.461 0.460 0.437 0.240 0.004 1.000 1.000 1.000 1.000 1.000
+> Platform Xavier Orin
+> λ0.001 0.01 0.1 1.0 10.0 0.001 0.01 0.1 1.0 10.0 EDF 0.748 0.746 0.735 0.616 0.003 0.973 0.972 0.971 0.954 0.878 RED-FG 0.525 0.523 0.501 0.295 0.005 0.953 0.952 0.951 0.931 0.893 RED-IDA 0.946 0.945 0.942 0.902 0.500 0.973 0.973 0.971 0.956 0.900 RED 0.999 0.999 0.998 0.996 0.900 0.990 0.990 0.989 0.984 0.960
+
+5.4 Adaptability under Different Scenarios 
+
+Adaptability to variant deadlines. To investigate the adaptability of the RED system to var-ious end-to-end deadlines, we conducted a parameter study on the NVIDIA Jetson AGX Xavier platform. This study evaluates the system’s performance under different deadlines, ranging from tight to loose. In real-world scenarios, end-to-end deadlines can change due to environmental dy-namics, and a robust system should adapt to these changes to meet the required deadlines. As depicted in Tab. 3, RED outperforms the baseline approaches under all deadline settings, with an average latency less than EDF, RED-IDA, and RED-FG, on average by 23.2%, 20.1%, and 17.1%, respectively. This suggests that RED can adapt to varying end-to-end deadlines by applying a MIMONet-aware intermediate deadline assignment policy integrated with dynamic DAG recon-struction, even in the face of environmental dynamics. Moreover, by incorporating components of RED, the end-to-end response time gradually decreases, significantly outperforming the EDF baseline. This observation further supports the idea that each component of our proposed RED contributes to increasing throughput and fully utilizing system resources to achieve a fast response time. 
+
+Adaptability to variant QoE requirements. To assess the versatility of our tool in the con-text of diverse QoE requirements, we maintained the workload intensity at a constant level while adjusting the hyperparameter λ of the QoE metrics, as defined in Eq. 8. This experiment was performed across four unique embedded devices using a stringent tight deadline benchmark as de-fined in Sec. 5.1. As depicted in Table 4, our RED consistently outperforms the alternatives across an extensive range of hyperparameter λ values, varying from 0.001 to 10. This result holds true under constant workload conditions, demonstrating the adaptability of our tool to different system settings. 
+
+Robust Adaptability : RED demonstrates exceptional adaptability under varied end-to-end deadlines and QoE requirements. It consistently outperforms baselines across multiple platforms and scenarios, showcasing its robustness and efficacy in dynamic environments. 21 5.5 Overhead Analysis 
+
+Memory Overhead. Our method demonstrates exceptional memory efficiency, with minimal overhead, as detailed in Table 5(a) and (b). As expected, our highly efficient implementation en-sures low memory overhead values for both the scheduler and synchronization components, with the scheduler being particularly modest. However, it is noteworthy that the on-demand synchro-nization components slightly compromise memory efficiency to enhance latency through reduced context switching between processes. As discussed in Sec. 4.4, on-demand synchronization is im-plemented to decrease code design space coupling, thereby increasing reusability. This approach leads to increased memory overhead due to complex inter-process communication. Future work may consider a potentially more memory-efficient alternative, such as implementing our solution in a multithreading manner, though this may trade off implementation complexity and reusability. Notably, the overhead ratios consistently remain low across four different hardware platforms and configurations, evidencing the memory efficiency of our approach. 
+
+Execution Overhead. In addition to memory overhead, the execution overhead of our proposed method is also critical. Tab. 5(c) shows the runtime execution overhead of RED and the profiling overhead for each testing platform. The first line of table showcases the remarkably low runtime execution overhead due to the efficient implementation of the RED framework. The scheduling overhead for NVIDIA Jetson Orin is significantly lower, potentially due to its utilization of a newer Linux kernel version. The main source of execution time overhead arises from scheduling decision-making. One potential strategy to reduce such overheads in future work involves employing finer-grained locks, especially when adapting to more stringent resource-constrained scenarios. Compared to latency data, the runtime overhead remains reasonably low, further underscoring the effectiveness of our approach. The second line of the table examines the profiling overhead of RED. The offline profile overhead is deemed acceptable, even on the Jetson Nano, which displays the largest absolute overhead value of merely 51.1 seconds (approximately 1 minute). Importantly, for a fixed system configuration, the offline profile requires only a one-time effort, thus easing its integration into continuous integration and deployment of RED. 
+
+Per-pillar overhead breakdown (qualitative). The runtime overhead reported in Tab. 5(c) decomposes across the RED pillars in the following qualitative ordering, derived from per-pillar code-path complexity (instruction counts and lock acquisitions in the implementation) rather than from a fresh stopwatch run; we keep this attribution qualitative because we did not introduce new instrumentation in this revision, and a precise per-pillar split would require additional measure-ments that are out of scope here. The dominant runtime term is the MIMONet refinement and on-line reassignment of Sec. 4.3 ( DynamicMerge candidate selection, encoder-broadcast book-keeping, and the per-dispatch reassignment step), followed by the on-demand synchronization layer of Sec. 4.4 (FSM transitions and barrier emission). The proportional intermediate-deadline assign-ment of Sec. 4.2 contributes a smaller share (level-set hash maintenance and the closed-form D(h)
+
+computation), and burst-management monitoring (Sec. 4.6) is the smallest term (counter reads against θu and Qmax ). The memory rows in Tab. 5(a)–(b) confirm that the synchronization layer is Table 5: Memory and runtime overhead of applying RED across platforms. Left: memory overhead (raw and ratio). Right: runtime and profiling overhead. (a) Memory Overhead (Raw) (b) Memory Overhead Ratio (c) Runtime and Profiling Overhead Scheduler Sync Nano TX2 Xavier Orin Platform Nano TX2 Xavier Orin Tight 5 KB 40.1 MB 1.00% 0.50% 0.25% 0.13% Runtime (ms) 27.3 26.9 17.4 1.2 Loose 3 KB 36.9 MB 0.92% 0.46% 0.23% 0.12% Profiling (s) 51.1 34.3 19.1 16.1 22 the dominant memory consumer, matching the design choice noted earlier in this section to favor latency over memory in the synchronization implementation. 
+
+Low overhead : Our method demonstrates not only impressive memory efficiency but also low execution overhead across various platforms. The efficient implementation of the RED framework, as well as the modest overhead incurred by the scheduler and synchronization components, contribute significantly to these outcomes. 
+
+# 6 Extended Evaluation 
+
+6.1 Experimental Setups. 
+
+This section details a comprehensive evaluation setup, complete with varying hardware platforms, a diverse set of tasks, and a range of deadline configurations, designed to thoroughly test the RED framework under a variety of conditions. This breadth of testing helps ensure that RED can deliver consistent, high-quality performance in robotic navigation. We use the same metrics as used in Sec. 5.1 in this extended evaluation. 
+
+Hardware Platforms. To validate the generality of our approach across heterogeneous systems, we conduct extended experiments on three representative hardware platforms as shown in Table 6. The Jetson Nano Orin is an updated version of Nano in the previous evaluation section (Sec. 5), equipped with a 6-core Cortex-A78AE CPU, an Ampere GPU, and 8 GB of LPDDR5 memory, and represents a lightweight edge device suitable for cost-sensitive robotic deployments. The AGX Orin is the same device as “Orin” in Sec. 5, with a more powerful 12-core Cortex-A78AE CPU, Ampere GPU, and 32 GB of LPDDR5 memory, exemplifying a high-end embedded GPU plat-form widely adopted in autonomous robotics. Finally, the MacBook Pro with the Apple M3 Max chip, integrating a 14-core CPU, 32-core GPU, and 36 GB of unified memory, serves as a repre-sentative general-purpose computing platform with ample resources. Together, these devices span low-power embedded systems to high-performance laptops, ensuring that our evaluation captures diverse deployment scenarios. 
+
+Comprehensive Minibenchmark. To evaluate RED’s ability to handle diverse environmental dynamics, we extend our mini-benchmark to five representative robotic scenarios as in Tab. 7. Each scenario still follows a three-stage pipeline (perception → environment understanding → control), Table 6: Hardware platforms used in extended experiments.               
+
+> Nano Orin AGX Orin MacBook Pro (M3 Max)
+> CPU 6-core Cortex-A78AE v8.2 12-core ARMv8.2 (Cortex-A78AE) 14-core (10P + 4E) GPU Ampere GPU Ampere GPU 32-core Memory 8 GB LPDDR5, 128-bit 32 GB LPDDR5 36 GB unified memory Storage 1 TB SSD 64 GB eMMC or NVMe 1 TB SSD
+
+Table 7: Expanded minibenchmark scenarios (L=lane-detection, S=segmentation, O=object-detection, C=control).                   
+
+> Scenario Stage 1 Stage 2 Stage 3
+> Obstacle-free cruising LSCObstacle cruising LS+O CUrban navigation L+O S+O CEmergency obstacle avoidance OL+S CNight driving CCC
+
+23 Table 8: Overall performance of RED evaluated on extended minibenchmarks, resource-constrained intelligent robotic systems. Platform Urban Navigation Emergency Obstacle Avoidance Night Driving EDF RED-FG RED-IDA RED EDF RED-FG RED-IDA RED EDF RED-FG RED-IDA RED End-to-end Latency Nano Orin 32.24 29.16 31.37 23.04 24.88 23.02 25.16 22.20 16.07 16.42 16.31 13.65                                                                                                 
+
+> AGX Orin 27.90 27.94 24.65 14.24 21.93 21.90 18.76 13.70 13.96 14.00 11.35 12.25 MacBook Pro 7.76 7.77 4.12 3.20 3.45 3.45 2.63 2.27 1.44 1.44 1.16 1.15
+> Deadline Miss Rate Nano Orin 1.00 1.00 1.00 0.17 1.00 1.00 1.00 0.43 1.00 1.00 1.00 0.97
+> AGX Orin 0.52 0.07 0.02 0.00 0.38 0.03 0.13 0.00 0.17 0.27 0.13 0.03
+> MacBook Pro 0.00 0.00 0.00 0.00 0.28 0.03 0.00 0.00 0.00 0.03 0.00 0.00
+> QoE Nano Orin 0.06 0.07 0.06 0.14 0.11 0.14 0.11 0.17 0.39 0.34 0.35 1.00
+> AGX Orin 0.08 0.08 0.11 1.00 0.15 0.15 0.30 1.00 1.00 1.00 1.00 1.00
+> MacBook Pro 0.35 0.35 1.00 1.00 0.63 0.63 1.00 1.00 1.00 1.00 1.00 1.00
+
+and we execute each 10 × per platform. This diversity ensures we cover a spectrum from benign to safety-critical tasks, verifying that RED maintains low miss-rates and adapts gracefully to workload changes. 
+
+6.2 Overall Effectiveness 
+
+We comprehensively evaluate RED across all key metrics: throughput, real-time performance, and quality of experience (QoE), using the same setup as the baselines across extended minibenchmark scenarios, as shown in Tab. 8. We measured the new running times to update the experimental configuration in the extended minibenchmark. 
+
+End-to-end Latency. Across all extended scenarios, RED consistently delivers the lowest end-to-end latency among all four schedulers: EDF, RED-FG, RED-IDA, and RED. On AGX Orin, EDF reaches 27.90 s in urban navigation, RED-FG reduces this to 27.94 s, RED-IDA further lowers it to 24.65 s, and RED achieves the best performance at 14.24 s, corresponding to latency reduc-tions of 49.0% over EDF and 42.2%/49.0% over RED-IDA/RED-FG. Night-driving workloads on AGX Orin show a similar pattern: EDF inflates to 13.96 s due to sensor bursts, RED-FG to 14.00 s, RED-IDA to 11.35 s, whereas RED contains latency at 12.25 s. On Nano Orin, where GPU pressure is most severe, EDF produces 32.24 s, RED-FG 29.16 s, and RED-IDA 31.37 s; RED again provides the smallest delay at 23.04 s. Apple M-series results mirror this trend, with RED consistently achieving the lowest delay across all six representative pipelines, including emergency braking, obstacle weaving, mixed-lighting navigation, and high-curvature trajectories. Overall, RED’s demand-driven synchronization prevents cross-stage stalls and avoids unnecessary context switching, offering robust latency improvements that generalize across platforms and real-world robotic workloads. 
+
+Real-time Performance. RED substantially lowers deadline miss rates across all tasks and hardware platforms when compared with EDF, RED-FG, and RED-IDA. On AGX Orin, EDF ex-hibits misses of 52.0%, RED-FG reduces this to 7.0%, and RED-IDA achieves 2.0%; RED further lowers deadline violations to 0.0%, yielding reductions of 100.0% versus EDF and 100.0%/100.0% over RED-IDA/RED-FG. EDF’s struggles are most apparent in dense pedestrian scenes or rapid obstacle-appearance tests, where perception bursts interfere with timely control updates. RED-FG alleviates some stalls through finer task partitioning, while RED-IDA offers better stage coordina-tion, but both suffer from either premature or inflexible synchronization points. RED, in contrast, issues synchronization only when queue length, slack decay, or GPU utilization indicate impend-ing latency propagation. On Nano Orin, all non-RED schedulers experience frequent spikes due to 24 memory pressure, while RED maintains stable performance. On Apple M-series hardware with uni-fied memory, RED preserves near-zero miss rates even when sensor frequency varies rapidly. These results show that RED’s adaptive coordination is essential for maintaining timing guarantees under environmental and workload variability. 
+
+Quality of Experience. RED consistently achieves the highest QoE among EDF, RED-FG, RED-IDA, and RED across all evaluated scenarios. On AGX Orin, EDF achieves a QoE of 0.15, RED-FG improves this to 0.15, and RED-IDA to 0.30; RED delivers the best QoE at 1.00, cor-responding to improvements of 566.7% over EDF and 233.3%/566.7% over RED-IDA/RED-FG. Night-driving tasks, where low-light perception is sensitive to frame pacing, expose EDF’s latency variance, leading to visible jitter and unstable steering. RED-FG and RED-IDA partially mitigate jitter but remain vulnerable to asynchronous perception bursts. RED’s reduced latency variance yields smoother trajectories, fewer abrupt braking events, and more stable tracking of road edges and obstacles. In emergency obstacle-avoidance pipelines, EDF produces noticeable oscillations, whereas RED-FG and RED-IDA show inconsistent behavior under bursty sensor arrivals. RED maintains consistent control behavior with steady update intervals across Nano Orin, AGX Orin, and Apple M-series devices. These results confirm that RED’s coordinated scheduling improves both low-level system robustness and high-level robotic behavior, enhancing user-perceived smooth-ness, responsiveness, and safety across diverse platforms and environmental conditions. 
+
+Overall effectiveness across diverse scenarios: RED consistently enhances throughput, real-time guarantees, and QoE across a wider range of scenarios and hardware platforms. Its design components generalize effectively to diverse workloads, from urban navigation to night driving, demonstrating RED’s robustness and reliability for on-device, resource-constrained intelligent robotic systems. 
+
+6.3 Evaluating Support for Non-Partitionable Tasks 
+
+Tab. 9 reports end-to-end latency, deadline miss rate, and QoE score across varying ratios of non-partitionable tasks in obstacle-free cruising scenarios. We vary the proportion of non-partitionable tasks from 0% (fully partitionable pipeline) to 100% (all tasks non-partitionable) and compare EDF against RED on all three platforms. 
+
+End-to-end Latency. Across all platforms, RED consistently achieves lower latency than EDF and maintains more stable latency as the non-partitionable ratio increases. On Nano Orin, EDF rises slightly from 41 .77 s to 42 .11 s as non-partitionability reaches 100%, while RED increases modestly from 37 .47 s to 39 .40 s, remaining lower throughout. The gap is larger on AGX Orin: EDF ranges from 26 .59 s to 26 .39 s, whereas RED stays near 16 s (from 16 .11 s to 16 .38 s), offering up to 39% lower latency. On the MacBook Pro, EDF remains at 5 .64 s across all ratios, while RED reduces latency to 3 .63–4 .05 s. These results show that RED not only improves absolute latency but also better stabilizes timing as atomic constraints grow, a key requirement for reliable perception-and-control loops. 
+
+Deadline Miss Rate. The latency improvements translate into lower deadline miss rates for RED compared to EDF. At 0% non-partitionable tasks, EDF exhibits miss rates of 0 .99% on Nano Orin and 1 .00% on AGX Orin, while RED reduces these to 0 .60% and 0 .82%, respectively. As the system becomes more constrained (from 50% to 100% non-partitionable tasks), EDF’s miss rate remains high, reaching 0 .97% on Nano Orin and consistently 1 .00% on AGX Orin at the 100% setting. RED, however, maintains substantially lower miss rates: 0 .64% on Nano Orin and 0 .83% on AGX Orin even when all tasks are non-partitionable. The MacBook Pro exhibits the same qualitative pattern. EDF’s miss rate varies between 0 .17% and 0 .16% as non-partitionability increases, whereas 25 Table 9: End-to-end latency / deadline-miss rate / QoE under different non-partitionable-task ratios in obstacle-free cruising scenarios. Platform 0% Non-Part. 50% Non-Part. 100% Non-Part. EDF RED EDF RED EDF RED End-to-end Latency Nano Orin 41.77 37.47 41.93 38.91 42.11 39.40 AGX Orin 26.59 16.11 24.54 16.21 26.39 16.38 MacBook Pro 5.64 3.63 5.64 4.05 5.64 3.97 Deadline Miss Rate Nano Orin 0.99 0.60 0.99 0.68 0.97 0.64 AGX Orin 1.00 0.82 1.00 0.79 1.00 0.83 MacBook Pro 0.17 0.00 0.14 0.00 0.16 0.00 QoE Nano Orin 0.31 1.00 0.29 1.00 0.28 1.00 AGX Orin 0.09 1.00 0.11 1.00 0.09 1.00 MacBook Pro 1.00 1.00 1.00 1.00 1.00 1.00 RED maintains a perfect 0 .00% miss rate across all ratios. These results demonstrate that RED is robust against increasingly atomic execution constraints: it preserves a high fraction of on-time completions even when the scheduler has limited freedom to reorder or split tasks. 
+
+QoE Score. We use λ = 0 .05 for this experiment to compute the QoE score. From the per-spective of user-perceived quality, RED consistently achieves higher QoE scores than EDF across all platforms and non-partitionable ratios. At 0% non-partitionable tasks, the QoE under EDF is already suboptimal, with scores of 0 .31 on Nano Orin and 0 .09 on AGX Orin, reflecting occasional latency spikes and deadline misses. RED raises these to 1 .00, respectively, yielding smoother and more responsive cruising behavior. As the non-partitionable ratio increases to 50%, EDF’s QoE further degrades (dropping from 0 .31 to 0 .29 on Nano Orin and increasing slightly from 0 .09 to 0.11 on AGX Orin), indicating more frequent control jitter and frame drops. In contrast, RED maintains perfectly stable QoE of 1 .00 across all platforms. In the fully non-partitionable setting (100%), EDF’s QoE drops to 0 .28 on Nano Orin and 0 .09 on AGX Orin, while RED again sustains a perfect score of 1 .00. This gap is consistent across Nano Orin, AGX Orin, and MacBook Pro (all 1 .00), underscoring that RED improves not only raw timing metrics but also the perceived smoothness and safety of the system’s behavior. 
+
+Effectiveness for non-partitionable task scenarios: RED explicitly supports heteroge-neous workloads with inherently non-partitionable GPU tasks by modeling them as atomic DAG nodes and assigning intermediate deadlines based on their worst-case execution time and contention margin. This design allows RED to maintain low end-to-end latency, substantially reduce deadline miss rates, and sustain higher QoE compared to EDF across Nano Orin, AGX Orin, and MacBook Pro, even as the fraction of non-partitionable tasks increases from 0% to 100%. These results demonstrate that RED preserves real-time guarantees and user-perceived quality under realistic, contention-heavy scenarios where many tasks must execute atomically. 
+
+6.4 Evaluating Burst Task Management 
+
+Tab. 10 reports end-to-end latency, deadline miss rate, and QoE across varying burst task ratios, where higher ratios represent more frequent overload phases caused by sensor surges or background 26 kernel activity. 
+
+End-to-end Latency. Across all platforms, RED consistently achieves lower latency than EDF under both mild and severe burst conditions. At the 0% setting, Nano Orin reports 39.68 s under EDF and 36.12 s with RED. As the burst ratio increases to 50% and 100%, EDF shows noticeable latency inflation (e.g., up to 30.24 s on AGX Orin), while RED exhibits only modest growth (from 22.11 s to 23.47 s). These improvements arise directly from RED ’s burst-management approach, where continuous monitoring of UGPU , Qlen , and slack enables early detection of overload and timely activation of ProactiveDrop to prevent excessive queueing delays. 
+
+Deadline Miss Rate. Bursting task scenarios are challenging workloads, especially when dead-lines are tight. For embedded devices with fewer computational resources (e.g., Nano Orin, AGX Orin), both EDF and RED fail to meet all deadlines when bursts are frequent. On MacBook Pro, however, RED exhibits significantly lower deadline miss rates than EDF across all burst ratios due to its stronger ability to suppress overload-induced queueing. Even at 0% bursts, EDF shows miss rates of 51%, while RED reduces these to 42%. Under 50% burst scenarios, EDF’s miss rate increases sharply (up to 98%), as it lacks a mechanism to prioritize tasks during overload. RED, however, contains the miss rate to 67% by ranking tasks properly and selectively shedding low-criticality tasks when UGPU or Qlen exceed thresholds. This allows high-criticality tasks to continue meeting deadlines even in sustained overload. 
+
+QoE Score. QoE results reflect the same trend: RED maintains significantly higher user-perceived quality across all burst ratios. At 100%, EDF’s QoE drops to 0.28 on Nano Orin and 0.09 on AGX Orin due to jittery control and frequent deadline misses, while RED preserves a much higher QoE of 1.00 on both platforms by keeping critical perception and control updates on schedule. In mixed settings (50%), RED maintains stable QoE (e.g., 1.00 on both Nano Orin and AGX Orin), whereas EDF further degrades (e.g., 0.29 and 0.11). On MacBook Pro, both EDF and RED achieve perfect QoE, but RED remains more stable under injected bursts. These results highlight that the integrated monitoring, selective dropping, and synchronization in Algorithm 2 effectively mitigate overload and preserve real-time capabilities. 
+
+Effectiveness under burst task scenarios: By leveraging the burst-management mecha-nisms, RED monitors system metrics and selectively drops low-criticality tasks during overload. This enables RED to bound latency inflation, reduce deadline misses for high-criticality tasks, and sustain higher QoE across different embedded devices under all burst ratios. Overall, RED delivers robust on-device scheduling for realistic, bursty robotic workloads, preserving real-time guarantees and user-perceived quality under dynamic operating conditions. 
+
+# 7 Discussion 
+
+Scalability of the solution. The primary impediment to scaling our approach is the limited compute and memory available on target devices. When full from-scratch training of MIMONet is infeasible, initializing with pretrained backbones is an effective workaround. Large-scale pretrained encoders, e.g., ViT models trained on ImageNet [29] (14M+ images), can be reused as shared feature extractors within MIMONet, substantially cutting training time while preserving accuracy. In addition, the controller and handler in RED are deliberately designed with loose coupling, so a lightweight networking layer can be inserted with minimal changes, enabling decentralized deployments across multiple robots or compute nodes. 
+
+Analytical scalability discussion. Beyond the scaling levers above, we summarise how the orchestration cost from §3.6 grows along three axes that real-time deployments care about. (a) 27 Table 10: End-to-end latency/deadline miss rate/QoE score under different burst task ratios in obstacle-free cruising scenarios. Platform 0% Burst 50% Burst 100% Burst EDF RED EDF RED EDF RED End-to-end Latency Nano Orin 48.83 46.46 59.58 46.27 75.34 46.24 AGX Orin 31.60 26.68 46.34 25.61 58.43 27.30 MacBook Pro 6.58 6.58 9.05 6.58 11.70 6.58 Deadline Miss Rate Nano Orin 1.00 1.00 0.99 1.00 0.99 1.00 AGX Orin 1.00 1.00 1.00 1.00 1.00 1.00 MacBook Pro 0.51 0.42 0.98 0.67 0.99 1.00 QoE Nano Orin 0.09 0.12 0.05 0.13 0.03 0.13 AGX Orin 0.06 0.09 0.03 0.10 0.02 0.09 MacBook Pro 0.51 0.51 0.22 0.51 0.14 0.51 
+
+Number of co-running DAGs K: the integrated orchestration loop runs in O(K · (|V | + |E|)) per release ( §3.6.d), so per-release scheduling cost grows linearly with the number of DAGs in flight; the burst-monitor adds an O(W · K) window check that is also linear in K. (b) DAG size |V | + |E|: proportional intermediate-deadline assignment, on-demand sync FSM updates, and integrated orchestration are all linear in |V | + |E|; the dominant constant factor is the height-recomputation step. (c) MIMONet branch count q per refined stage: each refinement of Definition 6 inserts 1+ q nodes, so the refinement step is O(q) per stage, and the schedulability margin from Proposition 2 grows by at most ξv ≤ P 
+
+> j
+
+cdec j 
+
+> v
+
+− max j cdec j 
+
+> v
+
+per refined stage in the worst-case ρ < q 
+
+regime — in the ideal regime ρ ≥ q the decoders fit in parallel and ξv = 0. Empirical scalability sweeps beyond the four Jetson generations and the M-series MacBook reported in this article are left to future work. 
+
+Future directions. Beyond the weight-sharing mechanism explored here, we plan to incorporate embedded deployment techniques such as model compression [28, 66], pruning, and quantization as configurable, reusable components. On the algorithmic side, Transformer-based large language models (LLMs) have achieved widespread adoption [24, 23, 22, 62], and integrating LLMs [100, 26, 25] into RED is a promising way to further improve task performance. From a systems perspective, the rapid adoption of AI-oriented heterogeneous SoCs, which often combine CPUs with FPGAs and NPUs, motivates extending RED with heterogeneity-aware mapping and processor scheduling [91]. Such support would broaden the set of embedded platforms capable of running RED entirely on-device. 
+
+# 8 Related Work 
+
+Real-time DAG scheduling. DAG workloads have long been studied in both server platforms [3, 85, 93, 13, 79] and embedded settings [96, 6, 112], with foundational results traceable to Graham’s classic bound [38]. Recent work advances schedulability analysis and runtime support for parallel, real-time DAGs [90, 4, 49, 50, 59, 58, 73, 6, 40, 16]. Outside real-time robotics, systems for evolving graphs (e.g., CommonGraph [1, 2] and the MEGA accelerator [32]) exploit temporal locality, work sharing, and redundancy removal as the graph changes. While their goals are high-throughput analytics rather than deadline-aware execution, the underlying idea, i.e., reuse under dynamic 28 topology, echoes our MIMONet-aware refinement that amortizes shared encoder computation in changing DAGs. Yet, most existing schedulers still assume static graphs or lack support for the multi-input multi-output structure and dynamically evolving workloads characteristic of MIMONet, which limits their applicability to our problem. We therefore include a representative technique, intermediate deadline assignment [79, 70, 63], as a baseline capable of coping with certain forms of dynamicity. 
+
+Mixed-criticality scheduling. The mixed-criticality scheduling (MCS) literature, surveyed in depth by Burns and Davis [12], partitions tasks into design-time criticality classes (typically high-criticality HI and low-criticality LO ) and switches between service modes when overload is detected, dropping or degrading low-criticality work to preserve high-criticality completions with formal mode-switch correctness guarantees. RED’s burst-task management with criticality scores ( §4.6) is inspired by MCS but differs along three axes. (i) RED targets a single design-time criticality class, the DNN inference pipeline, and assigns runtime criticality scores Ci from observed slack via Eq. (7), instead of a static HI /LO classification. (ii) RED does not switch service modes (no 
+
+LO →HI mode switch); under sustained overload, it sheds the lowest-Ci tasks via ProactiveDrop 
+
+while keeping the schedule for the remaining work in the same proportional-deadline regime. (iii) RED’s overload handling is a soft-real-time reaction to environmental dynamics that preserves the highest-criticality completions on a best-effort basis (Sec. 6.4, Tab. 10), rather than the formal mode-switch correctness property that MCS guarantees in the analytic regime. 
+
+Real-time scheduling in ROS. A series of ROS-focused frameworks has explored dynamic prior-ities, end-to-end latency control, multicore-aware policies, and feedback-based adaptation [51, 60, 89, 7, 88, 27, 8, 87, 61]. While effective for conventional models, these systems generally do not natively support the dynamic, MIMO-based modern DNN pipelines. Our design addresses this gap by creating a scheduler tailored for MIMONet workloads within ROS. 
+
+Real-time DNN inference. Prior work achieves low-latency inference via approximation [114], streaming/scheduling frameworks [5, 69], deep learning compiler optimization [18, 21], and OS-/runtime support co-designed for DNNs [54, 95]. However, built-in support for MIMO DNNs under deadline constraints remains limited. Concurrent efforts address GPU-memory interference in multi-DNN scenarios [53], but, to our knowledge, our work is the first to focus explicitly on real-time scheduling for MIMONet-style models. 
+
+Weight sharing and parameter efficiency. Weight sharing reduces compute and memory in both single-task [99, 10] and multi-task [45, 44, 57] settings. Recent graph-rewriting strategies further “stitch” multiple weight-shared networks into unified graphs to enable efficient multi-task inference [92]. Complementary to weight sharing, parameter-efficient fine-tuning (PEFT) limits the number of trainable parameters during model adaptation (surveyed in [39]) and can be realized in distributed settings via LoRA-style adapters (e.g., DLora [33]). These PEFT techniques primarily target training-time adaptation and deployment scalability; our contribution is orthogonal, focusing on inference-time scheduling and deadline satisfaction for weight-shared MIMONet pipelines on embedded robots. 
+
+Energy-, power-, and thermal-aware systems. Although our focus is on inference-time real-time scheduling for embedded robots, there is complementary work on energy/thermal efficiency at infrastructure and training layers. Warm-water cooling and heat-recycling techniques improve datacenter and edge-datacenter efficiency and hotspot management [48, 81, 115, 17, 20, 31, 113]. Separately, power-aware collective communication reduces energy cost during LLM training [47]. These directions optimize energy and thermals rather than end-to-end deadlines, but the underlying theme, aligning computation with physical constraints, resonates with our design goal of respecting resource limits while sustaining performance in embedded deployments. 
+
+Intelligent robotic systems. Lightweight, real-time deep learning has been explored for both 29 on-robot training [98, 86, 68, 64] and inference [82, 65, 63, 67, 64, 86, 68], frequently in safety-critical settings with explicit timing requirements, including multi-robot coordination [74, 42], UAV planning [97], geo-localization [111], tracking [11], HCI [56], and autonomous driving [43, 41]. Scheduling frameworks have also incorporated confidence-awareness for complex tasks such as multi-object tracking [52]. Our work fits this trajectory but specifically targets real-time execution of MIMO DNNs in robotic systems. 
+
+# 9 Conclusion 
+
+We presented RED, a framework for multi-task DNN inference on resource-constrained robots that must adapt to Robotic Environmental Dynamics while meeting real-time constraints. At its core is a deadline-aware scheduler that employs an intermediate-deadline assignment policy to accommodate evolving workloads and asynchronous inference in uncertain settings. RED further supports MIMONet (multi-input multi-output) models by exploiting weight sharing and by in-troducing a workload-refinement/reconstruction procedure that aligns MIMONet structure with real-time scheduling needs. Our evaluation demonstrates improvements in throughput, deadline satisfaction, usability, adaptability, and runtime overhead. A current limitation is that the design is most naturally suited to MIMONet-like DNNs, and our DAG scheduler favors practicality over sophistication. In future work, we plan to draw on recent advances in real-time DAG scheduling to enhance the performance of RED. 
+
+# References 
+
+[1] Mahbod Afarin, Chao Gao, Shafiur Rahman, Nael Abu-Ghazaleh, and Rajiv Gupta. Com-mongraph: Graph analytics on evolving data. In Proceedings of the 28th ACM International Conference on Architectural Support for Programming Languages and Operating Systems, Vol-ume 2 , ASPLOS 2023, page 133–145, New York, NY, USA, 2023. Association for Computing Machinery. [2] Mahbod Afarin, Chao Gao, Shafiur Rahman, Nael Abu-Ghazaleh, and Rajiv Gupta. Com-mongraph: Graph analytics on evolving data (abstract). In Proceedings of the 2023 ACM Workshop on Highlights of Parallel Computing , HOPC ’23, page 1–2, New York, NY, USA, 2023. Association for Computing Machinery. [3] Shareef Ahmed and James H Anderson. Exact response-time bounds of periodic dag tasks under server-based global scheduling. In 2022 IEEE Real-Time Systems Symposium (RTSS) ,pages 447–459. IEEE, 2022. [4] Sanjoy Baruah. The federated scheduling of systems of conditional sporadic dag tasks. In 
+
+2015 International Conference on Embedded Software (EMSOFT) , pages 1–10. IEEE, 2015. [5] Soroush Bateni, Husheng Zhou, Yuankun Zhu, and Cong Liu. Predjoule: A timing-predictable energy optimization framework for deep neural networks. In 2018 IEEE Real-Time Systems Symposium (RTSS) , pages 107–118. IEEE, 2018. [6] Ran Bi, Qingqiang He, Jinghao Sun, Zhenyu Sun, Zhishan Guo, Nan Guan, and Guozhen Tan. Response time analysis for prioritized dag task with mutually exclusive vertices. In 
+
+2022 IEEE Real-Time Systems Symposium (RTSS) , pages 460–473. IEEE, 2022. 30 [7] Tobias Blaß, Daniel Casini, Sergey Bozhko, and Bj¨ orn B. Brandenburg. A ROS 2 response-time analysis exploiting starvation freedom and execution-time variance. In 42nd IEEE Real-Time Systems Symposium, RTSS 2021, Dortmund, Germany, December 7-10, 2021 , pages 41–53. IEEE, 2021. [8] Tobias Blaß, Arne Hamann, Ralph Lange, Dirk Ziegenbein, and Bj¨ orn B. Brandenburg. Automatic latency management for ROS 2: Benefits, challenges, and open problems. In 
+
+27th IEEE Real-Time and Embedded Technology and Applications Symposium, RTAS 2021, Nashville, TN, USA, May 18-21, 2021 , pages 264–277. IEEE, 2021. [9] Mariusz Bojarski, Davide Del Testa, Daniel Dworakowski, Bernhard Firner, Beat Flepp, Prasoon Goyal, Lawrence D Jackel, Mathew Monfort, Urs Muller, Jiakai Zhang, et al. End to end learning for self-driving cars. arXiv preprint arXiv:1604.07316 , 2016. [10] Tolga Bolukbasi, Joseph Wang, Ofer Dekel, and Venkatesh Saligrama. Adaptive neural net-works for efficient inference. In Proceedings of ACM International Conference on Machine Learning , pages 527–536, New York, NY, USA, 2017. ACM. [11] Karim Botros, Mohammad Alkhatib, David Folio, and Antoine Ferreira. Fully automatic and real-time microrobot detection and tracking based on ultrasound imaging using deep learning. In 2022 International Conference on Robotics and Automation (ICRA) , pages 9763–9768. IEEE, 2022. [12] Alan Burns and Robert I. Davis. A survey of research into mixed criticality systems. ACM Computing Surveys , 50(6), 2017. [13] Louis-Claude Canon, Emmanuel Jeannot, Rizos Sakellariou, and Wei Zheng. Comparative evaluation of the robustness of dag scheduling heuristics. Grid Computing: Achievements and Prospects , pages 73–84, 2008. [14] Rich Caruana. Multitask learning. Machine learning , 28(1):41–75, 1997. [15] Hanlin Chen, Simin Chen, Wenyu Li, Wei Yang, and Yiheng Feng. Impact analysis of inference time attack of perception sensors on autonomous vehicles. arXiv preprint arXiv:2505.03850 ,2025. [16] Nan Chen, Shuai Zhao, Ian Gray, Alan Burns, Siyuan Ji, and Wanli Chang. Precise response time analysis for multiple dag tasks with intra-task priority assignment. In 2023 IEEE 29th Real-Time and Embedded Technology and Applications Symposium (RTAS) , pages 174–184. IEEE, 2023. [17] Simin Chen, Cong Liu, Mirazul Haque, Zihe Song, and Wei Yang. Nmtsloth: understanding and testing efficiency degradation of neural machine translation systems. In Proceedings of the 30th ACM Joint European Software Engineering Conference and Symposium on the Foundations of Software Engineering , pages 1148–1160, 2022. [18] Simin Chen, Jinjun Peng, Yixin He, Junfeng Yang, and Baishakhi Ray. Your compiler is back-dooring your model: Understanding and exploiting compilation inconsistency vulnerabilities in deep learning compilers. arXiv preprint arXiv:2509.11173 , 2025. [19] Simin Chen, Pranav Pusarla, and Baishakhi Ray. Dycodeeval: Dynamic benchmarking of reasoning capabilities in code large language models under data contamination. In Forty-second International Conference on Machine Learning .31 [20] Simin Chen, Zihe Song, Mirazul Haque, Cong Liu, and Wei Yang. Nicgslowdown: Evaluating the efficiency robustness of neural image caption generation models. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition , pages 15365–15374, 2022. [21] Simin Chen, Shiyi Wei, Cong Liu, and Wei Yang. Dycl: Dynamic neural network compilation via program rewriting and graph optimization. In Proceedings of the 32nd ACM SIGSOFT International Symposium on Software Testing and Analysis , pages 614–626, 2023. [22] Yiming Chen, Simin Chen, Zexin Li, Wei Yang, Cong Liu, Robby T. Tan, and Haizhou Li. Dynamic transformers provide a false sense of efficiency. In Anna Rogers, Jordan L. Boyd-Graber, and Naoaki Okazaki, editors, Proceedings of the 61st Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers), ACL 2023, Toronto, Canada, July 9-14, 2023 , pages 7164–7180. Association for Computational Linguistics, 2023. [23] Yiming Chen, Xianghu Yue, Xiaoxue Gao, Chen Zhang, Luis Fernando D’Haro, Robby T Tan, and Haizhou Li. Beyond single-audio: Advancing multi-audio processing in audio large language models. arXiv preprint arXiv:2409.18680 , 2024. [24] Yiming Chen, Xianghu Yue, Chen Zhang, Xiaoxue Gao, Robby T Tan, and Haizhou Li. Voicebench: Benchmarking llm-based voice assistants. arXiv preprint arXiv:2410.17196 ,2024. [25] Yiming Chen, Chen Zhang, Danqing Luo, Luis Fernando D’Haro, Robby T Tan, and Haizhou Li. Unveiling the achilles’ heel of nlg evaluators: A unified adversarial framework driven by large language models. arXiv preprint arXiv:2405.14646 , 2024. [26] Yiming Chen, Yan Zhang, Chen Zhang, Grandee Lee, Ran Cheng, and Haizhou Li. Revisiting self-training for few-shot learning of language model. arXiv preprint arXiv:2110.01256 , 2021. [27] Hyunjong Choi, Yecheng Xiang, and Hyoseung Kim. Picas: New design of priority-driven chain-aware scheduling for ROS2. In 27th IEEE Real-Time and Embedded Technology and Applications Symposium, RTAS 2021, Nashville, TN, USA, May 18-21, 2021 , pages 251–263. IEEE, 2021. [28] Bin Dai, Chen Zhu, Baining Guo, and David Wipf. Compressing neural networks using the variational information bottleneck. In International Conference on Machine Learning , pages 1135–1144. PMLR, 2018. [29] Jia Deng, Wei Dong, Richard Socher, Li-Jia Li, Kai Li, and Li Fei-Fei. Imagenet: A large-scale hierarchical image database. In 2009 IEEE conference on computer vision and pattern recognition , pages 248–255. Ieee, 2009. [30] Biyi Fang, Xiao Zeng, and Mi Zhang. Nestdnn: Resource-aware multi-tenant on-device deep learning for continuous mobile vision. In Proceedings of ACM Annual International Conference on Mobile Computing and Networking , pages 115–127, 2018. [31] Xiaoning Feng, Xiaohong Han, Simin Chen, and Wei Yang. Llmeffichecker: Understanding and testing efficiency degradation of large language models. ACM Transactions on Software Engineering and Methodology , 33(7):1–38, 2024. 32 [32] Chao Gao, Mahbod Afarin, Shafiur Rahman, Nael Abu-Ghazaleh, and Rajiv Gupta. Mega evolving graph accelerator. In Proceedings of the 56th Annual IEEE/ACM International Symposium on Microarchitecture , MICRO ’23, page 310–323, New York, NY, USA, 2023. Association for Computing Machinery. [33] Chao Gao and Sai Qian Zhang. Dlora: Distributed parameter-efficient fine-tuning solution for large language model. arXiv preprint arXiv:2404.05182 , 2024. [34] Andreas Geiger, Philip Lenz, and Raquel Urtasun. Are we ready for autonomous driving? the kitti vision benchmark suite. In 2012 IEEE conference on computer vision and pattern recognition , pages 3354–3361. IEEE, 2012. [35] Sahar Ghoflsaz Ghinani, Jingyao Zhang, and Elaheh Sadredini. Enabling low-cost secure computing on untrusted in-memory architectures. [36] Ionel Gog, Sukrit Kalra, Peter Schafhalter, Joseph E Gonzalez, and Ion Stoica. D3: a dynamic deadline-driven approach for building autonomous vehicles. In Proceedings of the Seventeenth European Conference on Computer Systems , pages 453–471, 2022. [37] Ionel Gog, Sukrit Kalra, Peter Schafhalter, Matthew A Wright, Joseph E Gonzalez, and Ion Stoica. Pylot: A modular platform for exploring latency-accuracy tradeoffs in autonomous vehicles. In 2021 IEEE International Conference on Robotics and Automation (ICRA) , pages 8806–8813. IEEE, 2021. [38] Ronald L. Graham. Bounds on multiprocessing timing anomalies. SIAM journal on Applied Mathematics , 17(2):416–429, 1969. [39] Zeyu Han, Chao Gao, Jinyang Liu, Sai Qian Zhang, et al. Parameter-efficient fine-tuning for large models: A comprehensive survey. arXiv preprint arXiv:2403.14608 , 2024. [40] Qingqiang He, Nan Guan, Mingsong Lv, Xu Jiang, and Wanli Chang. Bounding the response time of dag tasks using long paths. In 2022 IEEE Real-Time Systems Symposium (RTSS) ,pages 474–486. IEEE, 2022. [41] Sihong He, Shuo Han, and Fei Miao. Robust electric vehicle balancing of autonomous mobility-on-demand system: A multi-agent reinforcement learning approach. arXiv preprint arXiv:2307.16228 , 2023. [42] Sihong He, Songyang Han, Sanbao Su, Shuo Han, Shaofeng Zou, and Fei Miao. Robust multi-agent reinforcement learning with state uncertainty. Transactions on Machine Learning Research , 2023. [43] Sihong He, Yue Wang, Shuo Han, Shaofeng Zou, and Fei Miao. A robust and constrained multi-agent reinforcement learning framework for electric vehicle amod systems. arXiv preprint arXiv:2209.08230 , 2022. [44] Xiaoxi He, Xu Wang, Zimu Zhou, Jiahang Wu, Zheng Yang, and Lothar Thiele. On-device deep multi-task inference via multi-task zipping. IEEE Transactions on Mobile Computing ,pages 1–1, 2021. [45] Xiaoxi He, Zimu Zhou, and Lothar Thiele. Multi-task zipping via layer-wise neuron sharing. In Advances in Neural Information Processing Systems , pages 6019–6029, 2018. 33 [46] NVIDIA AI IOT. Ros2 real-time classification and detection. https://github.com/ NVIDIA-AI-IOT/ros2_torch_trt , 2020. [47] Ziyang Jia, Laxmi N Bhuyan, and Daniel Wong. Pccl: Energy-efficient llm training with power-aware collective communication. In 2024 IEEE 42nd International Conference on Computer Design (ICCD) , pages 84–91. IEEE, 2024. [48] Weixiang Jiang, Ziyang Jia, Sirui Feng, Fangming Liu, and Hai Jin. Fine-grained warm water cooling for improving datacenter economy. In Proceedings of the 46th International Symposium on Computer Architecture , pages 474–486, 2019. [49] Xu Jiang, Nan Guan, Xiang Long, Yue Tang, and Qingqiang He. Real-time scheduling of parallel tasks with tight deadlines. Journal of Systems Architecture , 108:101742, 2020. [50] Xu Jiang, Nan Guan, Xiang Long, and Wang Yi. Semi-federated scheduling of parallel real-time tasks on multiprocessors. In 2017 IEEE Real-Time Systems Symposium (RTSS) , pages 80–91. IEEE, 2017. [51] Xu Jiang, Dong Ji, Nan Guan, Ruoxiang Li, Yue Tang, and Yi Wang. Real-time scheduling and analysis of processing chains on multi-threaded executor in ROS 2. In IEEE Real-Time Systems Symposium, RTSS 2022, Houston, TX, USA, December 5-8, 2022 , pages 27–39. IEEE, 2022. [52] Donghwa Kang, Seunghoon Lee, Hoon Sung Chwa, Seung-Hwan Bae, Chang Mook Kang, Jinkyu Lee, and Hyeongboo Baek. Rt-mot: Confidence-aware real-time scheduling framework for multi-object tracking tasks. In 2022 IEEE Real-Time Systems Symposium (RTSS) , pages 318–330. IEEE, 2022. [53] Woosung Kang, Jinkyu Lee, Youngmoon Lee, Sangeun Oh, Kilho Lee, and Hoon Sung Chwa. Rt-swap: Addressing gpu memory bottlenecks for real-time multi-dnn inference. In 2024 IEEE 30th Real-Time and Embedded Technology and Applications Symposium (RTAS) , pages 373–385. IEEE Computer Society, 2024. [54] Woosung Kang, Kilho Lee, Jinkyu Lee, Insik Shin, and Hoon Sung Chwa. Lalarand: Flexible layer-by-layer cpu/gpu scheduling for real-time dnn tasks. In 2021 IEEE Real-Time Systems Symposium (RTSS) , pages 329–341. IEEE, 2021. [55] Hyoukjun Kwon, Krishnakumar Nair, Jamin Seo, Jason Yik, Debabrata Mohapatra, Dongyuan Zhan, Jinook Song, Peter Capak, Peizhao Zhang, Peter Vajda, et al. Xrbench: An extended reality (xr) machine learning benchmark suite for the metaverse. arXiv preprint arXiv:2211.08675 , 2022. [56] Bhoram Lee, Jonathan Brookshire, Rhys Yahata, and Supun Samarasekera. Towards safe, realistic testbed for robotic systems with human interaction. In 2022 International Conference on Robotics and Automation (ICRA) , pages 11280–11287. IEEE, 2022. [57] Seulki Lee and Shahriar Nirjon. Fast and scalable in-memory deep multitask learning via neural weight virtualization. In Proceedings of ACM Annual International Conference on Mobile Systems, Applications, and Services , pages 175–190, 2020. [58] Jing Li, Kunal Agrawal, Chenyang Lu, and Christopher Gill. Outstanding paper award: Analysis of global edf for parallel tasks. In 2013 25th Euromicro Conference on Real-Time Systems , pages 3–13. IEEE, 2013. 34 [59] Jing Li, Jian Jia Chen, Kunal Agrawal, Chenyang Lu, Chris Gill, and Abusayeed Saiful-lah. Analysis of federated and global scheduling for parallel real-time tasks. In 2014 26th Euromicro Conference on Real-Time Systems , pages 85–96. IEEE, 2014. [60] Ruoxiang Li, Nan Guan, Xu Jiang, Zhishan Guo, Zheng Dong, and Mingsong Lv. Worst-case time disparity analysis of message synchronization in ROS. In IEEE Real-Time Systems Symposium, RTSS 2022, Houston, TX, USA, December 5-8, 2022 , pages 40–52. IEEE, 2022. [61] Yufei Li, Yu Fu, Yue Dong, and Cong Liu. Mace: A hybrid llm serving system with colocated slo-aware continuous retraining alignment. arXiv preprint arXiv:2510.03283 , 2025. [62] Yufei Li, Zexin Li, Yingfan Gao, and Cong Liu. White-box multi-objective adversarial attack on dialogue generation. In Anna Rogers, Jordan L. Boyd-Graber, and Naoaki Okazaki, edi-tors, Proceedings of the 61st Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers), ACL 2023, Toronto, Canada, July 9-14, 2023 , pages 1778–1792. Association for Computational Linguistics, 2023. [63] Yufei Li, Zexin Li, Wei Yang, and Cong Liu. Rt-lm: Uncertainty-aware resource management for real-time inference of language models. In 2023 IEEE Real-Time Systems Symposium (RTSS) , pages 158–171. IEEE, 2023. [64] Yufei Li, Zexin Li, Yinglun Zhu, and Cong Liu. Lemix: Unified scheduling for llm training and inference on multi-gpu systems. arXiv preprint arXiv:2507.21276 , 2025. [65] Zexin Li, Soroush Bateni, and Cong Liu. Genie: Smart ros-based caching for connected autonomous robots. arXiv preprint arXiv:2402.19410 , 2024. [66] Zexin Li, Xiaoxi He, Yufei Li, Shahab Nikkhoo, Wei Yang, Lothar Thiele, and Cong Liu. Mi-monet: Multi-input multi-output on-device deep learning. arXiv preprint arXiv:2307.11962 ,2023. [67] Zexin Li, Tao Ren, Xiaoxi He, and Cong Liu. RED: A systematic real-time scheduling approach for robotic environmental dynamics. In 2023 IEEE Real-Time Systems Symposium (RTSS) , pages 210–223. IEEE, 2023. [68] Zexin Li, Aritra Samanta, Yufei Li, Andrea Soltoggio, Hyoseung Kim, and Cong Liu. r3:On-device real-time deep reinforcement learning for autonomous robotics. In 2023 IEEE Real-Time Systems Symposium (RTSS) , pages 131–144. IEEE, 2023. [69] Zexin Li, Yuqun Zhang, Ao Ding, Husheng Zhou, and Cong Liu. Efficient algorithms for task mapping on heterogeneous cpu/gpu platforms for fast completion time. Journal of Systems Architecture , 114:101936, 2021. [70] Jane WSW Liu. Real-time systems . Prentice Hall PTR, 2000. [71] Pullarao Maddu, Wayne Doherty, Ganesh Sistu, Isabelle Leang, Michal Uricar, Sumanth Chennupati, Hazem Rashed, Jonathan Horgan, Ciaran Hughes, and Senthil Yogamani. Fisheyemultinet: Real-time multi-task learning architecture for surround-view automated parking system. arXiv preprint arXiv:1912.11066 , 2019. [72] Akhil Mathur, Nicholas D Lane, Sourav Bhattacharya, Aidan Boran, Claudio Forlivesi, and Fahim Kawsar. Deepeye: Resource efficient local execution of multiple deep vision models us-ing wearable commodity hardware. In Proceedings of ACM Annual International Conference on Mobile Systems, Applications, and Services , pages 68–81, 2017. 35 [73] Alessandra Melani, Marko Bertogna, Vincenzo Bonifaci, Alberto Marchetti-Spaccamela, and Giorgio C Buttazzo. Response-time analysis of conditional dag tasks in multiprocessor sys-tems. In 2015 27th Euromicro Conference on Real-Time Systems , pages 211–221. IEEE, 2015. [74] Shahab Nikkhoo, Zexin Li, Aritra Samanta, Yufei Li, and Cong Liu. Pimbot: Policy and incentive manipulation for multi-robot reinforcement learning in social dilemmas. In 2023 IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS) , pages 5630– 5636. IEEE, 2023. [75] NVIDIA. Duckiebot (db-j). https://get.duckietown.com/products/duckiebot-db21 ,2022. [76] NVIDIA. Sparkfun jetbot ai kit. https://www.sparkfun.com/products/18486 , 2022. [77] NVIDIA. Waveshare jetbot ai kit. https://www.amazon.com/ Waveshare-JetBot-AI-Kit-Accessories/dp/B07V8JL4TF/ , 2022. [78] Xinlei Pan, Yurong You, Ziyan Wang, and Cewu Lu. Virtual to real reinforcement learning for autonomous driving. arXiv preprint arXiv:1704.03952 , 2017. [79] Mark Panahi, Weiran Nie, and Kwei-Jay Lin. A framework for real-time service-oriented architecture. In 2009 IEEE Conference on Commerce and Enterprise Computing , pages 460– 467. IEEE, 2009. [80] Adam Paszke, Abhishek Chaurasia, Sangpil Kim, and Eugenio Culurciello. Enet: Adeep neural network architecture for real-time semantic segmentation. arXiv preprint arXiv:1606.02147 , 2016. [81] Qiangyu Pei, Shutong Chen, Qixia Zhang, Xinhui Zhu, Fangming Liu, Ziyang Jia, Yishuo Wang, and Yongjie Yuan. Cooledge: hotspot-relievable warm water cooling for energy-efficient edge datacenters. In Proceedings of the 27th ACM International Conference on Architectural Support for Programming Languages and Operating Systems , pages 814–829, 2022. [82] Alexander Popov, Patrik Gebhardt, Ke Chen, Ryan Oldja, Heeseok Lee, Shane Murray, Ruchi Bhargava, and Nikolai Smolyanskiy. Nvradarnet: Real-time radar obstacle and free space detection for autonomous driving. arXiv preprint arXiv:2209.14499 , 2022. [83] Joseph Redmon, Santosh Divvala, Ross Girshick, and Ali Farhadi. You only look once: Unified, real-time object detection. In Proceedings of the IEEE conference on computer vision and pattern recognition , pages 779–788, 2016. [84] Olaf Ronneberger, Philipp Fischer, and Thomas Brox. U-net: Convolutional networks for biomedical image segmentation. In International Conference on Medical image computing and computer-assisted intervention , pages 234–241. Springer, 2015. [85] Rizos Sakellariou and Henan Zhao. A hybrid heuristic for dag scheduling on heterogeneous systems. In 18th International Parallel and Distributed Processing Symposium, 2004. Pro-ceedings. , page 111. IEEE, 2004. [86] Soheil Shirvani, Aritra Samanta, Zexin Li, and Cong Liu. Duojoule: Accurate on-device deep reinforcement learning for energy and timeliness. In 2024 IEEE Real-Time Systems Symposium (RTSS) , pages 109–122. IEEE, 2024. 36 [87] Hoora Sobhani, Hyunjong Choi, and Hyoseung Kim. Timing analysis and priority-driven enhancements of ros 2 multi-threaded executors. In 2023 IEEE 29th Real-Time and Embedded Technology and Applications Symposium (RTAS) , pages 106–118. IEEE, 2023. [88] Yue Tang, Zhiwei Feng, Nan Guan, Xu Jiang, Mingsong Lv, Qingxu Deng, and Wang Yi. Response time analysis and priority assignment of processing chains on ROS2 executors. In 
+
+41st IEEE Real-Time Systems Symposium, RTSS 2020, Houston, TX, USA, December 1-4, 2020 , pages 231–243. IEEE, 2020. [89] Harun Teper, Mario G¨ unzel, Niklas Ueter, Georg von der Br¨ uggen, and Jian-Jia Chen. End-to-end timing analysis in ROS2. In IEEE Real-Time Systems Symposium, RTSS 2022, Hous-ton, TX, USA, December 5-8, 2022 , pages 53–65. IEEE, 2022. [90] Niklas Ueter, Georg Von Der Br¨ uggen, Jian-Jia Chen, Jing Li, and Kunal Agrawal. Reservation-based federated scheduling for parallel real-time tasks. In 2018 IEEE Real-Time Systems Symposium (RTSS) , pages 482–494. IEEE, 2018. [91] Yidi Wang, Mohsen Karimi, and Hyoseung Kim. Towards energy-efficient real-time scheduling of heterogeneous multi-gpu systems. In 2022 IEEE Real-Time Systems Symposium (RTSS) ,pages 409–421. IEEE, 2022. [92] Zeyu Wang, Xiaoxi He, Zimu Zhou, Xu Wang, Qiang Ma, Xin Miao, Zhuo Liu, Lothar Thiele, and Zheng Yang. Stitching weight-shared deep neural networks for efficient multitask inference on gpu. In 2022 19th Annual IEEE International Conference on Sensing, Communication, and Networking (SECON) , pages 145–153. IEEE, 2022. [93] Wei Wu, Aurelien Bouteiller, George Bosilca, Mathieu Faverge, and Jack Dongarra. Hier-archical dag scheduling for hybrid distributed systems. In 2015 IEEE International Parallel and Distributed Processing Symposium , pages 156–165. IEEE, 2015. [94] Yecheng Xiang and Hyoseung Kim. Pipelined data-parallel cpu/gpu scheduling for multi-dnn real-time inference. In Proceedings of IEEE Real-Time Systems Symposium , pages 392–405, Piscataway, NJ, USA, 2019. IEEE Press. [95] Yecheng Xiang and Hyoseung Kim. Pipelined data-parallel cpu/gpu scheduling for multi-dnn real-time inference. In 2019 IEEE Real-Time Systems Symposium (RTSS) , pages 392–405. IEEE, 2019. [96] Guoqi Xie, Renfa Li, and Keqin Li. Heterogeneity-driven end-to-end synchronized scheduling for precedence constrained tasks and messages on networked embedded systems. Journal of Parallel and Distributed Computing , 83:1–12, 2015. [97] Zhefan Xu, Di Deng, Yiping Dong, and Kenji Shimada. Dpmpc-planner: A real-time uav trajectory planning framework for complex static environments with dynamic obstacles. In 
+
+2022 International Conference on Robotics and Automation (ICRA) , pages 250–256. IEEE, 2022. [98] Se-Wook Yoo and Seung-Woo Seo. Learning multi-task transferable rewards via variational inverse reinforcement learning. In 2022 International Conference on Robotics and Automation (ICRA) , pages 434–440. IEEE, 2022. [99] Jiahui Yu, Linjie Yang, Ning Xu, Jianchao Yang, and Thomas Huang. Slimmable neural networks. In Proceedings of International Conference on Learning Representations , 2019. 37 [100] Chen Zhang, Luis Fernando D’Haro, Yiming Chen, Thomas Friedrichs, and Haizhou Li. In-vestigating the impact of pre-trained language models on dialog evaluation. In Conversational AI for Natural Human-Centric Interaction: 12th International Workshop on Spoken Dialogue System Technology, IWSDS 2021, Singapore , pages 291–306. Springer, 2022. [101] Jingyao Zhang, Huaxi Gu, Grace Li Zhang, Bing Li, and Ulf Schlichtmann. Hardware-software codesign of weight reshaping and systolic array multiplexing for efficient CNNs. pages 667–672. [102] Jingyao Zhang, Mohsen Imani, and Elaheh Sadredini. BP-NTT: Fast and compact in-SRAM number theoretic transform with bit-parallel modular multiplication. [103] Jingyao Zhang, Hoda Naghibijouybari, and Elaheh Sadredini. Sealer: In-SRAM AES for high-performance and low-overhead memory encryption. In Proceedings of the ACM/IEEE International Symposium on Low Power Electronics and Design , pages 1–6. ACM. [104] Jingyao Zhang, Jaewoo Park, Jongeun Lee, and Elaheh Sadredini. SAIL: SRAM-accelerated LLM inference system with lookup-table-based GEMV. [105] Jingyao Zhang and Elaheh Sadredini. CryptoSRAM: Enabling high-throughput cryptography on MCUs via in-SRAM computing. [106] Jingyao Zhang and Elaheh Sadredini. Inhale: Enabling high-performance and energy-efficient in-SRAM cryptographic hash for IoT. In Proceedings of the 41st IEEE/ACM International Conference on Computer-Aided Design , number Article 97 in ICCAD ’22, pages 1–9. Associ-ation for Computing Machinery. [107] Jingyao Zhang and Elaheh Sadredini. A near-cache architectural framework for cryptographic computing. [108] Jingyao Zhang and Elaheh Sadredini. No one-size-fits-all: A workload-driven characterization of bit-parallel vs. bit-serial data layouts for processing-using-memory. [109] Jingyao Zhang and Elaheh Sadredini. Unlocking energy-efficient and high-throughput secure data communication in IoT with memory-centric computing. In 2025 IEEE International Par-allel and Distributed Processing Symposium Workshops (IPDPSW) , pages 1314–1315. IEEE. [110] Shiqing Zhang, Shiliang Zhang, Tiejun Huang, and Wen Gao. Multimodal deep convolutional neural network for audio-visual emotion recognition. In Proceedings of ACM on International Conference on Multimedia Retrieval , pages 281–284, 2016. [111] Tianyi Zhang and Matthew Johnson-Roberson. Learning cross-scale visual representations for real-time image geo-localization. IEEE Robotics and Automation Letters , 7(2):5087–5094, 2022. [112] Ziliang Zhang, Zexin Li, Hyoseung Kim, and Cong Liu. Boxr: Body and head motion optimization framework for extended reality. In 2024 IEEE Real-Time Systems Symposium (RTSS) , pages 70–82. IEEE, 2024. [113] Ziliang Zhang, Cong Liu, and Hyoseung Kim. Mii: A multifaceted framework for intermittence-aware inference and scheduling. IEEE Transactions on Computer-Aided Design of Integrated Circuits and Systems , 43(11):3708–3719, 2024. 38 [114] Husheng Zhou, Soroush Bateni, and Cong Liu. Sˆ 3dnn: Supervised streaming and schedul-ing for gpu-accelerated real-time dnn workloads. In 2018 IEEE Real-Time and Embedded Technology and Applications Symposium (RTAS) , pages 190–201. IEEE, 2018. [115] Xinhui Zhu, Weixiang Jiang, Fangming Liu, Qixia Zhang, Li Pan, Qiong Chen, and Ziyang Jia. Heat to power: Thermal energy harvesting and recycling for warm water-cooled datacen-ters. In 2020 ACM/IEEE 47th Annual International Symposium on Computer Architecture (ISCA) , pages 405–418. IEEE, 2020. 39
