@@ -6,43 +6,49 @@
 </div>
 
 ## 每次日报
-- 最新运行日期：2026-05-28
-- 运行时间：2026-05-28 21:27:36 UTC
+- 最新运行日期：2026-05-29
+- 运行时间：2026-05-29 21:24:59 UTC
 - 运行状态：成功
-- 本次总论文数：7
-- 精读区：3
-- 速读区：4
+- 本次总论文数：9
+- 精读区：1
+- 速读区：8
 
 ### 今日简报（AI）
-1) 今日精选7篇人形机器人研究，重点精读10分全身运动数据生成方案与8分视频模仿学习动态重定向。  
-2) 最值得关注《HumanoidMimicGen》的全身规划数据生成，以及《Direct Dynamic Retargeting》将视频模仿高效迁移至人形体的方法。  
-3) 建议后续可探索《Imagine2Real》的零样本物体交互或《SPRINT》的奔跑快速控制，拓展人形机器人实际部署能力。
-- 详情：[/202605/28/README](/202605/28/README)
+1) 今日精读边缘设备轻量轨迹预测模型BitTP，速读零样本机器人学习、触觉-本体融合力估计及真实机器人VLA基准三篇论文。  
+2) 最值得关注方向：BitTP用大模型实现轻量化轨迹预测（8分），以及HumanEgo通过人类第一人称视频实现零样本机器人学习（7分）。  
+3) 建议下一步：若关注部署，可深入研究BitTP的压缩方法；若对机器人自学感兴趣，可探索HumanEgo的零样本范式。
+- 详情：[/202605/29/README](/202605/29/README)
 
 ### 精读区论文标签
-1. [HumanoidMimicGen: Data Generation for Loco-Manipulation via Whole-Body Planning](/202605/28/2605.27724v1-humanoidmimicgen-data-generation-for-loco-manipulation-via-whole-body-planning)  
-   标签：评分：10.0/10、query:ur
-   evidence：人形机器人全身运动操作数据生成方法
-2. [Direct Dynamic Retargeting for Humanoid Imitation Learning from Videos](/202605/28/2605.23762v1-direct-dynamic-retargeting-for-humanoid-imitation-learning-from-videos)  
+1. [BitTP: The Lightweight Trajectory Prediction Model with BitLLM for Edge-Devices](/202605/29/2605.29705v1-bittp-the-lightweight-trajectory-prediction-model-with-bitllm-for-edge-devices)  
    标签：评分：8.0/10、query:ur
-   evidence：从视频直接动态重定向生成人形机器人数据
-3. [FineVLA: Fine-Grained Instruction Alignment for Steerable Vision-Language-Action Policies](/202605/28/2605.27284v1-finevla-fine-grained-instruction-alignment-for-steerable-vision-language-action-policies)  
-   标签：评分：8.0/10、query:ur
-   evidence：统一10个机器人数据集的细粒度VLA监督数据构建工具
+   evidence：面向自主机器人边缘设备的轻量轨迹预测模型
 
 ### 速读区论文标签
-1. [Imagine2Real: Towards Zero-shot Humanoid-Object Interaction via Video Generative Priors](/202605/28/2605.22272v1-imagine2real-towards-zero-shot-humanoid-object-interaction-via-video-generative-priors)  
+1. [HumanEgo: Zero-Shot Robot Learning from Minutes of Human Egocentric Videos](/202605/29/2605.24934v2-humanego-zero-shot-robot-learning-from-minutes-of-human-egocentric-videos)  
    标签：评分：7.0/10、query:ur
-   evidence：利用视频先验生成人机交互数据
-2. [ProgVLA: Progress-Aware Robot Manipulation Skill Learning](/202605/28/2605.28231v1-progvla-progress-aware-robot-manipulation-skill-learning)  
+   evidence：从人类自我中心视频学习机器人技能无需机器人数据
+2. [Tactile-Proprioceptive Sensor Fusion for Contact Wrench Estimation in Whole-Body Physical Human-Robot Interaction](/202605/29/2605.28412v1-tactile-proprioceptive-sensor-fusion-for-contact-wrench-estimation-in-whole-body-physical-human-robot-interaction)  
    标签：评分：7.0/10、query:ur
-   evidence：一个紧凑型VLA模型，专为在严格计算预算下高效处理而设计，适用于边缘部署
-3. [SPRINT: Efficient Spectral Priors for Humanoid Athletic Sprints](/202605/28/2605.28549v1-sprint-efficient-spectral-priors-for-humanoid-athletic-sprints)  
+   evidence：全身人机交互中的接触力估计可用于故障检测
+3. [PhAIL: A Real-Robot VLA Benchmark and Distributional Methodology](/202605/29/2605.29710v1-phail-a-real-robot-vla-benchmark-and-distributional-methodology)  
    标签：评分：7.0/10、query:ur
-   evidence：利用人形运动序列参考库为宇树机器人生成运动轨迹，解决了数据稀缺问题
-4. [Tabero: Learning Gentle Manipulation with Closed-Loop Force Feedback from Vision, Touch, and Language](/202605/28/2605.27886v1-tabero-learning-gentle-manipulation-with-closed-loop-force-feedback-from-vision-touch-and-language)  
+   evidence：提供真实机器人基准、数据集及分布评估方法
+4. [GE-Sim 2.0: A Roadmap Towards Comprehensive Closed-loop Video World Simulators for Robotic Manipulation](/202605/29/2605.27491v1-ge-sim-20-a-roadmap-towards-comprehensive-closed-loop-video-world-simulators-for-robotic-manipulation)  
    标签：评分：6.0/10、query:ur
-   evidence：数据高效管道，利用机器人操作轨迹生成视觉-触觉-语言任务，用于数据集构建
+   evidence：基于真实机器人数据的闭环视频世界模拟器
+5. [Colosseum V2: Benchmarking Generalization for Vision Language Action Models](/202605/29/2605.27759v1-colosseum-v2-benchmarking-generalization-for-vision-language-action-models)  
+   标签：评分：6.0/10、query:ur
+   evidence：机器人操作泛化基准数据集
+6. [MonoDuo: Using One Robot Arm to Learn Bimanual Policies](/202605/29/2605.29298v1-monoduo-using-one-robot-arm-to-learn-bimanual-policies)  
+   标签：评分：6.0/10、query:ur
+   evidence：利用单臂机器人数据学习双臂策略
+7. [Energy-Aware NECO for Single-Pass Pixel-wise Out-of-Distribution Detection in Semantic Segmentation](/202605/29/2605.29773v1-energy-aware-neco-for-single-pass-pixel-wise-out-of-distribution-detection-in-semantic-segmentation)  
+   标签：评分：6.0/10、query:ur
+   evidence：专为移动机器人边缘端部署设计的单次前向传播OOD检测器
+8. [DynaFLIP: Rethinking Robotics Perception via Tri-Modal-Dynamics Guided Representation](/202605/29/2605.30350v1-dynaflip-rethinking-robotics-perception-via-tri-modal-dynamics-guided-representation)  
+   标签：评分：6.0/10、query:ur
+   evidence：构建图像-语言-3D流三元组用于感知表示学习
 
 
 <div class="dpr-home-promo-card">

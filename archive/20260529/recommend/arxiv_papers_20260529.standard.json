@@ -1,0 +1,390 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-05-29T21:18:54.631531+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 1,
+    "deep_divecandidates": 1,
+    "deep_cap": 6,
+    "deep_selected": 1,
+    "quick_candidates": 8,
+    "quick_skim_target": 11,
+    "quick_selected": 8
+  },
+  "deep_dive": [
+    {
+      "id": "2605.29705v1",
+      "source": "arxiv",
+      "title": "BitTP: The Lightweight Trajectory Prediction Model with BitLLM for Edge-Devices",
+      "abstract": "Trajectory prediction is a fundamental task for autonomous systems, requiring complex reasoning about multi-agent interactions and intents. Large language models (LLMs) have recently been adopted for this task, as they provide strong contextual reasoning and interpretable, language-based trajectory representations. However, these LLM-based predictors are extremely memory- and compute-intensive, making them difficult to deploy on resource-constrained edge devices such as on-board computers in autonomous robots. To bridge this gap, we propose BitTP, which converts an LLM-based trajectory predictor into a lightweight bitlinear architecture. We demonstrate that weight-only quantization to 1.58-bit (BitTP-Weight) is optimal. Crucially, activations must remain in full precision, as quantizing them leads to severe degradation and instability in spatio-temporal reasoning. Empirically, BitTP-Weight not only preserves but improves prediction quality over the full-precision (BF16) LLM baseline, reducing ADE by 14.29% and FDE by 20.97% on average, while simultaneously reducing memory usage and inference latency relative to other quantization methods. These results demonstrate that carefully designed quantization acts as an effective regularizer, enabling the practical deployment of sophisticated LLM-based reasoning on edge devices. Code is available at: https://github.com/MintCat98/BitTP.",
+      "authors": [
+        "Mincheol Kang",
+        "Hyunjin Lim",
+        "Bomin Kang",
+        "Daehee Park"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI"
+      ],
+      "published": "2026-05-28T10:04:02+00:00",
+      "link": "https://arxiv.org/pdf/2605.29705v1",
+      "tags": [
+        "keyword:ur",
+        "query:ur"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "lightweight trajectory prediction model for edge devices in autonomous robots",
+      "llm_evidence_cn": "面向自主机器人边缘设备的轻量轨迹预测模型",
+      "llm_evidence": "面向自主机器人边缘设备的轻量轨迹预测模型",
+      "canonical_evidence": "面向自主机器人边缘设备的轻量轨迹预测模型",
+      "llm_tldr_en": "BitTP converts LLM-based trajectory predictors into a lightweight bitlinear architecture for edge deployment, enabling on-board computation on resource-constrained robots.",
+      "llm_tldr_cn": "大型语言模型在轨迹预测上表现优异，但计算开销巨大，难以部署于资源受限的边缘机器人设备。本文提出BitTP，通过将LLM预测器转换为1.58比特的位线性架构，大幅降低内存和计算需求。实验表明，该方法在保持预测精度的同时，显著减小模型体积，适用于自主机器人机载计算。该工作为人形机器人等平台的实时轨迹预测提供了高效的边缘部署方案。",
+      "llm_tldr": "大型语言模型在轨迹预测上表现优异，但计算开销巨大，难以部署于资源受限的边缘机器人设备。本文提出BitTP，通过将LLM预测器转换为1.58比特的位线性架构，大幅降低内存和计算需求。实验表明，该方法在保持预测精度的同时，显著减小模型体积，适用于自主机器人机载计算。该工作为人形机器人等平台的实时轨迹预测提供了高效的边缘部署方案。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "edge deployment for humanoid robots",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "quick_skim": [
+    {
+      "id": "2605.24934v2",
+      "source": "arxiv",
+      "title": "HumanEgo: Zero-Shot Robot Learning from Minutes of Human Egocentric Videos",
+      "abstract": "Human egocentric video captures rich manipulation demonstrations without any robot hardware, yet transferring these skills to robots remains challenging due to the embodiment gap between human and robot in both visual appearance and kinematics. We present HumanEgo, a framework that bridges the embodiment gap by lifting each human demonstration to an entity-level representation of hand-object interaction, and training a flow matching policy with dense auxiliary objectives that amplify supervision from every trajectory. HumanEgo is robot-data-free, hardware-agnostic, data-efficient, and zero-shot human-to-robot transferable. With only 30 minutes of human videos per task, HumanEgo achieves 92.5% average success across four real-world tasks (75% with just 15 minutes), outperforms matched-time robot teleoperation by 41%, and robustly transfers zero-shot across novel robots, cameras, and environments. We release HumanEgo as an easy-to-use, open-source framework for learning robot policies directly from human data: https://github.com/TX-Leo/HumanEgo",
+      "authors": [
+        "Zhi Wang",
+        "Botao He",
+        "Kelin Yu",
+        "Seungjae Lee",
+        "Ruohan Gao",
+        "Furong Huang",
+        "Yiannis Aloimonos"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.AI",
+        "cs.CV",
+        "cs.LG"
+      ],
+      "published": "2026-05-24T08:26:41+00:00",
+      "link": "https://arxiv.org/pdf/2605.24934v2",
+      "tags": [
+        "keyword:ur",
+        "query:ur"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "robot learning from human egocentric videos without robot data",
+      "llm_evidence_cn": "从人类自我中心视频学习机器人技能无需机器人数据",
+      "llm_evidence": "从人类自我中心视频学习机器人技能无需机器人数据",
+      "canonical_evidence": "从人类自我中心视频学习机器人技能无需机器人数据",
+      "llm_tldr_en": "HumanEgo enables zero-shot robot learning from minutes of human egocentric videos by lifting demonstrations to entity-level representations and using flow matching.",
+      "llm_tldr_cn": "该论文提出HumanEgo框架无需机器人数据即可从人类第一人称视频中学习机器人技能通过将人类演示提升为实体级手物交互表示并使用流匹配策略训练策略仅需30分钟视频即可在真实世界任务中达到92.5%成功率该方法为构建机器人数据集提供了无需昂贵机器人设备的低成本途径可迁移至人形机器人操作任务",
+      "llm_tldr": "该论文提出HumanEgo框架无需机器人数据即可从人类第一人称视频中学习机器人技能通过将人类演示提升为实体级手物交互表示并使用流匹配策略训练策略仅需30分钟视频即可在真实世界任务中达到92.5%成功率该方法为构建机器人数据集提供了无需昂贵机器人设备的低成本途径可迁移至人形机器人操作任务",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2605.27491v1",
+      "source": "arxiv",
+      "title": "GE-Sim 2.0: A Roadmap Towards Comprehensive Closed-loop Video World Simulators for Robotic Manipulation",
+      "abstract": "We introduce GE-Sim 2.0 (Genie Envisioner World Simulator 2.0), a closed-loop video world simulator for robotic manipulation. Building on the action-conditioned video generation framework of Genie Envisioner, GE-Sim 2.0 is re-trained on thousands of hours of real-world robot data spanning teleoperation, contact-rich interaction, and on-robot policy deployment, substantially improving action-following fidelity and trajectory coverage. On top of this foundation, three new modules close the loop from video simulation to policy learning: a state expert that decodes proprioceptive state from video latents to support next-chunk prediction by downstream VLA policies; a world judge that scores generated rollouts against task instructions, yielding machine-verifiable success signals and rewards in place of manual inspection; and an acceleration framework that delivers a 25-frame rollout in 2.3 seconds on a single H100, with up to 4* frame skipping at inference for long-horizon evaluation. GE-Sim 2.0 tops the public WorldArena leaderboard at only 2B parameters, outperforming both dedicated robotic world models and closed-source general video generators, and policies trained against its rollouts and rewards translate into measurable real-world gains, establishing GE-Sim 2.0 as a practical platform for scalable evaluation and closed-loop learning of manipulation policies.",
+      "authors": [
+        "Boxiang Qiu",
+        "Liliang Chen",
+        "Yue Liao",
+        "Nan Wang",
+        "Lintao Wang",
+        "Jiayi Luo",
+        "Wenzhi Zhao",
+        "Shengcong Chen",
+        "Di Chen",
+        "Ye Li",
+        "Chen Gao",
+        "Shuicheng Yan",
+        "Si Liu",
+        "Maoqing Yao",
+        "Guanghui Ren"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-05-26T16:23:05+00:00",
+      "link": "https://arxiv.org/pdf/2605.27491v1",
+      "tags": [
+        "keyword:ur",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "closed-loop video world simulator using real-world robot data for training",
+      "llm_evidence_cn": "基于真实机器人数据的闭环视频世界模拟器",
+      "llm_evidence": "基于真实机器人数据的闭环视频世界模拟器",
+      "canonical_evidence": "基于真实机器人数据的闭环视频世界模拟器",
+      "llm_tldr_en": "GE-Sim 2.0 is a closed-loop video world simulator for robotic manipulation retrained on thousands of hours of real-world robot data for policy learning.",
+      "llm_tldr_cn": "该论文提出GE-Sim 2.0闭环视频世界模拟器基于动作条件视频生成框架在数千小时真实机器人数据上重新训练提升了动作跟随保真度和轨迹覆盖引入状态专家世界评判器等模块实现从视频模拟到策略学习的闭环虽聚焦操作任务但其数据生成方法可应用于人形机器人数据集构建",
+      "llm_tldr": "该论文提出GE-Sim 2.0闭环视频世界模拟器基于动作条件视频生成框架在数千小时真实机器人数据上重新训练提升了动作跟随保真度和轨迹覆盖引入状态专家世界评判器等模块实现从视频模拟到策略学习的闭环虽聚焦操作任务但其数据生成方法可应用于人形机器人数据集构建",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2605.28412v1",
+      "source": "arxiv",
+      "title": "Tactile-Proprioceptive Sensor Fusion for Contact Wrench Estimation in Whole-Body Physical Human-Robot Interaction",
+      "abstract": "Direct physical guidance is a natural means of teaching and interacting with robots, and robotic skins make a key contribution by enabling sensitive contact sensing and localization. This paper presents a tactile-proprioceptive sensor fusion framework for natural physical human-robot interaction. Tactile cues from pneumatic skin pads serve as contact indicators that bypass the ambiguity between frictional residues and applied external forces, enabling highly sensitive contact detection without explicit friction identification. We fuse these cues with motor-current-based proprioception to reconstruct multi-axis contact forces on the robot surface. To maintain accuracy during motion, we employ a temporal convolutional network (TCN) to mitigate friction hysteresis during stick-slip transitions, reducing uncertainty at contact onset and yielding smooth, responsive guidance. We validate the approach on a skin-integrated robot arm: (i) multi-axis forces are reconstructed in stationary contacts, and (ii) simultaneous force estimation and kinesthetic teaching are demonstrated. Results indicate improved sensitivity and responsiveness across diverse contact conditions compared with tactile-only and proprioceptive-only baselines, supporting tactile-proprioceptive fusion as a reliable pathway to safe, intuitive physical human-robot interaction.",
+      "authors": [
+        "Junha Min",
+        "Junghyeon Ma",
+        "Jiwung Kwon",
+        "Sunggyu Bae",
+        "Joohyung Kim",
+        "Kyungseo Park"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.LG"
+      ],
+      "published": "2026-05-27T12:47:25+00:00",
+      "link": "https://arxiv.org/pdf/2605.28412v1",
+      "tags": [
+        "keyword:ur",
+        "query:ur"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "contact wrench estimation for whole-body human-robot interaction can be used for fault detection",
+      "llm_evidence_cn": "全身人机交互中的接触力估计可用于故障检测",
+      "llm_evidence": "全身人机交互中的接触力估计可用于故障检测",
+      "canonical_evidence": "全身人机交互中的接触力估计可用于故障检测",
+      "llm_tldr_en": "Tactile-proprioceptive sensor fusion estimates contact forces, enabling detection of abnormal interactions that could indicate faults in humanoid robots.",
+      "llm_tldr_cn": "该论文提出触觉-本体感觉融合框架，用于全身人机交互中的接触力估计。通过气动皮肤触觉与电机电流本体感觉的融合，实现高灵敏度接触检测。该方法能准确重建多轴接触力，并利用时间卷积网络保持运动中的精度。该技术可用于人形机器人故障检测，如识别异常外力。",
+      "llm_tldr": "该论文提出触觉-本体感觉融合框架，用于全身人机交互中的接触力估计。通过气动皮肤触觉与电机电流本体感觉的融合，实现高灵敏度接触检测。该方法能准确重建多轴接触力，并利用时间卷积网络保持运动中的精度。该技术可用于人形机器人故障检测，如识别异常外力。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "fault detection in humanoid robots",
+      "matched_requirement_id": "req-6",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2605.27759v1",
+      "source": "arxiv",
+      "title": "Colosseum V2: Benchmarking Generalization for Vision Language Action Models",
+      "abstract": "Vision-Language-Action (VLA) models demonstrate promising generalization in robotic manipulation, driven by advances in large-scale vision and language pre-training. This progress can be misleading. Despite the zero-shot perception and language capabilities of VLAs, their overall task performance often degrades under distribution shifts, revealing gaps in how these systems translate high-level understanding into robust behavior. To systematically study this gap, we introduce Colosseum V2, a large-scale simulation benchmark for evaluating VLA generalization in robot learning across diverse conditions. The benchmark comprises 28 tasks spanning 13 task categories and two robot morphologies, covering a wide range of manipulation primitives and long-horizon behaviors. Built on the ManiSkill simulator, Colosseum V2 enables fast, GPU-parallelized evaluation and supports both in-domain and out-of-domain testing at scale. We evaluate state-of-the-art methods, including Action Chunking Transformers (ACT) and Pi0.5, and reveal limitations in both base performance and generalization. We demonstrate strong correlations between simulation and real-world metrics that support the ecological validity of the benchmark. By standardizing tasks, metrics, and evaluation protocols within a unified benchmark, Colosseum V2 enables reproducible and fair comparisons, reduced evaluation overhead, and accelerated progress toward general-purpose robot policies.",
+      "authors": [
+        "Jeremy Morgan",
+        "Prajwal Vijay",
+        "Hyeonho Oh",
+        "Jincen Song",
+        "Ashvin Arora",
+        "Alina Du",
+        "Gaurav Sukhatme",
+        "Jesse Thomason",
+        "Ishika Singh"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-05-26T23:17:39+00:00",
+      "link": "https://arxiv.org/pdf/2605.27759v1",
+      "tags": [
+        "keyword:ur",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "benchmark dataset for robotic manipulation generalization",
+      "llm_evidence_cn": "机器人操作泛化基准数据集",
+      "llm_evidence": "机器人操作泛化基准数据集",
+      "canonical_evidence": "机器人操作泛化基准数据集",
+      "llm_tldr_en": "Colosseum V2 is a large-scale simulation benchmark for evaluating VLA generalization in robot learning across 28 tasks and two robot morphologies.",
+      "llm_tldr_cn": "该论文提出了Colosseum V2基准用于评估视觉语言动作模型在机器人操作中的泛化能力包含28个任务13个类别和两种机器人形态覆盖多种操作原语该基准为机器人数据集的构建和评估提供了标准平台有助于研究分布偏移下的鲁棒行为虽不直接涉及人形机器人但数据集构建方法有参考价值",
+      "llm_tldr": "该论文提出了Colosseum V2基准用于评估视觉语言动作模型在机器人操作中的泛化能力包含28个任务13个类别和两种机器人形态覆盖多种操作原语该基准为机器人数据集的构建和评估提供了标准平台有助于研究分布偏移下的鲁棒行为虽不直接涉及人形机器人但数据集构建方法有参考价值",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2605.29710v1",
+      "source": "arxiv",
+      "title": "PhAIL: A Real-Robot VLA Benchmark and Distributional Methodology",
+      "abstract": "Real-world evaluation of vision-language-action (VLA) policies still rests on binary success rate at a fixed timeout with $N \\le 25$ rollouts per condition, almost always without confidence intervals or paired statistical comparison; these cohort sizes struggle to resolve close comparisons reliably. We introduce PhAIL (Physical AI Leaderboard, https://phail.ai), an open real-robot benchmark on a Franka FR3 (dataset, per-rollout artifacts, and end-to-end reference implementation) of a distributional evaluation methodology: the time-to-success cumulative distribution function (CDF) as the evaluation primitive, with two separated jobs. The first is scoring via Human-Relative Throughput (HRT), a dimensionless scalar with bootstrap confidence intervals, anchored to same-fixture human teleoperation. The second is a significance test (Kolmogorov-Smirnov, computed per-object and macro-averaged across objects). On four publicly-available VLAs, the macro-averaged KS test resolves two close comparisons (GR00T vs. ACT, OpenPI vs. ACT) at $N \\le 30$ rollouts per (model, object) cell where binary-threshold metrics do not; the closest pair (OpenPI vs. GR00T) remains unresolved within our budget. The best evaluated VLA is $\\sim 7\\times$ slower per operation (RMST ratio) than the human reference.",
+      "authors": [
+        "Sergey Arkhangelskiy"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-05-28T10:10:19+00:00",
+      "link": "https://arxiv.org/pdf/2605.29710v1",
+      "tags": [
+        "keyword:ur",
+        "query:ur"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "provides real-robot benchmark with dataset and evaluation methodology",
+      "llm_evidence_cn": "提供真实机器人基准、数据集及分布评估方法",
+      "llm_evidence": "提供真实机器人基准、数据集及分布评估方法",
+      "canonical_evidence": "提供真实机器人基准、数据集及分布评估方法",
+      "llm_tldr_en": "PhAIL introduces an open real-robot benchmark on Franka FR3 with a dataset and distributional evaluation methodology using time-to-success CDF, enabling robust comparison of VLA policies.",
+      "llm_tldr_cn": "针对现有人形机器人评估方法样本量小、统计置信度低的问题，PhAIL提出一个开放的真实机器人基准，包含Franka FR3数据集和基于累积分布函数的评估方法论，采用人类相对吞吐量指标并提供自助置信区间，使得策略比较更可靠。",
+      "llm_tldr": "针对现有人形机器人评估方法样本量小、统计置信度低的问题，PhAIL提出一个开放的真实机器人基准，包含Franka FR3数据集和基于累积分布函数的评估方法论，采用人类相对吞吐量指标并提供自助置信区间，使得策略比较更可靠。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2605.29298v1",
+      "source": "arxiv",
+      "title": "MonoDuo: Using One Robot Arm to Learn Bimanual Policies",
+      "abstract": "Bimanual coordination is essential for many real-world manipulation tasks, yet learning bimanual robot policies is limited by the scarcity of bimanual robots and datasets. Single-arm robots, however, are widely available in research labs. Can we leverage them to train bimanual robot policies? We present MonoDuo, a framework for learning bimanual manipulation policies using single-arm robot demonstrations paired with human collaboration. MonoDuo collects data by teleoperating a single-arm robot to perform one side of a bimanual task while a human performs the other, then swapping roles to cover both sides. RGB-D observations from a wrist-mounted and fixed camera are augmented into synthetic demonstrations for target bimanual robots using state-of-the-art hand pose estimation, image and point cloud segmentation, and inpainting. These synthetic demonstrations, grounded in real robot kinematics, are used to train bimanual policies. We evaluate MonoDuo on five tasks: box lifting, backpack packing, cloth folding, jacket zipping, and plate handover. Compared to approaches relying solely on human bimanual videos, MonoDuo enables zero-shot deployment on unseen bimanual robot configurations, achieving success rates up to 70%. With only 25 target robot demonstrations, few-shot finetuning further boosts success rates by 65-70% over training from scratch, demonstrating MonoDuo's effectiveness in efficiently transferring knowledge from single-arm robot data to bimanual robot policies.",
+      "authors": [
+        "Sandeep Bajamahal",
+        "Lawrence Yunliang Chen",
+        "Toru Lin",
+        "Zehan Ma",
+        "Jitendra Malik",
+        "Ken Goldberg"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-05-28T03:27:38+00:00",
+      "link": "https://arxiv.org/pdf/2605.29298v1",
+      "tags": [
+        "keyword:ur",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "single-arm robot data collection for bimanual policy learning",
+      "llm_evidence_cn": "利用单臂机器人数据学习双臂策略",
+      "llm_evidence": "利用单臂机器人数据学习双臂策略",
+      "canonical_evidence": "利用单臂机器人数据学习双臂策略",
+      "llm_tldr_en": "Presents MonoDuo, a framework to learn bimanual policies using single-arm robot demonstrations, involving dataset construction via human-robot collaboration.",
+      "llm_tldr_cn": "本文针对双臂策略学习因机器人稀缺而受限的问题，提出MonoDuo框架，通过单臂机器人遥操作与人类协作收集数据，并利用手部姿态估计生成合成演示。该方法有效缓解了双臂机器人数据不足的瓶颈，实验表明在多种双臂任务中达到与真实双臂数据训练相当的性能。",
+      "llm_tldr": "本文针对双臂策略学习因机器人稀缺而受限的问题，提出MonoDuo框架，通过单臂机器人遥操作与人类协作收集数据，并利用手部姿态估计生成合成演示。该方法有效缓解了双臂机器人数据不足的瓶颈，实验表明在多种双臂任务中达到与真实双臂数据训练相当的性能。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2605.29773v1",
+      "source": "arxiv",
+      "title": "Energy-Aware NECO for Single-Pass Pixel-wise Out-of-Distribution Detection in Semantic Segmentation",
+      "abstract": "Reliable semantic segmentation for mobile robots requires both accurate dense prediction and robust uncertainty estimation under distribution shift. Strong uncertainty baselines such as Monte Carlo Dropout often require repeated stochastic forward passes and are difficult to deploy on edge platforms.   We propose Energy-Aware NECO, a single-pass pixel-wise out-of-distribution (OOD) detector for semantic segmentation. The method combines a centered NECO-style geometric ratio computed from decoder features with a logit-based Energy score. Both components are standardized using statistics fitted on a pure in-distribution validation split and fused through a convex combination.   We evaluate the method on the miniMUAD subset using true pixel-level OOD labels. The proposed hybrid score achieves an AUROC of 0.8539, outperforming NECO-only (0.8280), Energy-only (0.8171), and an ensemble predictive-entropy baseline (0.8124). Additional qualitative and operating-point analyses show that the hybrid detector improves overall ranking performance while preserving the efficiency advantages of a single-pass design.   Code is available at https://github.com/boyuan-zhangx/Energy-Aware_NECO",
+      "authors": [
+        "Boyuan Zhang",
+        "Huanshan Huang",
+        "Yifei Cao"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV",
+        "cs.AI",
+        "cs.RO"
+      ],
+      "published": "2026-05-28T11:19:46+00:00",
+      "link": "https://arxiv.org/pdf/2605.29773v1",
+      "tags": [
+        "keyword:ur",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "single-pass OOD detector designed for edge deployment on mobile robots",
+      "llm_evidence_cn": "专为移动机器人边缘端部署设计的单次前向传播OOD检测器",
+      "llm_evidence": "专为移动机器人边缘端部署设计的单次前向传播OOD检测器",
+      "canonical_evidence": "专为移动机器人边缘端部署设计的单次前向传播OOD检测器",
+      "llm_tldr_en": "Proposes Energy-Aware NECO, a single-pass pixel-wise OOD detector for semantic segmentation that is efficient for edge platforms.",
+      "llm_tldr_cn": "本文提出Energy-Aware NECO，一种用于语义分割的单通像素级分布外检测器。该方法结合了NECO风格的几何比率和基于logit的能量分数，通过凸组合融合，并利用验证集拟合统计量标准化。实验表明，该方法在保持精度的同时适合边缘部署，为机器人边缘端的不确定性估计提供了高效方案。",
+      "llm_tldr": "本文提出Energy-Aware NECO，一种用于语义分割的单通像素级分布外检测器。该方法结合了NECO风格的几何比率和基于logit的能量分数，通过凸组合融合，并利用验证集拟合统计量标准化。实验表明，该方法在保持精度的同时适合边缘部署，为机器人边缘端的不确定性估计提供了高效方案。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "edge deployment for humanoid robots",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2605.30350v1",
+      "source": "arxiv",
+      "title": "DynaFLIP: Rethinking Robotics Perception via Tri-Modal-Dynamics Guided Representation",
+      "abstract": "Robot manipulation critically depends on perception that preserves the action-relevant aspects of a scene. Yet most robot learning pipelines are built upon visual encoders pre-trained for static recognition or vision-language alignment, leaving motion understanding to downstream policies. We introduce DynaFLIP, a dynamics-aware multimodal pre-training framework that pushes motion understanding upstream into perception. We construct image-language-3D flow triplets from heterogeneous human and robot videos, and use these triplets as training-time supervision to shape an image-only encoder. Our key idea is to encourage the three modalities to span a small simplex volume in the shared hyperspherical space -- a smaller simplex volume indicating stronger alignment. To avoid the geometric ambiguity and trivial collapse of naive volume minimization, we combine simplex-volume minimization with a cosine regularizer and a contrastive objective. Our analyses show that DynaFLIP focuses on control-relevant regions critical for manipulation. The resulting dynamics-aware representations serve as reusable visual backbones and consistently outperform baselines across diverse downstream policies, including VLAs. We validate this across diverse simulation and real-world setups, with gains reaching +22.5% under out-of-distribution scenarios. Our results suggest that robot generalization improves when visual representations are trained to encode not just what is present, but how the world changes under action.",
+      "authors": [
+        "Jusuk Lee",
+        "Seungjae Lee",
+        "Jonghun Shin",
+        "Hoseong Jung",
+        "Sungha Kim",
+        "Daesol Cho",
+        "H. Jin Kim",
+        "Jia-Bin Huang",
+        "Furong Huang"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.LG"
+      ],
+      "published": "2026-05-28T17:59:53+00:00",
+      "link": "https://arxiv.org/pdf/2605.30350v1",
+      "tags": [
+        "keyword:ur",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "constructs image-language-3D flow triplets for perception",
+      "llm_evidence_cn": "构建图像-语言-3D流三元组用于感知表示学习",
+      "llm_evidence": "构建图像-语言-3D流三元组用于感知表示学习",
+      "canonical_evidence": "构建图像-语言-3D流三元组用于感知表示学习",
+      "llm_tldr_en": "DynaFLIP proposes a dynamics-aware multimodal pre-training framework that constructs image-language-3D flow triplets from heterogeneous videos, enabling an image-only encoder to capture motion understanding for robot manipulation.",
+      "llm_tldr_cn": "针对机器人感知中运动理解不足的问题，DynaFLIP提出一种动态感知的多模态预训练框架，从异构的人与机器人视频中构建图像-语言-3D流三元组，通过最小化共享超球面上的单纯形体积来训练图像编码器，使其具备运动理解能力。在多个机器人操作任务上验证了表示的有效性。",
+      "llm_tldr": "针对机器人感知中运动理解不足的问题，DynaFLIP提出一种动态感知的多模态预训练框架，从异构的人与机器人视频中构建图像-语言-3D流三元组，通过最小化共享超球面上的单纯形体积来训练图像编码器，使其具备运动理解能力。在多个机器人操作任务上验证了表示的有效性。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    }
+  ]
+}
