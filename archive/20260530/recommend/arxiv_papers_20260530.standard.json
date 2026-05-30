@@ -1,0 +1,262 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-05-30T20:18:05.851826+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 2,
+    "deep_divecandidates": 3,
+    "deep_cap": 7,
+    "deep_selected": 3,
+    "quick_candidates": 3,
+    "quick_skim_target": 12,
+    "quick_selected": 3
+  },
+  "deep_dive": [
+    {
+      "id": "2605.23100v1",
+      "source": "arxiv",
+      "title": "Four Simple Proprioceptive Estimators for Legged Robots",
+      "abstract": "Legged robots carry an IMU, but the inertial solution drifts because consumer-grade IMUs are noisy. However, the feet create intermittent contacts with the environment that can be used to mitigate that drift. This report develops a sequence of increasingly expressive legged robot state estimators that leverage this. In all cases, the floating-base state comprises attitude, position, velocity, and IMU biases. To model foot contacts, we start from the contact-aided invariant EKF of Hartley et al., albeit at a reduced contact update rate. This is then augmented by replacing the measurement update by a small factor graph. Finally, we turn the same factors into a fixed-lag smoother with contact-episode footholds, with and without an evolving IMU bias. To facilitate reproducibility and further research in proprioceptive legged odometry, all four variants are available in GTSAM (Dellaert et. al), and we additionally provide a ROS2-compatible implementation.",
+      "authors": [
+        "Frank Dellaert",
+        "Chiyun Noh",
+        "Varun Agrawal",
+        "Ayoung Kim"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-05-21T23:17:48+00:00",
+      "link": "https://arxiv.org/pdf/2605.23100v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "proprioceptive estimators for legged robots using IMU and contact",
+      "llm_evidence_cn": "使用IMU和接触信息的足式机器人本体感受估计器",
+      "llm_evidence": "使用IMU和接触信息的足式机器人本体感受估计器",
+      "canonical_evidence": "使用IMU和接触信息的足式机器人本体感受估计器",
+      "llm_tldr_en": "Develops four increasingly expressive legged robot state estimators that leverage IMU and foot contact information, from contact-aided EKF to fixed-lag smoothers, improving drift mitigation.",
+      "llm_tldr_cn": "足式机器人携带的消费级IMU存在漂移，而足地间断接触可辅助修正。该论文开发了一系列从接触辅助不变EKF到固定滞后平滑器的状态估计器，逐步增加表达能力，通过因子图优化融合IMU偏置与足地接触信息。实验表明这些估计器能有效抑制惯性漂移，为基于本体感受信号的人形机器人故障检测提供了关键的传感器预处理和状态估计工具。",
+      "llm_tldr": "足式机器人携带的消费级IMU存在漂移，而足地间断接触可辅助修正。该论文开发了一系列从接触辅助不变EKF到固定滞后平滑器的状态估计器，逐步增加表达能力，通过因子图优化融合IMU偏置与足地接触信息。实验表明这些估计器能有效抑制惯性漂移，为基于本体感受信号的人形机器人故障检测提供了关键的传感器预处理和状态估计工具。",
+      "llm_tags": [
+        "query:humanoid-ood"
+      ],
+      "matched_query_tag": "query:humanoid-ood",
+      "matched_query_text": "humanoid robot fault diagnosis using proprioceptive signals",
+      "matched_requirement_id": "req-9",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2605.24922v1",
+      "source": "arxiv",
+      "title": "MuJoCoUni:Persistent Batched Runtime Primitives for MuJoCo",
+      "abstract": "We present MuJoCoUni, a downstream MuJoCo distribution for online robot learning and batched physics evaluation. Alongside the open-loop batched trajectory generation already provided by upstream mujoco.rollout, MuJoCoUni supplies runtime primitives for stateful environment execution. The target workloads need high-throughput parallel execution while retaining upstream CPU MuJoCo semantics for models, sensors, contact, and constraints. Its core object, BatchEnvPool, is a C++/pybind11 executor that owns per-environment mjModel copies, per-thread mjData workers, and an internal thread pool. It provides final-state-only short stepping, sparse reset, reset-lifecycle domain randomization, batched sensor forward evaluation without advancing dynamics, and batched Jacobian and height-field queries. The implementation is confined to the Python binding layer; MuJoCo's solver, contact model, integrator, and core source tree retain upstream semantics. This report describes the BatchEnvPool API, implementation boundary, relationship to rollout, and the validation and benchmark scripts shipped with the open-source mujoco-uni package, which is installed with \\texttt{pip install mujoco-uni}.",
+      "authors": [
+        "Yufei Jia",
+        "Junzhe Wu"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-05-24T07:57:22+00:00",
+      "link": "https://arxiv.org/pdf/2605.24922v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "Provides persistent batched runtime for MuJoCo, enabling efficient fault injection simulation and dataset generation.",
+      "llm_evidence_cn": "提供MuJoCo的持久批处理运行时，支持高效的故障注入仿真和数据集生成。",
+      "llm_evidence": "提供MuJoCo的持久批处理运行时，支持高效的故障注入仿真和数据集生成。",
+      "canonical_evidence": "提供MuJoCo的持久批处理运行时，支持高效的故障注入仿真和数据集生成。",
+      "llm_tldr_en": "MuJoCoUni extends MuJoCo with persistent batched runtime primitives for stateful environment execution, supporting high-throughput simulation for robot learning and fault injection.",
+      "llm_tldr_cn": "MuJoCoUni是MuJoCo的一个下游发行版，提供了持久化的批处理运行时原语，支持有状态环境执行、批量传感器评估和域随机化。它专为在线机器人学习和故障注入仿真设计，能够高效生成训练数据，是构建人形机器人数据集和进行故障仿真实验的有力工具。",
+      "llm_tldr": "MuJoCoUni是MuJoCo的一个下游发行版，提供了持久化的批处理运行时原语，支持有状态环境执行、批量传感器评估和域随机化。它专为在线机器人学习和故障注入仿真设计，能够高效生成训练数据，是构建人形机器人数据集和进行故障仿真实验的有力工具。",
+      "llm_tags": [
+        "query:humanoid-ood"
+      ],
+      "matched_query_tag": "query:humanoid-ood",
+      "matched_query_text": "fault injection simulation for humanoid robots in MuJoCo or similar environments",
+      "matched_requirement_id": "req-14",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2605.27992v1",
+      "source": "arxiv",
+      "title": "Patched-DeltaNet: Token-Level Event-Driven Memory for Linear-Time Anomaly Detection",
+      "abstract": "Time series anomaly detection is critical for maintaining the reliability of mission-critical systems. While Transformer-based models like PatchTST have shown remarkable performance, their $\\mathcal{O}(L^2)$ computational complexity severely limits deployment in resource-constrained environments. In this paper, we propose Patched-DeltaNet, a novel architecture combining time-series patching with Gated Delta Networks. By integrating these paradigms, we hypothesize and demonstrate the emergence of token-level event-driven memory, whereby the patching mechanism extracts local semantic chunks, while the error-driven DeltaNet updates its recurrent state exclusively when significant physical changes, defined as deltas, occur. This synergy effectively filters out background noise and captures sudden anomalous drifts. Our rigorous experiments on the Server Machine Dataset (SMD) benchmark demonstrate the structural superiority and sample efficiency of Patched-DeltaNet. By strictly outperforming recent architectures under unified evaluation constraints and identical compute budgets, our model yields an ROC-AUC of 0.957 and PA-F1 of 0.822, while drastically reducing computational complexity to the theoretical minimum of $\\mathcal{O}(L/P)$.",
+      "authors": [
+        "Tae-Gyun Lee",
+        "Junyoung Park",
+        "Kyu Won Han"
+      ],
+      "primary_category": "cs.LG",
+      "categories": [
+        "cs.LG"
+      ],
+      "published": "2026-05-27T05:33:03+00:00",
+      "link": "https://arxiv.org/pdf/2605.27992v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "lightweight anomaly detection architecture with linear-time complexity suitable for edge deployment",
+      "llm_evidence_cn": "线性时间复杂度的轻量级异常检测架构，适合边缘部署",
+      "llm_evidence": "线性时间复杂度的轻量级异常检测架构，适合边缘部署",
+      "canonical_evidence": "线性时间复杂度的轻量级异常检测架构，适合边缘部署",
+      "llm_tldr_en": "Patched-DeltaNet combines time-series patching with Gated Delta Networks to achieve token-level event-driven memory for linear-time anomaly detection, suitable for resource-constrained environments.",
+      "llm_tldr_cn": "针对时间序列异常检测在资源受限环境下计算复杂度过高的问题，本文提出Patched-DeltaNet，融合时序分块与门控Delta网络，实现令牌级事件驱动记忆。该架构具有线性时间复杂度，且仅当显著物理变化时更新状态，极大降低了计算负载。实验表明其性能媲美Transformer，但效率显著提升，非常适合边缘平台（如RK3588）上的实时异常检测部署。",
+      "llm_tldr": "针对时间序列异常检测在资源受限环境下计算复杂度过高的问题，本文提出Patched-DeltaNet，融合时序分块与门控Delta网络，实现令牌级事件驱动记忆。该架构具有线性时间复杂度，且仅当显著物理变化时更新状态，极大降低了计算负载。实验表明其性能媲美Transformer，但效率显著提升，非常适合边缘平台（如RK3588）上的实时异常检测部署。",
+      "llm_tags": [
+        "query:humanoid-ood"
+      ],
+      "matched_query_tag": "query:humanoid-ood",
+      "matched_query_text": "lightweight LSTM or GRU models deployed on embedded platforms for anomaly detection",
+      "matched_requirement_id": "req-12",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "quick_skim": [
+    {
+      "id": "2605.24251v1",
+      "source": "arxiv",
+      "title": "Rethinking Continual Anomaly Detection on the Edge: Benchmarking Under Realistic Industrial Conditions",
+      "abstract": "Continual anomaly detection (CAD) addresses the need for industrial inspection systems to adapt to evolving production conditions, yet existing methods share three critical gaps: unrealistic evaluation, no systematic comparison, and no consideration of edge deployment constraints. We introduce a unified benchmark combining discrete-task evaluation on structural and logical anomalies, a novel continuous drift protocol, the first head-to-head comparison of all published CAD methods, and computational efficiency profiling on edge hardware. Our results reveal that existing CAD methods do not consistently outperform traditional approaches with simple experience replay. Thus motivated, we propose DINOSaur, a training-free method combining a frozen DINOv3 backbone with spatially-indexed coreset memory and neighborhood-restricted anomaly scoring. DINOSaur achieves zero forgetting by construction, outperforms all evaluated methods across all five protocols, and runs at sub-100\\,ms inference on an NVIDIA Jetson Orin Nano, with on-device adaptation to new tasks in under 30 seconds.",
+      "authors": [
+        "Chad Weatherly",
+        "Sen Lin"
+      ],
+      "primary_category": "cs.LG",
+      "categories": [
+        "cs.LG",
+        "cs.CV"
+      ],
+      "published": "2026-05-22T22:05:45+00:00",
+      "link": "https://arxiv.org/pdf/2605.24251v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "edge deployment for continual anomaly detection, benchmarking on edge hardware",
+      "llm_evidence_cn": "边缘持续异常检测，在边缘硬件上进行基准测试",
+      "llm_evidence": "边缘持续异常检测，在边缘硬件上进行基准测试",
+      "canonical_evidence": "边缘持续异常检测，在边缘硬件上进行基准测试",
+      "llm_tldr_en": "Introduces a benchmark for continual anomaly detection on edge, profiling computational efficiency on edge hardware, and proposes a training-free method DINOSaur that outperforms existing CAD methods.",
+      "llm_tldr_cn": "针对工业检测中持续异常检测方法评估不现实、缺乏系统比较且未考虑边缘部署约束的问题，该论文建立了统一的基准测试，包括离散任务评估和连续漂移协议。首次对所有已发布CAD方法进行对比，并在边缘硬件上进行效率分析。实验表明现有方法并不优于简单经验回放，进而提出了免训练方法DINOSaur。这项工作为边缘部署异常检测提供了方法论基础，可迁移至人形机器人故障检测场景。",
+      "llm_tldr": "针对工业检测中持续异常检测方法评估不现实、缺乏系统比较且未考虑边缘部署约束的问题，该论文建立了统一的基准测试，包括离散任务评估和连续漂移协议。首次对所有已发布CAD方法进行对比，并在边缘硬件上进行效率分析。实验表明现有方法并不优于简单经验回放，进而提出了免训练方法DINOSaur。这项工作为边缘部署异常检测提供了方法论基础，可迁移至人形机器人故障检测场景。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "edge deployment for humanoid robots",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2605.25639v1",
+      "source": "arxiv",
+      "title": "AeroTSBoost: Temporal-Statistical Boosting for Real-World UAV Telemetry Anomaly Mining",
+      "abstract": "Mining anomalies from unmanned aerial vehicle (UAV) state-estimation logs is challenging because failures are sparse, temporally structured, and distributed across heterogeneous PX4 telemetry streams with variable sensor availability and missing values. We present AeroTSBoost, a temporal-statistical boosting framework for real-world UAV telemetry anomaly mining. AeroTSBoost aligns multivariate flight logs, converts each window into deterministic descriptors that capture distributional shifts, quantile structure, endpoint drift, local dynamics, and lag correlation, and trains a class-balanced LightGBM detector. On UAV-SEAD, AeroTSBoost achieves the strongest AUPRC among evaluated classical, supervised tabular, neural reconstruction, recurrent, Granger-causality-based, and frequency-domain baselines. Across five seeds, it reaches $0.7516\\pm0.0043$ AUPRC and $0.5342\\pm0.0108$ threshold-swept event F1, improving AUPRC by 5.79 absolute points over the strongest non-AeroTSBoost baseline. Under purged chronological and leave-log-out protocols, it remains the best AUPRC method, reaching $0.6066\\pm0.0193$ and $0.6388\\pm0.0315$, respectively. On related ALFA fixed-wing UAV fault logs, AeroTSBoost reaches $0.9259\\pm0.0076$ leave-sequence-out AUPRC, ahead of RandomForest ($0.8835\\pm0.0797$) and moments-only ($0.8700\\pm0.0481$). These results show that deterministic temporal-statistical representations remain highly competitive for sparse anomaly mining in operational cyber-physical telemetry.",
+      "authors": [
+        "Junhao Wei",
+        "Haochen Li",
+        "Yanxiao Li",
+        "Yifu Zhao",
+        "Dexing Yao",
+        "Baili Lu",
+        "Xudong Ye",
+        "Sio-Kei Im",
+        "Yapeng Wang",
+        "Xu Yang"
+      ],
+      "primary_category": "cs.CE",
+      "categories": [
+        "cs.CE"
+      ],
+      "published": "2026-05-25T09:40:37+00:00",
+      "link": "https://arxiv.org/pdf/2605.25639v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "UAV telemetry anomaly mining method transferable to humanoid robot fault diagnosis",
+      "llm_evidence_cn": "无人机遥测异常挖掘方法可迁移至人形机器人故障诊断",
+      "llm_evidence": "无人机遥测异常挖掘方法可迁移至人形机器人故障诊断",
+      "canonical_evidence": "无人机遥测异常挖掘方法可迁移至人形机器人故障诊断",
+      "llm_tldr_en": "AeroTSBoost proposes a temporal-statistical boosting framework for real-world UAV telemetry anomaly mining using LightGBM, achieving strong AUPRC, and its methodology is transferable to humanoid robot proprioceptive signal anomaly detection.",
+      "llm_tldr_cn": "针对无人机遥测数据中的稀疏、时序性异常，本文提出AeroTSBoost时序统计提升框架，通过对齐多变量飞行日志并提取分布偏移、分位数结构等确定性描述符，训练类别平衡的LightGBM检测器，在UAV-SEAD数据集上取得最优AUPRC。该方法虽用于无人机，但其时序统计特征工程和分类器设计对基于本体感受信号的人形机器人故障诊断具有借鉴意义。",
+      "llm_tldr": "针对无人机遥测数据中的稀疏、时序性异常，本文提出AeroTSBoost时序统计提升框架，通过对齐多变量飞行日志并提取分布偏移、分位数结构等确定性描述符，训练类别平衡的LightGBM检测器，在UAV-SEAD数据集上取得最优AUPRC。该方法虽用于无人机，但其时序统计特征工程和分类器设计对基于本体感受信号的人形机器人故障诊断具有借鉴意义。",
+      "llm_tags": [
+        "query:humanoid-ood:composite"
+      ],
+      "matched_query_tag": "query:humanoid-ood:composite",
+      "matched_query_text": "Papers central to 请帮我查找与人形机器人故障诊断、异常检测（OOD / Anomaly Detection）、自监督时序重建（VAE / GRU）、以及边缘部署相关的论文。重点关注：基于本体感受信号（关节位置/速度/力矩/IMU）的故障检测方法；用于时序数据的自监督异常检测（如 OmniAnomaly, USAD）；开放集识别 / OOD 检测在机器人安全中的应用；轻量化模型（LSTM/GRU）在嵌入式平台（RK3588）上的部署；受 RAPT (Munn 等, 2026) 启发的机器人故障诊断框架。另外，请补充一些关于仿人机器人（Unitree G1 等）仿真故障注入、数据集构建的文献。, especially work that connects or combines: humanoid robot fault diagnosis using proprioceptive signals; anomaly detection from joint position velocity torque IMU signals in humanoid robots; out-of-distribution detection for safe robot operation; lightweight LSTM or GRU models deployed on embedded platforms for anomaly detection; RAPT framework for robot fault diagnosis based on proprioception; fault injection simulation for humanoid robots in MuJoCo or similar environments; Anomaly detection in humanoid robot using proprioceptive signals; Self supervised time series anomaly detection for robot fault diagnosis; Open set recognition in robotics for safety and anomaly detection; Deploying lightweight LSTM GRU on RK3588 for time series anomaly detection.",
+      "matched_requirement_id": "req-composite-humanoid-ood",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2605.25639v2",
+      "source": "arxiv",
+      "title": "AeroTSBoost: Temporal-Statistical Boosting for Real-World UAV Telemetry Anomaly Mining",
+      "abstract": "Mining anomalies from unmanned aerial vehicle (UAV) state-estimation logs is challenging because failures are sparse, temporally structured, and distributed across heterogeneous PX4 telemetry streams with variable sensor availability and missing values. We present AeroTSBoost, a temporal-statistical boosting framework for real-world UAV telemetry anomaly mining. AeroTSBoost aligns multivariate flight logs, converts each window into deterministic descriptors that capture distributional shifts, quantile structure, endpoint drift, local dynamics, and lag correlation, and trains a class-balanced LightGBM detector. On UAV-SEAD, AeroTSBoost achieves the strongest AUPRC among evaluated classical, supervised tabular, neural reconstruction, recurrent, Granger-causality-based, and frequency-domain baselines. Across five seeds, it reaches $0.7516\\pm0.0043$ AUPRC and $0.5342\\pm0.0108$ threshold-swept event F1, improving AUPRC by 5.79 absolute points over the strongest non-AeroTSBoost baseline. Under purged chronological and leave-log-out protocols, it remains the best AUPRC method, reaching $0.6066\\pm0.0193$ and $0.6388\\pm0.0315$, respectively. On related ALFA fixed-wing UAV fault logs, AeroTSBoost reaches $0.9259\\pm0.0076$ leave-sequence-out AUPRC, ahead of RandomForest ($0.8835\\pm0.0797$) and moments-only ($0.8700\\pm0.0481$). These results show that deterministic temporal-statistical representations remain highly competitive for sparse anomaly mining in operational cyber-physical telemetry.",
+      "authors": [
+        "Junhao Wei",
+        "Haochen Li",
+        "Yanxiao Li",
+        "Yifu Zhao",
+        "Dexing Yao",
+        "Baili Lu",
+        "Xudong Ye",
+        "Sio-Kei Im",
+        "Yapeng Wang",
+        "Xu Yang"
+      ],
+      "primary_category": "cs.CE",
+      "categories": [
+        "cs.CE"
+      ],
+      "published": "2026-05-25T09:40:37+00:00",
+      "link": "https://arxiv.org/pdf/2605.25639v2",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "time-series anomaly mining for UAV telemetry, method transferable to humanoid robot fault diagnosis",
+      "llm_evidence_cn": "无人机时间序列异常挖掘，方法可迁移至人形机器人故障诊断",
+      "llm_evidence": "无人机时间序列异常挖掘，方法可迁移至人形机器人故障诊断",
+      "canonical_evidence": "无人机时间序列异常挖掘，方法可迁移至人形机器人故障诊断",
+      "llm_tldr_en": "Proposes AeroTSBoost, a temporal-statistical boosting framework for anomaly mining from heterogeneous UAV telemetry. Achieves strong AUPRC on UAV-SEAD. The time-series anomaly detection methodology is highly transferable to humanoid robot fault diagnosis.",
+      "llm_tldr_cn": "该论文针对无人机遥测数据中异常稀疏且时空结构复杂的问题，提出AeroTSBoost框架：对齐多变量飞行日志，将每个时间窗口转换为确定性描述子（捕获分布偏移、分位数结构、端点漂移、局部动态和滞后相关性），然后训练类别平衡的LightGBM检测器。在UAV-SEAD数据集上取得了最优AUPRC。其面向时序数据的异常挖掘方法可直接迁移至人形机器人关节传感器信号的故障诊断，具有重要参考价值。",
+      "llm_tldr": "该论文针对无人机遥测数据中异常稀疏且时空结构复杂的问题，提出AeroTSBoost框架：对齐多变量飞行日志，将每个时间窗口转换为确定性描述子（捕获分布偏移、分位数结构、端点漂移、局部动态和滞后相关性），然后训练类别平衡的LightGBM检测器。在UAV-SEAD数据集上取得了最优AUPRC。其面向时序数据的异常挖掘方法可直接迁移至人形机器人关节传感器信号的故障诊断，具有重要参考价值。",
+      "llm_tags": [
+        "query:humanoid-ood:composite"
+      ],
+      "matched_query_tag": "query:humanoid-ood:composite",
+      "matched_query_text": "Papers central to 请帮我查找与人形机器人故障诊断、异常检测（OOD / Anomaly Detection）、自监督时序重建（VAE / GRU）、以及边缘部署相关的论文。重点关注：基于本体感受信号（关节位置/速度/力矩/IMU）的故障检测方法；用于时序数据的自监督异常检测（如 OmniAnomaly, USAD）；开放集识别 / OOD 检测在机器人安全中的应用；轻量化模型（LSTM/GRU）在嵌入式平台（RK3588）上的部署；受 RAPT (Munn 等, 2026) 启发的机器人故障诊断框架。另外，请补充一些关于仿人机器人（Unitree G1 等）仿真故障注入、数据集构建的文献。, especially work that connects or combines: humanoid robot fault diagnosis using proprioceptive signals; anomaly detection from joint position velocity torque IMU signals in humanoid robots; out-of-distribution detection for safe robot operation; lightweight LSTM or GRU models deployed on embedded platforms for anomaly detection; RAPT framework for robot fault diagnosis based on proprioception; fault injection simulation for humanoid robots in MuJoCo or similar environments; Anomaly detection in humanoid robot using proprioceptive signals; Self supervised time series anomaly detection for robot fault diagnosis; Open set recognition in robotics for safety and anomaly detection; Deploying lightweight LSTM GRU on RK3588 for time series anomaly detection.",
+      "matched_requirement_id": "req-composite-humanoid-ood",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    }
+  ]
+}

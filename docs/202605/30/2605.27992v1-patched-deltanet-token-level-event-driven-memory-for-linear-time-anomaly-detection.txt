@@ -1,0 +1,111 @@
+Title: Patched-DeltaNet: Token-Level Event-Driven Memory for Linear-Time Anomaly Detection
+
+URL Source: https://arxiv.org/pdf/2605.27992v1
+
+Published Time: Thu, 28 May 2026 00:41:40 GMT
+
+Number of Pages: 7
+
+Markdown Content:
+# Patched-DeltaNet: Token-Level Event-Driven Memory for Linear-Time Anomaly Detection 
+
+Tae-Gyun Lee, Junyoung Park, and Kyu Won Han ∗
+
+Electronics and Telecommunications Research Institute, South Korea 
+
+Abstract 
+
+Time series anomaly detection is critical for maintaining the relia-bility of mission-critical systems. While Transformer-based models like PatchTST have shown remarkable performance, their O(L2) compu-tational complexity severely limits deployment in resource-constrained environments. In this paper, we propose Patched-DeltaNet , a novel architecture combining time-series patching with Gated Delta Net-works. By integrating these paradigms, we hypothesize and demon-strate the emergence of token-level event-driven memory , whereby the patching mechanism extracts local semantic chunks, while the error-driven DeltaNet updates its recurrent state exclusively when significant physical changes, defined as deltas, occur. This synergy effectively fil-ters out background noise and captures sudden anomalous drifts. Our rigorous experiments on the Server Machine Dataset (SMD) bench-mark demonstrate the structural superiority and sample efficiency of Patched-DeltaNet. By strictly outperforming recent architectures un-der unified evaluation constraints and identical compute budgets, our model yields an ROC-AUC of 0.957 and PA-F1 of 0.822, while drasti-cally reducing computational complexity to the theoretical minimum of O(L/P ). 
+
+# 1 Introduction 
+
+The detection of anomalies in multivariate time series is foundational for the robustness of modern industrial systems. Traditional approaches often rely on discrete error codes, which are vulnerable to silent failures, defined as situations in which the physical trajectory deviates without triggering predefined system errors. Consequently, deep learning models reconstructing physical trajectories have become the standard [3, 4, 2]. 
+
+> ∗
+
+Corresponding author. Email: wally.han@etri.re.kr 
+
+1
+
+> arXiv:2605.27992v1 [cs.LG] 27 May 2026
+
+Recently, Transformer-based architectures like PatchTST [1] have dom-inated by segmenting time series into patches to capture local semantics. However, their quadratic complexity O(L2) restricts edge deployment. Linear-time sequence models like Mamba [6] and DeltaNet [5] offer O(L) efficiency, and recent forecasting models like Reverso [7] utilize DeltaNet point-wise. However, point-wise processing remains highly susceptible to local noise and yields suboptimal sequence length reduction. To address this, we propose Patched-DeltaNet . Moving beyond a simple architectural combination, we frame this integration as creating a token-level event-driven memory. Our core contributions are threefold: 
+
+• Architectural Synergy: We propose a novel integration of patching and Gated DeltaNet, reducing the attention bottleneck to O(L/P )while retaining robust local context. 
+
+• Event-Driven Anomaly Detection: We demonstrate that applying an error-driven update rule to patched tokens naturally filters unin-formative background noise, updating the memory state only during meaningful physical drifts indicative of anomalies. 
+
+• Superior Discriminability: We demonstrate the structural superi-ority and sample efficiency of Patched-DeltaNet on the SMD bench-mark [3]. Under unified evaluation constraints, our model strictly outperforms recent state-of-the-art architectures, achieving superior anomaly discriminability evidenced by ROC-AUC of 0.957, while op-erating with a fraction of the computational footprint. 
+
+# 2 Methodology 
+
+The proposed Patched-DeltaNet consists of three main components: a time-series patching module, a Gated DeltaNet core, and a reconstruction-based anomaly scorer. 
+
+2.1 Time-Series Patching 
+
+Given a multivariate time-series sequence X ∈ RL×F , where L is the se-quence length and F is the number of physical features, we divide X into non-overlapping patches. Each patch has a length of P , resulting in a sequence of N = ⌊L/P ⌋
+
+patches. These patches are flattened into tokens Xp ∈ RN ×(P ·F ). This operation reduces the effective sequence length from L to N , structurally mitigating the memory footprint while preserving the local physical context [1]. 22.2 Gated DeltaNet Core 
+
+The patched tokens are projected into a hidden dimension to yield queries 
+
+qt, keys kt, and values vt at each time step t. Unlike standard self-attention, DeltaNet [5] employs an error-driven linear attention mechanism. The mem-ory state St is updated based on the delta ∆ t, defined as the difference be-tween the actual value vt and the prediction of the model based on its past state St−1:∆t = vt − St−1kt (1) Furthermore, a data-dependent decay vector βt, functioning as a gating mechanism, is applied to actively forget uninformative, static background trajectories. Aligning with modern gated linear attention paradigms [5, 6], 
+
+βt is parameterized by a linear projection of the input token xt:
+
+βt = σ(Wβ xt + bβ ) ∈ Rdk (2) where Wβ and bβ are learnable parameters, and σ denotes the sigmoid activa-tion function. Crucially, rather than acting as a simple neuronal activation, this gate multiplicatively modulates the recurrent memory matrix St−1. The state and the final output ot are updated dynamically: 
+
+St = diag( βt)St−1 + ∆ tk⊤ 
+
+> t
+
+(3) 
+
+ot = Stqt (4) Through this explicit mathematical formulation, the model updates its re-current state only when meaningful physical dynamics alter the trajectory such that ∆ t̸ = 0, making it exceptionally suited for isolating anomalous behaviors. 
+
+2.3 Anomaly Scoring 
+
+The output of the DeltaNet is projected back to the original patching di-mension to reconstruct the patched time-series sequence ˆXp. We utilize the Mean Squared Error (MSE) between the input Xp and the reconstruction ˆXp to compute the final anomaly score [3, 4]. 
+
+# 3 Experiments and Results 
+
+3.1 Experimental Setup 
+
+To validate the feasibility and superiority of Patched-DeltaNet, we evalu-ated our model on the globally recognized Server Machine Dataset (SMD) benchmark [3], a highly complex multivariate dataset consisting of 38 fea-tures. For training, we configured the sliding window sequence length to 
+
+L = 100, patch size P = 10, and the hidden dimension dmodel = 128. While 3training operates on these concise windows, computation efficiency is stress-tested at an extended lengths scaling from L = 8 , 000 up to L = 512 , 000 to explicitly demonstrate the scalability of the model for high-frequency sensor environments. To ensure a strictly fair and rigorous evaluation, we established a uni-fied experimental protocol and directly reproduced the recent architectures, PatchTST [1] and Reverso [7], as our primary baselines. Specifically, PatchTST was implemented by substituting the DeltaNet core with a standard self-attention mechanism under identical patching conditions, while Reverso was reproduced by setting the patch size P = 1 to ablate the patching mechanism. All models were trained using the Adam optimizer with an MSE reconstruction loss objective. All latency and memory measurements were conducted on a single NVIDIA RTX 5080 GPU using PyTorch with 
+
+bfloat16 precision and a standardized batch size of 16 for efficiency evalu-ations. 
+
+3.2 Results: Anomaly Discriminability 
+
+We evaluated the models using ROC-AUC and the Point-Adjusted F1-Score [3], which is the standard protocol in time-series anomaly detection to ac-count for continuous anomaly segments. Table 1: Performance and Efficiency on the SMD Benchmark. PatchTST and Reverso are directly reproduced under our unified protocol to ensure strictly fair comparisons. Baseline latency is evaluated at L = 8000 using 
+
+bfloat16 precision and a batch size of 16.                        
+
+> Model Accuracy Efficiency PA-F1 ROC-AUC Params Latency Complexity
+> PatchTST [1] 0.802 0.920 424.1 K 0.54 ms O(( L/P )2)Reverso [7] 0.789 0.935 77.5 K 2.11 ms O(L)
+> Patched-DeltaNet 0.822 0.957 165.4 K 1.96 ms O(L/P )
+
+As demonstrated in Table 1, Patched-DeltaNet achieves superior anomaly discriminability, evidenced by an ROC-AUC of 0.957 and a PA-F1 of 0.822. Crucially, in a direct and fair comparison under identical patching con-figurations, Patched-DeltaNet strictly outperforms the self-attention based PatchTST baseline. This demonstrates that the error-driven update mecha-nism of DeltaNet is fundamentally superior at isolating anomalous behaviors compared to standard global attention. Furthermore, the direct compari-son with the point-wise architecture proves that the absence of patching in Reverso leads to severe performance degradation. This result validates our hypothesis that token-level semantic chunks are essential for filtering local noise. 43.3 Results: Computational Efficiency and Scalability 
+
+The true advantage of Patched-DeltaNet emerges in its computational foot-print during long-term context processing. In real-world edge deployments, such as unmanned vehicles, high-frequency sensors routinely sample at rates exceeding 1 kHz. Consequently, capturing even a few minutes of historical context requires processing sequence lengths well beyond L = 100 , 000. To simulate this, we conducted an extreme scalability test progressively increas-ing L up to 512,000, as detailed in Table 2. Table 2: Scalability Analysis: Inference latency and peak VRAM allocation across extreme sequence lengths. Tested with batch size 16 to observe the fundamental complexity bounds of each architecture.                                             
+
+> Seq Length PatchTST Reverso Patched-DeltaNet
+> Latency VRAM Latency VRAM Latency VRAM 8,000 0.54 ms 75.0 MB 2.11 ms 453.9 MB 1.96 ms 93.6 MB 32,000 1.50 ms 198.1 MB 9.47 ms 1700.5 MB 1.92 ms 269.8 MB 64,000 4.44 ms 361.0 MB 18.98 ms 3347.1 MB 2.15 ms 506.7 MB 128,000 15.24 ms 681.4 MB 38.06 ms 6659.6 MB 4.21 ms 964.3 MB 256,000 54.83 ms 1328.3 MB 76.75 ms 13284.6 MB 8.41 ms 1893.9 MB 512,000 208.27 ms 2622.6 MB 4089.97 ms 26535.1 MB 16.83 ms 3753.8 MB
+
+At relatively short sequences of L = 8 , 000, PatchTST exhibits a slightly lower latency of 0.54 ms compared to 1.96 ms for our model, primarily due to highly optimized hardware-level self-attention implementations. However, as L expands beyond the crossover point of 64,000, the O(( L/P )2) com-putational bottleneck of standard Transformers becomes evident, causing exponential spikes in latency that reach up to 208.27 ms at L = 512 , 000. Conversely, the point-wise Reverso baseline adheres to linear scaling but suffers from a massive absolute latency of 4089.97 ms and a catastrophic memory footprint of 26.5 GB at L = 512 , 000. This substantial memory requirement exceeds the capacity of standard hardware accelerators, lead-ing to severe memory bottlenecks that fundamentally prohibit its use in resource-constrained edge environments. Patched-DeltaNet uniquely resolves these bottlenecks. By unifying the structural compression of patching and the linear complexity of DeltaNet, it maintains a strictly linear and remarkably flat latency curve. At the extreme length of L = 512 , 000, Patched-DeltaNet operates in just 16.83 ms, achieving a speedup of over 12 × compared to PatchTST. Furthermore, it maintains an exceptionally stable memory footprint of 3.7 GB in stark contrast to the 26.5 GB demanded by Reverso. This hardware-friendly scaling empirically proves that Patched-DeltaNet is highly practical for on-device edge intelligence, where real-time continuous monitoring and strict VRAM constraints are critical. 53.4 Ablation Study: The Role of Gating 
+
+To isolate the contribution of the data-dependent gating mechanism within the DeltaNet core, we evaluated a variant of Patched-DeltaNet with the gat-ing function disabled. Without gating, the ROC-AUC of the model notably decreased from 0.957 to 0.949. While the Point-Adjusted F1-score showed a marginal, noise-level variation from 0.822 to 0.824 due to the threshold-sensitive nature of the PA protocol, the degradation in ROC-AUC clearly indicates a loss in fundamental discriminability. This confirms our hypothe-sis that the gating mechanism effectively decays uninformative background trajectories, preventing the recurrent state from being polluted by static noise and maintaining a sharper boundary between normal and anomalous events. 
+
+# 4 Conclusion 
+
+Patched-DeltaNet offers a paradigm shift in time-series anomaly detection. By harmonizing the local context capturing capability of patching with the global, error-driven linear attention of Delta Networks, we establish a new standard for efficiency and discriminability on the SMD benchmark. Under unified evaluation constraints, the architecture achieves superior anomaly discriminability while guaranteeing an extraordinary O(L/P ) computational efficiency, positioning it as an optimal, state-of-the-art solution for real-time, mission-critical edge intelligence systems. 
+
+# Acknowledgment 
+
+This work was supported by the Institute of Information and Communi-cations Technology Planning and Evaluation (IITP) grant funded by the Korea government, MSIT, Development of Adaptive On-Device Software Technology for Environmental Adaptation in Unmanned Vehicle Surveil-lance Equipment, under Grant RS-2024-00461079. 
+
+# References 
+
+[1] Yuqi Nie, Nam H. Nguyen, Phanwadee Sinthong, and Jayant Kalagnanam. A time series is worth 64 words: Long-term forecasting with transformers. In International Conference on Learning Represen-tations (ICLR) , 2023. [2] Jiehui Xu, Haixu Wu, Jianmin Wang, and Mingsheng Long. Anomaly transformer: Time series anomaly detection with association discrep-ancy. In International Conference on Learning Representations (ICLR) ,2022. 6[3] Ya Su, Youjian Zhao, Chenhao Niu, Rong Liu, Wei Sun, and Dan Pei. Robust anomaly detection for multivariate time series through stochastic recurrent neural network. In Proceedings of the 25th ACM SIGKDD International Conference on Knowledge Discovery & Data Mining , pages 2828–2837, 2019. [4] Julien Audibert, Pietro Michiardi, Fr´ ed´ eric Guyard, S´ ebastien Marti, and Maria A. Zuluaga. Usad: Unsupervised anomaly detection on multivariate time series. In Proceedings of the 26th ACM SIGKDD In-ternational Conference on Knowledge Discovery & Data Mining , pages 3395–3404, 2020. [5] Songlin Yang, Bailin Wang, Yikang Shen, Rameswar Panda, and Yoon Kim. Parallelizing linear transformers with the delta rule over state space models. In International Conference on Machine Learning (ICML) , 2024. [6] Albert Gu and Tri Dao. Mamba: Linear-time sequence modeling with selective state spaces. arXiv preprint arXiv:2312.00752 , 2023. [7] Xinghong Fu, Yanhong Li, Georgios Papaioannou, and Yoon Kim. Re-verso: Efficient Time Series Foundation Models for Zero-shot Forecast-ing. arXiv preprint arXiv:2602.17634 , 2026. 7
