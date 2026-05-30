@@ -1,0 +1,618 @@
+Title: Identifying Explicit Parsimonious Piece-wise Polynomial Relationships in Industrial time-series: Application to manipulator robots
+
+URL Source: https://arxiv.org/pdf/2605.28320v1
+
+Published Time: Thu, 28 May 2026 01:19:27 GMT
+
+Number of Pages: 12
+
+Markdown Content:
+# Identifying Explicit Parsimonious Piece-wise Polynomial Relationships in Industrial time-series: Application to manipulator robots 
+
+Mazen Alamir a, ∗, Sacha Clavel b,a 
+
+> aUniv. Grenoble Alpes, CNRS, Grenoble INP, GIPSA-lab, 38000 Grenoble, France
+> bStaubli company. Auvergne-Rhône-Alpes, 74210, Faverges, France.
+
+Abstract 
+
+This paper addresses the problem of identifying parsimonious explicit piece-wise polynomial relationships that might involve a relatively large number of raw features. The algorithm leverages a recently proposed identification algorithm that yields parsi-monious implicit relationships enabling to derive normality characterization in the context of anomaly detection and localization. The algorithm proposed in this paper goes a step further by deriving explicit piece-wise representations that are built using the set of polynomials involved in the implicit representations. The framework is illustrated on the problem of identifying parsimonious explicit representations of the inverse model of a 6-axis manipulator robot. Moreover, further experiments on a 4-axis robot are also shown which are designed to investigate the generalization capability of parsimonious models compared to state-of-the-art DNNs structures, when models face unseen contexts of use. 
+
+Keywords: Nonlinear Sparse Identification; Machine Learning; Scalable Algorithms; Manipulator Robots; Multi-Variate Polynomials; Generalization to unseen contexts. 
+
+1. Introduction 
+
+The identification of general nonlinear relationships [11, 1] from available sensors data is a key issue in many engineering problems such as, building digital twins, control design, state estimation, virtual sensors design and anomaly detection, to cite but a few. It is no surprise that this topic has been investigated since a long time ago and that the problem remains open as far as general solutions that perform on any use-case is concerned. The burst of Deep Neural Networks (DNNs) in all their variants [7, 11, 14] distillates the inaccurate belief according to which, the problem is behind us. The later belief is based on the uni-versal approximation property of DNNs and the now available parallel computational devices. This suggests that one has just 
+
+to collect the necessary amount of data and then to wait enough time for the gradient descent process to converge to a su ffi ciently good solution for the resulting model to miraculously emerge. Unfortunately, the specificity of industrial time-series tends to temper this optimism [8, 5, 4, 13]. Indeed, the industrial con-text brings additional di ffi culties and set of challenging require-ments that make the problem hard to tackle in a totally satis-factory way. Some of these specificities related to industrial context are discussed in the following section.    
+
+> ∗Corresponding author
+> Email addresses: mazen.alamir@grenoble-inp.fr (Mazen Alamir),
+> s.clavel@staubli.com (Sacha Clavel)
+
+1.1. Specificities of the industrial context 
+
+Training datasets are almost never complete .Indeed, industrial equipments operate within a high variety of contexts of use that are generally not all present in the training datasets. This increases the risk of overfitting even if several regularization techniques such as early stopping can be imple-mented to prevent the curse of overfitting. While this risk af-fects all models, it is particularly present in DNNs because of the generally high number of parameters involved. Explainability is mandatory .Indeed, prior to their consent to use data-driven models in pro-duction , industrial operators need to have a minimum under-standing of the structure of relationships and the underlying coupling that should validate their own physically-based knowl-edge of the equipments. In particular when anomalies are de-tected, it is particularly important in the industrial context to be able to provide a root-cause analysis of the alarm. To this respect, DNN models involving tens, if not, hundreds of thou-sands of parameters obviously do not address this concern un-less a specific a posteriori sensitivity analysis is undertaken which remains a tedious task with generally not rigorously as-sessed outcomes despite recent meaningful advances [9, 10, 6]. Industrial relationships are inherently parsimonious .Industrial equipments are designed based on a set of physical laws which are structurally parsimonious. This makes algo-rithms that are designed to capture this parsimony a priori more appropriate as this makes them less sensitive to the specificity of the training data and hence less prone to bad generalization 
+
+> arXiv:2605.28320v1 [cs.RO] 27 May 2026
+
+on unseen contexts. This contribution is based on the belief that the parsimony is an answer to all of the above-mentioned specific aspects of indus-trial concerns. Indeed: 1) Parsimoniously identified relationships are more closely re-lated to the true hidden physical relationships and are hence more robust to unseen contexts over which they are more likely to remain valid. 2) Parsimonious relationships are structurally built upon a pri-ori sensitivity analysis and hence provide a priori more explain-able structures through a battery of relationships (residual gen-erators), each involving a strict subset of arguments that are mandatory to making the relationship stand. This enables a clear diagnosis procedure by pointing out which sensors are in-volved in the residual that goes beyond the alarm’s threshold. 3) Finally, it goes without saying that if the relationships are inherently parsimonious, then parsimonious identification is the natural target to pursue. 
+
+1.2. This contribution 
+
+The present paper leverages a recently proposed algorithm [3] that identifies a set of multi-variate polynomials Pκ, with κ =
+
+1, . . . , nm such that the residual defined by: 
+
+e(x, y) : = nm
+
+min  
+
+> κ=1
+
+y − Pκ(x) (1) is su ffi ciently small with a moderate number ( nm) of polynomi-als. In other words, at each instant, the label y is close to one of the predicted values Pκ(x) provided by the set of nm polynomi-als. In [3], the precision of the so-derived implicit relationship has been compared to a DNN structure in terms of residuals am-plitude, computation time and complexity. The comparison showed orders of magnitude of di ff erence in terms of complex-ity and computation time for far lower residuals values. Notice however that, in the case of DNN, the residual is defined by: 
+
+e(x, y) = |ˆy(x) − y| ˆy(x) = DNN (x) (2) where ˆ y = DNN (x) is an explicit prediction of the label as a function of the vector of features x.Consequently, while the comparison stands when the task is to perform anomaly detection as in [3], the fact that the lat-ter model provides an explicit prediction of the label while the former only produces an implicit residual renders the two ap-proaches not fully comparable. For instance, when the task is to derive virtual sensors replacing the physical sensor y by the virtual sensors DNN (x), or when DNN (x) is used as a feedforward term in a control loop, the implicit piece-wise polynomial ap-proach does not provide an alternative. The present contribution fills the gap by deriving parsimonious 
+
+explicit piece-wise polynomial representations of the form: ˆy := 1
+
+nVnVX
+
+> ℓ=1
+
+Pκ⋆ℓ (x)(x) where κ⋆ℓ : Rn → { 1, . . . , nm} (3) in which, the set of polynomials {Pκ}nm 
+
+> κ=1
+
+are those identified for the implicit residual generation relationship (1) while each of the nV maps κ⋆ℓ defines a specific partition of the features space that maps sub-regions of Rn into the set of indices {1, . . . , nm}
+
+where the associated polynomial applies. More precisely, a number nV of di ff erent voters (predictors) are designed as shown later. The voter with index ℓ ∈ { 1, . . . , nV }
+
+uses the map κ⋆ℓ so that, at feature x, it predicts the label using 
+
+Pκ⋆ℓ (x)(x) thus mapping to the most suitable polynomial accord-ing to its own partitioning. The overall explicit prediction is then taken to be the average of the predictions by the di ff erent voters. Based on the above presentation, the contribution of the present paper is threefold: 
+
+✓ The derivation of the heuristics leading to the above parti-tioning maps κ⋆ℓ and consequently to a set of predictors to be averaged. 
+
+✓ The application of the resulting explicit piece-wise poly-nomial identification to a real-life data associated to a 6-axis manipulator robots shown in Figure 1. This can be viewed as a solid proof of concept for the proposed so-lution. The results are compared to some state-of-the art DNN structures. 
+
+✓ In addition, additional dedicated experiments are provided with a 4-axis manipulator where truly di ff erent contexts of use are considered for training and test in order to examine and compare the generalization capabilities of the di ff erent architectures. The paper is organized as follows: Section 2 introduces some definitions and notation used throughout the paper and briefly recalls the principle of the foundational algorithm proposed in [3]. Section 3 explains the features space partitioning principle and provides the details of the algorithm leading to the implementation of aggregation-based prediction (3). In Section 4, the algorithm is validated on six-axis industrial manipulator robot 1 through an extensive comparison with a set of possible DNN architectures regarding precision and computation times. The additional experimental investigation of the generalization capacity to unseen contexts for a four-axis manipulator robot is also provided and discussed together with a comparison to the results provided by the best DNN architecture. 
+
+> 1This is a more complicated use-case than the already involved four-axis robot used in previous work regarding implicit relationships identification [3].
+
+22. Definitions and Notation 
+
+2.1. Datasets, features & labels 
+
+We consider a set of n sensors whose values are considered as features 2:
+
+x :=
+
+
+
+x(1) 
+
+...
+
+x(n)
+
+ ∈ Rn
+
+together with a sensor y used as targeted label, namely to be ex-pressed as a function of x. The value provided by these sensors at a sampling acquisition instant indexed by t are denoted by 
+
+xt ∈ Rn, x(i) 
+
+> t
+
+∈ R and yt ∈ R.A dataset D is obtained by collecting time-series of x and y at a set of instants T :
+
+D := n(xt, yt)o 
+
+> t∈T
+
+∈ hRn × RicT
+
+(4) where for any discrete set D, cD stands for the cardinality of D,namely, the number of rows or samples. Given a dataset D, the projection on the features [resp. label] space are denoted by D|x [resp. D|y], namely: 
+
+D|x := nxt
+
+o 
+
+> t∈T
+
+; D|y := nyt
+
+o 
+
+> t∈T
+
+(5) The derivation of the explicit relationships relies on the parti-tioning of the space of features into sub-regions. The notation associated to this task is discussed in the next section. 
+
+2.2. Partitioning triplets 
+
+Consider a dataset D and its projection on the space of features 
+
+D|x. The following concept is extensively used in the sequel: Definition 1. A partitioning triplet ξ := (π, nd, xc) consists in the following items: 
+
+• A polynomial π : Rn → R,
+
+• An integer a nd ≥ 2,
+
+• A centre b xc ∈ Rn.These items are also sometimes referred to using the fol-lowing notation ξπ, ξnd and ξxc .   
+
+> aThis represents the number of sub-regions.
+> bThe partitioning is based on the value of π(x−xc).
+
+A partitioning triplet enables to partition the space of features following the steps described below where π, nd and xc associ-ated to the triplet are supposed to be fixed.          
+
+> 2Here we use Machine Learning wording according to which one seeks a function Fsuch that the label y can be approximated as a function of the fea-tures x via y≈F(x).
+
+Consider the set of scalar values defined by: 
+
+π D|x − xc
+
+ := nπ(x − xc) | x ∈ D|x
+
+o (6) together with the associated set of quantiles extended left and right by −∞ and +∞:
+
+Q := n−∞ , p⌊100 /nd ⌋, . . . , p⌊100 ∗(nd −1) /nd ⌋, +∞o
+
+where pq is the q-th quantile of the set of numbers π(D|x − xc). For instance, for nd = 3, the set Q is defined by the sequence 
+
+{−∞ , p33% , p66% + ∞} leading to the following three intervals of values n(−∞ , p33% ] , (p33% , p66% ] and ( p66% , +∞)o.More generally, a partitioning triplet ξ = (π, nd, xc) enables to define nd intervals covering all possible values of π(x − xc) and hence inducing a partitioning of the space of features accord-ing the index of the interval to which π(x − xc) belongs. The resulting partitioning map is denoted by: 
+
+σξ(x) ∈ { 1, . . . , nd} (7) and the associated nd regions are denoted by: 
+
+R(i) 
+
+> ξ
+
+:= nx ∈ Rn | σξ(x) = io ∀i ∈ { 1, . . . , nd} (8) 
+
+2.3. Implicit piece-wise representation 
+
+As it is mentioned earlier, the contribution of the present paper leverages a recently proposed algorithm [3] that solves a spe-cific implicit residual generation problem. For the sake of com-pleteness, let us briefly recall some of the notation and ideas associated to the previous contribution. Assume that a working dataset D is available gathering instances of a vector of features 
+
+x and the associated values of some targeted label denoted by y.The problem of parsimoniously identifying an implicit multi-variate polynomial residual expressing relationships between x
+
+and y can be stated as follows: Find a set of nm sparse polynomials 
+
+Pκ : Rn → R κ ∈ { 1, . . . , nm} (9) where 
+
+Pκ(x) : =
+
+> n(κ)
+> c
+
+X
+
+> j=1
+
+α(κ)
+
+> j
+
+
+
+> n
+
+Y
+
+> i=1
+
+[x(i)]p(κ)
+
+> i j
+
+| {z } 
+
+> ϕ(κ)
+> j(x)
+
+(10) s.t. the following implicit residual: 
+
+e(x, y) : = nm
+
+min  
+
+> κ=1
+
+y − Pκ(x) (11) is parsimoniously minimized over the training set D. 
+
+> The D-Implicit piece-wise polynomial ML problem
+
+3In [3], the precise meaning of the minimization involved in (11) is rigorously defined. Shortly speaking, an initial threshold th 
+
+is defined on the regression error, and several attempts are made to meet this error in a parsimonious way, beyond which the threshold is progressively increased until the training dataset is covered. 
+
+3. Identification of explicit piece-wise relationships 
+
+The first idea that comes to mind when searching for an explicit model is to keep track of the optimal indices, say κ⋆(x, y) ∈{1, . . . , nm} for ( x, y) ∈ D, upon running the algorithm proposed in [3] which solves (11), for the training dataset D, and to use the resulting dataset: 
+
+nx, κ ⋆(x, y)o 
+
+> (x,y)∈D
+
+(12) in which x plays the role of features vector while the integer 
+
+κ⋆ ∈ { 1, . . . , nm} plays the role of label (class index) to train an nm-class ML-classifier which might be able to provide a features-dependent polynomial’s index, namely: 
+
+cl : x → { 1, . . . , nm} (13) Indeed, if the task of building such a classifier were success-ful, the explicit formulae one is looking for would simply bowl down to: ˆy := Pcl (x)(x) (14) Unfortunately, the author’s experience on di ff erent datasets showed that this roadmap is quite often unsuccessful in that the precision of the resulting classifier is not good enough for the resulting prediction to be acceptable 3.This is precisely the reason why the methodology proposed in the present section borrows a di ff erent path that is based on an a priori set of explicit partitions of the space of features that is not derived from to the values of indices κ⋆ encountered during the execution of the implicit form computation’s algorithm. More precisely and anticipating the presentation that follows, it will be shown that each partitioning triplet ξ := (π, nd, xc) as de-fined in Section 2.2 provides a single predictor (voter) amongst a set of nV voters involved in the definition (3). So let us first ex-plain how such a partitioning triplet ξ leads to an explicit piece-wise polynomial predictor (voter). This is the aim of the next section. Once this is done, the rationale according to which several voters are iteratively generated is explained in Section 3.2.   
+
+> 3As a matter of fact, the precision of the resulting piece-wise polynomial explicit relationship is very often worse that a single explicit polynomial rela-tionships. This can be explained given the intimate details of the algorithm of [3] but such an explanation would go beyond the scope of the present contri-bution for which only the failure of this first attempt does really matter as it justifies the new heuristic presented in this contribution.
+
+3.1. A single ξ-associated predictor 
+
+This is where the concept of partitioning triplet introduced in Section 2.2 becomes helpful. Indeed, each candidate partition-ing triplet ξ = (π, nd, xc) induces a partitioning of the space of features into nd regions R(i) 
+
+> ξ
+> nd
+> i=1
+
+defined by (8). Now, it is possible to associate to each of these regions the index of the 
+
+best polynomial among those involved in the implicit solution, namely Pκ, κ = 1, . . . , nm. More precisely: 
+
+∀i ∈ { 1, . . . , nd}, κ ξ(i) : = arg min 
+
+> κ∈{ 1,..., nm}
+
+X 
+
+> xt∈R (i)
+> ξ
+
+Pκ(xt) − yt (15) Namely, for each region R(i) 
+
+> ξ
+
+, the best polynomial is the one that minimizes the Mean-Absolute-Error MAE 4 over the instances lying inside the region R(i) 
+
+> ξ
+
+. This enables to define an explicit relationship for each partitioning triplet ξ as follows: Given 
+
+✓ A set of polynomials Pκ, κ = 1, . . . , nm involved in an implicit model; 
+
+✓ A partitioning triplet ξ := (π, nd, xc) leading to the set of regions R(i) 
+
+> ξ
+
+, i = 1, . . . , nd,an explicit relationship is defined that associates to each vector of features x ∈ R(i) 
+
+> ξ
+
+the prediction given by Pκξ (i)(x)where the index κ(i) 
+
+> ξ
+
+is defined by (15). 
+
+> ξ-associated explicit model
+
+However, using the fact that the index i of the region to which 
+
+x belongs is precisely σξ(x) [see (7)], the explicit relationship induced by the partitioning triplet ξ can be condensed into: 
+
+Pξ(x) : = Pκξ (σξ (x)) (x) (16) hence, defining the κ⋆ map involved in (3) by κ⋆ := κξ ◦ σξ.As will be further explained, the above explicit predictor is based on a process that depends on a randomly generated poly-nomial π, so the resulting fit might obviously be far from being optimal. The idea is thus to create a set of di ff erent explicit representations providing a set of predictions that are then ag-gregated to provide the final explicit prediction. This is detailed in the next section. 
+
+3.2. A multiple voters-based prediction 
+
+The main idea is to start with an initial partitioning triplet ξ(1) 
+
+with centre x(1)  
+
+> c
+
+= 0 and a randomly generated polynomial 5 π(1) .The degree, say deg part ∈ N of the partitioning polynomial is fixed as well as the number nd of partitioning intervals. These 
+
+> 4Obviously the Mean-Squared-Error (MSE) can be used as well.
+> 5The random generation is done for a priori given degree and number of active monomials.
+
+4two parameters are used identically for all the forthcoming par-titioning triplets (voters). The resulting explicit piece-wise polynomial Pξ(1) defined by (16) induces an initial precision ϵ(1) , computed as shown here-after using (19). This precision is then used as basis for the pos-sible acceptance of the next voter, namely ξ(2) . More precisely, when another candidate partitioning triplet ξ(2) is examined, it is accepted only if the resulting new prediction law: 
+
+PVoters (x) : = 12
+
+> 2
+
+X
+
+> ℓ=1
+
+Pξ(ℓ) (x) | Voters := {ξ(ℓ)}2
+
+> ℓ=1
+
+provides a precision that is lower than γc × ϵ(1) for a predefined contraction parameter γc ∈ (0 , 1). More generally, when a current number j − 1 of voters has been accepted, adding a j-th one is conditioned by the prediction: 
+
+PVoters (x) : = 1
+
+j
+
+> j
+
+X
+
+> ℓ=1
+
+Pξ(ℓ) (x) | Voters := {ξ(ℓ)} j 
+
+> ℓ=1
+
+(17) providing a precision ϵ( j) such that 
+
+ϵ( j) ≤ γc × ϵ( j−1) (18) The process stops when the number of trials nmax V is reached. For a given set of voters, the precision is computed as follows: 
+
+ϵ(Voters |D) : = μ
+
+"nPVoters (x) − yo
+
+> (x,y)∈D
+
+#
+
+(19) where μ is some measure of the regression errors computed on the training data. When j voters are already adopted, the new candidate parti-tioning triplet is generated as follows: The training samples are first reordered according to the regression error. Based on this reordering, the centre x( j) 
+
+> c
+
+is randomly chosen among the top 
+
+ηtop = 5% higher errors samples. As for the polynomial π( j), it is randomly generated using the pre-defined degree deg part and the pre-defined number npart Modes of active monomials. This can be summarized in Algorithm 1. The following comments help understanding the steps of the algorithm. 
+
+✓ The input parameters of the algorithm are the ones that have been already discussed, namely: The set of polynomials in-volved in the implicit piece-wise polynomial solution {Pκ}nm
+
+> κ=1
+
+,the maximum number nmax  
+
+> V
+
+of voters, the contraction rate γc ∈
+
+(0 , 1) involved in (18), the degree deg part and the number npart Modes 
+
+of active monomials used in the partition polynomials π in-volved in the candidate partition triplets ξ(ℓ) and finally, the top ratio ηtop ∈ (0 , 1) used to define the highest error features vector inside which the future value of the centre xc is to be randomly sampled. 
+
+Algorithm 1 Explicit piece-wise polynomial design                                                                                                                     
+
+> 1: Input parameters :2: {Pκ}nm
+> κ=1,nmax
+> V,γc,deg part ,ηtop ,nd,npart Modes =20 3: Initialization :ξ(1) ←(π(1) ,nd,0), Voters ← { ξ(1) },4: nv←1, iter ←1, ϵ(1) ←ϵ(Voters |D). 5: ntop ← ⌊ ηtop ×cD⌋▷Number of top error rows
+> 6: while iter ≤nmax
+> Vdo
+> 7: e← |P Voters (·)−y(·)|▷Compute errors
+> 8: Xord ←sort (D|xaccording to increasing e)▷Sort features rows .9: xc←random (Xord [: −ntop ]) ▷Select a random row .10: π←Random polynomial of degree deg part .11: ξ←(π, nd,xc)▷Candidate partitioning triplet .12: Voters_cand ←Voters ∪{ ξ}▷Candidate set of voters
+> 13: ϵcand ←ϵ(Voters_cand |D)▷The candidate error
+> 14: if ϵcand ≤γc×ϵ(nv)then
+> 15: Voters ←Voters_cand ▷Adopt the set of Voters
+> 16: nv←nv+1▷Update the number of voters
+> 17: ϵ(nv)←ϵcand ▷Update the new precision
+> 18: end if
+> 19: iter ←iter +120: end while
+> 21: return a
+
+✓ The set of voters, denoted by Voters is represented by the set of partitioning triplets that are designed upon executing the algorithm. It is initialized in Step 3 by randomly generating a polynomial π(1) while setting n(1)  
+
+> d
+
+and x(1)  
+
+> c
+
+to respectively nd and 0 ∈ Rnx (Step 3). The current eligibility precision error ϵ(1) is computed according to (19) in Step 4. Based on ηtop the number of top error rows ntop in the training data is computed (Step 5). 
+
+✓ Steps 6-11 enable to generate a new candidate partitioning triplet. This is done by randomly selecting a new candidate centre xc among the ntop highest errors rows (samples) in the training data, the error is computed in Step 7. This enables to reorder the set of rows (samples) in the training dataset (Step 8). A random selection is performed among the ntop highest error samples (Step 9). In order to complete the items of a partition-ing triplet, a random polynomial π is sampled (Step 10) and the candidate partitioning triplet ξ is defined (Step 11). 
+
+✓ The new candidate partitioning triplet is used to create a can-didate set of voters (Step 12) for which the associated candidate error ϵcand is computed (Step 13). 
+
+✓ Steps 14-18 check whether the required contraction rate ( γc)on the precision level is satisfied [see (18)] in which case, the set of voters, the number of voters and the new precision threshold are updated accordingly in Steps 15-17. Otherwise, a new iter-ation is fired leading to a new hopefully successful partitioning triplet. 
+
+✓ The algorithm stops when the number of allowable trials nmax 
+
+> V
+
+is reached (Step 6). Remark 1 (T wo sets of polynomials ). Notice that the previ-ously described solution involves two sets of polynomials which play two di ff erent roles in the resulting explicit model: 
+
+5✓ The set of polynomials denoted previously by P κ, κ ∈{1, . . . , nm} which represents an input argument for the al-gorithm proposed in the paper. These polynomials are ob-tained using the algorithm of [3] and might be used to compute very tight implicit residuals of the form (1) once a pair (x, y) is available. 
+
+✓ The set of polynomials π(ℓ), ℓ ∈ { 1, . . . , nv} which are used, each for a specific voter, to partition the features space in a di ff erent way and hence to derive n v di ff erent explicit relationships using the previous set of polynomials. 
+
+4. Validation on industrial data 
+
+The framework proposed in the previous sections is evaluated on two use-cases concerning respectively a 6-axis (Figure 1) and a 4-axis (Figure 4) manipulator robots. While the former use-case focuses on the ability of the algorithm to scale in the presence of a decently high number of features ( dim (x) = 18), the latter has been used to collect two datasets corresponding to di ff erent contexts of use where the ability of the models to generalize to unseen contexts can be more aggressively chal-lenged 6.
+
+4.1. Use-case 1: Scalability, sparsity, performance and com-putation time 
+
+In this first use-case, the 6-axis robot depicted in Figure 1 is used. The dataset, the algorithm’s hyperparameters setting, the performance indicators, the used hardware as well as the alter-native DNNs architectures to which comparison is made are successively presented. Some of the information are shared with the second examples described in Section 4.2.  
+
+> Figure 1: The 6-axis S taubli TX2-90 used in the present paper to validate the proposed algorithms and heuristics.
+> 6As the need for this second use-case appeared in a later stage of the re-search program, the first robot was no more available for a new round of multiple-context focused measurement collection.
+
+4.1.1. The Dataset 
+
+The whole dataset includes 381 di ff erent random trajectories of a 6-axis manipulator robot (see Figure 1). The mean duration of a single trajectory is 51 sec with a standard deviation of 4.1 sec. The measurements are acquired at a frequency of 250 Hz leading to a total dataset including 4,858,087 rows (samples). The set of measurements comprises the kinematic variables: 
+
+q ∈ R6, ˙ q ∈ R6, ¨ q ∈ R6 used to define the vector of features 
+
+x := (q, ˙q, ¨q) ∈ R18 . Six labels are eligible which are the torques 
+
+τi, i = 1, . . . , 6 applied to the robot joints. Notice that each of the six possibilities of the label choice leads to a di ff erent in-stance of the identification problem τi = Fi(x), i = 1, . . . , 6which all share the same vector of features x ∈ R18 .Only one over 10 samples in the first 5% part of the dataset (no shu ffl e) is used for training leading to a total number of training samples of 24,290 . The test dataset involves 
+
+4,615,183 samples. The above splitting choice is intended to challenge the ability of the algorithm to provide a relevant prediction model despite a quite small number of samples and the decently high dimension of the features space. Notice however that all the trajectories, while quite di ff erent, still belong to the same family (i.e. joint trajectories) and show the same amplitudes of excursion which makes the harmful consequences of overfitting less easy to show hence justifying the second use-case examined later in Section 4.2. 
+
+4.1.2. Algorithm’s hyperparameters setting 
+
+For all the problem’s instances, the degrees of the polynomi-als Pκ used in the piece-wise polynomial identification as well as for those, denoted by π(ℓ) and used in the definition of the partition triplets is set to 3. The contraction parameter γc is set to 0.999. The parameter ηtop = 5% is used in the selection of the new centres xc. The maximum number of voters is set to 
+
+nmax  
+
+> V
+
+= 20. The number of intervals nd = 50 is used for the defi-nition of the features space partitioning triplets. The number of random monomials that are used to define the polynomials ξπ
+
+associated to a triplet ξ is chosen to be npart Modes = 20. 
+
+4.1.3. Performance indicators 
+
+The quality of the models is measured through the normal-ized Mean Absolute Error (nMAE) and the normalized Mean Squared Error (nMSE) which are defined as follows: 
+
+nMAE := MAE (ypred (·) − ytrue (·)) 
+
+MAE (ytrue (·)) (20a) 
+
+nMSE := MSE (ypred (·) − ytrue (·)) 
+
+MSE (ytrue (·)) (20b) A comparison is provided with di ff erent structures of DNNs for which it is a common practice to monitor the ratio of the resid-6ual computed on the validation dataset 7 to the residual obtained on the training dataset. This ratio is commonly referred to as the 
+
+generalization gap .Now since the proposed algorithm does not involve splitting the learning data into training and validation (no gradient de-scent is used and the risk of overfitting is contained by the very definition of the parsimonious regression), we shall use a pos-teriori measure of the generalization gap , which involves the test dataset instead of the validation dataset, as the former is available for both DNNs and the proposed framework. More precisely, we consider the so called centred generaliza-tion gap defined by: 
+
+αc := nMAE |test 
+
+nMAE |train 
+
+− 1 (21) The reason for which the absolute value is used stems from the fact that, for the proposed solution, it is not always true that the residual on the training data is smaller than the residual on the test data. The centred criterion is such that small values of 
+
+αc indicate a high generalization capacity, while values that are far from zero mean that the fitting process induced an amount of overfitting making the use of the model on unseen contexts riskier. 
+
+4.1.4. Hardware for computation times evaluation 
+
+For technical reasons, the computations of the DNNs-based so-lutions and those involving the proposed algorithm have been performed on two di ff erent machines. Nevertheless, it is pos-sible to use the associated computation time to still get a fair comparison, considering that the di ff erence is more than an or-der of magnitude, and that the longer computations are obtained on the faster machine /implementation. (see Table 7) More precisely, as far as the computation of the proposed algorithm (denoted hereafter by xpwpol for explicit piece-wise polynomial) is concerned, the computation has been per-formed on a MacBook Pro with Processor Apple M3 Pro ,18Go RAM using python 3.11.8 using only standard CPU computation. As for the DNN-related investigation, the computation has been performed on Windows machine with 13th Gen Intel Core i7-13700K , 3400 MHz, 16 cores processor using Pytorch 
+
+2.1.2, CUDA 12.1 and a NVIDA RTX A2000 (6 Go) GPU. 
+
+4.1.5. Alternative DNN models involved in the comparisons 
+
+In the present use-case, three di ff erent DNN structures are tested and compared to the proposed algorithm, namely: stan-dard Multi-Layer Perception (MLP), Convolutional Neural Network (CNN) and a Transformer architecture. All of them 
+
+> 7The validation dataset is used in order to provide an early stopping criterion which enables to partially avoid overfitting during the DNN learning step.
+
+have been implemented using the Pytorch python module [12] on the hardware described in Section 4.1.4. Upon fitting the DNN models, a standard early stopping mech-anism is used based on splitting the learning dataset into a train-ing and validation subsets. Regarding the early stopping condition commonly used when training DNN models in order to avoid overfitting, it is here-after defined by the iteration achieving the minimum residual on the validation dataset. Notice that some recent results [15, 2] suggest to be more cautious by considering a threshold on the generalization gap defined by (21) beyond which the gradient iterations should be stopped even if the validation residual keep decreasing. The rational is that high values of the generaliza-tion gap αc mean that the model already starts overfitting on the training data and hence might be dangerous to use on future unseen contexts. It has been decided to adopt the most commonly used early stopping condition (that minimizes the validation loss) leading to optimistic evaluation of the residuals of the DNN models which systematically show obvious amount of overfitting as it can be witnessed by high values of the generalization gap αc (see Table 3). 
+
+> Rather optimistic residual values for DNN models
+
+Figure 2 shows typical evolutions of the loss functions com-
+
+> Figure 2: Use-case 1: Typical evolution of the losses behaviour on training and validation datasets during the learning of the DNN models.
+
+puted on the training and validation datasets. In the specific case shown in Figure 2, when the iterations are stopped (at the iteration number that minimizes validation loss), there is already a significant gap between the training and the validation losses suggesting that a cautious learning would have been stopped quite earlier leading to significantly higher residuals than the ones reported in the forthcoming tables 2 and 4. Now it can be argued that what do really matter are the perfor-mance results on the unseen test dataset. This is only partially true since, as it is highlighted above, the trajectories used in all the datasets concerned by the present use-case, while rigorously 7di ff erent, still belong to the same family of generated trajecto-ries. This reduces the risk of observing the bad consequences of overfitting on the test dataset. 
+
+4.1.6. Results 
+
+The execution of the proposed algorithms leads to six explicit piece-wise polynomial models showing the characteristics pre-sented in Table 1. This table shows, for each identification problem corresponding to the choice of the label among the six torques applied to the robot’s joints, the number nm of polyno-mials Pκ involved in (1) which are obtained upon solving the implicit form and hence are input arguments for Algorithm 1. The second row of Table 1 shows the number of voters resulted from the execution of Algorithm 1 for each choice of the label.                   
+
+> Table 1: Use-case 1: Number of polynomials and number of voters for the explicit piece-wise polynomial models Axis 123456
+> nm15 2421 25 25
+> nVoters 413426
+
+For the sake of illustration, Figure 3 shows the definition of the maps κξ( j) (·) for j = 1, . . . , 4 corresponding to the 4 voters in-volved in the explicit piece-wise polynomial corresponding to axis 1. Notice that the x-axis refers to the index of the region among the nd = 50 regions used in the model while the y-axis shows the index of the polynomial Pκ used in each specific re-gion. Tables 2 and 3 show the comparison with DNNs of moderate 
+
+size. More precisely, Table 2 shows the nMAE and the nMSE 
+
+for the three DNN structures with moderate complexity and the proposed explicit piece-wise polynomial structure denoted by 
+
+xpwpol . Table 3 shows the corresponding generalization gap 
+
+αc as defined in (21). In both tables, each row corresponds to one of the six axes of the manipulator robot of Figure 1 when used as targeted label in the identification problem. Table 6 shows the number of active coe ffi cients 8 in all the fitted models. It can be observed that the quality of the prediction of the mod-els resulted from the proposed framework on the test datasets are quite comparable to those provided by the DNNs for the 
+
+first three axes while the residuals of the explicit piece-wise polynomials on the remaining axes is quite higher (while keep-ing the same order of magnitude). Notice however that the gen-eralization gap αc increases also, on these axes, for the DNN models as the di ff erence in residuals increases. On the other hand, the generalization gap is remarkably small for the explicit piece-wise polynomial models.  
+
+> 8For polynomials, the number of active coe ffi cients represents the number of selected monomials while for DNNs, it represents the number of trainable
+> coe ffi cients as all of them are a priori non rigorously zero in a gradient-descent based training.
+
+Tables 4 and 5 show the same information as Tables 2 and 3 but using the large DNN structures (notice that as far as the xpwpol 
+
+structure is concerned, the results are identical to those shown previously, and are reproduced for the reader’s convenience). Here again, Table 6 compares the number of coe ffi cients in-volved in the large DNN models to those used in the models identified by the proposed framework. Here again, the same comments can be reproduced regarding the residual values and the associated generalization gaps. In-deed, the latter increases significantly confirming the diagnosis regarding the overfitting introduced in the DNN models which increases for the minor axes 4, 5 and 6. For instance, Table 5 shows that the residual of MLP models for axis 5 on training data is 3.31 times (which is αc + 1 in this case) smaller than its value in the test data. Similarly, the Transformer model shows on the same axis a training residual that is 2.44 times smaller than the test residual. On the contrary, the xpwpol model shows a generalization gap of 0.03 meaning that the training and the test residuals are almost identical while providing comparable performance at least for the first three axes. As mentioned before, Table 6 compares the complexity of the di ff erent architectures, expressed in terms of the number of ac-tive coe ffi cients. The di ff erence in complexity explains the rea-sons for the di ff erent behaviour of the generalization gap αc as the xpwpol models maximum number of coe ffi cients never ex-ceed 700 (with only 66 for the model for axis 2) while the DNN models number of active coe ffi cients (i.e. the so called train-able parameters ) ranges from ten thousands to almost 800,000 coe ffi cients. Finally, Table 7 shows the computation times needed to achieve the models’ fitting (see Section 4.1.4 for more details) which is expressed in seconds for the xpwpol models while it is never lower than 2 hours for the MLP and the Transformer and always exceed 30 min for the CNN 9. Notice that for DNNs the compu-tation time is computed assuming that the iterations stops at the minimum of the validation residual. 
+
+4.2. Use-case 2: Generalization over unseen contexts 
+
+In this second use-case, data are collected corresponding to two di ff erent contexts that di ff er by the amplitudes of the excursions used in the trajectories. Then the small amplitude trajectories are used in training (including the validation for DNN models) while the larger trajectories are used in the test. For availabil-ity reasons, this experiment is built using a 4-axis manipulator robot such as the one depicted in Figure 4. This enables to em-ulate two di ff erent contexts of use so that the ability of models to generalize to unseen contexts can be challenged. 
+
+> 9The reason is that the CNN starts quite early to show overfitting behavior and hence the early stopping condition is activated earlier than for the other DNNs.
+
+8Table 2: Use-case 1: Results on the test dataset: Normalized residuals (nMAE, nMSE) | Small DNN models Axis MLP (Small) CNN (Small) Transformer (Small) xpwpol 
+
+1 (0.23, 0.06) (0.24, 0.06) (0.22, 0.06) (0.22, 0.06) 2 (0.09, 0.01) (0.10, 0.01) (0.10, 0.01) (0.12, 0.02) 3 (0.18, 0.04) (0.16, 0.04) (0.15, 0.03) (0.20, 0.05) 4 (0.25, 0.08) (0.25, 0.08) (0.27, 0.09) (0.37, 0.17) 5 (0.43, 0.20) (0.43, 0.19) (0.44, 0.20) (0.60, 0.33) 6 (0.30, 0.12) (0.34, 0.15) (0.33, 0.14) (0.52, 0.31) Table 3: Use-case 1: Centred Generalization Gap αc defined by (21) | Small DNN models Axis MLP (Small) CNN (Small) Transformer (Small) xpwpol 
+
+1 0.21 0.26 0.16 0.00 
+
+2 0.50 0.43 0.43 0.01 
+
+3 0.64 0.33 0.36 0.02 
+
+4 0.39 0.39 0.42 0.11 
+
+5 0.79 0.59 0.57 0.03 
+
+6 0.76 0.70 0.57 0.09 
+
+Table 4: Use-case 1: Results on the test dataset: Normalized residuals (nMAE, nMSE) | Large DNN models Axis MLP (Large) CNN (Large) Transformer (Large) xpwpol 
+
+1 (0.23, 0.06) (0.22, 0.05) (0.20, 0.05) (0.22, 0.06) 2 (0.11, 0.02) (0.09, 0.01) (0.09, 0.01) (0.12, 0.02) 3 (0.19, 0.05) (0.15, 0.03) (0.15, 0.03) (0.20, 0.05) 4 (0.26, 0.09) (0.24, 0.07) (0.22, 0.06) (0.37, 0.17) 5 (0.53, 0.30) (0.40, 0.16) (0.39, 0.17) (0.60, 0.33) 6 (0.37, 0.17) (0.28, 0.11) (0.31, 0.12) (0.52, 0.31) Table 5: Use-case 1: Centred Generalization Gap αc defined by (21) | Large DNN models Axis MLP (Large) CNN (Large) Transformer (Large) xpwpol 
+
+1 0.64 0.57 0.33 0.00 
+
+2 1.20 1.25 0.80 0.01 
+
+3 1.71 1.50 1.14 0.02 
+
+4 1.00 1.00 0.69 0.11 
+
+5 2.31 1.86 1.44 0.03 
+
+6 1.64 1.55 1.38 0.09 
+
+Table 6: Use-case 1: Number of active coe ffi cients. Axis MLP CNN Transformer xpwpol 
+
+1 387 2 66 3 Small: 14,086 Small: 10,542 Small: 11,190 183 4 Large: 617,990 Large: 618,598 Large: 797,958 464 5 431 6 688 
+
+9Figure 3: Use-case 1: Definition of the partitioning maps κξ( j) (i) ∈ { 1, . . . , 15 } defined by (15) for the four voters included in the explicit piece-wise model for Axis 1. Notice that j ∈ { 1, . . . , 4} refers to the voter index while i ∈ { 1, . . . , nd = 50 } refers to the region’s index. (see Table 1 for a reminder regarding the properties of the model for Axis 1.) Table 7: Use-case 1: Computation times for model fitting. Axis MLP CNN Transformer xpwpol               
+
+> 1106 sec 2(pytorch-GPU )35 sec 328 sec 4>2h >30min >2h 142 sec 5162 sec 6See Section 4.1.4 173 sec
+> Figure 4: The 4-axes S taubli TS0-80 used in the present paper to examine the generalization to unseen contexts.
+
+4.3. Dataset, metrics and alternative structure 
+
+The working dataset includes 835 di ff erent random trajectories. Among these trajectories, 635 corresponds to small excursions while 200 corresponds to large excursions. The number of tra-jectories for both subsets has been computed so that both con-texts (small and large excursions) is represented by the same number of samples, namely 1 , 623 , 956 leading to a total dataset involving 3,246,892 rows (samples). The measurements are ac-quired at a frequency of 250 Hz. The set of measurements comprises the kinematic variables: 
+
+q ∈ R4, ˙ q ∈ R4, ¨ q ∈ R4 used to define the vector of fea-tures x := (q, ˙q, ¨q) ∈ R12 . Four labels are eligible which are the torques τi, i = 1, . . . , 4 applied to the axes. Figure 5 shows a typical di ff erence in terms of excursion be-tween the trajectories used in the train /validation on the one hand and the test on the other hand. Obviously, in this experi-ment, the di ff erence is intentionally exaggerated in order to un-derline the issue of generalization power. Naturally, smaller di ff erences would have induced correspondingly smaller con-sequences on the generalization errors. Regarding the data splitting, Only one over 10 samples in the first 15% of the small excursions dataset are used for training (24 , 360 samples), the remaining of this small excursions-related dataset is used for validation in order to monitor the early stopping condition, and for the model testing, referred to hereafter by test-small . The final generalization test is done using the 1 , 622 , 936 samples of the large excursions-related unseen contexts and the resuting test is referred to by 
+
+test-large .As for the DNN structure used in the comparison, given the results of Section 4, only the large Transformer structure has been used as it stands out compared to the other ones. The same performance indexes metrics discussed in the previ-ous section are used hereafter. The discussion regarding the complexity and the computation times are not reproduced here as the order of magnitudes are similar to the ones depicted in Tables 6 and 7. 10 Figure 5: Use-case 2: Typical di ff erence in excursion between the trajecto-ries used in the train /validation and test-small dataset (blue) and in the  
+
+> test-large dataset (red).
+
+4.4. hyperparameters settings 
+
+The hyperparameters of the proposed framework that have been used in the previous use-case (see Section 4.1.2) are identically used here except for the degrees of the polynomials Pκ of the implicit solution that are taken all equal to 1 (instead of 3 in the previous use-case). This emulates the situation where the solution’s designer is aware of the risk of training /validation data being not fully representative of future operational use of the prediction model. 
+
+4.5. Results 
+
+Table 8 shows the number nm of polynomials used in the so-lutions for the di ff erent axes, as well as the number of needed voters and the total number of active coe ffi cients (total number of monomials involved in the expressions of the polynomials 
+
+Pκ, κ = 1, . . . , nm). Remarkably enough, in this case, only a single partitioning triplet is used for all the models.                             
+
+> Table 8: Use-case 2: Number of polynomials, number of voters and total num-ber of active coe ffi cients for the explicit piece-wise polynomial models. For the number of coe ffi cients involved in the DNN models, see Table 6.
+> Axis 1234
+> nm4558
+> nVoters 1111# coe ffi cients 273 104 194 282 Table 9: Use-case 2: Normalized residuals (nMAE, nMSE) |Test-small
+> Axis Transformer (test-small) xpwpol (test-small)
+> 1(0.08, 0.01) (0.10, 0.01) 2(0.10, 0.01) (0.12, 0.02) 3(0.13, 0.03) (0.10, 0.01) 4(0.24, 0.10) (0.20, 0.05)
+
+Tables 9 and 10 show the residual obtained respectively on the small excursions test dataset (the same context as in the training dataset) and on the large excursions (new context) dataset. Notice first of all that, Table 9 suggests that despite the first order polynomials used in the derivation of the set of poly-nomials Pκ, k = 1, . . . , nm, involved in the original implicit             
+
+> Table 10: Use-case 2: Normalized residuals (nMAE, nMSE) |Test-large
+> Axis Transformer (Test-large) xpwpol (Test-large)
+> 1(1.38, 1.53) (0.36, 0.13) 2(1.73, 2.57) (0.28, 0.08) 3(0.77, 0.63) (0.37, 0.14) 4(1.96, 3.79) (2.33, 5.68)
+
+representations (which are fed into Algorithm 1), the explicit form obtained by Algorithm 1 which needs a single partitioning triplet ( nVoters =1) enables to obtain an explicit piece-wise affi ne representations that show comparable residuals levels (if not smaller) on the small excursion test data (generalization to new trajectories within the same context) when compared to the Transformer’s residuals and this for all the axis’ models. More interestingly, the results shown in Table 10 clearly show that the DNN model generalize very badly on truly unseen new contexts and this for all the axes. The parsimonious explicit piece-wise a ffi ne models identified by Algorithm 1 show far more robust generalizations for the first three axes. On the con-trary, for axis 4, generalization goes very badly as it is the case for the DNN model. 
+
+5. Conclusion 
+
+A new heuristic is proposed in the present paper that enables to derive explicit parsimonious piece-wise polynomial representa-tion expressing a label in terms of a vector of features that might involve a decently high number of components. The relevance of the proposed solution is shown through real-life experimental data collection on two industrial manipulator robots. Compari-son with the state-of-the-art DNN alternatives is also provided. As stated by the famous no-free-lunch theorem, the results show that there is no always winning option and conse-quently, the proposed alternative is worth examining as it equals /outperforms the other alternatives, at least under certain circumstances. This is especially true in the presence of data scarcity and /or multiple contexts that make the training data in-complete hence inducing a high risk of bad generalization. Finally recall that in all circumstances, the proposed framework shows orders of magnitude shorter computation times and num-ber of active coe ffi cients and shows high potential for easier explainability and adoption in the industrial context. 
+
+References 
+
+[1] Luis Antonio Aguirre. A bird’s eye view of nonlinear sys-tem identification, 2022. [2] Sahan Ahmad and Aminul Islam. When do convolutional neural networks stop learning?, 2022. [3] Mazen Alamir and Sacha Clavel. An algorithm for sparse piece-wise polynomial residual generation for anomalies 11 detection in industrial manipulator robots. Control engi-neering practice , 165(December 2025):106545–, 2025. [4] Julien Audibert, Pietro Michiardi, Frédéric Guyard, Sébastien Marti, and Maria A. Zuluaga. Do deep neural networks contribute to multivariate time series anomaly detection? Pattern Recognition , 132:108945, December 2022. [5] Ben Au ff arth. Machine Learning for Time-Series with Python: Forecast, predict, and detect anomalies with state-of-the-art machine learning methods . Packt Publish-ing, Birmingham, 1 edition, 2021. [6] Szymon Bobek and Grzegorz J. Nalepa. Tsproto: Fusing deep feature extraction with interpretable glass-box surro-gate model for explainable time-series classification. In-formation fusion , 124:103357–, 2025. [7] Kyunghyun Cho, Bart van Merrienboer, Caglar Gulcehre, Dzmitry Bahdanau, Fethi Bougares, Holger Schwenk, and Yoshua Bengio. Learning phrase representations using rnn encoder-decoder for statistical machine translation, 2014. [8] Manu Joseph, Je ff rey Tackes, and Christoph Bergmeir. 
+
+Modern Time Series Forecasting with Python Industry-ready machine learning and deep learning time series analysis with PyTorch and pandas . Packt Publishing, Birmingham, England, 2nd ed. edition, 2024. [9] Aurelien Teguede Keleko, Bernard Kamsu-Foguem, Ray-mond Houe Ngouna, and Amèvi Tongne. Health condi-tion monitoring of a complex hydraulic system using deep neural network and deepshap explainable xai. Advances in engineering software (1992) , 175:103339–, 2023. [10] Aurélien Keleko Teguede. Deep learning for anomaly de-tection in industry 4.0, 2022. [11] Nelles Olivier. Nonlinear system identification : from classical approaches to neural networks, Fuzzy models, and Gaussian processes / Oliver Nelles . Springer, Cham, second edition. edition, 2021. [12] Adam Paszke, Sam Gross, Francisco Massa, Adam Lerer, James Bradbury, Gregory Chanan, Trevor Killeen, Zem-ing Lin, Natalia Gimelshein, Luca Antiga, et al. Pytorch: An imperative style, high-performance deep learning li-brary. Advances in Neural Information Processing Sys-tems , 32, 2019. [13] Ferdinand Rewicki, Joachim Denzler, and Julia Niebling. Is it worth it? comparing six deep and classical methods for unsupervised anomaly detection in time series. Ap-plied Sciences , 13(3):1778, January 2023. [14] Ashish Vaswani, Noam Shazeer, Niki Parmar, Jakob Uszkoreit, Llion Jones, Aidan N. Gomez, Lukasz Kaiser, and Illia Polosukhin. Attention is all you need, 2023. [15] Manuel Vilares Ferro, Yerai Doval Mosquera, Francisco J. Ribadas Pena, and Víctor M. Darriba Bilbao. Early stop-ping by correlating online indicators in neural networks. 
+
+Neural Networks , 159:109–124, 2023. 12

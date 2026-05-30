@@ -1,0 +1,399 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-05-30T13:09:33.088378+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 2,
+    "deep_divecandidates": 5,
+    "deep_cap": 7,
+    "deep_selected": 5,
+    "quick_candidates": 4,
+    "quick_skim_target": 12,
+    "quick_selected": 4
+  },
+  "deep_dive": [
+    {
+      "id": "2605.15336v2",
+      "source": "arxiv",
+      "title": "HoloMotion-1 Technical Report",
+      "abstract": "In this report, we present HoloMotion-1, a humanoid motion foundation model for zero-shot whole-body motion tracking. A key innovation of HoloMotion-1 is to scale control-policy training with a large-scale hybrid motion corpus, where video-reconstructed motions from in-the-wild videos provide the dominant source of motion diversity, while curated motion-capture and in-house motion data provide higher-fidelity supervision and deployment-oriented coverage. This data regime enables HoloMotion-1 to move beyond conventional MoCap-only training and exposes the policy to substantially broader behaviors, capture conditions, and motion styles.   Learning from such heterogeneous data introduces new challenges, including reconstruction noise, source-domain mismatch, uneven motion quality, and the need for temporal modeling under large behavioral variation. To address these challenges, HoloMotion-1 integrates large-capacity temporal modeling, a sparsely activated Mixture-of-Experts Transformer with KV-cache inference for real-time control, and a sequence-level training strategy that improves learning efficiency on extended motion sequences. Extensive experiments on multiple unseen motion benchmarks show that HoloMotion-1 generalizes robustly across diverse motion types and capture conditions, significantly improves tracking accuracy over prior methods, and transfers directly to a real humanoid robot without task-specific fine-tuning.",
+      "authors": [
+        "Maiyue Chen",
+        "Kaihui Wang",
+        "Bo Zhang",
+        "Xihan Ma",
+        "Zhiyuan Yang",
+        "Yi Ren",
+        "Qijun Huang",
+        "Zihao Zhu",
+        "Yucheng Wang",
+        "Zhizhong Su"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.AI"
+      ],
+      "published": "2026-05-14T18:59:43+00:00",
+      "link": "https://arxiv.org/pdf/2605.15336v2",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 10.0,
+      "llm_evidence_en": "large-scale hybrid motion corpus for humanoid motion foundation model",
+      "llm_evidence_cn": "大规模混合运动语料库用于人形运动基础模型",
+      "llm_evidence": "大规模混合运动语料库用于人形运动基础模型",
+      "canonical_evidence": "大规模混合运动语料库用于人形运动基础模型",
+      "llm_tldr_en": "HoloMotion-1 scales control-policy training with a large-scale hybrid motion corpus combining video-reconstructed, MoCap, and in-house data for zero-shot whole-body motion tracking.",
+      "llm_tldr_cn": "传统人形机器人控制策略训练依赖有限的动作捕捉数据，限制了行为多样性。本文提出HoloMotion-1，通过构建包含视频重建运动、动作捕捉和内部数据的大规模混合运动语料库，实现了零样本全身运动跟踪。该数据策略显著提升了策略的泛化能力，覆盖更广泛的行为和风格。实验表明在大规模异构数据上训练有效，为人形机器人数据集构建提供了新范式。",
+      "llm_tldr": "传统人形机器人控制策略训练依赖有限的动作捕捉数据，限制了行为多样性。本文提出HoloMotion-1，通过构建包含视频重建运动、动作捕捉和内部数据的大规模混合运动语料库，实现了零样本全身运动跟踪。该数据策略显著提升了策略的泛化能力，覆盖更广泛的行为和风格。实验表明在大规模异构数据上训练有效，为人形机器人数据集构建提供了新范式。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "humanoid robot dataset construction",
+      "matched_requirement_id": "req-2",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2605.09685v1",
+      "source": "arxiv",
+      "title": "Learning Unified Representations of Normalcy for Time Series Anomaly Detection",
+      "abstract": "The core challenge in unsupervised anomaly detection is identifying abnormal patterns without prior knowledge of their characteristics. While existing methods have addressed aspects of this problem, they often struggle to learn a robust representation of the normal data distribution that is distinct from anomalous patterns. In this paper, we present a novel framework, Unified Unsupervised Anomaly Detection ($\\text{U}^2\\text{AD}$), that comprehensively addresses anomaly detection in multivariate time series. Our approach learns the underlying data distribution of normal samples by utilizing score-based generative modeling. We introduce a novel time-dependent score network and a unified training objective that together delineate the manifold of normal data while considering both local and global temporal contexts. Reconstruction is then performed via a deterministic sampling process using an ordinary differential equation solver. Our extensive experimental evaluations demonstrate that $\\text{U}^2\\text{AD}$ not only outperforms current state-of-the-art methods in detection accuracy but also identifies anomalies at significantly earlier stages of their occurrence.",
+      "authors": [
+        "Prithul Sarker",
+        "Sushmita Sarker",
+        "Nicholas G. Murray",
+        "Alireza Tavakkoli"
+      ],
+      "primary_category": "cs.LG",
+      "categories": [
+        "cs.LG",
+        "cs.AI"
+      ],
+      "published": "2026-05-10T18:12:22+00:00",
+      "link": "https://arxiv.org/pdf/2605.09685v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "unsupervised time series anomaly detection via score-based generative modeling, directly applicable to joint/IMU signals",
+      "llm_evidence_cn": "基于分数生成模型的无监督时间序列异常检测，可直接应用于关节/IMU信号",
+      "llm_evidence": "基于分数生成模型的无监督时间序列异常检测，可直接应用于关节/IMU信号",
+      "canonical_evidence": "基于分数生成模型的无监督时间序列异常检测，可直接应用于关节/IMU信号",
+      "llm_tldr_en": "U^2AD learns unified normal representation for multivariate time series anomaly detection using score-based generative models, achieving state-of-the-art performance.",
+      "llm_tldr_cn": "针对无监督时间序列异常检测中难以学习正常数据分布的问题，提出U^2AD框架。利用基于分数的生成模型学习正常样本的流形，引入时间依赖的分数网络和统一训练目标。在多个基准数据集上取得最优结果，其方法可直接迁移到人形机器人关节/IMU信号上进行故障检测。",
+      "llm_tldr": "针对无监督时间序列异常检测中难以学习正常数据分布的问题，提出U^2AD框架。利用基于分数的生成模型学习正常样本的流形，引入时间依赖的分数网络和统一训练目标。在多个基准数据集上取得最优结果，其方法可直接迁移到人形机器人关节/IMU信号上进行故障检测。",
+      "llm_tags": [
+        "query:humanoid-ood"
+      ],
+      "matched_query_tag": "query:humanoid-ood",
+      "matched_query_text": "anomaly detection from joint position velocity torque IMU signals in humanoid robots",
+      "matched_requirement_id": "req-10",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2605.15336v1",
+      "source": "arxiv",
+      "title": "HoloMotion-1 Technical Report",
+      "abstract": "In this report, we present HoloMotion-1, a humanoid motion foundation model for zero-shot whole-body motion tracking. A key innovation of HoloMotion-1 is to scale control-policy training with a large-scale hybrid motion corpus, where video-reconstructed motions from in-the-wild videos provide the dominant source of motion diversity, while curated motion-capture and in-house motion data provide higher-fidelity supervision and deployment-oriented coverage. This data regime enables HoloMotion-1 to move beyond conventional MoCap-only training and exposes the policy to substantially broader behaviors, capture conditions, and motion styles.   Learning from such heterogeneous data introduces new challenges, including reconstruction noise, source-domain mismatch, uneven motion quality, and the need for temporal modeling under large behavioral variation. To address these challenges, HoloMotion-1 integrates large-capacity temporal modeling, a sparsely activated Mixture-of-Experts Transformer with KV-cache inference for real-time control, and a sequence-level training strategy that improves learning efficiency on extended motion sequences. Extensive experiments on multiple unseen motion benchmarks show that HoloMotion-1 generalizes robustly across diverse motion types and capture conditions, significantly improves tracking accuracy over prior methods, and transfers directly to a real humanoid robot without task-specific fine-tuning.",
+      "authors": [
+        "Maiyue Chen",
+        "Kaihui Wang",
+        "Bo Zhang",
+        "Xihan Ma",
+        "Zhiyuan Yang",
+        "Yi Ren",
+        "Qijun Huang",
+        "Zihao Zhu",
+        "Yucheng Wang",
+        "Zhizhong Su"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.AI"
+      ],
+      "published": "2026-05-14T18:59:43+00:00",
+      "link": "https://arxiv.org/pdf/2605.15336v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "builds large-scale hybrid motion corpus for humanoid robots",
+      "llm_evidence_cn": "构建用于人形机器人的大规模混合运动数据集",
+      "llm_evidence": "构建用于人形机器人的大规模混合运动数据集",
+      "canonical_evidence": "构建用于人形机器人的大规模混合运动数据集",
+      "llm_tldr_en": "HoloMotion-1 is a humanoid motion foundation model trained on a large-scale hybrid corpus combining video-reconstructed and MoCap motions for zero-shot whole-body tracking.",
+      "llm_tldr_cn": "该技术报告介绍了HoloMotion-1，一个用于零样本全身运动跟踪的人形运动基础模型。其关键创新在于利用大规模混合运动语料库，包含网络视频重建运动和动作捕捉数据，从而突破传统动作捕捉训练的局限。该数据集构建方法为人形机器人提供了丰富的运动多样性，支持更广泛的行为和风格。这项工作为人形机器人数据集构建和运动控制提供了新范式。",
+      "llm_tldr": "该技术报告介绍了HoloMotion-1，一个用于零样本全身运动跟踪的人形运动基础模型。其关键创新在于利用大规模混合运动语料库，包含网络视频重建运动和动作捕捉数据，从而突破传统动作捕捉训练的局限。该数据集构建方法为人形机器人提供了丰富的运动多样性，支持更广泛的行为和风格。这项工作为人形机器人数据集构建和运动控制提供了新范式。",
+      "llm_tags": [
+        "query:ur:composite"
+      ],
+      "matched_query_tag": "query:ur:composite",
+      "matched_query_text": "Papers central to 查找宇树G1人形机器人的数据集构建、故障诊断、错误分析以及边缘端部署的相关论文, especially work that connects or combines: Unitree G1 humanoid robot dataset construction; humanoid robot dataset construction; fault diagnosis for humanoid robots; edge deployment for humanoid robots; dataset construction for robotics; fault detection in humanoid robots; fault diagnosis and error analysis for humanoid robots; edge deployment of Unitree robots research.",
+      "matched_requirement_id": "req-composite-ur",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2605.02438v1",
+      "source": "arxiv",
+      "title": "Mixture Prototype Flow Matching for Open-Set Supervised Anomaly Detection",
+      "abstract": "Open-set supervised anomaly detection (OSAD) aims to identify unseen anomalies using limited anomalous supervision. However, existing prototype-based methods typically model normal data via a unimodal Gaussian prior, failing to capture inherent multi-modality and resulting in blurred decision boundaries. To address this, we propose Mixture Prototype Flow Matching (MPFM), a framework that learns a continuous transformation from normal feature distributions to a structured Gaussian mixture prototype space. Departing from traditional flow-based approaches that rely on a single velocity vector, MPFM explicitly models the velocity field as a Gaussian mixture prior where each component corresponds to a distinct normal class. This design facilitates mode-aware and semantically coherent distribution transport. Furthermore, we introduce a Mutual Information Maximization Regularizer (MIMR) to prevent prototype collapse and maximize normal-anomaly separability. Extensive experiments demonstrate that MPFM achieves state-of-the-art performance across diverse benchmarks under both single- and multi-anomaly settings.",
+      "authors": [
+        "Fuyun Wang",
+        "Yuanzhi Wang",
+        "Xu Guo",
+        "Sujia Huang",
+        "Tong Zhang",
+        "Dan Wang",
+        "Hui Yan",
+        "Xin Liu",
+        "Zhen Cui"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV",
+        "cs.LG"
+      ],
+      "published": "2026-05-04T10:36:43+00:00",
+      "link": "https://arxiv.org/pdf/2605.02438v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "open-set supervised anomaly detection using flow matching",
+      "llm_evidence_cn": "使用流匹配的开放集监督异常检测",
+      "llm_evidence": "使用流匹配的开放集监督异常检测",
+      "canonical_evidence": "使用流匹配的开放集监督异常检测",
+      "llm_tldr_en": "Proposes Mixture Prototype Flow Matching for open-set supervised anomaly detection, using a Gaussian mixture prior to model multi-modal normal data.",
+      "llm_tldr_cn": "该论文针对开放集监督异常检测问题，提出混合原型流匹配（MPFM）框架。不同于传统单一高斯先验的不足，MPFM将正常特征分布转换为结构化高斯混合原型空间，每个分量对应一类正常模式，从而清晰分离已知异常与未见异常。在多个异常检测基准上，MPFM显著优于现有方法，为开放集场景下的机器人安全异常检测提供了有效工具。",
+      "llm_tldr": "该论文针对开放集监督异常检测问题，提出混合原型流匹配（MPFM）框架。不同于传统单一高斯先验的不足，MPFM将正常特征分布转换为结构化高斯混合原型空间，每个分量对应一类正常模式，从而清晰分离已知异常与未见异常。在多个异常检测基准上，MPFM显著优于现有方法，为开放集场景下的机器人安全异常检测提供了有效工具。",
+      "llm_tags": [
+        "query:humanoid-ood"
+      ],
+      "matched_query_tag": "query:humanoid-ood",
+      "matched_query_text": "Open set recognition in robotics for safety and anomaly detection",
+      "matched_requirement_id": "req-17",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2605.12038v1",
+      "source": "arxiv",
+      "title": "OmniHumanoid: Streaming Cross-Embodiment Video Generation with Paired-Free Adaptation",
+      "abstract": "Cross-embodiment video generation aims to transfer motions across different humanoid embodiments, such as human-to-robot and robot-to-robot, enabling scalable data generation for embodied intelligence. A major challenge in this setting is that motion dynamics are partly transferable across embodiments, whereas appearance and morphology remain embodiment-specific. Existing approaches often entangle these factors, and many require paired data for every target embodiment, which limits scalability to new robots. We present OmniHumanoid, a framework that factorizes transferable motion learning and embodiment-specific adaptation. Our method learns a shared motion transfer model from motion-aligned paired videos spanning multiple embodiments, while adapting to a new embodiment using only unpaired videos through lightweight embodiment-specific adapters. To reduce interference between motion transfer and embodiment adaptation, we further introduce a branch-isolated attention design that separates motion conditioning from embodiment-specific modulation. In addition, we construct a synthetic cross-embodiment dataset with motion-aligned paired videos rendered across diverse humanoid assets, scenes, and viewpoints. Experiments on both synthetic and real-world benchmarks show that OmniHumanoid achieves strong motion fidelity and embodiment consistency, while enabling scalable adaptation to unseen humanoid embodiments without retraining the shared motion model.",
+      "authors": [
+        "Yiren Song",
+        "Xiyao Deng",
+        "Pei Yang",
+        "Yihan Wang",
+        "Mike Zheng Shou"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV"
+      ],
+      "published": "2026-05-12T12:21:11+00:00",
+      "link": "https://arxiv.org/pdf/2605.12038v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "cross-embodiment video generation for humanoid robot dataset construction",
+      "llm_evidence_cn": "跨本体视频生成用于人形机器人数据集构建",
+      "llm_evidence": "跨本体视频生成用于人形机器人数据集构建",
+      "canonical_evidence": "跨本体视频生成用于人形机器人数据集构建",
+      "llm_tldr_en": "OmniHumanoid generates cross-embodiment videos for humanoid robots, enabling scalable dataset construction without paired data.",
+      "llm_tldr_cn": "该论文提出OmniHumanoid框架，通过分解可迁移运动学习和本体特定适应，实现跨人形本体的视频生成。方法无需配对数据，仅利用运动对齐的跨本体视频学习共享运动模型。这为人形机器人数据集构建提供了可扩展的解决方案，特别适用于宇树G1等机器人。实验展示了高质量的视频生成结果。",
+      "llm_tldr": "该论文提出OmniHumanoid框架，通过分解可迁移运动学习和本体特定适应，实现跨人形本体的视频生成。方法无需配对数据，仅利用运动对齐的跨本体视频学习共享运动模型。这为人形机器人数据集构建提供了可扩展的解决方案，特别适用于宇树G1等机器人。实验展示了高质量的视频生成结果。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "humanoid robot dataset construction",
+      "matched_requirement_id": "req-2",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "quick_skim": [
+    {
+      "id": "2605.01427v1",
+      "source": "arxiv",
+      "title": "SixthSense: Task-Agnostic Proprioception-Only Whole-Body Wrench Estimation for Humanoids",
+      "abstract": "Humanoid robots are entering our physical world at scale, yet as oversized toys--good at singing and dancing, but short on force-interaction capabilities for practical tasks. Bridging this gap necessitates prioritizing reliable contact perception as a fundamental requirement. Estimating external wrenches in humanoids is complicated by floating-base dynamics and indeterminate contact locations. Existing analytical frameworks require idealistic assumptions and hard-to-obtain measurements, which are often unavailable in practice. To bridge this gap, we propose SixthSense, a task-agnostic approach that infers whole-body contact timing, location, and wrenches from proprioception and IMU data alone. To capture the multi-modal dynamics between unstructured contact inputs and the uncertain motion outputs, we employ conditional flow matching to tokenize proprioceptive histories and estimate a spatiotemporally sparse contact-event flow. SixthSense serves as a plug-and-play perception module for applications including collision detection, physical human-robot interaction, and force-feedback teleoperation. Experiments across standing, walking, and whole-body motion-tracking policies showcased unprecedented performance in diverse behaviors.",
+      "authors": [
+        "Xingzhou Chen",
+        "Xiayan Xu",
+        "Yan Ning",
+        "Jiyu Yu",
+        "Yizheng Zhang",
+        "Siyi Qian",
+        "Lingzhu Xiang",
+        "Jiahao Chen",
+        "Yuquan Wang",
+        "Haodong Zhang",
+        "Ling Shi"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-05-02T12:57:27+00:00",
+      "link": "https://arxiv.org/pdf/2605.01427v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "proprioception and IMU based wrench estimation for humanoids",
+      "llm_evidence_cn": "基于本体感受和IMU的人形机器人外力估计",
+      "llm_evidence": "基于本体感受和IMU的人形机器人外力估计",
+      "canonical_evidence": "基于本体感受和IMU的人形机器人外力估计",
+      "llm_tldr_en": "SixthSense uses only proprioception and IMU to estimate whole-body contact timing, location, and wrenches for humanoid robots, enabling task-agnostic contact perception.",
+      "llm_tldr_cn": "人形机器人缺乏可靠的接触感知能力，现有方法依赖理想化假设难以实用。本文提出SixthSense，一种仅利用本体感受和IMU数据的任务无关方法，推断整个人形机器人的接触时间、位置和外力。该方法捕获多模态动力学特性，为基于本体感受信号的故障检测提供了基础工具。在多个机器人平台上验证了有效性，表明可用于接触相关异常检测。",
+      "llm_tldr": "人形机器人缺乏可靠的接触感知能力，现有方法依赖理想化假设难以实用。本文提出SixthSense，一种仅利用本体感受和IMU数据的任务无关方法，推断整个人形机器人的接触时间、位置和外力。该方法捕获多模态动力学特性，为基于本体感受信号的故障检测提供了基础工具。在多个机器人平台上验证了有效性，表明可用于接触相关异常检测。",
+      "llm_tags": [
+        "query:humanoid-ood"
+      ],
+      "matched_query_tag": "query:humanoid-ood",
+      "matched_query_text": "humanoid robot fault diagnosis using proprioceptive signals",
+      "matched_requirement_id": "req-9",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2605.27486v1",
+      "source": "arxiv",
+      "title": "Federated Learning for Multivariate Time Series Anomaly Detection in Industrial Automation",
+      "abstract": "Federated learning (FL) has broadened the horizon for multivariate time series anomaly detection (MTSAD). However, benchmarking such anomaly detection methods within FL paradigm poses data-centric challenges. The existing datasets do not counteract these challenges since they do not simultaneously provide sufficient scale, accurate labels, and freedom from common flaws. In addition, the role of cyclic process behavior, which is common in discrete industrial automation, remains underexplored for MTSAD for the current state of research. This paper aims to shed more light on the literature and address these gaps by introducing a dataset designed with cyclic dynamics arising from the repetitive nature of discrete automation processes and evaluates selected MTSAD methods on both the proposed dataset and a public benchmark dataset.",
+      "authors": [
+        "Khayyam Nosrati",
+        "Martin Uray",
+        "Saverio Messineo",
+        "Olaf Sassnick",
+        "Stefan Huber"
+      ],
+      "primary_category": "cs.LG",
+      "categories": [
+        "cs.LG"
+      ],
+      "published": "2026-05-26T15:00:31+00:00",
+      "link": "https://arxiv.org/pdf/2605.27486v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "federated learning approach for multivariate time series anomaly detection in industrial automation",
+      "llm_evidence_cn": "面向工业自动化的多元时间序列异常检测联邦学习方法",
+      "llm_evidence": "面向工业自动化的多元时间序列异常检测联邦学习方法",
+      "canonical_evidence": "面向工业自动化的多元时间序列异常检测联邦学习方法",
+      "llm_tldr_en": "Introduces a dataset and framework for multivariate time series anomaly detection under federated learning, highlighting cyclic process behavior in discrete industrial automation.",
+      "llm_tldr_cn": "针对联邦学习范式下多元时间序列异常检测数据集的不足，该论文提出一个具有循环动力学的新数据集，并研究了离散工业自动化中周期行为对异常检测的影响。实验表明，该数据集弥补了现有基准在规模和标注准确性上的缺陷，为时序异常检测方法在联邦学习场景中的评估提供了更可靠的平台。",
+      "llm_tldr": "针对联邦学习范式下多元时间序列异常检测数据集的不足，该论文提出一个具有循环动力学的新数据集，并研究了离散工业自动化中周期行为对异常检测的影响。实验表明，该数据集弥补了现有基准在规模和标注准确性上的缺陷，为时序异常检测方法在联邦学习场景中的评估提供了更可靠的平台。",
+      "llm_tags": [
+        "query:humanoid-ood"
+      ],
+      "matched_query_tag": "query:humanoid-ood",
+      "matched_query_text": "Self supervised time series anomaly detection for robot fault diagnosis",
+      "matched_requirement_id": "req-16",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2605.24457v1",
+      "source": "arxiv",
+      "title": "Asymmetric Adaptation-based Real-time Fault Diagnosis Under Transitional Operating Conditions",
+      "abstract": "Data streams in real-world industrial scenarios often contain transitional operating conditions that are uncovered during offline training, leading to significant distribution shifts. To bridge the gap between static offline models and dynamic online data, a novel asymmetric adaptation-based fault diagnosis method is proposed in this paper. Specifically, in the offline stage, we employ domain generalization techniques to extract domain-invariant features from multiple stable conditions and construct robust normalized fault prototypes as reference anchors. Subsequently, during online inference, we design an online test-time adaptation method based on a periodic prototype re-projection mechanism to dynamically update prototype positions. Furthermore, we utilize the geometric distribution derived from anchors to guide the updates of classifiers and adopt an asymmetric learning rate strategy for the feature extractor and classifier. The proposed approach ensures rapid adaptation to new transitional conditions while preserving the discriminative power inherited from the offline domain generalization initialization. Experimental results demonstrate that this mechanism effectively leverages offline generalized knowledge to guide online inference, significantly improving robustness in non-stationary environments.",
+      "authors": [
+        "Hongshuo Zhao",
+        "Zeyi Liu",
+        "Xiao He"
+      ],
+      "primary_category": "eess.SY",
+      "categories": [
+        "eess.SY",
+        "cs.LG"
+      ],
+      "published": "2026-05-23T08:10:16+00:00",
+      "link": "https://arxiv.org/pdf/2605.24457v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "fault diagnosis method with online adaptation, transferable to humanoid robots",
+      "llm_evidence_cn": "在线自适应故障诊断方法，可迁移至人形机器人",
+      "llm_evidence": "在线自适应故障诊断方法，可迁移至人形机器人",
+      "canonical_evidence": "在线自适应故障诊断方法，可迁移至人形机器人",
+      "llm_tldr_en": "Proposes an asymmetric adaptation-based fault diagnosis method that uses domain generalization for offline prototypes and online test-time adaptation to handle transitional conditions. Enables real-time diagnosis under distribution shifts.",
+      "llm_tldr_cn": "针对工业数据流中过渡工况引起的分布偏移问题，提出了一种非对称自适应故障诊断方法。离线阶段通过域泛化提取域不变特征并构建故障原型；在线阶段利用周期性原型重投影机制动态更新原型。该方法实现了实时故障诊断，并提高了对未见过工况的鲁棒性，其迁移学习思想可应用于人形机器人故障诊断场景。",
+      "llm_tldr": "针对工业数据流中过渡工况引起的分布偏移问题，提出了一种非对称自适应故障诊断方法。离线阶段通过域泛化提取域不变特征并构建故障原型；在线阶段利用周期性原型重投影机制动态更新原型。该方法实现了实时故障诊断，并提高了对未见过工况的鲁棒性，其迁移学习思想可应用于人形机器人故障诊断场景。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "fault diagnosis for humanoid robots",
+      "matched_requirement_id": "req-3",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2605.28320v1",
+      "source": "arxiv",
+      "title": "Identifying Explicit Parsimonious Piece-wise Polynomial Relationships in Industrial time-series: Application to manipulator robots",
+      "abstract": "This paper addresses the problem of identifying parsimonious explicit piece-wise polynomial relationships that might involve a relatively large number of raw features. The algorithm leverages a recently proposed identification algorithm that yields parsimonious implicit relationships enabling to derive normality characterization in the context of anomaly detection and localization. The algorithm proposed in this paper goes a step further by deriving explicit piece-wise representations that are built using the set of polynomials involved in the implicit representations. The framework is illustrated on the problem of identifying parsimonious explicit representations of the inverse model of a 6-axis manipulator robot. Moreover, further experiments on a 4-axis robot are also shown which are designed to investigate the generalization capability of parsimonious models compared to state-of-the-art DNNs structures, when models face unseen contexts of use.",
+      "authors": [
+        "Mazen Alamir",
+        "Sacha Clavel"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.AI"
+      ],
+      "published": "2026-05-27T11:23:30+00:00",
+      "link": "https://arxiv.org/pdf/2605.28320v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "time series anomaly detection and normality characterization",
+      "llm_evidence_cn": "时间序列异常检测与正常性表征",
+      "llm_evidence": "时间序列异常检测与正常性表征",
+      "canonical_evidence": "时间序列异常检测与正常性表征",
+      "llm_tldr_en": "Proposes method to identify explicit piecewise polynomial relationships for anomaly detection in industrial time series, applied to manipulator robots.",
+      "llm_tldr_cn": "该论文提出一种识别显式分段多项式关系的方法，用于工业时间序列的异常检测与定位。算法基于隐式关系构建正常性表征，并进一步推导显式表示。在六轴机械臂逆模型辨识任务上验证了有效性，为机器人故障诊断提供了可解释的异常检测工具。",
+      "llm_tldr": "该论文提出一种识别显式分段多项式关系的方法，用于工业时间序列的异常检测与定位。算法基于隐式关系构建正常性表征，并进一步推导显式表示。在六轴机械臂逆模型辨识任务上验证了有效性，为机器人故障诊断提供了可解释的异常检测工具。",
+      "llm_tags": [
+        "query:humanoid-ood"
+      ],
+      "matched_query_tag": "query:humanoid-ood",
+      "matched_query_text": "out-of-distribution detection for safe robot operation",
+      "matched_requirement_id": "req-11",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    }
+  ]
+}

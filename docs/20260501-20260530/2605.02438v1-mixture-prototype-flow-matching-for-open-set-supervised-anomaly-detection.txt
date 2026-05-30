@@ -1,0 +1,1486 @@
+Title: Mixture Prototype Flow Matching for Open-Set Supervised Anomaly Detection
+
+URL Source: https://arxiv.org/pdf/2605.02438v1
+
+Published Time: Tue, 05 May 2026 02:13:07 GMT
+
+Number of Pages: 17
+
+Markdown Content:
+## Mixture Prototype Flow Matching for Open-Set Supervised Anomaly Detection 
+
+Fuyun Wang 1 Yuanzhi Wang 1 Xu Guo 2 Sujia Huang 1 Tong Zhang 1
+
+Dan Wang 3 Hui Yan 1 Xin Liu 4 Zhen Cui 2
+
+Abstract 
+
+Open-set supervised anomaly detection (OSAD) aims to identify unseen anomalies using lim-ited anomalous supervision. However, existing prototype-based methods typically model nor-mal data via a unimodal Gaussian prior, fail-ing to capture inherent multi-modality and result-ing in blurred decision boundaries. To address this, we propose Mixture Prototype Flow Match-ing (MPFM), a framework that learns a contin-uous transformation from normal feature distri-butions to a structured Gaussian mixture proto-type space. Departing from traditional flow-based approaches that rely on a single velocity vector, MPFM explicitly models the velocity field as a Gaussian mixture prior where each component corresponds to a distinct normal class. This de-sign facilitates mode-aware and semantically co-herent distribution transport. Furthermore, we introduce a Mutual Information Maximization Regularizer (MIMR) to prevent prototype col-lapse and maximize normal-anomaly separability. Extensive experiments demonstrate that MPFM achieves state-of-the-art performance across di-verse benchmarks under both single- and multi-anomaly settings. Code is available at https: //github.com/fuyunwang/MPFM-OSAD .
+
+1. Introduction 
+
+Anomaly detection (AD) plays a pivotal role in identify-ing deviations from normal patterns, underpinning critical applications such as industrial inspection and medical imag-ing (Yao et al., 2024; Guo et al., 2025). While recent ad-vances in Unsupervised AD (Lu et al., 2023; Liu et al., 
+
+> 1
+
+Nanjing University of Science and Technology, Nanjing, China 
+
+> 2
+
+Beijing Normal University, Beijing, China 3China Academy of Space Technology, Beijing, China 4Nanjing SeetaCloud Technol-ogy, Nanjing, China. Correspondence to: Zhen Cui <>.
+
+Proceedings of the 43 rd International Conference on Machine Learning , Seoul, South Korea. PMLR 306, 2026. Copyright 2026 by the author(s). Normal Samples 
+
+> False Positives
+> True Anomalies
+> Prototype Centers
+> Normal Samples
+> True Anomalies
+> Prototype Centers
+> (b) Ours (a) Existing Method
+
+Figure 1. (a) Existing method assumes a unimodal normal dis-tribution, overlooking intrinsic multi-modality and causing false positives. (b) Our method learns a continuous multi-modal proto-type space via flow, capturing intra-class diversity, concentrating normal density, and enlarging the margin to true anomalies. 
+
+2024) and few-shot AD (FSAD) (Pang et al., 2021; Hu et al., 2024) focus on modeling normal distributions to flag irregu-larities, they often overlook the valuable prior information embedded in observed anomalies, resulting in imprecise decision boundaries. Conversely, Supervised AD (SAD) (Li et al., 2023; Baitieva et al., 2024) explicitly incorporates known anomalies for guidance; however, its reliance on seen classes risks overfitting, leading to poor generalization across unseen anomaly types. To bridge this gap, Open-set Supervised AD (OSAD) (Ding et al., 2022; Wang et al., 2025) aims to leverage limited anomalous examples with image-level supervision, ensuring robust detection of both known and previously unseen anomalies. Existing OSAD methods can be grouped into three cate-gories. The first employs data augmentation and outlier exposure (e.g., DRA (Ding et al., 2022)), which increases anomaly coverage by disentangling seen, pseudo, and resid-ual factors, while other methods inject synthetic defects or external outliers to refine decision boundaries. The second category relies on heterogeneous simulation, as exempli-fied by AHL (Zhu et al., 2024), to enhance generalization using diverse simulated anomalies. The third leverages pro-totype learning and generative dynamics, constructing a structured prototype space where normal samples are drawn toward prototype centers and anomalies are repelled, often via diffusion or flow-based mechanisms. However, these methods face notable limitations: augmentation and expo-sure often cover only a limited anomaly spectrum and re-1
+
+> arXiv:2605.02438v1 [cs.CV] 4 May 2026 Submission and Formatting Instructions for ICML 2026
+
+tain in-distribution bias, while simulation-based approaches struggle to capture the scale and structural diversity of real-world anomalies. A recent prototype-based OSAD approach, DPDL (Wang et al., 2025), models normal sam-ple prototypes with a set of simple Gaussian distributions and identifies anomalies by constructing bridging flows that shift normal samples toward these prototypes. However, by assuming normal data is uni-modal and limited to ob-served categories, this method cannot represent the multi-modal complexity of real-world industrial data. As shown in Fig. 1 (a), a uni-modal Gaussian prior oversimplifies the sub-patterns within the normal sample distribution and fails to capture rare normal instances, leading to their misclas-sification as anomalies (i.e., false positives) and blurring the decision boundary of the normal samples. This raises a critical question: How can we more precisely model the distribution of normal samples to establish a compact, com-prehensive decision boundary that remains robust against unseen anomalies? 
+
+To address these challenges, we propose Mixture Prototype Flow Matching (MPFM), a novel framework integrating Gaussian mixture modeling with continuous flow matching to explicitly capture the multi-modal nature of normal data. Departing from conventional uni-modal prior paradigms, MPFM characterizes normality within a structured Gaus-sian mixture prototype space, where each component rep-resents a semantically distinct normal mode. Technically, we leverage flow matching to learn a mode-aware velocity field that transports features into this mixture prior, enabling fine-grained and mode-aligned distribution transformation. This yields a more expressive characterization of normal-ity, enhancing both anomaly discrimination and generaliza-tion. Furthermore, to mitigate prototype collapse and ensure open-set separability, we introduce a Mutual Information Maximization Regularizer (MIMR), which enforces confi-dent prototype assignments and margin-based separation from anomalies. Our contributions are outlined as follows: • We propose Mixture Prototype Flow Matching (MPFM) to integrate Gaussian mixture priors with flow matching to capture multi-modal normality and pro-duce sharper decision boundaries. • We introduce a Mutual Information Maximization Reg-ularizer (MIMR) to prevent mode collapse and enhance feature discriminability. • Extensive experiments demonstrate that MPFM achieves state-of-the-art performance across diverse benchmarks. 
+
+2. Related Work 
+
+2.1. Open-set Supervised Anomaly Detection 
+
+Open-set supervised anomaly detection generalizes from limited known anomalies to unseen types, leveraging anoma-lous priors to reduce false alarms. Existing approaches fol-low two main paradigms. The first paradigm employs data augmentation and simulation. DRA (Ding et al., 2022) dis-entangles seen, pseudo, and residual anomalies to expand coverage, while AHL (Zhu et al., 2024) simulates hetero-geneous distributions via collaborative training. However, these methods typically cover limited anomaly subspaces and may inherit training biases, constraining generaliza-tion to truly novel anomalies. The second paradigm adopts prototype- or generative-based approaches, constructing compact normal representations with transport dynamics. DPDL (Wang et al., 2025) builds a prototype space using dif-fusion processes to attract normals and repel anomalies. Yet, its single-mode prototype fails to capture normal data multi-modality, causing false positives on rare normal patterns and ambiguous boundaries near subtle anomalies. Addressing these limitations, our approach is guided by a Gaussian mix-ture prior for multi-modal normality, empowered by flow matching for stable alignment, and refined by a center-aware regularizer to bolster component separation. 
+
+2.2. Flow Matching 
+
+Flow matching provides a simulation-free framework for learning vector fields that transport data between complex and simple distributions (Lipman et al., 2022; Liu et al., 2022; Esser et al., 2024; Chen et al., 2025). Rectified Flow (Liu et al., 2022) substantially advanced the field by introducing straight probability paths between distributions, simplifying both training and sampling dynamics. Subse-quent efforts further improved efficiency and generality: InstaFlow (Liu et al., 2023) achieved single-step generation via rectified flow distillation, while Stable Diffusion 3 (Esser et al., 2024) and Flux (Labs, 2024) emerged as state-of-the-art text-to-image models by building upon flow matching for robust and generalized synthesis. These advances es-tablish flow matching as a scalable and stable alternative to diffusion models, particularly suited for tasks requiring efficient distribution alignment—a property we leverage in this work to construct compact and discriminative normal feature distributions for anomaly detection. 
+
+3. Preliminaries 
+
+We adopt the standard additive–Gaussian perturbation view used by diffusion models and instantiate flow matching on top of it. Let the clean feature be  z0 ∈ RD , Gaussian noise 
+
+ε ∼ N (0, I) is injected along a time schedule  (αt, σ t):
+
+zt = αtz0 + σtε.  (1) In the discrete-time setting, the process can be represented via the transition from zt−∆t to zt as: 
+
+p(zt|zt−∆t) = N
+
+
+
+zt; αt
+
+αt−∆t
+
+zt−∆t, β t, ∆tI
+
+
+
+, (2) 2Submission and Formatting Instructions for ICML 2026 
+
+where βt, ∆t := σ2 
+
+> t
+
+− α2
+
+> t
+> α2
+> t−∆t
+
+σ2
+
+> t−∆t
+
+. During the reverse process, marginalizing  z0 recovers the reverse kernel 
+
+p(zt−∆t|zt) = R p(zt−∆t|zt, z0)p(z0|zt) dz0:
+
+p(zt−∆t | zt, z0) = N  zt−∆t; c1zt + c2z0, c 3I, (3) where c1 = αtσ2
+
+> t−∆t
+> αt−∆tσ2
+> t
+
+, c 2 = αt−∆tβt, ∆t
+
+> σ2
+> t
+
+, c 3 = σ2
+
+> t−∆tβt, ∆t
+> σ2
+> t
+
+.Flow Matching (FM) trains a neural network to directly predict the ODE velocity field dzt 
+
+> dt
+
+. By adopting a linear noise schedule defined as T = 1 , α t = 1 − t and σt = t,the random velocity variable is defined as: 
+
+u = zt − zt−∆t
+
+∆t
+
+, (4) During training, FM learns a time-dependent vector field by fitting a parametric conditional  qθ (u | zt) to the ground truth  p(u | zt) in Kullback-Leibler Divergence (KL): 
+
+LFM = Et, z0,zt
+
+DKL 
+
+ p(u | zt) ∥ qθ (u | zt) 
+
+≡ Et, z0,zt
+
+ − log qθ (u | zt). (5) Technically, we obtain  zt by sampling  z0, drawing  ε, and computing  u via Eqn. (1) . Minimizing Eqn. (5) is a super-vised regression of velocities conditioned on  zt:
+
+LFM = Et, z0,zt [ 12 ∥u − μθ (zt)∥22], (6) where μθ (zt) denotes a flow velocity neural network with learnable parameters θ.
+
+4. Method 
+
+4.1. Problem Definition 
+
+Let Ztr = {(zi, y i)} be a weakly-supervised training set with zi denoting an image and yi ∈ { 0, 1} denotes image-level labels, where 0 indicates normal and 1 in-dicates anomaly. The training set typically divides as 
+
+Ztr = Zn 
+
+> tr
+
+∪Z a 
+
+> tr
+
+, with normal subset |Z n 
+
+> tr
+
+| = N , anomaly sub-set |Z a 
+
+> tr
+
+| = M , and typically N ≫ M . Given a test set Zte ,the goal is to predict whether z ∈ Z te is normal or anomaly. Under OSAD, the anomaly distribution at test time differs significantly from that during training, i.e., pa
+
+> te
+
+(z)̸ = pa
+
+> tr
+
+(z).OSAD requires learning compact and discriminative repre-sentations of normality. However, methods based on dis-crete multi-Gaussian prototypes face a fundamental limita-tion: the lack of structured relationships among components fragments the prototype space and disrupts semantic conti-nuity in the data manifold. While typically formulated as learning a set of independent Gaussians N (μk, σ 2
+
+> k
+
+I), this paradigm cannot establish semantic connections between modes, ultimately limiting its capacity to model complex normal distributions. 
+
+Algorithm 1 MPFM: Mixture Prototype Flow Matching 
+
+Require: Training sets Zn 
+
+> tr
+
+, Za 
+
+> tr
+
+; test set Zte 
+
+Ensure: Anomaly scores {S(z)} for z ∈ Z te 
+
+1: Hyperparameters: GMM components K, MIMR weight λ, Learning rate η
+
+2: Initialize f , ψ with θ, scoring modules {θa, θ n, θ r, θ g}
+
+3: Extract features: Fn 
+
+> tr
+
+← f (Zn 
+
+> tr
+
+), Fa 
+
+> tr
+
+← f (Za 
+
+> tr
+
+)
+
+4: Initialize GMM prototype via K-means++ on Fn 
+
+> tr
+
+:
+
+5: {μk, π k}Kk=1 ← K-means++ (Fn 
+
+> tr
+
+)
+
+6: s2 ← 1
+
+> dN
+
+PKk=1 
+
+P 
+
+> i∈Ck
+
+∥zn,i  
+
+> 0
+
+− μk∥22
+
+7: while not converged do 
+
+8: Sample batch: {zn,i  
+
+> 0
+
+} ∼ F n 
+
+> tr
+
+, {za,j  
+
+> 0
+
+} ∼ F a
+
+> tr
+
+9: Sample timestep: t ∼ U (0 , T )
+
+10: Compute interpolated features and velocities: 
+
+11: zn,i t ← (1 − t)zn,i  
+
+> 0
+
++ tzn,i T , un,i ← zn,i T −zn,i 
+
+> 0
+> t
+
+12: za,j t ← (1 − t)za,j  
+
+> 0
+
++ tza,j T , ua,j ← za,j T −za,j 
+
+> 0
+> t
+
+13: Compute flow matching losses: 
+
+14: Ln 
+
+> flow
+
+← E[− log qθ (un,i |zn,i t )] 
+
+15: La 
+
+> flow
+
+← E[log qθ (ua,j |za,j t )] 
+
+16: Compute MIMR regularization: 
+
+17: Lmim ← E[P 
+
+> k
+
+p(c = k|ψ(zn,i  
+
+> 0
+
+)) log p(c =
+
+k|ψ(zn,i  
+
+> 0
+
+))] − P 
+
+> k
+
+πk log πk
+
+18: Compute: Lscore ← P 
+
+> m∈{ a,n,r,g}
+
+LMm
+
+19: Total loss: L ← L n 
+
+> flow
+
++ La 
+
+> flow
+
++ λLmim + Lscore 
+
+20: Update Θ ← { θ, θ a, θ n, θ r, θ g}: Θ ← Θ − η · ∇ ΘL
+
+21: end while 
+
+22: Inference: For each z ∈ Z te :
+
+23: S(z) ← Sg + Sa + Sr − Sn
+
+24: return {S(z)}
+
+Our core idea is to overcome the limitation of discrete multi-Gaussian prototypes by learning a continuous and structured prototype space through Mixture Prototype Flow Learning (MPFL). Rather than depending on a collection of isolated distributions, we introduce a generative bridge in the form of a flow model ψ, which seamlessly maps the complex feature distribution of normal data onto a Gaussian Mixture Model (GMM) prior. This formulation effectively captures the multi-modal nature and smooth transitions inherent in the normal data manifold, yielding a more coherent and expressive density estimator that mitigates false positive anomalies. Formally, we jointly optimize the flow mapping 
+
+ψ and the parameters of the Gaussian mixture prototype 
+
+PGM  under the following objective: 
+
+min 
+
+> ψ, PGM ,f
+
+Dflow (ψ(Fn 
+
+> tr
+
+), ψ (Fa 
+
+> tr
+
+), PGM )+ λD mim (Fn 
+
+> tr
+
+), (7) s.t. , ψ : P (F) flow 
+
+−→ P GM , (8) 
+
+f : Z feature 
+
+−→ F , (9) where  PGM  denotes the Gaussian mixture prototype to be learned,  ψ is the flow function that performs probability 3Submission and Formatting Instructions for ICML 2026 
+
+distribution transport, Fn 
+
+> tr
+
+and Fa 
+
+> tr
+
+denote the feature space of normal and anomalous samples respectively,  Dflow  rep-resents the discriminative objective in the prototype space, 
+
+f is the feature extractor, and  Dmim  serves as a feature-space regularizer. In this formulation, we refer to the learning of  ψ and  PGM  as MPFL. Concurrently, the ob-jective  Dmim (Fnorm tr ) is referred to as Mutual Information Maximization Regularizer (MIMR), which encourages con-fident yet balanced prototype usage and reinforces nor-mal–anomalous separation, thereby mitigating prototype collapse and enhancing overall discriminability. The com-plete algorithmic procedure is summarized in Algorithm 1. 
+
+4.2. Mixture Prototype Flow Learning 
+
+Our Mixture Prototype Flow Learning (MPFL) is performed in the feature space. To extract intermediate image features, we employ a classic backbone network such as ResNet-18. Formally, the feature extraction process can be described by a function  f : Z → F , which maps an image  z to an intermediate feature representation  z = f (z) ∈ Rd, where 
+
+Rd denotes a  d-dimensional real space 1. We designate the intermediate feature sets of normal and anomaly sam-ples as Fn 
+
+> tr
+
+= {zn,i  
+
+> 0
+
+|i = 1 , · · · , N } and Fa 
+
+> tr
+
+= {za,j  
+
+> 0
+
+|j =1, · · · , M }, respectively. Throughout the subsequent work, we adopt a unified notation: subscripts denote timesteps (e.g., z0) and superscripts indicate both sample types and indices (e.g., zn,i  
+
+> 0
+
+for the i-th normal sample at timestep 0, 
+
+za,j  
+
+> 0
+
+for the j-th anomalous sample at timestep 0). Existing prototype-based OSAD methods rely on a sim-ple unimodal Gaussian prior, which significantly under-estimates the inherent multimodality of normal data. To mitigate this limitation, MPFL learns continuous flow trans-formations to map the features of normal samples to a struc-tured Gaussian mixture prior, effectively capturing the com-plex and multi-modal characteristics of normal data. Specif-ically, owing to the scarcity of anomalous samples and the abundance and diversity of normal data, we consider learn-ing a continuous distribution transformation from the source distribution  psource = P (Fn 
+
+> tr
+
+) of normal samples to the target Gaussian mixture prototype distribution  ptarget = P (PGM ),which is defined as: 
+
+p1(ψ(zn,i  
+
+> 0
+
+)) = 
+
+> K
+
+X
+
+> k=1
+
+πkN (ψ(zn,i  
+
+> 0
+
+); μk, s 2I), (10) where ψ denotes the flow function and ψ(zn,i  
+
+> 0
+
+) ∈ Rd de-notes the latent features. K is the number of mixture com-ponents, πk is the weight of the k-th component satisfying 
+
+πk > 0 and PKk=1 πk = 1 , μk ∈ Rd is mean vector, and 
+
+s ∈ R+ is a shared standard deviation to maintain numerical 
+
+> 1
+
+z is obtained by flattening the spatial dimensions of the con-volutional feature maps, transforming the 3D tensor into a 1D representation. 
+
+stability. Traditional flow-matching methods typically regress a single velocity vector, which limits their ability to capture the complex multimodal characteristics of normal data. To mitigate this limitation, we directly model the velocity field 
+
+p(u|zn,i t ) as a GMM: 
+
+qθ (u|zn,i t ) = 
+
+> K
+
+X
+
+> k=1
+
+πk(zn,i t ; θ)N (u; μk(zn,i t ; θ), s 2I), (11) where u ∈ Rd denotes the velocity vector, and zn,i t repre-sents the feature representation at timestep t obtained by Eqn. (4) . Building on Eqn. (11) , we directly regress the conditional velocity distribution with a Gaussian mixture. Training minimizes the following negative log-likelihood: 
+
+LNLL = Eu∼p(u|zn,i t )
+
+"
+
+− log 
+
+> K
+
+X
+
+> k=1
+
+πk(zn,i t ; θ) N
+
+
+
+u; μk(zn,i t ; θ), s 2I
+
+#
+
+. (12) We introduce an explicit time parameterization that enables closed-form reverse-time sampling while preserving the Gaussian mixture structure. Under a standard linear noise schedule, the one-step transition admits an approximate reparameterization, yielding a conditional endpoint distribu-tion consistent with the velocity field: 
+
+qθ (zn,i  
+
+> 0
+
+|zn,i t ) = 
+
+> K
+
+X
+
+> k=1
+
+πk(zn,i  
+
+> 0
+
+; μzk , s 2 
+
+> z
+
+I),
+
+s.t. , μzk = zt − σtμk, sz = σts,  (13) By the conditional–marginal closure of linear–Gaussian models, the one-step reverse transition that preserves the mixture structure is defined as follows: 
+
+qθ (zn,i t−∆t | zn,i t ) = 
+
+> K
+
+X
+
+> k=1
+
+πk(zn,i t ; θ)
+
+N
+
+
+
+zt−∆t; c1zn,i t + c2μzk ,  c3 + c22s2
+
+> z
+
+I
+
+
+
+, (14) where the coefficients are fully determined by the noise schedule: c1 = σ2 
+
+> t−∆t
+> σ2
+> t
+> αt
+> αt−∆t
+
+, c 2 = βt, ∆t
+
+> σ2
+> t
+
+αt−∆t, c 3 =
+
+> βt, ∆t
+> σ2
+> t
+
+σ2
+
+> t−∆t
+
+. The closed-form transition enables step-wise sampling at inference without numerical integration, while preserving mixture closure throughout the reverse trajectory, yielding numerically stable inference. However, the interdependence between the Gaussian mix-ture parameters and the flow transformation network presents a significant optimization challenge. To address this limitation, we introduce a data-driven initialization strat-egy for the target Gaussian mixture prototype distribution 4Submission and Formatting Instructions for ICML 2026 
+
+P (PGM ). Specifically, we perform K-means++ clustering on Fn 
+
+> tr
+
+to partition it into K clusters {Ck}Kk=1 , where Ck de-notes the set of sample indices belonging to the k-th cluster, minimizing the within-cluster sum of squares: 
+
+min   
+
+> {Ck,μk}Kk=1
+> K
+
+X
+
+> k=1
+
+X
+
+> i∈Ck
+
+∥zn,i  
+
+> 0
+
+− μk∥22. (15) The resulting cluster centroids are used to initialize the mixture means μk. The mixture weights πk are initialized proportionally to cluster sizes as πk = |Ck|/N , while the shared variance s2 is set to the per-dimension average vari-ance across all clusters: 
+
+s2 = 1
+
+dN 
+
+> K
+
+X
+
+> k=1
+
+X
+
+> i∈Ck
+
+∥zn,i  
+
+> 0
+
+− μk∥22. (16) We formulate the training objectives that enable effective learning of MPFL. For normal samples, we employ a nega-tive log-likelihood loss to align the predicted velocity distri-bution with the ground truth dynamics: 
+
+Ln 
+
+> flow
+
+= Et, zn,i  
+
+> 0,zn,i t
+
+h
+
+− log qθ (u|zn,i t )
+
+i
+
+, (17) where t ∼ U (0 , T ), the true velocity u = zn,i T −zn,i  
+
+> 0
+> t
+
+and the interpolated feature zn,i t = (1 −t)zn,i  
+
+> 0
+
++tzn,i T . This objective encourages the model to learn velocity distributions that faithfully capture the transformation dynamics of normal samples toward P (PGM ). For anomalous samples, we adopt an opposite strategy that pushes their distributions away from the normal prototype space: 
+
+La 
+
+> flow
+
+= Et, za,i  
+
+> 0,za,i t
+
+h
+
+log qθ (u|za,i t )
+
+i
+
+. (18) where za,i  
+
+> 0
+
+∼ P (Fa 
+
+> tr
+
+). The true velocity and the interpolated feature were computed in the same way as above. 
+
+4.3. Mutual Information Maximization Regularizer 
+
+Although MPFL captures the multi-modal distribution of normal data, the lack of explicit inter-prototype separation can induce prototype collapse, where multiple components converge to similar modes. This undermines discrimina-tive power, making semantically distinct patterns indistin-guishable in the latent space. To mitigate this challenge, we introduce a Mutual Information Maximization Regular-izer (MIMR) that complements our flow-based Gaussian-mixture framework. The core insight is that optimal proto-type learning should (i) encourage confident assignments of features to specific prototypes and (ii) maintain balanced uti-lization across components. Formally, let c ∈ { 1, ..., K } de-note the prototype assignment variable, mutual information 
+
+I(ψ(zn,i  
+
+> 0
+
+); c) measures the reduction in uncertainty about c
+
+given ψ(zn,i  
+
+> 0
+
+), which is defined as: 
+
+I(ψ(zn,i  
+
+> 0
+
+); c) = H(c) − H(c|ψ(zn,i  
+
+> 0
+
+)) , (19) where H(c) is the marginal entropy of prototype assign-ments and H(c|ψ(zn,i  
+
+> 0
+
+)) is the conditional entropy. Thanks to the Gaussian-mixture structure in Eqn. (10) , both terms can be estimated without extra parameters. In par-ticular, the posterior assignment follows directly from the prototype GMM: 
+
+p(c = k|ψ(zn,i  
+
+> 0
+
+)) = πkN (ψ(zn,i  
+
+> 0
+
+); μk, s 2I)
+
+PKj=1 πj N (ψ(zn,i  
+
+> 0
+
+); μj , s 2I) . (20) This posterior distribution enables efficient computation of the information-theoretic regularizer: 
+
+Lmim = Ezn,i    
+
+> 0∼P(Fntr )
+
+" KX
+
+> k=1
+
+p(c = k|ψ(zn,i  
+
+> 0
+
+)) log p(c = k|ψ(zn,i  
+
+> 0
+
+)) 
+
+#
+
+−
+
+> K
+
+X
+
+> k=1
+
+πk log πk,
+
+(21) where the first term reduces conditional entropy (promot-ing confident assignments), and the second term increases marginal entropy (balancing component usage) via the mix-ture weights πk. We evaluate Lmim only on normal samples to prevent pulling anomalies toward the normal prototypes. 
+
+4.4. Anomaly Score Prediction 
+
+Based on the MPFM framework, we design four comple-mentary modules for estimating anomaly scores from dif-ferent perspectives. For the feature map F ∈ RH′×W ′×C 2
+
+extracted from input images, we generate pixel-wise feature vectors V = {vi}H′×W ′ 
+
+> i=1
+
+where each  vi ∈ RC represents the feature of a local image patch. We design the global anomaly scoring module  Mg that computes the negative log-likelihood of transformed features under the Gaussian mixture prototype distribution: 
+
+LMg = Lbinary (− log 
+
+> K
+
+X
+
+> k=1
+
+πkN (ψ(z); μk, s 2I), y ), (22) where Lbinary refers to a binary classification loss function. The local anomaly scoring module  Ma focuses on the most salient anomalous regions by aggregating top-O pixel-level anomaly scores: 
+
+LMa = Lbinary ( 1
+
+O
+
+X Top O {Sa(vi; θa)}, y ), (23) 
+
+> 2
+
+The spatial feature map  F is taken from the convolutional layers of f by preserving the 3D tensor, while z is its flattened embedding. 
+
+5Submission and Formatting Instructions for ICML 2026 
+
+The normal feature scoring module  Mn learns prototypical normal patterns through global feature pooling: 
+
+LMn = Lbinary (Sn( 1
+
+H′ × W ′ 
+
+> H′×W′
+
+X
+
+> i=1
+
+vi; θn), y ) (24) The residual anomaly scoring module  Mr measures the deviation from the most probable prototype: 
+
+LMr = Lbinary (Sr(( ψ(z) − μc∗ )/s ; θr), y ), (25) where  c∗ = arg max c N (ψ(z); μc, s 2I) denotes the index of the most probable prototype. 
+
+Training. During the training phase, the flow match-ing model, Gaussian mixture prototype model, and four anomaly scoring modules are jointly trained. To this end, we employ an objective function that encompasses three components as follows: 
+
+L = LMa + LMn + LMr + LMg
+
+| {z }
+
+> Anomaly scoring modules
+
++ Ln 
+
+> flow
+
++ La
+
+> flow
+
+| {z }
+
+> Flow matching
+
++λLmim .
+
+(26) where the coefficient  λ modulates the relative importance of the prototype regularization loss, and the learnable param-eters include the flow model parameters  θ and the scoring module parameters  {θa, θ n, θ r, θ g}.
+
+Inference. During the test phase, we compute the anomaly score by adding the scores from  Sg, Sa and  Sr, while sub-tracting the normal score obtained from  Sn.
+
+In summary, we incorporate a shared standard deviation parameter  s for training stability and provide complete derivations for this and other formulations in the appendix. 
+
+5. Experiment 
+
+5.1. Datasets and Evaluation Metric Datasets. We evaluate MPFM on nine real-world anomaly detection benchmarks, covering six industrial defect datasets (MVTec AD (Bergmann et al., 2019), Optical (Wieler & Hahn, 2007), SDD (Tabernik et al., 2020), AITEX (Silvestre-Blanes et al., 2019), ELPV (Deitsch et al., 2019), Mast-cam (Kerner et al., 2020)) and three medical datasets (Hyper-Kvasir (Borgli et al., 2020), Brain-MRI (Salehi et al., 2021), HeadCT (Salehi et al., 2021)). Following OSAD base-lines (Ding et al., 2022; Zhu et al., 2024), we adopt two sampling protocols: a general protocol that randomly draws anomaly examples from all anomaly categories, and a hard protocol that samples from a single category to assess gen-eralization to novel or unseen anomaly classes. 
+
+Evaluation Metric. Performance is assessed using Area Under the ROC Curve (AUC) across all methods and set-tings, with scores averaged over five independent runs. 
+
+5.2. Baselines 
+
+We evaluate MPFM against six baselines: SAOE (Markovitz et al., 2020; Tack et al., 2020; Li et al., 2021), MLEP (Liu et al., 2019), FLOS (Ross & Doll ´ar, 2017), DRA (Ding et al., 2022), AHL (Zhu et al., 2024), and the prior DPDL (Wang et al., 2025). Among these, MLEP, DRA, AHL, and DPDL are tailored for OSAD; SAOE is a supervised detector aug-mented with synthetic anomalies and anomaly exposure, whereas FLOS handles class imbalance via focal loss. 
+
+5.3. Implementation Details 
+
+The input image size is 448 × 448 × 3. We set O to 10% of the total scores in each score map. We optimize with AdamW (Loshchilov, 2017) using an initial learning rate of 
+
+2 × 10 −4 and weight decay of 1 × 10 −5. MPFM is trained on a single NVIDIA GeForce RTX 5090 for 50 epochs with 20 iterations per epoch. Following prior protocol(Ding et al., 2022), we evaluate under M = 10 and M = 1 anomalous-sample settings. To enhance robustness to unseen anomalies, we employ CutMix (Yun et al., 2019) to generate pseudo-anomaly samples as augmentations of known anomalies. GMM components K is set to 32 and MIM weight λ is set to 0.1 in our experiments. 
+
+5.4. Results under General Setting 
+
+Tab. 1 presents comprehensive evaluation results under the general setting. MPFM demonstrates consistent improve-ments across all benchmarks, with performance gains at-tributed to its core methodological contributions. Under the one-shot setting, the 5.5% improvement on AITEX highlights the advantage of Gaussian mixture prototypes in capturing complex textile patterns. On Mastcam and Hyper-Kvasir, the 4.4% gains reflect how conditional flow matching enhances boundary discrimination for surface de-fects and medical anomalies. The framework also shows strong adaptability in industrial inspection, with gains of 2.9% on SDD and 3.0% on ELPV. Notably, improvements of 3.5% on BrainMRI and 3.8% on HeadCT confirm its robustness in data-scarce medical domains. Under the ten-shot setting, MPFM maintains its strong performance with improvements of 2.6% on ELPV, 3.6% on Mastcam, and 3.1% on Hyper-Kvasir, demonstrating that the Gaussian mixture prototype space effectively leverages the additional supervisory signals to enhance discriminative power while preserving generalization capability to unseen anomalies. 
+
+5.5. Results under the Hard Setting 
+
+Tab. 2 reports the comprehensive results under the challeng-ing hard setting. MPFM achieves the highest AUC in both single-anomaly and ten-anomaly configurations, demon-strating its robustness in handling complex open-set sce-6Submission and Formatting Instructions for ICML 2026 
+
+Table 1. AUC results (mean ± std) on nine real-world AD datasets under the general setting, with extended results in appendix. Best results are highlighted in red and second-best in blue (per column). Baseline state-of-the-art numbers are taken from the original papers. Dataset FLOS SAOE MLEP DRA AHL DPDL MPFM (Ours) Ten Training Anomaly Examples 
+
+MVTec AD 0.939 ±0.007 0.926 ±0.010 0.907 ±0.005 0.959 ±0.003 0.970 ±0.002 0.977 ±0.002 0.982 ±0.003 
+
+Optical 0.720 ±0.055 0.941 ±0.013 0.740 ±0.039 0.965 ±0.006 0.976 ±0.004 0.983 ±0.005 0.992 ±0.002 
+
+SDD 0.967 ±0.018 0.955 ±0.020 0.983 ±0.013 0.991 ±0.005 0.991 ±0.001 0.996 ±0.001 0.999 ±0.001 
+
+AITEX 0.841 ±0.049 0.874 ±0.024 0.867 ±0.037 0.893 ±0.017 0.925 ±0.013 0.975 ±0.007 0.992 ±0.004 
+
+ELPV 0.818 ±0.032 0.793 ±0.047 0.794 ±0.047 0.845 ±0.013 0.850 ±0.004 0.937 ±0.003 0.962 ±0.003 
+
+Mastcam 0.703 ±0.029 0.810 ±0.029 0.798 ±0.026 0.848 ±0.008 0.855 ±0.005 0.934 ±0.010 0.968 ±0.007 
+
+Hyper-Kvasir 0.773 ±0.029 0.666 ±0.050 0.600 ±0.069 0.834 ±0.004 0.880 ±0.003 0.939 ±0.005 0.965 ±0.004 
+
+BrainMRI 0.955 ±0.011 0.900 ±0.041 0.959 ±0.011 0.970 ±0.003 0.977 ±0.001 0.969 ±0.005 0.984 ±0.004 
+
+HeadCT 0.971 ±0.004 0.935 ±0.021 0.972 ±0.014 0.972 ±0.002 0.999 ±0.003 0.981 ±0.003 0.999 ±0.001 One Training Anomaly Example 
+
+MVTec AD 0.755 ±0.136 0.834 ±0.007 0.744 ±0.019 0.883 ±0.008 0.901 ±0.003 0.927 ±0.002 0.938 ±0.004 
+
+Optical 0.518 ±0.003 0.815 ±0.014 0.516 ±0.009 0.888 ±0.012 0.888 ±0.007 0.915 ±0.002 0.933 ±0.002 
+
+SDD 0.840 ±0.043 0.781 ±0.009 0.811 ±0.045 0.859 ±0.014 0.909 ±0.001 0.917 ±0.003 0.944 ±0.004 
+
+AITEX 0.538 ±0.073 0.675 ±0.094 0.564 ±0.055 0.692 ±0.124 0.734 ±0.008 0.838 ±0.008 0.884 ±0.005 
+
+ELPV 0.457 ±0.056 0.635 ±0.092 0.578 ±0.062 0.675 ±0.024 0.828 ±0.005 0.897 ±0.002 0.924 ±0.004 
+
+Mastcam 0.542 ±0.017 0.662 ±0.018 0.625 ±0.045 0.692 ±0.058 0.743 ±0.003 0.838 ±0.011 0.875 ±0.004 
+
+Hyper-Kvasir 0.668 ±0.004 0.498 ±0.100 0.445 ±0.040 0.690 ±0.017 0.768 ±0.015 0.821 ±0.007 0.857 ±0.005 
+
+BrainMRI 0.693 ±0.036 0.531 ±0.060 0.632 ±0.017 0.744 ±0.004 0.866 ±0.004 0.893 ±0.004 0.924 ±0.002 
+
+HeadCT 0.698 ±0.092 0.597 ±0.022 0.758 ±0.038 0.796 ±0.105 0.825 ±0.014 0.865 ±0.005 0.898 ±0.005 
+
+Table 2. AUC results (mean ± std) under the hard setting, with extended results in appendix. The best and second-best scores are highlighted in red and blue , respectively. Carpet and Metal nut are subsets of MVTec AD. Following prior work (Ding et al., 2022; Zhu et al., 2024), we use the same datasets, excluding those with only a single anomaly class to align with the hard setting. Dataset FLOS SAOE MLEP DRA AHL DPDL MPFM (Ours) Ten Training Anomaly Examples 
+
+Carpet (mean) 0.761 ±0.012 0.762 ±0.073 0.751 ±0.023 0.935 ±0.013 0.949 ±0.002 0.956 ±0.004 0.969 ±0.003 
+
+Metal nut (mean) 0.922 ±0.014 0.855 ±0.016 0.878 ±0.058 0.945 ±0.017 0.972 ±0.002 0.978 ±0.002 0.988 ±0.004 
+
+AITEX (mean) 0.635 ±0.043 0.724 ±0.032 0.626 ±0.041 0.733 ±0.009 0.747 ±0.002 0.798 ±0.005 0.836 ±0.004 
+
+ELPV (mean) 0.642 ±0.032 0.683 ±0.047 0.745 ±0.020 0.766 ±0.029 0.788 ±0.003 0.818 ±0.003 0.842 ±0.002 
+
+Mastcam (mean) 0.616 ±0.021 0.697 ±0.014 0.588 ±0.016 0.695 ±0.004 0.721 ±0.003 0.778 ±0.007 0.827 ±0.005 
+
+Hyper-Kvasir (mean) 0.786 ±0.021 0.698 ±0.021 0.571 ±0.014 0.844 ±0.009 0.854 ±0.004 0.864 ±0.002 0.893 ±0.002 One Training Anomaly Example 
+
+Carpet (mean) 0.678 ±0.040 0.753 ±0.055 0.679 ±0.029 0.901 ±0.006 0.932 ±0.003 0.941 ±0.006 0.957 ±0.003 
+
+Metal nut (mean) 0.855 ±0.024 0.816 ±0.029 0.825 ±0.023 0.932 ±0.017 0.939 ±0.004 0.944 ±0.003 0.969 ±0.004 
+
+AITEX (mean) 0.624 ±0.024 0.674 ±0.034 0.466 ±0.030 0.684 ±0.033 0.707 ±0.007 0.753 ±0.005 0.802 ±0.003 
+
+ELPV (mean) 0.691 ±0.008 0.614 ±0.048 0.566 ±0.111 0.703 ±0.022 0.740 ±0.003 0.762 ±0.003 0.796 ±0.002 
+
+Mastcam (mean) 0.524 ±0.013 0.689 ±0.037 0.541 ±0.007 0.667 ±0.012 0.673 ±0.010 0.733 ±0.004 0.770 ±0.002 
+
+Hyper-Kvasir (mean) 0.571 ±0.004 0.406 ±0.018 0.480 ±0.044 0.700 ±0.009 0.706 ±0.007 0.715 ±0.004 0.742 ±0.003 
+
+narios. The substantial performance gains across diverse datasets—with AUC improvements of 4.8% on AITEX, 2.9% on ELPV, 6.3% on Mastcam, and 3.4% on Hyper-Kvasir under the ten-anomaly setting—can be attributed to the method’s ability to model intricate multi-modal normal-ity through Gaussian mixture prototypes while maintaining discriminative boundaries via conditional flow matching. Notably, even on near-saturated subsets such as Carpet, MPFM consistently delivers stable improvements, highlight-ing its reliable adaptability across heterogeneous industrial environments. Furthermore, under the one-shot configura-tion, MPFM maintains superior generalization, surpassing the strongest baseline by 4.9% on AITEX and 3.7% on Mast-cam, which confirm that regularization strategy mitigates overfitting to limited supervision, fostering a robust normal representation sensitive to diverse, unseen defects. 
+
+5.6. Ablation Study 
+
+The ablation study in Fig. 2 systematically evaluates the contributions of core components in MPFM. Removing MPFL leads to substantial performance degradation across all datasets, particularly on complex-texture benchmarks like AITEX and Mastcam, underscoring its role in cap-turing multi-modal normality through Gaussian mixture prototypes. The MIMR removal results in moderate de-clines, especially in challenging settings, confirming its utility in preventing prototype collapse and enhancing fea-ture discriminability. The synergistic combination of both components is evidenced by the maximal performance drop 7Submission and Formatting Instructions for ICML 2026 MVTec AD Optical SDD AITEX                 
+
+> 0.65
+> 0.70
+> 0.75
+> 0.80
+> 0.85
+> 0.90
+> 0.95
+> 1.00
+> AUC
+> MPFM w/o MPFL w/o MIMR
+> ELPV Mastcam Hyper-Kvasir BrainMRI HeadCT
+> 0.65
+> 0.70
+> 0.75
+> 0.80
+> 0.85
+> 0.90
+> 0.95
+> 1.00
+> MPFM w/o MPFL w/o MIMR
+> Carpet Metal_nut AITEX
+> 0.65
+> 0.70
+> 0.75
+> 0.80
+> 0.85
+> 0.90
+> 0.95
+> 1.00
+> MPFM w/o MPFL w/o MIMR
+> ELPV Mastcam Hyper-Kvasir
+> 0.65
+> 0.70
+> 0.75
+> 0.80
+> 0.85
+> 0.90
+> 0.95
+> 1.00
+> MPFM w/o MPFL w/o MIMR
+> Ten Training Anomaly Examples Under General Settings Ten Training Anomaly Examples Under Hard Settings
+
+Figure 2. Ablation study for MPFL and MIMR under the general settings and hard settings. 
+
+Table 3. Ablation study for scoring modules M g, M a, M r and M n.
+
+Mg Ma Mr Mn AITEX Hyper-Kvasir ELPV Optical Mastcam HeadCT BrainMRI Ten Training Anomaly Examples Under General Settings 0.945 ± 0.009 0.949 ± 0.010 0.946 ± 0.005 0.973 ± 0.006 0.948 ± 0.014 0.980 ± 0.003 0.962 ± 0.007 0.968 ± 0.007 0.958 ± 0.005 0.958 ± 0.006 0.982 ± 0.014 0.958 ± 0.005 0.987 ± 0.002 0.971 ± 0.003 0.932 ± 0.012 0.938 ± 0.011 0.929 ± 0.015 0.947 ± 0.009 0.937 ± 0.013 0.968 ± 0.008 0.947 ± 0.014 
+
+0.992 ± 0.004 0.965 ± 0.004 0.962 ± 0.003 0.992 ± 0.002 0.968 ± 0.007 0.999 ± 0.001 0.984 ± 0.004 
+
+when ablating them jointly, highlighting their complemen-tary functions in establishing compact normal boundaries and generalizing to unseen anomalies. As shown in Tab. 3, the scoring modules demonstrate dis-tinct contributions to MPFM’s performance. The most sub-stantial performance degradation occurs when removing the global likelihood scorer Mg, underscoring its fundamental role in capturing normal patterns. The residual anomaly scorer Mr also proves essential, with its removal leading to noticeable performance drops, particularly in complex detection scenarios. The most severe performance reduction emerges when both Mg and Mr are ablated simultaneously, highlighting their synergistic effect in maintaining robust anomaly discrimination across diverse settings. 
+
+5.7. Parameter Sensitivity Analysis 
+
+We analyze the sensitivity of the Gaussian components K
+
+and the MIMR regularization weight λ. Tab. 4 reports the AUC on three representative datasets: MVTec AD (Object), AITEX (Texture), and Hyper-Kvasir (Medical). 
+
+Impact of Component Number K. Increasing the number of mixture components K initially yields consistent per-formance gains, with optimal results attained at K = 32 .Notably, a small number of components ( K = 8 ) struggles to encapsulate the rich multi-modal structures of complex data, evident in the lower scores on texture-rich AITEX and medical Hyper-Kvasir. Increasing K to 32 provides the necessary granularity to capture diverse semantic modes, achieving the best overall results (e.g., 0.992 on AITEX). However, excessive granularity ( K = 64 ) leads to diminish-ing returns; this is likely due to the fragmentation of coher-ent semantic patterns into redundant mixture components, which unnecessarily complicates the decision boundary. 
+
+Impact of MIMR Weight λ. The regularization coefficient 
+
+λ governs the trade-off between flow matching fidelity and inter-prototype discriminability. Insufficient regularization (λ = 0 .001 ) fails to enforce sharp separation, resulting in ambiguous latent boundaries and degraded performance. Conversely, aggressive regularization ( λ = 1 .0) imposes excessive constraints on the flow field, hindering the model’s ability to faithfully fit the data manifold. Setting λ = 0 .1
+
+achieves the optimal equilibrium, ensuring that the learned prototypes are both discriminative against anomalies and representative of the underlying normal distribution. 
+
+Table 4. Parameter sensitivity analysis of GMM components K
+
+and MIMR weight λ on MVTec AD, AITEX, and Hyper-Kvasir under the General Setting. 
+
+Param. Value MVTec AD AITEX Hyper-Kvasir Components (K)8 0.975 ± 0.001 0.980 ± 0.002 0.954 ± 0.003 16 0.979 ± 0.004 0.988 ± 0.005 0.960 ± 0.007 
+
+32 0.982 ± 0.001 0.992 ± 0.003 0.965 ± 0.004 
+
+64 0.978 ± 0.009 0.989 ± 0.011 0.958 ± 0.014 MIMR Weight (λ)0.001 0.972 ± 0.002 0.987 ± 0.002 0.948 ± 0.004 0.01 0.976 ± 0.005 0.989 ± 0.006 0.957 ± 0.007 
+
+0.1 0.982 ± 0.003 0.992 ± 0.005 0.965 ± 0.004 
+
+1.0 0.975 ± 0.007 0.981 ± 0.008 0.954 ± 0.012 
+
+6. Conclusion 
+
+We have introduced Mixture Prototype Flow Matching (MPFM), a framework that bridges Gaussian mixture mod-eling with conditional flow matching for open-set anomaly 8Submission and Formatting Instructions for ICML 2026 
+
+detection. By constructing a structured prototype space with mutual information regularization, our method effectively captures multi-modal normal patterns while maintaining discriminative power against anomalies. Across diverse benchmarks, MPFM establishes tighter normal boundaries and exhibits improved generalization to unseen anomalies. 
+
+Impact Statement 
+
+This paper presents work whose goal is to advance the field of Machine Learning by introducing a robust framework for Open-set Supervised Anomaly Detection. Our method, MPFM, is designed to improve the reliability of identify-ing irregularities in complex distributions, which has pos-itive implications for safety-critical applications such as industrial defect inspection and medical diagnosis. While anomaly detection techniques can theoretically be repur-posed for surveillance, our work focuses on characterizing multi-modal normality to reduce false positives in open-world settings. We do not foresee any specific negative societal consequences that must be highlighted here. 
+
+References 
+
+Baitieva, A., Hurych, D., Besnier, V., and Bernard, O. Super-vised anomaly detection for complex industrial images. In Proceedings of the IEEE/CVF Conference on Com-puter Vision and Pattern Recognition , pp. 17754–17762, 2024. Bergmann, P., Fauser, M., Sattlegger, D., and Steger, C. Mvtec ad–a comprehensive real-world dataset for un-supervised anomaly detection. In Proceedings of the IEEE/CVF conference on computer vision and pattern recognition , pp. 9592–9600, 2019. Borgli, H., Thambawita, V., Smedsrud, P. H., Hicks, S., Jha, D., Eskeland, S. L., Randel, K. R., Pogorelov, K., Lux, M., Nguyen, D. T. D., et al. Hyperkvasir, a comprehensive multi-class image and video dataset for gastrointestinal endoscopy. Scientific data , 7(1):283, 2020. Chen, H., Zhang, K., Tan, H., Xu, Z., Luan, F., Guibas, L., Wetzstein, G., and Bi, S. Gaussian mixture flow matching models. arXiv preprint arXiv:2504.05304 , 2025. Dai, S., Wu, Y., Li, X., and Xue, X. Generating and reweight-ing dense contrastive patterns for unsupervised anomaly detection. In Proceedings of the AAAI Conference on Artificial Intelligence , volume 38, pp. 1454–1462, 2024. Deitsch, S., Christlein, V., Berger, S., Buerhop-Lutz, C., Maier, A., Gallwitz, F., and Riess, C. Automatic clas-sification of defective photovoltaic module cells in elec-troluminescence images. Solar Energy , 185:455–468, 2019. Deng, Y., He, X., Mei, C., Wang, P., and Tang, F. Fireflow: Fast inversion of rectified flow for image semantic editing. 
+
+arXiv preprint arXiv:2412.07517 , 2024. Ding, C., Pang, G., and Shen, C. Catching both gray and black swans: Open-set supervised anomaly detection. In 
+
+Proceedings of the IEEE/CVF conference on computer vision and pattern recognition , pp. 7388–7398, 2022. Esser, P., Kulal, S., Blattmann, A., Entezari, R., M ¨uller, J., Saini, H., Levi, Y., Lorenz, D., Sauer, A., Boesel, F., et al. Scaling rectified flow transformers for high-resolution image synthesis. In Forty-first international conference on machine learning , 2024. Guo, J., Lu, S., Zhang, W., Chen, F., Li, H., and Liao, H. Dinomaly: The less is more philosophy in multi-class unsupervised anomaly detection. In Proceedings of the Computer Vision and Pattern Recognition Conference , pp. 20405–20415, 2025. Hu, T., Zhang, J., Yi, R., Du, Y., Chen, X., Liu, L., Wang, Y., and Wang, C. Anomalydiffusion: Few-shot anomaly image generation with diffusion model. In Proceedings of the AAAI Conference on Artificial Intelligence , vol-ume 38, pp. 8526–8534, 2024. Jin, Y., Peng, J., He, Q., Hu, T., Wu, J., Chen, H., Wang, H., Zhu, W., Chi, M., Liu, J., et al. Dual-interrelated diffusion model for few-shot anomaly image generation. In Pro-ceedings of the Computer Vision and Pattern Recognition Conference , pp. 30420–30429, 2025. Kerner, H. R., Wagstaff, K. L., Bue, B. D., Wellington, D. F., Jacob, S., Horton, P., Bell, J. F., Kwan, C., and Ben Amor, H. Comparison of novelty detection methods for multispectral images in rover-based planetary explo-ration missions. Data Mining and Knowledge Discovery ,34:1642–1675, 2020. Labs, B. F. Flux. https://github.com/ black-forest-labs/flux , 2024. Labs, B. F., Batifol, S., Blattmann, A., Boesel, F., Consul, S., Diagne, C., Dockhorn, T., English, J., English, Z., Esser, P., Kulal, S., Lacey, K., Levi, Y., Li, C., Lorenz, D., M ¨uller, J., Podell, D., Rombach, R., Saini, H., Sauer, A., and Smith, L. Flux.1 kontext: Flow matching for in-context image generation and editing in latent space, 2025. URL https://arxiv.org/abs/2506.15742 .Langley, P. Crafting papers on machine learning. In Langley, P. (ed.), Proceedings of the 17th International Conference on Machine Learning (ICML 2000) , pp. 1207–1216, Stan-ford, CA, 2000. Morgan Kaufmann. 9Submission and Formatting Instructions for ICML 2026 
+
+Li, C.-L., Sohn, K., Yoon, J., and Pfister, T. Cutpaste: Self-supervised learning for anomaly detection and local-ization. In Proceedings of the IEEE/CVF conference on computer vision and pattern recognition , pp. 9664–9674, 2021. Li, H., Wu, J., Chen, H., Wang, M., and Shen, C. Effi-cient anomaly detection with budget annotation using semi-supervised residual transformer. arXiv preprint arXiv:2306.03492 , 2023. Lipman, Y., Chen, R. T., Ben-Hamu, H., Nickel, M., and Le, M. Flow matching for generative modeling. arXiv preprint arXiv:2210.02747 , 2022. Lipman, Y., Havasi, M., Holderrieth, P., Shaul, N., Le, M., Karrer, B., Chen, R. T., Lopez-Paz, D., Ben-Hamu, H., and Gat, I. Flow matching guide and code. arXiv preprint arXiv:2412.06264 , 2024. Liu, J., Wu, K., Nie, Q., Chen, Y., Gao, B.-B., Liu, Y., Wang, J., Wang, C., and Zheng, F. Unsupervised contin-ual anomaly detection with contrastively-learned prompt. In Proceedings of the AAAI Conference on Artificial In-telligence , volume 38, pp. 3639–3647, 2024. Liu, W., Luo, W., Li, Z., Zhao, P., Gao, S., et al. Margin learning embedded prediction for video anomaly detec-tion with a few anomalies. In IJCAI , volume 3, pp. 023–3, 2019. Liu, X., Gong, C., and Liu, Q. Flow straight and fast: Learning to generate and transfer data with rectified flow. 
+
+arXiv preprint arXiv:2209.03003 , 2022. Liu, X., Zhang, X., Ma, J., Peng, J., et al. Instaflow: One step is enough for high-quality diffusion-based text-to-image generation. In The Twelfth International Confer-ence on Learning Representations , 2023. Loshchilov, I. Decoupled weight decay regularization. arXiv preprint arXiv:1711.05101 , 2017. Lu, R., Wu, Y., Tian, L., Wang, D., Chen, B., Liu, X., and Hu, R. Hierarchical vector quantized transformer for multi-class unsupervised anomaly detection. Advances in Neural Information Processing Systems , 36:8487–8500, 2023. Markovitz, A., Sharir, G., Friedman, I., Zelnik-Manor, L., and Avidan, S. Graph embedded pose clustering for anomaly detection. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition ,pp. 10539–10547, 2020. Pang, G., Ding, C., Shen, C., and Hengel, A. v. d. Ex-plainable deep few-shot anomaly detection with deviation networks. arXiv preprint arXiv:2108.00462 , 2021. Ross, T.-Y. and Doll ´ar, G. Focal loss for dense object detection. In proceedings of the IEEE conference on computer vision and pattern recognition , pp. 2980–2988, 2017. Salehi, M., Sadjadi, N., Baselizadeh, S., Rohban, M. H., and Rabiee, H. R. Multiresolution knowledge distillation for anomaly detection. In Proceedings of the IEEE/CVF conference on computer vision and pattern recognition ,pp. 14902–14912, 2021. Silvestre-Blanes, J., Albero-Albero, T., Miralles, I., P ´erez-Llorens, R., and Moreno, J. A public fabric database for defect detection methods and results. Autex Research Journal , 19(4):363–374, 2019. Sun, H., Cao, Y., Dong, H., and Fink, O. Unseen visual anomaly generation. In Proceedings of the Computer Vision and Pattern Recognition Conference , pp. 25508– 25517, 2025. Tabernik, D., Sela, S., Skvarc, J., and Skocaj, D. Segmentation-based deep-learning approach for surface-defect detection. Journal of Intelligent Manufacturing ,31(3):759–776, 2020. Tack, J., Mo, S., Jeong, J., and Shin, J. Csi: Novelty de-tection via contrastive learning on distributionally shifted instances. Advances in neural information processing systems , 33:11839–11852, 2020. Wang, F., Zhang, T., Wang, Y., Qiu, Y., Liu, X., Guo, X., and Cui, Z. Distribution prototype diffusion learning for open-set supervised anomaly detection. In Proceedings of the Computer Vision and Pattern Recognition Conference ,pp. 20416–20426, 2025. Wang, J., Pu, J., Qi, Z., Guo, J., Ma, Y., Huang, N., Chen, Y., Li, X., and Shan, Y. Taming rectified flow for inversion and editing. arXiv preprint arXiv:2411.04746 , 2024. Wieler, M. and Hahn, T. Weakly supervised learning for industrial optical inspection. In DAGM symposium in ,volume 6, pp. 11, 2007. Yao, X., Li, R., Qian, Z., Wang, L., and Zhang, C. Hierarchi-cal gaussian mixture normalizing flow modeling for uni-fied anomaly detection. arXiv preprint arXiv:2403.13349 ,2024. Yun, S., Han, D., Oh, S. J., Chun, S., Choe, J., and Yoo, Y. Cutmix: Regularization strategy to train strong clas-sifiers with localizable features. In Proceedings of the IEEE/CVF international conference on computer vision ,pp. 6023–6032, 2019. 10 Submission and Formatting Instructions for ICML 2026 
+
+Zhu, J., Ding, C., Tian, Y., and Pang, G. Anomaly hetero-geneity learning for open-set supervised anomaly detec-tion. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition , pp. 17616– 17626, 2024. 11 Submission and Formatting Instructions for ICML 2026 
+
+A. Dataset Statistics 
+
+We evaluate our approach through extensive experiments on nine real-world anomaly detection datasets. Key statistics of all datasets are summarized in Tab. 5. Our experimental setup follows established protocols from prior open-set supervised anomaly detection (OSAD) literature. For MVTec AD, we adopt its original data split for normal samples. For the remaining eight datasets, normal samples are randomly divided into training and testing sets with a ratio of 3:1.                                                                                                                              
+
+> Table 5. Summary statistics of the nine real-world anomaly detection (AD) datasets, with the first 15 rows listing the subsets of the MVTec AD dataset. Dataset Original Training Original Test
+> |C| Type Normal Normal Anomaly
+> Carpet 5Textture 280 28 89 Grid 5Textture 264 21 57 Leather 5Textture 245 32 92 Tile 5Textture 230 33 83 Wood 5Textture 247 19 60 Bottle 3Object 209 20 63 Capsule 5Object 219 23 109 Pill 7Object 267 26 141 Transistor 4Object 213 60 40 Zipper 7Object 240 32 119 Cable 8Object 224 58 92 Hazelnut 4Object 391 40 70 Metal nut 4Object 220 22 93 Screw 5Object 320 41 119 Toothbrush 1Object 60 12 30
+> MVTecAD 73 -3629 467 1258
+> Optical 1Object 10500 3500 2100
+> SDD 1Textture 594 286 54
+> AITEX 12 Textture 1692 564 183
+> ELPV 2Textture 1131 377 715
+> Mastcam 11 Object 9302 426 451
+> Hyper-Kvasir 4Medical 2021 674 757
+> BrainMRI 1Medical 73 25 155
+> HeadCT 1Medical 75 25 100
+
+• MVTec AD (Bergmann et al., 2019) is a standard benchmark for industrial defect inspection, comprising 15 object and texture categories, each containing one or more defect types. In total, it provides 73 fine-grained anomaly classes at the texture or object level. • Optical (Wieler & Hahn, 2007) is a synthetically generated dataset for industrial optical inspection, where artificial images are designed to closely mimic real-world defect detection scenarios. • SDD (Tabernik et al., 2020) is a product surface defect dataset with pixel-wise annotations. The original 500 × 1250 images are vertically split into three strips, and each strip is labeled at the pixel level. • AITEX (Silvestre-Blanes et al., 2019) is a fabric defect dataset with 12 defect categories and pixel-level labels. The original 4096 × 256 images are cropped into multiple 256 × 256 patches, which are then re-annotated at the pixel level. • ELPV (Deitsch et al., 2019) contains electroluminescence (EL) images of solar cells for defect detection. It covers two main defect types associated with monocrystalline and polycrystalline solar cells, respectively. • Mastcam (Kerner et al., 2020) is a geological novelty detection dataset constructed from multispectral images captured by the Mastcam system on the Mars rover. It includes typical scenes and 11 novel geological classes. Each image contains shorter-wavelength (color) and longer-wavelength (grayscale) channels, and we use only the shorter-wavelength channels in this work. • Hyper-Kvasir (Borgli et al., 2020) is a large-scale, open-access gastrointestinal imaging dataset collected from real endoscopy and colonoscopy examinations. It consists of four main categories and 23 subclasses. We focus on 12 Submission and Formatting Instructions for ICML 2026 
+
+endoscopic images, where anatomical landmark categories are treated as normal samples and pathological categories as anomalies. • BrainMRI (Salehi et al., 2021) is a brain tumor detection dataset composed of magnetic resonance (MR) images with corresponding tumor labels. • HeadCT (Salehi et al., 2021) is an intracranial hemorrhage detection dataset based on head computed tomography (CT) scans. 
+
+Table 6. AUC performance (mean ± std) across nine real-world AD datasets is reported under the general setting. red highlights the best results, and blue indicates sub-optimal outcomes. All baseline SOTA results are sourced from the original papers (Ding et al., 2022; Zhu et al., 2024). 
+
+Dataset One Training Anomaly Example Ten Training Anomaly Examples FLOS SAOE MLEP DRA AHL DPDL Ours FLOS SAOE MLEP DRA AHL DPDL Ours Carpet 0.755 ±0.026 0.766 ±0.098 0.701 ±0.091 0.859 ±0.023 0.877 ±0.004 0.914 ±0.006 0.916 ±0.014 0.780 ±0.009 0.755 ±0.136 0.781 ±0.049 0.940 ±0.027 0.953 ±0.001 0.988 ±0.002 0.990 ±0.023 Grid 0.871 ±0.076 0.921 ±0.032 0.839 ±0.028 0.972 ±0.011 0.975 ±0.005 0.999 ±0.001 1.000 ±0.005 0.966 ±0.005 0.952 ±0.011 0.980 ±0.009 0.987 ±0.009 0.992 ±0.002 0.999 ±0.001 1.000 ±0.004 Leather 0.791 ±0.057 0.996 ±0.007 0.781 ±0.020 0.989 ±0.005 0.988 ±0.001 0.996 ±0.001 0.997 ±0.010 0.993 ±0.004 1.000 ±0.000 0.813 ±0.158 1.000 ±0.000 1.000 ±0.000 1.000 ±0.000 1.000 ±0.000 Tile 0.787 ±0.038 0.935 ±0.034 0.927 ±0.036 0.965 ±0.015 0.968 ±0.001 0.994 ±0.002 0.995 ±0.008 0.952 ±0.010 0.944 ±0.013 0.988 ±0.009 0.994 ±0.006 1.000 ±0.000 0.999 ±0.001 0.999 ±0.005 Wood 0.927 ±0.065 0.948 ±0.009 0.660 ±0.142 0.985 ±0.011 0.987 ±0.003 0.998 ±0.002 0.998 ±0.004 1.000 ±0.000 0.976 ±0.031 0.999 ±0.002 0.998 ±0.001 0.998 ±0.000 0.998 ±0.001 0.999 ±0.003 Bottle 0.975 ±0.023 0.989 ±0.019 0.927 ±0.090 1.000 ±0.000 1.000 ±0.000 1.000 ±0.000 1.000 ±0.000 0.995 ±0.002 0.998 ±0.003 0.981 ±0.004 1.000 ±0.000 1.000 ±0.000 1.000 ±0.000 1.000 ±0.000 Capsule 0.666 ±0.020 0.611 ±0.109 0.558 ±0.075 0.631 ±0.056 0.665 ±0.030 0.757 ±0.017 0.760 ±0.010 0.902 ±0.017 0.850 ±0.054 0.818 ±0.063 0.935 ±0.022 0.930 ±0.001 0.976 ±0.004 0.977 ±0.013 Pill 0.745 ±0.064 0.652 ±0.078 0.656 ±0.061 0.832 ±0.034 0.840 ±0.003 0.842 ±0.002 0.845 ±0.004 0.929 ±0.012 0.872 ±0.049 0.845 ±0.048 0.904 ±0.024 0.918 ±0.001 0.923 ±0.001 0.940 ±0.026 Transistor 0.709 ±0.041 0.680 ±0.182 0.695 ±0.124 0.668 ±0.068 0.796 ±0.003 0.748 ±0.002 0.800 ±0.005 0.862 ±0.037 0.860 ±0.053 0.927 ±0.043 0.915 ±0.025 0.926 ±0.009 0.928 ±0.001 0.945 ±0.011 Zipper 0.885 ±0.033 0.970 ±0.033 0.865 ±0.086 0.984 ±0.016 0.986 ±0.000 0.989 ±0.001 0.990 ±0.001 0.990 ±0.008 0.995 ±0.004 0.965 ±0.002 1.000 ±0.000 1.000 ±0.000 1.000 ±0.000 1.000 ±0.000 Cable 0.790 ±0.039 0.819 ±0.060 0.688 ±0.017 0.876 ±0.012 0.858 ±0.011 0.935 ±0.008 0.983 ±0.005 0.952 ±0.011 0.890 ±0.063 0.862 ±0.022 0.857 ±0.062 0.909 ±0.011 0.921 ±0.001 0.945 ±0.002 Hazelnut 0.976 ±0.021 0.961 ±0.042 0.704 ±0.090 0.977 ±0.030 0.984 ±0.004 0.997 ±0.002 0.998 ±0.002 1.000 ±0.000 1.000 ±0.000 1.000 ±0.000 1.000 ±0.000 1.000 ±0.000 1.000 ±0.000 1.000 ±0.000 Metal nut 0.930 ±0.022 0.922 ±0.033 0.878 ±0.038 0.948 ±0.046 0.952 ±0.003 0.948 ±0.007 0.954 ±0.003 0.984 ±0.004 0.976 ±0.013 0.974 ±0.009 0.997 ±0.002 0.998 ±0.000 0.996 ±0.001 0.998 ±0.002 Screw 0.337 ±0.091 0.653 ±0.074 0.675 ±0.294 0.903 ±0.064 0.927 ±0.009 0.977 ±0.004 0.983 ±0.002 0.940 ±0.017 0.975 ±0.023 0.899 ±0.039 0.977 ±0.009 0.985 ±0.002 0.995 ±0.001 0.996 ±0.002 Toothbrush 0.731 ±0.028 0.686 ±0.110 0.617 ±0.058 0.650 ±0.029 0.794 ±0.016 0.807 ±0.001 0.845 ±0.004 0.900 ±0.008 0.865 ±0.062 0.783 ±0.048 0.826 ±0.021 0.921 ±0.007 0.929 ±0.000 0.941 ±0.006 
+
+MVTec AD 0.755 ±0.136 0.834 ±0.007 0.744 ±0.019 0.883 ±0.008 0.901 ±0.003 0.927 ±0.002 0.938 ±0.004 0.939 ±0.007 0.926 ±0.010 0.907 ±0.005 0.959 ±0.003 0.970 ±0.002 0.977 ±0.002 0.982 ±0.003 
+
+Optical 0.518 ±0.003 0.815 ±0.014 0.516 ±0.009 0.888 ±0.012 0.888 ±0.007 0.915 ±0.002 0.933 ±0.002 0.720 ±0.055 0.941 ±0.013 0.740 ±0.039 0.965 ±0.006 0.976 ±0.004 0.983 ±0.002 0.992 ±0.002 
+
+SDD 0.840 ±0.043 0.781 ±0.009 0.811 ±0.045 0.859 ±0.014 0.909 ±0.001 0.917 ±0.003 0.944 ±0.004 0.967 ±0.018 0.955 ±0.020 0.983 ±0.013 0.991 ±0.005 0.991 ±0.001 0.996 ±0.001 0.999 ±0.001 
+
+AITEX 0.538 ±0.073 0.675 ±0.094 0.564 ±0.055 0.692 ±0.124 0.734 ±0.008 0.838 ±0.008 0.884 ±0.005 0.841 ±0.049 0.874 ±0.024 0.867 ±0.037 0.893 ±0.017 0.925 ±0.013 0.975 ±0.007 0.992 ±0.004 
+
+ELPV 0.457 ±0.056 0.635 ±0.092 0.578 ±0.062 0.675 ±0.024 0.828 ±0.005 0.897 ±0.002 0.924 ±0.004 0.818 ±0.032 0.793 ±0.047 0.794 ±0.047 0.845 ±0.013 0.850 ±0.004 0.937 ±0.003 0.962 ±0.003 
+
+Mastcam 0.542 ±0.017 0.662 ±0.018 0.625 ±0.045 0.692 ±0.058 0.743 ±0.003 0.838 ±0.011 0.875 ±0.004 0.703 ±0.029 0.810 ±0.029 0.798 ±0.026 0.848 ±0.008 0.855 ±0.005 0.934 ±0.010 0.968 ±0.007 
+
+Hyper-Kvasir 0.668 ±0.004 0.498 ±0.100 0.445 ±0.040 0.690 ±0.017 0.768 ±0.015 0.821 ±0.007 0.857 ±0.005 0.773 ±0.029 0.666 ±0.050 0.600 ±0.069 0.834 ±0.004 0.880 ±0.003 0.939 ±0.005 0.965 ±0.004 
+
+BrainMRI 0.693 ±0.036 0.531 ±0.060 0.632 ±0.017 0.744 ±0.004 0.866 ±0.004 0.893 ±0.004 0.924 ±0.002 0.955 ±0.011 0.900 ±0.041 0.959 ±0.011 0.970 ±0.003 0.977 ±0.001 0.969 ±0.005 0.984 ±0.004 
+
+HeadCT 0.698 ±0.092 0.597 ±0.022 0.758 ±0.038 0.796 ±0.105 0.825 ±0.014 0.865 ±0.005 0.898 ±0.005 0.971 ±0.004 0.935 ±0.021 0.972 ±0.014 0.972 ±0.002 0.999 ±0.003 0.981 ±0.003 0.999 ±0.001 
+
+B. Full Results under General Setting 
+
+Tab. 6 provides extensive results across nine real-world datasets. MPFM achieves the highest average AUC on eight out of nine benchmarks in both one-shot and ten-shot settings, demonstrating exceptional generalization across industrial, medical, and scientific domains. The method shows particular strength on complex object categories in MVTec AD. On challenging classes like Screw and Capsule, MPFM achieves over 98% AUC, significantly outperforming unimodal prototype approaches. This validates the Gaussian mixture prior’s ability to capture diverse normal patterns that single-mode methods miss. Performance improvements remain consistent when scaling from one to ten anomaly examples, confirming that our mutual information regularization effectively leverages additional supervision while maintaining robustness to unseen anomalies. 
+
+C. Detailed Class-level AUC Results under Hard Setting 
+
+Tab. 7 provides fine-grained, class-level results under the hard setting. MPFM demonstrates dominant performance across nearly all anomaly sub-types in both one-shot and ten-shot scenarios, validating its precision in modeling complex normality. The framework excels particularly on subtle and structurally complex defects. For instance, on AITEX, it achieves significant gains on challenging Fuzzyball and Weft crack anomalies, where local texture deviations are difficult to discriminate. Similarly, on Metal nut, MPFM robustly handles Flip and Scratch types, outperforming methods reliant on unimodal priors. This consistent superiority across diverse defect morphologies—from global structural shifts to local texture faults—highlights the advantage of the Gaussian mixture prototype in capturing nuanced feature distributions. Notably, MPFM maintains strong performance even on near-saturated categories like Carpet’s Thread, underscoring its ability to refine decision boundaries without overfitting. The stable improvements across all six multi-subset datasets confirm that our flow matching mechanism and mutual information regularization collectively enhance model discriminability and prototype utilization, leading to more reliable detection in open-set scenarios. 13 Submission and Formatting Instructions for ICML 2026 
+
+Table 7. Detailed class-level AUC results (mean ± std) under the hard setting. The best and second-best results are highlighted in red and 
+
+blue , respectively. Carpet and Metal nut are subsets of MvTec AD. 
+
+Dataset One Training Anomaly Example Ten Training Anomaly Examples FLOS SAOE MLEP DRA AHL DPDL Ours FLOS SAOE MLEP DRA AHL DPDL Ours 
+
+Carpet 
+
+Color 0.467 ±0.278 0.763 ±0.100 0.547 ±0.056 0.879 ±0.021 0.894 ±0.004 0.909 ±0.001 0.918 ±0.008 0.760 ±0.005 0.467 ±0.067 0.698 ±0.025 0.886 ±0.042 0.929 ±0.007 0.933 ±0.002 0.945 ±0.006 Cut 0.685 ±0.007 0.664 ±0.165 0.658 ±0.056 0.902 ±0.033 0.934 ±0.003 0.941 ±0.003 0.950 ±0.005 0.688 ±0.059 0.793 ±0.175 0.653 ±0.120 0.922 ±0.038 0.943 ±0.002 0.951 ±0.004 0.963 ±0.003 Hole 0.594 ±0.142 0.772 ±0.071 0.653 ±0.065 0.901 ±0.033 0.935 ±0.014 0.945 ±0.009 0.949 ±0.007 0.733 ±0.014 0.831 ±0.125 0.674 ±0.076 0.947 ±0.016 0.960 ±0.003 0.964 ±0.003 0.975 ±0.004 Metal 0.701 ±0.028 0.780 ±0.172 0.706 ±0.047 0.871 ±0.037 0.931 ±0.007 0.940 ±0.001 0.951 ±0.006 0.678 ±0.083 0.883 ±0.043 0.764 ±0.061 0.933 ±0.022 0.921 ±0.003 0.938 ±0.005 0.952 ±0.004 Thread 0.941 ±0.005 0.787 ±0.204 0.831 ±0.117 0.950 ±0.029 0.966 ±0.005 0.970 ±0.002 0.978 ±0.006 0.946 ±0.005 0.831 ±0.297 0.967 ±0.006 0.989 ±0.004 0.991 ±0.001 0.993 ±0.000 0.997 ±0.002 
+
+Mean 0.678 ±0.040 0.753 ±0.055 0.679 ±0.029 0.901 ±0.006 0.932 ±0.003 0.941 ±0.006 0.949 ±0.003 0.761 ±0.012 0.762 ±0.073 0.751 ±0.023 0.935 ±0.013 0.949 ±0.002 0.956 ±0.004 0.966 ±0.003 
+
+Metal nut 
+
+Bent 0.851 ±0.046 0.864 ±0.032 0.743 ±0.013 0.952 ±0.020 0.954 ±0.003 0.958 ±0.001 0.965 ±0.004 0.827 ±0.075 0.901 ±0.023 0.956 ±0.013 0.990 ±0.003 0.989 ±0.000 0.991 ±0.002 0.995 ±0.002 Color 0.821 ±0.059 0.857 ±0.037 0.835 ±0.075 0.946 ±0.023 0.933 ±0.008 0.938 ±0.003 0.947 ±0.005 0.978 ±0.008 0.879 ±0.018 0.945 ±0.039 0.967 ±0.011 0.958 ±0.001 0.969 ±0.005 0.976 ±0.004 Flip 0.799 ±0.058 0.751 ±0.090 0.813 ±0.031 0.921 ±0.029 0.931 ±0.002 0.940 ±0.004 0.948 ±0.003 0.942 ±0.009 0.795 ±0.062 0.805 ±0.057 0.913 ±0.021 0.937 ±0.003 0.955 ±0.003 0.964 ±0.004 Scratch 0.947 ±0.027 0.792 ±0.075 0.907 ±0.085 0.909 ±0.023 0.934 ±0.005 0.936 ±0.002 0.945 ±0.004 0.845 ±0.041 0.805 ±0.153 0.911 ±0.034 0.999 ±0.000 0.992 ±0.002 0.994 ±0.002 0.997 ±0.001 
+
+Mean 0.855 ±0.024 0.816 ±0.029 0.825 ±0.023 0.932 ±0.017 0.939 ±0.004 0.944 ±0.003 0.951 ±0.004 0.922 ±0.014 0.855 ±0.016 0.878 ±0.058 0.945 ±0.017 0.972 ±0.002 0.978 ±0.002 0.983 ±0.004 
+
+AITEX 
+
+Broken end 0.645 ±0.030 0.778 ±0.068 0.441 ±0.111 0.708 ±0.094 0.704 ±0.005 0.761 ±0.010 0.785 ±0.008 0.585 ±0.037 0.712 ±0.068 0.732 ±0.065 0.693 ±0.099 0.735 ±0.010 0.796 ±0.001 0.825 ±0.006 Broken pick 0.598 ±0.023 0.644 ±0.039 0.476 ±0.070 0.731 ±0.072 0.727 ±0.003 0.760 ±0.014 0.782 ±0.007 0.548 ±0.054 0.629 ±0.012 0.555 ±0.027 0.760 ±0.037 0.683 ±0.002 0.784 ±0.011 0.812 ±0.005 Cut selvage 0.694 ±0.036 0.681 ±0.077 0.434 ±0.149 0.739 ±0.101 0.753 ±0.007 0.765 ±0.007 0.788 ±0.006 0.745 ±0.035 0.770 ±0.014 0.682 ±0.025 0.777 ±0.036 0.781 ±0.006 0.796 ±0.005 0.828 ±0.004 Fuzzyball 0.525 ±0.043 0.650 ±0.064 0.525 ±0.157 0.538 ±0.092 0.647 ±0.007 0.715 ±0.013 0.742 ±0.009 0.550 ±0.082 0.842 ±0.026 0.677 ±0.223 0.701 ±0.093 0.775 ±0.024 0.808 ±0.003 0.835 ±0.005 Nep 0.734 ±0.038 0.710 ±0.044 0.517 ±0.059 0.717 ±0.052 0.703 ±0.005 0.757 ±0.005 0.780 ±0.004 0.746 ±0.060 0.771 ±0.032 0.740 ±0.052 0.750 ±0.038 0.792 ±0.007 0.811 ±0.005 0.838 ±0.003 Weft crack 0.546 ±0.114 0.582 ±0.108 0.400 ±0.029 0.669 ±0.045 0.706 ±0.009 0.758 ±0.006 0.775 ±0.005 0.636 ±0.051 0.618 ±0.172 0.370 ±0.037 0.717 ±0.072 0.713 ±0.003 0.790 ±0.004 0.822 ±0.004 
+
+Mean 0.624 ±0.024 0.674 ±0.034 0.466 ±0.030 0.684 ±0.033 0.707 ±0.007 0.753 ±0.005 0.775 ±0.003 0.635 ±0.043 0.724 ±0.032 0.626 ±0.041 0.733 ±0.009 0.747 ±0.002 0.798 ±0.005 0.827 ±0.004 
+
+ELPV 
+
+Mono 0.717 ±0.025 0.563 ±0.102 0.649 ±0.027 0.735 ±0.031 0.774 ±0.013 0.785 ±0.002 0.795 ±0.006 0.629 ±0.072 0.569 ±0.035 0.756 ±0.045 0.731 ±0.021 0.745 ±0.004 0.793 ±0.003 0.818 ±0.004 Poly 0.665 ±0.021 0.665 ±0.173 0.483 ±0.247 0.671 ±0.051 0.705 ±0.006 0.738 ±0.008 0.762 ±0.006 0.662 ±0.042 0.796 ±0.084 0.734 ±0.078 0.800 ±0.064 0.831 ±0.011 0.843 ±0.004 0.862 ±0.005 
+
+Mean 0.691 ±0.008 0.614 ±0.048 0.566 ±0.111 0.703 ±0.022 0.740 ±0.003 0.762 ±0.003 0.779 ±0.002 0.642 ±0.032 0.683 ±0.047 0.745 ±0.020 0.766 ±0.029 0.788 ±0.003 0.818 ±0.003 0.840 ±0.002 
+
+Mastcam 
+
+Bedrock 0.499 ±0.056 0.636 ±0.072 0.532 ±0.036 0.668 ±0.012 0.679 ±0.012 0.732 ±0.003 0.758 ±0.005 0.499 ±0.098 0.636 ±0.068 0.512 ±0.062 0.658 ±0.021 0.673 ±0.006 0.757 ±0.004 0.782 ±0.005 Broken-rock 0.569 ±0.025 0.699 ±0.058 0.544 ±0.088 0.645 ±0.053 0.661 ±0.009 0.738 ±0.004 0.762 ±0.004 0.608 ±0.085 0.712 ±0.052 0.651 ±0.063 0.649 ±0.047 0.722 ±0.004 0.783 ±0.002 0.805 ±0.003 Drill-hole 0.539 ±0.077 0.697 ±0.074 0.636 ±0.066 0.657 ±0.070 0.654 ±0.004 0.738 ±0.011 0.765 ±0.006 0.601 ±0.009 0.682 ±0.042 0.660 ±0.002 0.725 ±0.005 0.760 ±0.003 0.797 ±0.004 0.823 ±0.003 Drt 0.591 ±0.042 0.735 ±0.020 0.624 ±0.042 0.713 ±0.053 0.724 ±0.006 0.745 ±0.005 0.772 ±0.004 0.652 ±0.024 0.761 ±0.062 0.616 ±0.048 0.760 ±0.033 0.772 ±0.004 0.818 ±0.002 0.842 ±0.003 Dump-pile 0.508 ±0.021 0.682 ±0.022 0.545 ±0.127 0.767 ±0.043 0.756 ±0.011 0.764 ±0.003 0.782 ±0.005 0.700 ±0.070 0.750 ±0.037 0.696 ±0.047 0.748 ±0.066 0.802 ±0.005 0.830 ±0.005 0.855 ±0.004 Float 0.551 ±0.030 0.711 ±0.041 0.530 ±0.075 0.670 ±0.065 0.702 ±0.005 0.739 ±0.007 0.764 ±0.005 0.736 ±0.041 0.718 ±0.064 0.671 ±0.032 0.744 ±0.073 0.765 ±0.002 0.816 ±0.012 0.841 ±0.008 Meteorite 0.462 ±0.077 0.669 ±0.037 0.476 ±0.014 0.637 ±0.015 0.616 ±0.013 0.704 ±0.004 0.732 ±0.005 0.568 ±0.053 0.647 ±0.030 0.473 ±0.047 0.716 ±0.004 0.691 ±0.001 0.785 ±0.017 0.808 ±0.010 Scuff 0.508 ±0.070 0.679 ±0.048 0.492 ±0.037 0.549 ±0.027 0.581 ±0.020 0.714 ±0.002 0.742 ±0.004 0.575 ±0.042 0.676 ±0.019 0.504 ±0.052 0.636 ±0.086 0.656 ±0.009 0.777 ±0.003 0.802 ±0.004 Veins 0.493 ±0.052 0.688 ±0.069 0.489 ±0.028 0.699 ±0.045 0.687 ±0.017 0.789 ±0.003 0.815 ±0.004 0.608 ±0.044 0.686 ±0.053 0.510 ±0.090 0.620 ±0.036 0.650 ±0.003 0.766 ±0.008 0.792 ±0.006 
+
+Mean 0.524 ±0.013 0.689 ±0.037 0.541 ±0.007 0.667 ±0.012 0.673 ±0.010 0.733 ±0.004 0.761 ±0.002 0.616 ±0.021 0.697 ±0.014 0.588 ±0.016 0.695 ±0.004 0.721 ±0.003 0.778 ±0.007 0.815 ±0.005 
+
+Hyper-Kvasir 
+
+Barretts 0.703 ±0.040 0.382 ±0.117 0.438 ±0.111 0.772 ±0.019 0.792 ±0.007 0.793 ±0.000 0.812 ±0.005 0.764 ±0.066 0.698 ±0.037 0.540 ±0.014 0.824 ±0.006 0.829 ±0.002 0.832 ±0.004 0.856 ±0.005 Barretts-short-seg 0.538 ±0.033 0.367 ±0.050 0.532 ±0.075 0.674 ±0.018 0.651 ±0.006 0.658 ±0.003 0.682 ±0.004 0.810 ±0.034 0.661 ±0.034 0.480 ±0.107 0.835 ±0.021 0.895 ±0.003 0.906 ±0.002 0.930 ±0.004 Esophagitis-a 0.536 ±0.040 0.518 ±0.063 0.491 ±0.084 0.778 ±0.020 0.760 ±0.006 0.758 ±0.001 0.785 ±0.004 0.815 ±0.022 0.820 ±0.034 0.646 ±0.036 0.881 ±0.035 0.878 ±0.021 0.878 ±0.003 0.905 ±0.004 Esophagitis-b-d 0.505 ±0.039 0.358 ±0.039 0.457 ±0.086 0.577 ±0.025 0.622 ±0.014 0.652 ±0.002 0.678 ±0.004 0.754 ±0.073 0.611 ±0.017 0.621 ±0.042 0.837 ±0.009 0.815 ±0.010 0.841 ±0.002 0.868 ±0.003 
+
+Mean 0.571 ±0.004 0.406 ±0.018 0.480 ±0.044 0.700 ±0.009 0.706 ±0.007 0.715 ±0.004 0.739 ±0.003 0.786 ±0.021 0.698 ±0.021 0.571 ±0.014 0.844 ±0.009 0.854 ±0.004 0.864 ±0.002 0.890 ±0.002 
+
+D. Additional Theoretical Analysis of Mixture Prototype Flow Matching 
+
+In this appendix, we provide the theoretical underpinnings of Mixture Prototype Flow Matching (MPFM) that are referenced but not derived in the main text. We first justify the use of a shared standard deviation parameter  s in the Gaussian mixture velocity model and show that it preserves the correctness of the learned velocity field. We then derive the endpoint posterior 
+
+qθ (z0 | zt) with parameters  μzk and  sz , and the closed-form reverse transition  qθ (zt−∆t | zt) with coefficients  c1, c 2, c 3.Finally, we connect the Mutual Information Maximization Regularizer (MIMR) to an explicit estimate of the mutual information between transformed features and prototype indices. 
+
+D.1. GM Velocity Parameterization and Shared Standard Deviation 
+
+Following the diffusion/flow-matching formulation in GMFlow, we recall the standard forward noising process for latent features: 
+
+zt = αtz0 + σtε, ε ∼ N (0, I), (27) where  αt, σ t are a pre-defined noise schedule satisfying typical boundary conditions  α0 = 1 , σ 0 = 0  and  αT ≈ 0, σ T ≈ 1.The corresponding random velocity is defined as: 
+
+u := zt − z0
+
+σt
+
+, (28) and the ground-truth velocity field at time  t and state  zt is the conditional expectation: 
+
+vt(zt) = Ez0∼p(z0|zt)[ u(z0, ε) ] , (29) where  p(z0 | zt) denotes the denoising distribution induced by normal training samples. In practice, we obtain empirical pairs  (zt, u) using the interpolation rule in Eqn. (4) of the main text; for theoretical analysis, Eqn. (27) –Eqn. (28) provide an equivalent continuous-time parameterization. MPFM models the full conditional distribution  p(u | zt) as a Gaussian mixture: 
+
+qθ (u | zt) = 
+
+KX
+
+k=1 
+
+πk(zt; θ) N u; μk(zt; θ), s 2I, (30) 14 Submission and Formatting Instructions for ICML 2026 
+
+where all components share a scalar standard deviation  s > 0, and the mixture weights  πk(zt; θ) satisfy  πk ≥ 0 and P 
+
+> k
+
+πk = 1  via a softmax parameterization. The training loss: 
+
+LNLL = Eu∼p(u|zt)
+
+h
+
+− log qθ (u | zt)
+
+i
+
+(31) is equivalent to minimizing the conditional Kullback–Leibler divergence  KL  p(u | zt) ∥ qθ (u | zt) up to an additive constant, and thus provides a consistent estimator for the velocity distribution. We now show that the shared variance  s2 does not affect the correctness of the learned mean velocity. Let  {π∗
+
+> k
+
+, μ∗
+
+> k
+
+} denote the optimal mixture parameters for a fixed  zt and fixed  s. Define: 
+
+q∗(u) := 
+
+> K
+
+X
+
+> k=1
+
+π∗
+
+> k
+
+N (u; μ∗
+
+> k
+
+, s 2I), q ∗
+
+> k
+
+(u) := π∗
+
+> k
+
+N (u; μ∗
+
+> k
+
+, s 2I), (32) and use the shorthand  E[·] := Eu∼p(u|zt)[·]. Differentiating Eqn. (31) with respect to the mixture logits and component means yields the optimality conditions: 
+
+π∗ 
+
+> k
+
+= E
+
+ q∗
+
+> k
+
+(u)
+
+q∗(u)
+
+
+
+, (33) 
+
+π∗
+
+> k
+
+μ∗ 
+
+> k
+
+= E
+
+ q∗
+
+> k
+
+(u)
+
+q∗(u) u
+
+
+
+. (34) Summing Eqn. (34) over  k and using  PKk=1 q∗
+
+> k
+
+(u) = q∗(u) gives: 
+
+> K
+
+X
+
+> k=1
+
+π∗
+
+> k
+
+μ∗ 
+
+> k
+
+= E
+
+" KX
+
+> k=1
+
+q∗
+
+> k
+
+(u)
+
+q∗(u) u
+
+#
+
+= E[u]. (35) Thus the mixture mean  ¯uθ (zt) := P 
+
+> k
+
+π∗
+
+> k
+
+(zt)μ∗
+
+> k
+
+(zt) exactly matches the true conditional mean velocity  E[u], independently of the specific value of  s. In the special case  K = 1 , Eqn. (31) reduces to: 
+
+LNLL = 12s2 E∥u − μ1(zt; θ)∥22
+
+ + const , (36) which is proportional to the standard  L2 flow-matching loss. Therefore, introducing a shared standard deviation parameter  s
+
+improves numerical stability without altering the learned flow field. 
+
+D.2. From Velocity Mixtures to Endpoint Posterior 
+
+The Gaussian–mixture parameterization of the velocity field induces a Gaussian–mixture posterior over the initial feature  z0
+
+at time  t. From Eqn. (27)–Eqn. (28) we obtain the affine relation: 
+
+z0 = zt − σtu. (37) If  u follows the conditional mixture distribution Eqn. (30), the induced density of  z0 given  zt is: 
+
+qθ (z0 | zt) = 
+
+> K
+
+X
+
+> k=1
+
+πk(zt; θ) N z0; μzk , s 2 
+
+> z
+
+I, (38) with transformed parameters: 
+
+μzk = zt − σtμk(zt; θ), sz = σts,  (39) exactly as stated in the main text. This follows from the closure of Gaussian distributions under affine transformations: for each component  N (u; μk, s 2I) in Eqn. (30) , the random variable  z0 = zt − σtu is Gaussian with mean and variance given by Eqn. (39), and summing over components preserves the mixture structure. 15 Submission and Formatting Instructions for ICML 2026 
+
+D.3. Closed-Form Reverse-Time Transition 
+
+We now derive the reverse-time transition  qθ (zt−∆t | zt) and its coefficients  c1, c 2, c 3. The forward diffusion process between adjacent timesteps is described by the Gaussian kernel: 
+
+p(zt | zt−∆t) = N  zt; αt 
+
+> αt−∆t
+
+zt−∆t, β t, ∆tI, (40) where: 
+
+βt, ∆t = σ2 
+
+> t
+
+− α2
+
+> t
+
+α2
+
+> t−∆t
+
+σ2 
+
+> t−∆t
+
+(41) is the forward transition variance (cf. Eqn. (1) in GMFlow). Given the endpoint posterior  qθ (z0 | zt) in Eqn. (38) , the reverse transition density can be written, by Bayes’ rule and marginalization over  z0, as: 
+
+qθ (zt−∆t | zt) = 
+
+Z
+
+> Rd
+
+p(zt−∆t | zt, z0) qθ (z0 | zt) dz0. (42) The conditional kernel  p(zt−∆t | zt, z0) is obtained by “conflating” the three linear–Gaussian factors  p(zt | zt−∆t),
+
+p(zt−∆t | z0) and  p(zt | z0); their joint Gaussianity implies that: 
+
+p(zt−∆t | zt, z0) = N zt−∆t; c1zt + c2z0, c 3I, (43) with coefficients determined by the schedule: 
+
+c1 = σ2
+
+> t−∆t
+
+σ2
+
+> t
+
+αt
+
+αt−∆t
+
+, c2 = βt, ∆t
+
+σ2
+
+> t
+
+αt−∆t, c3 = βt, ∆t
+
+σ2
+
+> t
+
+σ2
+
+> t−∆t
+
+. (44) Substituting Eqn. (43) and the mixture posterior Eqn. (38) into Eqn. (42) , and using the fact that the convolution of a Gaussian and a Gaussian mixture remains a Gaussian mixture, we obtain: 
+
+qθ (zt−∆t | zt) = 
+
+> K
+
+X
+
+> k=1
+
+πk(zt; θ)
+
+N
+
+
+
+zt−∆t; c1zt + c2μzk ,  c3 + c22s2
+
+> z
+
+I
+
+
+
+, (45) which coincides with the reverse-time sampling formula given in the main text. Eqn. (45) shows that the mixture structure is preserved across reverse steps: each component mean and variance is updated analytically according to Eqn. (39) and Eqn.(44), enabling numerically stable few-step sampling without numerical ODE integration. 
+
+D.4. Mutual Information Maximization Regularizer 
+
+We finally make explicit the information-theoretic interpretation of the Mutual Information Maximization Regularizer (MIMR). Let  y = ψ(zn,i  
+
+> 0
+
+) denote the transformed feature of a normal sample and  c ∈ { 1, . . . , K } denote the prototype index. The mutual information between  y and  c is: 
+
+I(y; c) = H(c) − H(c | y), (46) where  H(c) is the marginal entropy of prototype usage, and  H(c | y) is the conditional entropy of prototype assignments given features. Under the Gaussian-mixture prototype distribution in Eqn. (10) of the main text, Bayes’ rule gives the posterior assignment: 
+
+p(c = k | y) = πk N (y; μk, s 2I)
+
+PKj=1 πj N (y; μj , s 2I) , (47) 16 Submission and Formatting Instructions for ICML 2026 
+
+which appears explicitly in the main text. Approximating the marginal  p(c = k) by the mixture weights  πk, we obtain: 
+
+I(y; c)
+
+≈ − 
+
+> K
+
+X
+
+> k=1
+
+πk log πk − Ey
+
+h
+
+−
+
+> K
+
+X
+
+> k=1
+
+p(c = k | y) log p(c = k | y)
+
+i
+
+= −
+
+> K
+
+X
+
+> k=1
+
+πk log πk + Ey
+
+h KX
+
+> k=1
+
+p(c = k | y) log p(c = k | y)
+
+i
+
+. (48) Maximizing this mutual information is equivalent to minimizing the loss: 
+
+Lmim 
+
+= Ezn,i    
+
+> 0∼P(Fn
+> tr )
+
+h KX
+
+> k=1
+
+p(c = k | ψ(zn,i  
+
+> 0
+
+)) log p(c = k | ψ(zn,i  
+
+> 0
+
+)) 
+
+i
+
+−
+
+> K
+
+X
+
+> k=1
+
+πk log πk, (49) which matches the MIMR objective used in the main text. The first term decreases the conditional entropy  H(c | y) by encouraging confident prototype assignments, while the second term increases the marginal entropy  H(c) by discouraging degenerate solutions in which only a few components are used. Evaluating  Lmim  only on normal samples ensures that prototypes specialize to normal modes and remain well separated from anomalous regions. 17

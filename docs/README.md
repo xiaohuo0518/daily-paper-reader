@@ -6,49 +6,49 @@
 </div>
 
 ## 每次日报
-- 最新运行日期：2026-05-29
-- 运行时间：2026-05-29 21:24:59 UTC
+- 最新运行日期：2026-05-01 ~ 2026-05-30
+- 运行时间：2026-05-30 13:15:10 UTC
 - 运行状态：成功
 - 本次总论文数：9
-- 精读区：1
-- 速读区：8
+- 精读区：5
+- 速读区：4
 
 ### 今日简报（AI）
-1) 今日精读边缘设备轻量轨迹预测模型BitTP，速读零样本机器人学习、触觉-本体融合力估计及真实机器人VLA基准三篇论文。  
-2) 最值得关注方向：BitTP用大模型实现轻量化轨迹预测（8分），以及HumanEgo通过人类第一人称视频实现零样本机器人学习（7分）。  
-3) 建议下一步：若关注部署，可深入研究BitTP的压缩方法；若对机器人自学感兴趣，可探索HumanEgo的零样本范式。
-- 详情：[/202605/29/README](/202605/29/README)
+今日阅读推荐9篇，精读5篇，涵盖全息运动、时间序列异常检测、人形机器人力估计等方向。  
+最高分论文《HoloMotion-1 Technical Report》10.0/10聚焦全息运动重建，《Learning Unified Representations of Normalcy》9.0/10提出时间序列异常检测的统一正常性表示。  
+建议优先精读这两篇高分论文，掌握全息运动建模与异常检测的核心思路。
+- 详情：[/20260501-20260530/README](/20260501-20260530/README)
 
 ### 精读区论文标签
-1. [BitTP: The Lightweight Trajectory Prediction Model with BitLLM for Edge-Devices](/202605/29/2605.29705v1-bittp-the-lightweight-trajectory-prediction-model-with-bitllm-for-edge-devices)  
+1. [HoloMotion-1 Technical Report](/20260501-20260530/2605.15336v2-holomotion-1-technical-report)  
+   标签：评分：10.0/10、query:ur
+   evidence：大规模混合运动语料库用于人形运动基础模型
+2. [Learning Unified Representations of Normalcy for Time Series Anomaly Detection](/20260501-20260530/2605.09685v1-learning-unified-representations-of-normalcy-for-time-series-anomaly-detection)  
+   标签：评分：9.0/10、query:humanoid-ood
+   evidence：基于分数生成模型的无监督时间序列异常检测，可直接应用于关节/IMU信号
+3. [HoloMotion-1 Technical Report](/20260501-20260530/2605.15336v1-holomotion-1-technical-report)  
+   标签：评分：9.0/10、query:ur
+   evidence：构建用于人形机器人的大规模混合运动数据集
+4. [Mixture Prototype Flow Matching for Open-Set Supervised Anomaly Detection](/20260501-20260530/2605.02438v1-mixture-prototype-flow-matching-for-open-set-supervised-anomaly-detection)  
+   标签：评分：8.0/10、query:humanoid-ood
+   evidence：使用流匹配的开放集监督异常检测
+5. [OmniHumanoid: Streaming Cross-Embodiment Video Generation with Paired-Free Adaptation](/20260501-20260530/2605.12038v1-omnihumanoid-streaming-cross-embodiment-video-generation-with-paired-free-adaptation)  
    标签：评分：8.0/10、query:ur
-   evidence：面向自主机器人边缘设备的轻量轨迹预测模型
+   evidence：跨本体视频生成用于人形机器人数据集构建
 
 ### 速读区论文标签
-1. [HumanEgo: Zero-Shot Robot Learning from Minutes of Human Egocentric Videos](/202605/29/2605.24934v2-humanego-zero-shot-robot-learning-from-minutes-of-human-egocentric-videos)  
+1. [SixthSense: Task-Agnostic Proprioception-Only Whole-Body Wrench Estimation for Humanoids](/20260501-20260530/2605.01427v1-sixthsense-task-agnostic-proprioception-only-whole-body-wrench-estimation-for-humanoids)  
+   标签：评分：7.0/10、query:humanoid-ood
+   evidence：基于本体感受和IMU的人形机器人外力估计
+2. [Asymmetric Adaptation-based Real-time Fault Diagnosis Under Transitional Operating Conditions](/20260501-20260530/2605.24457v1-asymmetric-adaptation-based-real-time-fault-diagnosis-under-transitional-operating-conditions)  
    标签：评分：7.0/10、query:ur
-   evidence：从人类自我中心视频学习机器人技能无需机器人数据
-2. [Tactile-Proprioceptive Sensor Fusion for Contact Wrench Estimation in Whole-Body Physical Human-Robot Interaction](/202605/29/2605.28412v1-tactile-proprioceptive-sensor-fusion-for-contact-wrench-estimation-in-whole-body-physical-human-robot-interaction)  
-   标签：评分：7.0/10、query:ur
-   evidence：全身人机交互中的接触力估计可用于故障检测
-3. [PhAIL: A Real-Robot VLA Benchmark and Distributional Methodology](/202605/29/2605.29710v1-phail-a-real-robot-vla-benchmark-and-distributional-methodology)  
-   标签：评分：7.0/10、query:ur
-   evidence：提供真实机器人基准、数据集及分布评估方法
-4. [GE-Sim 2.0: A Roadmap Towards Comprehensive Closed-loop Video World Simulators for Robotic Manipulation](/202605/29/2605.27491v1-ge-sim-20-a-roadmap-towards-comprehensive-closed-loop-video-world-simulators-for-robotic-manipulation)  
-   标签：评分：6.0/10、query:ur
-   evidence：基于真实机器人数据的闭环视频世界模拟器
-5. [Colosseum V2: Benchmarking Generalization for Vision Language Action Models](/202605/29/2605.27759v1-colosseum-v2-benchmarking-generalization-for-vision-language-action-models)  
-   标签：评分：6.0/10、query:ur
-   evidence：机器人操作泛化基准数据集
-6. [MonoDuo: Using One Robot Arm to Learn Bimanual Policies](/202605/29/2605.29298v1-monoduo-using-one-robot-arm-to-learn-bimanual-policies)  
-   标签：评分：6.0/10、query:ur
-   evidence：利用单臂机器人数据学习双臂策略
-7. [Energy-Aware NECO for Single-Pass Pixel-wise Out-of-Distribution Detection in Semantic Segmentation](/202605/29/2605.29773v1-energy-aware-neco-for-single-pass-pixel-wise-out-of-distribution-detection-in-semantic-segmentation)  
-   标签：评分：6.0/10、query:ur
-   evidence：专为移动机器人边缘端部署设计的单次前向传播OOD检测器
-8. [DynaFLIP: Rethinking Robotics Perception via Tri-Modal-Dynamics Guided Representation](/202605/29/2605.30350v1-dynaflip-rethinking-robotics-perception-via-tri-modal-dynamics-guided-representation)  
-   标签：评分：6.0/10、query:ur
-   evidence：构建图像-语言-3D流三元组用于感知表示学习
+   evidence：在线自适应故障诊断方法，可迁移至人形机器人
+3. [Federated Learning for Multivariate Time Series Anomaly Detection in Industrial Automation](/20260501-20260530/2605.27486v1-federated-learning-for-multivariate-time-series-anomaly-detection-in-industrial-automation)  
+   标签：评分：6.0/10、query:humanoid-ood
+   evidence：面向工业自动化的多元时间序列异常检测联邦学习方法
+4. [Identifying Explicit Parsimonious Piece-wise Polynomial Relationships in Industrial time-series: Application to manipulator robots](/20260501-20260530/2605.28320v1-identifying-explicit-parsimonious-piece-wise-polynomial-relationships-in-industrial-time-series-application-to-manipulator-robots)  
+   标签：评分：6.0/10、query:humanoid-ood
+   evidence：时间序列异常检测与正常性表征
 
 
 <div class="dpr-home-promo-card">
