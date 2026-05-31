@@ -1,0 +1,363 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-05-31T20:06:45.043145+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 2,
+    "deep_divecandidates": 0,
+    "deep_cap": 7,
+    "deep_selected": 0,
+    "quick_candidates": 8,
+    "quick_skim_target": 12,
+    "quick_selected": 8
+  },
+  "deep_dive": [],
+  "quick_skim": [
+    {
+      "id": "2605.24402v1",
+      "source": "arxiv",
+      "title": "Dual Prototype-Conditioned Diffusion Model for Scalable Multi-Class Unsupervised Anomaly Detection in Large Category Spaces",
+      "abstract": "Multi-class anomaly detection aims to build unified models across diverse product categories. However, as the number of categories grows, its performance often degrades due to increasingly complex and heterogeneous normal distributions. To address this challenge, we propose DPDiff-AD, a Dual Prototype-conditioned Diffusion model for large-scale multi-class Anomaly Detection. DPDiff-AD models heterogeneous normal distributions through complementary local and global prototypes. Local prototypes capture representative fine-grained structural patterns via nearest-prototype aggregation, while global prototypes regulate holistic feature geometry through optimal transport regularization. Together, these dual-scale representations define a structured normality space. This space is refined through diffusion-based reconstruction conditioned on both local and global prototypes via prototype-aware attention. By jointly leveraging dual prototypes during generation, DPDiff-AD achieves precise normality modeling, preserves structured separability as category cardinality grows, and enables scalable anomaly discrimination. Extensive experiments across five benchmarks demonstrate the effectiveness and scalability of DPDiff-AD. On the 160-category large-scale dataset, it improves image- and pixel-level AUROC by 5.3 and 2.9 points over the previous state-of-the-art method Dinomaly+, while maintaining stable performance as category cardinality increases.",
+      "authors": [
+        "Yaoxuan Feng",
+        "Yuxin Li",
+        "Weijiang Lv",
+        "Zixuan Zhao",
+        "Yubiao Wang",
+        "Wenchao Chen",
+        "Bo Chen",
+        "Hongwei Liu"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV"
+      ],
+      "published": "2026-05-23T05:10:18+00:00",
+      "link": "https://arxiv.org/pdf/2605.24402v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "unsupervised anomaly detection method using prototype-conditioned diffusion model, relevant to OOD detection for safety",
+      "llm_evidence_cn": "使用原型条件扩散模型的无监督异常检测方法，与安全相关的OOD检测相关",
+      "llm_evidence": "使用原型条件扩散模型的无监督异常检测方法，与安全相关的OOD检测相关",
+      "canonical_evidence": "使用原型条件扩散模型的无监督异常检测方法，与安全相关的OOD检测相关",
+      "llm_tldr_en": "DPDiff-AD proposes a dual prototype-conditioned diffusion model for multi-class anomaly detection, using local and global prototypes to model heterogeneous normal distributions, achieving scalability in large category spaces.",
+      "llm_tldr_cn": "DPDiff-AD 提出了一种双原型条件扩散模型用于多类异常检测。通过局部原型捕捉细粒度结构模式，全局原型通过最优传输规划整体特征几何，有效解决了大规模类别空间中正常数据分布异质导致的检测性能下降问题。该方法在多个基准上取得了先进结果，其基于原型的异常检测思想可为人形机器人故障诊断中的OOD检测提供借鉴。",
+      "llm_tldr": "DPDiff-AD 提出了一种双原型条件扩散模型用于多类异常检测。通过局部原型捕捉细粒度结构模式，全局原型通过最优传输规划整体特征几何，有效解决了大规模类别空间中正常数据分布异质导致的检测性能下降问题。该方法在多个基准上取得了先进结果，其基于原型的异常检测思想可为人形机器人故障诊断中的OOD检测提供借鉴。",
+      "llm_tags": [
+        "query:humanoid-ood"
+      ],
+      "matched_query_tag": "query:humanoid-ood",
+      "matched_query_text": "out-of-distribution detection for safe robot operation",
+      "matched_requirement_id": "req-11",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2605.25639v1",
+      "source": "arxiv",
+      "title": "AeroTSBoost: Temporal-Statistical Boosting for Real-World UAV Telemetry Anomaly Mining",
+      "abstract": "Mining anomalies from unmanned aerial vehicle (UAV) state-estimation logs is challenging because failures are sparse, temporally structured, and distributed across heterogeneous PX4 telemetry streams with variable sensor availability and missing values. We present AeroTSBoost, a temporal-statistical boosting framework for real-world UAV telemetry anomaly mining. AeroTSBoost aligns multivariate flight logs, converts each window into deterministic descriptors that capture distributional shifts, quantile structure, endpoint drift, local dynamics, and lag correlation, and trains a class-balanced LightGBM detector. On UAV-SEAD, AeroTSBoost achieves the strongest AUPRC among evaluated classical, supervised tabular, neural reconstruction, recurrent, Granger-causality-based, and frequency-domain baselines. Across five seeds, it reaches $0.7516\\pm0.0043$ AUPRC and $0.5342\\pm0.0108$ threshold-swept event F1, improving AUPRC by 5.79 absolute points over the strongest non-AeroTSBoost baseline. Under purged chronological and leave-log-out protocols, it remains the best AUPRC method, reaching $0.6066\\pm0.0193$ and $0.6388\\pm0.0315$, respectively. On related ALFA fixed-wing UAV fault logs, AeroTSBoost reaches $0.9259\\pm0.0076$ leave-sequence-out AUPRC, ahead of RandomForest ($0.8835\\pm0.0797$) and moments-only ($0.8700\\pm0.0481$). These results show that deterministic temporal-statistical representations remain highly competitive for sparse anomaly mining in operational cyber-physical telemetry.",
+      "authors": [
+        "Junhao Wei",
+        "Haochen Li",
+        "Yanxiao Li",
+        "Yifu Zhao",
+        "Dexing Yao",
+        "Baili Lu",
+        "Xudong Ye",
+        "Sio-Kei Im",
+        "Yapeng Wang",
+        "Xu Yang"
+      ],
+      "primary_category": "cs.CE",
+      "categories": [
+        "cs.CE"
+      ],
+      "published": "2026-05-25T09:40:37+00:00",
+      "link": "https://arxiv.org/pdf/2605.25639v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "anomaly detection from UAV telemetry streams similar to joint position/velocity/torque/IMU signals",
+      "llm_evidence_cn": "从无人机遥测流中进行异常检测，类似关节位置/速度/力矩/IMU信号",
+      "llm_evidence": "从无人机遥测流中进行异常检测，类似关节位置/速度/力矩/IMU信号",
+      "canonical_evidence": "从无人机遥测流中进行异常检测，类似关节位置/速度/力矩/IMU信号",
+      "llm_tldr_en": "AeroTSBoost is a temporal-statistical boosting framework for mining anomalies from multivariate UAV telemetry, using windowed descriptors and LightGBM detector.",
+      "llm_tldr_cn": "该文针对无人机状态估计日志中故障稀疏、时序结构复杂且传感器数据异构的挑战，提出AeroTSBoost框架。该方法对齐多变量飞行日志，将每个时间窗口转换为包含分布偏移、分位数结构、终点漂移、局部动态和滞后相关性的确定性描述子，并训练类别平衡的LightGBM检测器。在UAV-SEAD数据集上，AeroTSBoost在AUPRC指标上优于多种经典和深度异常检测方法。该工作为机器人系统（如人形机器人）基于遥测信号进行异常检测提供了可迁移的时序统计增强方法。",
+      "llm_tldr": "该文针对无人机状态估计日志中故障稀疏、时序结构复杂且传感器数据异构的挑战，提出AeroTSBoost框架。该方法对齐多变量飞行日志，将每个时间窗口转换为包含分布偏移、分位数结构、终点漂移、局部动态和滞后相关性的确定性描述子，并训练类别平衡的LightGBM检测器。在UAV-SEAD数据集上，AeroTSBoost在AUPRC指标上优于多种经典和深度异常检测方法。该工作为机器人系统（如人形机器人）基于遥测信号进行异常检测提供了可迁移的时序统计增强方法。",
+      "llm_tags": [
+        "query:humanoid-ood"
+      ],
+      "matched_query_tag": "query:humanoid-ood",
+      "matched_query_text": "anomaly detection from joint position velocity torque IMU signals in humanoid robots",
+      "matched_requirement_id": "req-10",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2605.25639v2",
+      "source": "arxiv",
+      "title": "AeroTSBoost: Temporal-Statistical Boosting for Real-World UAV Telemetry Anomaly Mining",
+      "abstract": "Mining anomalies from unmanned aerial vehicle (UAV) state-estimation logs is challenging because failures are sparse, temporally structured, and distributed across heterogeneous PX4 telemetry streams with variable sensor availability and missing values. We present AeroTSBoost, a temporal-statistical boosting framework for real-world UAV telemetry anomaly mining. AeroTSBoost aligns multivariate flight logs, converts each window into deterministic descriptors that capture distributional shifts, quantile structure, endpoint drift, local dynamics, and lag correlation, and trains a class-balanced LightGBM detector. On UAV-SEAD, AeroTSBoost achieves the strongest AUPRC among evaluated classical, supervised tabular, neural reconstruction, recurrent, Granger-causality-based, and frequency-domain baselines. Across five seeds, it reaches $0.7516\\pm0.0043$ AUPRC and $0.5342\\pm0.0108$ threshold-swept event F1, improving AUPRC by 5.79 absolute points over the strongest non-AeroTSBoost baseline. Under purged chronological and leave-log-out protocols, it remains the best AUPRC method, reaching $0.6066\\pm0.0193$ and $0.6388\\pm0.0315$, respectively. On related ALFA fixed-wing UAV fault logs, AeroTSBoost reaches $0.9259\\pm0.0076$ leave-sequence-out AUPRC, ahead of RandomForest ($0.8835\\pm0.0797$) and moments-only ($0.8700\\pm0.0481$). These results show that deterministic temporal-statistical representations remain highly competitive for sparse anomaly mining in operational cyber-physical telemetry.",
+      "authors": [
+        "Junhao Wei",
+        "Haochen Li",
+        "Yanxiao Li",
+        "Yifu Zhao",
+        "Dexing Yao",
+        "Baili Lu",
+        "Xudong Ye",
+        "Sio-Kei Im",
+        "Yapeng Wang",
+        "Xu Yang"
+      ],
+      "primary_category": "cs.CE",
+      "categories": [
+        "cs.CE"
+      ],
+      "published": "2026-05-25T09:40:37+00:00",
+      "link": "https://arxiv.org/pdf/2605.25639v2",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "anomaly detection from UAV telemetry streams similar to joint position/velocity/torque/IMU signals",
+      "llm_evidence_cn": "从无人机遥测流中进行异常检测，类似关节位置/速度/力矩/IMU信号",
+      "llm_evidence": "从无人机遥测流中进行异常检测，类似关节位置/速度/力矩/IMU信号",
+      "canonical_evidence": "从无人机遥测流中进行异常检测，类似关节位置/速度/力矩/IMU信号",
+      "llm_tldr_en": "AeroTSBoost is a temporal-statistical boosting framework for mining anomalies from multivariate UAV telemetry, using windowed descriptors and LightGBM detector.",
+      "llm_tldr_cn": "该文针对无人机状态估计日志中故障稀疏、时序结构复杂且传感器数据异构的挑战，提出AeroTSBoost框架。该方法对齐多变量飞行日志，将每个时间窗口转换为包含分布偏移、分位数结构、终点漂移、局部动态和滞后相关性的确定性描述子，并训练类别平衡的LightGBM检测器。在UAV-SEAD数据集上，AeroTSBoost在AUPRC指标上优于多种经典和深度异常检测方法。该工作为机器人系统（如人形机器人）基于遥测信号进行异常检测提供了可迁移的时序统计增强方法。",
+      "llm_tldr": "该文针对无人机状态估计日志中故障稀疏、时序结构复杂且传感器数据异构的挑战，提出AeroTSBoost框架。该方法对齐多变量飞行日志，将每个时间窗口转换为包含分布偏移、分位数结构、终点漂移、局部动态和滞后相关性的确定性描述子，并训练类别平衡的LightGBM检测器。在UAV-SEAD数据集上，AeroTSBoost在AUPRC指标上优于多种经典和深度异常检测方法。该工作为机器人系统（如人形机器人）基于遥测信号进行异常检测提供了可迁移的时序统计增强方法。",
+      "llm_tags": [
+        "query:humanoid-ood"
+      ],
+      "matched_query_tag": "query:humanoid-ood",
+      "matched_query_text": "anomaly detection from joint position velocity torque IMU signals in humanoid robots",
+      "matched_requirement_id": "req-10",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2605.26831v1",
+      "source": "arxiv",
+      "title": "OSMa-Bench++: Toward Open-Ended Benchmarking of Semantic Mapping for Manipulation with Prompt-Generated Synthetic Scenes",
+      "abstract": "Semantic mapping methods are increasingly used as intermediate scene representations for downstream robotic reasoning and manipulation, yet their evaluation is still largely tied to fixed benchmark datasets with limited coverage of manipulation-relevant corner cases. In this work, we extend OSMa-Bench toward controllable benchmarking with prompt-generated synthetic indoor scenes. Our pipeline automatically generates scene descriptions, synthesizes corresponding environments with SceneSmith, and adapts the resulting assets into an OSMa-Bench-compatible simulation format. This adaptation requires a nontrivial intermediate layer, including semantic normalization, material and texture repair, shader fallback policies, floor handling, navigation setup, and controlled lighting configuration. A key advantage of the proposed setup is that the original scene-generation prompt is known in advance and can therefore serve as an auxiliary semantic specification of the intended scene. We use this property to extend the VQA component of OSMa-Bench with a prompt-grounded question category. The resulting framework supports targeted stress-testing of semantic scene representations under conditions such as clutter, small objects, partial occlusions, and lighting variation, and makes benchmarking more extensible and better aligned with downstream manipulation requirements. Our code is available at https://github.com/be2rlab/OSMa-Bench-v2.",
+      "authors": [
+        "Regina Kurkova",
+        "Maxim Popov",
+        "Sergey Kolyubin"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV",
+        "cs.RO"
+      ],
+      "published": "2026-05-26T10:51:36+00:00",
+      "link": "https://arxiv.org/pdf/2605.26831v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "Benchmarking dataset generation for robotic manipulation",
+      "llm_evidence_cn": "为机器人操作生成基准数据集",
+      "llm_evidence": "为机器人操作生成基准数据集",
+      "canonical_evidence": "为机器人操作生成基准数据集",
+      "llm_tldr_en": "Extends OSMa-Bench with prompt-generated synthetic scenes for controllable benchmarking of semantic mapping in robotic manipulation.",
+      "llm_tldr_cn": "该论文扩展OSMa-Bench，通过提示生成合成场景来创建可控制的语义映射基准。管道自动生成场景描述、合成环境并适配仿真格式，覆盖更多操作相关边角案例，为机器人操作评估提供丰富数据集。",
+      "llm_tldr": "该论文扩展OSMa-Bench，通过提示生成合成场景来创建可控制的语义映射基准。管道自动生成场景描述、合成环境并适配仿真格式，覆盖更多操作相关边角案例，为机器人操作评估提供丰富数据集。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2605.28312v1",
+      "source": "arxiv",
+      "title": "EventShiftFlow: Towards Hardware-efficient FPGA-based Flow Estimation",
+      "abstract": "Event-based vision sensors offer asynchronous, high-temporal-resolution measurements that are attractive for low-latency robotic perception, but many event-based motion estimation methods are computationally intensive and difficult to map to FPGA hardware. We present a streaming velocity estimator that discretizes asynchronous events into fixed-duration time bins, constructs a 1-bit spatial occupancy grid, and evaluates multiple velocity hypotheses in parallel using only fixed-width integer logic - shift registers, counters, comparators, and small LUT-mapped multiplies - with no dividers and no DSP blocks. It requires no frame reconstruction, no floating-point arithmetic, and no iterative optimization. The method deliberately trades dense sub-pixel optical flow for a sparse, quantized velocity estimate at each active pixel, suited to low-latency tasks such as reactive obstacle avoidance on size-, weight-, and power-constrained platforms. On noisy synthetic data with known ground-truth velocities, the method recovers both magnitude and direction, with magnitude estimates being most challenged when objects of different velocities intersect. On a real event-camera sequence, directional accuracy reaches 99.5% across all four evaluated motion segments, with performance remaining robust across occupancy densities in the 10-40% range. We characterize the algorithm's density-dependent behavior, present a parameter sensitivity analysis, show that the proposed datapath requires less than 2 kB of storage, and implement a single-axis prototype on a low-cost Xilinx Artix-7.",
+      "authors": [
+        "Arianna Alonso Bizzi",
+        "Fernando Cladera",
+        "C. J. Taylor"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.CV"
+      ],
+      "published": "2026-05-27T11:13:58+00:00",
+      "link": "https://arxiv.org/pdf/2605.28312v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "Hardware-efficient FPGA-based flow estimation for low-latency perception",
+      "llm_evidence_cn": "基于FPGA的高效光流估计，适用于低延迟感知",
+      "llm_evidence": "基于FPGA的高效光流估计，适用于低延迟感知",
+      "canonical_evidence": "基于FPGA的高效光流估计，适用于低延迟感知",
+      "llm_tldr_en": "Presents a streaming velocity estimator on FPGA using only fixed-width integer logic, enabling efficient event-based flow estimation without floating-point or DSP.",
+      "llm_tldr_cn": "该论文提出一种基于FPGA的流式速度估计器，利用固定宽度整数逻辑实现事件相机光流估计，无除法、无浮点、无DSP，适合低延迟机器人感知。",
+      "llm_tldr": "该论文提出一种基于FPGA的流式速度估计器，利用固定宽度整数逻辑实现事件相机光流估计，无除法、无浮点、无DSP，适合低延迟机器人感知。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "edge deployment for humanoid robots",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2605.29438v1",
+      "source": "arxiv",
+      "title": "ElegantVLA: Learning When to Think for Efficient Vision-Language-Action Models",
+      "abstract": "Vision-Language-Action (VLA) models are a powerful paradigm for generalist robotic control. However, their high computational cost and limited control frequency hinder real-time robotic manipulation, especially when large vision-language backbones and iterative action heads run at every control step. Existing VLA acceleration methods often optimize individual components or rely on fixed acceleration rules, treating different control steps with largely fixed computation and overlooking the non-uniform reasoning demands of sequential embodied control. Inspired by human motor control, where cognitive and feedback resources concentrate on goal-sensitive stages, we argue that VLA models should learn when to invest full computation and when to reuse prior computation. We propose ElegantVLA, a plug-in phase-adaptive inference framework that accelerates VLA models through intra-model dynamic compute scheduling. ElegantVLA introduces a lightweight scheduler that observes temporal representation similarity, robot-motion cues, and episode progress to jointly allocate computation across the vision encoder, LLM, and action head. For perception-language reasoning, the scheduler selects a five-level Vision-LLM compute mode, from full recomputation to multi-step temporal reuse, based on visual-language representation stability. For action generation, it selects a three-level denoising mode, reusing intermediate denoising states during stable motion while preserving full refinement for goal-sensitive stages. By coordinating these decisions, ElegantVLA offers a general acceleration framework for modern VLA pipelines with explicit action-generation modules, without modifying or retraining the base model. Experiments on GR00T and CogACT achieve up to 2.55x and 3.77x speedup, and on six real-world GR00T tasks ElegantVLA cuts computation by 2.18x while raising control frequency from 13.8 Hz to 26.3 Hz.",
+      "authors": [
+        "Ye Li",
+        "Huanan Liu",
+        "Kangye Ji",
+        "Yuan Meng",
+        "Jiajun Fan",
+        "Yuansong Wang",
+        "Shiyu Qin",
+        "Chenglei Wu",
+        "Shu-Tao Xia",
+        "Zhi Wang"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-05-28T06:33:05+00:00",
+      "link": "https://arxiv.org/pdf/2605.29438v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "efficient VLA model for real-time robotic control, suitable for edge deployment",
+      "llm_evidence_cn": "高效的VLA模型实现实时机器人控制，适用于边缘部署",
+      "llm_evidence": "高效的VLA模型实现实时机器人控制，适用于边缘部署",
+      "canonical_evidence": "高效的VLA模型实现实时机器人控制，适用于边缘部署",
+      "llm_tldr_en": "ElegantVLA learns when to allocate full computation in VLA models, achieving higher control frequency and lower latency for robotic manipulation.",
+      "llm_tldr_cn": "针对VLA模型计算成本高、控制频率低的问题，本文提出ElegantVLA，借鉴人类运动控制中认知资源集中于关键阶段的原理，让模型学习何时进行完整计算、何时复用先前结果。在多个机器人操作任务上实现了更高的控制频率和更低的延迟，为边缘端部署提供了可行的加速方案。",
+      "llm_tldr": "针对VLA模型计算成本高、控制频率低的问题，本文提出ElegantVLA，借鉴人类运动控制中认知资源集中于关键阶段的原理，让模型学习何时进行完整计算、何时复用先前结果。在多个机器人操作任务上实现了更高的控制频率和更低的延迟，为边缘端部署提供了可行的加速方案。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "edge deployment for humanoid robots",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2605.29605v1",
+      "source": "arxiv",
+      "title": "VLAConf: Calibrated Task-Success Confidence for Vision-Language-Action Models",
+      "abstract": "Confidence estimation for Vision-Language-Action (VLA) models is essential for robots to perform manipulation tasks in the open world, providing crucial signals for risk-sensitive decision-making and failure anticipation. Existing confidence estimation methods typically rely on ensemble-based paradigms or action-token probabilities to predict the likelihood of task success. However, they still encounter challenges in computational efficiency and cross-architecture generalizability. These methods usually require repeated sampling, leading to inference inefficiency, and are restricted to VLA models with discrete action outputs, making them difficult to apply to continuous action spaces. To address this issue, we propose VLAConf, a one-class discriminative confidence framework. By leveraging frozen pretrained VLA internal representations, VLAConf directly estimates step-wise anomaly scores in a single forward pass using a lightweight confidence head, thereby eliminating the overhead of exhaustive resampling. We additionally use step-conditioned modeling to encode rollout-phase information along the manipulation trajectory. Experiments on the LIBERO benchmark demonstrate that VLAConf significantly improves the quality of the confidence signal constructed for post-hoc calibration, outperforming existing baselines by a large margin in inference efficiency. The effectiveness of VLAConf is further validated in real-robot experiments. To access the source code and supplementary videos, visit https://sites.google.com/view/vlaconf.",
+      "authors": [
+        "Dehao Huang",
+        "Aoxiang Gu",
+        "Chengjie Zhang",
+        "Bolin Zou",
+        "Wenlong Dong",
+        "Zilang Cen",
+        "Yue Wang",
+        "Hong Zhang"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-05-28T08:42:12+00:00",
+      "link": "https://arxiv.org/pdf/2605.29605v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "calibrated confidence for task success in VLA models, enabling failure anticipation and safe operation",
+      "llm_evidence_cn": "为VLA模型提供校准的任务成功置信度，支持故障预判和安全操作",
+      "llm_evidence": "为VLA模型提供校准的任务成功置信度，支持故障预判和安全操作",
+      "canonical_evidence": "为VLA模型提供校准的任务成功置信度，支持故障预判和安全操作",
+      "llm_tldr_en": "VLAConf uses one-class discriminative approach to provide calibrated task-success confidence for VLA models, enabling failure anticipation during robot manipulation.",
+      "llm_tldr_cn": "视觉-语言-动作模型在开世界环境中缺乏可靠置信度，难以预判失败风险。VLAConf提出一类判别方法，学习任务成功与否的紧凑决策边界，提供校准的置信度估计。实验表明，VLAConf能够有效区分成功与失败轨迹，为机器人安全操作提供关键信号，同时计算高效，适用于连续动作空间。",
+      "llm_tldr": "视觉-语言-动作模型在开世界环境中缺乏可靠置信度，难以预判失败风险。VLAConf提出一类判别方法，学习任务成功与否的紧凑决策边界，提供校准的置信度估计。实验表明，VLAConf能够有效区分成功与失败轨迹，为机器人安全操作提供关键信号，同时计算高效，适用于连续动作空间。",
+      "llm_tags": [
+        "query:humanoid-ood"
+      ],
+      "matched_query_tag": "query:humanoid-ood",
+      "matched_query_text": "out-of-distribution detection for safe robot operation",
+      "matched_requirement_id": "req-11",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2605.30140v1",
+      "source": "arxiv",
+      "title": "AnomalyAgent: Training-Free Agentic Models for Zero-/Few-Shot Anomaly Detection",
+      "abstract": "Benefiting from generalizability of vision-language models (VLMs) such as CLIP, many zero-/few-shot anomaly detection (AD) approaches have achieved impressive detection performance across various datasets. Nevertheless, they require substantial training on large auxiliary datasets to adapt VLMs to anomaly detection, and their inference largely relies on visual-text embedding similarity-based anomaly scores, lacking reasoning abilities to detect complex anomalies that require in-depth contextual understanding. To address this limitation, we propose \\textbf{AnomalyAgent}, a novel training-free, agentic framework that leverages the advanced reasoning and generalization capabilities of multimodal large language models (MLLMs) for anomaly detection. The key ingredients include \\textbf{1)} a comprehensive anomaly-centric toolset that enables adaptive MLLM-driven, agentic anomaly reasoning in zero-shot settings, and \\textbf{2)} a customized memory module that grounds anomaly reasoning with few-shot, in-context reference examples. We extend evaluation beyond the detection of simple anomalies (e.g., surface defects like cracks and dents and clear lesions) in widely used benchmarks to more diverse types of anomalies such as logical/contextual anomalies in logistics and manufacturing settings. Extensive experiment results demonstrate that our AnomalyAgent achieves substantially better performance compared to training-free VLM-based AD and generic agentic methods, highlighting its superior generalization capability in both zero-shot and few-shot anomaly detection settings. The code implementation can be find at this address.",
+      "authors": [
+        "Yi Zhang",
+        "Jiawen Zhu",
+        "Lele Fu",
+        "Guansong Pang"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV"
+      ],
+      "published": "2026-05-28T16:05:42+00:00",
+      "link": "https://arxiv.org/pdf/2605.30140v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "Zero-shot anomaly detection method using MLLMs",
+      "llm_evidence_cn": "使用多模态大语言模型进行零样本异常检测的方法",
+      "llm_evidence": "使用多模态大语言模型进行零样本异常检测的方法",
+      "canonical_evidence": "使用多模态大语言模型进行零样本异常检测的方法",
+      "llm_tldr_en": "Proposes AnomalyAgent, a training-free agentic framework using MLLMs for zero/few-shot anomaly detection, enabling reasoning and contextual understanding without training.",
+      "llm_tldr_cn": "该论文提出AnomalyAgent，一种无需训练的多模态大语言模型代理框架，用于零样本/少样本异常检测。它利用MLLM的推理能力检测复杂异常，克服了传统方法依赖嵌入相似性的局限，在多个基准数据集上取得了优异性能。",
+      "llm_tldr": "该论文提出AnomalyAgent，一种无需训练的多模态大语言模型代理框架，用于零样本/少样本异常检测。它利用MLLM的推理能力检测复杂异常，克服了传统方法依赖嵌入相似性的局限，在多个基准数据集上取得了优异性能。",
+      "llm_tags": [
+        "query:humanoid-ood"
+      ],
+      "matched_query_tag": "query:humanoid-ood",
+      "matched_query_text": "out-of-distribution detection for safe robot operation",
+      "matched_requirement_id": "req-11",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    }
+  ]
+}

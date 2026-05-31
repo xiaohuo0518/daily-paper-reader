@@ -1,0 +1,715 @@
+Title: AnomalyAgent: Training-Free Agentic Models for Zero-/Few-Shot Anomaly Detection
+
+URL Source: https://arxiv.org/pdf/2605.30140v1
+
+Published Time: Fri, 29 May 2026 01:51:38 GMT
+
+Number of Pages: 19
+
+Markdown Content:
+# AnomalyAgent: Training-Free Agentic Models for Zero-/Few-Shot Anomaly Detection 
+
+Yi Zhang*, Jiawen Zhu*, Lele Fu, Guansong Pang 
+
+Singapore Management University, Singapore Sun Yat-sen University, China 
+
+dylan.zhang9420@gmail.com 
+
+## Abstract 
+
+Benefiting from generalizability of vision-language models (VLMs) such as CLIP, many zero-/few-shot anomaly detection (AD) approaches have achieved impressive detection performance across various datasets. Nevertheless, they require substan-tial training on large auxiliary datasets to adapt VLMs to anomaly detection, and their inference largely relies on visual–text embedding similarity-based anomaly scores, lacking reasoning abilities to detect complex anomalies that require in-depth contextual understanding. To address this limitation, we propose AnomalyAgent ,a novel training-free, agentic framework that leverages the advanced reasoning and generalization capabilities of multimodal large language models (MLLMs) for anomaly detection. The key ingredients include 1) a comprehensive anomaly-centric toolset that enables adaptive MLLM-driven, agentic anomaly reasoning in zero-shot settings, and 2) a customized memory module that grounds anomaly rea-soning with few-shot, in-context reference examples. We extend evaluation beyond the detection of simple anomalies ( e.g. , surface defects like cracks and dents and clear legions) in widely used benchmarks to more diverse types of anomalies such as logical/contextual anomalies in logistics and manufacturing settings. Extensive experiment results demonstrate that our AnomalyAgent achieves substantially bet-ter performance compared to training-free VLM-based AD and generic agentic methods, highlighting its superior generalization capability in both zero-shot and few-shot anomaly detection settings. The code implementation can be find at this address. 
+
+## 1 Introduction 
+
+Anomaly detection (AD) is one key task in computer vision, aiming to identify instances that deviate significantly from the underlying data distribution. It is critical for a wide range of real-world applications, including industrial inspection, medical diagnosis, security monitoring, and autonomous systems [ 3 , 27 , 2, 13 ]. A key challenge in AD lies in its inherent open-ended nature, ie , anomalies are rare, diverse and often unpredictable, making it impractical to exhaustively model all possible abnormalites during training. To tackle this challenge, conventional approaches [ 23 , 4 , 30 ] focus on learning normal patterns from large normal training data instead. Recent advances have shifted from this unsupervised learning paradigm toward data-efficient settings, particularly zero-shot [ 31 , 9 , 5 ]and few-shot AD [24, 36, 14], depending on the availability of normal reference samples. Benefiting from the strong zero/few-shot recognition capabilities of pre-trained vision-language models (VLMs), a line of work has emerged to adapt their unified visual-text representa-tions for AD via parameter-efficient tuning, achieving impressive performance across mul-tiple benchmarks [ 38 , 39 , 20 ]. Early studies such as WinCLIP [ 14 ] establish a training-free paradigm by exploiting handcrafted text prompts and multi-scale visual features from CLIP [37 ] for anomaly scoring, providing strong baselines for zero- and few-shot AD.        
+
+> Preprint.
+> arXiv:2605.30140v1 [cs.CV] 28 May 2026 VLM-based AD Previous MLLM-based AD AnomalyAgent
+> Plan Tool
+> Reflection Reason
+> VLMs
+> V-L Similarity
+> Matchin g
+> MLLMs
+> Post -hoc
+> Reasoning
+> AD Tuning Memory AD -centric Reasoning
+> AD Tuning
+> MLLM-based AD Agent
+
+Figure 1: Comparison of conventional VLM-based AD, previous MLLM-based AD, and our AnomalyAgent. Existing VLM-based methods mainly rely on similarity-based anomaly scoring, while previous MLLM-based methods use MLLMs as post-hoc reasoning modules after task-specific adaptation. In contrast, AnomalyAgent customizes the agentic abilities of MLLMs for AD and directly integrate them into the AD process in a fully training-free manner. 
+
+Following this direction, zero-shot AD methods typically enhance vi-sual–text alignment via prompt learn-ing to capture anomaly-relevant se-mantics [ 39 , 38 , 5 , 20 ], while few-shot AD methods leverage normal reference samples to characterize ex-pected normal patterns and detect anomalies through reference-based comparison with query samples [ 40 ,7, 24]. However, existing VLM-based meth-ods still require substantial training on auxiliary datasets to adapt the VLMs to AD. Furthermore, their inference largely rely on visual–text representation similarity-based anomaly scoring, which provides only shallow alignment between text prompts and visual features, with anomalies identified via thresholding of the resulting scores [ 31 , 26 ]. While effective for relatively simple and well-defined anomaly patterns, such as surface defects or localized lesions, this paradigm lacks explicit reasoning, making it insufficient for handling anomalies that require contextual, relational, or task-specific understanding. For example, detection of logical anomalies may depend on object arrangement or operational rules [ 2, 36 ], while real-world industrial and logistics scenarios often exhibit open-ended variations in object appearance, pose and environmental conditions [13]. These challenges go beyond shallow representation matching and require more structured reasoning about such contextual and logical abnormalities. Recent advances in multimodal large language models (MLLMs) offer a promising foundation for such reasoning and beyond [ 1 , 19 , 16 ]. However, their application to the AD task remains largely underexplored. Existing MLLM-based AD methods typically use reasoning either for anomaly interpretation [ 15 , 32 , 6, 12 ], or as auxiliary prior extraction for downstream anomaly analysis [ 36 ]. In both cases, MLLM reasoning is not directly integrated into the detection decision itself, restricting its utility for zero-shot and few-shot AD. As a consequence, their effectiveness in zero-shot and few-shot anomaly detection settings remains limited, often underperforming strong VLM-based training-free baselines or requiring dataset-specific tuning to achieve competitive performance. To address these challenges, we propose AnomalyAgent , a fully training-free agentic framework that directly leverages the superior agentic abilities of MLLMs—planning, tool use, reasoning, and reflecting—specifically for anomaly detection. As illustrated in Fig. 1, unlike existing VLM-based methods that rely on shallow similarity matching with auxiliary-domain tuning, or previous MLLM-based approaches that require task-specific adaptation for post-hoc reasoning, AnomalyAgent directly integrates anomaly-centric agentic abilities into the detection process itself in a fully training-free manner. To this end, an anomaly-centric toolset is introduced in AnomalyAgent to progressively gather and verify visual evidence through hypothesis-driven exploration, counterfactual verification, and reflective reasoning tailored for AD. This allows it to handle complex abnormality patterns beyond simple appearance deviations. In scenarios where in-context examples are available, e.g. ,few-shot AD settings, a self calibration-based memory mechanism is further introduced to convert the few-shot examples into actionable in-context memories to enable self calibration of the reasoning against dataset-specific normal patterns in AnomalyAgent. Overall, our contributions are summarized as follows: • We introduce AnomalyAgent , a novel training-free agentic framework tailored for AD. It shifts anomaly detection from visual-text representation similarity-based anomaly scoring to tool-and-memory-augmented anomaly reasoning,enabling score-thresholding-free anomaly decision and in-depth reasoning over complex abnormality patterns. • We further propose an anomaly-centric reasoning toolset and a self calibration-based memory mechanism to build an agentic AD-oriented planning–reasoning–reflecting pipeline. With this pipeline, AnomalyAgent can actively gather, verify, and refine evi-dence against expected normal patterns throughout its reasoning, and bring in external memories to perform self calibration when such information is available. 2• We establish a comprehensive evaluation benchmark covering a wide range of anomaly types across multiple AD scenarios, including industrial inspection, medical imaging, and logistics. Extensive comparisons with VLM-based methods and MLLM agents demonstrate the strong generalization ability of AnomalyAgent in both zero-shot and few-shot settings. 
+
+## 2 Related Work 
+
+VLM-based Zero-/Few-Shot Anomaly Detection. To improve generalization to unseen domains, zero- and few-shot anomaly detection (ZSAD/FSAD) methods have emerged to identify anomalies without dataset-specific training. Recent advances are largely driven by vision-language models (VLMs), which enable AD through visual–text similarity matching in a unified embedding space. Early methods such as WinCLIP [ 14 ] establish a training-free paradigm by exploiting CLIP [ 25 ]features with handcrafted prompts under both ZSAD and FSAD settings. For ZSAD, subsequent approaches mainly improve anomaly-sensitive representation learning through prompt-based adapta-tion [ 7 , 39 , 38 , 5 , 11 ]. For example, APRIL-GAN [ 7] introduces additional learnable layers trained with auxiliary anomaly data, while methods such as AnomalyCLIP [ 38 ], FAPrompt [ 39 ], and Ada-CLIP [ 5] employ learnable prompts to better align visual features with anomaly-relevant semantics. For FSAD, existing methods leverage normal reference samples through reference-based compari-son [ 18 , 40 , 35 ]. PromptAD [ 18 ] learns class-specific normal patterns via one-class prompt learning, while InCTRL [ 40 ] and ResAD [ 35 ] model residual discrepancies between query samples and normal references for anomaly detection. However, these methods still rely on similarity-based decision mechanisms, limiting their effectiveness in scenarios requiring contextual or relational understanding. 
+
+MLLM-based Anomaly Detection and Reasoning. Motivated by the strong reasoning capability of MLLMs, recent studies explore anomaly detection from a reasoning perspective. Approaches such as MMAD [ 15 ], AnomalyGPT [ 12 ], Anomaly-OV [ 32 ], and AnomalyR1 [ 6 ] mainly treat MLLMs as post-hoc reasoning modules for anomaly analysis through natural language descriptions or multi-step inference. Other methods, such as LogSAD [ 36 ], leverage MLLMs to model structural or logical constraints as prior knowledge for AD. However, existing methods still lack anomaly-aware reasoning guidance that explicitly integrates reasoning into the anomaly detection process itself, often requiring dataset-specific tuning and underperforming strong training-free VLM baselines. Recent agentic frameworks have demonstrated strong capabilities in planning, tool use, and multi-step reasoning across multimodal tasks [ 34 , 28 , 8]. However, directly applying generic agents to AD remains challenging due to the lack of anomaly-specific reasoning guidance and calibrated normality priors. In contrast, AnomalyAgent is a fully training-free agentic AD framework that explicitly integrates MLLM reasoning into anomaly detection through an anomaly-centric reasoning toolset and a self-calibration-based memory mechanism. 
+
+## 3 Methodology 
+
+Problem Statement. Existing ZSAD/FSAD methods [ 39 , 38 , 40 ] typically require auxiliary datasets to adapt VLMs to AD. Specifically, given auxiliary data Daux = {Xtrain , Y train }, where Xtrain =
+
+{xi}Ni=1 denotes the training images, Ytrain = {yi}Ni=1 denotes the corresponding binary labels, and each sample xi satisfies yi ∈ { 0, 1} with 0 and 1 represent normal an anomalous samples respectively, a pretrained VLM-based anomaly scoring function fVLM (xi, Prompt ) is fine-tuned using Daux and then directly applied to yield an anomaly score for samples from unseen test data Dtest . In contrast, our work operates in a fully training-free manner, requiring neither auxiliary data training nor parameter adaptation. In particular, our goal is to develop a generalizable MLLM-driven anomaly reasoning agent f MLLM (xi, Prompt , Tool , Memory ) that can effectively generalize across different unseen test datasets T = {D 1
+
+> test
+
+, D2
+
+> test
+
+, · · · , Dm
+
+> test
+
+} under both zero-shot and few-shot settings, where each test dataset Di 
+
+> test
+
+= {Xi
+
+> test
+
+, Y i
+
+> test
+
+} is drawn from a distinct application domain and f MLLM does not require any training. In the zero-shot setting, no target-domain reference samples are available during inference. In contrast, FSAD additionally provides a small set of normal reference samples from the target domain, denoted as P = {p1, p 2, ..., p k}, where k is typically a small number ( e.g. , k ≪ N ). The resulting model is expected to directly produce a hard-label prediction , ie , “anomalous” or “normal”, providing a global prediction of whether the query image contains any abnormal content. 
+
+Overview of AnomalyAgent. As illustrated in Fig. 2, AnomalyAgent inputs the image and the class name into the template tools, deriving the general template analysis and class-specific counterfactual 3template analysis. Given the general template analysis and the raw image, the Planner selects and invokes an appropriate visual tool to enhance anomaly-relevant evidence. Then, the augmented image, raw image, and template analysis are fed into the Reasoner for judgment. If the termination condition is not met, the aforementioned information, as well as the Reasoner’s thought, will be input into the Reflector for a new loop of investigation. Below, we present these modules in detail. 
+
+3.1 Anomaly-Centric Toolset for AD-Oriented Agentic Planning–Reasoning–Reflecting Zero -Shot Anomaly Detection      
+
+> Test Image
+> Class Name
+> General Template
+> Evidence
+> Counterfactual
+> Atomic Candidates
+> …
+> Few -Shot Anomaly Detection
+> Normal Shots
+> Class Name
+> Candidate
+> Calibration
+> Few -shot Image
+> Memory
+> …
+> …
+> LangGraph Agentic Reasoning Loop
+> Template Tools
+> Visual Tools
+> Planner
+> Denoise Deblur Super -
+> Resolution
+> Zoom Bright -
+> ness
+> Reflector Reasoner
+> Final Anomaly
+> Decision
+> Normal
+> Anomalous
+> Score+Explanation
+
+Figure 2: Overview of AnomalyAgent. 
+
+To enable anomaly detection in a fully training-free setting, we present a zero-shot agen-tic framework that can adapt to diverse inspection requirements without accessing training sam-ples or performing parameter up-dates. Unlike generic MLLM agents that mainly rely on open-ended visual question answer-ing, AnomalyAgent is specifi-cally designed for anomaly de-tection from two complementary aspects: an anomaly-centric toolset that provides task-relevant visual and semantic evidence, and an AD-oriented agentic pipeline that progressively plans, reasons, and reflects over such evidence before making a hard-label prediction. 
+
+Anomaly-Centric Toolset. The tools in AnomalyAgent are organized into two categories. The first category consists of general visual tools , which enhance the query image or focus on local regions to provide clearer visual evidence for anomaly inspection. The second category consists of template tools , which exploit both textual priors and image-level descriptions to construct structured anomaly-related cues. This design enables the agent to improve the visibility of suspicious observations while grounding its reasoning in explicit AD-specific priors. 
+
+General Visual Tools. We include five general visual tools: image denoising, image deblurring, super-resolution, zooming, and brightness adjustment. These tools are invoked when the Planner or the Reflector identifies insufficient or ambiguous visual evidence, such as low image quality, small suspicious regions, blur, or poor illumination. The implementations are provided in the Appendix A.1. 
+
+Template Tools. include a general template tool and a counterfactual atomic template tool. The 
+
+general template tool is inspired by the template ensembles in WinCLIP [ 14 ], i.e. , normal ensembles (EN ) and anomaly ensembles ( EA). However, instead of restricting anomaly evidence to the matching between CLIP visual features and predefined textual templates, we leverage the fine-grained visual description capability of MLLMs. Specifically, an MLLM-based image captioning model is employed to generate detailed descriptions of the query image x from complementary visual perspectives: Captions = {d1, d 2, d 3} = MLLM (x; Prompt IC ), (1) where each caption di focuses on a different visual aspect of the object and the Prompt IC can be found in the Appendix B. These captions are then compared with class-conditioned normal and anomaly templates, yielding a preliminary semantic evidence report that indicates whether the observed appearance is more consistent with normality or abnormality: Report GR = MLLM (Emb (Captions ) × EA, Emb (Captions ) × EN ), (2) where Emb (·) stands for an text embedding model. The counterfactual atomic template tool works in a similar way while being more adaptive and flexible. An LLM is utilized to generate class-conditioned anomalous and normal candidate sets: 
+
+ECA ; ECN = LLM (c; Prompt CG ). (3) The anomaly candidates describe concrete abnormal patterns such as surface damage, deformation, missing parts, contamination, or structural defects, while the normal candidates describe intact and 4regular appearances. For each caption dj , we compute its similarity to the normal and anomalous semantic prototypes, yielding a soft anomaly score: 
+
+sj = σ (sim( Emb (dj ), p A) − sim( Emb (dj ), p N )) ,
+
+where pA and pN are the averaged embeddings of anomaly and normal textual prototypes. This produces an interpretable preliminary evidence report, including caption-level anomaly scores, similarity margins, and agreement patterns across perspectives. In addition, we further construct a counterfactual evidence report through atomic candidate matching. Specifically, each image caption is compared against the generated anomaly and normal candidate sets: 
+
+TopK A(dj ), TopK N (dj ) = RetrieveTopK  Emb (dj ), Emb (ECA ), Emb (ECN ) , (4) where K is a hyperparameter. The retrieved candidates provide fine-grained evidence explaining whether the visual description is closer to abnormal or normal semantic patterns. We compute the candidate-level margin: 
+
+mj = max 
+
+> ai∈ECA
+
+sim( dj , a i) − max 
+
+> ni∈ECN
+
+sim( dj , n i), (5) and summarize the top-matched anomaly and normal candidates as counterfactual evidence: Report CR = LLM (s1, s 2, s 3, TopK A(dj ), TopK N (dj ), m 1, m 2, m 3). (6) This report is not directly used as a hard decision rule; instead, it provides structured semantic cues for the agent to reason over. 
+
+AD-Oriented Agentic Pipeline. After obtaining Report GR and Report CR , AnomalyAgent performs anomaly judgment through a planning–reasoning–reflecting pipeline. The Planner first receives the raw image, class name, and semantic evidence reports, and converts them into an inspection plan: Plan = MLLM P(x, c, Report GR , Report CR ; Prompt P)
+
+→ { Potential Anomalies , Heuristic Prompt , Tools to Use }. (7) Here, the potential anomalies summarize suspicious visual regions or abnormal patterns suggested by the template reports, while the heuristic prompt provides class-specific inspection guidance for subsequent reasoning. When the visual evidence is insufficient, the Planner invokes the corresponding general visual tools to obtain enhanced observations ˜x.The Reasoner then integrates the raw image, enhanced observations, inspection plan, and semantic evidence reports to produce a structured anomaly judgment: Result = MLLM R
+
+ x, ˜x, c, Plan ,
+
+Report GR , Report CR ; Prompt R
+
+ → { ˆy, Reason }. (8) The prediction ˆy is selected from {normal , anomalous , uncertain }, where Reason explains the sup-porting visual observations and their consistency with the semantic priors. If a confident normal or anomalous decision is obtained, the pipeline directly returns the result. When the Reasoner outputs uncertain , the Reflector revisits the previous plan and judgment, identifies missing or ambiguous evidence, and refines the inspection instruction: Reflect = MLLM Ref (x, ˜x, c, Plan , Result , Report GR , Report CR ; Prompt Ref )
+
+→ { Missing Evidence , Ambiguous Evidence , Refined Heuristic Prompt , Tools to Use }.
+
+(9) The reflected instruction is then sent back to the Planner or Reasoner for targeted re-inspection. In this way, AnomalyAgent avoids premature decisions from incomplete evidence while keeping the final prediction as a hard-label anomaly decision. 
+
+3.2 Memory-Augmented Self Calibration with Normal Reference Examples 
+
+To further reduce false alarms caused by class-specific normal variations, we introduce a memory-augmented self-calibration mechanism that uses a small set of normal reference examples without updating any model parameters. For each class c, let 
+
+MNc = {xNi }Ki=1 (10) denote the available normal reference images. We first run the same AnomalyAgent pipeline on each 
+
+xNi and record its intermediate evidence: 
+
+Ri = {Captions i, Report i
+
+> GR
+
+, Report i
+
+> CR
+
+, ˆyi, Reason i}. (11) Since all xNi are known to be normal, these records provide self-calibration signals for identifying normal visual patterns that may be mistakenly treated as anomalies. 5Counterfactual candidate calibration. For each atomic candidate e ∈ ECA ∪ ECN , we assign a reliability weight we, initialized to 0.5. Given the captions of a normal reference image, an LLM judges the relation between the reference description and each candidate as {fit , conflict , unrelated }.We compute the caption-candidate matching strength 
+
+ρi(e) = max  
+
+> j
+
+sim  Emb (dij ), Emb (e). (12) The weight is then updated according to the normal-reference constraint: 
+
+we ← clip( we + ∆ i(e), 0, 1) , (13) where normal candidates are strengthened when they fit normal references, while anomaly candidates are weakened when they fit normal references. In practice, if the original counterfactual evidence incorrectly favors anomaly on a normal reference image, a larger update coefficient is used. The calibrated weights are then injected into atomic candidate matching: 
+
+ℓ(dj , e ) = sim( Emb (dj ), Emb (e)) 
+
+τcand 
+
++ ( we − 0.5) , (14) where we = 0 .5 recovers the original unweighted matching. The calibrated counterfactual margin is computed as 
+
+mcal  
+
+> j
+
+= τcand max 
+
+> a∈ECA
+
+ℓ(dj , a ) − τcand max 
+
+> n∈ECN
+
+ℓ(dj , n ), (15) which produces a refined Report CR for subsequent agent reasoning. 
+
+Normal-reference memory. In addition to candidate calibration, we build a normal-reference memory bank. Each reference image is stored with its CLIP image embedding, captions, template margins, final judgment, and reasoning trace: 
+
+Bc = {(ϕ(xNi ), Ri)}Ki=1 , (16) where ϕ(·) denotes the image-level embedding. For normal references that are incorrectly judged as anomalous, the agent further reflects on the failure case and extracts class-level hard-normal cues, i.e. ,suspicious-looking but normal visual patterns. These cues are summarized into a class calibration note Hc and enabled only when a validation pass on normal references improves correctness without degrading previously correct cases. During inference, the query image x retrieves visually similar normal memories: 
+
+Nγ (x) = {(xNi , Ri) | cos( ϕ(x), ϕ (xNi )) > γ }, (17) where γ is a similarity threshold. The retrieved entries are summarized into a memory report Report MEM , including similarity statistics, average template margins, and the reliability of previous judgments on retrieved normal references. Finally, the Reasoner receives both semantic reports and memory-based calibration cues: Result = MLLM R
+
+ x, ˜x, c, Plan , Report GR , Report cal CR ,
+
+Report MEM , H c; Prompt R
+
+ → { ˆy, Reason }. (18) The memory report is used only as historical normal-shot calibration rather than a hard decision rule. Thus, the final prediction remains a hard-label anomaly judgment, while the agent is calibrated against class-specific normal variations and hard-negative normal appearances. 
+
+## 4 Experiments 
+
+Datasets. To verify the effectiveness of AnomalyAgent, we conduct extensive experiments across five real-world datasets from diverse application domains, including industrial defect dataset (MVTec [ 3]), medical image datasets (HeadCT [ 27 ] and LAG [ 17 ]), logistics defect dataset (Ka-putt [13]), and logical anomaly dataset (MVTec LOCO [2]). These are test datasets, which are used directly to evaluate the detection performance in the zero-shot setting. In the few-shot setting, the few-shot normal prompts for the target data are randomly sampled from the training set of target datasets and remain the same for all detection models for fair comparison. We evaluate the perfor-mance with varying number of few-shot normal sample set: K = 1 , 2, 4 (See Appendix for details about the dataset settings). 6Table 1: AUROC and F1-max results across five datasets under ZSAD settings. Best results among training-free methods are highlighted in red , while second-best results are underlined . Trainable methods are shaded in gray for reference only since they require additional training.                                                                                                                        
+
+> Dataset Training-Free Methods Trainable Methods
+> WinCLIP MRAD-TF ReACT AnomalyAgent CLIP AprilGAN AnomalyCLIP FAPrompt AUROC F1-max AUROC F1-max AUROC F1-max AUROC F1-max AUROC F1-max AUROC F1-max AUROC F1-max AUROC F1-max MVTec 90.4 92.7 81.2 89.3 74.3 86.3 84.5 90.7 74.0 74.7 86.1 83.5 91.6 89.6 91.8 89.7 MVTec LOCO 59.1 53.8 58.2 77.3 60.0 77.3 62.8 77.3 53.6 44.9 58.6 39.8 61.9 57.4 59.5 51.3 LAG 59.6 65.4 60.1 81.3 57.7 81.3 65.3 81.3 62.6 66.7 80.7 77.9 76.4 77.9 74.9 80.2 HeadCT 86.7 81.5 74.7 72.4 91.0 91.2 91.0 91.5 61.2 66.7 89.7 82.4 93.4 89.5 94.4 90.4 Kaputt 55.6 36.6 47.6 48.3 53.6 45.0 61.3 48.9 55.0 41.3 61.4 42.4 55.4 48.8 63.9 50.6 Average 70.3 66.0 64.4 73.7 67.3 76.2 73.0 77.9 61.3 58.9 75.3 65.2 75.7 72.6 76.9 72.4
+
+Baseline Methods and Evaluation Metrics. We compare AnomalyAgent with several state-of-the-art (SotA) anomaly detection methods under both zero-shot and few-shot settings. For ZSAD, the competing methods include training-free baselines, ie , CLIP [ 25 ], WinCLIP [ 14 ], MRAD [ 31 ], and ReAct Agent [ 34 ]. We also include trainable ZSAD approaches, including APRIL-GAN [ 7], AnomalyCLIP [ 38 ], and FAPrompt [ 39 ], but they are not included for direct performance comparison; their results are only used to check the performance gap between training-free and trainable AD methods. For FSAD, the training-free baselines include WinCLIP+ [ 14 ], PatchCore [ 26 ], and an agentic method Mem0 [ 8 ], while the trainable baselines include APRIL-GAN [ 7] and InCTRL [ 40 ]. Note that ReAct is not included in the FSAD experiments as it cannot directly use the few-shot references; similarly, Mem0 that requires few-shot references is not used in the ZSAD experiments. Following previous AD approaches [ 5 , 36 , 10 ], we report the Area Under the Receiver Operating Characteristic (AUROC) and the highest possible F1 score (F1-max) as our evaluation metrics. 
+
+Implementation Details. We use GPT-5.1 [ 22 ] with the Response API as the default MLLM for all agentic methods (AnomalyAgent, ReACT, and Mem0) for image description, planning, reasoning, and reflection in the main experiments. To reduce inference cost, GPT-4.1-mini [ 21 ] is used for auxiliary reasoning and memory-related operations. For embedding-based evidence matching, we employ a Qwen3-4B-based text embedding model [ 33 ] by default. For training-free methods, all datasets are directly used for inference without any training or adaptation. For trainable methods, we follow the official experimental protocols of the competing approaches, where models are trained on their corresponding auxiliary datasets and evaluated on the target test sets without further fine-tuning. Implementation details for AnomalyAgent and the competing methods are provided in Appendix .
+
+4.1 Main Results Zero-shot Anomaly Detection. Table 1 reports the ZSAD results across five datasets for both fully training-free and trainable methods. Overall, AnomalyAgent achieves the best average performance among all training-free methods, surpassing the strongest training-free baseline by up to 2.7% AUROC and 1.7% F1-max . Compared with conventional VLM-based approaches relying on visual– language similarity matching, AnomalyAgent shows particularly strong improvements on datasets requiring contextual and relational understanding, such as MVTec LOCO and Kaputt, and even achieves competitive performance against several trainable methods. Although trainable approaches such as AnomalyCLIP and FAPrompt still obtain slightly better results on some datasets due to auxiliary-domain optimization, AnomalyAgent remains highly competitive without any training or parameter adaptation. These results demonstrate the effectiveness of the proposed agentic reasoning framework for handling contextual, structural, and task-dependent anomalies. As for the generic MLLM agent ReAct, it achieves competitive performance compared with Win-CLIP, demonstrating the potential of agentic reasoning for AD. However, a clear gap still exists between ReAct and AnomalyAgent, suggesting that generic MLLM agents lack AD-specific rea-soning guidance and calibrated normality priors for reliable anomaly understanding. In contrast, AnomalyAgent explicitly organizes anomaly-centric tools within a structured reasoning workflow, enabling more reliable anomaly decisions across diverse AD scenarios. Moreover, the consistently stronger F1-max results achieved by MLLM-based methods, particularly ReAct and AnomalyAgent, indicate that reasoning-based anomaly analysis produces more discriminative anomaly decisions with better normal/anomaly separation than conventional anomaly scoring-based methods. 
+
+Few-shot Anomaly Detection. Table 2 reports the 1-, 2-, and 4-shot AD results. Among training-free baselines, AnomalyAgent achieves the best performance in the majority of dataset–shot settings and 7Table 2: AUROC and F1-max results across five datasets under FSAD settings. Best results among training-free methods are highlighted in red , while second-best results are underlined . Trainable methods are shaded in gray for reference only since they require additional training.                                                                                                                                                                                                                                           
+
+> Shot Dataset Training-Free Methods Trainable Methods
+> WinCLIP+ PatchCore Mem0 AnomalyAgent AprilGAN InCTRL AUROC F1-max AUROC F1-max AUROC F1-max AUROC F1-max AUROC F1-max AUROC F1-max 1-shot MVTec 94.1 92.0 83.8 87.4 83.0 89.2 85.0 91.0 92.2 89.4 93.0 91.5 MVTec LOCO 61.2 56.0 60.9 54.0 53.3 77.3 64.0 78.6 64.6 50.0 60.0 57.3 LAG 55.1 50.5 40.8 49.3 60.5 81.3 66.1 82.0 77.3 68.8 47.0 67.0 HeadCT 81.3 82.0 65.1 85.6 89.0 89.8 91.1 91.2 89.6 83.4 90.2 91.6 Kaputt 55.9 55.6 51.0 63.0 55.6 46.3 61.9 49.5 57.4 56.8 58.0 57.2 Average 69.5 67.2 60.3 67.9 68.3 76.8 73.6 78.5 76.2 69.7 69.6 72.9 2-shot MVTec 95.0 92.5 86.8 88.4 80.6 89.0 85.6 91.2 82.8 88.6 94.3 92.9 MVTec LOCO 63.3 67.2 61.7 53.9 52.6 77.3 66.3 79.4 65.2 59.7 61.6 58.2 LAG 59.5 58.5 59.6 68.1 59.3 81.3 67.0 82.3 77.1 73.0 58.8 76.9 HeadCT 81.2 77.6 70.0 77.0 89.5 90.2 91.5 91.6 89.6 86.0 91.5 92.2 Kaputt 55.7 55.9 50.1 52.1 57.4 48.3 63.0 51.5 57.1 56.5 57.7 56.9 Average 70.9 70.3 65.6 67.9 67.9 77.2 74.7 79.2 74.4 72.8 72.8 75.4 4-shot MVTec 94.9 93.0 89.7 89.5 82.4 89.2 86.4 91.8 82.7 88.9 95.3 93.8 MVTec LOCO 63.9 66.8 64.2 54.6 53.6 77.3 67.4 79.9 65.4 53.9 62.8 62.2 LAG 65.0 66.9 67.9 73.0 60.1 81.3 68.8 83.2 77.2 75.8 72.4 80.8 HeadCT 84.0 79.5 79.1 92.3 90.0 90.7 92.0 91.4 90.9 92.1 91.8 92.3 Kaputt 55.6 58.2 50.2 52.1 56.8 47.2 62.7 51.8 57.4 57.7 57.3 57.1 Average 72.7 72.9 70.2 72.3 68.6 77.1 75.5 79.6 74.7 73.7 75.9 77.2
+
+consistently obtains the highest average AUROC and F1-max across all shot numbers, surpassing the strongest training-free baseline by up to 2.8% AUROC and 2.5% F1-max . Similar trends to the zero-shot setting can also be observed for both VLM-based and MLLM-based methods. Compared with conventional VLM-based FSAD methods, AnomalyAgent shows particularly strong improvements on datasets requiring contextual and relational understanding, while generic MLLM agents still exhibit clear limitations due to the lack of AD-specific reasoning guidance and calibrated normality priors. More importantly, AnomalyAgent exhibits stable cross-shot improvement, with performance consistently increasing from 1-shot to 4-shot. In contrast, Mem0, which equips the zero-shot version of AnomalyAgent with a generic memory module, does not reliably benefit from additional shots. This suggests that the advantage of AnomalyAgent comes not merely from memory augmentation, but from an AD-specific memory mechanism that transforms few-shot normal references into effective in-context normality priors for reasoning calibration. Although trainable methods such as InCTRL still achieve slightly stronger performance through AD-specific optimization, AnomalyAgent remains highly competitive without any training or parameter adaptation, further validating the effectiveness of memory-calibrated agentic reasoning for FSAD. 
+
+4.2 Analysis of AnomalyAgent Ablation Study. In this section, we analyze the key design choices in AnomalyA-gent under both zero-shot and few-shot settings. Unless otherwise specified, GPT-4.1-mini is adopted as the default MLLM throughout this analysis for efficiency considerations. Table 3: Ablation study on MVTec and MVTec LOCO under zero-shot and few-shot settings. The best and second-best results are highlighted in bold 
+
+and underline, respectively.                                   
+
+> Setting Model MVTec MVTec LOCO
+> AUROC F1-max AUROC F1-max Zero-shot
+> Base 65.8 81.7 53.2 49.1
+> w. Ref. 67.2 84.3 52.8 50.3
+> w. Ref. & V-Tools 73.4 86.6 51.7 48.6
+> AnomalyAgent 81.4 89.4 60.8 75.7 Few-shot
+> w. Hard-Normal 79.3 88.1 58.4 72.9
+> w. Calibration 82.3 89.6 61.3 75.5
+> AnomalyAgent 83.5 90.4 62.0 77.1
+
+Table 3 presents the ablation results on MVTec and MVTec LOCO. Under the zero-shot set-ting, the ‘ Base ’ model, which only contains the Planner and Reasoner, achieves limited performance, especially on the challenging dataset MVTec LOCO, where structural con-sistency and category-level priors are more critical. Introducing reflective reasoning (‘ w. Ref. ’) only leads to marginal improvements, suggesting that reasoning loops alone are in-sufficient without additional AD-related evi-dence or external guidance. Further incorpo-rating general visual tools ( i.e. , ‘ w. Ref. & V-Tools ’) significantly improves the performance 8on MVTec, demonstrating the importance of enhanced visual evidence for the detection of simple anomalies. However, the performance on MVTec LOCO slightly drops, indicating that general visual processing alone is insufficient for the detection of complex anomalies, e.g. , logical anomalies in MVTec LOCO. In contrast, AnomalyAgent (the zero-shot version) consistently achieves the best performance across both datasets under the zero-shot setting, suggesting that the proposed anomaly-centric toolset provides valuable anomaly priors for effective detection of both simple and complex anomalies. This also indicate that such toolset should be explicitly integrated into the reasoning workflow rather than treated as optional tools. 
+
+Figure 3: Hyperparameter analysis. 
+
+For the few-shot setting, all variants are built upon the zero-shot version of AnomalyAgent. The variant ‘ w. Hard-Normal ’ injects hard-normal information extracted from the few-shot normal references, while ‘ w. Calibration ’ uses few-shot samples to calibrate the cross-modal prior tools toward the target-data normal pat-terns. It is clear that using hard-normal infor-mation alone leads to only limited improve-ments (‘ w. Hard-Normal ’ vs. the zero-shot AnomalyAgent), suggesting that simply pro-viding additional normal descriptions is insuffi-cient for effective few-shot anomaly reasoning. In contrast, the calibration variant achieves con-sistently stronger performance, indicating that few-shot samples are more effective when used to adapt anomaly reasoning toward the target-data normal distribution. Finally, integrating both hard-normal information and calibration into AnomalyAgent ( i.e. , the few-shot AnomalyAgent) yields the best overall performance, demonstrating that explicit normality priors and memory-calibrated reasoning are complementary for few-shot anomaly detection. 
+
+Hyperparameter Sensitivity. AnomalyAgent contains two key hyperparameters: K, which controls the number of selected atomic candidates in counterfactual template analysis, and N , which denotes the number of consecutive ‘Normal’ judgments required for agent termination. Fig. 3 presents the corresponding hyperparameter sensitivity analysis on MVTec and MVTec LOCO. As shown in Fig. 3(a), the performance first improves and then slightly drops as K increases. A small K
+
+may provide insufficient anomaly-relevant evidence for reliable reasoning, while an overly large K
+
+can introduce redundant or noisy candidates that weaken the discriminability of the counterfactual analysis. Overall, AnomalyAgent achieves the best trade-off around K = 5 . Fig. 3(b) analyzes the effect of N . Increasing N from 1 to 3 consistently improves the performance, suggesting that requiring multiple consecutive normal judgments helps suppress premature normal predictions and leads to more reliable anomaly decisions. However, further increasing N to 4 slightly degrades the performance, possibly because excessive confirmation introduces over-conservative reasoning behavior. Finally, Fig. 3(c) compares different MLLM backbones. Larger and stronger MLLMs consistently lead to improved anomaly detection performance, verifying that the proposed reasoning framework can effectively benefit from stronger multimodal reasoning capability. 
+
+## 5 Conclusion 
+
+This work introduces AnomalyAgent, offering a principled agentic framework that unleashes the superior reasoning abilities of MLLMs for training-free zero- and few-shot AD. This is not viable to the generic agentic models due to the lack of anomaly-centric priors and normality. To tackle this challenge, two novel components, including a comprehensive anomaly-centric toolset and self calibration-based memory mechanism, are introduced in AnomalyAgent. Our extensive experiments show that, with the support of these two components, AnomalyAgent achieves promising zero- and few-shot AD performance, significantly outperforming training-free VLM-based AD models and generic MLLM-based agents, with competitive performance to SotA trainable VLM-based methods. 9References 
+
+[1] Jinze Bai, Shuai Bai, Yunfei Chu, Zeyu Cui, Kai Dang, Xiaodong Deng, Yang Fan, Wenbin Ge, Yu Han, Fei Huang, et al. Qwen technical report. arXiv preprint arXiv:2309.16609 , 2023. 2 [2] Paul Bergmann, Kilian Batzner, Michael Fauser, David Sattlegger, and Carsten Steger. Beyond dents and scratches: Logical constraints in unsupervised anomaly detection and localization. International Journal of Computer Vision , 130(4):947–969, 2022. 1, 2, 6 [3] Paul Bergmann, Michael Fauser, David Sattlegger, and Carsten Steger. Mvtec ad–a comprehensive real-world dataset for unsupervised anomaly detection. In Proceedings of the IEEE/CVF conference on computer vision and pattern recognition , pages 9592–9600, 2019. 1, 6 [4] Yunkang Cao, Xiaohao Xu, Jiangning Zhang, Yuqi Cheng, Xiaonan Huang, Guansong Pang, and Weim-ing Shen. A survey on visual anomaly detection: Challenge, approach, and prospect. arXiv preprint arXiv:2401.16402 , 2024. 1 [5] Yunkang Cao, Jiangning Zhang, Luca Frittoli, Yuqi Cheng, Weiming Shen, and Giacomo Boracchi. Adaclip: Adapting clip with hybrid learnable prompts for zero-shot anomaly detection. In European Conference on Computer Vision , pages 55–72, 2024. 1, 2, 3, 7 [6] Yuhao Chao, Jie Liu, Jie Tang, and Gangshan Wu. Anomalyr1: A grpo-based end-to-end mllm for industrial anomaly detection. arXiv preprint arXiv:2504.11914 , 2025. 2, 3 [7] Xuhai Chen, Yue Han, and Jiangning Zhang. April-gan: A zero-/few-shot anomaly classification and segmentation method for cvpr 2023 vand workshop challenge tracks 1&2: 1st place on zero-shot ad and 4th place on few-shot ad. arXiv preprint arXiv:2305.17382 , 2023. 2, 3, 7 [8] Prateek Chhikara, Dev Khant, Saket Aryan, Taranjeet Singh, and Deshraj Yadav. Mem0: Building production-ready ai agents with scalable long-term memory. arXiv preprint arXiv:2504.19413 , 2025. 3, 7 [9] Qingqing Fang, Wenxi Lv, and Qinliang Su. Af-clip: Zero-shot anomaly detection via anomaly-focused clip adaptation. In Proceedings of the 33rd ACM International Conference on Multimedia , pages 4846–4855, 2025. 1 [10] Matic Fuˇ cka, Vitjan Zavrtanik, and Danijel Skoˇ caj. Anomalyvfm–transforming vision foundation models into zero-shot anomaly detectors. arXiv preprint arXiv:2601.20524 , 2026. 7 [11] Zhaopeng Gu, Bingke Zhu, Guibo Zhu, Yingying Chen, Hao Li, Ming Tang, and Jinqiao Wang. Filo: Zero-shot anomaly detection by fine-grained description and high-quality localization. In Proceedings of the 32nd ACM International Conference on Multimedia , pages 2041–2049, 2024. 3 [12] Zhaopeng Gu, Bingke Zhu, Guibo Zhu, Yingying Chen, Ming Tang, and Jinqiao Wang. Anomalygpt: Detecting industrial anomalies using large vision-language models. Proceedings of the AAAI Conference on Artificial Intelligence , 2024. 2, 3 [13] Sebastian Höfer, Dorian F Henning, Artemij Amiranashvili, Douglas Morrison, Mariliza Tzes, Ingmar Posner, Marc Matvienko, Alessandro Rennola, and Anton Milan. Kaputt: A large-scale dataset for visual defect detection. In Proceedings of the IEEE/CVF International Conference on Computer Vision , pages 24224–24233, 2025. 1, 2, 6 [14] Jongheon Jeong, Yang Zou, Taewan Kim, Dongqing Zhang, Avinash Ravichandran, and Onkar Dabeer. Winclip: Zero-/few-shot anomaly classification and segmentation. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition , pages 19606–19616, 2023. 1, 3, 4, 7 [15] Xi Jiang, Jian Li, Hanqiu Deng, Yong Liu, Bin-Bin Gao, Yifeng Zhou, Jialin Li, Chengjie Wang, and Feng Zheng. Mmad: A comprehensive benchmark for multimodal large language models in industrial anomaly detection. In Proceedings of The International Conference on Learning Representations , 2025. 2, 3 [16] Bo Li, Yuanhan Zhang, Dong Guo, Renrui Zhang, Feng Li, Hao Zhang, Kaichen Zhang, Peiyuan Zhang, Yanwei Li, Ziwei Liu, et al. Llava-onevision: Easy visual task transfer. arXiv preprint arXiv:2408.03326 ,2024. 2 [17] Liu Li, Mai Xu, Xiaofei Wang, Lai Jiang, and Hanruo Liu. Attention based glaucoma detection: A large-scale database and cnn model. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition , pages 10571–10580, 2019. 6 [18] Xiaofan Li, Zhizhong Zhang, Xin Tan, Chengwei Chen, Yanyun Qu, Yuan Xie, and Lizhuang Ma. Promptad: Learning prompts with only normal samples for few-shot anomaly detection. Proceedings of the IEEE/CVF conference on computer vision and pattern recognition , 2024. 3 
+
+10 [19] Aixin Liu, Bei Feng, Bing Xue, Bingxuan Wang, Bochao Wu, Chengda Lu, Chenggang Zhao, Chengqi Deng, Chenyu Zhang, Chong Ruan, et al. Deepseek-v3 technical report. arXiv preprint arXiv:2412.19437 ,2024. 2 [20] Wenxin Ma, Xu Zhang, Qingsong Yao, Fenghe Tang, Chenxu Wu, Yingtai Li, Rui Yan, Zihang Jiang, and S Kevin Zhou. Aa-clip: Enhancing zero-shot anomaly detection via anomaly-aware clip. In Proceedings of the Computer Vision and Pattern Recognition Conference , pages 4744–4754, 2025. 1, 2 [21] OpenAI. Gpt-4.1 mini. https://platform.openai.com/docs/models , 2025. 7 [22] OpenAI. Gpt-5.1. https://platform.openai.com/docs/models , 2025. 7 [23] Guansong Pang, Chunhua Shen, Longbing Cao, and Anton Van Den Hengel. Deep learning for anomaly detection: A review. ACM Computing Surveys , 54(2):1–38, 2021. 1 [24] Zhen Qu, Xian Tao, Xinyi Gong, ShiChen Qu, Xiaopei Zhang, Xingang Wang, Fei Shen, Zhengtao Zhang, Mukesh Prasad, and Guiguang Ding. Dictas: A framework for class-generalizable few-shot anomaly segmentation via dictionary lookup. In Proceedings of the IEEE/CVF International Conference on Computer Vision , pages 20519–20528, 2025. 1, 2 [25] Alec Radford, Jong Wook Kim, Chris Hallacy, Aditya Ramesh, Gabriel Goh, Sandhini Agarwal, Girish Sastry, Amanda Askell, Pamela Mishkin, Jack Clark, et al. Learning transferable visual models from natural language supervision. In International conference on machine learning , pages 8748–8763, 2021. 3, 7, 13 [26] Karsten Roth, Latha Pemula, Joaquin Zepeda, Bernhard Schölkopf, Thomas Brox, and Peter Gehler. Towards total recall in industrial anomaly detection. In Proceedings of the IEEE/CVF conference on computer vision and pattern recognition , pages 14318–14328, 2022. 2, 7 [27] Mohammadreza Salehi, Niousha Sadjadi, Soroosh Baselizadeh, Mohammad H Rohban, and Hamid R Rabiee. Multiresolution knowledge distillation for anomaly detection. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition , pages 14902–14912, 2021. 1, 6 [28] Noah Shinn, Federico Cassano, Ashwin Gopinath, Karthik Narasimhan, and Shunyu Yao. Reflexion: Language agents with verbal reinforcement learning. Advances in neural information processing systems ,36:8634–8652, 2023. 3 [29] Xintao Wang, Liangbin Xie, Chao Dong, and Ying Shan. Real-esrgan: Training real-world blind super-resolution with pure synthetic data. In Proceedings of the IEEE/CVF international conference on computer vision , pages 1905–1914, 2021. 13 [30] Peng Wu, Chengyu Pan, Yuting Yan, Guansong Pang, Qingsen Yan, Peng Wang, and Yanning Zhang. Deep learning for video anomaly detection: A review. IEEE Transactions on Neural Networks and Learning Systems , 2026. 1 [31] Chaoran Xu, Chengkan Lv, Qiyu Chen, Feng Zhang, and Zhengtao Zhang. Mrad: Zero-shot anomaly detection with memory-driven retrieval. In Proceedings of The International Conference on Learning Representations , 2026. 1, 2, 7 [32] Jiacong Xu, Shao-Yuan Lo, Bardia Safaei, Vishal M Patel, and Isht Dwivedi. Towards zero-shot anomaly detection and reasoning with multimodal large language models. In Proceedings of the Computer Vision and Pattern Recognition Conference , pages 20370–20382, 2025. 2, 3 [33] An Yang et al. Qwen3 technical report. arXiv preprint arXiv:2505.xxxxx , 2025. 7 [34] Shunyu Yao, Jeffrey Zhao, Dian Yu, Nan Du, Izhak Shafran, Karthik Narasimhan, and Yuan Cao. React: Synergizing reasoning and acting in language models. In Proceedings of The International Conference on Learning Representations , 2023. 3, 7 [35] Xincheng Yao, Zixin Chen, Gao Chao, Guangtao Zhai, and Chongyang Zhang. Resad: A simple framework for class generalizable anomaly detection. 2024. 3 [36] Jinjin Zhang, Guodong Wang, Yizhou Jin, and Di Huang. Towards training-free anomaly detection with vision and language foundation models. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition , pages 15204–15213, 2025. 1, 2, 3, 7 [37] Yu Zheng, Ming Jin, Yixin Liu, Lianhua Chi, Khoa T Phan, and Yi-Ping Phoebe Chen. Generative and contrastive self-supervised learning for graph anomaly detection. IEEE Transactions on Knowledge and Data Engineering , 35(12):12220–12233, 2021. 1 
+
+11 [38] Qihang Zhou, Guansong Pang, Yu Tian, Shibo He, and Jiming Chen. Anomalyclip: Object-agnostic prompt learning for zero-shot anomaly detection. In Proceedings of The International Conference on Learning Representations , 2024. 1, 2, 3, 7 [39] Jiawen Zhu, Yew-Soon Ong, Chunhua Shen, and Guansong Pang. Fine-grained abnormality prompt learning for zero-shot anomaly detection. In Proceedings of the IEEE/CVF International Conference on Computer Vision , pages 22241–22251, 2025. 1, 2, 3, 7 [40] Jiawen Zhu and Guansong Pang. Toward generalist anomaly detection via in-context residual learning with few-shot sample prompts. In Proceedings of the IEEE/CVF conference on computer vision and pattern recognition , pages 17826–17836, 2024. 2, 3, 7 
+
+12 A More Implmentation Details 
+
+A.1 Details of Visual Tool Use 
+
+AnomalyAgent equips the MLLM agent with a set of lightweight visual tools to support anomaly-oriented evidence gathering. These tools provide complementary observations under different visual conditions, and their outputs are not used as standalone anomaly predictions. Instead, the processed observations are returned to the planner–reasoner–reflector loop, where they are considered together with the original image, semantic priors, counterfactual evidence, and accumulated reasoning history. All tools are invoked only at inference time and do not require target-dataset training or parameter adaptation. 
+
+Image Denoising. The denoising tool is implemented with OpenCV’s fast non-local means filtering, which suppresses color and spatial noise while preserving local image structures. In AnomalyAgent, this tool is useful when suspected defects may be confused with acquisition noise, compression artifacts, or low-light degradation, allowing the reasoner to verify whether the abnormal evidence remains visible after noise suppression. 
+
+Image Deblurring. The deblurring tool is implemented with unsharp masking based on Gaussian blur subtraction. It enhances local edges and contours without introducing any learned adaptation. This tool is used when anomaly hypotheses depend on boundary sharpness, object shape, or surface discontinuities, helping the agent distinguish true structural irregularities from blur-induced ambiguity. 
+
+Brightness Enhancement. The brightness enhancement tool applies contrast-limited adaptive histogram equalization (CLAHE) to the L-channel in the LAB color space. This operation improves local contrast while limiting over-amplification. In the reasoning loop, it is used to re-examine regions affected by under-exposure or over-exposure, where abnormal patterns may otherwise be hidden or visually exaggerated. 
+
+Image Super-Resolution. The super-resolution tool uses Real-ESRGAN [ 29 ] to enhance image resolution and recover fine-grained texture details. This provides additional visual evidence for cases where the anomaly decision relies on small defects, subtle texture changes, or local missing components. The enhanced image is treated as an auxiliary observation for verification rather than as a replacement for the original image. 
+
+Image Retrieval. The retrieval tool uses CLIP-based visual-textual retrieval [ 25 ], where cosine similarity between CLIP embeddings is used to score relevance. This tool provides contextual reference evidence by retrieving previously observed examples related to the current query or suspected abnormal pattern. The retrieved results are used to support comparison with normal or suspicious visual patterns, but the final anomaly decision is still made by the reasoner through the agentic reasoning process. 
+
+## B Prompt Templates 
+
+13 Planner Prompt for Anomaly Detection 
+
+Your task is to analyze the provided image(s) and plan the anomaly-detection workflow. You have access to a general template 
+
+analysis from keyword heuristic decision (if available), which provides semantic evidence signals based on caption-prototype 
+
+comparison. Use this information to inform your planning, but do not rely solely on it. 
+
+You MUST: 
+
+1. Examine the image for potential anomalies (color, texture, shape, patterns, structure). 
+
+2. Decide whether additional image processing is needed. 
+
+3. Either: 
+
+- Call exactly ONE image-processing tool using the tool calling mechanism, OR 
+
+- Skip tool calling if you have already identified obvious anomalies. 
+
+IMPORTANT (CRITICAL PROTOCOL — MUST FOLLOW EXACTLY): 
+
+You MUST ALWAYS provide a JSON object in the assistant message content with the following structure: 
+
+{
+
+"decision": "call_tool" or "skip_tool", 
+
+"potential_anomalies": "Describe suspected or observed anomalies, with locations and visual characteristics. If none, describe 
+
+normal appearance.", 
+
+"heuristic_prompt": "Guidance for further analysis: regions to re-inspect, features to verify, or next-step strategy." 
+
+}
+
+This JSON is ALWAYS required, regardless of whether you call a tool or skip tool calling. 
+
+Tool calling rules: 
+
+- If you choose "decision": "call_tool": 
+
+- Use the tool calling mechanism to invoke the selected tool. 
+
+- You MUST include the required JSON in the SAME assistant message content (even if it's very short, just the JSON). 
+
+- The JSON can be in the same message that contains the tool_calls. 
+
+- If you choose "decision": "skip_tool": 
+
+- Do NOT call any tools. 
+
+- Output ONLY the JSON object in your response content. 
+
+Additional rules: 
+
+- Tool choice MUST be based on FUNCTION, NOT list order. 
+
+- You may call tools WITHOUT providing image_base64; the image will be extracted automatically. 
+
+- Do NOT mention tool names if you skip tool calling. 
+
+Available tools (arbitrary order): 
+
+- image_denoising: reduce noise or grain 
+
+- image_deblurring: sharpen blurry or out-of-focus images 
+
+- image_super_resolution: enhance fine-grained details 
+
+- image_zooming: magnify specific regions 
+
+- image_brightness_enhancement: enhance brightness for dimly lit or overexposed images using CLAHE 
+
+Decision Guide: 
+
+- If noisy → image_denoising 
+
+- If blurry → image_deblurring 
+
+- If low-resolution → image_super_resolution 
+
+- If specific region needs close inspection → image_zooming 
+
+- If dimly lit or overexposed → image_brightness_enhancement 
+
+- If image looks already clear → use super-resolution or zoom for finer detail analysis Figure 4: Planner Prompt for Anomaly Detection. 14 Reasoner Prompt for Anomaly Detection 
+
+Your task is to make a FINAL judgment about whether the image contains anomalies. 
+
+Use ALL available information, including: 
+
+- General template analysis from keyword heuristic decision (semantic evidence signals based on caption-prototype comparison) -
+
+available in first call 
+
+- Counterfactual template analysis from atomic candidate matching (evidence report based on similarity matching) - available in 
+
+later calls (after reflection) 
+
+- Potential anomalies identified in earlier stages 
+
+- Heuristic prompts 
+
+- Any processed/enhanced image results 
+
+- Your own analysis based on the current image 
+
+Note: In the first call, you will receive general template analysis. In later calls (after reflection), you will receive counterfactual 
+
+template analysis instead. 
+
+Respond with a JSON object containing exactly two fields: 
+
+{
+
+"result": "One of: 'anomalous', 'normal', or 'uncertain'. 
+
+Use 'anomalous' if you judge that anomalies exist. 
+
+Use 'normal' if the image appears consistent with expected appearance. 
+
+Use 'uncertain' if the evidence is mixed, ambiguous, or insufficient.", 
+
+"reason": "A detailed explanation of your reasoning, including: 
+
+(1) what specific issues were found or why the image seems normal, 
+
+(2) how previous findings influenced your judgment, 
+
+(3) your confidence level, 
+
+(4) if uncertain, what information is still missing." 
+
+}
+
+Guidelines: 
+
+- Be specific about which visual or analytical factors led to your conclusion. 
+
+- Integrate past findings with your current understanding. 
+
+- Only output the JSON object, with no extra text. 
+
+- <<IMAGE_SOURCE_INSTRUCTION>> 
+
+- <<TOOL_FAILURE_INSTRUCTION>> Figure 5: Reasoner Prompt for Anomaly Detection. 15 Your task is to RE-ANALYZE the case to verify or refine the previous conclusion. 
+
+Use ALL available information: 
+
+- General template analysis from keyword heuristic decision (semantic evidence signals based on caption-prototype comparison) 
+
+- Counterfactual template analysis from atomic candidate matching (evidence report based on similarity matching) 
+
+- Previous potential anomalies 
+
+- The heuristic prompt 
+
+- Which tools were used previously 
+
+- Any processed or enhanced visual results 
+
+You MUST: 
+
+1. Decide whether new information is needed. 
+
+2. Either: 
+
+- Call exactly ONE image-processing tool (prefer a tool NOT used previously; if all tools were used, you may reuse one with a 
+
+different focus), OR 
+
+- Skip tool calling if the existing evidence is sufficient. 
+
+3. Provide refined potential anomalies and a refined heuristic prompt. 
+
+IMPORTANT (CRITICAL PROTOCOL — MUST FOLLOW EXACTLY): 
+
+You MUST ALWAYS provide a JSON object in the assistant message content with the following structure: 
+
+{
+
+"decision": "call_tool" or "skip_tool", 
+
+"image_target": "raw" or "augmented", 
+
+"potential_anomalies": "Refined description of suspected or observed anomalies, with locations and visual characteristics.", 
+
+"heuristic_prompt": "Refined guidance for further analysis: regions to re-inspect, features to verify, or next-step strategy." 
+
+}
+
+This JSON is ALWAYS required, regardless of whether you call a tool or skip tool calling. 
+
+Tool calling rules: 
+
+- If you choose "decision": "call_tool": 
+
+- Use the tool calling mechanism to invoke the selected tool. 
+
+- You MUST include the required JSON in the SAME assistant message content (even if it's very short, just the JSON). 
+
+- The JSON can be in the same message that contains the tool_calls. 
+
+- If you choose "decision": "skip_tool": 
+
+- Do NOT call any tools. 
+
+- Do NOT mention any tool names. 
+
+- Output ONLY the JSON object in your response content. 
+
+<<TOOL_TARGET_INSTRUCTION>> 
+
+Additional rules: 
+
+- Tool selection MUST be based on FUNCTION, NOT list order. 
+
+- The goal is to gather NEW information from a DIFFERENT angle. 
+
+- You may call tools WITHOUT providing image_base64; the image will be extracted automatically. 
+
+Available tools: 
+
+- image_denoising: reduce noise or grain 
+
+- image_deblurring: sharpen blurry or out-of-focus images 
+
+- image_super_resolution: enhance fine-grained details 
+
+- image_zooming: magnify specific regions 
+
+- image_brightness_enhancement: enhance brightness for dimly lit or overexposed images using CLAHE 
+
+Re-analysis goals: 
+
+- If previous result was "normal": verify that no subtle or overlooked anomalies exist. 
+
+- If previous result was "uncertain": focus on resolving ambiguity. 
+
+- If previous result contained potential anomalies: refine, validate, or challenge them. 
+
+Reflector Prompt for Anomaly Detection Figure 6: Reflector Prompt for Anomaly Detection. 16 Description Prompt for Anomaly Detection 
+
+You are performing visual condition inspection for anomaly detection. 
+
+Your task is to generate MULTIPLE concise descriptions of the object's visual condition from DIFFERENT PERSPECTIVES. 
+
+Carefully examine the object in the image and produce EXACTLY THREE short captions, each focusing on a different aspect: 
+
+Perspective 1 (Overall Condition): 
+
+- Describe whether the object appears intact, normal, clean, or obviously damaged. 
+
+Perspective 2 (Surface & Texture): 
+
+- Describe surface-level details such as scratches, cracks, dents, contamination,missing parts, deformation, or unusual texture. 
+
+Perspective 3 (Anomaly-Oriented Judgment): 
+
+- Describe whether there are any visual signs that could indicate defects, damage, or abnormality, even if subtle. 
+
+Guidelines: 
+
+- Each caption MUST be a single short English sentence. 
+
+- Use objective visual observations only. 
+
+- Do NOT explain reasoning. 
+
+- Do NOT speculate beyond what is visible. 
+
+- Do NOT repeat the same wording across captions. 
+
+Your response MUST strictly follow this JSON format: 
+
+{
+
+"captions": [ 
+
+"Caption from Perspective 1", 
+
+"Caption from Perspective 2", 
+
+"Caption from Perspective 3" 
+
+]
+
+}
+
+Return ONLY the JSON object, with no additional text. Figure 7: Description Prompt for Anomaly Detection. 17 Candidate Generation Prompt for Anomaly Detection 
+
+You are generating atomic candidate descriptions for anomaly detection. 
+
+Given a class name (e.g., "bottle"), generate two sets of atomic candidates in strict JSON format: 
+
+1. anomaly_candidates: 10-12 short phrases or sentences describing anomalies such as: 
+
+- Surface issues (scratches, cracks, dents, stains) 
+
+- Deformations (bent, warped, misshapen) 
+
+- Missing parts (broken, incomplete) 
+
+- Contamination (dirty, discolored, foreign objects) 
+
+- Label issues (misaligned, damaged labels) 
+
+2. normal_candidates: The same quantity as anomaly_candidates, describing the object in complete and intact state. 
+
+Guidelines: 
+
+- Each candidate MUST be a short phrase or sentence (1-10 words). 
+
+- Candidates should be specific and concrete. 
+
+- Do NOT repeat similar descriptions. 
+
+- anomaly_candidates should focus on defect/anomaly characteristics. 
+
+- normal_candidates should focus on intact/complete characteristics. 
+
+Constraints: 
+
+- Return candidates grouped to cover: surface, shape, parts, contamination, label/printing (at least 2 each). 
+
+- If a category is not applicable for this class (e.g., carpet/grid/tile may have no label/parts), replace it with other plausible defect 
+
+types, but keep total count unchanged. 
+
+- Do NOT use generic words like 'defective', 'damaged', 'abnormal' alone; always be specific (e.g., 'cracked surface', 'missing cap'). 
+
+- Do NOT treat synonyms as different candidates (e.g., 'scratch' vs 'scratched surface' are redundant); avoid pseudo-diversity. 
+
+Your response MUST strictly follow this JSON format: 
+
+{
+
+"anomaly_candidates": [ 
+
+"candidate 1", 
+
+"candidate 2", 
+
+... 
+
+], 
+
+"normal_candidates": [ 
+
+"candidate 1", 
+
+"candidate 2", 
+
+... 
+
+]
+
+}
+
+Return ONLY the JSON object, with no additional text. Figure 8: Candidate Generation Prompt for Anomaly Detection. 18 Few-Shot Entry Hard-Negative Reflection Prompt 
+
+You are reviewing a normal few-shot industrial inspection sample that the reasoner judged incorrectly. 
+
+The sample is known to be NORMAL. You will receive the image and the agent metadata below. 
+
+Your task: 
+
+1. Decide whether the image caption likely misled the reasoner into calling this normal sample anomalous. 
+
+2. If the caption was misleading, write one concise hard-negative description: a visual cue that sounds suspicious in the caption but 
+
+is actually normal for this class/sample. 
+
+3. If the caption was not the cause of the mistake, do not invent a hard-negative description. 
+
+Return JSON only: 
+
+{{ 
+
+"caption_misled_reasoner": true or false, 
+
+"hard_negative_description": "Concise description, or empty string if not applicable.", 
+
+"misleading_caption_evidence": "What phrase or visual framing was misleading, or empty string.", 
+
+"why_normal_for_this_class": "Why the cue should not be overcalled as anomalous.", 
+
+"confidence": 0.0 
+
+}} 
+
+Sample metadata JSON: 
+
+{sample_json} Figure 9: Few-Shot Entry Hard-Negative Reflection Prompt. Few-Shot Class Hard-Negative Summary Prompt 
+
+You are building a class-level hard-negative calibration note for industrial anomaly detection. 
+
+You will receive hard-negative descriptions mined from NORMAL few-shot samples of one class. These descriptions refer to 
+
+visual cues that can look anomalous or suspicious but were observed in normal samples. 
+
+Your task: 
+
+- Produce one compact class hard-negative description. 
+
+- Emphasize what looks abnormal but is often normal for this class. 
+
+- Keep it specific and useful for a reasoner. 
+
+- Do not claim that all such cues are always normal; phrase it as a caution against overcalling. 
+
+Return JSON only: 
+
+{{ 
+
+"class_hard_negative_description": "One concise paragraph." 
+
+}} 
+
+Class hard-negative input JSON: 
+
+{class_json} 
+
+Figure 10: Few-Shot Class Hard-Negative Summary Prompt. 19
