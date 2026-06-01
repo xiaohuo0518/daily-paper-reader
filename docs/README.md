@@ -6,47 +6,38 @@
 </div>
 
 ## 每次日报
-- 最新运行日期：2026-05-31
-- 运行时间：2026-05-31 20:11:34 UTC
+- 最新运行日期：2026-06-01
+- 运行时间：2026-06-01 22:09:09 UTC
 - 运行状态：成功
-- 本次总论文数：8
-- 精读区：0
-- 速读区：8
+- 本次总论文数：6
+- 精读区：2
+- 速读区：4
 
 ### 今日简报（AI）
-今日速读8篇论文，聚焦大规模类别异常检测与无人机遥测异常挖掘。  
-值得关注的两大方向：双原型条件扩散模型应对多类无监督检测，以及时序统计增强方法在真实无人机遥测中的实际采矿案例。  
-建议优先了解这两篇6分论文中的具体方法设计，便于迁移到类似工业数据场景。
-- 详情：[/202605/31/README](/202605/31/README)
+今日推出6篇论文精读速读组合，聚焦具身智能与机器人学习前沿。最值得关注的是ELAN4D和RDGen，前者通过插拔式4D监督增强视觉-语言-动作模型，后者用强化学习生成高质量机器人演示数据。建议优先精读这两篇，其余速读即可快速了解对抗性推理、GPU加速刚体动力学和噪声鲁棒异常检测。
+- 详情：[/202606/01/README](/202606/01/README)
 
 ### 精读区论文标签
-- 本次无精读推荐。
+1. [ELAN4D: Embodiment-Centric 4D Supervision for Vision-Language-Action Models via Plug-and-Play Adaptation](/202606/01/2605.30484v1-elan4d-embodiment-centric-4d-supervision-for-vision-language-action-models-via-plug-and-play-adaptation)  
+   标签：评分：8.0/10、query:humanoid-ood
+   evidence：利用本体感受状态预测未来关键点轨迹以应对分布外泛化
+2. [RDGen: Demonstration Generation for High-Quality Robot Learning via Reinforcement Learning](/202606/01/2605.30957v1-rdgen-demonstration-generation-for-high-quality-robot-learning-via-reinforcement-learning)  
+   标签：评分：8.0/10、query:ur
+   evidence：通过强化学习生成机器人演示数据，直接相关于机器人数据集构建
 
 ### 速读区论文标签
-1. [Dual Prototype-Conditioned Diffusion Model for Scalable Multi-Class Unsupervised Anomaly Detection in Large Category Spaces](/202605/31/2605.24402v1-dual-prototype-conditioned-diffusion-model-for-scalable-multi-class-unsupervised-anomaly-detection-in-large-category-spaces)  
+1. [Don't Fool Me Twice: Adapting to Adversity in the Wild with Experience-Driven Reasoning](/202606/01/2605.31119v1-dont-fool-me-twice-adapting-to-adversity-in-the-wild-with-experience-driven-reasoning)  
+   标签：评分：7.0/10、query:humanoid-ood
+   evidence：移动机器人从扰动中在线持续学习并归因异常行为
+2. [Batched Differentiable Rigid Body Dynamics in PyTorch for GPU-Accelerated Robot Learning](/202606/01/2605.31481v1-batched-differentiable-rigid-body-dynamics-in-pytorch-for-gpu-accelerated-robot-learning)  
+   标签：评分：7.0/10、query:humanoid-ood
+   evidence：GPU加速刚体动力学仿真，支持故障注入环境
+3. [Memory-Distilled Selection for Noise-Robust Anomaly Detection](/202606/01/2605.26676v1-memory-distilled-selection-for-noise-robust-anomaly-detection)  
    标签：评分：6.0/10、query:humanoid-ood
-   evidence：使用原型条件扩散模型的无监督异常检测方法，与安全相关的OOD检测相关
-2. [AeroTSBoost: Temporal-Statistical Boosting for Real-World UAV Telemetry Anomaly Mining](/202605/31/2605.25639v1-aerotsboost-temporal-statistical-boosting-for-real-world-uav-telemetry-anomaly-mining)  
-   标签：评分：6.0/10、query:humanoid-ood
-   evidence：从无人机遥测流中进行异常检测，类似关节位置/速度/力矩/IMU信号
-3. [AeroTSBoost: Temporal-Statistical Boosting for Real-World UAV Telemetry Anomaly Mining](/202605/31/2605.25639v2-aerotsboost-temporal-statistical-boosting-for-real-world-uav-telemetry-anomaly-mining)  
-   标签：评分：6.0/10、query:humanoid-ood
-   evidence：从无人机遥测流中进行异常检测，类似关节位置/速度/力矩/IMU信号
-4. [OSMa-Bench++: Toward Open-Ended Benchmarking of Semantic Mapping for Manipulation with Prompt-Generated Synthetic Scenes](/202605/31/2605.26831v1-osma-bench-toward-open-ended-benchmarking-of-semantic-mapping-for-manipulation-with-prompt-generated-synthetic-scenes)  
+   evidence：异常检测方法可应用于机器人安全中的分布外检测
+4. [On-Device Robotic Planning: Eliminating Inference Redundancy for Efficient Decision-Making](/202606/01/2605.31460v1-on-device-robotic-planning-eliminating-inference-redundancy-for-efficient-decision-making)  
    标签：评分：6.0/10、query:ur
-   evidence：为机器人操作生成基准数据集
-5. [EventShiftFlow: Towards Hardware-efficient FPGA-based Flow Estimation](/202605/31/2605.28312v1-eventshiftflow-towards-hardware-efficient-fpga-based-flow-estimation)  
-   标签：评分：6.0/10、query:ur
-   evidence：基于FPGA的高效光流估计，适用于低延迟感知
-6. [ElegantVLA: Learning When to Think for Efficient Vision-Language-Action Models](/202605/31/2605.29438v1-elegantvla-learning-when-to-think-for-efficient-vision-language-action-models)  
-   标签：评分：6.0/10、query:ur
-   evidence：高效的VLA模型实现实时机器人控制，适用于边缘部署
-7. [VLAConf: Calibrated Task-Success Confidence for Vision-Language-Action Models](/202605/31/2605.29605v1-vlaconf-calibrated-task-success-confidence-for-vision-language-action-models)  
-   标签：评分：6.0/10、query:humanoid-ood
-   evidence：为VLA模型提供校准的任务成功置信度，支持故障预判和安全操作
-8. [AnomalyAgent: Training-Free Agentic Models for Zero-/Few-Shot Anomaly Detection](/202605/31/2605.30140v1-anomalyagent-training-free-agentic-models-for-zero-few-shot-anomaly-detection)  
-   标签：评分：6.0/10、query:humanoid-ood
-   evidence：使用多模态大语言模型进行零样本异常检测的方法
+   evidence：设备上规划实现高效决策，与边缘部署相关
 
 
 <div class="dpr-home-promo-card">

@@ -1,0 +1,274 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-06-01T22:01:34.899169+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 2,
+    "deep_divecandidates": 2,
+    "deep_cap": 7,
+    "deep_selected": 2,
+    "quick_candidates": 4,
+    "quick_skim_target": 12,
+    "quick_selected": 4
+  },
+  "deep_dive": [
+    {
+      "id": "2605.30484v1",
+      "source": "arxiv",
+      "title": "ELAN4D: Embodiment-Centric 4D Supervision for Vision-Language-Action Models via Plug-and-Play Adaptation",
+      "abstract": "Vision-Language-Action (VLA) models have shown promise for robotic manipulation, yet most existing policies operate reactively by directly regressing actions from current observations, without explicitly modeling future dynamics. This limits their ability to generalize under out-of-distribution perturbations. To address this issue, we propose ELAN4D, an embodiment-centric, 4D-aware training framework that enhances VLA policies with future robot keypoint tracks as predictive spatio-temporal supervision. Using only forward kinematics from proprioceptive states, we derive 3D displacement tracks of robot keypoints, such as joints and the end-effector, with negligible preprocess cost. These tracks provide metric and compact supervision without requiring external trackers or reconstruction. A plug-and-play auxiliary branch with a lightweight track decoder injects this 4D signal into the action expert while preserving the pretrained vision-language backbone through gradient isolation. The track decoder is discarded during inference, leaving the base policy interface unchanged. Extensive experiments on LIBERO, LIBERO-Plus, RoboTwin2.0 and real-world manipulation tasks demonstrate that ELAN4D consistently improves over strong VLA baselines, achieving the best overall performance and substantial gains under out-of-distribution perturbations, including camera, background, and layout shifts. These results highlight the effectiveness of embodiment-centric 4D supervision for building more robust and generalizable manipulation policies.",
+      "authors": [
+        "Zeyuan He",
+        "Bowen Yang",
+        "Zhirui Fang",
+        "Keru Zhou",
+        "Lei Jiang",
+        "Jingjing Qian",
+        "Fan Mo",
+        "Junchi Yan",
+        "Philip Torr",
+        "Xiu Li",
+        "Li Jiang",
+        "Jialin Yu"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-05-28T19:03:30+00:00",
+      "link": "https://arxiv.org/pdf/2605.30484v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "uses proprioceptive states to predict future keypoint tracks for OOD generalization",
+      "llm_evidence_cn": "利用本体感受状态预测未来关键点轨迹以应对分布外泛化",
+      "llm_evidence": "利用本体感受状态预测未来关键点轨迹以应对分布外泛化",
+      "canonical_evidence": "利用本体感受状态预测未来关键点轨迹以应对分布外泛化",
+      "llm_tldr_en": "ELAN4D enhances VLA policies with future robot keypoint tracks from proprioceptive forward kinematics, improving generalization under out-of-distribution perturbations.",
+      "llm_tldr_cn": "该论文提出ELAN4D，一种面向具身智能的4D感知训练框架，通过本体感受前向运动学推理出机器人关键点（如关节、末端执行器）的未来3D位移轨迹，作为时空预测监督来增强VLA政策。该方法在分布外扰动下显著提升了机器人操作的泛化能力，且预计算成本极低。",
+      "llm_tldr": "该论文提出ELAN4D，一种面向具身智能的4D感知训练框架，通过本体感受前向运动学推理出机器人关键点（如关节、末端执行器）的未来3D位移轨迹，作为时空预测监督来增强VLA政策。该方法在分布外扰动下显著提升了机器人操作的泛化能力，且预计算成本极低。",
+      "llm_tags": [
+        "query:humanoid-ood"
+      ],
+      "matched_query_tag": "query:humanoid-ood",
+      "matched_query_text": "out-of-distribution detection for safe robot operation",
+      "matched_requirement_id": "req-11",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2605.30957v1",
+      "source": "arxiv",
+      "title": "RDGen: Demonstration Generation for High-Quality Robot Learning via Reinforcement Learning",
+      "abstract": "Vision-Language-Action (VLA) models have emerged as a promising paradigm for general-purpose robot control. However, their performance remains fundamentally constrained by the availability of high-quality robot trajectory data. In current robot learning practice, such data are primarily collected through human teleoperation, which is labor-intensive, costly, and difficult to scale. In this paper, we propose RDGen, a sim-to-real reinforcement learning framework for generating high-quality robot demonstrations. Rather than employing reinforcement learning solely as the final control policy, RDGen leverages trained RL policies as a structured trajectory generator. The system consists of a VLM-based task parser that identifies task-relevant objects, a Grounding DINO-based object localizer, and an RL policy transferred from simulation to the real robot. Successful rollouts are then harvested as clean, high-quality demonstrations for downstream VLA training, while the simulation stage further provides a scalable source of additional trajectories at little marginal cost. Experiments on a pick-and-place task demonstrate that the transferred RL policy achieves a high task success rate. Compared with human teleoperation, RDGen produces significantly smoother trajectories and yields superior downstream VLA performance. These results indicate that RL-generated demonstrations can serve as more reliable and consistent supervisory signals for robot policy learning.",
+      "authors": [
+        "Zijian Zhu",
+        "Menglin Zou",
+        "Zhuang Li",
+        "Yaojie Tu",
+        "Xinhai Sun"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-05-29T07:53:19+00:00",
+      "link": "https://arxiv.org/pdf/2605.30957v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "generates robot demonstration data via RL, directly relevant to dataset construction for robotics",
+      "llm_evidence_cn": "通过强化学习生成机器人演示数据，直接相关于机器人数据集构建",
+      "llm_evidence": "通过强化学习生成机器人演示数据，直接相关于机器人数据集构建",
+      "canonical_evidence": "通过强化学习生成机器人演示数据，直接相关于机器人数据集构建",
+      "llm_tldr_en": "RDGen uses sim-to-real RL to generate high-quality robot demonstrations, addressing data scarcity for robot learning.",
+      "llm_tldr_cn": "提出RDGen框架，通过仿真-现实强化学习生成高质量机器人演示轨迹。该方法利用训练好的RL策略作为轨迹生成器，并结合视觉语言模型进行任务解析，替代了昂贵的人工遥操作数据采集过程。实验证明生成的数据能有效提升VLA模型的性能，为机器人数据集构建提供了可扩展方案。",
+      "llm_tldr": "提出RDGen框架，通过仿真-现实强化学习生成高质量机器人演示轨迹。该方法利用训练好的RL策略作为轨迹生成器，并结合视觉语言模型进行任务解析，替代了昂贵的人工遥操作数据采集过程。实验证明生成的数据能有效提升VLA模型的性能，为机器人数据集构建提供了可扩展方案。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "quick_skim": [
+    {
+      "id": "2605.31119v1",
+      "source": "arxiv",
+      "title": "Don't Fool Me Twice: Adapting to Adversity in the Wild with Experience-Driven Reasoning",
+      "abstract": "In robotics, dangers and adversity modes are often embodiment-specific and relative to each agent. A frontier of autonomous mobile robotics is to enable agents to operate effectively in the wild in unseen unstructured environments. A significant challenge in unseen unstructured environments is that it may not be possible to predict all the dangers to the specific robot. Although recent work has used large foundation vision-language models (VLMs) to preemptively predict an exhaustive list of common-sense dangers, it remains difficult to capture possible interaction and embodiment-dependent adversities. We propose a continual learning framework for a mobile embodied agent to learn online from disturbances and attribute anomalous behaviours to causes through semantics, enabling better prediction and planning of the world in the future. Our framework, \"Don't Fool Me Twice\", first observes disturbances and describes their effects on the robot; this description is augmented with visual context to query a VLM to predict possible causes; the local disturbance is characterized using kernel regression, which allows for efficient, few-shot modeling of transient anomalies. We leverage semantic voxel-centric modeling to estimate epistemic uncertainty, enabling richer downstream recovery by treating interaction-driven disturbances as learnable spatial behaviors. We present four hypotheses and validate them in simulation and on hardware across embodiments and adversity modes.",
+      "authors": [
+        "Navin Sriram Ravie",
+        "Andrew Jong",
+        "Krrish Jain",
+        "John Liu",
+        "Omar Alama",
+        "Bijo Sebastian",
+        "Sebastian Scherer"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.LG"
+      ],
+      "published": "2026-05-29T10:30:02+00:00",
+      "link": "https://arxiv.org/pdf/2605.31119v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "online continual learning from disturbances for anomaly attribution in mobile robots",
+      "llm_evidence_cn": "移动机器人从扰动中在线持续学习并归因异常行为",
+      "llm_evidence": "移动机器人从扰动中在线持续学习并归因异常行为",
+      "canonical_evidence": "移动机器人从扰动中在线持续学习并归因异常行为",
+      "llm_tldr_en": "A continual learning framework enables mobile robots to learn online from disturbances, attribute anomalous behavior to interaction-specific adversities, and adapt using foundation models.",
+      "llm_tldr_cn": "该论文提出一种在线持续学习框架，让移动机器人在未知非结构化环境中从干扰中学习，并归因异常行为为交互相关的对抗事件。通过结合大型视觉语言模型进行常识推理，机器人能够逐步适应环境而不遗忘。实验表明该方法提高了在野外的鲁棒性和安全性。",
+      "llm_tldr": "该论文提出一种在线持续学习框架，让移动机器人在未知非结构化环境中从干扰中学习，并归因异常行为为交互相关的对抗事件。通过结合大型视觉语言模型进行常识推理，机器人能够逐步适应环境而不遗忘。实验表明该方法提高了在野外的鲁棒性和安全性。",
+      "llm_tags": [
+        "query:humanoid-ood"
+      ],
+      "matched_query_tag": "query:humanoid-ood",
+      "matched_query_text": "out-of-distribution detection for safe robot operation",
+      "matched_requirement_id": "req-11",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2605.26676v1",
+      "source": "arxiv",
+      "title": "Memory-Distilled Selection for Noise-Robust Anomaly Detection",
+      "abstract": "Anomaly detection (AD) under data contamination is critical for deploying unsupervised defect detection in industrial environments, where curating perfectly clean training sets is impractical. However, existing methods are sensitive to contamination, suffering significant performance degradation as the noise ratio increases. In this paper, we propose Memory-Distilled Selection (MeDS), a training algorithm based on data selection. MeDS constructs an ensemble of partial memories via random subsampling, where the resulting sparsity acts as a low-pass filter that captures nominal patterns across a wide range of noise ratios, enabling coarse-level identification of contaminated samples. The aggregated distances to the bootstrapped memories are then distilled into a reconstruction score network, which is subsequently fine-tuned on clean data filtered using scores from the distilled model, enabling fine-grained localization of anomalies. MeDS is robust across a wide range of noise ratios without requiring noise-ratio-specific hyperparameter tuning, achieving 99.16\\% image-level AUROC on MVTecAD at a 40\\% noise ratio, and attaining state-of-the-art performance on both VisA and Real-IAD under noisy settings. We thoroughly verify the efficacy of MeDS on industrial AD benchmarks under noisy data scenarios, accompanied by in-depth empirical analyses.",
+      "authors": [
+        "Sirojbek Safarov",
+        "Jaewoo Park",
+        "Yoon Gyo Jung",
+        "Kuan-Chuan Peng",
+        "Wonchul Kim",
+        "Seongdeok Bang",
+        "Octavia Camps"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV"
+      ],
+      "published": "2026-05-26T08:13:41+00:00",
+      "link": "https://arxiv.org/pdf/2605.26676v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "anomaly detection method applicable to out-of-distribution detection for robot safety",
+      "llm_evidence_cn": "异常检测方法可应用于机器人安全中的分布外检测",
+      "llm_evidence": "异常检测方法可应用于机器人安全中的分布外检测",
+      "canonical_evidence": "异常检测方法可应用于机器人安全中的分布外检测",
+      "llm_tldr_en": "Proposes MeDS, a training algorithm for noise-robust anomaly detection using memory-distilled selection, achieving robustness to data contamination.",
+      "llm_tldr_cn": "提出基于记忆蒸馏选择的MeDS训练算法，用于噪声鲁棒的异常检测。该算法通过随机子采样构建部分记忆集成，利用稀疏性作为低通滤波器捕获正常模式，并蒸馏聚合距离用于样本选择，有效应对训练数据污染问题。该方法在工业缺陷检测中验证了鲁棒性，可迁移至机器人故障诊断任务中的分布外检测。",
+      "llm_tldr": "提出基于记忆蒸馏选择的MeDS训练算法，用于噪声鲁棒的异常检测。该算法通过随机子采样构建部分记忆集成，利用稀疏性作为低通滤波器捕获正常模式，并蒸馏聚合距离用于样本选择，有效应对训练数据污染问题。该方法在工业缺陷检测中验证了鲁棒性，可迁移至机器人故障诊断任务中的分布外检测。",
+      "llm_tags": [
+        "query:humanoid-ood"
+      ],
+      "matched_query_tag": "query:humanoid-ood",
+      "matched_query_text": "out-of-distribution detection for safe robot operation",
+      "matched_requirement_id": "req-11",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2605.31481v1",
+      "source": "arxiv",
+      "title": "Batched Differentiable Rigid Body Dynamics in PyTorch for GPU-Accelerated Robot Learning",
+      "abstract": "As robot control shifts toward large-scale reinforcement learning with in-loop dynamics computation, the community's reliance on CPU-bound libraries such as Pinocchio creates a throughput bottleneck in GPU-based training pipelines. We present BARD (Batched Articulated Rigid-body Dynamics), a self-contained PyTorch implementation of Featherstone's rigid-body dynamics algorithms, optimized for batched GPU evaluation and automatic differentiation. Three design choices make this efficient: a tiered lazy-evaluation cache that avoids redundant tree traversals, matmul-free joint transforms via pre-computed Rodrigues constants, and level-parallel propagation that reduces sequential operations to tree-depth batched steps. On five robot models (7-23 DOFs), BARD matches Pinocchio numerically while reaching up to 64x higher throughput for Forward Kinematics and 63x for Jacobians at batch size 4096 on an NVIDIA H200. We validate differentiability through gradient-based system identification on a 7-DOF manipulator, recovering link masses to 1.24% mean error under 5% torque noise, and integrate BARD into an Isaac Lab AMP training pipeline for an 11-DOF spined quadruped with 4096 parallel environments, where it is 8.5x faster than Pinocchio and 2.0x faster than ADAM for in-loop dynamics. BARD is open-sourced at: https://github.com/YueWang996/bard-pytorch-dynamics.",
+      "authors": [
+        "Yue Wang",
+        "Yanran Xu",
+        "Wenbo Wu",
+        "Chuanhang Qiu",
+        "Zhaoxing Li"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-05-29T16:07:28+00:00",
+      "link": "https://arxiv.org/pdf/2605.31481v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "GPU-accelerated rigid body dynamics for robot simulation, enabling fault injection environments",
+      "llm_evidence_cn": "GPU加速刚体动力学仿真，支持故障注入环境",
+      "llm_evidence": "GPU加速刚体动力学仿真，支持故障注入环境",
+      "canonical_evidence": "GPU加速刚体动力学仿真，支持故障注入环境",
+      "llm_tldr_en": "BARD provides batched differentiable rigid body dynamics in PyTorch, enabling efficient GPU-accelerated simulation that can be used for fault injection in humanoid robot environments.",
+      "llm_tldr_cn": "针对传统CPU动力学库在GPU训练中的瓶颈，提出BARD框架，在PyTorch中实现了批量可微刚体动力学，通过分层缓存、免矩阵关节变换和层级并行传播等设计，显著提升仿真效率。该工具可直接用于人形机器人故障注入仿真，支持在MuJoCo等环境中模拟关节异常，为故障诊断数据集构建提供基础。",
+      "llm_tldr": "针对传统CPU动力学库在GPU训练中的瓶颈，提出BARD框架，在PyTorch中实现了批量可微刚体动力学，通过分层缓存、免矩阵关节变换和层级并行传播等设计，显著提升仿真效率。该工具可直接用于人形机器人故障注入仿真，支持在MuJoCo等环境中模拟关节异常，为故障诊断数据集构建提供基础。",
+      "llm_tags": [
+        "query:humanoid-ood"
+      ],
+      "matched_query_tag": "query:humanoid-ood",
+      "matched_query_text": "fault injection simulation for humanoid robots in MuJoCo or similar environments",
+      "matched_requirement_id": "req-14",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2605.31460v1",
+      "source": "arxiv",
+      "title": "On-Device Robotic Planning: Eliminating Inference Redundancy for Efficient Decision-Making",
+      "abstract": "Reasoning-based robotic policies using large language and vision-language models achieve strong semantic planning capabilities but mostly suffer from a high inference latency that limits practical real-time deployment. In this work, we observe that robotic reasoning workloads contain substantial temporal redundancy, where consecutive observations frequently produce identical actions and subgoals. Based on this insight, we present REIS, a human cognition inspired robotic decision-making framework that minimizes unnecessary reasoning while preserving semantic adaptability. REIS combines lightweight scene gating, KV-steered affordance routing, and deliberative reasoning to accelerate robotic control under embodied constraints. Experiments on ALFRED, and real-world robotic tasks demonstrate that REIS significantly suppresses reasoning overhead while maintaining competitive task performance.",
+      "authors": [
+        "Joonhee Lee",
+        "Hyunseung Shin",
+        "Hyunmi Kim",
+        "Pei Zhang",
+        "Jeonggil Ko"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "eess.SY"
+      ],
+      "published": "2026-05-29T15:51:42+00:00",
+      "link": "https://arxiv.org/pdf/2605.31460v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "on-device planning for efficient decision-making, relevant to edge deployment",
+      "llm_evidence_cn": "设备上规划实现高效决策，与边缘部署相关",
+      "llm_evidence": "设备上规划实现高效决策，与边缘部署相关",
+      "canonical_evidence": "设备上规划实现高效决策，与边缘部署相关",
+      "llm_tldr_en": "Proposes REIS, a lightweight reasoning framework that reduces inference redundancy for on-device robotic planning, addressing edge deployment latency.",
+      "llm_tldr_cn": "该论文提出REIS框架，通过场景门控和键值路由减少推理冗余，实现设备上高效规划。虽然面向通用机器人决策，但其轻量化推理设计对人形机器人边缘部署具有方法论借鉴意义，尤其适用于资源受限平台（如RK3588）。",
+      "llm_tldr": "该论文提出REIS框架，通过场景门控和键值路由减少推理冗余，实现设备上高效规划。虽然面向通用机器人决策，但其轻量化推理设计对人形机器人边缘部署具有方法论借鉴意义，尤其适用于资源受限平台（如RK3588）。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "edge deployment for humanoid robots",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    }
+  ]
+}
