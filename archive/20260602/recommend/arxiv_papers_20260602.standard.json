@@ -1,0 +1,315 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-06-02T22:12:03.203260+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 2,
+    "deep_divecandidates": 3,
+    "deep_cap": 7,
+    "deep_selected": 3,
+    "quick_candidates": 4,
+    "quick_skim_target": 12,
+    "quick_selected": 4
+  },
+  "deep_dive": [
+    {
+      "id": "2606.00162v1",
+      "source": "arxiv",
+      "title": "Modeling Robotics Dataset Construction as an Artifact-Based Build Process",
+      "abstract": "Robotic systems generate large volumes of multimodal sensor data, but converting ROS bag recordings into machine learning datasets is often handled by ad hoc sequential scripts, creating engineering overhead and slow iteration cycles. We model dataset construction as an artifact-based build process over a dependency graph and implement this approach in Bagzel, an open-source Bazel extension for reproducible, incremental dataset generation (including nuScenes-format export). We compare Bagzel and Bagzel-xattr (server-side digest management) against a sequential rosbag2nuscenes baseline. Bagzel reduces runtime in all evaluated execution modes, with the largest gains in iterative workflows (up to 386.26x in warm builds and 7.21x in incremental builds on a 20.4 GB dataset). Across dataset sizes from 5.1 to 20.4 GB, Bagzel variants show markedly better scaling behavior than the baseline, especially in warm and incremental modes. Bagzel-xattr provides additional gains, with a mean runtime reduction of 5.9% compared to Bagzel in the input granularity study. Overall, modeling robotics dataset construction as an artifact-based build process substantially reduces dataset update latency while maintaining a deterministic build design that supports reproducibility. Bagzel is publicly available at https://github.com/UniBwTAS/bagzel.",
+      "authors": [
+        "Leon Pohl",
+        "Lukas Beer",
+        "George Sebastian",
+        "Mirko Maehlisch"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.CV",
+        "cs.LG"
+      ],
+      "published": "2026-05-29T10:11:45+00:00",
+      "link": "https://arxiv.org/pdf/2606.00162v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "direct method for robotics dataset construction from ROS bags",
+      "llm_evidence_cn": "直接针对机器人数据集构建的方法",
+      "llm_evidence": "直接针对机器人数据集构建的方法",
+      "canonical_evidence": "直接针对机器人数据集构建的方法",
+      "llm_tldr_en": "Proposes Bagzel, an open-source Bazel extension for reproducible and incremental robotics dataset generation from ROS bags, reducing runtime up to 386x in warm builds.",
+      "llm_tldr_cn": "针对机器人数据集构建过程中依赖临时脚本、迭代效率低的问题，本文提出了Bagzel，一个基于Bazel构建系统的开源扩展。它通过将数据集构建建模为基于工件依赖图的构建过程，实现了可重现、增量的数据集生成（包括nuScenes格式导出）。实验表明，与传统的rosbag2nuscenes基线相比，Bagzel在迭代工作流中实现了高达386倍的加速。",
+      "llm_tldr": "针对机器人数据集构建过程中依赖临时脚本、迭代效率低的问题，本文提出了Bagzel，一个基于Bazel构建系统的开源扩展。它通过将数据集构建建模为基于工件依赖图的构建过程，实现了可重现、增量的数据集生成（包括nuScenes格式导出）。实验表明，与传统的rosbag2nuscenes基线相比，Bagzel在迭代工作流中实现了高达386倍的加速。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2606.01458v1",
+      "source": "arxiv",
+      "title": "LEGS: Fine-Tuning Teleop-Free VLAs for Humanoid Loco-manipulation in an Embodied Gaussian Splatting World",
+      "abstract": "Training vision-language-action (VLA) policies for humanoid loco-manipulation is constrained by the high cost and complexity of collecting human teleoperation demonstrations. VLA policies fine-tuned in simulators have, until now, failed to transfer effectively in humanoid loco-manipulation tasks. We present LEGS (Loco-manipulation via Embodied Gaussian Splatting), a hybrid simulator that composites a mesh foreground (robot, objects, props) over a photorealistic 3D Gaussian Splatting (3DGS) background reconstructed from a handheld scene capture. LEGS uses a procedural motion-primitive generator to synthesize labeled demonstrations at scale without human teleoperation, and a deterministic two-stage color calibration to align the rendered 3DGS image to the robot's deployment camera. On a Unitree G1 humanoid robot, across three pick-and-place tasks of increasing whole-body difficulty and three VLA backbones (psi_0, pi_0.5, GR00T N1.6), a policy trained purely on LEGS data matches or exceeds one trained on human teleoperation demos on every experiment. It also outperforms a mesh-only simulation baseline that ablates the effect of the 3DGS background, showing that photorealistic rendering is a key enabler for synthetic data transfer. Humanoid motion is recorded independently of scene appearance in LEGS, allowing the same auto-generated demonstrations to be re-rendered under new backgrounds and object meshes--covering a new scene at more than 15x lower cost than teleoperation--to augment training data for robustness to scene variations. Under combined object-and-scene appearance shift, the policy trained on re-rendered LEGS-AUG data maintains task success while the baseline trained on teleoperation data fails entirely. Our project page is located at https://legsvla.github.io/.",
+      "authors": [
+        "Hojune Kim",
+        "Timothy Chen",
+        "Jiankai Sun",
+        "Lars W. Osterberg",
+        "Qianzhong Chen",
+        "Ke Wang",
+        "Mac Schwager"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-05-31T21:36:02+00:00",
+      "link": "https://arxiv.org/pdf/2606.01458v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "humanoid loco-manipulation with synthetic demonstration generation",
+      "llm_evidence_cn": "人形机器人全身操作与合成演示生成",
+      "llm_evidence": "人形机器人全身操作与合成演示生成",
+      "canonical_evidence": "人形机器人全身操作与合成演示生成",
+      "llm_tldr_en": "LEGS proposes a hybrid simulator for humanoid loco-manipulation that generates labeled demonstrations at scale without teleoperation, using procedural motion-primitive generators and 3DGS backgrounds.",
+      "llm_tldr_cn": "LEGS提出混合仿真器解决人形机器人全身操作训练中遥操作成本高的问题。通过程序化运动基元生成器合成大规模标注演示，结合3DGS真实背景实现仿真到现实的迁移。在多个任务上验证了有效性，为人类机器人数据集构建提供了无需人工标注的可扩展方案。",
+      "llm_tldr": "LEGS提出混合仿真器解决人形机器人全身操作训练中遥操作成本高的问题。通过程序化运动基元生成器合成大规模标注演示，结合3DGS真实背景实现仿真到现实的迁移。在多个任务上验证了有效性，为人类机器人数据集构建提供了无需人工标注的可扩展方案。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "humanoid robot dataset construction",
+      "matched_requirement_id": "req-2",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2606.02577v1",
+      "source": "arxiv",
+      "title": "RoboDream: Compositional World Models for Scalable Robot Data Synthesis",
+      "abstract": "Scaling robot learning requires large-scale, diverse demonstrations, yet real-world data collection via teleoperation remains prohibitively expensive and time-consuming. While video diffusion models offer a promising avenue for data scaling, existing generative approaches are often limited to superficial visual augmentation, or suffer from embodiment hallucinations that yield physically infeasible motions. We present a generalizable embodiment-centric world model that achieves scalable data generation by synthesizing photorealistic demonstrations with novel objects, in novel scenes, and from novel viewpoints. Our approach anchors generation to rendered robot motion while conditioning on explicit scene and object priors, effectively decoupling trajectory execution from environment synthesis. This formulation has the potential to unlock two powerful data scaling capabilities: (1) retrieval and rebirth, which repurposes existing trajectories into entirely new contexts without new motion data; and (2) prop-free teleoperation, where operators manipulate empty air and the model hallucinates the target objects and scene afterwards, eliminating reset time. We demonstrate with real-world experiments that our generated data consistently improves downstream policy performance and significantly reduces real-world data requirements across diverse manipulation tasks.",
+      "authors": [
+        "Junjie Ye",
+        "Rong Xue",
+        "Basile Van Hoorick",
+        "Runhao Li",
+        "Harshitha Rajaprakash",
+        "Pavel Tokmakov",
+        "Muhammad Zubair Irshad",
+        "Vitor Guizilini",
+        "Yue Wang"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.CV"
+      ],
+      "published": "2026-06-01T17:59:38+00:00",
+      "link": "https://arxiv.org/pdf/2606.02577v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "scalable robot data synthesis for dataset construction",
+      "llm_evidence_cn": "可扩展机器人数据合成用于数据集构建",
+      "llm_evidence": "可扩展机器人数据合成用于数据集构建",
+      "canonical_evidence": "可扩展机器人数据合成用于数据集构建",
+      "llm_tldr_en": "RoboDream generates photorealistic robot demonstrations with novel objects, scenes, and viewpoints using an embodiment-centric world model, enabling scalable dataset construction.",
+      "llm_tldr_cn": "真实世界遥操作采集机器人演示数据成本高昂，现有生成式方法易产生物理不可行的虚拟动作。本文提出RoboDream，一种以本体为中心的组合世界模型，通过解耦轨迹生成和视觉渲染，合成包含新物体、新场景和新视角的真实感演示。该方法可生成大规模多样化数据集用于机器人学习。实验表明合成的数据在多种下游任务中有效提升了策略泛化性。",
+      "llm_tldr": "真实世界遥操作采集机器人演示数据成本高昂，现有生成式方法易产生物理不可行的虚拟动作。本文提出RoboDream，一种以本体为中心的组合世界模型，通过解耦轨迹生成和视觉渲染，合成包含新物体、新场景和新视角的真实感演示。该方法可生成大规模多样化数据集用于机器人学习。实验表明合成的数据在多种下游任务中有效提升了策略泛化性。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "quick_skim": [
+    {
+      "id": "2605.30834v1",
+      "source": "arxiv",
+      "title": "Hide-and-Seek in Trajectories: Discovering Failure Signals for VLA Runtime Monitoring",
+      "abstract": "Vision-Language-Action (VLA) models enable robots to follow natural language instructions and generalize across diverse tasks, but they remain vulnerable to execution failures that compromise reliability in real-world deployment. Detecting such failures during execution is therefore critical for the robust deployment of embodied systems. Existing failure detection methods either rely on expensive action resampling or external models, while alternatives propagate trajectory-level labels uniformly across every timestep, obscuring localized failure signals. In this paper, we propose \\textbf{Hide-and-Seek}, a framework that formulates VLA failure detection as a coarsely supervised learning problem. By combining inter-trajectory and intra-trajectory contrastive objectives, Hide-and-Seek localizes failure-indicative actions and induces temporally structured failure signals from trajectory-level supervision alone, without any step-level annotation. We evaluate Hide-and-Seek on LIBERO, VLABench, and a real-world robotic platform across three representative VLA policies: OpenVLA, $π_0$, and $π_{0.5}$.Our method achieves state-of-the-art multi-task failure detection performance with a practical accuracy--timeliness trade-off under conformal prediction, and generalizes well to both seen and unseen tasks.",
+      "authors": [
+        "Seongheon Park",
+        "Wendi Li",
+        "Changdae Oh",
+        "Samuel Yeh",
+        "Zsolt Kira",
+        "Michael Hagenow",
+        "Sharon Li"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.AI"
+      ],
+      "published": "2026-05-29T04:40:12+00:00",
+      "link": "https://arxiv.org/pdf/2605.30834v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "failure detection framework for VLA robots, applicable to humanoid robot error analysis",
+      "llm_evidence_cn": "面向 VLA 机器人的故障检测框架，可应用于人形机器人错误分析",
+      "llm_evidence": "面向 VLA 机器人的故障检测框架，可应用于人形机器人错误分析",
+      "canonical_evidence": "面向 VLA 机器人的故障检测框架，可应用于人形机器人错误分析",
+      "llm_tldr_en": "Proposes Hide-and-Seek, a coarsely supervised learning framework for detecting execution failures in VLA models by combining inter-trajectory and intra-trajectory signals.",
+      "llm_tldr_cn": "针对 VLA 模型在执行中易出错且缺乏有效故障检测方法的问题，本文提出了 Hide-and-Seek 框架。该框架将故障检测建模为粗监督学习问题，通过结合轨迹间和轨迹内信号来发现局部故障信号。该方法无需昂贵的重采样或外部模型，有效提升了机器人部署的可靠性。",
+      "llm_tldr": "针对 VLA 模型在执行中易出错且缺乏有效故障检测方法的问题，本文提出了 Hide-and-Seek 框架。该框架将故障检测建模为粗监督学习问题，通过结合轨迹间和轨迹内信号来发现局部故障信号。该方法无需昂贵的重采样或外部模型，有效提升了机器人部署的可靠性。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "fault diagnosis and error analysis for humanoid robots",
+      "matched_requirement_id": "req-7",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2606.00552v1",
+      "source": "arxiv",
+      "title": "Edge-Based QoS-Aware Adaptive Task Placement: A Closed-Loop Control in Multi-Robot Systems",
+      "abstract": "Multi-robot systems (MRS) increasingly offload compute-intensive perception tasks to edge nodes to meet strict time-sensitive Quality-of-Service (QoS) constraints. However, static task orchestration on a shared edge node can severely degrade QoS due to network latency, jitter, and edge-resource contention. We present a pilot edge-centric MRS testbed using Raspberry Pi nodes to evaluate a camera-to-manipulator pipeline under three modes: local execution, static offloading, and a QoS-aware Adaptive Task Placement (ATP) controller. ATP scores candidate placements using a multi-metric cost (normalized latency, CPU utilization, and switching overhead) over two-second control windows. The closed-loop visual servoing testbed is instrumented with sub-millisecond clock synchronization, network emulation, and detailed monitoring of multiple metrics across nodes to capture realistic jitter. Experimental results under compute-stress and network-fault scenarios show that static edge offloading reduces on-board CPU load but amplifies tail latency and deadline misses. In contrast, the QoS-aware ATP controller, by switching task placement based on measured latency and utilization thresholds, consistently lowers deadline violations and tail latency. Overall, the results position ATP as a practical edge-side control primitive for MRS and concrete design guidelines for Cloud-Edge Robotics deployments within the broader cloud-fog automation, while motivating QoS-aware multi-objective workload orchestration for industrial cyber-physical systems.",
+      "authors": [
+        "Thien Tran",
+        "Jonathan Kua",
+        "Thuong Hoang",
+        "Minh Tran",
+        "Honghao Lyu",
+        "Jiong Jin"
+      ],
+      "primary_category": "cs.OS",
+      "categories": [
+        "cs.OS",
+        "cs.DC",
+        "cs.NI",
+        "cs.RO",
+        "eess.SY"
+      ],
+      "published": "2026-05-30T05:54:44+00:00",
+      "link": "https://arxiv.org/pdf/2606.00552v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "edge deployment for multi-robot systems",
+      "llm_evidence_cn": "多机器人系统边缘部署",
+      "llm_evidence": "多机器人系统边缘部署",
+      "canonical_evidence": "多机器人系统边缘部署",
+      "llm_tldr_en": "Proposes a QoS-aware adaptive task placement controller for edge-centric multi-robot systems, using Raspberry Pi testbed with camera-to-manipulator pipeline.",
+      "llm_tldr_cn": "现有静态任务编排在多机器人系统共享边缘节点上会导致服务质量严重下降。本文提出了一种QoS感知的自适应任务放置控制器，通过多指标成本函数在2秒控制窗口内优化任务放置决策。在基于树莓派的实物平台上验证了三种模式：本地执行、静态卸载和自适应控制。结果表明该方法能有效降低延迟和资源竞争。该工作为边缘端机器人系统的实时任务调度提供了新思路。",
+      "llm_tldr": "现有静态任务编排在多机器人系统共享边缘节点上会导致服务质量严重下降。本文提出了一种QoS感知的自适应任务放置控制器，通过多指标成本函数在2秒控制窗口内优化任务放置决策。在基于树莓派的实物平台上验证了三种模式：本地执行、静态卸载和自适应控制。结果表明该方法能有效降低延迟和资源竞争。该工作为边缘端机器人系统的实时任务调度提供了新思路。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "edge deployment for humanoid robots",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2606.02042v1",
+      "source": "arxiv",
+      "title": "Normality-Preserving Continual Industrial Anomaly Detection via Orthogonal LoRA Banks",
+      "abstract": "Continual industrial anomaly detection with diffusion models suffers from historical normality prior drift and catastrophic forgetting. Existing continual diffusion methods preserve previous knowledge through replay or constrained optimization, but they lack an explicit mechanism for isolating and protecting category-specific normality priors during sequential adaptation. Although low-rank adaptation provides modular residual updates, standard LoRA neither freezes historical normality subspaces nor prevents new adapters from interfering with previous ones. To address this issue, we propose a normality-preserving continual anomaly detection framework based on two modules: History Frozen Orthogonal LoRA Bank (HF-OLB) and Hierarchical Novelty Adaptive Bank Growth module (HNABG). HF-OLB freezes both the pre-trained U-Net backbone and the learned LoRA banks, and constrains new task-specific normality residuals to the orthogonal complement of historical LoRA subspaces. HNABG further allocates layer-dependent residual capacity and expands the bank only when the residual normality novelty exceeds the expressive capacity of existing banks. Extensive experiments on MVTec and VisA demonstrate the effectiveness of the proposed method. On the challenging VisA 2x6 setting, our method achieves 83.6/91.8 image and pixel level A-AUROC with 3.8/3.9 FM, improving pixel level A-AUROC over the state of the art by 3.2 points while reducing pixel level FM by 1.3. These results show that our method effectively preserves historical normality priors in long horizon continual category sequences.",
+      "authors": [
+        "Weibai Fang",
+        "Haijun Che",
+        "Feiyang Ren",
+        "Qiancheng Lao"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV"
+      ],
+      "published": "2026-06-01T10:30:42+00:00",
+      "link": "https://arxiv.org/pdf/2606.02042v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "continual anomaly detection using orthogonal LoRA banks to prevent forgetting",
+      "llm_evidence_cn": "使用正交LoRA库的持续异常检测以防止遗忘",
+      "llm_evidence": "使用正交LoRA库的持续异常检测以防止遗忘",
+      "canonical_evidence": "使用正交LoRA库的持续异常检测以防止遗忘",
+      "llm_tldr_en": "This paper proposes a normality-preserving continual anomaly detection framework with orthogonal LoRA banks to prevent catastrophic forgetting in industrial settings, applicable to robot fault diagnosis.",
+      "llm_tldr_cn": "针对持续工业异常检测中正常性先验漂移和灾难性遗忘问题，本文提出一种保持正常性的框架。通过历史冻结正交LoRA库（HF-OLB）隔离并保护类别特定的正常性子空间，防止新适配器干扰旧知识。实验表明，该方法在连续学习多个类别后仍能保持高检测精度，其模块化更新策略可迁移至机器人故障诊断场景。",
+      "llm_tldr": "针对持续工业异常检测中正常性先验漂移和灾难性遗忘问题，本文提出一种保持正常性的框架。通过历史冻结正交LoRA库（HF-OLB）隔离并保护类别特定的正常性子空间，防止新适配器干扰旧知识。实验表明，该方法在连续学习多个类别后仍能保持高检测精度，其模块化更新策略可迁移至机器人故障诊断场景。",
+      "llm_tags": [
+        "query:humanoid-ood:composite"
+      ],
+      "matched_query_tag": "query:humanoid-ood:composite",
+      "matched_query_text": "Papers central to 请帮我查找与人形机器人故障诊断、异常检测（OOD / Anomaly Detection）、自监督时序重建（VAE / GRU）、以及边缘部署相关的论文。重点关注：基于本体感受信号（关节位置/速度/力矩/IMU）的故障检测方法；用于时序数据的自监督异常检测（如 OmniAnomaly, USAD）；开放集识别 / OOD 检测在机器人安全中的应用；轻量化模型（LSTM/GRU）在嵌入式平台（RK3588）上的部署；受 RAPT (Munn 等, 2026) 启发的机器人故障诊断框架。另外，请补充一些关于仿人机器人（Unitree G1 等）仿真故障注入、数据集构建的文献。, especially work that connects or combines: humanoid robot fault diagnosis using proprioceptive signals; anomaly detection from joint position velocity torque IMU signals in humanoid robots; out-of-distribution detection for safe robot operation; lightweight LSTM or GRU models deployed on embedded platforms for anomaly detection; RAPT framework for robot fault diagnosis based on proprioception; fault injection simulation for humanoid robots in MuJoCo or similar environments; Anomaly detection in humanoid robot using proprioceptive signals; Self supervised time series anomaly detection for robot fault diagnosis; Open set recognition in robotics for safety and anomaly detection; Deploying lightweight LSTM GRU on RK3588 for time series anomaly detection.",
+      "matched_requirement_id": "req-composite-humanoid-ood",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2606.02307v1",
+      "source": "arxiv",
+      "title": "FATE-VLA:Failue-aware test generation for vision-language-action models",
+      "abstract": "Vision-Language-Action (VLA) models are increasingly used as generalist robot policies, yet their evaluation still relies largely on static benchmarks that randomly sample task scenes. In high-dimensional embodied spaces, failures are sparse and clustered, so static benchmarking can underestimate robustness risks. We reframe VLA evaluation as an active failure-discovery problem and propose a failure-aware test-generation approach that combines diversity-driven exploration with surrogate models learned from observed executions. The method steers testing toward high-risk yet diverse scene regions. Across four state-of-the-art VLA models, it uncovers substantially more failures (up to +29.7 % over selected baselines) while revealing more diverse failure modes. This mean that, for instance, in the case of GR00T-N1.6, success rate dropped from 64.4% to 34.7%. More broadly, our findings call for a shift in VLA evaluation: from passive measurement on fixed task suites to adaptive, failure-seeking test generation that exposes the structure of model weaknesses before deployment.",
+      "authors": [
+        "Arusa Kanwal",
+        "Pablo Valle",
+        "Shaukat Ali",
+        "Aitor Arrieta"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-06-01T14:27:13+00:00",
+      "link": "https://arxiv.org/pdf/2606.02307v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "failure-aware test generation for VLA models, applicable to robot fault diagnosis",
+      "llm_evidence_cn": "针对VLA模型的故障感知测试生成方法，可应用于机器人故障诊断",
+      "llm_evidence": "针对VLA模型的故障感知测试生成方法，可应用于机器人故障诊断",
+      "canonical_evidence": "针对VLA模型的故障感知测试生成方法，可应用于机器人故障诊断",
+      "llm_tldr_en": "FATE-VLA reframes VLA evaluation as active failure discovery, generating high-risk test scenes to uncover diverse failures across robot models.",
+      "llm_tldr_cn": "FATE-VLA针对视觉-语言-动作模型（VLA）在机器人中的应用，提出一种故障感知测试生成方法。该方法通过多样性探索和代理模型学习，主动发现高风险的故障场景。在四种先进VLA模型上，它能发现多达29.7%的额外故障，并揭示更多样化的故障模式。这项技术可直接用于人形机器人VLA策略的故障诊断与鲁棒性评估。",
+      "llm_tldr": "FATE-VLA针对视觉-语言-动作模型（VLA）在机器人中的应用，提出一种故障感知测试生成方法。该方法通过多样性探索和代理模型学习，主动发现高风险的故障场景。在四种先进VLA模型上，它能发现多达29.7%的额外故障，并揭示更多样化的故障模式。这项技术可直接用于人形机器人VLA策略的故障诊断与鲁棒性评估。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "fault diagnosis for humanoid robots",
+      "matched_requirement_id": "req-3",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    }
+  ]
+}

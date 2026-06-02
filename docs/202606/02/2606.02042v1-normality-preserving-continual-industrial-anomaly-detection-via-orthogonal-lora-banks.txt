@@ -1,0 +1,937 @@
+Title: Normality-Preserving Continual Industrial Anomaly Detection via Orthogonal LoRA Banks
+
+URL Source: https://arxiv.org/pdf/2606.02042v1
+
+Published Time: Tue, 02 Jun 2026 02:30:12 GMT
+
+Number of Pages: 33
+
+Markdown Content:
+# Graphical Abstract 
+
+Normality-Preserving Continual Industrial Anomaly Detection via Orthogonal LoRA Banks 
+
+Weibai Fang, Haijun Che, Feiyang Ren, Qiancheng Lao Trainable LoRA bank Frozen U-Net bank 
+
+Hierarchical Novelty-Adaptive Bank Growth (§ 3.3) 
+
+History-Frozen Orthogonal LoRA Bank ( § 3.2) Frozen U-Net Backbone 🐀 
+
+> …
+> …
+> …
+> …
+
+L1 L2 L3 L4 
+
+Chosen linear/conv 
+
+layer using LoRA 
+
+Al,t,j 
+
+Freeze Prev.Banks 
+
+Freeze historical LoRA banks and keep their 
+
+row-space basis fixed 
+
+Orthogonal Projection 
+
+Project new LoRA factors into the orthogonal 
+
+complement of historical LoRA row space 
+
+grow bank s
+
+Activation-based novelty statistics Chosen mid block 
+
+using LoRA 
+
+Diffusion U-Net 
+
+High-res 
+
+Convs 
+
+(shallow) 
+
+Middle Attn 
+
+/Linear 
+
+(mid-depth) 
+
+Other 
+
+Selected 
+
+Layers 
+
+(deep) 
+
+rhigh 
+
+High-res Convs 
+
+(Edges, textures) 
+
+rmid 
+
+Middle Attn / Linear 
+
+(Structure, semantics) 
+
+rbase 
+
+Other selected layers 
+
+(Global context) 
+
+> LoRA Rank (r)
+
+𝐀 𝐀 ,𝐀 ,𝐀 
+
+⊥ = 𝐀 𝐀 ,𝐀 ,𝐀 𝐀 𝐀 𝐀 − 𝐀 𝐀 ,𝐀 
+
+<𝐀 ⊤𝐀 𝐀 ,𝐀 
+
+<𝐀 
+
+Freeze {𝐀 𝐀 ,𝐀 ,𝐀 , 𝐀 𝐀 ,𝐀 ,𝐀 }𝐀 <𝐀 ; train {𝐀 𝐀 ,𝐀 ,𝐀 
+
+⊥ , 𝐀 𝐀 ,𝐀 ,𝐀 }𝐀 =𝐀 
+
+Historical LoRA row space 
+
+Al,t-1,j 
+
+(span of )
+
+Al,1,j 
+
+𝐀 𝐀 ,𝐀 
+
+𝐀 
+
+Hierarchical LoRA adaptation Layer-wise bank growth 
+
+…
+
+Al,t-1,j 
+
+Orthogonal component (kept) 
+
+removed projection 
+
+> arXiv:2606.02042v1 [cs.CV] 1 Jun 2026
+
+# Highlights 
+
+Normality-Preserving Continual Industrial Anomaly Detection via Orthogonal LoRA Banks 
+
+Weibai Fang, Haijun Che, Feiyang Ren, Qiancheng Lao 
+
+• We introduce LoRA into continual diffusion-based IAD and propose HF-OLB, which treats LoRA banks as low-rank normality memory units and orthogonalizes new adapters against frozen historical banks to preserve category-specific normality priors. 
+
+• We propose HNABG, a hierarchical bank-growth strategy that allo-cates residual normality capacity according to layer-wise subspace nov-elty, enabling new-category normality acquisition only where historical bases are insufficient. 
+
+• Extensive experiments on continual settings derived from MVTec and VisA demonstrate that the proposed method could provide stronger normality-prior preservation, lower forgetting, and more stable anomaly localization under long sequential category updates. Normality-Preserving Continual Industrial Anomaly Detection via Orthogonal LoRA Banks 
+
+Weibai Fang a, Haijun Che a, ∗, Feiyang Ren b, Qiancheng Lao c
+
+> aSchool of Electrical Engineering, Yanshan University, Haigang District, Qinhuangdao, 066000, Hebei, China
+> bSchool of Artificial Intelligence, Yanshan University, Haigang District, Qinhuangdao, 066000, Hebei, China
+> cSilesian College of Intelligent Science and Engineering, Yanshan University, Haigang District, Qinhuangdao, 066000, Hebei, China
+
+Abstract 
+
+Continual industrial anomaly detection with diffusion models suffers from his-torical normality prior drift and catastrophic forgetting. Existing continual diffusion methods preserve previous knowledge through replay or constrained optimization, but they lack an explicit mechanism for isolating and protect-ing category specific normality priors during sequential adaptation. Although low-rank adaptation provides modular residual updates, standard LoRA nei-ther freezes historical normality subspaces nor prevents new adapters from interfering with previous ones. To address this issue, we propose a normality-preserving continual anomaly detection framework based on two modules: History Frozen Orthogonal LoRA Bank (HF-OLB) and Hierarchical Novelty Adaptive Bank Growth module (HNABG). HF-OLB freezes both the pre-trained U Net backbone and the learned LoRA banks, and constrains new task specific normality residuals to the orthogonal complement of historical LoRA subspaces. HNABG further allocates layer dependent residual capac-ity and expands the bank only when the residual normality novelty exceeds the expressive capacity of existing banks. Extensive experiments on MVTec and VisA demonstrate the effectiveness of the proposed method. On the chal-lenging VisA 2 × 6 setting, our method achieves 83.6/91.8 image and pixel level A-AUROC with 3.8/3.9 FM, improving pixel level A-AUROC over the   
+
+> ∗Corresponding author
+> Email address: hjche@ysu.edu.cn (Haijun Che)
+
+state of the art by 3.2 points while reducing pixel level FM by 1.3. These results show that our method effectively preserves historical normality priors in long horizon continual category sequences. 
+
+Keywords: Industrial anomaly detection, diffusion model, low-rank adaptation, catastrophic forgetting. 
+
+1. Introduction 
+
+Industrial anomaly detection (IAD) aims to identify and localize defects using only anomaly-free training samples [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]. Recent methods have achieved strong performance in static or offline set-tings, where all categories are assumed to be available during training. How-ever, this assumption is often violated in practical production environments, where new product categories are introduced sequentially and the detector must remain effective on previously learned categories. This setting raises a central challenge for continual IAD: how to acquire the normal patterns of new categories without drifting away from the normality priors established for historical categories. Diffusion models are particularly attractive for IAD because their detec-tion ability is closely tied to anomaly-free normality priors. A diffusion based detector learns the normal visual manifold from anomaly-free samples and reconstructs anomalous regions toward their corresponding normal appear-ances. The discrepancy between the input image and its reconstructed nor-mal counterpart can then be used to localize defects [12, 13, 14, 15, 16, 17, 18, 19]. Beyond industrial inspection, diffusion models have also shown strong controllable generation and editing capabilities in subject transformation, layout consistent editing, and fine grained garment generation [20, 21, 22], further demonstrating their potential as expressive visual priors. Neverthe-less, when diffusion based IAD is deployed in a continual category update set-ting, adaptation to new categories may perturb the normality priors learned for previous categories. Once such historical priors drift, the model may fail to reconstruct old category anomalies into faithful normal appearances, leading to degraded anomaly localization and catastrophic forgetting. General continual learning methods preserve previous knowledge through replay, regularization, parameter isolation, or constrained optimization [23, 24, 25, 26]. Although these strategies reduce interference between old and new tasks in a general representation space, they do not explicitly model 282       
+
+> 84
+> 86
+> 88
+> 90
+> 92
+> 94
+> 96
+> 98
+> A-AUROC on Initial Task (%)
+> 94.7
+> 96.1
+> 90.0
+> 84.3
+> Ours CDAD
+> After T0 After T1 After T2 After T3 After T4 After T5
+> Sequential Update Stage
+> 82
+> 84
+> 86
+> 88
+> 90
+> 92
+> 94
+> 96
+> 98
+> Average Pixel-level A-AUROC (%)
+> 94.7
+> 96.1
+> 91.8
+> 88.6
+
+Figure 1: Normality prior retention on VisA setting 3 under sequential category updates. The upper panel reports the A-AUROC on the initial task after each update, where the initial task contains the first two categories in the continual stream and is re-evaluated after subsequent tasks arrive. The lower panel reports the average pixel level A-AUROC over all seen tasks after each update. The slower degradation of our method indicates better preservation of historical normality priors. 
+
+the category specific normality priors required by diffusion based IAD. This limitation is critical for reconstruction based anomaly localization, since his-torical normality priors directly determine whether anomalies from old cate-gories can still be restored into normal appearances. Recent continual diffu-sion based IAD methods, such as CDAD [27] and ReplayCAD [28], attempt to address sequential category updates under the diffusion framework. How-ever, they mainly preserve previous knowledge at the model or sample level, rather than explicitly isolating historical normality subspaces. As shown in Figure 1, CDAD suffers from a clear performance decline as new categories arrive, indicating that general knowledge retention does 3not necessarily prevent historical normality prior drift. Therefore, continual diffusion based IAD requires a dedicated mechanism that preserves histori-cal normality priors while incorporating residual normality information from newly arriving categories. Low Rank Adaptation (LoRA) is naturally suited to continual learning because it separates task induced residual updates from the frozen backbone and provides modular carriers for newly acquired knowledge [29, 30, 31, 32, 33, 34]. In diffusion based IAD, we reinterpret each LoRA bank as a low rank normality memory unit that stores category specific normality residuals on top of a frozen diffusion U Net. However, standard LoRA does not explicitly protect historical normality subspaces. Newly trained adapters may overlap with or distort previous LoRA subspaces, causing interference between old and new normality representations. To address these issues, we propose a continual industrial anomaly detec-tion framework based on a frozen Stable Diffusion U Net. The first compo-nent, History Frozen Orthogonal LoRA Bank (HF-OLB), serves as a histori-cal normality prior protection mechanism. It freezes the LoRA banks learned from previous tasks as historical normality bases and projects newly learned adapters into the orthogonal complement of the historical LoRA subspace. By preventing new normality residuals from being written into previously occupied subspaces, HF-OLB reduces interference between old and new nor-mality representations and preserves the reconstruction behavior required by historical categories. The second component, Hierarchical Novelty Adap-tive Bank Growth (HNABG), allocates residual normality capacity in a layer aware manner. Instead of expanding LoRA banks uniformly across all U Net layers, HNABG estimates layer wise subspace novelty and identifies where historical LoRA subspaces are insufficient to express the normal patterns of the incoming category. New residual normality capacity is therefore in-troduced only in layers that contain genuinely novel normality information. This selective allocation avoids both insufficient adaptation in critical layers and redundant residual subspaces that may increase future interference. Extensive experiments on continual settings derived from MVTec Anomaly Detection (MVTec) [35] and Visual Anomaly (VisA) [36] demonstrate that the proposed method better preserves historical normality priors under se-quential category updates. On VisA setting 3, after the final update stage, our method achieves 91.8% average pixel level A-AUROC over all seen tasks, outperforming CDAD by 3.2 percentage points. These results show that pre-serving historical normality priors while adaptively allocating residual nor-4mality capacity leads to more stable anomaly localization under long contin-ual category sequences. The main contributions of this work are threefold: 
+
+• We introduce LoRA into continual diffusion based IAD and propose HF-OLB, which treats LoRA banks as low rank normality memory units and orthogonalizes new adapters against frozen historical banks to preserve category specific normality priors. 
+
+• We propose HNABG, a hierarchical bank growth strategy that allocates residual normality capacity according to layer wise subspace novelty, enabling new category normality acquisition only where historical bases are insufficient. 
+
+• Extensive experiments on continual settings derived from MVTec and VisA demonstrate that the proposed method provides stronger nor-mality prior preservation, lower forgetting, and more stable anomaly localization under long sequential category updates. 
+
+2. Related Work 
+
+2.1. Diffusion Based Anomaly Detection 
+
+Industrial anomaly detection has been widely studied through feature de-viation modeling, retrieval, distillation, and vision language priors [1, 2, 3, 5, 6, 37]. Different from these paradigms, diffusion based methods model anomaly free visual content and localize defects through reconstruction dis-crepancies, making them suitable for subtle and fine grained industrial de-fects. Early reconstruction based methods, such as DRAEM [4], combine image restoration with discriminative segmentation. Recent diffusion based methods further improve normal reconstruction by denoising anomalous in-puts toward the normal manifold. DiffAD [13] and RANO [14] formulate anomaly removal as a diffusion denoising process. GLAD [15] introduces adaptive denoising and spatial fusion, while TransFusion [16] integrates re-construction and localization in an iterative framework. RealNet [38] im-proves realistic anomaly synthesis, and AnomalySD [18] adapts Stable Diffu-sion for few shot multiclass anomaly detection on MVTec [35] and VisA [36]. Inversion based methods such as InvAD [19] improve efficiency, but may 5weaken dense spatial restoration, which is important for pixel level localiza-tion. Beyond anomaly detection, diffusion models have shown strong con-ditional generation ability in pose guided synthesis, talking face generation, story visualization, and virtual dressing [39, 40, 41, 42, 43]. These stud-ies further demonstrate the effectiveness of diffusion priors for controllable visual reconstruction and generation. However, most diffusion based IAD methods are designed for static category sets. In real production lines, new product categories may arrive sequentially, requiring the detector to update continually while preserving historical normality priors. Existing static dif-fusion based methods do not explicitly separate or protect category specific normality patterns, limiting their reliability in continual IAD. 
+
+2.2. Continual Anomaly Detection 
+
+Continual learning methods aim to reduce forgetting through replay, reg-ularization, parameter isolation, or constrained optimization [23, 24]. In IAD, IUF [25] introduces an incremental framework for small defect inspec-tion, while UCAD [26] uses continual prompting with a key prompt knowl-edge memory bank. These methods move IAD toward realistic sequential scenarios, but mainly operate in feature space or rely on lightweight recon-struction, offering limited support for preserving pixel level normality priors. Recent works combine continual learning with diffusion models. Replay-CAD [28] uses diffusion based generative replay to preserve historical details. CDAD [27] stabilizes diffusion training with gradient projection, iterative singular value decomposition, and anomaly masked conditioning. Although these methods improve continual diffusion based IAD, they mainly preserve knowledge through replay samples or constrained model updates. They do not explicitly isolate the category specific normality subspaces formed by pre-vious tasks. As a result, new category adaptation may still perturb historical normality priors and degrade reconstruction behavior for old categories. 
+
+2.3. LoRA Based Modular Adaptation and Subspace Preservation 
+
+LoRA [29] encodes task induced residual updates on top of a frozen back-bone, making it suitable for modular and parameter efficient adaptation. In anomaly detection, LoRA has mainly been used for vision language adapta-tion. AULoRA [30] injects LoRA into CLIP for zero shot anomaly detection, and UniCLIP AD [31] adapts CLIP for unified cross category industrial in-spection. These methods show the potential of low rank adaptation, but they 6are not designed for diffusion reconstruction or continual normality preser-vation. LoRA has also been explored in continual learning. InfLoRA [32] constrains new updates to an interference free subspace, CL LoRA [33] sep-arates shared and task specific adapters, and Online LoRA [34] handles task free online continual learning through distribution shift detection and knowl-edge consolidation. However, these methods mainly target recognition or classification, where the goal is to preserve discriminative representations. Continual diffusion based IAD has a different requirement: historical nor-mality priors must remain stable so that anomalies from old categories can still be reconstructed into normal appearances. Overall, existing diffusion based IAD methods model defect free visual content but rarely address continual category updates. Continual anomaly detection methods reduce forgetting but do not explicitly protect histori-cal normality subspaces. LoRA based continual methods provide modular residual adaptation, but are not tailored to reconstruction based normality preservation. These gaps motivate our normality preserving continual diffu-sion framework, where historical normality priors are stored in frozen LoRA banks and new residual normality information is incorporated through or-thogonal and novelty adaptive bank updates. 
+
+3. Method 
+
+Figure 2 provides an overview of our method. The framework consists of three main modules: a frozen U-Net backbone, a history-frozen orthog-onal LoRA bank, and a hierarchical novelty-adaptive bank growth model. The frozen U-Net backbone provides a stable diffusion prior for anomaly-free reconstruction, while the history-frozen orthogonal LoRA bank serves as a modular memory for category-specific normality priors. Specifically, previ-ously learned LoRA banks are frozen as historical normality bases, and newly added adapters are projected into the orthogonal complement of the historical subspace, thereby reducing interference between old and new normality rep-resentations. The hierarchical novelty-adaptive bank growth model further estimates layer-wise subspace novelty and expands the LoRA bank only for layers where incoming normal patterns cannot be sufficiently represented by historical LoRA subspaces. In this way, the proposed framework preserves historical normality priors while allocating residual normality capacity for newly arriving categories under continual industrial anomaly detection. 7Trainable LoRA bank Frozen U-Net bank 
+
+Hierarchical Novelty-Adaptive Bank Growth (§ 3.3) 
+
+History-Frozen Orthogonal LoRA Bank ( § 3.2) Frozen U-Net Backbone 🐀    
+
+> …
+> …
+> …
+> …
+> L1 L2 L3 L4
+
+Chosen linear/conv 
+
+layer using LoRA 
+
+> Al,t,j
+
+Freeze Prev.Banks   
+
+> Freeze historical LoRA banks and keep their
+> row-space basis fixed
+
+Orthogonal Projection     
+
+> Project new LoRA factors into the orthogonal
+> complement of historical LoRA row space
+
+grow bank s
+
+Activation-based novelty statistics Chosen mid block 
+
+using LoRA 
+
+> Diffusion U-Net
+> High-res
+> Convs
+> (shallow)
+> Middle Attn
+> /Linear
+> (mid-depth)
+> Other
+> Selected
+> Layers
+> (deep)
+
+rhigh 
+
+> High-res Convs
+> (Edges, textures)
+
+rmid 
+
+> Middle Attn / Linear
+> (Structure, semantics)
+
+rbase 
+
+> Other selected layers
+> (Global context)
+> LoRA Rank (r)
+
+𝐀 𝐀 ,𝐀 ,𝐀  
+
+> ⊥
+
+= 𝐀 𝐀 ,𝐀 ,𝐀 𝐀 𝐀 𝐀 − 𝐀 𝐀 ,𝐀  
+
+> <𝐀 ⊤
+
+𝐀 𝐀 ,𝐀 
+
+> <𝐀
+
+Freeze {𝐀 𝐀 ,𝐀 ,𝐀 , 𝐀 𝐀 ,𝐀 ,𝐀 }𝐀 <𝐀 ; train {𝐀 𝐀 ,𝐀 ,𝐀  
+
+> ⊥
+
+, 𝐀 𝐀 ,𝐀 ,𝐀 }𝐀 =𝐀    
+
+> Historical LoRA row space
+> Al,t-1,j
+> (span of )
+> Al,1,j
+
+𝐀 𝐀 ,𝐀 
+
+> 𝐀
+
+Hierarchical LoRA adaptation Layer-wise bank growth 
+
+…
+
+> Al,t-1,j
+> Orthogonal component (kept)
+> removed projection
+
+Figure 2: Illustration of our method. The left part shows the overall framework of the continual diffusion model using LoRA. The right part shows the proposed History-Frozen Orthogonal LoRA Bank and Hierarchical Novelty-Adaptive Bank Growth mechanism. 
+
+3.1. Stable-Diffusion Reconstruction Backbone 
+
+We build our anomaly detector on a latent diffusion backbone initialized from Stable Diffusion. After adaptation on normal data, the model learns a strong prior of anomaly-free appearance and tends to reconstruct abnormal inputs toward the normal manifold. As a result, abnormal regions are poorly preserved in the reconstruction and become salient in the reconstruction dis-crepancy map. This property is especially attractive for industrial anomaly detection, where the notion of “normality” is often easier to model than the potentially unbounded space of anomalies. Given an input image x, a variational autoencoder first maps it into the latent space, 
+
+z0 = E(x), (1) where E(·) denotes the VAE encoder. Following the standard diffusion for-mulation, a noisy latent at denoising timestep s is constructed as 
+
+zs = √¯αsz0 + √1 − ¯αsϵ, ϵ ∼ N (0 , I ). (2) 8Here, s is used exclusively for the diffusion denoising timestep. A U-Net denoiser ϵθ(·) is trained to predict the injected noise: 
+
+Ldiff = Ez0,ϵ,s 
+
+∥ϵ − ϵθ(zs, s )∥22
+
+ . (3) At inference time, the denoising process produces an estimated clean latent 
+
+ˆz0, which is decoded back to the image space, 
+
+ˆx = D(ˆ z0), (4) where D(·) denotes the VAE decoder. The anomaly heat map is obtained from the discrepancy between the input image and its restored normal coun-terpart, 
+
+M (x) = ψ(x, ˆx), σ(x) = Pool( M (x)) , (5) where ψ(·, ·) denotes a residual operator, M (x) is the pixel-wise anomaly map, and σ(x) is the image-level anomaly score. If the input is normal, the reconstructed image should remain close to the observation. In contrast, if the input contains anomalies, the diffusion prior tends to repair them into normal structures, making the residual map a reliable indicator of abnormal-ity. Since the generative prior of Stable Diffusion provides a stable recon-struction foundation, we keep the diffusion U-Net backbone frozen during continual adaptation. Instead of modifying the backbone directly, we attach LoRA banks to selected convolutional and linear operators, where each bank stores category-specific normality residuals. This design separates newly ac-quired normality information from the shared diffusion backbone, allowing historical normality priors to be preserved while new-category residual nor-mality patterns are incorporated sequentially. 
+
+3.2. History-Frozen Orthogonal LoRA Bank 
+
+To incorporate new-category normality residuals without disturbing pre-viously acquired normality priors, we introduce the History-Frozen Orthogo-nal LoRA Bank (HF-OLB). The central idea is that banks learned for previ-ous tasks are frozen permanently, while new tasks are handled by appending new low-rank banks in directions that are explicitly orthogonal to the histor-ical LoRA subspace. For each adapted layer l, let Wl denote the frozen backbone weight and let xl denote the layer input in matrix form. For convolutional layers, xl
+
+9is formed by unfolding local patches, so that both convolutional and linear operators can be written consistently as matrix multiplications. We attach a layer-wise LoRA bank collection 
+
+L(t) 
+
+> l
+
+=
+
+> t
+
+[
+
+> q=1
+
+{∆Wl,q,j }m(q) 
+
+> l
+> j=1
+
+, (6) where t is the continual task index, q is the task index associated with a historical or current bank, and j indexes the banks appended within task q.Here, m(q) 
+
+> l
+
+denotes the number of banks appended to layer l during task q.The total number of banks available at layer l after task t is 
+
+K(t) 
+
+> l
+
+=
+
+> t
+
+X
+
+> q=1
+
+m(q) 
+
+> l
+
+. (7) The adapted response of layer l is written as 
+
+yl = Wlxl + Agg l
+
+n 
+
+∆Wl,q,j xl | 1 ≤ q ≤ t, 1 ≤ j ≤ m(q)
+
+> l
+
+o 
+
+, (8) where Agg l(·) denotes the bank aggregation operator. In our implementation, both training and inference follow a unified top-k sparse bank selection prin-ciple. Each LoRA bank is associated with a learnable scalar gate, and only the top-k activated banks are retained for aggregation through sparse soft-max normalization. Historical banks remain available in the forward pass as routing candidates, but their LoRA factors and scalar gates are frozen after their corresponding tasks. This design allows previously learned nor-mality banks to contribute to reconstruction without being overwritten by later updates. Each bank is parameterized in LoRA form, 
+
+∆Wl,q,j = Bl,q,j ˜Al,q,j , ˜Al,q,j ∈ Rrl×dl , Bl,q,j ∈ Rol×rl , (9) where ˜Al,q,j is equal to Al,q,j for ordinary LoRA and denotes the projected effective factor in the hard-orthogonal mode, rl is the LoRA rank of layer l, dl
+
+is the input dimension after matrix reshaping, and ol is the output dimension. For a convolutional layer with kernel size hl × wl and input channel number 
+
+cl, we have dl = clhlwl after unfolding. For final testing, we use the deployment-oriented fused form of the same top-k sparse aggregation rule. Specifically, the selected LoRA banks are 10 merged into the corresponding frozen backbone weight before evaluation. Let I(t) 
+
+> l
+
+= {(q, j ) | 1 ≤ q ≤ t, 1 ≤ j ≤ m(q) 
+
+> l
+
+} denote all available banks at layer l, and let gl,q,j be the learned scalar gate of bank (q, j ). We first select the top-kl banks according to their gate values, where kl = min( k, K (t) 
+
+> l
+
+):
+
+Sfuse  
+
+> l
+
+= TopK kl
+
+
+
+{gl,q,j }(q,j )∈I (t)
+
+> l
+
+
+
+,
+
+¯ωl,q,j =
+
+
+
+exp( gl,q,j )
+
+P
+
+> (q′,j ′)∈S fuse
+> l
+
+exp( gl,q ′,j ′ ), (q, j ) ∈ S fuse  
+
+> l
+
+,
+
+0, otherwise ,
+
+¯∆W (t) 
+
+> l
+
+= αl
+
+X
+
+> (q,j )∈I (t)
+> l
+
+¯ωl,q,j ∆Wl,q,j ,
+
+fW (t) 
+
+> l
+
+= Wl + ¯∆W (t) 
+
+> l
+
+, ytest  
+
+> l
+
+= fW (t) 
+
+> l
+
+xl.
+
+(10) Here, αl is the LoRA scaling factor. In the hard-orthogonal mode, the LoRA-A factor used in ∆Wl,q,j is the projected effective factor defined by the histor-ical subspace complement. At evaluation, the same fused model is used for all test samples. The top-k banks are selected according to their learned scalar gates and merged into the frozen backbone weights before inference, without using task labels or category labels. Therefore, the inference pipeline pre-serves the same sparse bank-selection principle used during continual adap-tation while avoiding dynamic routing overhead during deployment. This design preserves the contribution of highly relevant banks while preventing less informative adapters from dominating the fused residual. The defining principle of HF-OLB is history freezing. Assume continual task t arrives after tasks 1, . . . , t − 1. We optimize only the newly appended banks for task t, while all historical banks remain fixed: 
+
+Θ(t)train ={ ¯Al,t,j , B l,t,j , g l,t,j | 1 ≤ j ≤ m(t) 
+
+> l
+
+}l ∪ { ϕl}l∈S ,
+
+{ ¯Al,q,j , B l,q,j , g l,q,j | q < t }l,j are fixed . (11) Here, ϕl denotes the lightweight router parameters at layer l. q < t denotes a historical task index, while t denotes the current continual task index. Nei-ther q nor t is used as a diffusion denoising timestep. Therefore, current-task optimization updates only the newly appended LoRA factors, their scalar gates, and the lightweight routers, whereas all historical LoRA factors and 11 historical scalar gates receive no gradients. This allows previous banks to be reused in the forward computation without being overwritten by later tasks. Freezing alone is not sufficient. If newly appended banks are initialized inside the subspace already covered by historical banks, they may compete for the same representation directions and waste capacity. To avoid this, we explicitly build an orthonormal row-space basis of the historical LoRA-A
+
+matrices: 
+
+U <t l,A = orth 
+
+
+
+rowspan 
+
+n
+
+Al,q,j | q < t, 1 ≤ j ≤ m(q)
+
+> l
+
+o 
+
+, U <t l,A ∈ Rρ<t l,A ×dl ,
+
+(12) where the rows of U <t l,A are orthonormal and ρ<t l,A is the dimension of the accu-mulated historical LoRA-A subspace. The corresponding projection matrix in the input-feature space is 
+
+P <t l,A =  U <t l,A 
+
+⊤ U <t l,A ∈ Rdl×dl . (13) During optimization, we maintain an unconstrained trainable factor ¯Al,t,j ,while the effective LoRA-A factor used in each forward pass is projected onto the orthogonal complement of the historical LoRA-A row space: 
+
+˜Al,t,j = ¯Al,t,j 
+
+ Idl − P <t l,A 
+
+ = ¯Al,t,j 
+
+h
+
+Idl −  U <t l,A 
+
+⊤ U <t l,A 
+
+i
+
+. (14) Since the projection is applied to the effective factor throughout training and inference, ˜Al,t,j (U <t l,A )⊤ = 0 holds at every forward pass. For ∆Wl,t,j =
+
+Bl,t,j ˜Al,t,j , we have row(∆ Wl,t,j ) ⊆ row( ˜Al,t,j ); therefore, the LoRA update is constrained on the input-feature side by the same historical-subspace comple-ment, while Bl,t,j remains free to map residual directions to output channels. For a historical bank appended at task q < t , its effective factor ˜Al,q,j is computed with the historical basis available at task q and then kept fixed. The benefit of HF-OLB is two-fold. History freezing keeps the reconstruc-tion behavior encoded by previous banks unchanged, while the hard projec-tion of the effective LoRA-A factor prevents newly appended banks from reusing input-side directions already occupied by historical normality bases. This combination preserves historical normality priors while allowing new-category residual normality information to be written into non-overlapping subspaces. 
+
+3.3. Hierarchical Novelty-Adaptive Bank Growth 
+
+A fixed LoRA-bank budget for all layers is rarely optimal. Different U-Net stages play different roles: high-resolution convolutional blocks are sensitive 12 to local textures and defect boundaries, while middle attention or linear lay-ers primarily encode more global context. Motivated by this observation, we design Hierarchical Novelty-Adaptive Bank Growth (HNABG), which com-bines hierarchical rank allocation with layer-wise capacity expansion. 
+
+3.3.1. Hierarchical Rank Allocation 
+
+Instead of assigning the same LoRA rank to all adapted layers, we allocate layer-dependent ranks according to their functional roles: 
+
+rl =
+
+
+
+rhigh , l ∈ S conv high ,rmid , l ∈ S attn mid ∪ S lin mid ,rbase , otherwise .
+
+(15) Here, Sconv high denotes high-resolution convolutional blocks in the U-Net, while 
+
+Sattn mid and Slin mid denote middle-block attention and linear layers, respectively. We assign a larger rank to high-resolution convolutional blocks because they must encode fine-grained textures, small structural defects, and boundary distortions. A medium rank is used for middle attention and linear layers because they require sufficient expressiveness for semantic coordination but do not need the same level of local detail modeling. The remaining adapted layers keep a base rank to avoid assigning excessive residual normality ca-pacity to layers with limited novelty. 
+
+3.3.2. Novelty-guided Layer-wise Capacity Growth 
+
+Even with hierarchical ranks, not every layer requires additional banks when a new task arrives. Uniformly growing all layers may introduce redun-dant residual subspaces and occupy directions that should remain available for future normality patterns. Therefore, we trigger expansion only in layers whose current banks cannot adequately explain the new task. At the beginning of continual task t, we compute subspace novelty statis-tics from sampled layer activations. For layer l, let 
+
+F (t) 
+
+> l
+
+=
+
+h
+
+f (t) 
+
+> l, 1
+
+, f (t) 
+
+> l, 2
+
+, . . . , f (t)
+
+> l,n l
+
+i
+
+∈ Rdl×nl (16) be the activation matrix formed from sampled layer inputs. For linear layers, 
+
+f (t) 
+
+> l,i
+
+is obtained by flattening token features. For convolutional layers, local patches are obtained by unfolding, optionally after spatial pooling to reduce redundancy, and are treated as column vectors. 13 Given the historical LoRA-A row-space basis U <t l,A and projection matrix 
+
+P <t l,A , the novelty score of task t at layer l is defined as 
+
+e(t) 
+
+> l
+
+=
+
+ Idl − P <t l,A 
+
+ F (t)
+
+> l
+> 2
+> F
+
+F (t)
+
+> l
+> 2
+> F
+
++ ε. (17) This quantity is the fraction of activation energy that lies outside the sub-space already spanned by historical LoRA-A directions. If e(t) 
+
+> l
+
+is small, the current layer capacity is already sufficient, and adding a new bank would be redundant. If e(t) 
+
+> l
+
+is large, the layer contains genuinely new directions and should receive additional capacity. To account for layer heterogeneity, we use layer-dependent novelty thresh-olds: 
+
+ηl =
+
+
+
+γhigh η0, l ∈ S conv high ,γmid η0, l ∈ S attn mid ∪ S lin mid ,η0, otherwise ,
+
+(18) where η0 is the base novelty threshold. In practice, high-resolution convo-lutional blocks can use a lower effective threshold because they are more sensitive to subtle appearance shifts. Middle attention and linear layers use stricter thresholds because each bank there is already relatively expressive. When e(t) 
+
+> l
+
+exceeds ηl, the historical LoRA banks in layer l are frozen, and new LoRA banks are appended. The number of newly appended banks is determined by the excess novelty: 
+
+m(t) 
+
+> l
+
+=
+
+
+
+0, e(t) 
+
+> l
+
+≤ ηl,
+
+max 
+
+
+
+0, min 
+
+
+
+Mtask , M max  
+
+> l
+
+− K(t−1)  
+
+> l
+
+, 1 + 
+
+e(t) 
+
+> l−ηl
+> δ
+
+ 
+
+, e(t) 
+
+> l
+
+> η l,
+
+(19) where m(t) 
+
+> l
+
+is the number of banks added by task t to layer l, Kl is the current number of banks at layer l, M max  
+
+> l
+
+is the layer-wise capacity limit, Mtask is the maximum number of banks allowed to grow in one task, and δ is the novelty step. This rule is preferable to adding a constant number of banks because it lets capacity scale with task difficulty: mildly novel layers receive only a small expansion, while strongly novel layers are granted more room. To keep the growth budget focused, we expand only the top-Kgrow layers 14 ranked by novelty. Let Gt be the selected growth set: 
+
+Gt = TopK Kgrow 
+
+n 
+
+l | e(t) 
+
+> l
+
+> η l
+
+o
+
+, e (t)
+
+> l
+
+
+
+. (20) Here, TopK Kgrow (·) returns at most Kgrow candidate layers with the largest novelty scores. If fewer than Kgrow layers satisfy e(t) 
+
+> l
+
+> η l, all satisfying layers are selected. The layer-wise LoRA bank collection is then updated as 
+
+L(t) 
+
+> l
+
+=
+
+(
+
+L(t−1)  
+
+> l
+
+∪ { ∆Wl,t,j }m(t) 
+
+> l
+> j=1
+
+, l ∈ G t,
+
+L(t−1)  
+
+> l
+
+, l / ∈ G t. (21) Before appending new banks, all historical banks in the selected layer are frozen. Therefore, each growth round becomes an explicit residual allocation for the new task, rather than a destructive update to previously learned banks. HNABG offers two advantages for normality-prior preservation. First, it avoids redundant bank growth in layers whose historical subspaces already explain the incoming normal patterns, thereby reserving residual subspace directions for future categories. Second, by expanding only where novelty is high, it reduces unnecessary overlap among normality representations and prevents the LoRA bank space from becoming fragmented. Overall, HF-OLB and HNABG are complementary. HF-OLB prevents newly added LoRA banks from overwriting historical normality priors, while HNABG determines where and how much residual normality capacity should be introduced. Together, they enable continual U-Net adaptation through a controlled process of normality-preserving residual subspace expansion. Algorithm 1 summarizes the overall continual training and fused inference pipeline of our framework. 
+
+4. Experiments and Analysis 
+
+4.1. Experimental Setup 
+
+Datasets. The datasets used in this paper are MVTec [35] and VisA [36]. Both datasets contain multiple categories. Specifically, MVTec contains 15 categories, with image resolutions ranging from 700 2 to 900 2 pixels. It in-cludes 3629 training samples, all of which are normal, and 1725 test samples, including 467 normal samples and 1258 anomalous samples. VisA contains 15 Algorithm 1 Continual training and fused inference. 
+
+Require: Normal task stream {D tr  
+
+> t
+
+}Tt=1 ; frozen diffusion backbone (E, D, ϵ θ ); adapted layer set S; top-k value; bank-growth configuration. 
+
+Ensure: Fused model {W f (T ) 
+
+> l
+
+}l∈S , anomaly map M (I), and image-level score σ(I).1: Freeze (E, D, ϵ θ ) and initialize L(0)  
+
+> l
+
+= ∅, ∀l ∈ S .
+
+– Continual training 
+
+2: for t = 1 to T do 
+
+3: Extract {xl, F (t) 
+
+> l
+
+}l∈S from Dtr  
+
+> t
+
+with the frozen U-Net. 4: for all l ∈ S do 
+
+5: Build U <t l,A and P <t l,A by Eqs. (12)–(13). 6: Compute novelty score e(t) 
+
+> l
+
+by Eq. (17). 7: end for 
+
+8: Compute {m(t) 
+
+> l
+
+} by Eq. (19) and select Gt by Eq. (20). 9: Freeze L(t−1)  
+
+> l
+
+and append {∆Wl,t,j }m(t) 
+
+> l
+> j=1
+
+for each l ∈ G t.10: Project each new effective LoRA-A factor by Eq. (14). 11: Train Θ(t)train under Eq. (11) with Ldiff in Eq. (3). 12: end for – Fused inference 
+
+13: for all l ∈ S do 
+
+14: Select top-k LoRA banks and fuse them into W f (T ) 
+
+> l
+
+by Eq. (10). 15: end for 
+
+16: Reconstruct ˆI = D(ˆ z0) and compute M (I) and σ(I) by Eqs. (4)–(5). 17: return {W f (T ) 
+
+> l
+
+}l∈S , M (I), and σ(I).
+
+12 categories, with image resolutions of roughly 1.5K ×1K pixels. It includes 8661 training samples, all of which are normal, and 2162 test samples, includ-ing 962 normal samples and 1200 anomalous samples. These two datasets contain diverse industrial objects and textures and are widely used to eval-uate real-world anomaly detection methods. Task Settings. We evaluate our method on both MVTec and VisA under multiple incremental settings. For MVTec, the task streams include 14–1 (1 step), 3 × 5 (5 steps), and 7– 
+
+1 × 8 (8 steps). For VisA, we use 11–1 (1 step), 8– 2 × 2 (2 steps), and 2 × 6 (6 steps). Following the one-for-more continual IAD protocol, we evaluate each setting under three randomly shuffled task orders. For each random order, all compared methods use the same category sequence, data split, and train-ing configuration to ensure a fair comparison. The reported A-AUROC and FM results are averaged over the three task-order trials. To further evaluate long-horizon stability, we include extended incremental settings with more sequential steps. 16 Table 1: LoRA insertion blocks and rank allocation in the Stable-Diffusion U-Net. The three row groups separated by horizontal rules correspond to the input path, middle block, and output path, respectively. Curly braces denote grouped blocks or submodules that share the same LoRA rank.                                                   
+
+> Rank Block name LoRA-inserted submodules
+> rhigh = 16 input_blocks.0 0
+> rhigh = 16 input_blocks.{1,2,4,5,7,8,10,11} 0.{in_layers.2,out_layers.3}
+> rhigh = 16 input_blocks.{4,7} 0.skip_connection
+> rhigh = 16 input_blocks.{3,6,9} 0.op
+> rhigh = 16 input_blocks.{1,2,4,5,7,8} 1.{proj_in,proj_out}
+> rmid = 8 input_blocks.{1,2,4,5,7,8} 1.attn{1,2}.to_{q,k,v,out.0}
+> rbase = 4 input_blocks.{1,2,4,5,7,8} 1.ff.net.{0.proj,2}
+> rbase = 4 middle_block.{0,2} {in_layers.2,out_layers.3}
+> rbase = 4 middle_block.1 {proj_in,proj_out}
+> rmid = 8 middle_block.1 attn{1,2}.to_{q,k,v,out.0}; ff.net.{0.proj,2}
+> rhigh = 16 output_blocks.{0,...,11} 0.{in_layers.2,out_layers.3,skip_connection}
+> rhigh = 16 output_blocks.2 1.conv
+> rhigh = 16 output_blocks.{5,8} 2.conv
+> rhigh = 16 output_blocks.{3,...,11} 1.{proj_in,proj_out}
+> rmid = 8 output_blocks.{3,...,11} 1.attn{1,2}.to_{q,k,v,out.0}
+> rbase = 4 output_blocks.{3,...,11} 1.ff.net.{0.proj,2}
+
+Evaluation Metrics. To evaluate model performance, we calculate the av-erage AUROC (A-AUROC) and the forgetting measure (FM) over N contin-ual steps [27]. Both A-AUROC and FM are reported in the image-level/pixel-level format. For each continual setting, we use three randomly shuffled task orders, where all compared methods share the same order within each trial. The reported A-AUROC and FM values are averaged over the three trials. 
+
+Implementation Details. We use a 4090 GPU for training. We adopt a Stable Diffusion v1.5-based latent diffusion backbone with a 4-level U-Net, where the channel multiplier is [1 , 2, 4, 4] , each level contains 2 ResBlocks, the transformer depth is 1, the number of attention heads is 8, and the base channel number is 320. The backbone also uses an AutoencoderKL with latent dimension z = 4 and 1000 diffusion steps, and we train the model using the AdamW optimizer with an initial learning rate of 1 × 10 −4. In all experiments and comparisons, we use the same experimental configuration: input images are resized to 256 × 256 , the maximum number of epochs is 300, the batch size is 4, and a PyTorch DataLoader with num_workers=4 is used for data loading. For reproducibility, Table 1 summarizes the exact LoRA insertion posi-17 Table 2: Image-level/pixel-level results of our method on MVTec under 3 continual anomaly detection settings, reported with A-AUROC and FM. The best and second-best results are marked in bold and underlined. † indicates diffusion-based continual IAD methods, and * indicates LoRA-based continual diffusion adaptation variants. Green de-notes methods based on official public code, whereas Blue denotes methods implemented and tuned by our team.                                                                      
+
+> Method Venue 14–1 with 1 Step 3×5 with 5 Steps 7–1 ×8 with 8 Steps A-AUROC ( ↑)FM ( ↓)A-AUROC ( ↑)FM ( ↓)A-AUROC ( ↑)FM ( ↓)UCAD[26] AAAI 24 92.1/94.4 2.3/1.9 81.8/87.2 10.4/9.5 75.6/79.9 12.1/9.1 MambaAD[44] NeurIPS 24 80.5/– 10.8/– 75.8/– 15.6/– 72.3/– 21.4/– IUF[25] ECCV 24 94.2/95.5 1.8/1.5 83.9/87.7 9.7/8.4 76.8/81.0 10.2/9.5 ReplayCAD[28] †IJCAI 25 95.1 /95.3 0.2/0.1 87.0/88.1 6.1/4.7 83.3/86.1 8.5/3.8 CDAD[27] †CVPR 25 94.9/ 95.6 -0.2 /-0.1 88.5/91.7 4.7/3.5 83.5/85.6 6.0/4.3 Seq-SD-LoRA[29]* ICLR 22 85.8/86.8 4.7/4.3 71.5/79.5 13.4/10.0 68.1/78.2 19.7/15.2 Seq-SD-CLLoRA[33]* CVPR 25 89.5/90.4 2.9/2.6 82.5/85.6 5.7/5.2 77.1/80.7 6.5/8.0
+> Ours *-93.0/93.8 0.1/0.1 86.7 /92.4 3.3 /3.1 84.1 /91.5 3.8 /3.2
+
+tions and the corresponding rank allocation in the Stable-Diffusion U-Net. For sparse routing and fused inference, we set k=4 for all experiments, follow-ing the same configuration across datasets and task streams. In our imple-mentation, LoRA adapters are attached only to selected Conv2d and Linear operators, including convolutional layers, projection layers, attention-related linear layers, and feed-forward layers. The rank is assigned according to the U-Net region and operator type: high-resolution convolutional layers are given a larger rank of rhigh = 16 to enhance adaptation capacity, mid-dle attention/linear layers use rmid = 8 , and the remaining adapted layers use rbase = 4 . For novelty filtering, we set a base threshold τ0 = 0 .2 and apply group-wise scaling factors following the same rank hierarchy, where 
+
+γhigh = 0 .8, γmid = 1 .2, and γbase = 1 .0. Accordingly, the thresholds are computed as 0.16, 0.24, and 0.20. 
+
+4.2. Comparison Results 
+
+The compared methods can be divided into three groups: (1) conventional continual anomaly detection methods, including UCAD [26], MambaAD [44], and IUF [25]; (2) diffusion-based continual IAD methods, including Replay-CAD [28] and CDAD [27]; and (3) LoRA-based continual diffusion adap-tation variants, including Seq-SD-LoRA [29] and Seq-SD-CLLoRA [33]. In Seq-SD-LoRA, each incoming task is assigned an independent LoRA unit on the Stable Diffusion backbone, so that task-specific residual updates are stored in isolated adapters without explicit historical-subspace protection. 18 Table 3: Image-level/pixel-level results of our method on VisA under 3 continual anomaly detection settings, reported with A-AUROC and FM. The best and second-best results are marked in bold and underlined. † indicates diffusion-based continual IAD methods, and * indicates LoRA-based continual diffusion adaptation variants. Green denotes methods based on official public code, whereas Blue denotes methods implemented and tuned by our team.                                                                          
+
+> Method Venue 11– 1×1with 1 Step 8– 2×2with 2 Steps 2×6 with 6 Steps A-AUROC ( ↑)FM ( ↓)A-AUROC ( ↑)FM ( ↓)A-AUROC ( ↑)FM ( ↓)UCAD[26] AAAI 24 84.2/95.6 3.0/0.9 80.7/92.5 5.2/5.8 73.4/76.8 15.0/10.1 MambaAD[44] NeurIPS 24 78.0/– 13.2/– 73.9/– 20.2/– 64.7/– 33.8/– IUF[25] ECCV 24 84.6/ 95.7 2.7/1.4 81.3/91.8 5.8/6.5 78.9/80.4 14.2/11.1 ReplayCAD[28] †IJCAI 25 90.9/94.6 0.7/0.6 84.5/92.9 3.0/ 1.2 79.8/85.1 9.8/7.9 CDAD[27] †CVPR 25 93.7 /95.5 0.3 /0.1 85.9 /93.2 1.4 /1.3 80.8/88.6 6.2/5.2 Seq-SD-LoRA[29]* ICLR 22 84.2/86.9 2.1/1.9 80.7/81.0 5.0/4.6 68.0/70.4 18.7/16.3 Seq-SD-CLLoRA[33]* CVPR 25 86.9/90.7 0.7/0.7 83.0/83.2 3.1/2.8 73.7/78.6 13.6/9.5
+> Ours *-89.6/93.3 0.5/0.3 85.2/93.0 1.7/1.3 83.6 /91.8 3.8/3.9
+
+In Seq-SD-CLLoRA, each adapted layer contains one shared LoRA branch initialized from the first task to retain common normality features, while the remaining LoRA branches store task-specific residual features beyond the shared component. The third group therefore evaluates whether the pro-posed history-frozen orthogonal bank and novelty-adaptive growth designs can better preserve historical normality priors and allocate residual normal-ity capacity than isolated LoRA units or shared-specific LoRA organization under the same diffusion reconstruction framework. As shown in Tables 2 and 3, diffusion-based continual IAD methods can still achieve strong results in short task streams, where historical normality-prior drift is relatively limited. However, our method shows clearer advan-tages over the LoRA-based continual diffusion adaptation variants. Com-pared with Seq-SD-LoRA and Seq-SD-CLLoRA, our method consistently achieves higher A-AUROC and lower FM on both datasets, indicating that isolated LoRA units or shared-specific LoRA organization are insufficient to fully protect historical normality priors. The advantage becomes more evident as the task stream grows. On MVTec 3 × 5, our method achieves the best pixel-level A-AUROC (92.4) and the lowest FM (3.1). On the longest MVTec setting, 7–1 × 8, it ranks first on all four metrics, reaching 84.1/91.5 A-AUROC with 3.8/3.2 FM. A similar trend appears on VisA. In the hardest setting, 2 × 6, our method obtains 83.6/91.8 A-AUROC and 3.8/3.9 FM, improving the second-best A-AUROC by 2.8/3.2 points and reducing FM by 2.4/1.3. These results show that the 19 Table 4: Ablation study of key design choices on MVTec under setting 2. “Freeze” denotes freezing historical LoRA banks, and “A-Proj.” denotes hard projection of the effective LoRA-A factor onto the complement of the historical LoRA-A subspace. For “Growth Strategy”, “None” means no additional bank growth, “Fixed” means uniformly expanding all LoRA-inserted layers once growth is triggered, and “Adaptive” means novelty-guided layer-wise growth. The best results are marked in bold .                                          
+
+> No. Variant Freeze A-Proj. Growth Strategy A-AUROC ( ↑)FM ( ↓)1Standard LoRA ✗✗None 71.5/79.5 13.4/10.0 2HF-OLB only ✓✓None 81.2/86.9 7.1/4.6 3LoRA + HNABG ✗✗Adaptive 79.2/82.3 10.6/7.5 4Ours w/o Hard A-Proj. ✓✗Adaptive 83.0/87.6 5.8/5.2 5Ours w/ Fixed Growth ✓✓Fixed 83.8/89.6 4.7/4.4 6Ours ✓✓Adaptive 86.7/92.4 3.3/3.1
+
+proposed normality-preserving subspace expansion is especially effective in long-horizon continual anomaly detection. 
+
+4.3. Ablation Study 
+
+Table 4 shows that the improvement does not come from simply inserting LoRA, but from how the LoRA banks are preserved and expanded during continual adaptation. Standard LoRA suffers from severe forgetting, with only 71.5/79.5 A-AUROC and 13.4/10.0 FM. Adding HF-OLB improves the result to 81.2/86.9 A-AUROC and reduces FM to 7.1/4.6, confirming that freezing historical banks and constraining new updates to the historical-complement subspace help preserve historical normality priors. LoRA + HNABG also improves over Standard LoRA, but still shows larger forgetting than HF-OLB, indicating that adaptive growth alone is insufficient without explicit history protection. Rows 4 and 5 further isolate the two key designs in the full framework. Removing hard A-projection degrades A-AUROC from 86.7/92.4 to 83.0/87.6 and increases FM from 3.3/3.1 to 5.8/5.2, showing that freezing historical banks alone cannot fully suppress subspace interference. Replacing adaptive growth with fixed growth also weakens performance, re-ducing A-AUROC to 83.8/89.6 and increasing FM to 4.7/4.4. This suggests that uniformly expanding LoRA banks cannot allocate residual normality capacity as effectively as novelty-guided layer-wise growth. The full model achieves the best results on both A-AUROC and FM, demonstrating the complementarity of HF-OLB and HNABG. 20 0.5× 0.75× 1.0× 1.25× 1.5× 
+
+> Threshold scale
+> 82
+> 84
+> 86
+> 88
+> 90
+> 92
+> 94
+> Pixel-level A-AUROC (%)
+> 90.5
+> 91.0
+> 92.4
+> 90.6
+> 88.9
+> Default
+
+Figure 3: Sensitivity analysis of the three-level HNABG threshold configuration on MVTec setting 2. The default High/Mid/Base threshold configuration is 0.16/0.24/0.20 and is scaled by different factors while preserving their relative ratios. The best performance at the default scale suggests that balanced novelty-guided growth is important for allocating residual normality capacity. 
+
+4.4. Hyperparameter Analysis 
+
+Since HNABG uses a three-level threshold configuration, we analyze its sensitivity by scaling the default thresholds, i.e., 0.16/0.24/0.20, with dif-ferent factors. As shown in Figure 3, the default scale achieves the best pixel-level A-AUROC of 92.4. When the thresholds are scaled down to 0.5 ×
+
+and 0.75 ×, the performance decreases to 90.5 and 91.0, respectively, suggest-ing that overly loose growth criteria may introduce redundant LoRA banks. When the thresholds are scaled up to 1.25 × and 1.5 ×, the performance further drops to 90.6 and 88.9, indicating that overly strict growth criteria may under-allocate residual normality capacity for newly arriving categories. These results show that the default threshold configuration provides a better balance between preserving historical normality priors and adapting to new normality patterns. 21 1 2 3 4 5 6 7 8       
+
+> Task Index
+> 0.0
+> 0.1
+> 0.2
+> 0.3
+> 0.4
+> 0.5
+> 0.6
+> Cosine Similarity  cos(  (t)
+> new , (1 :  t 1)
+> old  )
+> 0.22
+> 0.28
+> 0.34
+> 0.40
+> 0.45
+> 0.49
+> 0.52
+> 0.55
+> 0.030 0.026 0.022 0.020 0.018 0.016 0.015 0.014
+> Cumulative Subspace Overlap Across Tasks
+> Ours
+> CDAD
+
+Figure 4: Comparison of cosine similarity between the newly acquired task subspace and the cumulative old-knowledge subspace on MVTec Setting 3. 
+
+4.5. Effectiveness of Hard Orthogonal Projection 
+
+As shown in Figure 4, we measure the cosine similarity between the newly acquired task subspace U (t)new and the cumulative old-knowledge subspace 
+
+U (1: t−1) old . As a representative gradient-constrained continual diffusion base-line, CDAD stabilizes sequential updates through soft update constraints, but it does not explicitly enforce a hard orthogonal complement for new-task adaptation. Therefore, its overlap with the cumulative old subspace tends to increase as tasks accumulate, which may lead to weight drift and degraded long-horizon performance. In contrast, our hard-orthogonal LoRA bank projects the effective LoRA-A factor onto the orthogonal complement of previous banks at each forward pass, keeping the input-side subspace overlap near zero and thereby better preserving old knowledge. 22 Input  
+
+> CDAD
+> Ours
+> GT Figure 5: Qualitative comparison of anomaly localization maps produced by CDAD and the proposed method on representative industrial inspection samples. From top to bottom, each row shows the input image, the anomaly map generated by CDAD, the anomaly map generated by our method, and the ground-truth mask. Warmer colors indicate higher anomaly responses.
+
+4.6. Visualization Results 
+
+As shown in Figure 5, CDAD tends to produce over-diffused anomaly responses and frequently activates normal regions with complex textures or strong structural edges, which may lead to false-positive detections and inac-curate defect boundaries. In contrast, the proposed method concentrates the anomaly responses on the true defective areas and exhibits stronger consis-tency with the ground-truth masks. This advantage is particularly evident for subtle defects and texture-like anomalies, where the abnormal patterns are easily confused with normal background variations. The qualitative re-sults indicate that our method not only improves the discriminability between normal and abnormal regions, but also provides more reliable pixel-level lo-calization, thereby enhancing the interpretability and practical applicability of industrial anomaly inspection. As shown in Figure 6, our method accurately localizes anomalous regions across different object and texture categories on both MVTec and VisA. The zoomed regions further demonstrate that the detected anomalies are consistent with the actual defective areas. Moreover, the reconstructed nor-mal images effectively remove abnormal patterns while preserving the overall 23 MVTec VisA Figure 6: Visualization of anomaly localization and restoration on MVTec and VisA. For each sample, we show the anomalous image, zoomed anomalous region, and reconstructed normal image. Red and green boxes indicate anomalous and reconstructed normal regions, respectively. 
+
+structure and appearance of the original samples. These qualitative results indicate that our method achieves reliable anomaly localization and normal reconstruction under diverse visual conditions. 
+
+4.7. Auxiliary Resource Analysis 
+
+Table 5 reports the auxiliary resource usage on MVTec Setting 1. Here, TP denotes the number of trainable parameters, M-TP denotes the maximum number of training parameters during the continual training process, M-TPR denotes the corresponding maximum training-parameter ratio, and P-GPU denotes the peak GPU memory usage over the entire training process. Although resource efficiency is not the main objective of our framework, the results show that the proposed normality-preserving bank design re-mains practical. Compared with diffusion-based continual IAD methods, our method reduces the peak trainable parameters from 70.77M in ReplayCAD and 892.67M in CDAD to 41.48M. The corresponding M-TPR is only 3.6%, much lower than ReplayCAD, CDAD, Seq-SD-LoRA, and Seq-SD-CLLoRA. In terms of memory usage, our method requires 13,936 MiB peak GPU mem-ory, saving 9,944 MiB compared with ReplayCAD and 8,960 MiB compared with CDAD. Compared with LoRA-based continual diffusion variants, our method also reduces peak GPU memory by 3,712 MiB over Seq-SD-LoRA 24 Table 5: Auxiliary resource analysis on MVTec Setting 1. † indicates diffusion-based con-tinual IAD methods, and * indicates LoRA-based continual diffusion adaptation variants. Green and Blue denote methods based on official public code and our implementation, respectively.                                     
+
+> Method Venue Backbone Parameter TP ( ↓)M-TP ( ↓)M-TPR ( ↓)P-GPU ( ↓)ReplayCAD[28] †IJCAI 25 95,631,088 70,768,560 70,768,560 74.0% 23880 MiB CDAD[27] †CVPR 25 1,099,384,995 892,670,652 892,670,652 81.2% 22896 MiB Seq-SD-LoRA[29]* ICLR 22 1,131,225,573 330,145,926 330,145,926 29.2% 17648 MiB Seq-SD-CLLoRA[33]* CVPR 25 1,131,225,573 531,375,210 351,809,684 31.1% 18192 MiB
+> Ours *-1,131,225,573 65,345,721 41,482,234 3.6% 13936 MiB
+
+and 4,256 MiB over Seq-SD-CLLoRA. These results indicate that HF-OLB and HNABG preserve historical normality priors with limited additional re-source overhead, rather than relying on a larger trainable parameter budget. 
+
+5. Conclusion 
+
+We present a normality-preserving continual industrial anomaly detection framework built on a frozen Stable Diffusion backbone. The core objective is to prevent newly arriving categories from perturbing historical normality priors while still allowing the model to acquire residual normality capacity for new categories. To this end, HF-OLB freezes historical LoRA banks and constrains new updates to the orthogonal complement of previous normality subspaces, while HNABG adaptively determines where additional residual banks should be introduced according to layer-wise novelty. Together, they formulate continual diffusion adaptation as a controlled process of normality-preserving residual subspace expansion. On the challenging long-horizon MVTec 7–1 × 8 setting, our framework achieves 84.1/91.5 A-AUROC with 3.8/3.2 FM. On the hardest VisA 2 × 6 setting, it further reaches 83.6/91.8 A-AUROC with 3.8/3.9 FM, showing stronger stability under longer cate-gory sequences. These results demonstrate that historical normality priors can be effectively preserved in continual diffusion-based anomaly detection. Future work will extend this framework to more complex industrial scenar-ios, including stronger domain shifts, longer open-ended task streams, and adaptive bank selection under online inspection conditions. 25 Acknowledgements 
+
+This work was supported by the National Key Research and Develop-ment Program of China under Grant No. 2022YFB3705504. The authors acknowledge the support from the Engineering Research Center of Intelligent Control Systems and Intelligent Equipment, Ministry of Education, Yanshan University. 
+
+References 
+
+[1] K. Roth, L. Pemula, J. Zepeda, B. Schölkopf, T. Brox, P. Gehler, To-wards total recall in industrial anomaly detection, in: Proceedings of the IEEE/CVF conference on computer vision and pattern recognition, 2022, pp. 14318–14328. [2] D. Gudovskiy, S. Ishizaka, K. Kozuka, Cflow-ad: Real-time unsupervised anomaly detection with localization via conditional normalizing flows, in: Proceedings of the IEEE/CVF winter conference on applications of computer vision, 2022, pp. 98–107. [3] H. Deng, X. Li, Anomaly detection via reverse distillation from one-class embedding, in: Proceedings of the IEEE/CVF conference on computer vision and pattern recognition, 2022, pp. 9737–9746. [4] V. Zavrtanik, M. Kristan, D. Skočaj, Draem-a discriminatively trained reconstruction embedding for surface anomaly detection, in: Proceed-ings of the IEEE/CVF international conference on computer vision, 2021, pp. 8330–8339. [5] J. Jeong, Y. Zou, T. Kim, D. Zhang, A. Ravichandran, O. Dabeer, Win-clip: Zero-/few-shot anomaly classification and segmentation, in: Pro-ceedings of the IEEE/CVF conference on computer vision and pattern recognition, 2023, pp. 19606–19616. [6] X. Li, Z. Zhang, X. Tan, C. Chen, Y. Qu, Y. Xie, L. Ma, Promptad: Learning prompts with only normal samples for few-shot anomaly de-tection, in: Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition, 2024, pp. 16838–16848. 26 [7] J. Tang, et al., Enhancing aero-engine blade few-shot anomaly detection with visual-language multi-modal models under domain shift conditions, Advanced Engineering Informatics 69 (2026) 103953. [8] J. Cao, K. Zhou, J. Du, Hypcv-former: Hyperbolic spatio-temporal transformer for 3d point cloud video anomaly detection, Advanced En-gineering Informatics 73 (2026) 104537. [9] X. Jia, X. Chen, Aquada-uni: A super-efficient unified cascade multi-modal model for thermographic wind turbine blade segmentation and damage detection, Advanced Engineering Informatics 71 (2026) 104387. [10] Z. Xin, J.-A. Goulet, Time series anomaly detection with residuals stationarity intervention on state-space models, Advanced Engineering Informatics 72 (2026) 104485. [11] J. Wang, et al., An open-vocabulary industrial anomaly detection method based on clip and llm, Advanced Engineering Informatics 73 (2026) 104599. [12] R. Rombach, A. Blattmann, D. Lorenz, P. Esser, B. Ommer, High-resolution image synthesis with latent diffusion models, in: Proceedings of the IEEE/CVF conference on computer vision and pattern recogni-tion, 2022, pp. 10684–10695. [13] X. Zhang, N. Li, J. Li, T. Dai, Y. Jiang, S.-T. Xia, Unsupervised surface anomaly detection with diffusion probabilistic model, in: Proceedings of the IEEE/CVF International Conference on Computer Vision, 2023, pp. 6782–6791. [14] F. Lu, X. Yao, C.-W. Fu, J. Jia, Removing anomalies as noises for indus-trial defect localization, in: Proceedings of the IEEE/CVF international conference on computer vision, 2023, pp. 16166–16175. [15] H. Yao, M. Liu, Z. Yin, Z. Yan, X. Hong, W. Zuo, Glad: Towards better reconstruction with global and local adaptive diffusion models for unsupervised anomaly detection, in: European Conference on Computer Vision, Springer, 2024, pp. 1–17. 27 [16] M. Fučka, V. Zavrtanik, D. Skočaj, Transfusion–a transparency-based diffusion model for anomaly detection, in: European conference on computer vision, Springer, 2024, pp. 91–108. [17] H. He, J. Zhang, H. Chen, X. Chen, Z. Li, X. Chen, Y. Wang, C. Wang, L. Xie, A diffusion-based framework for multi-class anomaly detection, in: Proceedings of the AAAI conference on artificial intelligence, vol-ume 38, 2024, pp. 8472–8480. [18] Z. Yan, Q. Fang, W. Lv, Q. Su, Anomalysd: Few-shot multi-class anomaly detection with stable diffusion model, arXiv preprint arXiv:2408.01960 (2024). [19] S. Sakai, X. He, C. Gu, L. Sigal, T. Hasegawa, Invad: Inversion-based reconstruction-free anomaly detection with diffusion models, arXiv preprint arXiv:2504.05662 (2025). [20] F. Shen, W. Xu, R. Yan, D. Zhang, X. Shu, J. Tang, Imagedit: Let any subject transform, arXiv preprint arXiv:2510.01186 (2025). [21] F. Shen, X. Du, Y. Gao, J. Yu, Y. Cao, X. Lei, J. Tang, Imagharmony: Controllable image editing with consistent object quantity and layout, arXiv preprint arXiv:2506.01949 (2025). [22] F. Shen, J. Yu, C. Wang, X. Jiang, X. Du, J. Tang, Imaggarment-1: Fine-grained garment generation for controllable fashion design, arXiv preprint arXiv:2504.13176 (2025). [23] J. Kirkpatrick, R. Pascanu, N. Rabinowitz, J. Veness, G. Desjardins, A. A. Rusu, K. Milan, J. Quan, T. Ramalho, A. Grabska-Barwinska, et al., Overcoming catastrophic forgetting in neural networks, Proceed-ings of the national academy of sciences 114 (2017) 3521–3526. [24] Z. Wang, L. Liu, Y. Duan, Y. Kong, D. Tao, Continual learning with lifelong vision transformer, in: Proceedings of the IEEE/CVF Confer-ence on Computer Vision and Pattern Recognition, 2022, pp. 171–181. [25] J. Tang, H. Lu, X. Xu, R. Wu, S. Hu, T. Zhang, T. W. Cheng, M. Ge, Y.-C. Chen, F. Tsung, An incremental unified framework for small defect inspection, in: European conference on computer vision, Springer, 2024, pp. 307–324. 28 [26] J. Liu, K. Wu, Q. Nie, Y. Chen, B.-B. Gao, Y. Liu, J. Wang, C. Wang, F. Zheng, Unsupervised continual anomaly detection with contrastively-learned prompt, in: Proceedings of the AAAI conference on artificial intelligence, volume 38, 2024, pp. 3639–3647. [27] X. Li, X. Tan, Z. Chen, Z. Zhang, R. Zhang, R. Guo, G. Jiang, Y. Chen, Y. Qu, L. Ma, et al., One-for-more: Continual diffusion model for anomaly detection, in: 2025 IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR), IEEE, 2025, pp. 4766–4775. [28] L. Hu, Z. Gan, L. Deng, J. Liang, L. Liang, S. Huang, T. Chen, Replay-cad: Generative diffusion replay for continual anomaly detection, arXiv preprint arXiv:2505.06603 (2025). [29] E. J. Hu, Y. Shen, P. Wallis, Z. Allen-Zhu, Y. Li, S. Wang, L. Wang, W. Chen, Lora: Low-rank adaptation of large language models, arXiv preprint arXiv:2106.09685 (2021). [30] S. Oh, S. Lee, S. Chae, Y. Ro, Aulora: Anomaly understanding with low-rank adaptation for zero-shot anomaly detection, IEEE Access 13 (2025) 170095–170105. [31] J. Yang, J. Cao, C. Duan, Uniad: A real-world multi-category industrial anomaly detection dataset with a unified clip-based framework, Infor-mation 16 (2025) 956. [32] Y.-S. Liang, W.-J. Li, Inflora: Interference-free low-rank adaptation for continual learning, in: Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition, 2024, pp. 23638–23647. [33] J. He, Z. Duan, F. Zhu, Cl-lora: Continual low-rank adaptation for rehearsal-free class-incremental learning, in: Proceedings of the Com-puter Vision and Pattern Recognition Conference, 2025, pp. 30534– 30544. [34] X. Wei, G. Li, R. Marculescu, Online-lora: Task-free online continual learning via low rank adaptation, in: Proceedings of the IEEE/CVF Winter Conference on Applications of Computer Vision, 2025, pp. 5909– 5918. 29 [35] P. Bergmann, M. Fauser, D. Sattlegger, C. Steger, Mvtec ad–a com-prehensive real-world dataset for unsupervised anomaly detection, in: Proceedings of the IEEE/CVF conference on computer vision and pat-tern recognition, 2019, pp. 9592–9600. [36] Y. Zou, J. Jeong, L. Pemula, D. Zhang, O. Dabeer, Spot-the-difference self-supervised pre-training for anomaly detection and segmentation, in: European conference on computer vision, Springer, 2022, pp. 392–408. [37] J. Zhu, G. Pang, Toward generalist anomaly detection via in-context residual learning with few-shot sample prompts, in: Proceedings of the IEEE/CVF conference on computer vision and pattern recognition, 2024, pp. 17826–17836. [38] X. Zhang, M. Xu, X. Zhou, Realnet: A feature selection network with realistic synthetic anomaly for anomaly detection, in: Proceedings of the IEEE/CVF conference on computer vision and pattern recognition, 2024, pp. 16699–16708. [39] F. Shen, H. Ye, J. Zhang, C. Wang, X. Han, Y. Wei, Advancing pose-guided image synthesis with progressive conditional diffusion models, in: The Twelfth International Conference on Learning Representations, 2024. URL: https://openreview.net/forum?id=rHzapPnCgT .[40] F. Shen, J. Tang, Imagpose: A unified conditional framework for pose-guided person generation, Advances in neural information processing systems 37 (2024) 6246–6266. [41] F. Shen, C. Wang, J. Gao, Q. Guo, J. Dang, J. Tang, T.-S. Chua, Long-term talkingface generation via motion-prior conditional diffusion model, arXiv preprint arXiv:2502.09533 (2025). [42] F. Shen, H. Ye, S. Liu, J. Zhang, C. Wang, X. Han, Y. Wei, Boosting consistency in story visualization with rich-contextual conditional dif-fusion models, in: Proceedings of the AAAI Conference on Artificial Intelligence, volume 39, 2025, pp. 6785–6794. [43] F. Shen, X. Jiang, X. He, H. Ye, C. Wang, X. Du, Z. Li, J. Tang, Imagdressing-v1: Customizable virtual dressing, in: Proceedings of the AAAI Conference on Artificial Intelligence, volume 39, 2025, pp. 6795– 6804. 30 [44] H. He, Y. Bai, J. Zhang, Q. He, H. Chen, Z. Gan, C. Wang, X. Li, G. Tian, L. Xie, Mambaad: Exploring state space models for multi-class unsupervised anomaly detection, Advances in Neural Information Processing Systems 37 (2024) 71162–71187. 31

@@ -1,0 +1,231 @@
+Title: Modeling Robotics Dataset Construction as an Artifact-Based Build Process
+
+URL Source: https://arxiv.org/pdf/2606.00162v1
+
+Published Time: Tue, 02 Jun 2026 00:06:18 GMT
+
+Number of Pages: 6
+
+Markdown Content:
+# Modeling Robotics Dataset Construction as an Artifact-Based Build Process 
+
+Leon Pohl, Lukas Beer, George Sebastian, and Mirko Maehlisch 
+
+Abstract — Robotic systems generate large volumes of mul-timodal sensor data, but converting ROS bag recordings into machine learning datasets is often handled by ad hoc sequen-tial scripts, creating engineering overhead and slow iteration cycles. We model dataset construction as an artifact-based build process over a dependency graph and implement this approach in Bagzel, an open-source Bazel extension for repro-ducible, incremental dataset generation (including nuScenes-format export). We compare Bagzel and Bagzel-xattr (server-side digest management) against a sequential rosbag2nuscenes baseline. Bagzel reduces runtime in all evaluated execution modes, with the largest gains in iterative workflows (up to 386.26 × in warm builds and 7.21 × in incremental builds on a 20.4 GB dataset). Across dataset sizes from 5.1 to 20.4 GB, Bagzel variants show markedly better scaling behavior than the baseline, especially in warm and incremental modes. Bagzel-xattr provides additional gains, with a mean runtime reduction of 5.9% compared to Bagzel in the input granularity study. Overall, modeling robotics dataset construction as an artifact-based build process substantially reduces dataset update latency while maintaining a deterministic build design that supports reproducibility. Bagzel is publicly available at https:// github.com/UniBwTAS/bagzel .
+
+I. I NTRODUCTION 
+
+Modern robotics research increasingly relies on supervised and self-supervised learning methods that require large and diverse datasets for training and evaluation [1]–[3]. In au-tonomous driving in particular, public benchmarks such as nuScenes [4], KITTI [5], Waymo Open Dataset [6], and Argoverse 2 [7] have accelerated progress and become de facto standards, shaping model architectures and enabling reproducible comparison. However, the widespread adoption of these benchmarks has led to an implicit coupling between research codebases and dataset-specific formats. Many learning architectures and evaluation pipelines are implemented directly against benchmark schemas [8]–[10], meaning that newly recorded data must either be converted into these formats or require adaptation of the training code. This coupling increases engineering overhead and complicates experimentation with custom datasets. It also constrains evaluation beyond fixed benchmark distributions, where performance can degrade under even small distribution shifts [11]. In active learning settings, where models are iteratively retrained on newly collected edge-case data, such integration friction directly slows down the training loop. This motivates the develop-ment of streamlined dataset construction workflows capable 
+
+All authors are with the Institute for Autonomous Driving, University of the Bundeswehr Munich, 85579 Neubiberg, Germany. Corresponding author: Leon Pohl, leon.pohl@unibw.de .
+
+Cars Robots 
+
+File Server 
+
+Build System (Deterministic & Reproducible) 
+
+Artifact Cache Machine Learning Dataset 
+
+raw data raw data 
+
+hashes 
+
+stores reuses 
+
+incremental updates 
+
+Fig. 1. Artifact-based robotics dataset construction workflow. Raw data from cars and robots are uploaded to a file server, whose content hashes trigger a deterministic build system. The build system stores and reuses intermediate artifacts via the cache and incrementally generates ML datasets. 
+
+of matching the fast cycles of model development and deployment. In robotics, new data are commonly captured in the Robot Operating System (ROS) ecosystem [12], [13] as rosbag recordings that store synchronized multi-sensor streams and system state. Although well suited for replay and debug-ging, rosbags are not directly organized as machine learning datasets and require substantial post-processing before train-ing or evaluation. As observed in prior work on Machine Learning (ML) pipelines [14], such ad hoc integration can ac-cumulate technical debt, reduce reproducibility, and increase operational cost of ML methods at scale. More broadly, production ML systems face persistent data-management challenges in data validation, evolution, and maintenance [15]. Similar scalability challenges have been reported in large Continuous Integration (CI) pipelines, where long depen-dency chains can increase feedback latency and reduce developer productivity [16]. A common mitigation strategy is to use artifact-based build systems, such as Bazel [17], Buck [18], and Pants [19]. These systems model the build as a Directed Acyclic Graph (DAG), in which nodes represent build steps and edges represent declared dependencies. For each step, the required inputs and produced outputs are specified explicitly and tracked via hashing. This allows the build system to re-execute only affected steps and reuse cached artifacts when inputs are unchanged. With these principles implemented in Bazel CI pipelines, reported build-time speedups reach up to 12.8 × [20]. We transfer this execution principle to robotics dataset construction. The contributions of this work are as follows:  
+
+> •
+
+We formulate robotics dataset construction as an artifact-based build problem by modeling preprocessing 
+
+> 2026 IEEE 22nd International Conference on Automation Science and Engineering (CASE 2026). Accepted Author Manuscript, May 2026. © 2026 IEEE. Personal use of this material is permitted. Permission from IEEE must be obtained for all other uses, in any current or future media, including reprinting/republishing this material for advertising or promotional purposes, creating new collective works, for resale or redistribution to servers or lists, or reuse of any copyrighted component of this work in other works.
+> arXiv:2606.00162v1 [cs.RO] 29 May 2026
+
+stages as explicit build targets with declared inputs and outputs. This enables dependency tracking, selective recomputation, and artifact reuse for dataset generation, as illustrated in Fig. 1.  
+
+> •
+
+We design and implement Bagzel [21], an open-source framework built on the Bazel build system that realizes this formulation and enables reproducible and incremen-tal generation of nuScenes-format datasets from ROS recordings.  
+
+> •
+
+We introduce a server-side digest management mech-anism for large input files ( Bagzel-xattr ) that reduces hashing overhead during the build process while pre-serving deterministic artifact identification. We empirically evaluate the proposed approach with re-spect to execution efficiency, scalability with increasing dataset size, and the influence of input granularity and server-side digest management on incremental rebuild performance. II. R ELATED WORK 
+
+Recent ROS ecosystem reports indicate strong ROS 2 adoption and continued community growth, increasing de-mand for scalable and reproducible preprocessing [22]. Building on ROS logging infrastructure [12], [13], prior work addresses specific stages of dataset creation, including rosbag conversion [23], [24], synchronization validation [25], and LLM-assisted annotation [26]. Beyond robotics converters, MLOps literature emphasizes dataset and model versioning because ML performance de-pends strongly on data quality. Tools such as DVC [27], MLflow [28], and TFX [29] support experiment tracking and artifact management, and recent studies analyze practical versioning strategies for ML data and models [30], [31]. In contrast, this work formulates robotics dataset construction as an artifact-based build process, applying core CI principles (explicit dependencies, hermetic actions, content-addressed caching, incremental rebuilds) to support deterministic, low-latency updates and integration into existing CI workflows. III. M ETHODOLOGY 
+
+We formulate dataset construction from raw recordings as an artifact-based build problem over a DAG. This formu-lation underlies Bagzel. We use an abstract bipartite build graph P = ( V, E ) with node set V = Va ∪ Vo and edge set E, where Va denotes artifact nodes (data objects) and Vo
+
+denotes operation nodes (transformations), with Va ∩Vo = ∅.Edges encode declared dependencies and alternate between artifacts and operations, i.e., 
+
+E ⊆ (Va × Vo) ∪ (Vo × Va). (1) Thus, artifacts serve as inputs to operations, and operations produce derived artifacts. We denote source artifacts by si ∈
+
+Va, operations by oi ∈ Vo, and derived artifacts by ai ∈ Va.Each operation declares its inputs, outputs, and execution rule. Rebuild decisions are based on an action digest com-puted from the declared inputs and operation definition. If the digest changes, the operation and its transitive dependents are recomputed (Fig. 2); otherwise, cached artifacts are reused.                     
+
+> s1
+> s2
+> o1
+> o2
+> a1
+> a2
+> affected
+> Fig. 2. Abstract artifact DAG P= ( V, E )for selective recomputation. A modification to s1propagates along dependency edges and invalidates only the affected path ( s1→o1→a1), while unrelated nodes ( s2,o2, and a2)remain reusable.
+> s1o1a1
+> source modified? ohash adigest
+> check
+> yes no
+> attach digest
+> File Server
+> Fig. 3. Server-side digest management used by Bagzel-xattr. The file server checks whether the source artifact has changed; on a positive decision, it computes and stores a digest attached to s1. Operation o1then uses this digest for build decisions.
+
+Under deterministic and hermetic execution, identical inputs and rules yield identical digests and outputs, enabling correct cache reuse. The graph-processing cost of an incremental update is linear in the size of the affected subgraph, O(|V∆|+
+
+|E∆|). Let Vo, ∆ ⊆ Vo denote the recomputed operation nodes. The total runtime additionally includes their execution cost, P 
+
+> o∈Vo, ∆
+
+T (o).Artifact-based build systems are typically optimized for many small source files, where client-side content hashing is inexpensive. In robotics data pipelines, raw recordings can reach hundreds of gigabytes, making repeated full-file hashing on the client a bottleneck, particularly during iterative updates with only small changes. To reduce this overhead, we extend the base formulation with server-side digest management, implemented in Bagzel-xattr. When a source artifact changes, a detection service recomputes and persists its digest as metadata associated with that artifact. During build graph evaluation, the system uses the stored digest to determine whether dependent steps must be executed, avoiding repeated client-side full-file hashing. This approach preserves deterministic artifact identifica-tion while reducing incremental update overhead for large inputs. Fig. 3 illustrates the change detection flow, digest update path, and subsequent use of stored digests in the build. IV. I MPLEMENTATION 
+
+To validate the concept of artifact-based dataset construc-tion, we implemented our approach on top of the open-source build system Bazel [17]. Bazel was selected due to its explicit modeling of artifacts, deterministic execution model, and content-addressable caching, which provide strong guar-antees for reproducibility and incremental recomputation. The current implementation supports ROS 1 and ROS 2 bag files as primary source artifacts. To integrate ROS bag processing into the Bazel build model, we developed custom rules that encapsulate common dataset preparation steps, including frame decoding, trajectory extraction, annotation processing, and export to standardized dataset formats. Each rule explicitly declares its inputs, such as raw bag files, and outputs, such as processed dataset artifacts, thereby incorporating dataset construction into the Bazel dependency graph. These extensions are provided as an open-source Bazel rule set named Bagzel. Bagzel currently supports the generation of two dataset formats: (i) a visual dataset format that organizes sensor data and annotations in a structured directory layout accompanied by metadata files, and (ii) the widely adopted nuScenes for-mat [4], which facilitates compatibility with established tools and benchmarks in autonomous driving research. Bagzel also supports integration with the Slurm workload manager [32] for distributed execution of independent build actions across cluster nodes. We evaluate two Bagzel configurations and one sequential baseline. The default Bagzel configuration performs client-side build-time hashing, where digests of input artifacts are computed during each build. The Bagzel-xattr variant extends Bagzel with server-side digest management, in which file digests are maintained on the file server and reused during build evaluation. As a baseline, we adapt the sequen-tial converter rosbag2nuscenes [23], [24], which follows a monolithic, single-file processing pipeline and converts one ROS bag input at a time into nuScenes outputs. The baseline does not implement artifact caching or selective invalidation across processing steps. V. E XPERIMENTAL SETUP 
+
+To empirically evaluate our contributions and understand their practical impact on robotics dataset construction, we investigate the following research questions:  
+
+> •
+
+RQ1 (Execution Efficiency): Does artifact-based dataset construction reduce overall and iterative runtime compared to a conventional sequential pipeline?  
+
+> •
+
+RQ2 (Scalability): How does runtime scale with in-creasing dataset size under artifact-based versus sequen-tial dataset construction?  
+
+> •
+
+RQ3 (Input Granularity and Digest Management): 
+
+How do input granularity and server-side digest man-agement influence incremental runtime? To answer these questions, we design two groups of experiments. RQ1 and RQ2 are addressed by comparing Bagzel, Bagzel-xattr, and rosbag2nuscenes across execution modes and dataset sizes. RQ3 is addressed by a separate input granularity ablation that compares the incremental update behavior of Bagzel and Bagzel-xattr under fixed total data volume. The scalability experiments were conducted using three datasets of increasing size: small (5.1 GB), medium (10.2 GB), and large (20.4 GB). The small dataset consists of one ROS 1 bag file (2.5 GB) and one ROS 2 bag file (2.6 GB) containing identical sensor data. The ROS 1 bag was con-verted to ROS 2 format to ensure functional equivalence between formats while maintaining separate input artifacts. The medium dataset was constructed by duplicating the small dataset, resulting in two ROS 1 and two ROS 2 bag files with a total size of 10.2 GB. The large dataset extends this setup by further duplication, yielding four ROS 1 and four ROS 2 bag files with a total size of 20.4 GB. The execution efficiency experiments were performed on the large dataset. The primary performance metric is end-to-end wall-clock runtime T per build execution. Based on these measurements, we compute (i) relative speedup and percentage runtime reduction with respect to the baseline for each execution mode, and (ii) runtime scaling behavior as a function of dataset size using a first-order linear fit over the measured range. Runtime reduction and speedup are defined as 
+
+Reduction(%) = 
+
+
+
+1 − Tmethod 
+
+Tbase 
+
+
+
+× 100 , (2) 
+
+Speedup = Tbase 
+
+Tmethod 
+
+. (3) where Tbase denotes the baseline and Tmethod the evaluated method runtime. To characterize scalability, we model runtime as a linear function of dataset size D (in GB) 
+
+T (D) = aD + b, (4) where T (D) denotes runtime in seconds, a (s/GB) represents the slope of runtime growth with respect to dataset size, and 
+
+b is the intercept of the linear model. We evaluate three execution modes under identical build conditions: (i) Cold build , where no reusable cache entries or prepared build environment are available and all actions are executed; (ii) Warm build , where no input changes are introduced and previously generated artifacts and build environment are reused from cache; and (iii) Incremental build , where a localized input modification is introduced and only the affected subgraph is rebuilt. Each configuration was executed in three independent trials, and the median runtime is reported. For incremental rebuild experiments, we introduced ametadata change in one source artifact. This modifies the file digest without changing the sensor content used by the extraction step, producing a controlled and localized invali-dation in the dependency graph. As a result, the incremental recomputation workload should remain comparable across dataset sizes while simulating a small data update. In the input granularity ablation, we keep the base dataset size constant at 20.4 GB and vary only how it is partitioned (one, two, or eight bag files). A separate rebuild target 
+
+R (2.5 GB) is included in every condition and is identical across runs. Thus, each condition consists of a fixed 20.4 GB base dataset plus the same rebuild target R (2.5 GB). The conditions are: (i) one input file + rebuild target R, (ii) two input files + rebuild target R, and (iii) eight input files +rebuild target R. We only compare Bagzel and Bagzel-xattr Cold Warm Incremental  
+
+> 10 0
+> 10 1
+> 10 2
+> Runtime [s]
+> Bagzel
+> Bagzel-xattr
+> rosbag2nuscenes Fig. 4. Runtime comparison across execution modes for the large dataset (20.4 GB). Bars show the median of three runs; error bars indicate the min-max range. The y-axis is logarithmic.
+
+in this experiment and compare the incremental runtime of the modified target R across conditions. This setup isolates the effect of input granularity on hashing and incremental runtime while controlling for total base data volume. All experiments were conducted on a workstation equipped with an 11th Gen Intel Core i7-11700K CPU (8 cores, 16 threads, 3.6 GHz base frequency), 64 GB RAM, and a 4 TB Samsung SSD 990 PRO NVMe. The system ran Ubuntu 20.04.6 LTS with Linux kernel 5.15. Bazel version 8.3.1 was used for all builds. No GPU acceleration was employed. To ensure a fair comparison, all experiments were executed under identical system conditions. Remote caching was disabled, and all experiments were performed locally on the workstation. VI. R ESULTS 
+
+This section reports results by research question (RQ). Sec. VI-A compares execution efficiency against the sequen-tial baseline, Sec. VI-B analyzes scaling with dataset size, and Sec. VI-C evaluates the effect of input artifact granularity on incremental build performance. 
+
+A. RQ1: Execution Efficiency 
+
+Fig. 4 reports runtimes for the large dataset by execu-tion mode. Bars show median runtime over three trials. Error bars indicate min-max range. Bagzel and Bagzel-xattr outperform the sequential baseline in all modes, with the largest gains in warm and incremental builds. The Bagzel-xattr variant provides an additional incremental benefit over default Bagzel. Because the y-axis is logarithmic, uncertainty should be interpreted in relative terms. Consequently, warm mode error bars may appear visually large despite modest absolute runtime differences. The numerical runtime results are summarized in Ta-ble I. Compared with rosbag2nuscenes, Bagzel substantially improves performance across all build modes. For cold builds, runtime decreases from 343.40 s to 166.40 s (51.5%                           
+
+> TABLE I LARGE DATASET RUNTIME COMPARISON (MEDIAN OF THREE RUNS ). R2N = ROSBAG 2NUSCENES , B = B AGZEL , BX = B AGZEL -XATTR .
+> Metric Cold Warm Incremental
+> Runtime [s]
+> R2N 343.40 312.87 313.11 B166.40 0.81 43.45 BX 156.96 0.74 41.34
+> Speedup [ ×]
+> B vs R2N 2.06 386.26 7.21 BX vs B 1.06 1.10 1.05
+> Reduction [%]
+> B vs R2N 51.5 99.7 86.1 BX vs B 5.7 8.6 4.9
+
+reduction, 2.06 × speedup). The improvement is most pro-nounced in warm builds, where runtime drops from 312.87 s to 0.81 s, corresponding to a 99.7% reduction ( 386 .26 ×). For incremental builds, runtime decreases from 313.11 s to 43.45 s (86.1% reduction, 7.21 ×). Bagzel-xattr further improves performance over Bagzel with modest but consistent gains. Runtime decreases from 166.40 s to 156.96 s in cold builds (5.7%, 1.06 ×), from 0.81 s to 0.74 s in warm builds (8.6%, 1.10 ×), and from 43.45 s to 41.34 s in incremental builds (4.9%, 1.05 ×). Overall, the results indicate that artifact-based dataset construction with Bagzel substantially reduces runtime com-pared to a sequential baseline, particularly in warm and incremental execution modes. The additional optimization of server-side digest management in Bagzel-xattr provides further performance benefits, albeit with more modest gains. 
+
+B. RQ2: Scalability 
+
+To evaluate how performance scales with dataset size, we additionally assessed all methods on a small (5.1 GB) and a medium (10.2 GB) dataset. The results are presented in Fig. 5, where the x-axis represents dataset size in GB and the y-axis represents runtime in seconds. Separate plots are shown for cold, warm, and incremental build modes. Each method is distinguished by a different color. The results indicate that all Bagzel variants consistently outperform the rosbag2nuscenes baseline across all three build modes. In the cold build mode, the runtime of all methods increases with dataset size, demonstrating a clear scaling effect. In the warm build mode, the baseline runtime continues to increase with dataset size, whereas Bagzel runtimes remain close to one second. For incremental rebuilds, the runtime of the Bagzel vari-ants remains nearly constant and shows little dependence on dataset size. In contrast, the baseline runtime continues to increase with dataset size. We summarize scaling over the measured range (5.1 to 20.4 GB) using a first-order linear fit T (D) = aD + b,where D is the dataset size in GB, T (D) is the runtime in seconds, and a is the slope representing the increase in runtime per GB. The fitted slopes (Table II) show that both Bagzel variants have substantially lower scaling rates than rosbag2nuscenes across all modes (e.g., cold: 6.74/6.25 vs 5 10 15 20 
+
+> Dataset Size [GB]
+> 10 −1
+> 10 0
+> 10 1
+> 10 2
+> Runtime [s]
+
+Cold Build    
+
+> 510 15 20
+> Dataset Size [GB]
+
+Warm Build    
+
+> 510 15 20
+> Dataset Size [GB]
+
+Incremental Build                       
+
+> Bagzel Bagzel-xattr rosbag2nuscenes Fig. 5. Runtime scaling across dataset sizes (5.1, 10.2, and 20.4 GB) for cold, warm, and incremental execution modes. Points show median runtime over three runs; error bars indicate min-max range. The y-axis is logarithmic. TABLE II ESTIMATED RUNTIME SCALING SLOPES FROM LINEAR FITS
+> T(D) = aD +b,WHERE aIS REPORTED IN S /GB.
+> Method Cold Warm Incremental
+> Bagzel 6.74 0.02 0.03 Bagzel-xattr 6.25 0.01 0.06 rosbag2nuscenes 15.50 15.29 15.25
+
+15.50 s/GB). In warm and incremental modes, Bagzel-based slopes remain close to zero, indicating weak dependence on dataset size within the evaluated range. The small Bagzel vs Bagzel-xattr slope differences (e.g., incremental: 0.03 vs 0.06 s/GB) are minor and should be interpreted cautiously given the limited number of dataset sizes. Overall, within the evaluated range, Bagzel exhibits sub-stantially better scaling behavior than the sequential baseline across all three modes. For both Bagzel variants, runtime in warm and incremental modes shows only weak dependence on dataset size. 
+
+C. RQ3: Input Granularity and Digest Management 
+
+Fig. 6 compares incremental runtime across three input file granularities for Bagzel and Bagzel-xattr. Across the evaluated range, input granularity has only a minor effect on incremental runtime. For both methods, runtime increases slightly as the number of input files grows (Bagzel: 42.67 s up to 43.39 s; Bagzel-xattr: 40.20 s up to 40.78 s from one to eight files), indicating limited sensitivity of incremental recomputation to file partitioning under fixed data volume. Bagzel-xattr is consistently faster than Bagzel for all granularities, with gains of 2.47 s, 2.53 s, and 2.61 s (5.8%, 5.9%, and 6.0%, respectively), corresponding to a mean reduction of 5.9% and a mean absolute gain of 2.53 s on our system. The xattr benefit is stable across conditions and appears slightly larger at finer granularity. 1 + R 2 + R 8 + R   
+
+> Input files + R [count]
+> 40.0
+> 40.5
+> 41.0
+> 41.5
+> 42.0
+> 42.5
+> 43.0
+> 43.5
+> 44.0
+> Runtime [s]
+> Δ 2.47s
+> (5.8%)
+> Δ 2.53s
+> (5.9%)
+> Δ 2.61s
+> (6.0%)
+> 42.67
+> 40.20
+> 43.08
+> 40.55
+> 43.39
+> 40.78
+> Bagzel
+> Bagzel-xattr
+> Fig. 6. Incremental runtime for constant target R(2.5 GB) with a fixed base dataset (20.4 GB), varying only input file granularity (1+ R, 2+ R, 8+ R). Points show the median over three runs; connectors indicate the difference between Bagzel and Bagzel-xattr (seconds and %).
+
+Overall, the results indicate that incremental runtime in-creases only slightly as input granularity becomes finer. The benefit of server-side digest management also grows modestly with granularity. Within the evaluated range, both effects are small. However, for larger datasets with more in-put artifacts, the advantage of server-side digest management may become more pronounced, and input granularity may have a stronger impact on incremental rebuild performance. VII. C ONCLUSION 
+
+This paper presented Bagzel, an artifact-based approach to robotics dataset construction that models preprocessing as a dependency graph with deterministic actions and cacheable artifacts. Across all evaluated execution modes, Bagzel out-performed a sequential rosbag2nuscenes baseline, with the largest gains in iterative workflows. On the 20.4 GB dataset, Bagzel achieved up to 386 .26 × speedup in warm builds and 
+
+7.21 × in incremental builds. Scalability analysis over 5.1 to 20.4 GB showed substan-tially lower runtime growth for Bagzel variants than for the baseline, especially in warm and incremental modes, where runtime remained nearly constant within the evaluated range. In addition, server-side digest management (Bagzel-xattr) provided consistent extra improvements over Bagzel, with a mean incremental runtime reduction of 5.9% in the input granularity study. The benefit increased slightly with finer input granularity, suggesting that server-side digest management becomes more advantageous as the number of input artifacts grows. These results indicate that artifact-based dataset construc-tion is an effective strategy for reducing dataset update latency in robotics data pipelines. Although the evaluation focuses on runtime performance and is conducted on a single workstation with datasets ranging from 5.1 to 20.4 GB, the findings provide initial evidence of the benefits of incremen-tal artifact-based execution. Replication on larger datasets and distributed environments would further strengthen exter-nal validity. Overall, modeling robotics dataset construction as an artifact-based build process substantially reduces recomputa-tion overhead while enabling by design reproducible dataset generation through deterministic execution. ACKNOWLEDGMENT 
+
+The authors acknowledge support from BAAINBw and dtec.bw – Digitalization and Technology Research Center of the Bundeswehr [project MORE]. dtec.bw is funded by the European Union – NextGenerationEU. The authors thank colleagues at the Institute for Autonomous Driving and the ROS and Bazel open-source communities. REFERENCES [1] A. Brohan et al. , “RT-1: Robotics Transformer for Real-World Control at Scale,” Aug. 2023. [2] B. Zitkovich et al. , “RT-2: Vision-Language-Action Models Transfer Web Knowledge to Robotic Control,” in Proceedings of The 7th Conference on Robot Learning . PMLR, Dec. 2023, pp. 2165–2183. [3] A. O’Neill et al. , “Open X-Embodiment: Robotic Learning Datasets and RT-X Models : Open X-Embodiment Collaboration0,” in 2024 IEEE International Conference on Robotics and Automation (ICRA) ,May 2024, pp. 6892–6903. [4] H. Caesar et al. , “nuScenes: A Multimodal Dataset for Autonomous Driving,” in Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition , 2020, pp. 11 621–11 631. [5] A. Geiger et al. , “Are we ready for autonomous driving? The KITTI vision benchmark suite,” in 2012 IEEE Conference on Computer Vision and Pattern Recognition , Jun. 2012, pp. 3354–3361. [6] P. Sun et al. , “Scalability in Perception for Autonomous Driving: Waymo Open Dataset,” in Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition , 2020, pp. 2446–2454. [7] B. Wilson et al. , “Argoverse 2: Next Generation Datasets for Self-Driving Perception and Forecasting,” Proceedings of the Neural Infor-mation Processing Systems Track on Datasets and Benchmarks , vol. 1, Dec. 2021. [8] S. Gao et al. , “Vista: A Generalizable Driving World Model with High Fidelity and Versatile Controllability,” Jul. 2024. [9] J. Zhang et al. , “ResWorld: Temporal Residual World Model for End-to-End Autonomous Driving,” Feb. 2026. [10] Y. Li et al. , “End-to-End Driving with Online Trajectory Evaluation via BEV World Model,” in Proceedings of the IEEE/CVF International Conference on Computer Vision , 2025, pp. 27 137–27 146. [11] B. Recht et al. , “Do ImageNet Classifiers Generalize to ImageNet?” in Proceedings of the 36th International Conference on Machine Learning . PMLR, May 2019, pp. 5389–5400. [12] M. Quigley et al. , “ROS: An open-source robot operating system,” in 
+
+ICRA Workshop on Open Source Software , vol. 3. Kobe, 2009, p. 5. [13] S. Macenski et al. , “Robot operating system 2: Design, architecture, and uses in the wild,” Science Robotics , vol. 7, no. 66, p. eabm6074, 2022. [14] D. Sculley et al. , “Hidden Technical Debt in Machine Learning Systems,” in Advances in Neural Information Processing Systems ,vol. 28. Curran Associates, Inc., 2015. [15] N. Polyzotis et al. , “Data Management Challenges in Production Machine Learning,” in Proceedings of the 2017 ACM International Conference on Management of Data, SIGMOD Conference 2017, Chicago, IL, USA, May 14-19, 2017 , S. Salihoglu et al. , Eds. ACM, 2017, pp. 1723–1726. [16] J. H. Bernardo et al. , “The impact of a continuous integration service on the delivery time of merged pull requests,” Empirical Software Engineering , vol. 28, no. 4, p. 97, Jun. 2023. [17] Bazel Team, “Bazel: A fast, scalable, multi-language build system,” https://bazel.build, 2025. [18] Facebook, Inc., “Buck: A fast build tool for android and java,” https://buck.build, 2013. [19] Pantsbuild, “Pants build system,” https://www.pantsbuild.org, 2025. [20] S. Zheng et al. , “Does using Bazel help speed up continuous integra-tion builds?” Empirical Software Engineering , vol. 29, no. 5, p. 110, Jul. 2024. [21] L. Pohl et al. , “Bagzel: A Bazel Extension for Reproducible Dataset Builds from ROS 1 and ROS 2 Bags,” Feb. 2026. [22] Open Robotics, “2025 ROS metrics report,” Open Robotics, Tech. Rep., Feb. 2026. [23] J. Chrosniak and M. Behl, “ROSBag2nuScenes: Share the bags, spread the joy – autonomous vehicle ROS dataset deployment,” Presentation at ROSCon 2023, Oct. 2023. [24] A. Kulkarni et al. , “RACECAR - The Dataset for High-Speed Au-tonomous Racing,” in 2023 IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS) , Oct. 2023, pp. 11 458–11 463. [25] F. Vigni et al. , “A Rosbag Tool to Improve Dataset Reliability,” in Companion of the 2024 ACM/IEEE International Conference on Human-Robot Interaction , ser. HRI ’24. New York, NY, USA: Association for Computing Machinery, Mar. 2024, pp. 1085–1089. [26] Y. Zhang et al. , “ROSAnnotator: A Web Application for ROSBag Data Analysis in Human-Robot Interaction,” in 2025 20th ACM/IEEE International Conference on Human-Robot Interaction (HRI) , Mar. 2025, pp. 1099–1103. [27] Iterative / Treeverse, “DVC: Data version control,” https://dvc.org, 2017. [28] A. Chen et al. , “Developments in MLflow: A System to Accelerate the Machine Learning Lifecycle,” in Proceedings of the Fourth In-ternational Workshop on Data Management for End-to-End Machine Learning , ser. DEEM ’20. New York, NY, USA: Association for Computing Machinery, Jun. 2020, pp. 1–4. [29] D. Baylor et al. , “TFX: A TensorFlow-Based Production-Scale Ma-chine Learning Platform,” in Proceedings of the 23rd ACM SIGKDD International Conference on Knowledge Discovery and Data Mining ,ser. KDD ’17. New York, NY, USA: Association for Computing Machinery, Aug. 2017, pp. 1387–1395. [30] L. Barreto Simedo Pacheco et al. , “DVC in Open Source ML-development: The Action and the Reaction,” in Proceedings of the IEEE/ACM 3rd International Conference on AI Engineering - Software Engineering for AI , ser. CAIN ’24. New York, NY, USA: Association for Computing Machinery, Jun. 2024, pp. 75–80. [31] A. Barrak et al. , “On the Co-evolution of ML Pipelines and Source Code - Empirical Study of DVC Projects,” in 2021 IEEE Interna-tional Conference on Software Analysis, Evolution and Reengineering (SANER) , Mar. 2021, pp. 422–433. [32] A. B. Yoo et al. , “SLURM: Simple linux utility for resource man-agement,” in Job Scheduling Strategies for Parallel Processing , ser. Lecture Notes in Computer Science, vol. 2862. Springer, 2003, pp. 44–60.
