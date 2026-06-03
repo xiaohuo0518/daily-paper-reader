@@ -1,0 +1,69 @@
+{
+  "label": "2026-06-03",
+  "date": "2026-06-03",
+  "generated_at": "2026-06-03T22:53:31",
+  "count": 4,
+  "papers": [
+    {
+      "paper_id": "202606/03/2606.03784v1-revisiting-embodied-chain-of-thought-for-generalizable-robot-manipulation",
+      "section": "deep",
+      "title_en": "Revisiting Embodied Chain-of-Thought for Generalizable Robot Manipulation",
+      "authors": "Nan Sun, Yuan Zhang, Yongkun Yang, Wentao Zhao, Peiyan Li, Jun Guo, Wenxuan Song, Pengxiang Ding, Runze Suo, Yifei Su, Xin Xiao, Xinghang Li, Huaping Liu",
+      "date": "2026-06-02",
+      "pdf": "https://arxiv.org/pdf/2606.03784v1",
+      "score": "9.0",
+      "evidence": "构建了最大的具身思维链语料库，包含97.8万条轨迹",
+      "tldr": "机器人具身思维链研究中，现有方法将思维链作为自回归动作前缀存在推理误差累积和不稳定耦合问题。本文构建最大规模具身CoT数据集，提出ERVLA模型，将CoT作为表示塑造监督而非强制测试时推理，训练时使用推理丢弃策略。在LIBERO-Plus和VLABench上达SOTA，真实机器人任务展现强泛化能力。",
+      "tags": "query:ur",
+      "abstract_en": "Embodied chain-of-thought (CoT) aims to bridge linguistic reasoning and robotic control, but its effective form and integration strategy remain underexplored. In this paper, we revisit embodied CoT for vision-language-action (VLA) models at large scale. We construct the largest embodied CoT corpus to date, comprising 978,743 trajectories, 226.3M samples, and 2592.5 hours of robot data. Through extensive experiments, we find that effective embodied CoT should ground high-level semantic understanding into concrete action guidance, such as end-effector movement descriptions and image-space trajectories, while high-level reasoning alone brings only marginal gains. We further show that explicit CoT does not scale reliably when used as an autoregressive action prefix, as it suffers from compounding inference errors and unstable reasoning-action coupling. To address these limitations, we propose ERVLA, a VLA model that uses embodied CoT as representation-shaping supervision rather than mandatory test-time reasoning. ERVLA is trained with a reasoning-dropout strategy, enabling the model to absorb rich reasoning traces during training while predicting actions directly without CoT decoding during inference. This design improves scalability with increasing pre-training data and avoids autoregressive instability. ERVLA achieves state-of-the-art performance on LIBERO-Plus with an 86.9% success rate and reaches 53.2% success rate on VLABench, demonstrating strong out-of-distribution generalization. In real-robot experiments, ERVLA further outperforms competitive state-of-the-art baselines, especially on tasks requiring semantic disambiguation and long-horizon execution. Code, data, and model checkpoints will be released.",
+      "source": "arxiv",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "paper_id": "202606/03/2606.03985v1-humanoid-gpt-scaling-data-and-structure-for-zero-shot-motion-tracking",
+      "section": "deep",
+      "title_en": "Humanoid-GPT: Scaling Data and Structure for Zero-Shot Motion Tracking",
+      "authors": "Zekun Qi, Xuchuan Chen, Dairu Liu, Chenghuai Lin, Yunrui Lian, Sikai Liang, Zhikai Zhang, Yu Guan, Jilong Wang, Wenyao Zhang, Xinqiang Yu, He Wang, Li Yi",
+      "date": "2026-06-02",
+      "pdf": "https://arxiv.org/pdf/2606.03985v1",
+      "score": "9.0",
+      "evidence": "人形机器人运动跟踪数据集构建",
+      "tldr": "现有运动跟踪方法受限于数据稀缺和浅层MLP模型，面临敏捷性与泛化能力的权衡。为此，我们提出Humanoid-GPT，一个GPT风格的因果注意力Transformer，在包含20亿帧的重定向动作语料上预训练，统一了主流动作捕捉数据集与大规模内录数据。通过扩展数据量和模型容量，单一生成式Transformer即可跟踪高度动态行为，并实现前所未有的零样本泛化到未见运动与控制任务。大量实验与缩放分析表明，该方法建立了新性能边界，同时具备鲁棒零样本泛化与复杂动态跟踪能力，为全身控制提供了可扩展的预训练范式。",
+      "tags": "query:ur",
+      "abstract_en": "We introduce Humanoid-GPT, a GPT-style Transformer with causal attention trained on a billion-scale motion corpus for whole-body control. Unlike prior shallow MLP trackers constrained by scarce data and an agility-generalization trade-off, Humanoid-GPT is pre-trained on a 2B-frame retargeted corpus that unifies all major mocap datasets with large-scale in-house recordings. Scaling both data and model capacity yields a single generative Transformer that tracks highly dynamic behaviors while achieving unprecedented zero-shot generalization to unseen motions and control tasks. Extensive experiments and scaling analyses show that our model establishes a new performance frontier, demonstrating robust zero-shot generalization to unseen tasks while simultaneously tracking highly dynamic and complex motions.",
+      "source": "arxiv",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "paper_id": "202606/03/2606.00374v1-constrained-whole-body-tracking-for-humanoid-robots",
+      "section": "quick",
+      "title_en": "Constrained Whole-Body Tracking for Humanoid Robots",
+      "authors": "Daniel Morton, Pranit Mohnot, Marco Pavone",
+      "date": "2026-05-29",
+      "pdf": "https://arxiv.org/pdf/2606.00374v1",
+      "score": "7.0",
+      "evidence": "在仿真的宇树G1上实现带约束的全身跟踪",
+      "tldr": "强化学习虽使仿人机器人具备全身敏捷能力，但训练后添加的安全约束（如避障、限位）难以在线保障。本文提出ConstrainedMimic框架，结合操作空间控制与CBF，在强化学习跟踪策略中实时强制任意运动学与动力学约束。在Unitree G1全身跟踪与遥操作仿真中，成功实现自碰撞与外部障碍避免、关节限位及质心稳定，跟踪频率高达500 Hz。该方法完全可微、多平台兼容，且与接触模式一致，在满足约束同时最小化对原始策略的干扰，为仿人机器人安全控制提供实用框架。",
+      "tags": "query:ur",
+      "abstract_en": "Recent advances in reinforcement learning (RL) have demonstrated impressive whole-body agility for humanoid robots, yet ensuring safety and satisfying constraints -- particularly those specified after training -- remains a challenge. Towards this goal, we present ConstrainedMimic, a control framework that leverages whole-body kinematics and dynamics for real-time constraint enforcement within RL tracking policies. By integrating principles from operational space control and control barrier functions (CBFs), we enable the satisfaction of arbitrary runtime constraints on both the kinematic reference motion and the underlying dynamics. In whole-body motion-tracking and teleoperation experiments on a (simulated) Unitree G1 with a learned policy, we demonstrate collision avoidance (both with the robot body and external obstacles), joint limits, and center of mass stability constraints. By remaining consistent with the current contact mode and tracking objectives, we minimally restrict the capabilities of the policy when constraints are active. Our method is fully differentiable, runs on CPU, GPU, and TPU, and can be deployed at up to 300-500 Hz. All software will be freely available upon publication.",
+      "source": "arxiv",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "paper_id": "202606/03/2606.02042v1-normality-preserving-continual-industrial-anomaly-detection-via-orthogonal-lora-banks",
+      "section": "quick",
+      "title_en": "Normality-Preserving Continual Industrial Anomaly Detection via Orthogonal LoRA Banks",
+      "authors": "Weibai Fang, Haijun Che, Feiyang Ren, Qiancheng Lao",
+      "date": "2026-06-01",
+      "pdf": "https://arxiv.org/pdf/2606.02042v1",
+      "score": "7.0",
+      "evidence": "持续异常检测，通过正交LoRA库保持正常性先验",
+      "tldr": "针对扩散模型在持续工业异常检测中遗忘历史正常性先验的问题，提出基于正交LoRA银行和层次化新颖性自适应银行增长的方法。冻结预训练U-Net和历史LoRA银行，强制新任务残差正交于历史子空间。在MVTec和VisA数据集上实验，VisA 2x6设置下图像级和像素级A-AUROC达83.6/91.8，像素级A-AUROC提升3.2点，FM降低1.3。有效保持长序列中历史正常性先验。",
+      "tags": "query:humanoid-ood",
+      "abstract_en": "Continual industrial anomaly detection with diffusion models suffers from historical normality prior drift and catastrophic forgetting. Existing continual diffusion methods preserve previous knowledge through replay or constrained optimization, but they lack an explicit mechanism for isolating and protecting category-specific normality priors during sequential adaptation. Although low-rank adaptation provides modular residual updates, standard LoRA neither freezes historical normality subspaces nor prevents new adapters from interfering with previous ones. To address this issue, we propose a normality-preserving continual anomaly detection framework based on two modules: History Frozen Orthogonal LoRA Bank (HF-OLB) and Hierarchical Novelty Adaptive Bank Growth module (HNABG). HF-OLB freezes both the pre-trained U-Net backbone and the learned LoRA banks, and constrains new task-specific normality residuals to the orthogonal complement of historical LoRA subspaces. HNABG further allocates layer-dependent residual capacity and expands the bank only when the residual normality novelty exceeds the expressive capacity of existing banks. Extensive experiments on MVTec and VisA demonstrate the effectiveness of the proposed method. On the challenging VisA 2x6 setting, our method achieves 83.6/91.8 image and pixel level A-AUROC with 3.8/3.9 FM, improving pixel level A-AUROC over the state of the art by 3.2 points while reducing pixel level FM by 1.3. These results show that our method effectively preserves historical normality priors in long horizon continual category sequences.",
+      "source": "arxiv",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "errors": []
+}
