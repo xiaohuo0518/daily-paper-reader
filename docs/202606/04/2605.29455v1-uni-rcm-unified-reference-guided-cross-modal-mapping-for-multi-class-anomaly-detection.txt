@@ -1,0 +1,364 @@
+Title: Uni-RCM: Unified Reference-guided Cross-modal Mapping for Multi-Class Anomaly Detection
+
+URL Source: https://arxiv.org/pdf/2605.29455v1
+
+Published Time: Fri, 29 May 2026 00:52:55 GMT
+
+Number of Pages: 5
+
+Markdown Content:
+> 1
+
+# Uni-RCM: Unified Reference-guided Cross-modal Mapping for Multi-Class Anomaly Detection 
+
+Yangchen Wu and Huiqiang Xie, Member, IEEE 
+
+Abstract —Multi-modal industrial anomaly detection typically relies on separate models for each product category, fundamen-tally limiting practical scalability. When shifting to a unified paradigm that handles diverse classes simultaneously, detection accuracy often degrades due to inter-class interference and feature manifold confusion. To overcome these challenges, we propose a Unified Reference guided Cross-modal Mapping frame-work, named Uni-RCM. At its core, we propose a reference guide block to dynamically filter out category-specific noise by introducing a learnable reference feature, which captures the commonalities across different modalities. Besides, an offline residual quantizer is proposed to characterize the normal dis-tribution by multiple cascaded codebooks. Extensive evaluations on the MVTec-3D AD dataset demonstrate the state-of-the-art performance in the challenging multi-class setting and in terms of image-level detection and pixel-level localization. 
+
+Index Terms —Industrial Anomaly Detection, Multi-modal Fu-sion, Multi-class, Feature Quantization. 
+
+I. I NTRODUCTION 
+
+# INDUSTRIAL anomaly detection (IAD) is a critical tech-nology for ensuring product quality in smart manufactur-ing. Powered by artificial intelligence, IAD has been shifting the paradigm from manual inspection to automated defect identification [1], [2]. In real-world scenarios, production lines need to handle diverse product categories. While conventional category-aware approaches rely on training individual mod-els for specific categories, they inherently suffer from poor scalability and limited generalization to unseen classes. To overcome these limitations, category-agnostic models have gained significant attention, which aims to establish a shared feature space that captures the commonalities and variations across different product types. Existing works for unified anomaly detection primarily focus on single-modality images [3]–[7]. Early efforts in this direction, You et al. [4] have demonstrated the feasibility of detecting anomalies across multiple categories simultane-ously within a single network. Building upon this paradigm, subsequent research has explored various architectures and modeling strategies to enhance feature representation. For instance, Zhao [5] has introduced OmniAL, which leverages a unified CNN framework for unsupervised anomaly local-ization. More recently, advanced generative techniques have been adapted to address the multi-class setting. Zhong and Song [6] have proposed UniFlow, utilizing normalizing flows to estimate unified density distributions, while He et al. [7]             
+
+> Y. Wu and H. Xie are with the School of Information Science and Technology, Jinan University, Guangzhou, Guangdong 510632, P. R. China (e-mail: wuyangchen@stu2023.jnu.edu.cn, huiqiangxie@jnu.edu.cn).
+
+have developed a diffusion-based framework to reconstruct normal patterns across diverse classes. However, these unified models rely solely on 2D images, which fundamentally limits their capability to detect 3D structural deformations. To overcome the inherent limitations of single-modality detection, multi-modal IAD methods have been proposed and are mainly categorized into memory-based [8]–[13] and reconstruction-based [14]–[17] methods. Following the foundational 3D anomaly detection baselines established by Bergmann et al. [8], subsequent research has extensively explored multimodal feature fusion. For instance, Wang et al. [9] proposed a hybrid fusion framework to effectively combine 2D and 3D representations. Recent advancements in this vein further enhance detection robustness, such as the geometry-guided score fusion introduced by Tao et al. [10] and the multi-perspective fusion network developed by Asad 
+
+et al. [11]. Conversely, reconstruction-based methods identify defects by measuring discrepancies between the original inputs and their reconstructed normal patterns or by distilling errors. Within this category, Rudolph et al. [15] utilized asymmet-ric student-teacher networks for anomaly distillation. Simi-larly, Costanzino et al. [17] introduced cross-modal feature mapping to align distinct modalities, while Tu et al. [16] proposed self-supervised feature adaptation to optimize 3D industrial anomaly detection. However, these works focus on the category-aware design and omit the multi-class scenarios. When directly extending these methods to multi-class sce-narios, multimodal anomaly detection accuracy faces degrada-tion. The performance degradation stems from two fundamen-tal limitations. First, reconstruction-based models are tailored to fit the normal distribution of individual categories, and multi-class data disrupts this distribution consistency. Besides, the multi-class features cause memory banks to suffer from severe manifold confusion during retrieval, which leads to inevitable false positives. To address the aforementioned limitations, we propose Uni-RCM, a Unified Reference-guided Cross-modal Mapping framework for multi-modal multi-class IAD. To mitigate cate-gory discrepancies, we design a reference guide module, which includes reference feature integration (RFI) and reference-guided attention modulation (RAM) to dynamically extract modality-consistent features. Furthermore, to circumvent man-ifold confusion during memory retrieval, we propose an offline residual quantizer. This module explicitly models compact normal pattern distributions, providing highly discriminative and complementary anomaly scores. The main contributions of this letter are summarized as follows:  
+
+> •
+
+We propose the Uni-RCM framework for the multi-modal          
+
+> arXiv:2605.29455v1 [cs.CV] 28 May 2026 2Offline Residual Quantizer
+> Layer 1Layer L
+> Layer Codebook 1 Codebook L
+> kL
+> E1(k1)
+> x0
+> x1EL(kL)
+> n
+> m
+> n
+> mf-fˆ
+> xL-1
+> xL-1
+> k1
+> n
+> mf
+> Cloud Point
+> :Element-wise Multiplication :Concatenation C:Element-wise Addition
+
++   
+
+> Dmul Aadd A:Discrepancy function :Additive Aggregation :Multiplicative Aggregation
+> loss
+
+Overall architecture of the proposed Uni-RCM framework  
+
+> Conv
+> CMLP
+
++× 𝐀    
+
+> ×(𝐀 −𝐀 )
+
++ 
+
+> ×𝐀
+> Reference Guide Block
+> RFI Branch
+> RAM Branch
+> Q
+> K
+> V
+> mF
+> pre
+> mF
+> Linear
+> Sigmoid
+> Linear
+> Linear
+> FFN
+> Sigmoid
+> Linear
+
+Detailed structure  
+
+> mF
+> Linear
+> mR
+> RGB
+> F2D
+> F3D
+> Reference Guide
+> Blocks
+> Offline Residual
+> Quantizer
+> Dadd A
+> mul A
+> Reference Guide
+> Blocks
+> Offline Residual
+> Quantizer
+> Dadd A
+> 2D
+
+F
+
+> 2D
+
+R
+
+> 3D
+
+F
+
+> 3D
+
+R
+
+> pre
+> 2D
+
+F
+
+> pre
+> 3D
+
+F
+
+> final
+
+S
+
+> loss
+> map
+> 3D
+
+S
+
+> orq
+> 2D
+
+S
+
+> orq
+> 3D
+
+S
+
+> map
+> 2D
+
+S
+
+Fig. 1. Overview of the proposed Uni-RCM framework, with the detailed structure of its core modules illustrated. 
+
+multi-class IAD task, which can effectively mitigate 2D and 3D feature confusion across multiple categories.  
+
+> •
+
+We design a reference guide module to dynamically regularize cross-modal mapping, and a offline residual quantizer module to provide robust auxiliary anomaly scoring.  
+
+> •
+
+Extensive experiments on the MVTec-3D AD dataset demonstrate that Uni-RCM achieves state-of-the-art I-AUROC and AUPRO@1% scores. II. M ETHOD 
+
+A. Network Overall Architecture 
+
+As illustrated in Fig. 1, the proposed Uni-RCM framework employs two frozen pre-trained models to extract hetero-geneous features Fm = [ f 1
+
+> m
+
+, f 2
+
+> m
+
+, · · · , f Nm ], m ∈ { 2D, 3D},including the DINO ViT-B/8 [18] trained on ImageNet [19] for RGB images and the PointMAE [20] trained on ShapeNet [21] for point clouds. The network then utilizes two key modules. One is the reference guided block for cross-modal feature alignment, which comprises RFI and RAM branches. Another is an offline residual quantizer, which is designed to store normal patterns and provide auxiliary anomaly signals. Next, we will introduce the two modules in detail. 
+
+B. Reference Guide Block 
+
+As detailed in Fig. 1, the reference guide block introduces learnable reference, Rm, m ∈ { 2D, 3D}, as the shared fea-tures. Taking input features Fm and Rm as inputs, the block performs feature interaction through two parallel branches, i.e., RFI and RAM branches. The RFI branch uses Fm as a query to retrieve relevant information from Rm by 
+
+ZRFI = fConv 
+
+
+
+σ
+
+ Q ⊙ K
+
+√C
+
+
+
+⊙ V
+
+
+
+, (1) where ZRFI is the retrived features, fConv (·) is the convolution network, σ(·) is the Sigmoid function, ⊙ denotes element-wise multiplication, C is constant, and Q, K, V are obtained via linear projections by Q = Wq Fm, K = WkRm, and 
+
+V = Wv Rm.Simultaneously, the RAM branch adaptively modulates Fm
+
+along the channel dimension. Fm and Rm are concatenated and fed into a multiple-layer perception (MLP) to generate modulated features by 
+
+ZRAM = Fm ⊙ σ (fMLP ([ Fm; Rm])) , (2) where ZRAM is the modulated features and fMLP (·) is MLP function. To balance the importance between retrieved and the mod-ulated features, a learnable scalar α is employed for dynamic weighted fusion. The fused feature is further processed by a feed-forward network with a residual connection to produce the final output Fpre by 
+
+Fpre m = fFFN (Zfuse ) + Zfuse , (3) where Zfuse = α·WRFI ZRFI +(1 −α)·WRAM ZRAM and fMLP (·)
+
+is feed-forward network. 
+
+Remark: The insights behind the design of the reference-guided block can be summarized as follows. First, the learn-able reference is used to store the common normal char-acteristics within cross-modal mapping. Then, the attention mechanism in the RFI branch helps the inputs to retrieve normal cross-modal details from the learnable reference, which makes the outputs closer to the normal cross-modal features. Besides, the RAM branch fuses the reference information to adaptively filter out abnormal details and enhance the normal details, effectively mitigating feature interference caused by multi-class mixtures. By smoothly coordinating these two mechanisms via dynamic weights, the single network achieves stable and high-quality cross-modal mapping that outputs the normal features with abnormal inputs. 
+
+C. Offline Residual Quantizer 
+
+To build a compact space of normal features, we introduce the offline residual quantizer (ORQ). Unlike memory bank approaches that require massive storage, ORQ offers a highly lightweight alternative through residual vector quantization. We define codebooks as a finite set C = {C 1, C2, · · · , CL},in which Cl = {(kl, El(kl)) }kl∈[Kl], where each discrete index 3
+
+kl is mapped to an vector El(kl). Here, Kl represents the total capacity of the Cl.Given the f nm, ORQ employs L cascaded codebooks to approximate it from coarse to fine. Starting with 0-th residual 
+
+x0 = f nm, the l-th residual xl is given by 
+
+kil = arg min  
+
+> kl∈[Kl]
+
+∥xl−1 − El(kl)∥2,
+
+xl = xl−1 − El(kil ),
+
+(4) where kil is the index of the closest feature in El to 
+
+xl−1. Therefore, the final reconstructed feature is ˆf nm =PLl=1 El(kil ). Then, by approximating all features in Fm by ORQ, we can obtain the ˆFm.This achieves high-precision coverage of the normal feature space with a tiny codebook size. To prevent codebook collapse, the codebooks are generated by standard K-Means clustering on training features offline. 
+
+Remark: The insights behind this module are summarized as follows. Due to tiny surface defects that belong to the high-frequency information, quantization is an effective way to perform a low-pass filter and filter out the defects, such that the outputs are smooth features without defects and are used to find deviations from the expected manifold. Besides, compared to conventional unified memory banks that need an additional memory space for each anomaly category, the residual quantization can approximate any anomaly types by the cascaded codebook design. Finally, this cascaded quanti-zation effectively decomposes coarse category semantics and fine intra-class details, which is highly suited for the multi-class scenarios. 
+
+D. Loss Functions and Joint Training 
+
+To optimize Uni-RCM, we employ a joint loss function combining cosine similarity ( Lcos ) and mean squared error (Lmse ) to align the generated features with the target modality in both direction and magnitude by 
+
+Lcos = 1 − X
+
+> m∈{ 2D, 3D}
+
+Fm · Fpre m
+
+∥Fm∥2∥Fpre m ∥2
+
+, (5) 
+
+Lmse = X
+
+> m∈{ 2D, 3D}
+
+∥Fm − Fpre m ∥22. (6) The final training objective is the weighted sum Ltotal =
+
+Lcos + λLmse , where λ is a balancing coefficient (set to 0.01). The network adaptively balances the mapping difficulty between different modalities via the learnable parameter α
+
+in the reference-guided blocks, without requiring additional constraints. 
+
+E. Anomaly Inference 
+
+During inference, Uni-RCM detects anomalies through bidi-rectional mapping consistency and ORQ reconstruction errors. The mapping anomaly score Sm 
+
+> map
+
+is measured by the Eu-clidean distance between the mapped and target features: 
+
+Smap  
+
+> m
+
+= ∥Fm − Fpre m ∥2, m ∈ { 2D, 3D}. (7) Simultaneously, the quantization anomaly score uses the ORQ residual magnitude Sorq  
+
+> m
+
+= ∥Fm − ˆFm∥2. To fully exploit multi-modal complementary information, the final pixel-level anomaly score Sfinal is defined as the multiplicative fusion of these signals: 
+
+Sfinal = ( Smap  
+
+> 2D
+
++ βSorq 
+
+> 2D
+
+) ⊙ (Smap  
+
+> 3D
+
++ βSorq  
+
+> 3D
+
+), (8) where β is a balancing coefficient (set to 0.1). III. E XPERIMENTS 
+
+A. Datasets and Evaluation Metrics 
+
+We evaluate Uni-RCM on the MVTec-3D AD dataset [8], which consists of 10 industrial product categories with var-ious surface and structural defects. The model is trained on normal samples and tested on both normal and anomalous instances. Performance is assessed using Image-level AUROC (I-AUROC) for detection and Area Under the Per-Region Overlap curve (AUPRO@30% and AUPRO@1%) for segmen-tation. 
+
+B. Implementation Details 
+
+Data preprocessing follows [9]. Uni-RCM is implemented in PyTorch and trained on a single NVIDIA RTX 4090D GPU. We stack 3 reference-guided blocks with a hidden dimension of 512. The main network is trained end-to-end using the Adam optimizer for 200 epochs, with a batch size of 32 and a learning rate of 3 × 10 −4. In contrast, the ORQ module utilizes a 4-layer residual cascade with codebook sizes set to 
+
+K2D = 4096 and K3D = 1024 . During inference, the resultant anomaly maps are bilinearly interpolated to 224 ×224 . Finally, a Gaussian smoothing filter following [24] is applied to smooth noise. 
+
+C. Comparison With Existing Methods 
+
+Table I and Table II compare Uni-RCM with state-of-the-art anomaly detection methods on the MVTec-3D AD dataset [8] for a multi-class scenario. For the anomaly detection, Uni-RCM achieves state-of-the-art performance, outperforming previous methods by a margin of 2.2% absolute points for I-AUROC. This indicates that the reference-guided mapping effectively manages inter-class interference for generalized detection. Regarding localization, Uni-RCM also outperforms all previous methods except for the G2SF [10] model that uses a memory bank. However, Uni-RCM achieves the best results on the stricter AUPRO@1% metric with 0.7% gain, which confirms that combining cross-modal mapping with ORQ ef-fectively suppresses background noise and enhances boundary delineation. Qualitative results in Fig. 2 further corroborate this finding, where Uni-RCM produces sharper and more accurate anomaly maps compared to existing methods. 
+
+D. Ablation Study 
+
+To evaluate the contribution of proposed components in Uni-RCM, we conducted comprehensive ablation studies as detailed in Table III. First, using either the RFI or RAM branch alone yields I-AUROC of 0.938 and 0.942, respectively. Fusing both improves it to 0.947, demonstrating that the learnable reference features obtain the general representations to manage 4
+
+TABLE I ANOMALY DETECTION PERFORMANCE COMPARISON (I-AUROC AND AUPRO@30%). T HE BEST AND SECOND BEST RESULTS IN THE MULTI -CLASS SETTING ARE HIGHLIGHTED .
+
+Method Bagel C Gland Carrot Cookie Dowel Foam Peach Potato Rope Tire Mean 
+
+BTF [22] 0.819 /0.975 0.742 /0.957 0.965 /0.979 0.864 /0.972 0.956 /0.969 0.568 /0.863 0.825 /0.974 0.884 /0.981 0.933 /0.927 0.852 /0.935 0.841 /0.953 AST [15] 0.754 /0.946 0.599 /0.795 0.469 /0.942 0.761 /0.813 0.624 /0.844 0.628 /0.567 0.470 /0.925 0.499 /0.982 0.590 /0.707 0.682 /0.695 0.608 /0.822 M3DM [9] 0.835 /0.893 0.644 /0.896 0.795 /0.957 0.850 /0.840 0.708 /0.910 0.759 /0.907 0.760 /0.926 0.837 /0.925 0.843 /0.908 0.651 /0.837 0.768 /0.900 CFM [17] 0.978 /0.975 0.880 /0.967 0.940 /0.982 1.000 /0.953 0.998 /0.962 0.878 /0.958 0.919 /0.979 0.888 /0.982 0.977 /0.979 0.860 /0.978 0.932 /0.972 LSFA [16] 0.942 /0.974 0.791 /0.962 0.919 /0.980 0.952 /0.958 0.932 /0.984 0.818 /0.963 0.966 /0.989 0.657 /0.967 0.985 /0.972 0.783 /0.954 0.875 /0.970 G2SF [10] 0.993 /0.982 0.855 /0.974 0.998 /0.982 0.907 /0.973 0.915 /0.969 0.944 /0.973 0.978 /0.982 0.969 /0.982 0.967 /0.976 0.749 /0.971 0.928 /0.976 
+
+CIF [23] 0.849 /0.596 0.717 /0.808 0.749 /0.936 0.771 /0.570 0.672 /0.906 0.816 /0.679 0.726 /0.713 0.512 /0.899 0.917 /0.834 0.602 /0.833 0.733 /0.777 
+
+Ours 0.988 /0.977 0.897 /0.966 0.966 /0.982 0.999 /0.948 1.000 /0.954 0.898 /0.965 0.963 /0.981 0.950 /0.983 0.979 /0.979 0.903 /0.982 0.954 /0.972 map 
+
+> 2D
+
+SRGB PC GT map 
+
+> 3D
+
+S orq 
+
+> 2D
+
+S orq 
+
+> 3D
+
+S AST CFM M3DM Ours 
+
+Fig. 2. Qualitative segmentation results. The left columns illustrate the internal anomaly-map generation process of Uni-RCM, including 2D/3D mapping anomaly scores and quantization anomaly scores. The right columns present a comparison of the final anomaly localization results with state-of-the-art methods. TABLE II AUPRO@1% R ESULTS . T HE BEST AND SECOND BEST RESULTS IN THE MULTI -CLASS SETTING ARE HIGHLIGHTED .              
+
+> Metric BTF [22] AST [15] M3DM [9] CFM [17] LSFA [16] G2SF [10] Ours
+> AUPRO@1% 0.366 0.303 0.192 0.442 0.408 0.448 0.455
+
+multi-class variations. Besides, adding ORQ to the baseline mapping network improves I-AUROC from 0.947 to 0.954. This confirms that quantization reconstruction error provides a crucial complementary signal to constrain the normal feature manifold and improve anomaly separability. IV. C ONCLUSION 
+
+In this letter, we proposed Uni-RCM, a Unified Reference-guided Cross-modal Mapping framework, to tackle multi-modal multi-class industrial anomaly detection task. To miti-gate severe interference across diverse category distributions, we designed a reference guide block that dynamically aligns 
+
+TABLE III ABLATION STUDY ON KEY COMPONENTS IN UNI -RCM. T HE BEST AND SECOND BEST RESULTS IN THE MULTI -CLASS SETTING ARE HIGHLIGHTED .ORQ RFI RAM I-AUROC AUPRO@30% AUPRO@1% 
+
+✓ 0.783 0.954 0.406 
+
+✓ 0.938 0.969 0.449 
+
+✓ 0.942 0.970 0.450 
+
+✓ ✓ 0.947 0.972 0.452 
+
+✓ ✓ ✓ 0.954 0.972 0.455 
+
+cross-modal features via learnable reference features and adaptive channel-wise modulation. Furthermore, we proposed an offline residual quantizer that decouples normal pattern memory by using compact cascaded codebooks. Extensive experiments on the MVTec-3D AD dataset demonstrate that Uni-RCM establishes a robust unified model, achieving state-of-the-art detection and fine-grained localization performance under the multi-class setting. 5
+
+REFERENCES [1] Y. Cui, Z. Liu, and S. Lian, “A survey on unsupervised anomaly detection algorithms for industrial images,” IEEE Access , vol. 11, pp. 55 297–55 315, 2023. [2] M. Carrat` u, V. Gallo, S. D. Iacono, P. Sommella, A. Bartolini, F. Grasso, L. Ciani, and G. Patrizi, “A novel methodology for unsupervised anomaly detection in industrial electrical systems,” IEEE Trans. Instrum. Meas. , vol. 72, pp. 1–12, 2023. [3] L. He, Z. Jiang, J. Peng, W. Zhu, L. Liu, Q. Du, X. Hu, M. Chi, Y. Wang, and C. Wang, “Learning unified reference representation for unsupervised multi-class anomaly detection,” in Proc. Eur. Conf. Comput. Vis. Springer, 2024, pp. 216–232. [4] Z. You, L. Cui, Y. Shen, K. Yang, X. Lu, Y. Zheng, and X. Le, “A unified model for multi-class anomaly detection,” Adv. Neural Inf. Process. Syst. ,vol. 35, pp. 4571–4584, 2022. [5] Y. Zhao, “OmniAL: A unified cnn framework for unsupervised anomaly localization,” in Proc. IEEE/CVF Conf. Comput. Vis. Pattern Recognit. ,2023, pp. 3924–3933. [6] J. Zhong and Y. Song, “Uniflow: Unified normalizing flow for unsuper-vised multi-class anomaly detection,” Information , vol. 15, no. 12, p. 791, 2024. [7] H. He, J. Zhang, H. Chen, X. Chen, Z. Li, X. Chen, Y. Wang, C. Wang, and L. Xie, “A diffusion-based framework for multi-class anomaly detection,” in Proc. AAAI Conf. Artif. Intell. , vol. 38, no. 8, 2024, pp. 8472–8480. [8] P. Bergmann, X. Jin, D. Sattlegger, and C. Steger, “The mvtec 3d-ad dataset for unsupervised 3d anomaly detection and localization,” in Proc. Int. Jt. Conf. Comput. Vis. Imaging Comput. Graph. Theory Appl. , 2022, pp. 202–213. [9] Y. Wang, J. Peng, J. Zhang, R. Yi, Y. Wang, and C. Wang, “Multimodal industrial anomaly detection via hybrid fusion,” in Proc. IEEE/CVF Conf. Comput. Vis. Pattern Recognit. , 2023, pp. 8032–8041. [10] C. Tao, X. Cao, and J. Du, “G2SF: Geometry-guided score fusion for multimodal industrial anomaly detection,” in Proc. IEEE/CVF Int. Conf. Comput. Vis. , 2025, pp. 20 551–20 560. [11] M. Asad, W. Azeem, H. Jiang, H. T. Mustafa, J. Yang, and W. Liu, “2M3DF: Advancing 3D industrial defect detection with multi-perspective multimodal fusion network,” IEEE Trans. Circuits Syst. Video Technol. , vol. 35, no. 7, pp. 6803–6815, 2025. [12] S. He, T. Zhang, W. Song, and H. Yu, “Feature bank-guided reconstruc-tion for anomaly detection,” IEEE Signal Process. Lett. , vol. 32, pp. 1480–1484, 2025. [13] Z. Chen, C. Bai, Y. Zhu, and X. Lu, “Tut: Template-augmented u-net transformer for unsupervised anomaly detection,” IEEE Signal Process. Lett. , vol. 31, pp. 780–784, 2024. [14] T. Chen, B. Li, and J. Zeng, “Learning traces by yourself: Blind image forgery localization via anomaly detection with vit-vae,” IEEE Signal Process. Lett. , vol. 30, pp. 150–154, 2023. [15] M. Rudolph, T. Wehrbein, B. Rosenhahn, and B. Wandt, “Asymmetric student-teacher networks for industrial anomaly detection,” in Proc. IEEE/CVF Winter Conf. Appl. Comput. Vis. , 2023, pp. 2592–2602. [16] Y. Tu, B. Zhang, L. Liu, Y. Li, J. Zhang, Y. Wang, C. Wang, and C. Zhao, “Self-supervised feature adaptation for 3d industrial anomaly detection,” in Proc. Eur. Conf. Comput. Vis. Springer, 2024, pp. 75–91. [17] A. Costanzino, P. Z. Ramirez, G. Lisanti, and L. Di Stefano, “Mul-timodal industrial anomaly detection by crossmodal feature mapping,” in Proc. IEEE/CVF Conf. Comput. Vis. Pattern Recognit. , 2024, pp. 17 234–17 243. [18] M. Caron, H. Touvron, I. Misra, H. J´ egou, J. Mairal, P. Bojanowski, and A. Joulin, “Emerging properties in self-supervised vision transformers,” in Proc. IEEE/CVF Int. Conf. Comput. Vis. , 2021, pp. 9650–9660. [19] J. Deng, W. Dong, R. Socher, L.-J. Li, K. Li, and L. Fei-Fei, “Imagenet: A large-scale hierarchical image database,” in Proc. IEEE/CVF Conf. Comput. Vis. Pattern Recognit. , 2009, pp. 248–255. [20] Y. Pang, F. E. H. Tay, L. Yuan, and Z. Chen, “Masked autoencoders for 3d point cloud self-supervised learning,” World Sci. Annu. Rev. Artif. Intell. , vol. 2, pp. 2 440 001:1–2 440 001:22, 2024. [21] A. X. Chang, T. Funkhouser, L. Guibas, P. Hanrahan, Q. Huang, Z. Li, S. Savarese, M. Savva, S. Song, H. Su et al. , “Shapenet: An information-rich 3d model repository,” arXiv preprint arXiv:1512.03012 , 2015. [22] E. Horwitz and Y. Hoshen, “Back to the feature: classical 3d features are (almost) all you need for 3d anomaly detection,” in Proc. IEEE/CVF Conf. Comput. Vis. Pattern Recognit. , 2023, pp. 2968–2977. [23] Y. Lin, H. Yan, X. Tong, Y. Chang, H. Wang, Z. Zhou, S. Gao, Y. Wang, and W. Zhang, “Commonality in few: Few-shot multimodal anomaly detection via hypergraph-enhanced memory,” in Proc. AAAI Conf. Artif. Intell. , 2026, pp. 7015–7023. [24] N. Cohen and Y. Hoshen, “Sub-image anomaly detection with deep pyra-mid correspondences. arxiv 2020,” arXiv preprint arXiv:2005.02357 ,vol. 2, 2005.

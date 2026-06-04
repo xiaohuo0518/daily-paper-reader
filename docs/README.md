@@ -6,34 +6,49 @@
 </div>
 
 ## 每次日报
-- 最新运行日期：2026-06-03
-- 运行时间：2026-06-03 22:53:26 UTC
+- 最新运行日期：2026-06-04
+- 运行时间：2026-06-04 21:59:44 UTC
 - 运行状态：成功
-- 本次总论文数：4
-- 精读区：2
-- 速读区：2
+- 本次总论文数：9
+- 精读区：3
+- 速读区：6
 
 ### 今日简报（AI）
-今天推荐4篇论文，两篇精读获9分，聚焦机器人操作推理与人形机器人零样本运动跟踪。  
-最值得关注的是《Revisiting Embodied Chain-of-Thought》和《Humanoid-GPT》，分别提出通用化机械手操控方案和尺度化运动追踪结构。  
-建议优先精读这两篇9分论文，掌握机器人灵巧操作与全身控制的最新突破。
-- 详情：[/202606/03/README](/202606/03/README)
+今日聚焦人形机器人全身操控与失败检测，精读2篇高分论文。
+最值得关注：人形机器人从3D资产和视频先验生成全身操控动作（9分）以及操作失败的可观察性研究（8分）。
+建议关注人形机器人操控与模拟中失败检测的可靠性，适合机器人研究者深入。
+- 详情：[/202606/04/README](/202606/04/README)
 
 ### 精读区论文标签
-1. [Revisiting Embodied Chain-of-Thought for Generalizable Robot Manipulation](/202606/03/2606.03784v1-revisiting-embodied-chain-of-thought-for-generalizable-robot-manipulation)  
+1. [GRAIL: Generating Humanoid Loco-Manipulation from 3D Assets and Video Priors](/202606/04/2606.05160v1-grail-generating-humanoid-loco-manipulation-from-3d-assets-and-video-priors)  
    标签：评分：9.0/10、query:ur
-   evidence：构建了最大的具身思维链语料库，包含97.8万条轨迹
-2. [Humanoid-GPT: Scaling Data and Structure for Zero-Shot Motion Tracking](/202606/03/2606.03985v1-humanoid-gpt-scaling-data-and-structure-for-zero-shot-motion-tracking)  
-   标签：评分：9.0/10、query:ur
-   evidence：人形机器人运动跟踪数据集构建
+   evidence：虚拟生成人形机器人演示数据用于数据集构建
+2. [How Visible Are Silent Manipulation Failures? An Observability Study of False-Success Detection in Simulated Robot Episodes](/202606/04/2606.03134v1-how-visible-are-silent-manipulation-failures-an-observability-study-of-false-success-detection-in-simulated-robot-episodes)  
+   标签：评分：8.0/10、query:humanoid-ood
+   evidence：模拟机器人操作中利用本体感觉检测假成功
+3. [Revisiting Embodied Chain-of-Thought for Generalizable Robot Manipulation](/202606/04/2606.03784v2-revisiting-embodied-chain-of-thought-for-generalizable-robot-manipulation)  
+   标签：评分：8.0/10、query:ur
+   evidence：构建了最大的具身CoT语料库，包含978K个轨迹，用于机器人操作
 
 ### 速读区论文标签
-1. [Constrained Whole-Body Tracking for Humanoid Robots](/202606/03/2606.00374v1-constrained-whole-body-tracking-for-humanoid-robots)  
-   标签：评分：7.0/10、query:ur
-   evidence：在仿真的宇树G1上实现带约束的全身跟踪
-2. [Normality-Preserving Continual Industrial Anomaly Detection via Orthogonal LoRA Banks](/202606/03/2606.02042v1-normality-preserving-continual-industrial-anomaly-detection-via-orthogonal-lora-banks)  
+1. [Mahalanobis PatchCore: Covariance-Aware and Streaming-Compatible Industrial Anomaly Detection](/202606/04/2605.27748v1-mahalanobis-patchcore-covariance-aware-and-streaming-compatible-industrial-anomaly-detection)  
    标签：评分：7.0/10、query:humanoid-ood
-   evidence：持续异常检测，通过正交LoRA库保持正常性先验
+   evidence：协方差感知的异常检测方法，适用于人形机器人故障检测
+2. [Uni-RCM: Unified Reference-guided Cross-modal Mapping for Multi-Class Anomaly Detection](/202606/04/2605.29455v1-uni-rcm-unified-reference-guided-cross-modal-mapping-for-multi-class-anomaly-detection)  
+   标签：评分：7.0/10、query:humanoid-ood
+   evidence：统一参考引导的异常检测方法，可迁移至人形机器人故障诊断
+3. [PHASOR: Phase-Anchored Universal Action Representations for Humanoid Embodiments](/202606/04/2606.01851v2-phasor-phase-anchored-universal-action-representations-for-humanoid-embodiments)  
+   标签：评分：7.0/10、query:ur
+   evidence：面向人形机器人的动作表征，与数据集构建和策略学习相关
+4. [Grasp-Then-Plan with Failure Attribution: A Closed Two-Stage Framework for Precise and Generalizable Robotic Manipulation](/202606/04/2606.03385v1-grasp-then-plan-with-failure-attribution-a-closed-two-stage-framework-for-precise-and-generalizable-robotic-manipulation)  
+   标签：评分：7.0/10、query:ur
+   evidence：用于机器人操作诊断的失败归因模型
+5. [TPA-AD: A Two-Stage Pseudo Anomaly-Guided Method for Bearing Time-Series Anomaly Detection](/202606/04/2606.04073v1-tpa-ad-a-two-stage-pseudo-anomaly-guided-method-for-bearing-time-series-anomaly-detection)  
+   标签：评分：7.0/10、query:humanoid-ood
+   evidence：自监督时序异常检测方法，可迁移至机器人信号
+6. [PrimitiveVLA: Learning Reusable Motion Primitives for Efficient and Generalizable Robotic Manipulation](/202606/04/2605.28634v1-primitivevla-learning-reusable-motion-primitives-for-efficient-and-generalizable-robotic-manipulation)  
+   标签：评分：6.0/10、query:ur
+   evidence：提出自动化流水线将演示拆解为可重用运动基元，涉及数据集构建
 
 
 <div class="dpr-home-promo-card">
