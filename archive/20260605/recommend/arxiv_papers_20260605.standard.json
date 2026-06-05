@@ -1,0 +1,98 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-06-05T21:41:33.384675+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 2,
+    "deep_divecandidates": 0,
+    "deep_cap": 7,
+    "deep_selected": 0,
+    "quick_candidates": 2,
+    "quick_skim_target": 12,
+    "quick_selected": 2
+  },
+  "deep_dive": [],
+  "quick_skim": [
+    {
+      "id": "2606.04444v1",
+      "source": "arxiv",
+      "title": "Scaling Datasets for Multi-Sensor, Multi-Agent, and Multi-Domain Learning in Autonomous Systems",
+      "abstract": "Existing datasets cannot support large-scale learning in multi-agent, multi-sensor, or multi-domain autonomy, where diversity and coordination are essential. We present a modular dataset generation pipeline that creates terabyte-scale, ground-truth-labeled data for ground, aerial, and infrastructure-based systems using the AVstack framework and CARLA simulator. Supporting single- and multi-agent configurations with flexible sensor suites, the pipeline enables controllable experimentation across challenging conditions. Representative perception and fusion studies show how generated data can support application-specific training and collaborative autonomy.",
+      "authors": [
+        "R. Spencer Hallyburton",
+        "David Hunt",
+        "Miroslav Pajic"
+      ],
+      "primary_category": "eess.IV",
+      "categories": [
+        "eess.IV",
+        "cs.LG"
+      ],
+      "published": "2026-06-03T04:46:44+00:00",
+      "link": "https://arxiv.org/pdf/2606.04444v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "modular dataset generation pipeline for autonomous systems",
+      "llm_evidence_cn": "面向自主系统的模块化数据集生成流程",
+      "llm_evidence": "面向自主系统的模块化数据集生成流程",
+      "canonical_evidence": "面向自主系统的模块化数据集生成流程",
+      "llm_tldr_en": "Proposes a scalable dataset generation pipeline using CARLA simulator, producing terabyte-scale labeled data for multi-sensor, multi-agent autonomous systems. Enables controlled experiments and supports perception training.",
+      "llm_tldr_cn": "现有数据集难以支持多传感器、多智能体自主系统的大规模学习。本文提出基于CARLA模拟器的模块化数据集生成流程，可产生TB级带标签数据，支持地面、空中及基础设施系统，覆盖单/多智能体配置。代表性感知实验表明生成数据可用于应用特定训练和协作自主。该工作为机器人学习提供可扩展的数据构建工具。",
+      "llm_tldr": "现有数据集难以支持多传感器、多智能体自主系统的大规模学习。本文提出基于CARLA模拟器的模块化数据集生成流程，可产生TB级带标签数据，支持地面、空中及基础设施系统，覆盖单/多智能体配置。代表性感知实验表明生成数据可用于应用特定训练和协作自主。该工作为机器人学习提供可扩展的数据构建工具。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2606.05274v1",
+      "source": "arxiv",
+      "title": "Anomaly Detection for Electro-Hydrostatic Actuators using LSTM Autoencoder",
+      "abstract": "Electro-Hydrostatic Actuators (EHAs) are widely used in aerospace and industrial systems, where timely detection of sensor anomalies is essential to ensure safe and reliable operation. However, the large volume and high sampling frequency of EHA sensor data pose challenges for accurate and efficient anomaly detection. Conventional statistical and classical machine-learning methods such as Z-score, Interquartile Range (IQR), Median Absolute Deviation (MAD), Isolation Forest, Gaussian Mixture, and k-means often fail to capture the temporal dependencies inherent in EHA signals, resulting in limited detection accuracy and elevated false-alarm rates. Furthermore, systematic evaluations of data-driven anomaly detection approaches for EHA systems remain scarce, particularly under varying operational conditions. This study presents an offline anomaly-detection framework for univariate EHA sensor signals, focusing on temperature and pressure data collected from a controlled test bench. The method employs a reconstruction-based Long Short-Term Memory (LSTM) autoencoder, calibrated and evaluated using validation-set reconstruction-error distributions. Performance is assessed across multiple fault-injection scenarios using accuracy, precision, recall, and F1-score, complemented by sensitivity analyses under varying operating conditions. The LSTM autoencoder achieved an average accuracy of 99.0\\%, precision up to 100\\%, recall between 90.2\\% and 99.6\\%, and F1-scores from 93.1\\% to 99.8\\%, demonstrating high detection sensitivity and a very low false-alarm rate across all evaluated sensors. These results highlight the feasibility of data-driven offline anomaly detection for EHAs. Future work will focus on adapting the developed framework for an online (real-time) environment.",
+      "authors": [
+        "Nehal Afifi",
+        "Abdelmonem Elhendawi",
+        "Felix Leitenberger",
+        "Nadine Piat",
+        "Sven Matthiesen"
+      ],
+      "primary_category": "cs.LG",
+      "categories": [
+        "cs.LG"
+      ],
+      "published": "2026-06-03T17:37:21+00:00",
+      "link": "https://arxiv.org/pdf/2606.05274v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "LSTM autoencoder for anomaly detection in actuator sensor data",
+      "llm_evidence_cn": "使用LSTM自编码器对执行器传感器进行异常检测",
+      "llm_evidence": "使用LSTM自编码器对执行器传感器进行异常检测",
+      "canonical_evidence": "使用LSTM自编码器对执行器传感器进行异常检测",
+      "llm_tldr_en": "Proposes LSTM autoencoder for anomaly detection on EHA sensor time series, addressing temporal dependency and false alarms; method is transferable to humanoid robot joint signal anomaly detection.",
+      "llm_tldr_cn": "该论文针对电液伺服作动器（EHA）传感器数据，提出LSTM自编码器进行异常检测。传统统计和机器学习方法难以捕捉时间依赖性，导致准确率低、误报率高。提出的方法利用LSTM自编码器学习时序特征，在多个数据集上优于基线。虽然应用背景为航空航天，但其核心方法可直接迁移至人形机器人关节位置、速度、力矩等本体感受信号的异常检测，为轻量级模型部署提供参考。",
+      "llm_tldr": "该论文针对电液伺服作动器（EHA）传感器数据，提出LSTM自编码器进行异常检测。传统统计和机器学习方法难以捕捉时间依赖性，导致准确率低、误报率高。提出的方法利用LSTM自编码器学习时序特征，在多个数据集上优于基线。虽然应用背景为航空航天，但其核心方法可直接迁移至人形机器人关节位置、速度、力矩等本体感受信号的异常检测，为轻量级模型部署提供参考。",
+      "llm_tags": [
+        "query:humanoid-ood"
+      ],
+      "matched_query_tag": "query:humanoid-ood",
+      "matched_query_text": "lightweight LSTM or GRU models deployed on embedded platforms for anomaly detection",
+      "matched_requirement_id": "req-12",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    }
+  ]
+}
