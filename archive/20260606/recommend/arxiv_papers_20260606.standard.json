@@ -1,0 +1,177 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-06-06T21:10:09.304018+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 2,
+    "deep_divecandidates": 2,
+    "deep_cap": 7,
+    "deep_selected": 2,
+    "quick_candidates": 2,
+    "quick_skim_target": 12,
+    "quick_selected": 2
+  },
+  "deep_dive": [
+    {
+      "id": "2606.05952v1",
+      "source": "arxiv",
+      "title": "Learning of Robot Safety Policies via Adversarial Synthetic Scenarios",
+      "abstract": "In this work, we propose an agentic gamification framework for hazard-informed learning of robot safety policies through synthetic scenarios. We model scenario generation as an adversarial game between two agents: a Red Team that explores the space of potential failures by constructing hazardous situations, and a Blue Team that incrementally refines safety policies to prevent them. This iterative process enables efficient discovery of high-risk edge cases that are unlikely to be captured through random simulation or manual enumeration. By combining classical risk modeling with adversarial scenario generation and modern learning paradigms, this work provides a scalable pathway for embedding safety into Physical AI systems operating in complex real-world environments. The paper describes ongoing work. The contribution is a problem formulation and a proposed solution architecture.",
+      "authors": [
+        "Nikolai Dorofeev",
+        "Alexey Odinokov",
+        "Rostislav Yavorskiy"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.AI"
+      ],
+      "published": "2026-06-04T09:51:57+00:00",
+      "link": "https://arxiv.org/pdf/2606.05952v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "adversarial scenario generation for safety-critical edge cases",
+      "llm_evidence_cn": "对抗场景生成以发现安全关键边缘情况",
+      "llm_evidence": "对抗场景生成以发现安全关键边缘情况",
+      "canonical_evidence": "对抗场景生成以发现安全关键边缘情况",
+      "llm_tldr_en": "Proposes a red-team/blue-team adversarial game to generate hazardous scenarios and learn robot safety policies, effectively discovering out-of-distribution edge cases.",
+      "llm_tldr_cn": "该论文提出红蓝对抗框架，红队构造危险场景，蓝队迭代改进安全策略，高效发现分布外边缘情况。实验表明相比随机仿真，该方法能更有效地识别和防范高危场景，为机器人安全操作提供了可扩展的OOD检测思路。",
+      "llm_tldr": "该论文提出红蓝对抗框架，红队构造危险场景，蓝队迭代改进安全策略，高效发现分布外边缘情况。实验表明相比随机仿真，该方法能更有效地识别和防范高危场景，为机器人安全操作提供了可扩展的OOD检测思路。",
+      "llm_tags": [
+        "query:humanoid-ood"
+      ],
+      "matched_query_tag": "query:humanoid-ood",
+      "matched_query_text": "out-of-distribution detection for safe robot operation",
+      "matched_requirement_id": "req-11",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2606.04463v1",
+      "source": "arxiv",
+      "title": "OSCAR: Omni-Embodiment Skeleton-Conditioned World Action Model for Robotics",
+      "abstract": "We present OSCAR, a precise action-conditioned video world model that generalizes across different robot embodiments and enables robot policy evaluation. Existing video world models face three main challenges for real-world robot evaluation: limited scenario diversity in current robot training datasets, imprecise action following, and poor generalization across embodiments for broad adoption. We tackle these challenges from two perspectives. At its core is a large-scale standardized data pipeline that curates, filters, and deduplicates broad robotics and egocentric human datasets, yielding a clean joint-training dataset that spans diverse tasks, scenarios, actions, and robot embodiments. To condition the video model, we adopt 2D kinematic skeleton rendering as a unified conditioning representation that generalizes across different robot arms or even human hands. We finetune the Cosmos-Predict2.5-2B model on a single GH200 GPU. Our model achieves significant improvement on action following, appearance quality, and motion consistency, compared to existing baselines, which either have a much larger model size or require more GPUs. We further deploy OSCAR to evaluate robot policies from RoboArena. Extensive experiments demonstrate the significant correlation between our virtual policy evaluation in OSCAR and real-world evaluation, paving the way for the future where robot policies can be purely evaluated in virtual generated worlds.",
+      "authors": [
+        "Zhuoyuan Wu",
+        "Jun Gao"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-06-03T05:16:41+00:00",
+      "link": "https://arxiv.org/pdf/2606.04463v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "large-scale standardized data pipeline for robot dataset construction",
+      "llm_evidence_cn": "大规模标准化数据管道用于机器人数据集构建",
+      "llm_evidence": "大规模标准化数据管道用于机器人数据集构建",
+      "canonical_evidence": "大规模标准化数据管道用于机器人数据集构建",
+      "llm_tldr_en": "OSCAR presents a large-scale data pipeline for robot dataset construction, curating and deduplicating diverse embodied datasets for world model training.",
+      "llm_tldr_cn": "该论文提出OSCAR，一个面向机器人策略评估的通用骨架条件视频世界模型。其核心是构建大规模标准化数据管道，从多种机器人数据源和人类视频中整理、过滤、去重，形成高质量联合训练数据集。该方法有效提升了视频世界模型的泛化能力和动作跟随精度。",
+      "llm_tldr": "该论文提出OSCAR，一个面向机器人策略评估的通用骨架条件视频世界模型。其核心是构建大规模标准化数据管道，从多种机器人数据源和人类视频中整理、过滤、去重，形成高质量联合训练数据集。该方法有效提升了视频世界模型的泛化能力和动作跟随精度。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "quick_skim": [
+    {
+      "id": "2606.00374v1",
+      "source": "arxiv",
+      "title": "Constrained Whole-Body Tracking for Humanoid Robots",
+      "abstract": "Recent advances in reinforcement learning (RL) have demonstrated impressive whole-body agility for humanoid robots, yet ensuring safety and satisfying constraints -- particularly those specified after training -- remains a challenge. Towards this goal, we present ConstrainedMimic, a control framework that leverages whole-body kinematics and dynamics for real-time constraint enforcement within RL tracking policies. By integrating principles from operational space control and control barrier functions (CBFs), we enable the satisfaction of arbitrary runtime constraints on both the kinematic reference motion and the underlying dynamics. In whole-body motion-tracking and teleoperation experiments on a (simulated) Unitree G1 with a learned policy, we demonstrate collision avoidance (both with the robot body and external obstacles), joint limits, and center of mass stability constraints. By remaining consistent with the current contact mode and tracking objectives, we minimally restrict the capabilities of the policy when constraints are active. Our method is fully differentiable, runs on CPU, GPU, and TPU, and can be deployed at up to 300-500 Hz. All software will be freely available upon publication.",
+      "authors": [
+        "Daniel Morton",
+        "Pranit Mohnot",
+        "Marco Pavone"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-05-29T21:33:03+00:00",
+      "link": "https://arxiv.org/pdf/2606.00374v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "simulated Unitree G1, whole-body control with safety constraints",
+      "llm_evidence_cn": "仿真Unitree G1上的全身控制与安全约束",
+      "llm_evidence": "仿真Unitree G1上的全身控制与安全约束",
+      "canonical_evidence": "仿真Unitree G1上的全身控制与安全约束",
+      "llm_tldr_en": "ConstrainedMimic integrates control barrier functions with RL tracking policies for real-time constraint enforcement on humanoid robots, demonstrated on simulated Unitree G1.",
+      "llm_tldr_cn": "该工作针对人形机器人强化学习策略运行时安全约束难以满足的问题，提出了ConstrainedMimic框架。该方法将操作空间控制与控制屏障函数（CBF）结合，在仿真Unitree G1上实现了对全身运动跟踪和遥操作的实时约束满足，展示了碰撞避免等安全能力。研究为人形机器人安全控制提供了可迁移的方法，间接支持故障诊断与边缘部署需求。",
+      "llm_tldr": "该工作针对人形机器人强化学习策略运行时安全约束难以满足的问题，提出了ConstrainedMimic框架。该方法将操作空间控制与控制屏障函数（CBF）结合，在仿真Unitree G1上实现了对全身运动跟踪和遥操作的实时约束满足，展示了碰撞避免等安全能力。研究为人形机器人安全控制提供了可迁移的方法，间接支持故障诊断与边缘部署需求。",
+      "llm_tags": [
+        "query:ur:composite"
+      ],
+      "matched_query_tag": "query:ur:composite",
+      "matched_query_text": "Papers central to 查找宇树G1人形机器人的数据集构建、故障诊断、错误分析以及边缘端部署的相关论文, especially work that connects or combines: Unitree G1 humanoid robot dataset construction; humanoid robot dataset construction; fault diagnosis for humanoid robots; edge deployment for humanoid robots; dataset construction for robotics; fault detection in humanoid robots; fault diagnosis and error analysis for humanoid robots; edge deployment of Unitree robots research.",
+      "matched_requirement_id": "req-composite-ur",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2606.05660v1",
+      "source": "arxiv",
+      "title": "Safe Embodied AI for Long-horizon Tasks: A Cross-layer Analysis of Robotic Manipulation",
+      "abstract": "Embodied AI systems are increasingly expected to reason and act over extended horizons in physical environments. This growing capability brings safety to the foreground, because failures in the physical world can harm people, damage objects, and disrupt workplaces. Although safe embodied AI has attracted substantial attention, the literature remains fragmented across planning, policy design, and runtime execution. Long-horizon robotic manipulation is a particularly revealing anchor domain for this problem because semantic misgrounding, subtask-level error propagation, execution drift, and contact-rich physical risk can accumulate within the same closed-loop system. This survey therefore provides a structured review of safety in long-horizon robotic manipulation from an embodied AI perspective. We organize the literature by intervention locus, covering planning-time, policy-time, and execution-time safety, and we analyze the strength of the evidence that each line of work provides, distinguishing formal guarantees, statistical support, and empirical safety heuristics. This framework clarifies the distinct roles of backbone capability papers, direct safety mechanisms, and benchmark or evaluation studies, while exposing where current safety claims are well supported and where they remain indirect. We identify persistent gaps, including limited evidence for policy-time safety, weak formal support for contact-rich long-horizon manipulation, immature uncertainty-triggered intervention, and a shortage of manipulation-specific safety benchmarks. We conclude by outlining research directions for cross-layer assurance, evaluation design, and safer deployment of long-horizon robotic agents in real-world settings.",
+      "authors": [
+        "Dabin Kim",
+        "Daemin Park",
+        "Sangyub Lee",
+        "Jinsik Kim",
+        "Yeongtak Oh",
+        "Jongho Shin",
+        "Sungroh Yoon"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.AI"
+      ],
+      "published": "2026-06-04T03:43:09+00:00",
+      "link": "https://arxiv.org/pdf/2606.05660v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "survey on safety including error propagation and fault analysis, relevant to humanoid robot fault diagnosis",
+      "llm_evidence_cn": "关于安全性的综述，包含错误传播和故障分析，与人形机器人故障诊断相关",
+      "llm_evidence": "关于安全性的综述，包含错误传播和故障分析，与人形机器人故障诊断相关",
+      "canonical_evidence": "关于安全性的综述，包含错误传播和故障分析，与人形机器人故障诊断相关",
+      "llm_tldr_en": "A structured survey of safety in long-horizon robotic manipulation, covering planning, policy design, and runtime execution, with emphasis on error accumulation and physical risk.",
+      "llm_tldr_cn": "具身AI在长时间跨度任务中面临安全问题，但相关文献分散在规划、策略设计、运行时执行等层面。本文以长时程机器人操作为锚点，系统综述了安全考虑，包括语义错配、子任务错误传播、执行漂移和接触物理风险。该综述为人形机器人故障诊断和错误分析提供了全面的背景和分类框架，指导安全系统的设计。",
+      "llm_tldr": "具身AI在长时间跨度任务中面临安全问题，但相关文献分散在规划、策略设计、运行时执行等层面。本文以长时程机器人操作为锚点，系统综述了安全考虑，包括语义错配、子任务错误传播、执行漂移和接触物理风险。该综述为人形机器人故障诊断和错误分析提供了全面的背景和分类框架，指导安全系统的设计。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "fault diagnosis and error analysis for humanoid robots",
+      "matched_requirement_id": "req-7",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    }
+  ]
+}

@@ -1,0 +1,69 @@
+{
+  "label": "2026-06-06",
+  "date": "2026-06-06",
+  "generated_at": "2026-06-06T21:14:21",
+  "count": 4,
+  "papers": [
+    {
+      "paper_id": "202606/06/2606.04463v1-oscar-omni-embodiment-skeleton-conditioned-world-action-model-for-robotics",
+      "section": "deep",
+      "title_en": "OSCAR: Omni-Embodiment Skeleton-Conditioned World Action Model for Robotics",
+      "authors": "Zhuoyuan Wu, Jun Gao",
+      "date": "2026-06-03",
+      "pdf": "https://arxiv.org/pdf/2606.04463v1",
+      "score": "8.0",
+      "evidence": "大规模标准化数据管道用于机器人数据集构建",
+      "tldr": "现有机器人视频世界模型面临数据场景有限、动作跟随不精确和跨本体泛化差三大挑战。OSCAR通过大规模标准化数据管道整合机器人与人类数据，采用2D骨骼渲染作为统一条件表示，在单GPU上微调Cosmos模型。在动作跟随、外观质量和运动一致性上显著优于基线，且虚拟评估与真实评估高度相关，为纯虚拟环境中的机器人策略评估奠定基础。",
+      "tags": "query:ur",
+      "abstract_en": "We present OSCAR, a precise action-conditioned video world model that generalizes across different robot embodiments and enables robot policy evaluation. Existing video world models face three main challenges for real-world robot evaluation: limited scenario diversity in current robot training datasets, imprecise action following, and poor generalization across embodiments for broad adoption. We tackle these challenges from two perspectives. At its core is a large-scale standardized data pipeline that curates, filters, and deduplicates broad robotics and egocentric human datasets, yielding a clean joint-training dataset that spans diverse tasks, scenarios, actions, and robot embodiments. To condition the video model, we adopt 2D kinematic skeleton rendering as a unified conditioning representation that generalizes across different robot arms or even human hands. We finetune the Cosmos-Predict2.5-2B model on a single GH200 GPU. Our model achieves significant improvement on action following, appearance quality, and motion consistency, compared to existing baselines, which either have a much larger model size or require more GPUs. We further deploy OSCAR to evaluate robot policies from RoboArena. Extensive experiments demonstrate the significant correlation between our virtual policy evaluation in OSCAR and real-world evaluation, paving the way for the future where robot policies can be purely evaluated in virtual generated worlds.",
+      "source": "arxiv",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "paper_id": "202606/06/2606.05952v1-learning-of-robot-safety-policies-via-adversarial-synthetic-scenarios",
+      "section": "deep",
+      "title_en": "Learning of Robot Safety Policies via Adversarial Synthetic Scenarios",
+      "authors": "Nikolai Dorofeev, Alexey Odinokov, Rostislav Yavorskiy",
+      "date": "2026-06-04",
+      "pdf": "https://arxiv.org/pdf/2606.05952v1",
+      "score": "8.0",
+      "evidence": "对抗场景生成以发现安全关键边缘情况",
+      "tldr": "机器人安全策略学习需捕获高风险边缘案例，但随机仿真或手动枚举效率低。提出代理博弈框架，红队构建危险情境，蓝队迭代优化策略，通过对抗生成高效发现失败模式。该方案结合经典风险建模与学习范式，为Physical AI在复杂环境中的安全嵌入提供可扩展路径。",
+      "tags": "query:humanoid-ood",
+      "abstract_en": "In this work, we propose an agentic gamification framework for hazard-informed learning of robot safety policies through synthetic scenarios. We model scenario generation as an adversarial game between two agents: a Red Team that explores the space of potential failures by constructing hazardous situations, and a Blue Team that incrementally refines safety policies to prevent them. This iterative process enables efficient discovery of high-risk edge cases that are unlikely to be captured through random simulation or manual enumeration. By combining classical risk modeling with adversarial scenario generation and modern learning paradigms, this work provides a scalable pathway for embedding safety into Physical AI systems operating in complex real-world environments. The paper describes ongoing work. The contribution is a problem formulation and a proposed solution architecture.",
+      "source": "arxiv",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "paper_id": "202606/06/2606.00374v1-constrained-whole-body-tracking-for-humanoid-robots",
+      "section": "quick",
+      "title_en": "Constrained Whole-Body Tracking for Humanoid Robots",
+      "authors": "Daniel Morton, Pranit Mohnot, Marco Pavone",
+      "date": "2026-05-29",
+      "pdf": "https://arxiv.org/pdf/2606.00374v1",
+      "score": "6.0",
+      "evidence": "仿真Unitree G1上的全身控制与安全约束",
+      "tldr": "强化学习实现的人形机器人全身跟踪策略难以保证后训练约束。为此提出ConstrainedMimic框架，融合操作空间控制与控制障碍函数，在运行时实时满足碰撞避免、关节限位、质心稳定等约束。在仿真Unitree G1上验证，该方法与当前接触模式和跟踪目标一致，最小化对策略能力的限制，可微分且支持高速部署。",
+      "tags": "query:ur",
+      "abstract_en": "Recent advances in reinforcement learning (RL) have demonstrated impressive whole-body agility for humanoid robots, yet ensuring safety and satisfying constraints -- particularly those specified after training -- remains a challenge. Towards this goal, we present ConstrainedMimic, a control framework that leverages whole-body kinematics and dynamics for real-time constraint enforcement within RL tracking policies. By integrating principles from operational space control and control barrier functions (CBFs), we enable the satisfaction of arbitrary runtime constraints on both the kinematic reference motion and the underlying dynamics. In whole-body motion-tracking and teleoperation experiments on a (simulated) Unitree G1 with a learned policy, we demonstrate collision avoidance (both with the robot body and external obstacles), joint limits, and center of mass stability constraints. By remaining consistent with the current contact mode and tracking objectives, we minimally restrict the capabilities of the policy when constraints are active. Our method is fully differentiable, runs on CPU, GPU, and TPU, and can be deployed at up to 300-500 Hz. All software will be freely available upon publication.",
+      "source": "arxiv",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "paper_id": "202606/06/2606.05660v1-safe-embodied-ai-for-long-horizon-tasks-a-cross-layer-analysis-of-robotic-manipulation",
+      "section": "quick",
+      "title_en": "Safe Embodied AI for Long-horizon Tasks: A Cross-layer Analysis of Robotic Manipulation",
+      "authors": "Dabin Kim, Daemin Park, Sangyub Lee, Jinsik Kim, Yeongtak Oh, Jongho Shin, Sungroh Yoon",
+      "date": "2026-06-04",
+      "pdf": "https://arxiv.org/pdf/2606.05660v1",
+      "score": "6.0",
+      "evidence": "关于安全性的综述，包含错误传播和故障分析，与人形机器人故障诊断相关",
+      "tldr": "长时程具身AI系统的安全问题因贯穿规划、策略和执行层面而碎片化。本文以机器人操作为锚点，系统综述了各类安全机制的证据强度，区分了正式保证、统计支持和经验启发式。发现策略时安全证据薄弱、接触丰富操作缺乏正式保障、不确定性触发干预不成熟，以及缺乏专用基准。研究为跨层安全保证和实际部署提供了方向。",
+      "tags": "query:ur",
+      "abstract_en": "Embodied AI systems are increasingly expected to reason and act over extended horizons in physical environments. This growing capability brings safety to the foreground, because failures in the physical world can harm people, damage objects, and disrupt workplaces. Although safe embodied AI has attracted substantial attention, the literature remains fragmented across planning, policy design, and runtime execution. Long-horizon robotic manipulation is a particularly revealing anchor domain for this problem because semantic misgrounding, subtask-level error propagation, execution drift, and contact-rich physical risk can accumulate within the same closed-loop system. This survey therefore provides a structured review of safety in long-horizon robotic manipulation from an embodied AI perspective. We organize the literature by intervention locus, covering planning-time, policy-time, and execution-time safety, and we analyze the strength of the evidence that each line of work provides, distinguishing formal guarantees, statistical support, and empirical safety heuristics. This framework clarifies the distinct roles of backbone capability papers, direct safety mechanisms, and benchmark or evaluation studies, while exposing where current safety claims are well supported and where they remain indirect. We identify persistent gaps, including limited evidence for policy-time safety, weak formal support for contact-rich long-horizon manipulation, immature uncertainty-triggered intervention, and a shortage of manipulation-specific safety benchmarks. We conclude by outlining research directions for cross-layer assurance, evaluation design, and safer deployment of long-horizon robotic agents in real-world settings.",
+      "source": "arxiv",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "errors": []
+}

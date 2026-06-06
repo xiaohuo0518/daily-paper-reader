@@ -6,29 +6,34 @@
 </div>
 
 ## 每次日报
-- 最新运行日期：2026-06-05
-- 运行时间：2026-06-05 21:42:19 UTC
+- 最新运行日期：2026-06-06
+- 运行时间：2026-06-06 21:14:14 UTC
 - 运行状态：成功
-- 本次总论文数：2
-- 精读区：0
+- 本次总论文数：4
+- 精读区：2
 - 速读区：2
 
 ### 今日简报（AI）
-今日速读2篇论文，聚焦自动驾驶多模态数据集扩展与液压作动器异常检测。  
-最值关注《Scaling Datasets for Multi-Sensor, Multi-Agent, and Multi-Domain Learning》，其数据扩充思路对提升自动驾驶泛化性有直接借鉴意义。  
-建议可将LSTM自编码器方法迁移至其他工业设备的异常检测场景，但需注意数据特征差异。
-- 详情：[/202606/05/README](/202606/05/README)
+1) 今日4篇论文精读两篇高分聚焦机器人世界模型与安全策略。  
+2) 最值得关注方向：OSCAR骨架条件动作模型实现通用机器人泛化，以及用对抗场景学习安全策略提升鲁棒性。  
+3) 建议优先阅读精读论文，掌握具身AI从动作生成到安全保证的关键突破。
+- 详情：[/202606/06/README](/202606/06/README)
 
 ### 精读区论文标签
-- 本次无精读推荐。
+1. [OSCAR: Omni-Embodiment Skeleton-Conditioned World Action Model for Robotics](/202606/06/2606.04463v1-oscar-omni-embodiment-skeleton-conditioned-world-action-model-for-robotics)  
+   标签：评分：8.0/10、query:ur
+   evidence：大规模标准化数据管道用于机器人数据集构建
+2. [Learning of Robot Safety Policies via Adversarial Synthetic Scenarios](/202606/06/2606.05952v1-learning-of-robot-safety-policies-via-adversarial-synthetic-scenarios)  
+   标签：评分：8.0/10、query:humanoid-ood
+   evidence：对抗场景生成以发现安全关键边缘情况
 
 ### 速读区论文标签
-1. [Scaling Datasets for Multi-Sensor, Multi-Agent, and Multi-Domain Learning in Autonomous Systems](/202606/05/2606.04444v1-scaling-datasets-for-multi-sensor-multi-agent-and-multi-domain-learning-in-autonomous-systems)  
-   标签：评分：7.0/10、query:ur
-   evidence：面向自主系统的模块化数据集生成流程
-2. [Anomaly Detection for Electro-Hydrostatic Actuators using LSTM Autoencoder](/202606/05/2606.05274v1-anomaly-detection-for-electro-hydrostatic-actuators-using-lstm-autoencoder)  
-   标签：评分：6.0/10、query:humanoid-ood
-   evidence：使用LSTM自编码器对执行器传感器进行异常检测
+1. [Constrained Whole-Body Tracking for Humanoid Robots](/202606/06/2606.00374v1-constrained-whole-body-tracking-for-humanoid-robots)  
+   标签：评分：6.0/10、query:ur
+   evidence：仿真Unitree G1上的全身控制与安全约束
+2. [Safe Embodied AI for Long-horizon Tasks: A Cross-layer Analysis of Robotic Manipulation](/202606/06/2606.05660v1-safe-embodied-ai-for-long-horizon-tasks-a-cross-layer-analysis-of-robotic-manipulation)  
+   标签：评分：6.0/10、query:ur
+   evidence：关于安全性的综述，包含错误传播和故障分析，与人形机器人故障诊断相关
 
 
 <div class="dpr-home-promo-card">
