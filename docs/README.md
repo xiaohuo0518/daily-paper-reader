@@ -6,34 +6,43 @@
 </div>
 
 ## 每次日报
-- 最新运行日期：2026-06-06
-- 运行时间：2026-06-06 21:14:14 UTC
+- 最新运行日期：2026-06-07
+- 运行时间：2026-06-07 20:09:53 UTC
 - 运行状态：成功
-- 本次总论文数：4
-- 精读区：2
-- 速读区：2
+- 本次总论文数：7
+- 精读区：3
+- 速读区：4
 
 ### 今日简报（AI）
-1) 今日4篇论文精读两篇高分聚焦机器人世界模型与安全策略。  
-2) 最值得关注方向：OSCAR骨架条件动作模型实现通用机器人泛化，以及用对抗场景学习安全策略提升鲁棒性。  
-3) 建议优先阅读精读论文，掌握具身AI从动作生成到安全保证的关键突破。
-- 详情：[/202606/06/README](/202606/06/README)
+今日精读聚焦机器人世界模型与数据适配，OSCAR获9分高评，VISTA提供视觉-物理验证的UMI数据适应方案。  
+最值得关注OSCAR的“全具身动作条件世界模型”在机器人规划中的应用，以及VISTA通过虚拟-现实数据同步提升VLA训练效果。  
+建议优先精读OSCAR论文，理解世界模型对机器人泛化能力的提升；同时关注VISTA中数据适应方法，可应用于自身研究的数据集构建。
+- 详情：[/202606/07/README](/202606/07/README)
 
 ### 精读区论文标签
-1. [OSCAR: Omni-Embodiment Skeleton-Conditioned World Action Model for Robotics](/202606/06/2606.04463v1-oscar-omni-embodiment-skeleton-conditioned-world-action-model-for-robotics)  
+1. [OSCAR: Omni-Embodiment Action-Conditioned World Model for Robotics](/202606/07/2606.04463v2-oscar-omni-embodiment-action-conditioned-world-model-for-robotics)  
+   标签：评分：9.0/10、query:ur
+   evidence：提出大规模标准化机器人数据管道
+2. [VISTA: Vision-Grounded and Physics-Validated Adaptation of UMI data for VLA Training](/202606/07/2606.04708v1-vista-vision-grounded-and-physics-validated-adaptation-of-umi-data-for-vla-training)  
    标签：评分：8.0/10、query:ur
-   evidence：大规模标准化数据管道用于机器人数据集构建
-2. [Learning of Robot Safety Policies via Adversarial Synthetic Scenarios](/202606/06/2606.05952v1-learning-of-robot-safety-policies-via-adversarial-synthetic-scenarios)  
-   标签：评分：8.0/10、query:humanoid-ood
-   evidence：对抗场景生成以发现安全关键边缘情况
+   evidence：对UMI数据进行物理验证和适应以用于VLA训练
+3. [HapTile: A Haptic-Informed Vision-Tactile-Language-Action Dataset for Contact-Rich Imitation Learning](/202606/07/2606.04825v1-haptile-a-haptic-informed-vision-tactile-language-action-dataset-for-contact-rich-imitation-learning)  
+   标签：评分：8.0/10、query:ur
+   evidence：构建了包含触觉信息的机器人操作数据集
 
 ### 速读区论文标签
-1. [Constrained Whole-Body Tracking for Humanoid Robots](/202606/06/2606.00374v1-constrained-whole-body-tracking-for-humanoid-robots)  
-   标签：评分：6.0/10、query:ur
-   evidence：仿真Unitree G1上的全身控制与安全约束
-2. [Safe Embodied AI for Long-horizon Tasks: A Cross-layer Analysis of Robotic Manipulation](/202606/06/2606.05660v1-safe-embodied-ai-for-long-horizon-tasks-a-cross-layer-analysis-of-robotic-manipulation)  
-   标签：评分：6.0/10、query:ur
-   evidence：关于安全性的综述，包含错误传播和故障分析，与人形机器人故障诊断相关
+1. [Face versus Body Tracking for Human-Robot Interaction: An Egocentric Dataset](/202606/07/2606.03694v1-face-versus-body-tracking-for-human-robot-interaction-an-egocentric-dataset)  
+   标签：评分：7.0/10、query:ur
+   evidence：面向人机交互的自我中心数据集
+2. [VISTA: Vision-Grounded and Physics-Validated Adaptation of UMI data for VLA Training](/202606/07/2606.04708v2-vista-vision-grounded-and-physics-validated-adaptation-of-umi-data-for-vla-training)  
+   标签：评分：7.0/10、query:ur
+   evidence：UMI数据适配和物理验证用于机器人训练数据集
+3. [Towards a Data Flywheel for Embodied Intelligence in Logistics](/202606/07/2606.05960v1-towards-a-data-flywheel-for-embodied-intelligence-in-logistics)  
+   标签：评分：7.0/10、query:ur
+   evidence：物流具身智能的数据飞轮框架
+4. [Teaching Robots to Say 'I Don't Know' : SENTINEL for Uncertainty-Aware SLAM](/202606/07/2606.04853v1-teaching-robots-to-say-i-dont-know--sentinel-for-uncertainty-aware-slam)  
+   标签：评分：6.0/10、query:humanoid-ood
+   evidence：面向安全机器人操作的不确定性感知SLAM可靠性估计
 
 
 <div class="dpr-home-promo-card">

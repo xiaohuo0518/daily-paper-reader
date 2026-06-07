@@ -1,0 +1,228 @@
+Title: Face versus Body Tracking for Human-Robot Interaction: An Egocentric Dataset
+
+URL Source: https://arxiv.org/pdf/2606.03694v1
+
+Published Time: Wed, 03 Jun 2026 01:16:22 GMT
+
+Number of Pages: 8
+
+Markdown Content:
+# Face versus Body Tracking for Human–Robot Interaction: An Egocentric Dataset and Evaluation 
+
+Jessica Wenninger 1 and Gabriel Skantze 2
+
+Abstract — Meaningful human-robot interaction (HRI) re-quires a robot to continuously assess user engagement through persistent user tracking. However, state-of-the-art Multi-Object Tracking models are heavily optimized for surveillance or autonomous driving. A social robot faces distinct egocentric challenges, such as unpredictable nonlinear motion, humans obstructing each other, or leaving the frame. These dynamics trigger frequent identity switches (IDSW), causing the robot to lose its footing mid-conversation. To address this, we in-troduce a novel, custom-annotated egocentric dataset collected via the Furhat robot to capture complex social dynamics. We present a systematic evaluation isolating detection errors from tracking logic, comparing face versus body tracking, and assessing the impact of extended memory and appearance re-identification (ReID). Results indicate that increasing temporal memory mitigates prolonged occlusions but fails on complex dynamic events. Integrating ReID resolves complex switches but exhibits opposing effects: it substantially improves body tracking stability, yet causes facial IDSW to spike due to profile angle sensitivity. Ultimately, our optimized pipeline reduces IDSW by 49% compared to a standard tracking-by-detection baseline, effectively mitigating interaction breakdowns. As stan-dard benchmarks lack dense, close-quarter occlusions, this work highlights the critical need for natively captured social dynamics to truly validate HRI perception models. 
+
+I. INTRODUCTION To enable meaningful human-robot interaction (HRI), a robot must be capable of continuously assessing and main-taining user engagement [1]. This requires a robot to consis-tently track who it is interacting with over time [2]. Crucially, this involves understanding the interaction’s footing : the ability to dynamically track and distinguish the specific roles of individuals in its environment, such as active interlocutors (addressees), bystanders, and overhearers (nonparticipants) [3]. Robust perception is the foundational building block for maintaining these roles during long-term interactions [4]. If a tracking system suffers from frequent identity switches (IDSW)—where the algorithm incorrectly assigns a new ID to an existing person after an occlusion—the robot effectively loses this footing mid-conversation, degrading the user’s perception of the robot’s social competence [5]. While modern object tracking models perform exception-ally well, there is a fundamental disconnect between com-               
+
+> This project has received funding from the European Union’s Horizon 2023 research and innovation programme under the Marie Skłodowska-Curie grant agreement No. 101168792 (SWEET).
+> 1Jessica Wenninger is with Furhat Robotics, Stockholm, Sweden, and the University of Naples Federico II, Naples, Italy.
+
+jessi.wenninger@gmail.com  
+
+> 2Gabriel Skantze is with Furhat Robotics, Stockholm, Sweden, and the Division of Speech, Music and Hearing, KTH Royal Institute of Technology, Stockholm, Sweden.
+
+skantze@kth.se      
+
+> Fig. 1. The Egocentric HRI Tracking Challenge. Left: The experimental setup with the Furhat robot in a real-world office environment. Right: Arepresentative frame from the robot’s egocentric perspective. The scene highlights the difficulty of maintaining consistent identities for multiple actors despite dynamic background motion and severe occlusions.
+
+puter vision and HRI. State-of-the-art models are heavily op-timized for surveillance cameras [6] or autonomous driving [7]. Consequently, being trained on domain-specific datasets, they struggle in alternative contexts. As illustrated in Fig. 1, a social robot viewing the world from an egocentric, close-quarter perspective faces completely different challenges: humans moving in erratic nonlinear patterns, obstructing each other or walking out of frame [6]. These factors lead to “pathologically” missing data that makes standard linear trajectory prediction no longer sufficient [8]. While the literature demonstrates that both face and body tracking offer distinct advantages [9]–[11], it remains unclear which modality performs better overall in unstructured HRI. To resolve this, we introduce a novel egocentric dataset to systematically evaluate both modalities under varying configurations of extended memory and appearance re-identification (ReID). While researchers increasingly com-bine deep learning modules to push tracking robustness [12], our empirical data challenge the assumption that adding more complex tracking features universally improves results in HRI. Specifically, we reveal that while appearance ReID drastically improves body tracking during complex occlu-sions, applying it to faces completely breaks the tracker, causing IDSW to spike. This paper provides the following contributions: 1) A novel, custom-annotated egocentric dataset collected via the Furhat robot, capturing complex real-world social dynamics. 2) A systematic evaluation comparing face versus body tracking that isolates tracking from detection errors and assesses the impact of extended memory and 
+
+> arXiv:2606.03694v1 [cs.RO] 2 Jun 2026
+
+appearance ReID. 3) An optimized pipeline for stationary HRI that reduces IDSW by 49% against the baseline. II. BACKGROUND AND RELATED WORK 
+
+A. Multi-Object Tracking in Computer Vision 
+
+Modern spatial tracking relies on the “Tracking-by-Detection” paradigm [13], separating perception into two sequential steps. First, a detector isolates targets without temporal memory. A tracker then links these across frames, typically using a Kalman filter for spatial prediction and the Hungarian algorithm for matching. Architectures like ByteTrack [14] revolutionized this by linking even low-confidence bounding boxes to maintain identities during partial occlusions using Intersection over Union (IoU) spatial overlap. It achieves this via a two-stage matching strategy: associating high-confidence detections first, then performing a second pass to link remaining low-confidence detections with unmatched tracks. Subsequent models like BoT-SORT [15] integrate ReID by formulating a cost function that takes the minimum between the spatial cost and the appearance distance of visual embeddings. This fusion allows track recovery when spatial predictions fail, though it strictly rejects candidates that fall outside a predetermined spatial distance gate. Furthermore, to handle moving cameras, BoT-SORT employs Camera Motion Compensation (CMC) using background keypoints. However, the authors note that in scenes with many dynamic objects, this estimation can fail due to a lack of stable background points, causing unexpected tracker behavior. 
+
+B. Egocentric Tracking in HRI 
+
+Historically, social robotics relied heavily on RGB-D sensors to capture spatial data [16]. Furthermore, researchers often integrated external sensor networks to overcome the in-herently restricted egocentric field of view [17]. Several sys-tems fused robot vision with static third-person surveillance cameras [18], or utilized complementary top-down views to link global trajectories through identity association [17]. However, to avoid the hardware overhead and constrained applicability of specialized sensors, modern HRI perception has increasingly shifted toward robust, purely monocular 2D Convolutional Neural Network feature extractors [19]. To maintain identities using only this single viewpoint, architectures designed for autonomous navigation in dy-namic environments rely on “motion-appearance bimodal association,” demonstrating that appearance features must be integrated with temporal memory to recover targets after dense occlusions [20]. Facial ReID is crucial for social robots to tailor inter-actions [9], but applying standard appearance embeddings to faces often leads to tracking degradation. To address this, recent state-of-the-art architectures like BoT-FACE-SORT [12] have adapted the BoT-SORT framework by integrating specifically tailored face appearance embeddings. Complementing these facial features, body tracks provide a stable visual anchor. Because bodies capture macroscopic details like clothing [11], they successfully reduce IDSW during prolonged occlusions when faces are hidden [10]. Yet, body tracking alone is insufficient. Environmental obstacles frequently occlude bodies, necessitating face tracking to maintain the interaction’s spatial anchor [9], [21] and provide a biometric corrective layer to resolve identity mix-ups when bodies overlap during close-proximity scenarios [10]. 
+
+C. Existing Datasets vs. The HRI Reality 
+
+Processing social dynamics strictly through egocentric frames without third-person oracles remains a bleeding-edge goal [22]. However, evaluating these pipelines is in-herently difficult because standard benchmarks [23] lack robot-mounted, stationary egocentric perspectives [21], [24]. Large-scale benchmarks like MOT17 and MOT20 are pri-marily optimized for navigation and surveillance; their focus on linear pedestrian trajectories makes them unsuitable for natural HRI [23], [25]. Other datasets, such as DanceTrack [26], feature nonlinear motion (NLM) but lack specific con-versational transitions. Similarly, datasets like CrowdHuman [27] consist only of static images rather than continuous video sequences. Even egocentric datasets like JRDB [21] focus on mobile robots navigating environments rather than stationary social robots engaged in close-quarters conver-sations. Because egocentric views naturally cause frequent target disappearance [24], we constructed a custom dataset to capture these unstructured, stationary HRI dynamics natively. III. FURHAT EGOCENTRIC DATASET The Furhat egocentric dataset consists of 20 se-quences and was collected using the Furhat robot (running FurhatOS v2.8.4), as seen in Fig. 1. We modified the robot’s camera core to enable the direct recording of raw video streams and to increase the frame rate from 10 to approx-imately 25 fps. The Furhat robot is designed specifically for multi-party, face-to-face conversations, so it naturally encourages the kind of dynamic, close-quarters social in-teraction that our tracking pipeline is intended to address [28]. We capture these scenarios from a stationary, egocentric perspective via the camera integrated into the robot’s fixed stand. The combination of a stationary observer and an un-structured social environment introduces several tracking challenges:  
+
+> •
+
+Prolonged Occlusions: Target actors are frequently hidden behind other people or objects for extended periods ( > 30 frames).  
+
+> •
+
+In-Out-Screen Transitions: People leave the camera’s field of view and re-enter later.  
+
+> •
+
+Nonlinear Motion: Actors move in unpredictable, er-ratic patterns that break the linear Kalman filter predic-tions.  
+
+> •
+
+U-Turns: A person disappears behind an occlusion, reverses their direction of motion while hidden and reappears on the unexpected side again.  
+
+> •
+
+ID Takeover: A foreground actor walking past a back-ground actor and “stealing” their identity. TABLE I DETAILED COMPOSITION OF THE EGOCENTRIC HRI D ATASET 
+
+Actors Category Example Key Interaction Challenges Environmental Details * B** N Length (s) 
+
+1Basic 
+
+Main Actor walking in/out from side, standing/“bouncing” from one foot to another, sitting, stretching, eating nuts. Body visible from head to belly/hip (Robot Camera at Belly Height). Facing robot frontal. Clean/cluttered background. No occlusion. Dark/Good/Very Good lighting. 0 3 150 Face Occlusions 
+
+Main Actor sitting / walking towards robot, moving close with rapid head movements (left/right). Half-face temporarily out-of-screen. Hiding face behind phone/hands/laptops (peeking occasionally). Body visible from head to chest/knees (Robot Camera at Chest Height). Facing robot frontal. Slightly/very cluttered background. No occlusions by other people. Good lighting. 0–1 4 81 Not Engaged 
+
+People walking past the robot/not paying attention. Main Actor walking in/out from side or walking away. Up to 3 bystanders sitting at the table or behind glass wall in the background. Body visible from head to hip/feet (Robot Camera at Belly Height). Facing robot sideways or from the back. Cluttered background. Occlusions (actor walks in front of bystanders). Good lighting. 1–3 3 17 Dynamic Background 
+
+Main Actor sitting/standing, chatting to robot, occasionally kneeling or covering face with hands. 3–6 bystanders (working, walking past, visible through doors, or actively listening to the conversation). Body visible from head to chest/knees (Robot Camera at Chest/Hip Height). Facing robot frontal. Cluttered background. Occlusions (bystanders walk in front of/behind main actor). Bad/Good lighting. 3–6 3 260 2Basic 
+
+Main Actors (standing/sitting) engaged in conversation with robot. Social gaze (temporarily turning heads towards each other). One actor temporarily covering face with phone. Bodies visible from head to chest/hip (Robot Camera at Chest/Belly Height). Facing robot frontal. Clean/cluttered background (with static images of people). No occlusion. OK/Very Good lighting. 0 3 596 Dynamic Background 
+
+Main Actors chatting to robot, turning heads towards each other. Bending over, covering face, turning head up/side/down, or halfway in-out-screen. Distant people visible; 1 active bystander walking behind actors. Bodies visible from head to hip/knee (Robot Camera at Belly/Hip Height). Facing robot frontal. Occasional occlusions (bystander occluded by main actors). Bad/OK lighting. 0–1 2 378 Crowded 
+
+Main Actors chatting to robot, hand gesticulations, bending, looking back/up. Complex scene with 4–5 very active bystanders (switching positions, peeking over shoulder, using phones). Bodies visible from head to belly/hip (Robot Camera at Chest/Belly Height). Facing robot frontal. Heavy dynamic occlusions. OK/Good lighting. 4–5 2 332 
+
+> *
+
+All spatial descriptors are defined from the perspective of the main actor. 
+
+> **
+
+B stands for Bystanders.  
+
+> •
+
+Fragmentation: Bounding boxes are occasionally dropped for single frames. This occurs frequently at the edges of the video, likely due to fisheye lens distortion. Table I details the exact composition of the 20 collected video sequences. The dataset is structurally divided based on the number of interlocutors (1 or 2) and the specific category of the interaction (e.g., 1-Basic ). All videos were recorded at approximately 25 frames per second with a resolution of 640 ×480, with the exception of one sequence in the Crowded category, which was recorded at 1280 ×960. To establish the ground truth (GT) for our tracking evalu-ation, we systematically annotated body and face bounding boxes across all frames using the Computer Vision Annota-tion Tool (CVAT) [29]. First, we generated initial proposals with YOLOX (version 0.1.0) [30] and RetinaFace (com-mit b984b4b [31], then hand-corrected them into amodal bounding boxes to maintain identity consistency during oc-clusions. We followed Caltech Pedestrian guidelines [32] for bodies and WIDER FACE standards [33] for faces. IV. EXPERIMENTAL SETUP 
+
+A. Evaluated Configurations and Experimental Progression 
+
+We conducted 11 experiments, in which we systematically analyzed the impact of four architectural components:  
+
+> •
+
+Tracking Target: B (Body) or F (Face). • Detector: YX (YOLOX) for Bodies, RF (RetinaFace) for Faces, or GT (Ground Truth).  
+
+> •
+
+Tracker: BT (ByteTrack, spatial only) or BS (BoT-SORT, with ReID).  
+
+> •
+
+Buffer: Tracker’s temporal memory buffer size in frames ( 30 , 120 , or 2500 ). For the configurations, we adopt the naming convention 
+
+[Target]-[Detector]-[Tracker]-[Buffer] . To isolate tracking logic from hardware compute constraints, all evaluations were conducted offline following a step-by-step progression: 1) End-to-End Baselines: To establish stable real-world baselines, we chose YOLOX, ByteTrack’s default de-tector [30], for bodies ( B-YX-BT-30 ) and RetinaFace, excelling under severe occlusions and extreme profile angles [31], for faces ( F-RF-BT-30 ). 2) Isolating Tracking Performance: We then evaluated their GT counterparts ( B-GT-BT-30 , F-GT-BT-30 ) to explicitly separate tracking performance from detection errors. 3) Extending Temporal Memory: To address IDSW caused by prolonged occlusions, we evaluated the impact of extended memory on the GT configurations by increasing the buffer size to 120 and 2500 frames (B-GT-BT-120 , F-GT-BT-120 , B-GT-BT-2500 , F-GT-BT-2500 ). 4) Integrating Appearance Features: Subsequently, we introduced appearance features via BoT-SORT and BoT-FACE-SORT ( B-GT-BS-2500 , F-GT-BS-2500 ) to resolve tracking failures caused by complex NLMs. 5) Real-World Validation: The most successful track-ing configuration was paired back with the standard YOLOX detector ( B-YX-BS-2500 ) to validate the sys-tem’s end-to-end real-world performance. 6) Environmental Impact Analysis: Finally, we evalu-ated the B-GT-BT-2500 and F-GT-BT-2500 configura-tions across the interaction categories defined in Table I to isolate specific environmental impacts. 
+
+B. Tracker Implementation 
+
+We utilized the official implementation of ByteTrack 
+
+(base commit d1bf019 ) [14] as our spatial baseline. For appearance-based tracking, we utilized BoT-SORT (commit 
+
+2519854 ) [15] for bodies and BoT-FACE-SORT (base commit 3d597ec ) [12] for facial targets. To tailor these ReID architectures to our stationary, egocentric HRI setting, we applied two key modifications:  
+
+> •
+
+Disabled Camera Motion Compensation: Because our robot is stationary, we disabled CMC. This prevents moving bystanders from causing unexpected tracker behavior as described in Section II-A.  
+
+> •
+
+Disabled Spatial ReID Gating: We disabled the spatial gating mechanism described in Section II-A while pre-serving the underlying cost function [15]. This allows a strong visual appearance match to effectively override a poor spatial prediction. This is crucial for successfully linking tracklets, for example during “U-Turn” events, where an occluded target reappears in a spatially distant location. 
+
+C. Evaluation Metrics 
+
+Tracker performance was quantified using the TrackEval framework (commit 12c8791 ) [34]. We focused on three primary metrics, interpreted specifically for social robotics:  
+
+> •
+
+Higher Order Tracking Accuracy (HOTA): Consid-ered the current “gold standard” metric, HOTA com-bines Detection Accuracy (DetA) and Association Ac-curacy (AssA) into a single score. It is calculated as the geometric mean of these two components: 
+
+HOTA = √DetA · AssA . (1)  
+
+> •
+
+Identity F1 Score (IDF1): This metric measures tem-poral consistency. It is less sensitive to precise bounding box overlap but heavily penalizes identity fragmenta-tion, reflecting how well a user retained the same ID throughout the interaction.  
+
+> •
+
+IDSW: The raw count of how many times a single tracked target incorrectly changes its assigned ID. In an HRI context, this is the most critical metric: minimizing IDSW directly correlates to fewer instances where the robot forgets a user and interrupts a natural conversa-tion. 
+
+D. Qualitative Failure Categorization 
+
+While metrics like HOTA and IDSW indicate that a tracker failed, they do not explain why . To bridge this gap, we conducted a manual, qualitative analysis of tracking failures. We visually reviewed every IDSW in the GT baseline con-figurations ( B-GT-BT-30 , F-GT-BT-30 ) and mapped them to the specific HRI challenges established in Section III. This allowed us to directly map specific social behaviors to architectural tracking weaknesses. Note that due to the high number of IDSW, one sequence from the Crowded category was excluded from this manual review.                                            
+
+> TABLE II QUANTITATIVE RESULTS FOR BODY AND FACE TRACKING
+> Configuration HOTA ↑IDF1 ↑IDSW ↓
+> Body Tracking
+> B-YX-BT-30 (Baseline) 80.8 77.4 78 B-GT-BT-30 94.8 91.1 71 B-GT-BT-120 96.4 95.7 59 B-GT-BT-2500 96.5 96.2 54
+> B-GT-BS-2500 98.0 98.1 25
+> B-YX-BS-2500 89.0 90.5 40
+> Face Tracking
+> F-RF-BT-30 (Baseline) 74.3 72.2 141 F-GT-BT-30 88.8 86.7 128 F-GT-BT-120 90.2 88.6 110
+> F-GT-BT-2500 90.3 88.7 102
+> F-GT-BS-2500 90.8 88.4 188
+
+V. RESULTS 
+
+A. Body Tracking Performance 
+
+Table II details body tracking performance. The baseline tracker (B-YX-BT-30) achieved a HOTA score of 80.8% but suffered from 78 IDSW, indicating frequent identity fragmentation during interactions. 
+
+Impact of Perfect Detections: Using GT (B-GT-BT-30) to isolate the tracking logic yielded only a marginal im-provement over the baseline, reducing IDSW from 78 to 71. This confirms that most tracking failures are caused by the association algorithm’s inability to handle complex social dynamics rather than by detection inaccuracies. 
+
+Impact of Extended Memory: Increasing the track buffer to 120 and 2500 frames provided a stepwise sta-bility improvement. The maximum buffer configuration (B-GT-BT-2500) reduced IDSW from 71 to 54 (blue line in Fig. 3), alongside notable improvements in HOTA and IDF1. 
+
+Impact of Appearance: The integration of ReID features (B-GT-BS-2500) provided the final and most substantial sta-bility improvement. This configuration achieved the highest overall scores, reducing IDSW to just 25 (cyan diamond in Fig. 3), which is a 68% reduction compared to the baseline. 
+
+Failure Mode Analysis: Fig. 2 deconstructs these im-provements by specific failure types. The extended memory buffer (B-GT-BT-2500) was the primary driver for resolving standard occlusions (where an actor is hidden for >30 frames), reducing them from 12 cases to 2. However, mem-ory alone failed to address more complex events, such as In-Out-Screen and ID Takeovers, for which the ReID module was necessary. 
+
+End-to-End Real-World Performance: Finally, we ap-plied this optimized architecture (Extended Buffer + ReID) to the standard YOLOX detector to validate its performance in a real-world setting. Comparing the proposed pipeline (B-YX-BS-2500) against the initial baseline (B-YX-BT-30) confirms that the architectural gains transfer effectively: despite using the same detector, the proposed system cut                  
+
+> B-GT-BT-30 B-GT-BT-2500 B-GT-BS-2500
+> 0
+> 10
+> 20
+> Count of Failure Cases
+> Occlusions >30f In-Out-Screen ID Takeover U-Turn NLM Fragmentation
+> Fig. 2. Mitigation of qualitative failure modes for body tracking (see Section III for category definitions). Increasing the buffer size (B-GT-BT-2500) effectively eliminates prolonged occlusions, while the addition of ReID (B-GT-BS-2500) is required to resolve complex IDSW like In-Out-Screen. 30 120 2500
+> 0
+> 50
+> 100
+> 150
+> 200
+> Buffer Size (Frames) ID Switches Body (Spatial) Body (ReID) Face (Spatial) Face (ReID) Fig. 3. Impact of Memory and Appearance on Tracking Stability. Increasing buffer size consistently improves spatial tracking (solid lines slope down). Adding ReID features (at 2500) drastically improves body tracking (diamond drops to 25) but destabilizes face tracking (cross spikes to 188).
+
+IDSW nearly in half (78 → 40) and improved the overall tracking accuracy. 
+
+Resolving Nonlinear Motion: Fig. 4 visualizes the prac-tical benefit of the proposed body tracking pipeline during a “U-Turn” event. In the baseline sequence (B-YX-BT-30), the tracker loses the actor’s ID 25 upon occlusion and re-assigns a new ID 27 when the person reappears on the unexpected side (Top Row). In contrast, the proposed pipeline (B-YX-BS-2500) utilizes ReID to successfully link the tracklets across the occlusion, maintaining ID 5 despite the nonlinear trajectory (Bottom Row). 
+
+B. Face Tracking Performance 
+
+Table II details the quantitative performance of the face tracking configurations. The baseline face tracker (F-RF-BT-30) suffered from 141 IDSW, indicating extreme identity fragmentation. 
+
+Impact of Perfect Detections: Applying GT bounding boxes for faces (F-GT-BT-30) improved both the baseline HOTA score and the IDSW count (141 → 128). However, 128 IDSW still represents a high error rate. As with body tracking, this reinforces that perfect detection accuracy alone cannot resolve the complex dynamics of HRI. 
+
+Impact of Extended Memory: Increasing the tracker’s buffer size (F-GT-BT-2500) further reduced IDSW from 128 to 102. However, comparing the red trajectory (Face) against the blue trajectory (Body) in Fig. 3 shows a persistent performance gap: face tracking consistently results in nearly double the error rate across all memory buffers. This shows that faces are harder to track, likely because they are more prone to erratic motion. 
+
+Failure of ReID: In contrast to body tracking, enabling ReID caused degradation rather than an improvement. The orange ‘X’ in Fig. 3 marks a spike to 188 IDSW, repre-senting an 84% increase in errors. This suggests that face embeddings are more unreliable than body embeddings on this dataset. Our qualitative review of the F-GT-BS-2500 Fig. 4. Qualitative comparison of tracking stability during a complex “U-Turn” occlusion event. Top Row (Baseline B-YX-BT-30): The tracker predicts the occluded actor will continue moving left; when the actor turns and reappears on the right, the spatial mismatch causes an IDSW (ID 25 → ID 27).  
+
+> Bottom Row (Proposed B-YX-BS-2500): Despite the NLM and full occlusion by a second person, the proposed pipeline correctly re-identifies the actor using appearance features, maintaining ID 5 throughout the sequence.
+
+tracking errors confirmed that the ReID module was highly sensitive to extreme profile angles (looking down, up, or sideways) and dynamic partial occlusions (such as hands or phones temporarily covering the face). Consequently, strict spatial constraints have proven superior for maintaining facial identities. 
+
+C. Performance Across Interaction Categories 
+
+To isolate the influence of specific social behaviors and environmental complexities on tracking stability for bodies and faces, we evaluated B-GT-BT-2500 and F-GT-BT-2500 across the interaction categories established in Table I. The results can be found in Table III. The Crowded category accounts for most of the errors (46 IDSW for bodies, 82 for faces). This confirms that navigating dense social scenes with highly active bystanders represents the most significant challenge in unstructured HRI environments. Furthermore, as the number of actors increases, body tracking proves significantly more robust. Interestingly, face and body tracking perform comparably in 1 - Not Engaged and 1 - Dynamic Background . These categories each contain one video with an “ID Takeover” event, which we will explore in the following section. 
+
+D. Edge Case Analysis 
+
+While body tracking produced better global metrics, our qualitative analysis revealed a specific scenario where face tracking was more robust: ID Takeovers. When actors cross paths, their body bounding boxes overlap heavily. This high IoU frequently confuses the spatial association algorithm. For example, in a 1-Dynamic-Background sequence, one bystander temporarily occludes another in the background. The resulting spatial ambiguity caused the body tracker (B-GT-BT-30) to swap their identities. In contrast, facial bounding boxes are smaller and more localized. Even when bodies significantly overlap, faces typically remain spatially distinct. Consequently, as illustrated in Fig. 5, the face tracker                                                                
+
+> TABLE III TRACKING PERFORMANCE ACROSS HRI C ATEGORIES (E VALUATED USING B-GT-BT-2500 FOR BODY AND F-GT-BT-2500 FOR FACE )
+> Actors Category Target HOTA ↑IDF1 ↑IDSW ↓
+> 1Basic Body 99.2 100.0 0Face 99.1 100.0 0Face Occlusion Body 98.6 100.0 0Face 90.9 92.9 2Not Engaged Body 85.5 96.3 3Face 74.1 87.2 3Dynamic Background Body 97.5 98.3 4Face 91.8 89.5 52Basic Body 99.8 100.0 0Face 91.8 89.5 5Dynamic Background Body 99.1 99.5 1Face 85.7 83.5 9Crowded Body 91.5 89.7 46 Face 82.0 79.2 82
+
+(F-GT-BT-30) successfully maintained the correct identities during these crossing events. VI. DISCUSSION Our findings suggest that while robust spatial detection is important, the primary bottleneck for HRI tracking remains temporal association. To address this, increasing the memory buffer proved highly effective at mitigating prolonged occlu-sions. However, there is a significant performance gap be-tween modalities: face tracking consistently results in higher error rates across all buffers compared to body tracking, showing that faces are inherently harder to track, likely because they are more prone to erratic motion. Nevertheless, regardless of modality, memory alone failed to address more complex dynamic events. To resolve these more complex IDSW, such as In-Out-Screen transitions and ID Takeovers, the ReID module was necessary. However, it exhibited opposing effects depending on the target. Integrating visual appearance features into Fig. 5. Tracking during an “ID Takeover” event. Top Row (B-GT-BT-30): Moving Bystander occludes seated overhearer at the back. The heavy body bounding box overlap causes the Kalman filter to swap their identities.  
+
+> Bottom Row (F-GT-BT-30): Smaller, spatially distinct face boxes minimize IoU overlap, allowing the tracker to correctly maintain individual identities through the dynamic occlusion.
+
+body tracks substantially improved overall tracking accuracy and mitigated identity fragmentation. The body likely acts as a stable visual anchor that remains consistent even dur-ing erratic movement. Conversely, applying ReID to faces caused IDSW to spike, as the module was highly sensitive to extreme profile angles and dynamic partial occlusions. Therefore, standard facial embeddings are currently unsuited for close-quarters HRI. Ultimately, neither body nor face tracking is sufficient alone. While body tracking provides excellent global sta-bility, it fails during heavy bounding box overlap, causing “ID Takeovers”. In contrast, face tracking excels in these exact crossing events because facial bounding boxes are smaller and typically remain spatially distinct. Furthermore, face tracking is essential for downstream feature extraction and provides the exact spatial anchor a robot requires to direct its gaze and maintain eye contact. An ideal HRI tracking pipeline must therefore fuse both face and body tracking. VII. LIMITATIONS AND FUTURE WORK While our pipeline demonstrates substantial stability im-provements, the generalizability of our findings is con-strained by our experiment design. First, the custom dataset comprises only 20 sequences captured in an indoor office en-vironment. Also, we disabled Camera Motion Compensation (CMC) for our stationary setup. Therefore, these findings may not translate to mobile robots experiencing ego-motion or varying outdoor lighting. Second, evaluating solely close-quarter, face-to-face interactions leaves distant or noncon-versational encounters unassessed. Third, our reliance on the Furhat robot’s specific wide-angle fisheye lens means observations regarding peripheral trajectory fragmentation may not generalize to robots utilizing different cameras. Finally, this offline evaluation has not yet accounted for the real-time compute constraints or processing latency of actual robot hardware. Future work should address these boundaries by expanding dataset scale and environmental diversity for broader HRI scenarios. A logical next step involves transitioning this pipeline to live deployment on the Furhat robot to evaluate real-world latency and its impact on interaction quality. Finally, further investigation into the dynamic fusion of face and body tracking shows promise in resolving complex occlusions more effectively in unstructured environments. VIII. CONCLUSION This study demonstrates that the fundamental challenge of egocentric HRI tracking lies in temporal association rather than spatial detection alone. Our systematic evaluation highlights distinct advantages for different tracking modal-ities: body tracking paired with appearance ReID excels at maintaining global stability through complex occlusions, while face tracking with strict spatial constraints is supe-rior for resolving identity takeovers during close-proximity crossing events. Ultimately, by optimizing temporal memory and appearance features for the specific dynamics of social interactions, our proposed pipeline (B-YX-BS-2500) suc-cessfully reduced IDSW by 49% compared to the baseline. This performance improvement directly mitigates interaction breakdowns, allowing a social robot to effectively maintain its conversational footing. DATA AVAILABILITY Pending participants’ written consent for distribution, the dataset will be available upon request. To protect privacy, access requires a signed Data Usage Agreement obtained from the corresponding author. ACKNOWLEDGMENT Gemini was used for literature search, language editing, LATEX formatting and data visualization; the authors take full responsibility for the content. Per Swedish law, formal ethical review was not required for the collection of this dataset. Informed consent was obtained for data collection and im-age publication. Consent for broader dataset distribution is currently being finalized. REFERENCES [1] A. Sorrentino, L. Fiorini, and F. Cavallo, “From the Definition to the Automatic Assessment of Engagement in Human–Robot Interaction: A Systematic Review,” International Journal of Social Robotics ,vol. 16, no. 7, pp. 1641–1663, July 2024. [Online]. Available: https://doi.org/10.1007/s12369-024-01146-w [2] F. Del Duchetto, P. Baxter, and M. Hanheide, “Are You Still With Me? Continuous Engagement Assessment From a Robot’s Point of View,” Frontiers in Robotics and AI , vol. 7, Sept. 2020. [Online]. Available: https://www.frontiersin.org/journals/robotics-and-ai/articles /10.3389/frobt.2020.00116/full [3] B. Mutlu, T. Shiwa, T. Kanda, H. Ishiguro, and N. Hagita, “Footing in human-robot conversations: how robots might shape participant roles using gaze cues,” in Proceedings of the 4th ACM/IEEE international conference on Human robot interaction , ser. HRI ’09. New York, NY, USA: Association for Computing Machinery, Mar. 2009, pp. 61–68. [Online]. Available: https://dl.acm.org/doi/10.1145/1514095.1514109 [4] J. Yang, D. Feng, Y. Gao, and C. Liu, “Online Multi-Object Tracking Based on Record Confidence and Hierarchical Association for Cyber-Physical Social Intelligence,” Big Data Mining and Analytics , vol. 8, no. 4, pp. 851–866, Aug. 2025. [Online]. Available: https://ieeexplore.ieee.org/abstract/document/11002437 [5] L. Tian and S. Oviatt, “A Taxonomy of Social Errors in Human-Robot Interaction,” J. Hum.-Robot Interact. , vol. 10, no. 2, pp. 13:1–13:32, Feb. 2021. [Online]. Available: https://dl.acm.org/doi/10.1145/34397 20 [6] A. Taylor and L. D. Riek, “REGROUP: A Robot-Centric Group Detection and Tracking System,” in 2022 17th ACM/IEEE International Conference on Human-Robot Interaction (HRI) .Sapporo, Japan: IEEE, Mar. 2022, pp. 412–421. [Online]. Available: https://ieeexplore.ieee.org/document/9889634/ [7] F. Yu, H. Chen, X. Wang, W. Xian, Y. Chen, F. Liu, V. Madhavan, and T. Darrell, “BDD100K: A Diverse Driving Dataset for Heterogeneous Multitask Learning,” in 2020 IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR) . Seattle, WA, USA: IEEE, June 2020, pp. 2633–2642. [Online]. Available: https://ieeexplore.ieee.org/document/9156329/ [8] B. Stoler, M. Jana, S. Hwang, and J. Oh, “T2FPV: Dataset and Method for Correcting First-Person View Errors in Pedestrian Trajectory Prediction,” Mar. 2023, arXiv:2209.11294 [cs]. [Online]. Available: http://arxiv.org/abs/2209.11294 [9] Y. Wang, J. Shen, S. Petridis, and M. Pantic, “A real-time and unsupervised face re-identification system for human-robot interaction,” Pattern Recognition Letters , vol. 128, pp. 559–568, Dec. 2019. [Online]. Available: https://www.sciencedirect.com/science/arti cle/pii/S0167865518301296 [10] A. Khalifa, A. A. Abdelrahman, D. Strazdas, J. Hintz, T. Hempel, and A. Al-Hamadi, “Face Recognition and Tracking Framework for Human–Robot Interaction,” Applied Sciences , vol. 12, no. 11, May 2022. [Online]. Available: https://www.mdpi.com/2076-3417/12/11/ 5568 [11] A. Brown, V. Kalogeiton, and A. Zisserman, “Face, Body, Voice: Video Person-Clustering With Multiple Modalities,” 2021, pp. 3184– 3194. [Online]. Available: https://openaccess.thecvf.com/content/IC CV2021W/CVEU/html/Brown Face Body Voice Video Person-Clust ering With Multiple Modalities ICCVW 2021 paper.html [12] J. Kim, C.-Y. Ju, G.-W. Kim, and D.-H. Lee, “BoT-FaceSORT: Bag-of-Tricks for Robust Multi-face Tracking in Unconstrained Videos,” in Computer Vision – ACCV 2024 , M. Cho, I. Laptev, D. Tran, A. Yao, and H. Zha, Eds. Singapore: Springer Nature Singapore, 2025, vol. 15473, pp. 278–294, series Title: Lecture Notes in Computer Science. [Online]. Available: https: //link.springer.com/10.1007/978-981-96-0901-7 17 [13] A. Bewley, Z. Ge, L. Ott, F. Ramos, and B. Upcroft, “Simple online and realtime tracking,” in 2016 IEEE International Conference on Image Processing (ICIP) , Sept. 2016, pp. 3464–3468, iSSN: 2381-8549. [Online]. Available: https://ieeexplore.ieee.org/document /7533003/ [14] Y. Zhang, P. Sun, Y. Jiang, D. Yu, F. Weng, Z. Yuan, P. Luo, W. Liu, and X. Wang, “ByteTrack: Multi-object Tracking by Associating Every Detection Box,” in Computer Vision – ECCV 2022 , S. Avidan, G. Brostow, M. Ciss´ e, G. M. Farinella, and T. Hassner, Eds. Cham: Springer Nature Switzerland, 2022, pp. 1–21. [Online]. Available: https://doi.org/10.1007/978-3-031-20047-2 1 [15] N. Aharon, R. Orfaig, and B.-Z. Bobrovsky, “BoT-SORT: Robust Associations Multi-Pedestrian Tracking,” July 2022, arXiv:2206.14651 [cs]. [Online]. Available: http://arxiv.org/abs/2206.14651 [16] P. Wang, W. Li, P. Ogunbona, J. Wan, and S. Escalera, “RGB-D-based human motion recognition with deep learning: A survey,” Computer Vision and Image Understanding , vol. 171, pp. 118–139, June 2018. [Online]. Available: https://linkinghub.elsevier.com/retrieve/pii/S1077 314218300663 [17] R. Han, W. Feng, Y. Zhang, J. Zhao, and S. Wang, “Multiple Human Association and Tracking From Egocentric and Complementary Top Views,” IEEE Transactions on Pattern Analysis and Machine Intelligence , vol. 44, no. 9, pp. 5225–5242, Sept. 2022. [Online]. Available: https://ieeexplore.ieee.org/document/9394804/ [18] Z. Lin, S. Ji, W. Wang, M. Qin, R. Yang, M. Wan, J. Gu, T. Li, and C. Zhang, “A Joint Tracking System: Robot is Online to Access Surveillance Views,” in 2023 IEEE International Conference on Robotics and Biomimetics (ROBIO) , Dec. 2023, pp. 1–6. [Online]. Available: https://ieeexplore.ieee.org/document/10354902/ [19] F. Mohsen and A. Safa, “Real-Time Human-Robot Interaction Intent Detection Using RGB-based Pose and Emotion Cues with Cross-Camera Model Generalization,” Dec. 2025, arXiv:2512.17958 [cs]. [Online]. Available: http://arxiv.org/abs/2512.17958 [20] Y. Su, C. Cun, H. Xia, Y. Feng, B. He, Q. Sun, J. Zhong, and Z. Li, “Q-Tracking: A Robust Visual Human Following for Quadruped Robots in Dynamic Environments,” in 2025 International Conference on Advanced Robotics and Mechatronics (ICARM) ,Aug. 2025, pp. 1–6, iSSN: 2993-4990. [Online]. Available: https://ieeexplore.ieee.org/document/11293732/ [21] R. Mart´ ın-Mart´ ın, M. Patel, H. Rezatofighi, A. Shenoi, J. Gwak, E. Frankel, A. Sadeghian, and S. Savarese, “JRDB: A Dataset and Benchmark of Egocentric Robot Visual Perception of Humans in Built Environments,” IEEE Transactions on Pattern Analysis and Machine Intelligence , vol. 45, no. 6, pp. 6748–6765, June 2023. [Online]. Available: https://ieeexplore.ieee.org/abstract/document/9394786 [22] L. Scofano, A. Sampieri, T. Campari, V. Sacco, I. Spinelli, L. Ballan, and F. Galasso, “Following the Human Thread in Social Navigation,” Feb. 2025, arXiv:2404.11327 [cs]. [Online]. Available: http://arxiv.org/abs/2404.11327 [23] P. Dendorfer, A. Oˇ sep, A. Milan, K. Schindler, D. Cremers, I. Reid, S. Roth, and L. Leal-Taix´ e, “MOTChallenge: A Benchmark for Single-Camera Multiple Target Tracking,” International Journal of Computer Vision , vol. 129, no. 4, pp. 845–881, Apr. 2021. [Online]. Available: https://doi.org/10.1007/s11263-020-01393-0 [24] H. Ye, Y. Zhan, W. Situ, G. Chen, J. Yu, Z. Zhao, K. Cai, A. Ajoudani, and H. Zhang, “TPT-Bench: A Large-Scale, Long-Term and Robot-Egocentric Dataset for Benchmarking Target Person Tracking,” July 2025, arXiv:2505.07446 [cs]. [Online]. Available: http://arxiv.org/abs/2505.07446 [25] P. Dendorfer, H. Rezatofighi, A. Milan, J. Shi, D. Cremers, I. Reid, S. Roth, K. Schindler, and L. Leal-Taix´ e, “MOT20: A benchmark for multi object tracking in crowded scenes,” Mar. 2020, arXiv:2003.09003 [cs]. [Online]. Available: http: //arxiv.org/abs/2003.09003 [26] P. Sun, J. Cao, Y. Jiang, Z. Yuan, S. Bai, K. Kitani, and P. Luo, “DanceTrack: Multi-Object Tracking in Uniform Appearance and Diverse Motion,” in 2022 IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR) . New Orleans, LA, USA: IEEE, June 2022, pp. 20 961–20 970. [Online]. Available: https://ieeexplore.ieee.org/document/9879192/ [27] S. Shao, Z. Zhao, B. Li, T. Xiao, G. Yu, X. Zhang, and J. Sun, “CrowdHuman: A Benchmark for Detecting Human in a Crowd,” Apr. 2018, arXiv:1805.00123 [cs]. [Online]. Available: http://arxiv.org/abs/1805.00123 [28] S. Al Moubayed, J. Beskow, G. Skantze, and B. Granstr¨ om, “Furhat: A Back-Projected Human-Like Robot Head for Multiparty Human-Machine Interaction,” in Cognitive Behavioural Systems , A. Esposito, A. M. Esposito, A. Vinciarelli, R. Hoffmann, and V. C. M¨ uller, Eds. Berlin, Heidelberg: Springer, 2012, pp. 114–130. [Online]. Available: https://doi.org/10.1007/978-3-642-34584-5 9 [29] CVAT.ai Corporation, “Computer Vision Annotation Tool (CVAT),” 2024. [Online]. Available: https://github.com/cvat-ai/cvat [30] Z. Ge, S. Liu, F. Wang, Z. Li, and J. Sun, “YOLOX: Exceeding YOLO Series in 2021,” Aug. 2021, arXiv:2107.08430 [cs]. [Online]. Available: http://arxiv.org/abs/2107.08430 [31] J. Deng, J. Guo, E. Ververas, I. Kotsia, and S. Zafeiriou, “RetinaFace: Single-Shot Multi-Level Face Localisation in the Wild,” in 2020 IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR) . Seattle, WA, USA: IEEE, June 2020, pp. 5202–5211. [Online]. Available: https://ieeexplore.ieee.org/document/9157330/ [32] P. Dollar, C. Wojek, B. Schiele, and P. Perona, “Pedestrian Detection: An Evaluation of the State of the Art,” IEEE Transactions on Pattern Analysis and Machine Intelligence , vol. 34, no. 4, pp. 743–761, Apr. 2012. [Online]. Available: https: //ieeexplore.ieee.org/document/5975165/ [33] S. Yang, P. Luo, C. C. Loy, and X. Tang, “WIDER FACE: A Face Detection Benchmark,” in 2016 IEEE Conference on Computer Vision and Pattern Recognition (CVPR) . Las Vegas, NV, USA: IEEE, June 2016, pp. 5525–5533. [Online]. Available: https://ieeexplore.ieee.org/document/7780965/ [34] J. Luiten, A. Oˇ sep, P. Dendorfer, P. Torr, A. Geiger, L. Leal-Taix´ e, and B. Leibe, “HOTA: A Higher Order Metric for Evaluating Multi-object Tracking,” International Journal of Computer Vision ,vol. 129, no. 2, pp. 548–578, Feb. 2021. [Online]. Available: https://doi.org/10.1007/s11263-020-01375-2

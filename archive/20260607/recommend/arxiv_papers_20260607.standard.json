@@ -1,0 +1,316 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-06-07T20:04:52.115866+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 2,
+    "deep_divecandidates": 3,
+    "deep_cap": 7,
+    "deep_selected": 3,
+    "quick_candidates": 4,
+    "quick_skim_target": 12,
+    "quick_selected": 4
+  },
+  "deep_dive": [
+    {
+      "id": "2606.04463v2",
+      "source": "arxiv",
+      "title": "OSCAR: Omni-Embodiment Action-Conditioned World Model for Robotics",
+      "abstract": "We present OSCAR, a precise action-conditioned video world model that generalizes across different robot embodiments and enables robot policy evaluation. Existing video world models face three main challenges for real-world robot evaluation: limited scenario diversity in current robot training datasets, imprecise action following, and poor generalization across embodiments for broad adoption. We tackle these challenges from two perspectives. At its core is a large-scale standardized data pipeline that curates, filters, and deduplicates broad robotics and egocentric human datasets, yielding a clean joint-training dataset that spans diverse tasks, scenarios, actions, and robot embodiments. To condition the video model, we adopt 2D kinematic skeleton rendering as a unified conditioning representation that generalizes across different robot arms or even human hands. We finetune the Cosmos-Predict2.5-2B model on a single GH200 GPU. Our model achieves significant improvement on action following, appearance quality, and motion consistency, compared to existing baselines, which either have a much larger model size or require more GPUs. We further deploy OSCAR to evaluate robot policies from RoboArena. Extensive experiments demonstrate the significant correlation between our virtual policy evaluation in OSCAR and real-world evaluation, paving the way for the future where robot policies can be purely evaluated in virtual generated worlds.",
+      "authors": [
+        "Zhuoyuan Wu",
+        "Jun Gao"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-06-03T05:16:41+00:00",
+      "link": "https://arxiv.org/pdf/2606.04463v2",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "large-scale data pipeline for robotics datasets",
+      "llm_evidence_cn": "提出大规模标准化机器人数据管道",
+      "llm_evidence": "提出大规模标准化机器人数据管道",
+      "canonical_evidence": "提出大规模标准化机器人数据管道",
+      "llm_tldr_en": "OSCAR proposes a large-scale data pipeline that curates, filters, and deduplicates diverse robot and human datasets to create a clean joint-training dataset for a video world model.",
+      "llm_tldr_cn": "当前机器人视频世界模型面临训练数据场景多样性不足、动作跟随不精确及跨体现泛化差等问题。本文提出OSCAR，其核心是一个大规模标准化数据流水线，可清洗、过滤并去重广泛的机器人及人类自我中心数据集，生成覆盖多种任务、场景、动作和机器人形态的联合训练数据集。基于该数据集，OSCAR训练了一个精确的动作条件视频世界模型，可推广至不同机器人形态并用于策略评估。实验表明OSCAR在视频预测和策略评估上优于现有方法。",
+      "llm_tldr": "当前机器人视频世界模型面临训练数据场景多样性不足、动作跟随不精确及跨体现泛化差等问题。本文提出OSCAR，其核心是一个大规模标准化数据流水线，可清洗、过滤并去重广泛的机器人及人类自我中心数据集，生成覆盖多种任务、场景、动作和机器人形态的联合训练数据集。基于该数据集，OSCAR训练了一个精确的动作条件视频世界模型，可推广至不同机器人形态并用于策略评估。实验表明OSCAR在视频预测和策略评估上优于现有方法。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2606.04708v1",
+      "source": "arxiv",
+      "title": "VISTA: Vision-Grounded and Physics-Validated Adaptation of UMI data for VLA Training",
+      "abstract": "Universal Manipulation Interface (UMI) enables scalable real-world robot data collection without hardware-specific teleoperation, yet leveraging UMI data to train large-scale Vision-Language-Action (VLA) models remains fundamentally challenging. We identify two critical mismatches: wrist-mounted fisheye views, with severe radial distortion and local gripper-centric perspectives, are out-of-distribution for pretrained VLMs; and human-collected trajectories frequently violate kinematic limits, incur collisions, or exceed controller bandwidth, teaching VLA policies physically infeasible actions. To address the challenges, we present VISTA, a framework that bridges this dual gap through three synergistic components. (i)~UMI-VQA, the first large-scale VQA dataset tailored to wrist-mounted fisheye observations, aligns VLM representations to the distorted visual regime via auxiliary vision-language supervision. (ii)~A systematic physical-validation pipeline performs a data-completeness pre-check and scores each valid trajectory for trajectory continuity, self-collision risk, and execution fidelity before it enters training. (iii)~A two-stage co-training recipe jointly learns vision-language grounding on UMI-VQA and action prediction on validated trajectories. Our experiments empirically show that incorporating UMI-VQA consistently improves downstream policy performance, and that physical-validation scores are strongly predictive of deployment success. On diverse simulation and real-world manipulation tasks, VISTA significantly outperforms strong baselines including $π_{0.5}$, LingBot-VLA, and Wall-X. We release the physical-validation pipeline, UMI-VQA, validated trajectory data, and the pre-trained model for the community.",
+      "authors": [
+        "Siyuan Yang",
+        "Linzheng Guo",
+        "Ouyang Lu",
+        "Zhaxizhuoma",
+        "Daoran Zhang",
+        "Xinmiao Wang",
+        "Ting Xiao",
+        "Fangzheng Yan",
+        "Zhijun Chen",
+        "Yan Ding",
+        "Chao Yu",
+        "Chenjia Bai",
+        "Xuelong Li"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.AI"
+      ],
+      "published": "2026-06-03T10:38:45+00:00",
+      "link": "https://arxiv.org/pdf/2606.04708v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "adapting UMI data for VLA training with physics validation",
+      "llm_evidence_cn": "对UMI数据进行物理验证和适应以用于VLA训练",
+      "llm_evidence": "对UMI数据进行物理验证和适应以用于VLA训练",
+      "canonical_evidence": "对UMI数据进行物理验证和适应以用于VLA训练",
+      "llm_tldr_en": "VISTA bridges the gap between UMI-collected real-world data and VLA training by correcting fisheye distortion and validating physical feasibility of trajectories.",
+      "llm_tldr_cn": "UMI方法可大规模采集机器人操作数据，但直接用于训练VLA模型存在两个问题：鱼眼视图畸变导致视觉分布偏移，以及人类演示轨迹常违反物理约束。本文提出VISTA框架，通过三个组件解决：UMI-VQA生成描述语言，视角校正去除鱼眼畸变，物理验证模块检测并修正不可行轨迹。实验表明VISTA能有效将UMI数据转化为可用的VLA训练数据，提升策略执行成功率。",
+      "llm_tldr": "UMI方法可大规模采集机器人操作数据，但直接用于训练VLA模型存在两个问题：鱼眼视图畸变导致视觉分布偏移，以及人类演示轨迹常违反物理约束。本文提出VISTA框架，通过三个组件解决：UMI-VQA生成描述语言，视角校正去除鱼眼畸变，物理验证模块检测并修正不可行轨迹。实验表明VISTA能有效将UMI数据转化为可用的VLA训练数据，提升策略执行成功率。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2606.04825v1",
+      "source": "arxiv",
+      "title": "HapTile: A Haptic-Informed Vision-Tactile-Language-Action Dataset for Contact-Rich Imitation Learning",
+      "abstract": "Despite the importance of tactile sensing for reliable manipulation, most existing Vision-Language-Action (VLA) datasets remain vision-only, and those that do incorporate tactile information typically lack the joint combination of task diversity, language conditioning, and action trajectories. Furthermore, existing teleoperation pipelines rarely provide haptic feedback to the operator, despite its established role in demonstration quality and manipulation stability. In this work, we present HapTile, a contact-grounded visuotactile manipulation dataset that advances beyond vision-only trajectory datasets by embedding physical interaction sensing at two levels: fingertip tactile feedback at the robot end-effector, and haptic-informed demonstrations at the teleoperator side. The data collection platform integrates haptic feedback directly into the teleoperation controller, enabling the operator to perceive contact interactions in real time. It is built around a standard and reproducible robotic system equipped with custom-designed fingertip tactile sensors. The dataset comprises everyday manipulation tasks spanning a broad range of contact-rich skills, including pick-and-place, folding, pressing, stacking, and other routine activities. Each task is paired with language instructions that condition the policy on the manipulation objective, together with synchronized visuotactile observations and action trajectories. In addition, we provide a benchmarking study on contact-rich policy learning using two baseline models to evaluate the effectiveness of the proposed contact-grounded dataset. The dataset and additional details are available on our website: haptile-dataset.github.io.",
+      "authors": [
+        "Amirhosein Alian",
+        "Yongqiang Zhao",
+        "Shiyi Gu",
+        "Xuyang Zhang",
+        "Zhuo Chen",
+        "Christopher E. Mower",
+        "Haitham Bou-Ammar",
+        "Shan Luo"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-06-03T12:48:17+00:00",
+      "link": "https://arxiv.org/pdf/2606.04825v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "vision-tactile-language-action dataset for robotics",
+      "llm_evidence_cn": "构建了包含触觉信息的机器人操作数据集",
+      "llm_evidence": "构建了包含触觉信息的机器人操作数据集",
+      "canonical_evidence": "构建了包含触觉信息的机器人操作数据集",
+      "llm_tldr_en": "HapTile presents a contact-grounded visuotactile manipulation dataset with fingertip tactile feedback and haptic force, enabling VLA models to leverage physical interaction sensing.",
+      "llm_tldr_cn": "现有视觉-语言-动作（VLA）数据集大多仅包含视觉信息，缺乏触觉感知。本文提出HapTile数据集，在机器人操作过程中采集指尖触觉反馈和力触觉信息，形成包含视觉、触觉、语言和动作轨迹的多模态数据集。该数据集通过触觉信息增强了触觉感知，可用于训练接触丰富的操作策略，实验表明触觉信息有助于提高策略成功率。",
+      "llm_tldr": "现有视觉-语言-动作（VLA）数据集大多仅包含视觉信息，缺乏触觉感知。本文提出HapTile数据集，在机器人操作过程中采集指尖触觉反馈和力触觉信息，形成包含视觉、触觉、语言和动作轨迹的多模态数据集。该数据集通过触觉信息增强了触觉感知，可用于训练接触丰富的操作策略，实验表明触觉信息有助于提高策略成功率。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "quick_skim": [
+    {
+      "id": "2606.03694v1",
+      "source": "arxiv",
+      "title": "Face versus Body Tracking for Human-Robot Interaction: An Egocentric Dataset",
+      "abstract": "To enable meaningful human-robot interaction (HRI), a robot must continuously assess engagement by consistently tracking users over time. State-of-the-art computer vision models, however, are heavily optimized for surveillance or autonomous driving. A social robot faces distinct egocentric challenges, such as humans bouncing, obstructing each other, or leaving the frame. Frequent identity switches (IDSW) cause the robot to lose its footing mid-conversation. To address this, we introduce a novel, custom-annotated egocentric dataset collected via the Furhat robot to capture complex social dynamics. We present a systematic evaluation isolating detection errors from tracking logic, comparing face versus body tracking, and assessing the impact of extended spatial memory and appearance re-identification (ReID). Results indicate that increasing spatial memory mitigates prolonged occlusions but fails on complex dynamic events. Integrating ReID resolves complex switches but exhibits opposing effects: it substantially improves body tracking stability, yet causes facial IDSW to spike due to profile angle sensitivity. Ultimately, our optimized pipeline reduces IDSW by 49\\%, mitigating interaction breakdowns. Because standard benchmarks lack dense, close-quarter occlusions, this work highlights the critical need for natively captured social dynamics to truly validate HRI perception models.",
+      "authors": [
+        "Jessica Wenninger",
+        "Gabriel Skantze"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.CV",
+        "cs.HC"
+      ],
+      "published": "2026-06-02T14:15:17+00:00",
+      "link": "https://arxiv.org/pdf/2606.03694v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "egocentric dataset for HRI robot tracking",
+      "llm_evidence_cn": "面向人机交互的自我中心数据集",
+      "llm_evidence": "面向人机交互的自我中心数据集",
+      "canonical_evidence": "面向人机交互的自我中心数据集",
+      "llm_tldr_en": "Introduces a custom-annotated egocentric dataset collected via a social robot for tracking, directly relevant to robotics dataset construction.",
+      "llm_tldr_cn": "该论文针对机器人人机交互中面临的挑战，如身份切换等问题，提出了一个基于社交机器人收集的自我中心数据集。该数据集包含了复杂社交动态的标注，并系统评估了面部与身体跟踪的性能。这项工作为机器人数据集构建提供了实际案例，尤其适用于需要跟踪用户的交互场景。",
+      "llm_tldr": "该论文针对机器人人机交互中面临的挑战，如身份切换等问题，提出了一个基于社交机器人收集的自我中心数据集。该数据集包含了复杂社交动态的标注，并系统评估了面部与身体跟踪的性能。这项工作为机器人数据集构建提供了实际案例，尤其适用于需要跟踪用户的交互场景。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2606.04853v1",
+      "source": "arxiv",
+      "title": "Teaching Robots to Say 'I Don't Know' : SENTINEL for Uncertainty-Aware SLAM",
+      "abstract": "Low-cost 2D LiDARs lack the intensity channel that higher-end sensors use to diagnose measurement failures, yet they are widely used on educational and budget robotics platforms. We present SENTINEL, a training - free, label - free reliability estimation framework that gives range - only LiDAR an effective diagnostic signal. SENTINEL combines geometry-based scan statistics with cross - modal depth consistency between LiDAR and an RGB - D camera to compute a per - scan reliability score between 0 and 1. When the score falls below a threshold, corrupted scans are rejected and the robot falls back to calibrated wheel odometry, preventing silent SLAM corruption. We evaluate SENTINEL on a GEFIER R1 four - wheel skid-steer robot equipped with an RPLidar A2M12 and an Intel RealSense D435i in a 185 cm by 245 cm arena containing controlled transparent and reflective failure elements on a central obstacle. Spatial reliability maps across five surface conditions, including glass, mirror, shiny paper, and a mixed mirror and shiny-paper condition, show clear separation between clean and failure cases, allowing affected regions to be identified as reject or noise. Because these failure modes are absent in simulation, validation is performed entirely on real hardware.",
+      "authors": [
+        "Abhishek S",
+        "Badrikanath Praharaj",
+        "Sreeram MV"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-06-03T13:22:05+00:00",
+      "link": "https://arxiv.org/pdf/2606.04853v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "uncertainty-aware SLAM reliability estimation for safe robot operation",
+      "llm_evidence_cn": "面向安全机器人操作的不确定性感知SLAM可靠性估计",
+      "llm_evidence": "面向安全机器人操作的不确定性感知SLAM可靠性估计",
+      "canonical_evidence": "面向安全机器人操作的不确定性感知SLAM可靠性估计",
+      "llm_tldr_en": "SENTINEL provides a training-free reliability score for low-cost LiDAR, enabling detection of corrupted scans to prevent silent SLAM failure, enhancing robot safety.",
+      "llm_tldr_cn": "针对低成本2D LiDAR缺乏诊断信号的问题，提出SENTINEL框架，无需训练和标签，利用几何扫描统计和跨模态深度一致性计算每帧可靠性分数。当分数低于阈值时拒绝受损扫描并回退至轮式里程计，有效防止SLAM静默损坏。在GEFIER R1机器人上验证了其有效性，为机器人安全操作提供了一种轻量级在线故障检测方法。",
+      "llm_tldr": "针对低成本2D LiDAR缺乏诊断信号的问题，提出SENTINEL框架，无需训练和标签，利用几何扫描统计和跨模态深度一致性计算每帧可靠性分数。当分数低于阈值时拒绝受损扫描并回退至轮式里程计，有效防止SLAM静默损坏。在GEFIER R1机器人上验证了其有效性，为机器人安全操作提供了一种轻量级在线故障检测方法。",
+      "llm_tags": [
+        "query:humanoid-ood"
+      ],
+      "matched_query_tag": "query:humanoid-ood",
+      "matched_query_text": "out-of-distribution detection for safe robot operation",
+      "matched_requirement_id": "req-11",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2606.04708v2",
+      "source": "arxiv",
+      "title": "VISTA: Vision-Grounded and Physics-Validated Adaptation of UMI data for VLA Training",
+      "abstract": "Universal Manipulation Interface (UMI) enables scalable real-world robot data collection without hardware-specific teleoperation, yet leveraging UMI data to train large-scale Vision-Language-Action (VLA) models remains fundamentally challenging. We identify two critical mismatches: wrist-mounted fisheye views, with severe radial distortion and local gripper-centric perspectives, are out-of-distribution for pretrained VLMs; and human-collected trajectories frequently violate kinematic limits, incur collisions, or exceed controller bandwidth, teaching VLA policies physically infeasible actions. To address the challenges, we present VISTA, a framework that bridges this dual gap through three synergistic components. (i)~UMI-VQA, the first large-scale VQA dataset tailored to wrist-mounted fisheye observations, aligns VLM representations to the distorted visual regime via auxiliary vision-language supervision. (ii)~A systematic physical-validation pipeline performs a data-completeness pre-check and scores each valid trajectory for trajectory continuity, self-collision risk, and execution fidelity before it enters training. (iii)~A two-stage co-training recipe jointly learns vision-language grounding on UMI-VQA and action prediction on validated trajectories. Our experiments empirically show that incorporating UMI-VQA consistently improves downstream policy performance, and that physical-validation scores are strongly predictive of deployment success. On diverse simulation and real-world manipulation tasks, VISTA significantly outperforms strong baselines including $π_{0.5}$, LingBot-VLA, and Wall-X. We release the physical-validation pipeline, UMI-VQA, validated trajectory data, and the pre-trained model for the community.",
+      "authors": [
+        "Siyuan Yang",
+        "Linzheng Guo",
+        "Ouyang Lu",
+        "Zhaxizhuoma",
+        "Daoran Zhang",
+        "Xinmiao Wang",
+        "Ting Xiao",
+        "Fangzheng Yan",
+        "Zhijun Chen",
+        "Yan Ding",
+        "Chao Yu",
+        "Chenjia Bai",
+        "Xuelong Li"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.AI"
+      ],
+      "published": "2026-06-03T10:38:45+00:00",
+      "link": "https://arxiv.org/pdf/2606.04708v2",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "UMI data adaptation and physics validation for robot training datasets",
+      "llm_evidence_cn": "UMI数据适配和物理验证用于机器人训练数据集",
+      "llm_evidence": "UMI数据适配和物理验证用于机器人训练数据集",
+      "canonical_evidence": "UMI数据适配和物理验证用于机器人训练数据集",
+      "llm_tldr_en": "VISTA adapts UMI data for VLA training by addressing fisheye distortion and physical infeasibility through UMI-VQA dataset and physics validation.",
+      "llm_tldr_cn": "VISTA框架解决了UMI数据用于VLA训练时的两个关键不匹配问题：鱼眼视图的分布外和轨迹的物理不可行性。通过提出UMI-VQA大规模数据集和物理验证模块，提升了数据质量和策略训练的有效性。实验表明该方法显著减少了策略执行中的物理违规，提高了训练效率。",
+      "llm_tldr": "VISTA框架解决了UMI数据用于VLA训练时的两个关键不匹配问题：鱼眼视图的分布外和轨迹的物理不可行性。通过提出UMI-VQA大规模数据集和物理验证模块，提升了数据质量和策略训练的有效性。实验表明该方法显著减少了策略执行中的物理违规，提高了训练效率。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2606.05960v1",
+      "source": "arxiv",
+      "title": "Towards a Data Flywheel for Embodied Intelligence in Logistics",
+      "abstract": "Embodied intelligence is moving from laboratory demonstrations toward industrial deployment, with the logistics industry serving as a key application scenario. Learning-based policies offer a promising path beyond traditional perception-planning-control pipelines, but their scalability depends on how embodied data can be collected, organized, and reused. This research studies a data-centric framework for industrial embodied intelligence by constructing a logistics data flywheel. Our framework converts daily operations into reusable data assets, uses World Models to generate reliable supervision for long-tail parcel manipulation, and feeds deployment feedback back into policy improvement. As an initial result, \\textit{WM-DAgger} introduces a World-Model-based data aggregation framework that synthesizes out-of-distribution recovery data for robust imitation learning. Building on this result, ongoing work explores how large-scale in-the-wild multimodal data, including labeled human demonstrations, unlabeled operational videos, and system-level robot logs, can be aligned for policy learning and transformed into feedback for continual system improvement.",
+      "authors": [
+        "Anlan Yu",
+        "Zaishu Chen",
+        "Zhiqing Hong",
+        "Daqing Zhang"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-06-04T09:58:55+00:00",
+      "link": "https://arxiv.org/pdf/2606.05960v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "data flywheel framework for embodied intelligence logistics",
+      "llm_evidence_cn": "物流具身智能的数据飞轮框架",
+      "llm_evidence": "物流具身智能的数据飞轮框架",
+      "canonical_evidence": "物流具身智能的数据飞轮框架",
+      "llm_tldr_en": "Proposes a data-centric framework for industrial embodied intelligence that converts daily operations into reusable datasets, using World Models for supervision and deployment feedback for policy improvement.",
+      "llm_tldr_cn": "本文针对工业具身智能中数据收集、组织和复用的挑战，提出了一种数据飞轮框架。该框架将日常操作转化为可复用的数据资产，利用世界模型为长尾包裹操作生成可靠监督，并将部署反馈用于策略改进。初始结果WM-DAgger展示了基于世界模型的迭代式数据聚合方法。这项工作为机器人数据集构建提供了系统化思路，尤其适用于物流场景下的具身智能应用。",
+      "llm_tldr": "本文针对工业具身智能中数据收集、组织和复用的挑战，提出了一种数据飞轮框架。该框架将日常操作转化为可复用的数据资产，利用世界模型为长尾包裹操作生成可靠监督，并将部署反馈用于策略改进。初始结果WM-DAgger展示了基于世界模型的迭代式数据聚合方法。这项工作为机器人数据集构建提供了系统化思路，尤其适用于物流场景下的具身智能应用。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    }
+  ]
+}
