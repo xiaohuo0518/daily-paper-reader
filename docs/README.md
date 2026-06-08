@@ -6,43 +6,26 @@
 </div>
 
 ## 每次日报
-- 最新运行日期：2026-06-07
-- 运行时间：2026-06-07 20:09:53 UTC
+- 最新运行日期：2026-06-08
+- 运行时间：2026-06-08 21:54:33 UTC
 - 运行状态：成功
-- 本次总论文数：7
-- 精读区：3
-- 速读区：4
+- 本次总论文数：1
+- 精读区：1
+- 速读区：0
 
 ### 今日简报（AI）
-今日精读聚焦机器人世界模型与数据适配，OSCAR获9分高评，VISTA提供视觉-物理验证的UMI数据适应方案。  
-最值得关注OSCAR的“全具身动作条件世界模型”在机器人规划中的应用，以及VISTA通过虚拟-现实数据同步提升VLA训练效果。  
-建议优先精读OSCAR论文，理解世界模型对机器人泛化能力的提升；同时关注VISTA中数据适应方法，可应用于自身研究的数据集构建。
-- 详情：[/202606/07/README](/202606/07/README)
+今天精读了《RhinoVLA Technical Report》，评分8.0，聚焦于视觉-语言-动作模型的最新进展。  
+最值得关注的是该技术报告提出的RhinoVLA方法及其在实际任务中的应用效果。  
+建议深入阅读原文，重点理解其架构设计和性能分析，以把握多模态模型的前沿方向。
+- 详情：[/202606/08/README](/202606/08/README)
 
 ### 精读区论文标签
-1. [OSCAR: Omni-Embodiment Action-Conditioned World Model for Robotics](/202606/07/2606.04463v2-oscar-omni-embodiment-action-conditioned-world-model-for-robotics)  
-   标签：评分：9.0/10、query:ur
-   evidence：提出大规模标准化机器人数据管道
-2. [VISTA: Vision-Grounded and Physics-Validated Adaptation of UMI data for VLA Training](/202606/07/2606.04708v1-vista-vision-grounded-and-physics-validated-adaptation-of-umi-data-for-vla-training)  
+1. [RhinoVLA Technical Report](/202606/08/2606.07383v1-rhinovla-technical-report)  
    标签：评分：8.0/10、query:ur
-   evidence：对UMI数据进行物理验证和适应以用于VLA训练
-3. [HapTile: A Haptic-Informed Vision-Tactile-Language-Action Dataset for Contact-Rich Imitation Learning](/202606/07/2606.04825v1-haptile-a-haptic-informed-vision-tactile-language-action-dataset-for-contact-rich-imitation-learning)  
-   标签：评分：8.0/10、query:ur
-   evidence：构建了包含触觉信息的机器人操作数据集
+   evidence：专注于VLA模型在边缘SoC上的实时部署，解决延迟挑战
 
 ### 速读区论文标签
-1. [Face versus Body Tracking for Human-Robot Interaction: An Egocentric Dataset](/202606/07/2606.03694v1-face-versus-body-tracking-for-human-robot-interaction-an-egocentric-dataset)  
-   标签：评分：7.0/10、query:ur
-   evidence：面向人机交互的自我中心数据集
-2. [VISTA: Vision-Grounded and Physics-Validated Adaptation of UMI data for VLA Training](/202606/07/2606.04708v2-vista-vision-grounded-and-physics-validated-adaptation-of-umi-data-for-vla-training)  
-   标签：评分：7.0/10、query:ur
-   evidence：UMI数据适配和物理验证用于机器人训练数据集
-3. [Towards a Data Flywheel for Embodied Intelligence in Logistics](/202606/07/2606.05960v1-towards-a-data-flywheel-for-embodied-intelligence-in-logistics)  
-   标签：评分：7.0/10、query:ur
-   evidence：物流具身智能的数据飞轮框架
-4. [Teaching Robots to Say 'I Don't Know' : SENTINEL for Uncertainty-Aware SLAM](/202606/07/2606.04853v1-teaching-robots-to-say-i-dont-know--sentinel-for-uncertainty-aware-slam)  
-   标签：评分：6.0/10、query:humanoid-ood
-   evidence：面向安全机器人操作的不确定性感知SLAM可靠性估计
+- 本次无速读推荐。
 
 
 <div class="dpr-home-promo-card">

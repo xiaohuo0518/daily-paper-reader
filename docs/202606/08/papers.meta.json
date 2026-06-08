@@ -1,0 +1,24 @@
+{
+  "label": "2026-06-08",
+  "date": "2026-06-08",
+  "generated_at": "2026-06-08T21:54:41",
+  "count": 1,
+  "papers": [
+    {
+      "paper_id": "202606/08/2606.07383v1-rhinovla-technical-report",
+      "section": "deep",
+      "title_en": "RhinoVLA Technical Report",
+      "authors": "Huixi Intelligence, :, Chen Zhang, Chenyang Zhou, Guanglei Ding, Guanghui He, Haibin Gao, Jiajia Chen, Jianyong Zhang, Lianyi Yu, Ningyi Xu, Ping Xu, Qingchen Li, Yingjun Hu, Yijia Zhang, Yuxi Liu",
+      "date": "2026-06-05",
+      "pdf": "https://arxiv.org/pdf/2606.07383v1",
+      "score": "8.0",
+      "evidence": "专注于VLA模型在边缘SoC上的实时部署，解决延迟挑战",
+      "tldr": "VLA模型在边缘硬件实时部署面临视觉和上下文token导致的延迟问题。RhinoVLA采用token高效的Qwen3-VL骨干和连续Action Expert减少计算，并通过View Registry、72D状态动作空间和机器人LoRA的统一接口实现跨机器人学习。经硬件感知编译和混合精度优化，在Huixi R1上达到11.69 Hz推理，满足10 Hz实时闭环控制，性能与π0.5相当。该工作为边缘端机器人操控提供了高效部署方案。",
+      "tags": "query:ur",
+      "abstract_en": "Vision-Language-Action (VLA) models have shown strong potential for robotic manipulation, but real-time deployment on edge hardware remains challenging. In this work, we identify VLM visual and context tokens as a major source of deployment latency: for GEMM-dominated projection operators, computation grows linearly with the number of input tokens when model dimensions are fixed. Motivated by this observation, we propose RhinoVLA, a deployment-oriented VLA model co-designed with the Huixi R1 edge SoC. RhinoVLA adopts a token-efficient Qwen3-VL backbone and a continuous Action Expert, reducing the VLM-side token and computation burden while preserving pretrained multimodal capability. To support cross-robot learning, RhinoVLA further introduces a unified interface that combines View Registry, 72D physical state-action slot space, and robotinstance LoRA, allowing heterogeneous robot observations and action schemas to be aligned under a shared policy. On the deployment side, RhinoVLA is optimized through hardware-aware compilation, mixed-precision execution, and parallel visual encoding. Experiments show that RhinoVLA achieves downstream performance comparable to π0.5 at a similar parameter scale, while reaching 11.69 Hz end-to-end inference on Huixi R1, meeting the 10 Hz real-time closedloop control target. The project will be open-sourced at https://github.com/HuixiAI/RhinoVLA.",
+      "source": "arxiv",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "errors": []
+}

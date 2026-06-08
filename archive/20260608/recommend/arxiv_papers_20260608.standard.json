@@ -1,0 +1,69 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-06-08T21:52:51.873838+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 2,
+    "deep_divecandidates": 1,
+    "deep_cap": 7,
+    "deep_selected": 1,
+    "quick_candidates": 0,
+    "quick_skim_target": 12,
+    "quick_selected": 0
+  },
+  "deep_dive": [
+    {
+      "id": "2606.07383v1",
+      "source": "arxiv",
+      "title": "RhinoVLA Technical Report",
+      "abstract": "Vision-Language-Action (VLA) models have shown strong potential for robotic manipulation, but real-time deployment on edge hardware remains challenging. In this work, we identify VLM visual and context tokens as a major source of deployment latency: for GEMM-dominated projection operators, computation grows linearly with the number of input tokens when model dimensions are fixed. Motivated by this observation, we propose RhinoVLA, a deployment-oriented VLA model co-designed with the Huixi R1 edge SoC. RhinoVLA adopts a token-efficient Qwen3-VL backbone and a continuous Action Expert, reducing the VLM-side token and computation burden while preserving pretrained multimodal capability. To support cross-robot learning, RhinoVLA further introduces a unified interface that combines View Registry, 72D physical state-action slot space, and robotinstance LoRA, allowing heterogeneous robot observations and action schemas to be aligned under a shared policy. On the deployment side, RhinoVLA is optimized through hardware-aware compilation, mixed-precision execution, and parallel visual encoding. Experiments show that RhinoVLA achieves downstream performance comparable to π0.5 at a similar parameter scale, while reaching 11.69 Hz end-to-end inference on Huixi R1, meeting the 10 Hz real-time closedloop control target. The project will be open-sourced at https://github.com/HuixiAI/RhinoVLA.",
+      "authors": [
+        "Huixi Intelligence",
+        ":",
+        "Chen Zhang",
+        "Chenyang Zhou",
+        "Guanglei Ding",
+        "Guanghui He",
+        "Haibin Gao",
+        "Jiajia Chen",
+        "Jianyong Zhang",
+        "Lianyi Yu",
+        "Ningyi Xu",
+        "Ping Xu",
+        "Qingchen Li",
+        "Yingjun Hu",
+        "Yijia Zhang",
+        "Yuxi Liu"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.LG"
+      ],
+      "published": "2026-06-05T15:21:41+00:00",
+      "link": "https://arxiv.org/pdf/2606.07383v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "focuses on real-time deployment of VLA models on edge SoC, addressing latency challenges",
+      "llm_evidence_cn": "专注于VLA模型在边缘SoC上的实时部署，解决延迟挑战",
+      "llm_evidence": "专注于VLA模型在边缘SoC上的实时部署，解决延迟挑战",
+      "canonical_evidence": "专注于VLA模型在边缘SoC上的实时部署，解决延迟挑战",
+      "llm_tldr_en": "proposes RhinoVLA, a deployment-oriented VLA model with token-efficient backbone and edge SoC co-design for real-time robotic manipulation.",
+      "llm_tldr_cn": "该论文针对VLA模型在边缘硬件上实时部署的延迟问题，提出RhinoVLA，采用令牌高效的Qwen3-VL骨干和连续动作专家，与Huixi R1边缘SoC协同设计，大幅降低计算负担。同时引入统一接口支持跨机器人学习，为边缘端机器人部署提供了高效方案。",
+      "llm_tldr": "该论文针对VLA模型在边缘硬件上实时部署的延迟问题，提出RhinoVLA，采用令牌高效的Qwen3-VL骨干和连续动作专家，与Huixi R1边缘SoC协同设计，大幅降低计算负担。同时引入统一接口支持跨机器人学习，为边缘端机器人部署提供了高效方案。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "edge deployment for humanoid robots",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "quick_skim": []
+}
