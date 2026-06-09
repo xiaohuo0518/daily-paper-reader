@@ -1,0 +1,537 @@
+Title: Learning Contact Representation for Leg Odometry
+
+URL Source: https://arxiv.org/pdf/2606.05501v1
+
+Published Time: Fri, 05 Jun 2026 00:27:58 GMT
+
+Number of Pages: 17
+
+Markdown Content:
+# Learning Contact Representation for Leg Odometry 
+
+Emre Girgin 
+
+Department of Aerospace Engineering Embry Riddle Aeronautical University United States 
+
+girgine@my.erau.edu 
+
+Cagri Kilic 
+
+Department of Aerospace Engineering Embry Riddle Aeronautical University United States 
+
+kilicc@erau.edu Denoising Autoencoder 
+
+> Latent Code
+> Gaussian Mixture Model Rock Grass Concrete
+> IMU Joint Encoders
+> Propagation Model
+> Measurement Correction
+> Raw Features
+> Kinematic
+> Model
+> Output
+> MSE Loss
+> Error State Extended Kalman Filter
+> Stance Probability
+> Odometry Estimation
+
+Figure 1: Our framework learns the latent representations of the leg kinematics and model the latent space as bimodal Gaussian for the ZUPT of ESEKF. Denoising Autoencoder is trained only on estimated foot kinematics in a self-supervised manner without relying on human supervision. 
+
+Abstract: The estimation of odometry in legged robots depends on the assump-tion that the velocity of the foot with respect to the world remains zero during the stance phase. Feedback for the main body velocity is derived from the kinematic serial chain of the feet making accurate leg phase detection is a critical subprob-lem. A considerable number of studies employ ground reaction force sensors mounted at the tip of the foot to classify, yet these sensors may not be universally available for all legged robots. Additionally, these sensors are often unresponsive to unaccounted disturbances, such as slippage, while the foot remains in contact with the ground. In this study, we propose a self-supervised representation learn-ing framework for contact detection that utilizes the standard sensor set of joint encoders without reliance on force sensor augmentations. We employ learned representations to model the stance and swing phases probabilistically. The ex-perimental results obtained confirm the efficacy of the proposed self-supervised contact detector. Our framework exhibited superior performance in comparison to supervised methods which necessitate sensor set augmentation and labeling, as well as baseline probabilistic approaches. Additionally, we make our code avail-able to the public. 1
+
+Keywords: Leg Odometry, Contact Detection, Representation Learning 
+
+## 1 Introduction 
+
+Legged robots exhibit superior mobility in unstructured environments compared to wheeled plat-forms. However, their morphology complicates state estimation. Legged odometry relies funda-mentally on the assumption that the velocity of the foot in contact with the ground is zero relative to the inertial frame [1, 2, 3, 4], during the stance phase, referred as Zero-Velocity Update (ZUPT) [5, 6]. This constraint allows kinematic chains to correct main-body velocity drift. Consequently, the accuracy of the entire downstream state estimator is bounded by the precision of the contact 
+
+> 1
+
+Project Repository 
+
+> arXiv:2606.05501v1 [cs.RO] 3 Jun 2026
+
+detection algorithm, which is a non-trivial challenge due to unmodeled contact dynamics, terrain compliance, and sensor noise. Many existing pipelines rely on Ground Reaction Force (GRF) sensors at the foot tip to determine contact [7, 8, 9, 4]. However, high-fidelity force sensors are prone to mechanical failure, suffer from shock-induced noise, and are absent on deployed minimal-sensor quadruped platforms [10]. To en-sure robustness and hardware agnosticism, we propose a contact estimator framework strictly relies on standard proprioceptive joint encoders used to obtain time series kinematic telemetry. To map these kinematic sequences to contact states without requiring GRF-based pseudo-labels, we adopt a self-supervised representation learning framework. A Denoising Autoencoder (DAE) projects the multivariate temporal kinematics into a latent space. Because the latent code is forced to reconstruct underlying leg dynamics, the latent representations of swing and stance are naturally disentangled as shown in our experiments. A Gaussian Mixture Model (GMM) is then fitted to this latent space, isolating the physical contact modes into distinct probabilistic manifolds, as visualized in Figure 1. Unlike standard binary contact classifiers, our self-supervised generative approach outputs a continu-ous posterior probability of the stance state. We integrate this probability directly into an Error-State Extended Kalman Filter (ESEKF). Instead of utilizing a constant contact threshold, the continuous belief dynamically scales the measurement covariance matrix for the ZUPT, smoothing impact tran-sients and rejecting kinematic noise during the swing phase for a better downstream leg odometry task. We evaluate the proposed framework in extensive and publicly available simulation dataset and real-world environments, quantifying performance through isolated contact classification and down-stream leg odometry drift reduction tasks. Furthermore, ablation studies expose the nonlinear topo-logical constraints of contact kinematics across varying temporal windows. The main contributions of this study are: i) A label-free, self-supervised representation learning framework that extracts continuous contact probabilities strictly from joint kinematics. ii) A dy-namic ESEKF formulation for measurement uncertainty driven by the latent generative belief. iii) 
+
+An empirical evaluation showing contact detection can be formulated as a self-supervised proba-bility density estimation task rather than classification and does not necessarily need long temporal context. 
+
+## 2 Related Work 
+
+The primary approach in leg odometry exploits the stance phase as a ZUPT [2, 3, 4]. However, methods vary in their contact detection and position estimation strategies. While many studies adopt Kalman filter-based approaches [1, 4, 11, 12, 13, 14], smoothing solutions such as factor graphs [15, 16] are increasingly utilized. When GRF is available via foot-mounted sensors, the simplest ap-proach applies hard thresholding with a constant covariance [7, 8]. However, this method oversim-plifies complex foot-terrain interactions and neglects disturbances like slippage. Other techniques [9] model GRF as a binary clustering problem using unsupervised methods like K-means. On the other hand, since GRF is not universally available, alternatives utilize joint encoder readings com-bined with forward kinematics. Probabilistic models estimate contact probability given kinematic data. Camurri et al. [17] estimate stance probability via logistic regression on joint position, veloc-ity, and torque. Hwangbo et al. [18] employ a Hidden Markov Model (HMM) on joint readings, using Monte-Carlo sampling for transition probabilities informed by a gait pattern prior. Similarly, Bledt et al. [19] implement a cyclic gait scheduler to predict future contacts. Jenelten et al. [20] also utilize an HMM, computing transition probabilities by fitting the vertical component of the estimated foot velocity to an exponential distribution to predict touchdown and liftoff events while evaluating slippage robustness. Doglegs [21] applies a Generalized Likelihood Ratio Test (GLRT) to foot acceleration and angular velocity, requiring sensor augmentation with foot-mounted IMUs. Recently, OCELOT framework [4] conducted GLRT test on the foot velocity but their method also relies on GRF signal, as well. Methods directly estimating measurement covariance require either user-defined thresholds [14] or fully differentiable estimators [22], coupling contact detection with the odometry estimator, limiting the approach’s transferability. Neural network based approaches 2are also gaining prominence. Lin et al. [23] trained a 1D CNN using kinematics for binary contact classification, generating ground truth heuristically. Another standard practice couples state esti-mators with locomotion policies within a reinforcement learning (RL) framework. These neural network-based state estimators are trained in simulation via supervised learning to provide observa-tions for control policies prior to real-world transfer. Ji et al. [24] trained an MLP state estimator to supply body velocity, foot position, and contact probability observations for a concurrently trained actor-critic locomotion policy. The State Estimator Transformer (SET) [25] adapts a GPT-based architecture [26], trained alongside a control policy to facilitate agile quadrupedal actions. Sun et al. [27] trained a CNN-based state estimator that expands the prediction space by introducing a slip state alongside swing and stance. Finally, Youm et al. [28] deployed a GRU within a similar RL framework to estimate body velocity and contact probabilities. 
+
+## 3 Methodology 
+
+In this section, we start by odometry estimator (Section 3.1) and then present the contact detectors (Section 3.2). We first develop an HMM based approach (Section 3.2.1) as unsupervised baseline followed by supervised and self-supervised neural contact detectors (Section 3.2.2). While unsu-pervised HMM and self-supervised neural detector are our contributions, supervised methods are implemented based on previous work [23, 28] as supervised baseline. 
+
+3.1 Error-State Extended Kalman Filter 
+
+Our approach estimates the robot’s odometry using an ESEKF, which decouples the system into a non-linear nominal state x and a linear error state δx, instead of directly filtering nominal states [29]. This formulation minimizes linearization errors because error states evolve more linearly than nom-inal states, particularly for variables defined on non-linear Lie group manifolds, such as orientation. (See Appendix A for the full ESEKF formulation.) The nominal state x tracks position pW ∈ R3
+
+and velocity vW ∈ R3 in world-frame, as well as the body to world rotation matrix R ∈ SO (3) ,and additive body-frame accelerometer and gyroscope biases ba, bg ∈ R3.The assumption of stance foot remains static within the world frame {W } establishes the constraint 
+
+vW 
+
+> foot
+
+= 0. The measurement function h(xk) computes the predicted world-frame velocity of the stance foot by summing the base velocity vWk with the body-relative foot velocity vB
+
+> foot ,k
+
+, at timestep 
+
+k. Given the pseudo-measurement yk = 0, the resulting innovation νk = −h(xk) used in measure-ment update and undergoes a Mahalanobis distance check to filter out non-stationary events like slippage [3] or stance with high covariance. Updates are aborted if Normalized Innovation Squared (NIS) score exceeds 3-DOF Chi-Squared test at 95% confidence level ( γ95 ). 
+
+3.2 Contact Detectors 
+
+To accurately infer unobservable contact states from noisy proprioceptive sequences, we investi-gate probabilistic modeling with Hidden Markov Model combined with a Gaussian Mixture Model (HMM-GMM) as unsupervised baseline, which is bounded by the geometric assumptions of Gaus-sian distributions on raw, non-linear kinematics. To resolve the boundary aliasing, we subsequently introduce deep neural network architectures as supervised baseline and self-supervised proposed framework to quantify the trade-off between explicit pseudo-label supervision and probabilistic spa-tial separation. While prior studies often utilize this entire input manifold (joint encoders( q, ˙q, ¨q, τ [30], and IMU) as input [23], supplying redundant or noisy features degrades generative clustering. High-dimensional inputs lead the curse of dimensionality, leading to ill-conditioned covariance matrices during GMM optimization and overfitting in supervised sequence models [31]. We use 5D subset consisting of vertical foot position relative to the base ( pB 
+
+> foot ,z
+
+), 3D foot velocity ( vB
+
+> rel
+
+) estimated by forward kinematics, and estimated calf torque ( τcalf ) for all contact detectors. (See Appendix B for details.) 
+
+3.2.1 Gaussian Mixture Model Governed Hidden Markov Model 
+
+We formulate legged robot contact detection as a Hidden Markov Model to estimate contact states from noisy kinematic time-series data. While prior work often focuses on dynamically adapting transition probabilities [18, 20], we emphasize data-driven emission modeling. 3PCA Component 1  
+
+> PCA Component 2
+> Simulation
+> PCA Component 1
+> Real World
+> Stance Swing
+
+Figure 2: Visualization of input space at first two PCA components on simulation (left) and real-world sequences (right). The raw input space does not follow bimodal Gaussian distribution. Con-tours represent the log-likelihood levels. Red and blue colors represent the pseudo-labels. The HMM is defined by a 5-tuple λ = ( X , O, B, A, π ). The hidden states are X = {swing , stance }.The observation vector is ot ∈ Rd, B defines the emission probabilities, A represents the state transition matrix, and π is the initial belief. To define the emission probabilities B, we fit an un-supervised two-component GMM to the continuous kinematic dataset, whose parameters ( μj , Σj )are optimized by Expectation Maximization. For each state j ∈ X , the class-conditional emission probability is modeled as a multivariate Gaussian: 
+
+bj (ot) = P (ot | xt = j) = N (ot; μj , Σj ). (1) The label-agnostic unsupervised clusters are mapped to physical states using kinematic constraints, where the cluster with the lower mean vertical foot position ( pBz ) and lower velocity variance is assigned to the stance state. Posterior probability estimation is calculated using forward algorithm whose details are included in the Appendix C.1. Due to calibrated probability scores from HMM-GMM, the stance belief pt(stance ) dynamically scales the measurement covariance Rt ∈ R3×3 :
+
+Rt =
+
+ 1
+
+pt(stance ) + ϵ
+
+
+
+I3×3, (2) where I is the identity matrix and ϵ ≪ 1 prevents division by zero during the swing phase. Lower belief produces higher covariance, leading effective rejection of the swing leg kinematics or un-reliable stances at the odometry update by the innovation based gating [3], without requiring hard thresholding logic. We adopt two operational modes (Offline and Online Sliding Window) for GMM fitting to address deployment constraints. (See Appendix C.1 for details.) While the HMM-GMM framework yields a continuous likelihood formulation, it is constrained by the geometric assumptions of the Gaussian distribution with convex, ellipsoidal cluster bound-aries. However, the stance and swing manifolds exhibit non-linear intersections that are not naturally disjoint, particularly at transient phases such as lift-off and touch-down, which are critical for leg odometry as we discussed in our experiments section. Figure 2 demonstrates the non-Gaussian na-ture of the raw input space. Therefore, fitting a bimodal GMM to the raw kinematic observation space results in unavoidable boundary aliasing and misclassification at the intersecting regions. The data must be projected into a latent representation space where the contact states are structurally dis-entangled and highly separable before fitting the generative model as in our proposed self-supervised neural framework. 
+
+3.2.2 Neural Contact Representation 
+
+To address the geometric limitations of raw kinematic spaces, we utilize deep neural networks to extract linearly separable features. We evaluate both supervised direct classification as baseline and self-supervised representation learning as our proposed framework. The supervised framework leverages GRF derived pseudo-labels as targets, forcing the network to explicitly map the non-linear relationship between raw kinematics and binary contact states. Conversely, the self-supervised 4framework avoids label dependency entirely. It focuses purely on representation learning, projecting the raw kinematics into a disentangled latent space designed to satisfy the geometric assumptions of the Gaussian formulation. 
+
+Supervised Neural Contact Detectors: We formulate the detection problem as a dense time-series classification task as supervised baseline. We evaluate a 1D Convolutional Neural Network (CNN) and a Gated Recurrent Unit (GRU) sequence modeling architectures. Prior to sequence extraction, the raw observation vectors ot are normalized based on training set. At each time step t, for an input vector of dimension C and window size W , the sequence is defined as Ot = [ ot−W +1 , . . . , o t] ∈ RC×W . This causal formulation ensures no future data is utilized, maintaining compatibility with real-time, online deployment constraints. Both networks output a single logit, which is mapped to a stance probability ˆpt ∈ (0 , 1) via a sigmoid activation function. We utilized two architectures for the supervised contact detection for leg odometry. A 1D CNN based architecture from Lin et al. [23] and a GRU based one from Youm et al. [28]. (See Appendix C.2 for architectural details.) For contact targets, we generate binary pseudo-labels ˜yt ∈ { 0, 1} from GRF data obtained during training data collection, depending on the noise characteristics of the source domain. In simulation, GRF signals ( Fz ) exhibit negligible noise. We utilize a strict thresholding mechanism: ˜yt = 1 if 
+
+Fz > Tsim , otherwise 0. On the other hand, in real-world, the physical robot telemetry exhibits significant sensor noise, making hard thresholding unstable. We fit a continuous HMM-GMM ex-plicitly to the 1D Fz signal. The discrete contact state is extracted from the normalized posterior belief to provide a robust pseudo-label which is immune to transient force spikes. Both networks are optimized via standard Binary Cross-Entropy (BCE) loss. 
+
+Self-Supervised Neural Contact Detectors: While supervised sequential models provide discrim-inative decision boundaries, their reliance on GRF pseudo-labels presents a critical vulnerability. To eliminate label dependency while retaining a probabilistically continuous contact belief, we propose a Denoising Autoencoder (DAE) framework coupled with a latent-space GMM. The objective of the DAE is to project the entangled kinematic window into a latent space Z where the underlying physical states (stance vs. swing) naturally disentangle by an encoder network fθ
+
+(See Figure 4 in Experiments Section). The standardized kinematic sequence Ot ∈ RC×W is ex-plicitly augmented via Gaussian noise ( N (0 , σ 2)) and uniform amplitude scaling to prevent the network from learning a trivial identity function. We evaluate both CNN and GRU architectures for 
+
+fθ . (See Appendix C.3 for architectural details.) Even though our design supports varying window sizes, we choose W = 1 by default, effectively reducing CNN architecture to MLP and GRU to a nonlinear transform. However, we keep the window size in our architecture to demonstrate the effect of varying window sizes in our ablation study. A decoder network gϕ, comprised of 1D Transposed Convolutions, reconstructs the uncorrupted original sequence from the latent code: ˆOt = gϕ(zt).The network is optimized via Mean Squared Error (MSE) reconstruction loss. By forcing the DAE to reconstruct the underlying dynamics of the leg, the latent code zt intrinsically encodes the contact mode, whose size is found as D = 16 empirically (See Appendix D), mapping distinct kinematic phases to separate manifolds in RD . To extract a continuous contact belief, we fit an unsupervised 2-component GMM to the latent representations Z which is obtained from the training set. Note that, GMM is fit to the train data during DAE training and those precomputed probability distributions are used for inference to avoid non-parallelized fitting of GMM in real-time. Since clusters lack explicit labels, we assign physical states using the identical heuristic defined in our HMM formulation. The cluster mapping to the samples with the lowest mean vertical foot position ( pz ) is designated as the stance component. 
+
+## 4 Experiments 
+
+All contact detection frameworks are evaluated across their classification performance and down-stream impact on quadruped leg odometry. We further conduct ablation studies to reveal intrinsic properties of the contact kinematics. For the experiments, TartanGround [32] simulation dataset and 56.4 6.6 6.8 7.0 7.2       
+
+> Time (s)
+> 0
+> 50
+> 100
+> 150
+> 200
+> 250
+> 300
+> Force (N)
+> 0.0
+> 0.5
+> 1.0
+> pstance
+> GRF HMM (Offline) HMM (Online) CNN GRU DAE (CNN) DAE (GRU)
+
+Figure 3: Stance probabilities across contact detectors during a slippage event. The non-zero GRF wrongfully leads supervised methods to generate high probability of stance and to overestimate the stance duration, during unstable contact (light red background). The proposed self-supervised DAE methods isolate the reliable stance period (light green background). our real world dataset on diverse terrain such as concrete, grass and rock are utilized to test our methods generalization across different kinematic models. (See Appendix D for details on datasets, default hyperparameter set and additional experiments.) We benchmark the following contact estimation pipelines: i) GRF-Thresholding (Baseline): Hard thresholding on Fz . ii) HMM-GMM (Offline vs. Online): Our unsupervised baseline which models continuous probability on raw kinematic inputs. iii) Supervised NN (CNN vs. GRU): Discrimina-tive models trained on GRF pseudo-labels. iv) Self-supervised DAE-GMM (CNN vs. GRU): The proposed label-free representation learning pipelines. 
+
+4.1 Classification Accuracy and Domain Shift 
+
+Standard evaluation protocols for leg odometry contact detection rely on classification metrics against heuristic pseudo-labels [23, 27]. We establish this comparison by evaluating isolated contact classification performance, detailed in Table 1. Supervised CNN and GRU models achieve the high-est scores on both datasets. However, all detectors exhibit performance degradation when evaluated on the physical robot due sensor noise and unmodeled terrain compliance in real-world. Table 1: Contact Classification Metrics Across Domains (Higher is better.) TartanGround (Sim) Real-World (Physical) 
+
+Method Precision Recall F1 Precision Recall F1 
+
+Supervised CNN 0.996 0.999 0.998 0.935 0.895 0.907 Supervised GRU 0.997 0.999 0.998 0.924 0.929 0.921 HMM-GMM (Offline) 0.995 0.980 0.988 0.916 0.922 0.906 
+
+HMM-GMM (Online) 0.994 0.937 0.964 0.917 0.868 0.886 Unsup. DAE (CNN) 0.983 0.994 0.988 0.809 0.967 0.868 Unsup. DAE (GRU) 0.985 0.992 0.989 0.844 0.994 0.900 Crucially, ground truth pseudo-labels rely on heuristics. Table 1 demonstrates how supervised mod-els successfully fit to these heuristics. However, we hypothesize that heuristic pseudo-labels are fundamentally inadequate for identifying the physically reliable stance of the leg during dynamic locomotion. Figure 3 demonstrates an example GRF signal and stance probabilities estimated by contact detectors, collected during an example slippage period. While supervised models generate higher probability for the section where the contact is clearly weak and robot is not standing on that leg, our self-supervised models produce zero probability of stance until robot shifts its weight to that leg. The overestimation of the stance duration by supervised methods leads to overconfi-dent measurement update and hurts filter accuracy. Consequently, in the proposed framework, we formulate contact estimation as a self-supervised continuous stance probability problem, making it more robust to slippage and noise at GRF sensor. Similar to DAE, Offline HMM-GMM also follow a similar trend but it underestimates the contact period preventing maximum correction in ESEKF. The following section demonstrates that superior classification performance on pseudo-labels does not correlate with downstream odometry accuracy. 64.2 Downstream Leg Odometry Performance 
+
+We evaluate the practical utility of continuous contact estimation via closed-loop ESEKF trajectory estimation. Trajectories are evaluated using RMSE for time-synchronized absolute errors (Absolute Trajectory Error-ATE, Absolute Heading Error-AHE), relative errors (Relative Position Error-RPE translation/rotation) [33], and time-synchronization-free geometric errors (Final Position Error-FPE, Fr´ echet Distance). (See Appendix D.1 for details.) Table 2 reports odometry errors on the TartanGround dataset. The proposed DAE (CNN) and DAE (GRU) methods achieve the lowest errors across all metrics, despite supervised methods demonstrat-ing higher pseudo-label classification accuracy (Table 1). Furthermore, supervised models under-perform the GRF thresholding baseline. This indicates that the generalization capabilities of neural networks do not compensate for the noise injected during heuristic pseudo-labeling. Table 2: Leg Odometry Performance at Simulation Dataset ↓ (Best , Second Best)                                                      
+
+> Contact Detector ATE AHE RPE Trans RPE Rot FPE Frechet (m) (deg) (%) (◦/m) (m) (m)
+> GRF Threshold 4.25 3.03 10.20 0.143 7.48 7.64 Supervised CNN 4.32 3.27 10.45 0.147 7.64 7.80 Supervised GRU 4.29 3.14 10.33 0.146 7.54 7.68 HMM-GMM (Offline) 4.50 3.45 10.72 0.146 8.13 8.28 HMM-GMM (Online) 4.88 3.86 12.41 0.181 9.07 9.25 Autoencoder CNN 4.09 2.69 9.93 0.141 7.13 7.28
+> Autoencoder GRU 4.15 2.81 10.05 0.142 7.25 7.44
+
+Table 3 details real-world odometry performance. The performance gap between the proposed DAEs and baseline methods widens on physical hardware. DAE (CNN) yields the lowest errors in all metrics, while DAE (GRU) is the second best at every metric except rotational RPE. Because real-world ground truth relies on an offline 1D GRF HMM-GMM heuristic, supervised networks trained on this data outperform GRF thresholding, reversing the trend observed in simulation. Table 3: Leg Odometry Performance at Real World Dataset ↓ (Best , Second Best)                                                      
+
+> Contact Detector ATE AHE RPE Trans RPE Rot FPE Frechet (m) (deg) (%) (◦/m) (m) (m)
+> GRF Threshold 25.36 55.12 76.21 3.33 57.24 57.07 Supervised CNN 21.95 44.67 68.42 3.24 50.95 50.76 Supervised GRU 22.16 45.45 69.37 3.25 51.47 51.37 HMM-GMM (Offline) 27.13 57.13 82.98 3.36 61.82 61.76 HMM-GMM (Online) 28.68 61.18 88.72 3.33 64.84 64.72 Autoencoder CNN 17.20 31.90 49.93 3.22 28.66 30.54
+> Autoencoder GRU 18.87 44.11 62.08 3.30 40.07 39.95
+
+The kinematic HMM-GMM baselines yield the highest errors overall, though they remain competi-tive, especially in rotational RPE. The online sliding-window variant marginally underperforms the offline model, consistent with the reduced context. To summarize, supervised models are bounded by the pseudo-labeling methods accuracy whereas unsupervised HMM-GMM method is limited due to non-Gaussian nature of the raw input space. Overall, the leg odometry experiments validate formulating contact detection as a self-supervised continuous probability density estimation task rather than supervised binary classification is a more robust approach. After all, binary contact classification is fundamentally ill-posed; even given noise-free GRF signals, unmodeled foot-terrain compliance makes binary states inadequate for high-accuracy state estimation during dynamic locomotion. 
+
+4.3 Ablation Studies Window Size and Temporal History: While time-series kinematic data typically benefits from historical context, in our experiment, increasing the input window size causes the periodic gait to dominate the latent space. This forms a nonlinear, ring-like manifold, prominently visible in the PCA projections (Figure 4, top row). Standard GMMs fail on this topology because their covariance 7ellipsoids assume an Euclidean space. Therefore, we choose window size W = 1 by default for both CNN and GRU based autoencoders. Even though periodic gait is not modeled in our approach, these periodic features may be useful when modeled as prior in a Bayesian framework [18]. To evaluate a nonlinear mapping, we applied a 2-component UMAP [34] dimensionality reduction to the latent space prior to GMM fitting. While UMAP allows GMM clustering on larger window sizes, the ring-like distribution of the periodic gait remains unavoidable (Figure 4, bottom row), which degrades contact state separation. Consequently, minimizing the history window is required to preserve a linearly separable latent space suitable for real-time GMM inference.               
+
+> (a) W= 1 (b) W= 5 (c) W= 20 (d) W= 50 (e) W= 100
+
+Figure 4: Latent space projected onto PCA (top) and UMAP (bottom) dimensions. Colors indicate pseudo contact labels. Contours represent the log-likelihood of the fitted GMM. As window size increases, cyclic gait patterns dominate the geometry, forming a nonlinear ring manifold. 
+
+Computational Latency: To benchmark computational requirements, we measured per-step in-ference latency on a desktop workstation (Intel i9-14900K CPU, NVIDIA RTX 4090 GPU). These baselines are computed without model quantization or hardware-specific acceleration. The GRF thresholding baseline executes fastest at < 1.0 ms. The kinematic HMM-GMM requires 1.3 ms for online processing and 3.0 ms offline. The proposed self-supervised DAE networks (CNN and GRU) execute in 3.0 ms, slightly faster than their supervised counterparts at 3.5 ms. All evaluated methods remain bounded within the 10 ms execution budget dictated by 100 Hz odometry control loop. 
+
+## 5 Limitations 
+
+Despite our self-supervised contact estimator exhibit improvement on alternative approaches in the literature, there is still room for improvement. First, the latent mapping discards initial sensor noise, forcing the bimodal Gaussian modeling into the assumption that latent distributions are independent of input noise. Second, even though we adopt isotropic covariance, contact slippage can be highly anisotropic. Also, to achieve better uncertainty calibration, future iterations are encouraged to re-place the deterministic DAE with a Variational Autoencoder (VAE) to formally parameterize the latent space as a continuous probability distribution. 
+
+## 6 Conclusion 
+
+This study proposes a kinematics-only, self-supervised representation learning framework for con-tact modeling in legged odometry. Evaluations against supervised and probabilistic unsupervised baselines in simulation and hardware demonstrate that ZUPT reduce state estimation drift when formulated via continuous probabilistic weighting rather than discrete binary classification thresh-olds. Furthermore, temporal augmentation of the input space biases the latent representation toward periodic gait dynamics, which can be useful to serve as formal priors within Bayesian filtering ar-chitectures. 8References 
+
+[1] R. Hartley, M. Ghaffari, R. M. Eustice, and J. W. Grizzle. Contact-aided invariant extended kalman filtering for robot state estimation. The International Journal of Robotics Research , 39 (4):402–430, 2020. [2] M. Bloesch, M. Hutter, M. A. Hoepflinger, S. Leutenegger, C. Gehring, C. D. Remy, and R. Siegwart. State estimation for legged robots-consistent fusion of leg kinematics and imu. 
+
+Robotics , 17:17–24, 2013. [3] M. Bloesch, C. Gehring, P. Fankhauser, M. Hutter, M. A. Hoepflinger, and R. Siegwart. State estimation for legged robots on unstable and slippery terrain. In 2013 IEEE/RSJ International Conference on Intelligent Robots and Systems , pages 6058–6064, 2013. doi:10.1109/IROS. 2013.6697236. [4] E. Girgin and C. Kilic. Ocelot: Odometry and contact estimation for legged robots, 2026. URL 
+
+https://arxiv.org/abs/2605.21863 .[5] I. Skog, P. Handel, J.-O. Nilsson, and J. Rantakokko. Zero-velocity detection—an algorithm evaluation. IEEE Transactions on Biomedical Engineering , 57(11):2657–2666, 2010. doi: 10.1109/TBME.2010.2060723. [6] C. Kilic, N. Ohi, Y. Gu, and J. N. Gross. Slip-based autonomous zupt through gaussian process to improve planetary rover localization. IEEE robotics and automation letters , 6(3):4782– 4789, 2021. [7] L. Hohmeyer, M. Popescu, I. Bergonzani, D. Mronga, and F. Kirchner. Inekformer: A hybrid state estimator for humanoid robots. In 2025 IEEE International Conference on Advanced Robotics (ICAR) , pages 833–840. IEEE, 2025. [8] M. F. Fallon, M. Antone, N. Roy, and S. Teller. Drift-free humanoid state estimation fusing kinematic, inertial and lidar sensing. In 2014 IEEE-RAS International Conference on Hu-manoid Robots , pages 112–119. IEEE, 2014. [9] N. Rotella, S. Schaal, and L. Righetti. Unsupervised contact learning for humanoid estimation and control. In 2018 IEEE International Conference on Robotics and Automation (ICRA) ,pages 411–417. IEEE, 2018. [10] G. Bledt, M. J. Powell, B. Katz, J. Di Carlo, P. M. Wensing, and S. Kim. Mit cheetah 3: Design and control of a robust, dynamic quadruped robot. In 2018 IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS) , pages 2245–2252. IEEE, 2018. [11] R. Hartley, J. Mangelson, L. Gan, M. G. Jadidi, J. M. Walls, R. M. Eustice, and J. W. Grizzle. Legged robot state-estimation through combined forward kinematic and preintegrated contact factors. In 2018 IEEE International Conference on Robotics and Automation (ICRA) , pages 4422–4429. IEEE, 2018. [12] S. Teng, M. W. Mueller, and K. Sreenath. Legged robot state estimation in slippery environ-ments using invariant extended kalman filter with velocity update. In 2021 IEEE International Conference on Robotics and Automation (ICRA) , pages 3104–3110. IEEE, 2021. [13] H. M. S. Santana, J. C. V. Soares, Y. Nistic` o, M. A. Meggiolaro, and C. Semini. Proprio-ceptive state estimation for quadruped robots using invariant kalman filtering and scale-variant robust cost functions. In 2024 IEEE-RAS 23rd International Conference on Humanoid Robots (Humanoids) , pages 213–220. IEEE, 2024. [14] K.-H. Kim, D. Ahn, D.-h. Lee, J. Yoon, and D. J. Hyun. Adaptive invariant extended kalman filter for legged robot state estimation. In 2025 IEEE/RSJ International Conference on Intelli-gent Robots and Systems (IROS) , pages 3063–3068. IEEE, 2025. 9[15] J.-H. Kim, S. Hong, G. Ji, S. Jeon, J. Hwangbo, J.-H. Oh, and H.-W. Park. Legged robot state estimation with dynamic contact event information. IEEE Robotics and Automation Letters , 6 (4):6733–6740, 2021. [16] Z. Yoon, J.-H. Kim, and H.-W. Park. Invariant smoother for legged robot state estimation with dynamic contact event information. IEEE Transactions on Robotics , 40:193–212, 2023. [17] M. Camurri, M. Fallon, S. Bazeille, A. Radulescu, V. Barasuol, D. G. Caldwell, and C. Semini. Probabilistic contact estimation and impact detection for state estimation of quadruped robots. 
+
+IEEE Robotics and Automation Letters , 2(2):1023–1030, 2017. [18] J. Hwangbo, C. D. Bellicoso, P. Fankhauser, and M. Hutter. Probabilistic foot contact esti-mation by fusing information from dynamics and differential/forward kinematics. In 2016 IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS) , pages 3872– 3878. IEEE, 2016. [19] G. Bledt, P. M. Wensing, S. Ingersoll, and S. Kim. Contact model fusion for event-based locomotion in unstructured terrains. In 2018 IEEE International Conference on Robotics and Automation (ICRA) , pages 4399–4406. IEEE, 2018. [20] F. Jenelten, J. Hwangbo, F. Tresoldi, C. D. Bellicoso, and M. Hutter. Dynamic locomotion on slippery ground. IEEE Robotics and Automation Letters , 4(4):4170–4176, 2019. [21] Y. Wu, J. Kuang, S. Khorshidi, X. Niu, L. Klingbeil, M. Bennewitz, and H. Kuhlmann. Doglegs: Robust proprioceptive state estimation for legged robots using multiple leg-mounted imus. arXiv preprint arXiv:2503.04580 , 2025. [22] M. Baumgartner, D. M¨ uller, A. Serifi, R. Grandia, E. Knoop, M. Gross, and M. B¨ acher. Coco-inekf: State estimation with learned contact covariances in dynamic, contact-rich scenarios. 
+
+arXiv preprint arXiv:2605.15122 , 2026. [23] T.-Y. Lin, R. Zhang, J. Yu, and M. Ghaffari. Legged robot state estimation using invariant kalman filtering and learned contact events. arXiv preprint arXiv:2106.15713 , 2021. [24] G. Ji, J. Mun, H. Kim, and J. Hwangbo. Concurrent training of a control policy and a state estimator for dynamic and robust legged locomotion. IEEE Robotics and Automation Letters ,7(2):4630–4637, 2022. [25] C. Yu, Y. Yang, T. Liu, Y. You, M. Zhou, and D. Xiang. State estimation transformers for agile legged locomotion. In 2024 IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS) , pages 6810–6817. IEEE, 2024. [26] A. Radford, K. Narasimhan, T. Salimans, I. Sutskever, et al. Improving language understanding by generative pre-training. 2018. [27] P. Sun, Q. Li, H. Hu, J. Qiang, W. Wu, and X. Luo. Proprioceptive slip detection and state estimation of multi-legged robots in slippery scenarios. Frontiers of Mechanical Engineering ,20(5):36, 2025. [28] D. Youm, H. Oh, S. Choi, H. Kim, S. Jeon, and J. Hwangbo. Legged robot state estima-tion with invariant extended kalman filter using neural measurement network. In 2025 IEEE International Conference on Robotics and Automation (ICRA) , pages 670–676. IEEE, 2025. [29] J. Sola. Quaternion kinematics for the error-state kalman filter. arXiv preprint arXiv:1711.02508 , 2017. [30] B. Jin, C. Sun, A. Zhang, N. Ding, J. Lin, G. Deng, Z. Zhu, and Z. Sun. Joint torque estimation toward dynamic and compliant control for gear-driven torque sensorless quadruped robot. In 
+
+2019 IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS) , pages 4630–4637. IEEE, 2019. 10 [31] A. Zimek, E. Schubert, and H.-P. Kriegel. A survey on unsupervised outlier detection in high-dimensional numerical data. Statistical Analysis and Data Mining: The ASA Data Science Journal , 5(5):363–387, 2012. [32] M. Patel, F. Yang, Y. Qiu, C. Cadena, S. Scherer, M. Hutter, and W. Wang. Tartanground: A large-scale dataset for ground robot perception and navigation. In 2025 IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS) , pages 20524–20531. IEEE, 2025. [33] J. Sturm, N. Engelhard, F. Endres, W. Burgard, and D. Cremers. A benchmark for the evalu-ation of rgb-d slam systems. In 2012 IEEE/RSJ international conference on intelligent robots and systems , pages 573–580. IEEE, 2012. [34] L. McInnes, J. Healy, and J. Melville. Umap: Uniform manifold approximation and projection for dimension reduction. arXiv preprint arXiv:1802.03426 , 2018. [35] J. Sola, J. Deray, and D. Atchuthan. A micro lie theory for state estimation in robotics. arXiv preprint arXiv:1812.01537 , 2018. [36] M. Hutter, C. Gehring, D. Jud, A. Lauber, C. D. Bellicoso, V. Tsounis, J. Hwangbo, K. Bodie, P. Fankhauser, M. Bloesch, et al. Anymal-a highly mobile and dynamic quadrupedal robot. In 2016 IEEE/RSJ international conference on intelligent robots and systems (IROS) , pages 38–44. IEEE, 2016. 11 A Error State Extended Kalman Filter Design 
+
+Instead of directly filtering nominal states, we utilize ESEKF, which decouples the system into a non-linear nominal state x and a linear error state δx. This formulation minimizes linearization errors because error states evolve more linearly than nominal states, particularly for variables defined on non-linear Lie group manifolds, such as orientation. 
+
+Kinematics: Forward kinematics fk i and the analytical Jacobian Jv,i transform the joint configu-ration qi ∈ RN and joint velocities ˙qi of leg i into the foot position pBi ∈ R3 and linear velocity 
+
+vBi ∈ R3 relative to the body frame {B}:
+
+pBi = fk i(qi), vBi = Jv,i (qi) ˙ qi (3) 
+
+State Definition: The nominal state x tracks world-frame position pW ∈ R3 and velocity vW ∈
+
+R3, the {B} to {W } rotation matrix R ∈ SO (3) , alongside additive body-frame accelerometer and gyroscope biases ba, bg ∈ R3. The corresponding error state δx is modeled as a zero-mean Gaussian: 
+
+δx = [ δpT , δ vT , δ θT , δ bTa , δ bTg ]T ∈ R15 (4) True states are synthesized by injecting the error state into the nominal state, utilizing the exponential map Exp (·) : R3 → SO (3) for rotation matrices [35]: 
+
+ptrue = pW +δp, vtrue = vW +δv, Rtrue = RExp (δθ), ba, true = ba+δba, bg, true = bg +δbg
+
+(5) 
+
+Prediction Step (Propagation): Nominal states advance by integrating raw IMU readings, araw and 
+
+ωraw , across the time step ∆t. Bias compensation and Euler integration proceed simultaneously, incorporating the global gravity vector gW = [0 , 0, −g]T :
+
+ωB = ωraw − bg,k −1 Rk = Rk−1 · Exp (ωB ∆t)
+
+aB = araw − ba,k −1 vWk = vWk−1 + aW ∆t
+
+aW = Rk−1aB + gW pWk = pWk−1 + vWk−1∆t + 0 .5aW ∆t2
+
+(6) Error covariance propagation follows Pk = FdPk−1FTd + Qd. The discrete transition matrix 
+
+Fd ≈ I + Fc∆t and discrete process noise Qd = GQ cGT ∆t originate from the continuous-time error dynamics Fc and noise mapping G ([·]× denotes the skew-symmetric operator; Qc ∈ R12 ×12 
+
+is the continuous noise covariance): 
+
+Fc =
+
+
+
+0 I 0 0 00 0 −R[aB ]× −R 00 0 −[ωB ]× 0 −I0 0 0 0 00 0 0 0 0
+
+ , G =
+
+
+
+0 0 0 0 
+
+−R 0 0 0 0 −I 0 0 0 0 I 0 0 0 0 I 
+
+ (7) 
+
+Correction Step (Zero-Velocity Update): Fundamental kinematic assumption of leg odometry relies on stance foot remains static within the world frame {W }, establishing the constraint vW 
+
+> foot ,i
+
+=
+
+0. The measurement function h(xk) computes the predicted world-frame velocity of the stance foot by superimposing the base velocity vWk with the body-relative foot velocity vB
+
+> rel ,i
+
+. For each foot i,measurement Jacobian Hk = ∂h/∂δ x ∈ R3×15 is formulated as: 
+
+h(xk) = vWk + RkvB
+
+> rel ,i
+
+, vB 
+
+> rel ,i
+
+= ωB × pBi + Jv,i (qi) ˙ qi
+
+Hk = 03×3 I3×3 −Rk[vB
+
+> rel ,i
+
+]× 03×3 Rk[pBi ]×
+
+ (8) Given the pseudo-measurement yk = 0, the resulting innovation νk = −h(xk) undergoes a Ma-halanobis distance check to filter out non-stationary events like slippage [3] or stance with high covariance. Updates are aborted if νTk S−1 
+
+> k
+
+νk > γ 95 , where Sk = HkPkHTk + Rk defines the inno-vation covariance. Upon acceptance, the optimal Kalman gain Kk is evaluated to extract the state 12 correction δx+, and the posterior covariance P+ 
+
+> k
+
+is updated via the numerically stable Joseph form: 
+
+Kk = PkHTk S−1 
+
+> k
+
+, δx+ = Kkνk
+
+P+ 
+
+> k
+
+= ( I − KkHk)Pk(I − KkHk)T + KkRkKTk
+
+(9) Ultimately, the nominal state absorbs the calculated corrections. Linear variables are updated via standard addition, whereas the rotation matrix relies on the Lie group exponential map: 
+
+R+ = RExp (δθ+), z+ = z + δz+ ∀z ∈ { p, v, ba, bg } (10) 
+
+## B Kinematic Feature Selection 21.5%  
+
+> 5.1% 16.4%
+> 19.7%
+> 11.2%
+> 17.7%
+> Mutual Information
+> 10.2%
+> 33.1%
+> 19.3%
+> 34.7%
+> Leave-1-Out (F1 Drop)
+> 16.1%
+> 5.5%
+> 24.0%
+> 26.8%
+> 5.8% 15.9%
+> Random Forest Impurity
+> ax
+> ay
+> az
+> ωx
+> ωy
+> ωz
+> τcalf
+> τhip
+> τthigh
+> pfoot_x
+> pfoot_y
+> pfoot_z
+> vfoot_x
+> vfoot_y
+> vfoot_z
+
+Figure 5: Feature Selection outputs ranking the predictive power of kinematic variables relative to the binary Ground Reaction Force (GRF) contact state. The standard proprioceptive sensor suite for quadrupedal robots (joint encoders and IMU) yields a dense observation space comprising joint angles ( q), velocities ( ˙q), accelerations ( ¨q), estimated torques ( τ ) [30], base linear acceleration ( a), and angular velocity ( ω). To isolate a minimal, high-signal kinematic subset S capable of reproducing the GRF-derived contact distributions, we exe-cuted a tripartite feature selection protocol directly against binary GRF pseudo-labels: 
+
+Mutual Information (MI): A non-parametric filter method quantifying the non-linear dependency (in bits) between individual continuous kinematic signals and the discrete contact labels. 
+
+Random Forest (RF) Importance: A predictive ensemble method ranking features based on the Mean Decrease in Gini Impurity when trained to classify the contact state. 
+
+Leave-One-Out (L1O) Ablation: A wrapper method evaluating the structural importance of fea-tures within the generative model. The baseline 2-state GMM-HMM is iteratively re-fitted with one feature masked. The structural importance is quantified by the absolute degradation in the F1-score relative to the full-state baseline. As illustrated in Figure 5, higher-order derivatives susceptible to high-frequency noise exhibit negligible predictive utility. The consensus across all three metrics identified an optimal, com-pact 5-dimensional subset: vertical foot position relative to the base ( pfoot z ), 3D foot velocity (vfoot x , v foot y , v foot z ), and estimated calf torque ( τcalf ). This subset serves as the observation vec-tor ot for all subsequent estimation frameworks. 13 C Contact Detectors 
+
+C.1 HMM - GMM 
+
+State estimation is performed online via a recursive Bayesian filter. The belief pt(j) = P (xt = j |
+
+o1: t) is updated at each time step t using the forward algorithm: 
+
+pt(j) = η b j (ot) X
+
+> i∈X
+
+pt−1(i)aij , (11) where η is a normalization factor ensuring P 
+
+> j∈X
+
+pt(j) = 1 , and aij = P (xt = j | xt−1 = i).The transition probabilities A are held constant and act as a tuning parameter to regulate the filter’s sensitivity to state switching. We have two operational modes for fitting the emission probabilities to address deployment con-straints. The Offline (Batch) mode fits GMM once over the entire trajectory prior to state estimation. This provides a global, robust, sequence specific emission model but lacks real-time adaptability. On the other hand, Online (Sliding Window) approach is utilized for real-time deployment. The GMM is continuously re-fitted over a sliding window of length N at a specified update frequency. Sliding window is required for both real-time performance and it allows the emission probabilities to dynamically adapt to varying terrain properties. Degenerate cases violating the bimodal distribution assumption such as staying stationary are detected by thresholding standard deviation of the vertical foot position, σ(pz ) then the system reverts to a precomputed nominal GMM. 
+
+C.2 Supervised Architectures 
+
+Our CNN based architecture is a 1D CNN processes the sequence using two consecutive convo-lutional blocks. We follow the exact architecture of Lin et al. [23] for comparison. Each block consists of two stacked convolutional layers (kernel size 3, padding configured to preserve length) followed by max pooling (kernel size 2, stride 2) and dropout ( p = 0 .5). The pooled temporal features are flattened and passed through a Multi-Layer Perceptron (MLP) with hidden dimensions 
+
+[2048 , 512 , 1] .Our other architecture is a recurrent architecture processes the input sequentially using a single-layer GRU with a hidden state dimension of 128. To isolate the current state prediction, only the hidden state of the final sequence timestep is extracted. This vector is processed by an MLP with hidden dimensions [256 , 128 , 1] utilizing dropout ( p = 0 .5) between linear layers. Similar to previous architecture, we follow the exact architecture of Youm et al. [28] for this one too. 
+
+C.3 Self-Supervised Architectures 
+
+The autoencoder processes a kinematic input tensor X ∈ RB×W ×D through an asymmetric sequence-to-sequence topology, utilizing one of two mutually exclusive encoders to generate a latent vector z ∈ R16 .
+
+Encoder Topologies 
+
+• CNN Encoder: A 3-layer 1D Convolutional stack ( Cout = {32 , 64 , 128 }, K = {5, 5, 3},
+
+S = {2, 2, 2}) with GELU activations. The final feature map is flattened and linearly projected to z.• GRU Encoder: A 1-layer GRU ( Hdim = 64 ). The terminal hidden state h20 is linearly projected directly to z.
+
+Convolutional Decoder The latent vector z is linearly expanded and reshaped into D0 ∈
+
+R128 ×Lbase . The sequence is upsampled to the original dimensions via a 3-layer 1D Transposed Convolution stack: • Layer 1: Cin = 128 , C out = 64 , K = 3 , S = 2 , GELU 14 • Layer 2: Cin = 64 , C out = 32 , K = 5 , S = 2 , GELU • Layer 3: Cin = 32 , C out = 5 , K = 5 , S = 2 , Linear To enforce exact dimensional alignment, the base sequence length Lbase and ConvTranspose1d output paddings are determined via exhaustive search during network initialization. 
+
+## D Experimental Details 
+
+In our experiments, all models are optimized using Adam optimizer on train set and best check-point is decided using lowest validation loss, per dataset. Hyperparameters are selected via the best performing configuration at the downstream leg odometry task on validation set. 
+
+TartanGround (Simulation): 240 sequences from the TartanGround dataset [32] collected using the ANYmal robot [36]. This comprises 8 hours and 23.5 km of locomotion data across 6 terrain profiles. Ground truth contact states are derived from noise-free simulated GRF ( Fz ). 
+
+Real-World Domain: Comprises 25 minutes and 1.10 km of data recorded on the Unitree Go2 quadruped traversing concrete (470m), grass (500m), and rock (130m), which is subject to slip-page frequently. Two distinct locomotion controllers are used to induce gait diversity. Absolute time synchronized RTK GPS (5 Hz, sub-centimeter precision) provides ground truth trajectories for odometry evaluation. For the real world dataset, pseudo-labels are generated via an offline HMM-GMM method fitted exclusively to the 1D GRF signal for the real world dataset, as standard hard thresholding fails under sensor noise during the swing phase. 
+
+Default Hyperparameters: 
+
+By default, we set window size ( W ) 20 for supervised CNN and GRU and 1 for DAE CNN and DAE GRU, effectively reducing CNN to MLP and GRU to a nonlinear layer. However, we keep the architecture the same to experiment over varying window sizes in our ablation experiments. Also, latent dimension is 16 for both DAE CNN and DAE GRU. The GMMs for DAEs are fitted during DAE training and kept fixed during inference. Therefore, both DAE are Online by design. HMM-GMM method’s online setting used sliding window of size 500 and refitted at every 250 samples. GRF thresholds are 3 and 30 for simulation and real-world datasets, respectively. The pt(stance )
+
+calculated as Fz 
+
+> T
+
+clampped between 0 and 1. 
+
+D.1 Evaluation Metric Definitions 
+
+Let the ground truth trajectory be defined as a sequence of poses P = {p1, p 2, . . . , p N }, where 
+
+pi ∈ Rd (d ∈ { 2, 3}). Let the estimated trajectory, synchronized to the ground truth timestamps via linear interpolation, be ˆP = {ˆp1, ˆp2, . . . , ˆpN }. The initial states are perfectly aligned such that 
+
+p1 = ˆ p1 and the initial coordinate frames are identical. For angular metrics, let θi and ˆθi denote the headings derived from the sequential spatial displace-ments of P and ˆP , respectively. Let wrap (·) denote angular normalization to the interval [−π, π ].
+
+D.1.1 Absolute Trajectory Error (ATE) 
+
+ATE evaluates the global consistency of the trajectory by computing the Root Mean Square Error (RMSE) of the synchronized Euclidean position differences. ATE =
+
+vuut 1
+
+N
+
+> N
+
+X
+
+> i=1
+
+∥pi − ˆpi∥22 (12) 15 D.1.2 Absolute Heading Error (AHE) 
+
+AHE computes the RMSE of the absolute difference between the ground truth and predicted head-ings. AHE =
+
+vuut 1
+
+N − 1 
+
+> N−1
+
+X
+
+> i=1
+
+wrap (ˆθi − θi)2 (13) 
+
+D.1.3 Relative Pose Error (RPE) 
+
+RPE measures the local drift over a predefined interval. Let S denote the set of valid index pairs (i, j )
+
+such that the traveled path distance between pi and pj corresponds to a fixed evaluation window ∆.Let R(θ) ∈ SO (d) represent the rotation matrix constructed from heading θ.The translational RPE evaluates the relative spatial drift by comparing local displacements, normal-ized by the interval distance, expressed as a percentage: RPE trans =
+
+vuuut 1
+
+|S|
+
+X
+
+> (i,j )∈S
+
+∥R(θi)−1(pj − pi) − R(ˆθi)−1(ˆ pj − ˆpi)∥2
+
+∆
+
+!2
+
+× 100 (14) The rotational RPE evaluates the local heading drift per unit distance, expressed in degrees per meter: RPE rot =
+
+vuuut 1
+
+|S|
+
+X
+
+> (i,j )∈S
+
+wrap  (ˆθj − ˆθi) − (θj − θi)
+
+∆
+
+!2
+
+× 180 
+
+π (15) 
+
+D.1.4 Final Position Error (FPE) 
+
+FPE computes the terminal drift of the system. FPE = ∥pN − ˆpN ∥2 (16) 
+
+D.1.5 Discrete Fr´ echet Distance 
+
+The discrete Fr´ echet distance evaluates the structural shape similarity of the paths independent of temporal alignment. Let A and B represent the discrete spatial sequences of P and ˆP . Let C
+
+represent the set of all monotonically ordered index couplings (uk, v k) that traverse A and B.Fr´ echet (A, B ) = min  
+
+> C
+
+max   
+
+> (uk,v k)∈C
+
+∥Auk − Bvk ∥2 (17) 
+
+## E Additional Experiments 
+
+E.1 Effect of Window Size ( W )
+
+Consistent with our analysis on the latent space (Figure 4) we achieve the best performance across all metrics when the window size is the smallest ( W = 1 ). The details of the error metrics across different window sizes are summarized in Table 4. 
+
+E.2 Effect of Latent Dimensionality ( D)
+
+We evaluated the DAE reconstruction MSE and GMM Silhouette Score across D ∈{2, 4, 8, 16 , 32 , 64 }. As shown in Figure 6, D < 4 forces excessive compression, increasing MSE. 
+
+D > 4 does not provide additional separation at the latent space. However, since it yields the lowest errors on DAE CNN, we keep the latent size D = 16 to keep our hyperparameter search protocol consistent. 16 Table 4: Effect of Window Size on Leg Odometry ↓ (Best , Second Best) 
+
+Window Size ATE AHE RPE Trans RPE Rot FPE Frechet (m) (deg) (%) (◦/m) (m) (m) 
+
+1 4.09 2.69 9.93 0.141 7.13 7.28 
+
+5 19.83 22.38 40.60 0.581 32.69 33.37 20 12.15 6.14 23.96 0.236 18.73 19.53 50 43.95 55.35 80.08 1.319 66.76 67.72 100 51.47 92.08 98.70 3.153 85.24 87.81 
+
+(a) LD: 2 (b) LD: 4 (c) LD: 8 (d) LD: 16 (e) LD: 32 
+
+Figure 6 Table 5: Autoencoder CNN Latent Dimension Comparison ↓ (Best , Second Best) 
+
+Latent Dim. ATE AHE RPE Trans RPE Rot FPE Frechet (m) (deg) (%) (◦/m) (m) (m) 
+
+2 13.99 17.03 31.98 0.462 24.13 24.70 4 4.72 3.54 10.75 0.165 7.50 7.67 8 4.13 2.88 10.06 0.142 7.24 7.39 16 4.13 2.79 10.00 0.141 7.21 7.39 
+
+32 4.16 2.87 10.02 0.141 7.28 7.46 64 13.54 15.67 27.88 0.452 22.33 22.75 
+
+Table 6: Autoencoder GRU Latent Dimension Comparison ↓ (Best , Second Best) 
+
+Latent Dim. ATE AHE RPE Trans RPE Rot FPE Frechet (m) (deg) (%) (◦/m) (m) (m) 
+
+2 5.33 3.82 11.99 0.166 8.60 8.87 4 4.62 2.54 10.70 0.139 7.93 8.14 8 4.16 2.82 10.06 0.141 7.27 7.46 16 4.19 2.90 10.12 0.142 7.31 7.50 32 4.15 2.85 10.06 0.142 7.26 7.46 64 4.13 2.78 9.99 0.141 7.22 7.39 
+
+17
