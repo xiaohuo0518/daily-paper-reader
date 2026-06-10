@@ -1,0 +1,317 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-06-10T22:51:16.707181+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 2,
+    "deep_divecandidates": 1,
+    "deep_cap": 7,
+    "deep_selected": 1,
+    "quick_candidates": 6,
+    "quick_skim_target": 12,
+    "quick_selected": 6
+  },
+  "deep_dive": [
+    {
+      "id": "2606.10918v1",
+      "source": "arxiv",
+      "title": "Task Robustness via Re-Labelling Vision-Action Robot Data",
+      "abstract": "The recent trend in scaling models for robot learning has resulted in impressive policies that can perform various manipulation tasks and generalize to novel scenarios. However, these policies continue to struggle with following instructions, likely due to the limited linguistic and action sequence diversity in existing robotics datasets. This paper introduces Task Robustness via Re-Labelling Vision-Action Robot Data (TREAD), a scalable framework that leverages large Vision-Language Models (VLMs) to augment existing robotics datasets without additional data collection, harnessing the transferable knowledge embedded in these models. Our approach leverages a pretrained VLM through three stages: generating semantic sub-tasks from original instruction labels and initial scenes, segmenting demonstration videos conditioned on these sub-tasks, and producing diverse instructions that incorporate object properties, effectively decomposing longer demonstrations into grounded language-action pairs. We further enhance robustness by augmenting the data with linguistically diverse versions of the text goals. Evaluations on LIBERO demonstrate that policies trained on our augmented datasets exhibit improved performance on novel, unseen tasks and goals. Our results show that TREAD enhances both planning generalization through trajectory decomposition and language-conditioned policy generalization through increased linguistic diversity.",
+      "authors": [
+        "Artur Kuramshin",
+        "Özgür Aslan",
+        "Cyrus Neary",
+        "Glen Berseth"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.LG"
+      ],
+      "published": "2026-06-09T14:28:22+00:00",
+      "link": "https://arxiv.org/pdf/2606.10918v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "VLM-based dataset relabeling for robot learning data augmentation",
+      "llm_evidence_cn": "基于VLM的机器人学习数据集重标注增强",
+      "llm_evidence": "基于VLM的机器人学习数据集重标注增强",
+      "canonical_evidence": "基于VLM的机器人学习数据集重标注增强",
+      "llm_tldr_en": "TREAD uses VLMs to augment vision-action robot datasets by generating semantic sub-tasks and relabeling, improving instruction following without extra data collection.",
+      "llm_tldr_cn": "机器人策略在遵循指令上存在困难，原因之一是数据集多样性不足。本文提出TREAD框架，利用预训练VLM分三阶段重标注现有数据：生成语义子任务、重新标注初始指令等，从而在不增加采集成本的情况下提升策略鲁棒性。实验表明该方法有效提高了指令跟随能力，为机器人数据集构建提供了新思路。",
+      "llm_tldr": "机器人策略在遵循指令上存在困难，原因之一是数据集多样性不足。本文提出TREAD框架，利用预训练VLM分三阶段重标注现有数据：生成语义子任务、重新标注初始指令等，从而在不增加采集成本的情况下提升策略鲁棒性。实验表明该方法有效提高了指令跟随能力，为机器人数据集构建提供了新思路。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "quick_skim": [
+    {
+      "id": "2606.08922v1",
+      "source": "arxiv",
+      "title": "PTDL:Multi-Terrain Fall Recovery via Phase-Terrain Decoupled Learning",
+      "abstract": "Humanoid robots can fall on slopes, gravel, and uneven ground in unstructured environments. We target integrated fall recovery and locomotion: rebuilding balance from a fallen state using proprioception alone and resuming velocity-commanded walking at the fall site. Prior methods often stop at quasi-static rise, neglect the post-fall ground-contact phase, or, when trained on mixed terrains without separating recovery and locomotion phases or per-surface constraints, collapse to a single compromise get-up across surfaces. We propose Phase--Terrain Decoupled Learning (PTDL), which decouples training supervision along phase and terrain axes while deploying one proprioceptive policy. On the phase axis, projected-gravity-gated dual motion-prior discriminators and a probe-to-walk transition link post-fall recovery to commanded walking. On the terrain axis, terrain-stratified recovery shaping assigns surface-specific training supervision on flat ground, gravel, and slopes; terrain labels are training-only and withheld from policy observations, enabling implicit post-fall strategy selection at deployment. We validate PTDL on a 29-DoF Unitree G1 across flat ground, gravel, and slopes up to 20 degrees in simulation and on hardware, achieving stable cross-terrain recovery, smooth recovery-to-locomotion transitions, and differentiated post-fall rise behaviors under one deployed policy.",
+      "authors": [
+        "Xiaoyu Xu",
+        "Zhiming Chen",
+        "Yuenan Zhao",
+        "Ran Song",
+        "Wei Zhang"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-06-08T02:01:08+00:00",
+      "link": "https://arxiv.org/pdf/2606.08922v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "fall recovery for humanoid robots using proprioceptive signals",
+      "llm_evidence_cn": "利用本体感受信号实现人形机器人跌倒恢复",
+      "llm_evidence": "利用本体感受信号实现人形机器人跌倒恢复",
+      "canonical_evidence": "利用本体感受信号实现人形机器人跌倒恢复",
+      "llm_tldr_en": "Proposes Phase-Terrain Decoupled Learning (PTDL) for humanoid fall recovery using only proprioception, enabling terrain-aware, velocity-commanded walking from a fallen state.",
+      "llm_tldr_cn": "该论文针对人形机器人在不平坦地形上的跌倒恢复问题，提出了阶段-地形解耦学习（PTDL）方法。该方法仅利用本体感受信号（如关节角度、IMU）来重建平衡，并在跌倒现场恢复速度跟随行走。PTDL通过解耦训练监督的相位和地形维度，部署单一的基于本体感受的策略。实验表明，该方法在多种地形上实现了比现有方法更鲁棒的跌倒恢复与行走。这项工作为基于本体感受的人形机器人故障（跌倒）恢复提供了有效解决方案。",
+      "llm_tldr": "该论文针对人形机器人在不平坦地形上的跌倒恢复问题，提出了阶段-地形解耦学习（PTDL）方法。该方法仅利用本体感受信号（如关节角度、IMU）来重建平衡，并在跌倒现场恢复速度跟随行走。PTDL通过解耦训练监督的相位和地形维度，部署单一的基于本体感受的策略。实验表明，该方法在多种地形上实现了比现有方法更鲁棒的跌倒恢复与行走。这项工作为基于本体感受的人形机器人故障（跌倒）恢复提供了有效解决方案。",
+      "llm_tags": [
+        "query:humanoid-ood"
+      ],
+      "matched_query_tag": "query:humanoid-ood",
+      "matched_query_text": "humanoid robot fault diagnosis using proprioceptive signals",
+      "matched_requirement_id": "req-9",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2606.05880v1",
+      "source": "arxiv",
+      "title": "TAGA: Terrain-aware Active Gaze Learning for Generalizable Agile Humanoid Locomotion",
+      "abstract": "Agile humanoid locomotion across diverse challenging terrain demands both wide perceptual coverage and precise local geometry understanding. Motivated by the way humans selectively look at relevant terrain during locomotion, we introduce TAGA, a Terrain-aware Active Gaze learning framework for Attention-based humanoid control. By fusing vision, proprioception, and motion commands, our framework guides the model to learn anticipatory cues and actively attend to specific areas of the height scan, selectively using these informative regions for the downstream network. This adaptively increases the information density of observations under tight onboard computational constraints, thus enabling fine-grained perceptive locomotion over larger-scale terrains. We find that such gaze behaviors can naturally emerge through reinforcement learning alone, without requiring additional supervision or explicit guidance, significantly improve training efficiency. As a result, the trained policy demonstrates robust and generalizable locomotion in simulation and on hardware, including reliable terrain-aware foothold selection, elevated-platform traversal, competitive sparse-foothold traversal, and the largest reported real-world gap traversal distance of 1.2m among perceptive humanoid locomotion systems, while maintaining stability under severe perceptual disturbances and environmental interference.",
+      "authors": [
+        "Peizhuo Li",
+        "Hongyi Li",
+        "Mingfeng Fan",
+        "Fangzhou Xu",
+        "Shuhao Liao",
+        "Yuxuan Ma",
+        "Zicheng Zeng",
+        "Ze Wang",
+        "Yongbin Jin",
+        "Yuhong Cao",
+        "Hongtao Wang",
+        "Guillaume Sartoretti"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-06-04T08:52:56+00:00",
+      "link": "https://arxiv.org/pdf/2606.05880v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "active gaze learning for efficient humanoid locomotion under tight compute constraints",
+      "llm_evidence_cn": "在严格计算约束下的人形机器人主动注视学习",
+      "llm_evidence": "在严格计算约束下的人形机器人主动注视学习",
+      "canonical_evidence": "在严格计算约束下的人形机器人主动注视学习",
+      "llm_tldr_en": "TAGA fuses vision, proprioception, and motion commands with attention to selectively attend to relevant terrain regions, enabling agile humanoid locomotion under tight onboard compute.",
+      "llm_tldr_cn": "人形机器人需要在有限计算资源下实现敏捷运动。本文提出TAGA，融合视觉、本体感受和运动命令，学习主动关注高度扫描中的相关区域，提升信息密度。该方法在多种地形上实现高效感知运动，验证了在边缘设备上部署的可行性，为人形机器人边缘部署研究提供了参考。",
+      "llm_tldr": "人形机器人需要在有限计算资源下实现敏捷运动。本文提出TAGA，融合视觉、本体感受和运动命令，学习主动关注高度扫描中的相关区域，提升信息密度。该方法在多种地形上实现高效感知运动，验证了在边缘设备上部署的可行性，为人形机器人边缘部署研究提供了参考。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "edge deployment for humanoid robots",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2606.10340v1",
+      "source": "arxiv",
+      "title": "OMG: Omni-Modal Motion Generation for Generalist Humanoid Control",
+      "abstract": "Humanoid whole-body control has made significant progress in recent years, yet existing approaches remain limited to few-skill policies with heavy reward engineering, or motion trackers that are difficult to extend to new input modalities. We argue that the key to general-purpose humanoid control is to build a scalable brain, a module capable of reasoning with diverse conditioning modalities, atop a reactive motion tracking cerebellum, mirroring the hierarchical structure of biological motor systems. Two challenges arise in realizing this vision: acquiring a vast amount of high-quality data to achieve general purpose control, and equipping the generator with the capability to condition on compositional, extensible multi-modal inputs. We present OMG, which addresses these challenges with a meticulous data curation, filtering and labeling pipeline, as well as a diffusion-based motion generation backbone that conditions on language, audio, and human reference motions. Extensive experiments validate OMG as an omni-modal whole-body controller exhibiting state-of-the-art performance, model scaling behavior and efficient adaptation to new distributions and modalities, marking a concrete step toward foundation models for humanoid robots.",
+      "authors": [
+        "Siqiao Huang",
+        "Kun-Ying Lee",
+        "Dongming Qiao",
+        "Guanqi He",
+        "Zhenyu Wang",
+        "Yitang Li",
+        "Shaoting Zhu",
+        "Hang Zhao"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-06-09T02:46:14+00:00",
+      "link": "https://arxiv.org/pdf/2606.10340v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "acquiring vast amount of high-quality data for humanoid control",
+      "llm_evidence_cn": "为通用人形控制获取大量高质量数据",
+      "llm_evidence": "为通用人形控制获取大量高质量数据",
+      "canonical_evidence": "为通用人形控制获取大量高质量数据",
+      "llm_tldr_en": "Proposes OMG, a framework for generalist humanoid control that emphasizes scalable data acquisition and multi-modal motion generation, enabling compositional conditioning.",
+      "llm_tldr_cn": "该论文提出了OMG框架，旨在构建通用人形控制的可扩展大脑。OMG强调获取大量高质量数据以实现通用控制，并支持多模态条件输入（如文本、视觉、运动轨迹）来生成运动。其核心是一个可扩展的条件运动生成器，能够处理组合性、可扩展的多模态输入。实验表明，OMG在多种任务上表现出色，展示了数据驱动通用人形控制的潜力。该工作对人形机器人数据集构建和运动生成具有重要启发。",
+      "llm_tldr": "该论文提出了OMG框架，旨在构建通用人形控制的可扩展大脑。OMG强调获取大量高质量数据以实现通用控制，并支持多模态条件输入（如文本、视觉、运动轨迹）来生成运动。其核心是一个可扩展的条件运动生成器，能够处理组合性、可扩展的多模态输入。实验表明，OMG在多种任务上表现出色，展示了数据驱动通用人形控制的潜力。该工作对人形机器人数据集构建和运动生成具有重要启发。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "humanoid robot dataset construction",
+      "matched_requirement_id": "req-2",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2606.07193v1",
+      "source": "arxiv",
+      "title": "Shield-Loco: Shielding Locomotion Policies with Predictive Safety Filtering",
+      "abstract": "Reinforcement learning (RL) policies enable dynamic legged locomotion but lack mechanisms to avoid violations of safety constraints that are absent during training. Large-scale offline safe learning is impractical for covering all edge cases. Existing safety frameworks either rely on reduced-order models that cannot reason about whole-body behaviors or require conservative recovery controllers that degrade task performance. We propose a predictive safety filter that post-hoc filters the nominal contact locations fed to the RL policy. When a collision is predicted, a sampling-based optimizer asynchronously searches for safer contact sequences using a full-physics model, while a learned value function bootstraps long-horizon returns. Our three algorithmic components (geometric projection of sampled contacts, momentum-augmented updates, and replica-exchange) make the optimization tractable in a discontinuous contact landscape. We validate the filter on a quadruped robot in dense, cluttered environments, both in simulation and in the real world, showing substantial reductions in safety violations with minimal deviation from the nominal input.",
+      "authors": [
+        "Aditya Shirwatkar",
+        "Sebastian Sanokowski",
+        "Shishir Kolathaya",
+        "Aaron Johnson",
+        "Majid Khadiv"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-06-05T11:59:43+00:00",
+      "link": "https://arxiv.org/pdf/2606.07193v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "predictive safety filter for out-of-distribution detection in locomotion",
+      "llm_evidence_cn": "用于运动中的分布外检测的预测安全过滤器",
+      "llm_evidence": "用于运动中的分布外检测的预测安全过滤器",
+      "canonical_evidence": "用于运动中的分布外检测的预测安全过滤器",
+      "llm_tldr_en": "Shield-Loco proposes a predictive safety filter that post-hoc filters contact locations for legged locomotion, avoiding unsafe states via full-physics optimization.",
+      "llm_tldr_cn": "强化学习策略在训练中未覆盖的安全边缘情况可能导致危险。Shield-Loco提出预测性安全过滤器，在当前接触位置可能导致碰撞时，通过全物理模型异步搜索更安全的接触序列。该方法可视为一种面向安全的分布外检测手段，虽然面向四足/双足运动，但其思想适用于人形机器人安全运行。",
+      "llm_tldr": "强化学习策略在训练中未覆盖的安全边缘情况可能导致危险。Shield-Loco提出预测性安全过滤器，在当前接触位置可能导致碰撞时，通过全物理模型异步搜索更安全的接触序列。该方法可视为一种面向安全的分布外检测手段，虽然面向四足/双足运动，但其思想适用于人形机器人安全运行。",
+      "llm_tags": [
+        "query:humanoid-ood"
+      ],
+      "matched_query_tag": "query:humanoid-ood",
+      "matched_query_text": "out-of-distribution detection for safe robot operation",
+      "matched_requirement_id": "req-11",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2606.10501v1",
+      "source": "arxiv",
+      "title": "Uncovering Vulnerability of Vision-Language-Action Models under Joint-Level Physical Faults",
+      "abstract": "Deploying Vision-Language-Action (VLA) models in real robotic systems requires robustness not only to semantic and perceptual variations, but also to embodiment-side faults that change how actions are physically realized. Real robots can experience joint-level changes caused by actuator degradation, hardware faults, safety limits, collision damage, or wear-induced friction. These faults are critical because they alter the action-to-motion interface of a policy, disrupting the learned closed-loop relationship between commanded actions, realized motion, and subsequent observations. In this work, we study realistic joint-level physical faults and show that VLA models are vulnerable when predicted actions are executed through a perturbed robot body. Our analysis reveals joint-dependent effects, with heterogeneous degradation in task success across affected joints. We also show that performance drops cannot be attributed solely to physical infeasibility, since feasible faults such as increased joint friction can still substantially reduce success rates and induce closed-loop execution mismatch. Motivated by these findings, we propose Joint-level Physical-fault Aware Residual Calibrator (J-PARC), a lightweight residual calibration framework built on top of a frozen VLA policy. J-PARC infers a latent joint-fault regime from recent joint dynamics and conditions a shared residual calibrator on this regime, enabling adaptive action correction across faulty joints. Experiments show that J-PARC improves robustness under joint-level faults while preserving fault-free environment performance.",
+      "authors": [
+        "Minsoo Jo",
+        "Taeju Kwon",
+        "Junha Chun",
+        "Youngjoon Jeong",
+        "Taesup Kim"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-06-09T07:26:25+00:00",
+      "link": "https://arxiv.org/pdf/2606.10501v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "studies joint-level physical faults on VLA models, relevant to fault diagnosis",
+      "llm_evidence_cn": "研究VLA模型在关节级物理故障下的脆弱性，与故障诊断相关",
+      "llm_evidence": "研究VLA模型在关节级物理故障下的脆弱性，与故障诊断相关",
+      "canonical_evidence": "研究VLA模型在关节级物理故障下的脆弱性，与故障诊断相关",
+      "llm_tldr_en": "This paper investigates vulnerability of Vision-Language-Action models under joint-level physical faults, highlighting the need for fault-aware robot deployment.",
+      "llm_tldr_cn": "本文揭示了视觉-语言-动作模型在真实机器人中面临关节级物理故障（如执行器退化、碰撞损伤）时的脆弱性，系统评估表明故障会破坏动作-运动闭环，导致任务失败。研究强调实现鲁棒机器人部署必须考虑物理故障诊断。",
+      "llm_tldr": "本文揭示了视觉-语言-动作模型在真实机器人中面临关节级物理故障（如执行器退化、碰撞损伤）时的脆弱性，系统评估表明故障会破坏动作-运动闭环，导致任务失败。研究强调实现鲁棒机器人部署必须考虑物理故障诊断。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "fault diagnosis for humanoid robots",
+      "matched_requirement_id": "req-3",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2606.08242v1",
+      "source": "arxiv",
+      "title": "Light-WAM: Efficient World Action Models with State-Fusion Action Decoding",
+      "abstract": "World Action Models (WAMs) extend robot policy learning by incorporating future prediction as an additional training objective, encouraging the policy to encode task-relevant temporal structure in its representations. Current WAMs often rely on large-scale generative architectures that incur high training costs and inference latency, making them difficult to deploy as efficient closed-loop policies. We propose Light-WAM, a lightweight World Action Model for efficient robot manipulation. Specifically, it is built with a compact video backbone and performs future-video supervision in a downsampled latent space, reducing the cost of video co-training while retaining its benefits for representation learning. For action prediction, Light-WAM introduces the StateFusionActionExpert, which reads adapted states from multiple backbone layers, fuses them through learned-query pooling, and directly predicts action chunks in a single forward pass. This design provides an efficient interface between video backbone representations and robot actions, avoiding the need for heavy generative action experts. Experiments demonstrate that Light-WAM maintains strong performance on LIBERO and achieves usable multi-task performance on RoboTwin 2.0, while using only 0.44B trainable parameters. It also achieves 72.03ms inference latency with 4.1GiB peak GPU memory and improved training throughput.",
+      "authors": [
+        "Ziang Li",
+        "Dongzhou Cheng",
+        "Yibin Wang",
+        "Shiyue Wang",
+        "Xiaoyang Xu",
+        "Lingxuan Weng",
+        "Juan Wang",
+        "Jiaqi Wang"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV"
+      ],
+      "published": "2026-06-06T15:58:12+00:00",
+      "link": "https://arxiv.org/pdf/2606.08242v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "lightweight world action model for efficient robot deployment",
+      "llm_evidence_cn": "轻量级世界动作模型，适用于机器人高效部署",
+      "llm_evidence": "轻量级世界动作模型，适用于机器人高效部署",
+      "canonical_evidence": "轻量级世界动作模型，适用于机器人高效部署",
+      "llm_tldr_en": "Proposes Light-WAM, a lightweight World Action Model using compact video backbone and latent-space future prediction for efficient robot manipulation deployment.",
+      "llm_tldr_cn": "现有世界动作模型计算量大、推理延迟高，难以部署为闭环策略。Light-WAM通过紧凑视频骨干和降采样潜在空间未来预测监督，大幅降低训练和推理成本。该轻量化方法直接支持人形机器人边缘端部署需求，虽未特化人形，但方法论具有强迁移性。",
+      "llm_tldr": "现有世界动作模型计算量大、推理延迟高，难以部署为闭环策略。Light-WAM通过紧凑视频骨干和降采样潜在空间未来预测监督，大幅降低训练和推理成本。该轻量化方法直接支持人形机器人边缘端部署需求，虽未特化人形，但方法论具有强迁移性。",
+      "llm_tags": [
+        "query:ur:composite"
+      ],
+      "matched_query_tag": "query:ur:composite",
+      "matched_query_text": "Papers central to 查找宇树G1人形机器人的数据集构建、故障诊断、错误分析以及边缘端部署的相关论文, especially work that connects or combines: Unitree G1 humanoid robot dataset construction; humanoid robot dataset construction; fault diagnosis for humanoid robots; edge deployment for humanoid robots; dataset construction for robotics; fault detection in humanoid robots; fault diagnosis and error analysis for humanoid robots; edge deployment of Unitree robots research.",
+      "matched_requirement_id": "req-composite-ur",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    }
+  ]
+}

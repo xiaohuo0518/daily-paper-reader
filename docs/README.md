@@ -6,53 +6,41 @@
 </div>
 
 ## 每次日报
-- 最新运行日期：2026-06-09
-- 运行时间：2026-06-09 21:36:26 UTC
+- 最新运行日期：2026-06-10
+- 运行时间：2026-06-10 22:55:28 UTC
 - 运行状态：成功
-- 本次总论文数：11
-- 精读区：2
-- 速读区：9
+- 本次总论文数：7
+- 精读区：1
+- 速读区：6
 
 ### 今日简报（AI）
-今日收录11篇论文，精读聚焦于从仿真到真实的人形双臂操作与生成策略故障检测。重点推荐《OASIS》和《ActProbe》，前者在仿真数据转化的双臂操作任务上表现突出，后者为机器人策略提供早期故障预警。建议关注人形机器人的仿真数据泛化与策略鲁棒性提升方向。
-- 详情：[/202606/09/README](/202606/09/README)
+今日聚焦机器人领域的任务鲁棒性、多地形摔倒恢复、通用人形控制及模型脆弱性等7篇论文。最值得关注的是提出重标注视觉-动作数据提升任务鲁棒性的研究（9.0分），以及多地形步态-地形解耦学习的PTDL方法。建议重点精读重标注数据增强鲁棒性的论文，其余速读了解人形机器人控制与故障安全方向。
+- 详情：[/202606/10/README](/202606/10/README)
 
 ### 精读区论文标签
-1. [OASIS: From Simulation Data Collection to Real-World Humanoid Loco-Manipulation](/202606/09/2606.08548v1-oasis-from-simulation-data-collection-to-real-world-humanoid-loco-manipulation)  
+1. [Task Robustness via Re-Labelling Vision-Action Robot Data](/202606/10/2606.10918v1-task-robustness-via-re-labelling-vision-action-robot-data)  
    标签：评分：9.0/10、query:ur
-   evidence：人形机器人仿真数据采集
-2. [ActProbe: Action-Space Probe for Early Failure Detection of Generative Robot Policies](/202606/09/2606.08508v1-actprobe-action-space-probe-for-early-failure-detection-of-generative-robot-policies)  
-   标签：评分：8.0/10、query:ur
-   evidence：使用动作空间信号对生成式机器人策略进行早期故障检测
+   evidence：基于VLM的机器人学习数据集重标注增强
 
 ### 速读区论文标签
-1. [Ego-Pi: VLA Fine-Tuning for Ego-Centric Human and Robot Data](/202606/09/2606.08107v1-ego-pi-vla-fine-tuning-for-ego-centric-human-and-robot-data)  
+1. [PTDL:Multi-Terrain Fall Recovery via Phase-Terrain Decoupled Learning](/202606/10/2606.08922v1-ptdlmulti-terrain-fall-recovery-via-phase-terrain-decoupled-learning)  
+   标签：评分：7.0/10、query:humanoid-ood
+   evidence：利用本体感受信号实现人形机器人跌倒恢复
+2. [OMG: Omni-Modal Motion Generation for Generalist Humanoid Control](/202606/10/2606.10340v1-omg-omni-modal-motion-generation-for-generalist-humanoid-control)  
    标签：评分：7.0/10、query:ur
-   evidence：利用自我中心人类数据构建人形机器人数据集
-2. [Two Bridges, One Pathway: From VLMs to Generalizable VLAs with Embodied Trajectory-Coupled Data](/202606/09/2606.08520v1-two-bridges-one-pathway-from-vlms-to-generalizable-vlas-with-embodied-trajectory-coupled-data)  
+   evidence：为通用人形控制获取大量高质量数据
+3. [Uncovering Vulnerability of Vision-Language-Action Models under Joint-Level Physical Faults](/202606/10/2606.10501v1-uncovering-vulnerability-of-vision-language-action-models-under-joint-level-physical-faults)  
    标签：评分：7.0/10、query:ur
-   evidence：提出用于机器人学习的具身轨迹耦合数据
-3. [FW-NKF: Frequency-Weighted Neural Kalman Filters](/202606/09/2606.02251v1-fw-nkf-frequency-weighted-neural-kalman-filters)  
+   evidence：研究VLA模型在关节级物理故障下的脆弱性，与故障诊断相关
+4. [TAGA: Terrain-aware Active Gaze Learning for Generalizable Agile Humanoid Locomotion](/202606/10/2606.05880v1-taga-terrain-aware-active-gaze-learning-for-generalizable-agile-humanoid-locomotion)  
    标签：评分：6.0/10、query:ur
-   evidence：频率加权神经卡尔曼滤波器用于鲁棒状态估计，可应用于故障检测
-4. [PerceptTwin: Semantic Scene Reconstruction for Iterative LLM Planning and Verification](/202606/09/2606.04226v1-percepttwin-semantic-scene-reconstruction-for-iterative-llm-planning-and-verification)  
+   evidence：在严格计算约束下的人形机器人主动注视学习
+5. [Shield-Loco: Shielding Locomotion Policies with Predictive Safety Filtering](/202606/10/2606.07193v1-shield-loco-shielding-locomotion-policies-with-predictive-safety-filtering)  
    标签：评分：6.0/10、query:humanoid-ood
-   evidence：自动构建机器人交互仿真，支持故障注入场景
-5. [Learning Contact Representation for Leg Odometry](/202606/09/2606.05501v1-learning-contact-representation-for-leg-odometry)  
-   标签：评分：6.0/10、query:humanoid-ood
-   evidence：利用标准传感器（本体感受信号）进行足式机器人自监督接触检测
-6. [RealDexUMI: A Wearable Universal Manipulation Interface for Dexterous Robot Learning](/202606/09/2606.06033v1-realdexumi-a-wearable-universal-manipulation-interface-for-dexterous-robot-learning)  
+   evidence：用于运动中的分布外检测的预测安全过滤器
+6. [Light-WAM: Efficient World Action Models with State-Fusion Action Decoding](/202606/10/2606.08242v1-light-wam-efficient-world-action-models-with-state-fusion-action-decoding)  
    标签：评分：6.0/10、query:ur
-   evidence：可穿戴机器人数据收集接口，用于数据集构建
-7. [RealDexUMI: A Wearable Universal Manipulation Interface for Dexterous Robot Learning](/202606/09/2606.06033v2-realdexumi-a-wearable-universal-manipulation-interface-for-dexterous-robot-learning)  
-   标签：评分：6.0/10、query:ur
-   evidence：用于灵巧操作数据收集的可穿戴接口
-8. [Real-Time Industrial Defect Detection on Edge Hardware Using Fine-Tuned YOLOv8: A Systematic Benchmark on the NEU Surface Defect Database and MVTec AD with Automotive & Battery Manufacturing Extensions](/202606/09/2606.07659v1-real-time-industrial-defect-detection-on-edge-hardware-using-fine-tuned-yolov8-a-systematic-benchmark-on-the-neu-surface-defect-database-and-mvtec-ad-with-automotive--battery-manufacturing-extensions)  
-   标签：评分：6.0/10、query:ur
-   evidence：使用微调YOLOv8在边缘硬件上进行实时缺陷检测
-9. [SIMPLE: Simulation-Based Policy Learning and Evaluation for Humanoid Loco-manipulation](/202606/09/2606.08278v1-simple-simulation-based-policy-learning-and-evaluation-for-humanoid-loco-manipulation)  
-   标签：评分：6.0/10、query:ur
-   evidence：基于仿真的仿人机器人操控数据集构建基准
+   evidence：轻量级世界动作模型，适用于机器人高效部署
 
 
 <div class="dpr-home-promo-card">
