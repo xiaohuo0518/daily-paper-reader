@@ -6,41 +6,40 @@
 </div>
 
 ## 每次日报
-- 最新运行日期：2026-06-10
-- 运行时间：2026-06-10 22:55:28 UTC
+- 最新运行日期：2026-06-11
+- 运行时间：2026-06-11 22:25:34 UTC
 - 运行状态：成功
-- 本次总论文数：7
+- 本次总论文数：6
 - 精读区：1
-- 速读区：6
+- 速读区：5
 
 ### 今日简报（AI）
-今日聚焦机器人领域的任务鲁棒性、多地形摔倒恢复、通用人形控制及模型脆弱性等7篇论文。最值得关注的是提出重标注视觉-动作数据提升任务鲁棒性的研究（9.0分），以及多地形步态-地形解耦学习的PTDL方法。建议重点精读重标注数据增强鲁棒性的论文，其余速读了解人形机器人控制与故障安全方向。
-- 详情：[/202606/10/README](/202606/10/README)
+1) 今日聚焦具身智能领域，精选6篇论文，其中一篇综述系统梳理了基准构建自动化流程。
+2) 最值得关注的两个方向：智能自动化构建具身基准（8.0分）与双手操作基准DuoBench（7.0分）。
+3) 建议普通读者优先精读《Intelligent Automation for Embodied Benchmark Construction》，后续可追踪DuoBench的仿真-真实一致性。
+- 详情：[/202606/11/README](/202606/11/README)
 
 ### 精读区论文标签
-1. [Task Robustness via Re-Labelling Vision-Action Robot Data](/202606/10/2606.10918v1-task-robustness-via-re-labelling-vision-action-robot-data)  
-   标签：评分：9.0/10、query:ur
-   evidence：基于VLM的机器人学习数据集重标注增强
+1. [Intelligent Automation for Embodied Benchmark Construction: Pipelines, Embodiments, Simulators, and Trends](/202606/11/2606.12207v1-intelligent-automation-for-embodied-benchmark-construction-pipelines-embodiments-simulators-and-trends)  
+   标签：评分：8.0/10、query:ur
+   evidence：关于具身基准构建流程的综述，涵盖数据采集和数据集生成
 
 ### 速读区论文标签
-1. [PTDL:Multi-Terrain Fall Recovery via Phase-Terrain Decoupled Learning](/202606/10/2606.08922v1-ptdlmulti-terrain-fall-recovery-via-phase-terrain-decoupled-learning)  
+1. [Light-WAM: Efficient World Action Models with State-Fusion Action Decoding](/202606/11/2606.08242v1-light-wam-efficient-world-action-models-with-state-fusion-action-decoding)  
    标签：评分：7.0/10、query:humanoid-ood
-   evidence：利用本体感受信号实现人形机器人跌倒恢复
-2. [OMG: Omni-Modal Motion Generation for Generalist Humanoid Control](/202606/10/2606.10340v1-omg-omni-modal-motion-generation-for-generalist-humanoid-control)  
+   evidence：轻量模型，高效部署
+2. [AetheRock: An Arm-Worn Robot Teaching System for Force-Guided Vision-Tactile Learning](/202606/11/2606.09777v1-aetherock-an-arm-worn-robot-teaching-system-for-force-guided-vision-tactile-learning)  
    标签：评分：7.0/10、query:ur
-   evidence：为通用人形控制获取大量高质量数据
-3. [Uncovering Vulnerability of Vision-Language-Action Models under Joint-Level Physical Faults](/202606/10/2606.10501v1-uncovering-vulnerability-of-vision-language-action-models-under-joint-level-physical-faults)  
+   evidence：臂戴式机器人教学系统，用于力、视觉、触觉数据收集
+3. [DuoBench: A Reproducible Benchmark for Bimanual Manipulation in Simulation and the Real World](/202606/11/2606.11901v1-duobench-a-reproducible-benchmark-for-bimanual-manipulation-in-simulation-and-the-real-world)  
    标签：评分：7.0/10、query:ur
-   evidence：研究VLA模型在关节级物理故障下的脆弱性，与故障诊断相关
-4. [TAGA: Terrain-aware Active Gaze Learning for Generalizable Agile Humanoid Locomotion](/202606/10/2606.05880v1-taga-terrain-aware-active-gaze-learning-for-generalizable-agile-humanoid-locomotion)  
+   evidence：提供机器人操作基准数据集和细粒度错误分析
+4. [A Conversational Framework for Human-Robot Collaborative Manipulation with Distributed Generative AI models](/202606/11/2606.06061v1-a-conversational-framework-for-human-robot-collaborative-manipulation-with-distributed-generative-ai-models)  
    标签：评分：6.0/10、query:ur
-   evidence：在严格计算约束下的人形机器人主动注视学习
-5. [Shield-Loco: Shielding Locomotion Policies with Predictive Safety Filtering](/202606/10/2606.07193v1-shield-loco-shielding-locomotion-policies-with-predictive-safety-filtering)  
-   标签：评分：6.0/10、query:humanoid-ood
-   evidence：用于运动中的分布外检测的预测安全过滤器
-6. [Light-WAM: Efficient World Action Models with State-Fusion Action Decoding](/202606/10/2606.08242v1-light-wam-efficient-world-action-models-with-state-fusion-action-decoding)  
+   evidence：边缘部署，分布式硬件
+5. [Benchmarking Vision-Language-Action Models on SO-101: Failure and Recovery Analysis](/202606/11/2606.08881v1-benchmarking-vision-language-action-models-on-so-101-failure-and-recovery-analysis)  
    标签：评分：6.0/10、query:ur
-   evidence：轻量级世界动作模型，适用于机器人高效部署
+   evidence：构建了包含数据集和评估协议的标准真实世界基准
 
 
 <div class="dpr-home-promo-card">
