@@ -1,0 +1,170 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-06-12T21:56:26.877791+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 2,
+    "deep_divecandidates": 0,
+    "deep_cap": 7,
+    "deep_selected": 0,
+    "quick_candidates": 3,
+    "quick_skim_target": 12,
+    "quick_selected": 3
+  },
+  "deep_dive": [],
+  "quick_skim": [
+    {
+      "id": "2606.08057v1",
+      "source": "arxiv",
+      "title": "EgoAERO: Learning Dexterous Manipulation from a Single Egocentric Video without Object Assets",
+      "abstract": "Egocentric RGB-D videos offer a natural source of human dexterous manipulation demonstrations, but existing data is difficult to use for robot learning because object pose, geometry, and contact information are often missing or require pre-scanned object assets. We present EgoAERO, the first framework that learns dexterous manipulation from a single egocentric RGB-D human demonstration without object assets. EgoAERO reconstructs contact-consistent hand-object trajectories through asset-free object tracking and reconstruction, ego motion compensation, and adaptive contact optimization, then converts them into robot policies using two-stage residual learning. We further introduce an online quality assessment mechanism and construct EgoDex-R, a large-scale egocentric dataset with 4.3M RGB-D frames for dexterous policy learning. Simulation and real-world experiments show that EgoAERO enables single-demonstration dexterous manipulation and achieves downstream performance close to CAD-based reconstructions on HOI4D.",
+      "authors": [
+        "Yichen Niu",
+        "Haoran Lv",
+        "Xinrui Zhang",
+        "Xueyao Wan",
+        "Shiyu Gao",
+        "Ying Ai",
+        "Hui Xu",
+        "Yongqi Hu",
+        "Hengyi Zhang",
+        "Yang Xie",
+        "Zhaxizhuoma",
+        "Yue Zhao",
+        "Zhenshan Bing",
+        "Yan Ding",
+        "Jianxing Liu"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.AI"
+      ],
+      "published": "2026-06-06T08:39:52+00:00",
+      "link": "https://arxiv.org/pdf/2606.08057v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "dataset construction for robotics from egocentric video",
+      "llm_evidence_cn": "从第一人称视频构建机器人数据集",
+      "llm_evidence": "从第一人称视频构建机器人数据集",
+      "canonical_evidence": "从第一人称视频构建机器人数据集",
+      "llm_tldr_en": "EgoAERO learns dexterous manipulation from a single egocentric video without object assets, reconstructing hand-object trajectories and converting them to robot policies.",
+      "llm_tldr_cn": "该论文解决机器人学习缺乏物体资产的问题，提出从单个第一人称RGB-D视频中重建接触一致的轨迹，通过无资产物体追踪和自适应接触优化，将人类演示转化为机器人策略。该方法为机器人提供了低成本的数据集构建途径，尤其在灵巧操作任务中展现了有效性。",
+      "llm_tldr": "该论文解决机器人学习缺乏物体资产的问题，提出从单个第一人称RGB-D视频中重建接触一致的轨迹，通过无资产物体追踪和自适应接触优化，将人类演示转化为机器人策略。该方法为机器人提供了低成本的数据集构建途径，尤其在灵巧操作任务中展现了有效性。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2606.06493v3",
+      "source": "arxiv",
+      "title": "HANDOFF: Humanoid Agentic Task-Space Whole-Body Control via Distilled Complementary Teachers",
+      "abstract": "For a humanoid robot to be deployed in the real world, the choice of command space (i.e., the interface between task planning and whole-body control) is crucial. Existing whole-body controllers typically demand dense kinematic or spatial references that planners struggle to synthesize from task semantics. We instead propose a compact, explicit interface that is intuitive, general, modular, and expressive enough for diverse loco-manipulation skills. To this end, we introduce HANDOFF, a single humanoid whole-body controller that follows this interface and is distilled via multi-teacher KL distillation under a context-conditioned gating scheme into a mixture-of-experts student from three complementary specialists: whole-body motion tracking with safety-filtered data, locomotion, and fall-recovery. On the Unitree G1, HANDOFF matches state-of-the-art velocity tracking and offers one of the largest robust manipulation workspaces. We further demonstrate hardware feasibility through multiple natural-language-driven task roll-outs, powered by a VLM-driven agentic planner with no task-specific data or controller fine-tuning.",
+      "authors": [
+        "Lizhi Yang",
+        "Junheng Li",
+        "Nehar Poddar",
+        "Yiling Hou",
+        "Gio Huh",
+        "Robert Griffin",
+        "Georgia Gkioxari",
+        "Aaron Ames"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.AI",
+        "cs.LG"
+      ],
+      "published": "2026-06-04T17:59:50+00:00",
+      "link": "https://arxiv.org/pdf/2606.06493v3",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "humanoid robot whole-body control for deployment",
+      "llm_evidence_cn": "人形机器人全身控制与部署",
+      "llm_evidence": "人形机器人全身控制与部署",
+      "canonical_evidence": "人形机器人全身控制与部署",
+      "llm_tldr_en": "HANDOFF proposes a compact command space for humanoid whole-body control via distilled multi-teacher knowledge, enabling real-world deployment.",
+      "llm_tldr_cn": "针对人形机器人真实部署中命令空间选择的关键问题，提出HANDOFF框架，通过多教师知识蒸馏得到单一全身控制器，采用上下文门控的混合专家结构。该控制器遵循紧凑显式的接口，支持多样化移动操控技能，为人形机器人边缘部署提供了高效控制基础。",
+      "llm_tldr": "针对人形机器人真实部署中命令空间选择的关键问题，提出HANDOFF框架，通过多教师知识蒸馏得到单一全身控制器，采用上下文门控的混合专家结构。该控制器遵循紧凑显式的接口，支持多样化移动操控技能，为人形机器人边缘部署提供了高效控制基础。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "edge deployment for humanoid robots",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2606.10382v1",
+      "source": "arxiv",
+      "title": "UMI-Bench 1.0: An Open and Reproducible Real-World Benchmark for Tabletop Robotic Manipulation with UMI Data",
+      "abstract": "Real-robot evaluation is essential for understanding whether learned manipulation policies can operate reliably outside curated demonstrations. This need is particularly pressing for Universal Manipulation Interface (UMI)-style policies, whose performance depends on the coupling between wrist-view observations, action representation, data collection, and physical deployment. Existing real-world benchmarks have made important progress, but they are not designed around this UMI data-to-deployment setting. We present UMI-Bench 1.0, a local-first real-robot benchmark for standardized evaluation of UMI-style manipulation policies. To the best of our knowledge, this is the first benchmark dedicated to real-world evaluation of UMI-based manipulation models. UMI-Bench aligns data collection, scene reset, policy execution, result logging, and task-factor analysis within a unified protocol. By making the full evaluation process reproducible and auditable, UMI-Bench provides a practical testbed for measuring how UMI-trained policies generalize to real physical manipulation.",
+      "authors": [
+        "Shi Jin",
+        "Yuntian Wang",
+        "Yuhui Duan",
+        "Di Wu",
+        "Gaoqi Dong",
+        "Xiaohang Liu",
+        "Xiaotong Li",
+        "Hongfei Jia",
+        "Zehao Zhang",
+        "Tianyu Wang",
+        "Zhongjie Jia",
+        "Yuanqi Yao",
+        "Chenjia Bai",
+        "Zhaxizhuoma",
+        "Siao Liu",
+        "Nieqing Cao",
+        "Jin Wang",
+        "Chao Yu",
+        "Yan Ding"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-06-09T03:47:54+00:00",
+      "link": "https://arxiv.org/pdf/2606.10382v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "robot manipulation benchmark with standardised data collection",
+      "llm_evidence_cn": "机器人操作基准与标准化数据收集",
+      "llm_evidence": "机器人操作基准与标准化数据收集",
+      "canonical_evidence": "机器人操作基准与标准化数据收集",
+      "llm_tldr_en": "UMI-Bench 1.0 provides an open real-world benchmark for evaluating UMI-style manipulation policies, emphasising data-to-deployment standardisation.",
+      "llm_tldr_cn": "针对UMI风格策略的真实世界评估需求，提出UMI-Bench 1.0开源基准，专注于数据采集、动作表示与物理部署的标准化。该基准首个专门针对UMI数据到部署流程设计，为机器人数据集的构建与评估提供了可复现框架，可直接应用于人形机器人数据集构建。",
+      "llm_tldr": "针对UMI风格策略的真实世界评估需求，提出UMI-Bench 1.0开源基准，专注于数据采集、动作表示与物理部署的标准化。该基准首个专门针对UMI数据到部署流程设计，为机器人数据集的构建与评估提供了可复现框架，可直接应用于人形机器人数据集构建。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    }
+  ]
+}

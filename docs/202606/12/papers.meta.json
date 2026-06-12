@@ -1,0 +1,54 @@
+{
+  "label": "2026-06-12",
+  "date": "2026-06-12",
+  "generated_at": "2026-06-12T21:58:57",
+  "count": 3,
+  "papers": [
+    {
+      "paper_id": "202606/12/2606.08057v1-egoaero-learning-dexterous-manipulation-from-a-single-egocentric-video-without-object-assets",
+      "section": "quick",
+      "title_en": "EgoAERO: Learning Dexterous Manipulation from a Single Egocentric Video without Object Assets",
+      "authors": "Yichen Niu, Haoran Lv, Xinrui Zhang, Xueyao Wan, Shiyu Gao, Ying Ai, Hui Xu, Yongqi Hu, Hengyi Zhang, Yang Xie, Zhaxizhuoma, Yue Zhao, Zhenshan Bing, Yan Ding, Jianxing Liu",
+      "date": "2026-06-06",
+      "pdf": "https://arxiv.org/pdf/2606.08057v1",
+      "score": "7.0",
+      "evidence": "从第一人称视频构建机器人数据集",
+      "tldr": "从自我中心视频学习灵巧操作面临物体资产缺失的难题，现有方法依赖预扫描物体模型。提出EgoAERO框架，通过无资产物体跟踪与重建、自我运动补偿和自适应接触优化，从单个RGB-D视频重建接触一致的手-物体轨迹，再利用两阶段残差学习转化为机器人策略。在仿真和真实实验中，仅需单次演示即可完成灵巧操作任务，性能接近基于CAD的重建方法。首次无需物体资产实现从单自我中心视频学习灵巧操作，并构建大规模EgoDex-R数据集推动该领域发展。",
+      "tags": "query:ur",
+      "abstract_en": "Egocentric RGB-D videos offer a natural source of human dexterous manipulation demonstrations, but existing data is difficult to use for robot learning because object pose, geometry, and contact information are often missing or require pre-scanned object assets. We present EgoAERO, the first framework that learns dexterous manipulation from a single egocentric RGB-D human demonstration without object assets. EgoAERO reconstructs contact-consistent hand-object trajectories through asset-free object tracking and reconstruction, ego motion compensation, and adaptive contact optimization, then converts them into robot policies using two-stage residual learning. We further introduce an online quality assessment mechanism and construct EgoDex-R, a large-scale egocentric dataset with 4.3M RGB-D frames for dexterous policy learning. Simulation and real-world experiments show that EgoAERO enables single-demonstration dexterous manipulation and achieves downstream performance close to CAD-based reconstructions on HOI4D.",
+      "source": "arxiv",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "paper_id": "202606/12/2606.10382v1-umi-bench-10-an-open-and-reproducible-real-world-benchmark-for-tabletop-robotic-manipulation-with-umi-data",
+      "section": "quick",
+      "title_en": "UMI-Bench 1.0: An Open and Reproducible Real-World Benchmark for Tabletop Robotic Manipulation with UMI Data",
+      "authors": "Shi Jin, Yuntian Wang, Yuhui Duan, Di Wu, Gaoqi Dong, Xiaohang Liu, Xiaotong Li, Hongfei Jia, Zehao Zhang, Tianyu Wang, Zhongjie Jia, Yuanqi Yao, Chenjia Bai, Zhaxizhuoma, Siao Liu, Nieqing Cao, Jin Wang, Chao Yu, Yan Ding",
+      "date": "2026-06-09",
+      "pdf": "https://arxiv.org/pdf/2606.10382v1",
+      "score": "7.0",
+      "evidence": "机器人操作基准与标准化数据收集",
+      "tldr": "针对UMI风格操控策略缺少真实世界标准化评估的问题，提出UMI-Bench 1.0基准，统一了从数据收集到部署的全流程协议，包含场景重置、策略执行和结果记录，使评估可复现可审计。关键贡献在于提供首个专为UMI策略设计的真实世界测试平台。",
+      "tags": "query:ur",
+      "abstract_en": "Real-robot evaluation is essential for understanding whether learned manipulation policies can operate reliably outside curated demonstrations. This need is particularly pressing for Universal Manipulation Interface (UMI)-style policies, whose performance depends on the coupling between wrist-view observations, action representation, data collection, and physical deployment. Existing real-world benchmarks have made important progress, but they are not designed around this UMI data-to-deployment setting. We present UMI-Bench 1.0, a local-first real-robot benchmark for standardized evaluation of UMI-style manipulation policies. To the best of our knowledge, this is the first benchmark dedicated to real-world evaluation of UMI-based manipulation models. UMI-Bench aligns data collection, scene reset, policy execution, result logging, and task-factor analysis within a unified protocol. By making the full evaluation process reproducible and auditable, UMI-Bench provides a practical testbed for measuring how UMI-trained policies generalize to real physical manipulation.",
+      "source": "arxiv",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "paper_id": "202606/12/2606.06493v3-handoff-humanoid-agentic-task-space-whole-body-control-via-distilled-complementary-teachers",
+      "section": "quick",
+      "title_en": "HANDOFF: Humanoid Agentic Task-Space Whole-Body Control via Distilled Complementary Teachers",
+      "authors": "Lizhi Yang, Junheng Li, Nehar Poddar, Yiling Hou, Gio Huh, Robert Griffin, Georgia Gkioxari, Aaron Ames",
+      "date": "2026-06-04",
+      "pdf": "https://arxiv.org/pdf/2606.06493v3",
+      "score": "6.0",
+      "evidence": "人形机器人全身控制与部署",
+      "tldr": "人类机器人部署中命令空间选择关键，现有控制器需密集运动学参考难以从任务语义合成。提出HANDOFF，通过多教师KL蒸馏将三个互补专家（运动跟踪、运动、跌倒恢复）融合为混合专家学生，采用上下文门控调度。在Unitree G1上匹配SOTA速度跟踪并提供最大鲁棒操作工作空间之一，结合VLM规划器实现自然语言驱动任务，无需任务特定数据或微调。",
+      "tags": "query:ur",
+      "abstract_en": "For a humanoid robot to be deployed in the real world, the choice of command space (i.e., the interface between task planning and whole-body control) is crucial. Existing whole-body controllers typically demand dense kinematic or spatial references that planners struggle to synthesize from task semantics. We instead propose a compact, explicit interface that is intuitive, general, modular, and expressive enough for diverse loco-manipulation skills. To this end, we introduce HANDOFF, a single humanoid whole-body controller that follows this interface and is distilled via multi-teacher KL distillation under a context-conditioned gating scheme into a mixture-of-experts student from three complementary specialists: whole-body motion tracking with safety-filtered data, locomotion, and fall-recovery. On the Unitree G1, HANDOFF matches state-of-the-art velocity tracking and offers one of the largest robust manipulation workspaces. We further demonstrate hardware feasibility through multiple natural-language-driven task roll-outs, powered by a VLM-driven agentic planner with no task-specific data or controller fine-tuning.",
+      "source": "arxiv",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "errors": []
+}
