@@ -1,0 +1,304 @@
+Title: EM-Fall: Embodied mmWave Sensing for Day-and-Night Fall Detection on Humanoid Robots
+
+URL Source: https://arxiv.org/pdf/2606.11109v1
+
+Published Time: Wed, 10 Jun 2026 01:21:22 GMT
+
+Number of Pages: 11
+
+Markdown Content:
+# EM-Fall: Embodied mmWave Sensing for Day-and-Night Fall Detection on Humanoid Robots 
+
+Yanshuo Lu 1,2, Yuxuan Hu 1,2, Shenghai Yuan 1,3, Xinyu Zhou 1,2, Kuangji Zuo 1,2, Bofan Lyu 1,2, XiChen Yuan 1,2, Jianfei Yang 1,21MARS Lab, 2NTU, 3IOT Lab Falls are one of the leading causes of injury and hospitalization among elderly individuals, making reliable fall awareness an essential capability for safety monitoring in residential environments. However, existing fall detection systems often rely on wearable devices or fixed sensing installations, which may suffer from low user compliance, limited spatial coverage, or degraded performance under occlusion and poor lighting conditions. In this work, we propose EM-Fall , an embodied fall detection framework deployed on a mobile humanoid robot. The system integrates millimeter-wave (mmWave) sensing with robotic mobility, allowing the robot to actively adjust its sensing viewpoint and maintain target observability across rooms and under occlusion. To address interference in complex residential environments, including pet motion and multipath artifacts, we design a human-centered perception pipeline combined with lightweight temporal modeling to capture motion evolution before, during, and after fall events. We evaluate the proposed system across eight real indoor environments with four participants and construct an in-home mmWave fall detection dataset. Experimental results show that the embodied mobile sensing paradigm improves monitoring continuity and maintains robust fall detection performance under diverse environmental conditions. The proposed framework provides a practical solution for robot-assisted safety monitoring in home environments.  
+
+> Correspondence:
+
+Jianfei Yang at jianfei.yang@ntu.edu.sg 
+
+# 1 Introduction 
+
+With the rapid growth of the global aging popula-tion, enabling safe and independent living for elderly individuals has become an important societal chal-lenge. Home service robots are increasingly envi-sioned as long-term companions that assist elderly people in daily residential environments. Among the various health and safety risks faced by older adults, falls are one of the leading causes of injury, hospitalization, and loss of independence. A large proportion of elderly individuals experience at least one fall each year, and delayed detection or response can lead to severe medical consequences. Therefore, equipping home robots with the capability to contin-uously monitor and promptly detect fall events is a critical requirement for robotic systems designed for elderly care (Chen et al., 2025). Achieving reliable fall monitoring in real residential environments has thus become an important research direction in home robotics (Newaz and Hanada, 2023). Existing fall detection solutions can generally be cate-gorized into wearable sensing systems and contactless environmental sensing approaches. Wearable devices  
+
+> Figure 1
+
+Overview of the proposed EM-Fall framework for embodied fall detection using mobile mmWave sensing. A humanoid robot performs continuous safety monitor-ing through user following, fall detection, and assisted response. By combining mmWave radar with robotic mobility, the system enables robust and continuous moni-toring across rooms under occlusion, low-visibility, and privacy-sensitive conditions. 
+
+1 
+
+> arXiv:2606.11109v1 [cs.RO] 9 Jun 2026 Figure 2 Overview of the EM-Fall framework. The upper panel illustrates the robotic perception pipeline: mmWave point clouds are clustered and tracked using EKF, fused with robot ego-motion for people-as-planner following, and processed through semantic fusion with a three-stage temporal module for fall detection. The lower panel presents the eight indoor evaluation scenarios (S1–S8) covering normal lighting, low-visibility, and occlusion conditions, including pet-like motion simulated by a quadruped robot. Dark scenes are exposure-adjusted for visualization.
+
+such as inertial sensors or smart watches (Rocha et al., 2024) provide direct motion measurements but require users to consistently wear the devices over long periods, which can be inconvenient and often leads to low user compliance in real-world de-ployment. Alternatively, contactless sensing meth-ods have been widely explored. Vision-based sys-tems (Benkaci et al., 2024) can achieve good activity recognition performance under ideal conditions, yet their reliability significantly degrades under poor il-lumination or nighttime conditions and may raise privacy concerns in domestic environments. LiDAR-based sensing can capture geometric structure but may suffer from occlusion caused by obstacles such as furniture, curtains, or water mist in high-risk areas like bathrooms. Millimeter-wave (mmWave) radar sensing provides a promising alternative for fall detection. Radar signals are insensitive to lighting conditions, preserve user privacy, and offer a certain level of penetration capa-bility through obstacles (Casmin and Oliveira, 2025). These advantages make radar particularly suitable for long-term monitoring in residential environments. However, most existing radar-based fall detection systems rely on fixed installations, which inevitably suffer from limited spatial coverage and occlusion-induced blind zones (Hu et al., 2024). When a fall occurs outside the sensing region or behind obstacles, the system may fail to observe the event. In contrast, mobile robots naturally provide an embodied sensing platform that can actively adjust their pose and view-point to maintain target observability and expand monitoring coverage across rooms. Integrating radar sensing with robotic mobility therefore provides a promising paradigm for continuous fall monitoring in real homes. Despite these advantages, reliable fall detection in real residential environments remains challenging. In practice, many motion sources other than humans exist, including pet activities, swinging doors, moving furniture, and ghost reflections caused by multipath propagation. These factors introduce substantial environmental interference and can easily lead to false detections if not properly handled. Moreover, fall events exhibit strong temporal dynamics and may be difficult to distinguish from daily activities such as sitting or lying down without appropriate temporal modeling. To address these challenges, we propose EM-Fall , an embodied mmWave fall detection framework deployed on a humanoid robotic platform. By integrating mmWave sensing with robotic mobility, the system maintains target observability and monitoring con-tinuity across rooms and under occlusion. To im-prove robustness in complex residential environments, we design a hierarchical human-centered perception pipeline that performs non-human target filtering and temporal modeling of fall events. This enables reliable discrimination between true fall incidents and normal daily activities while suppressing interference caused by environmental motion sources. 2We conduct comprehensive system-level validation across eight real indoor environments with four par-ticipants. Experimental results demonstrate that, compared with conventional fixed radar deployments, the embodied mobile sensing paradigm significantly improves monitoring continuity and robustness under environmental interference. The system effectively suppresses false alarms caused by non-human motion while maintaining reliable detection performance for real fall events. The main contributions of this work are summarized as follows: 
+
+• We introduce an embodied mmWave fall detec-tion paradigm that integrates radar sensing with robotic mobility, establishing a complete robotic pipeline from perception and event inference to decision and assistance. When deployed on a humanoid platform, the system improves cross-room monitoring continuity and alleviates cover-age interruptions associated with static installa-tions. 
+
+• We develop a hierarchical human-centered per-ception pipeline that integrates target attribu-tion, interference suppression, and temporal event modeling, enabling robust fall detection in complex residential environments with multiple environmental motion sources. 
+
+• We conduct extensive real-world validation across eight indoor environments with four par-ticipants. The results demonstrate effective sup-pression of false alarms while maintaining re-liable fall detection performance under diverse environmental conditions. 
+
+# 2 Related works 
+
+2.1 Static Radar-based Fall Detection 
+
+Radar-based fall detection has been widely studied as a privacy-preserving alternative to vision-based ap-proaches. Most prior works adopt a static deployment paradigm, where radar sensors monitor predefined areas under a fixed sensing geometry. Early studies rely on spectral representations such as Doppler–time and range–velocity maps to capture rapid body de-scent dynamics. Subsequent works introduce multi-map fusion and deep models to improve generaliza-tion (Yao et al., 2022). With the development of MIMO mmWave radar, point cloud and 4D imaging representations have been adopted to preserve spatial structure and posture evolution (Ahn et al., 2025). Temporal reasoning mechanisms are further incorpo-rated to distinguish life-threatening falls from fall-like behaviors (Zhang et al., 2023). Despite advances in representation and temporal modeling, these ap-proaches remain constrained by fixed sensing geome-try and predefined coverage areas. To improve robustness in practical settings, recent studies explore mmWave radar for in-home fall de-tection. Multi-view fusion strategies (Feng et al., 2023) and environment-invariant kinematic represen-tations (Huh et al., 2025) have been proposed to enhance generalization under environmental varia-tion. However, many evaluations are conducted under relatively controlled assumptions, with limited con-sideration of additional motion sources such as pets and multipath-induced ghost reflections. These non-human dynamics significantly increase false detection rates and tracking instability. Moreover, although robustness to environmental variation is studied, sens-ing deployment largely remains static, and cross-area continuous monitoring is not explicitly addressed. 
+
+2.2 Embodied Fall Detection Paradigms on Mobile Robots 
+
+Mobile robotic platforms have been introduced to extend monitoring coverage in elderly care applica-tions (Chin et al., 2020; Elwaly et al., 2024). In most existing systems, fall detection is implemented using onboard cameras, while robot mobility primar-ily serves to reduce blind areas. Such approaches inherit the limitations of vision-based sensing, in-cluding sensitivity to illumination, occlusion, and privacy concerns. In addition, robot motion is typ-ically driven by navigation objectives rather than perception-oriented sensing regulation. Radar-based fall detection under embodied mobile deployment has been rarely explored. Integrating mmWave radar into a humanoid robotic platform, therefore, represents a distinct sensing configuration that shifts fall detection from static installation to embodied mobile deploy-ment, enabling continuous cross-area monitoring in realistic home environments. 
+
+# 3 Methodology 
+
+3.1 Embodied Monitoring Architecture 
+
+We propose an embodied mobile mmWave sensing paradigm for indoor caregiving that integrates per-ception, fall inference, and action generation into a unified robotic loop, as illustrated in Fig. 2. The pro-posed system is organized into three tightly coupled layers: spatial state estimation for maintaining reli-able target observability, human-centered perception 3and fall inference for robust activity understanding, and decision integration for generating robot actions. The system first estimates human target states from mmWave radar point clouds and fuses them with robot ego-motion derived from kinematics and odom-etry to maintain spatial consistency under mobile deployment. The fused spatial representation en-ables people-as-planner tracking and lightweight lo-cal motion regulation for continuous following. To address occlusion, multipath effects, and non-human dynamics in real homes, a human-centered percep-tion pipeline is introduced to suppress ghost targets, reject non-human entities, and model fall-related tem-poral state transitions. The structured state abstrac-tion is then provided to a high-level decision module, which generates action policies for active tracking and assisted response, including fall alerting, thereby enabling continuous cross-area monitoring and event-driven intervention. The decision module primarily serves as an integration interface between perception outputs and robot behavior generation, while the quantitative evaluation presented in this work focuses on the robustness of perception and fall inference. 
+
+3.2 Spatial State Estimation and Active Reg-ulation 
+
+To maintain reliable spatial observability under mo-bile deployment, we first estimate stable human target trajectories from raw mmWave point clouds. Specifically, a clustering–EKF tracking pipeline (San-tos et al., 2021) is adopted to convert sparse and multipath-contaminated radar returns into tempo-rally consistent target states. Building upon the tracked human trajectory, we im-plement a people-as-planner following strategy (Liao et al., 2025). Instead of performing global replan-ning or predictive crowd modeling, the robot treats human motion as an implicit local guide and contin-uously regulates its motion to preserve monitoring continuity. To compensate for robot ego-motion, the radar-estimated target pose is transformed into the robot coordinate frame as 
+
+> R
+
+TO (t) = 
+
+RRS RpS
+
+0⊤ 1
+
+  S RO (t) S pO (t)
+
+0⊤ 1
+
+
+
+, (1) where ATB (t) ∈ SE (3) denotes the homogeneous transformation that maps coordinates from frame 
+
+{B} to frame {A} at time t. Here, RRS ∈ SO (3) 
+
+and RpS ∈ R3 are the rotation matrix and trans-lation vector of the radar frame {S} with respect to the robot frame {R}, obtained from radar–robot  
+
+> Figure 3 Illustration of people-as-planner active tracking. The observed robot–human distance is updated every 0.1 s, while subgoals are refreshed over a 0.5 s horizon to maintain stable following under noisy observations.
+
+extrinsic calibration. Moreover, S RO (t) ∈ SO (3) 
+
+and S pO (t) ∈ R3 denote the target orientation (ap-proximated by the direction of the tracked planar velocity) and position expressed in {S} at time t.The composition yields RTO (t), namely the target pose represented in the robot frame. Let ptR and ptHL denote the robot and human posi-tions on the ground plane at time t, respectively. The subgoal located d meters behind the leader along the robot–leader line is defined as 
+
+ptg = ptHL − d · ptHL − ptR
+
+ptHL − ptR
+
+. (2) We update the subgoal at a fixed frequency f and maintain it over a short horizon to improve tracking stability. A lightweight local planner is then executed to reach the subgoal in real time. Let the leader ve-locity be vtHL ∈ R2, and let the robot-leader distance be ptHL − ptR . We directly modulate the maximum speed used by the local planner as 
+
+vt 
+
+> max
+
+= min 
+
+
+
+¯v, vtHL 2 + kv
+
+  ∆pt 
+
+> 2
+
+− ρ
+
+> +
+
+
+
+, (3) where ¯v > 0 is a preset speed cap and typically ¯v ≥∥vtL∥2, vtL denotes the leader velocity on the ground plane, ∆pt is the robot–leader displacement on the ground plane, ρ is the capture distance threshold, and kv > 0 is a linear gain that converts the excess distance into an additional speed allowance. The operator (·)+ is defined as 
+
+(x)+ ≜ max( x, 0) , (4) so that the extra term is activated only when 
+
+∥∆pt∥2 > ρ . This design enables the mobile plat-form to perform responsive indoor following and con-tinuous monitoring. The tracking performance is illustrated in Fig. 3. 43.3 Human-Centered Perception and Fall In-ference 
+
+Given the tracked target states, we process them with a hierarchical human-centered perception pipeline. Specifically, we refine raw target observations through a cascaded filtering procedure. A non-human target filter is first applied to remove returns associated with pets and other moving objects, followed by a ghost target filter to suppress spurious tracks caused by multipath propagation. For the remaining human tar-gets, we perform human activity recognition using an MLP-based temporal state model that learns discrim-inative representations from continuous target state sequences and classifies the underlying activity. By explicitly modeling motion semantics and the state transitions surrounding fall events, the proposed cas-cade supports online fall recognition with improved robustness to measurement noise, background clutter, and multipath interference. The non-human target filter aims to separate human targets from non-human entities. Since mmWave radars typically produce point clouds that mainly correspond to moving or dynamically changing ob-ject components (Pearce et al., 2023), we aggregate the most recent frames into a stacked point cloud to obtain a more stable observation. Based on the aggregated data, we compute two geometric cues, namely the estimated target height and the number of associated points. A threshold-based rule is then used to reject non-human targets and retain human candidates according to these cues. To further im-prove robustness against frame-level fluctuations, we adopt a voting scheme over the temporal window to determine the final classification outcome. The ghost target filter aims to remove ghost targets from the set of detected tracks. Although TI’s tar-get tracking pipeline provides partial suppression of spurious tracks (Santos et al., 2021), our empirical evaluation indicates that ghost targets are still fre-quently produced in cluttered indoor environments. To further mitigate this issue, we introduce an ad-ditional state machine-based filter that operates on the tracked outputs. After applying the TI tracking method, each point in the point cloud is represented as a seven-dimensional feature vector:           
+
+> pi=xi,yi,zi,vi,SNR i,noise i,id i
+> ∈R7,
+> (5)
+
+where xi, yi, and zi denote the three-dimensional Cartesian coordinates of the i-th point, vi is the cor-responding Doppler velocity, SNR i and noise i are signal quality indicators, and id i is the cluster iden-tifier assigned by the TI tracking module. We then apply a threshold based screening rule using the per-cluster point count and aggregate SNR i to reject low-confidence clusters and suppress spurious targets. Only clusters that satisfy these criteria are retained for subsequent state updates. To enforce temporal consistency and suppress ghost targets, we associate each cluster i with a discrete confidence state ci[t] ∈ Z≥0, which is updated at ev-ery point cloud frame. Let It denote the index set of clusters that are successfully observed (i.e., asso-ciated with valid measurements) at time step t. We further introduce two thresholds, where s1 specifies the confirmation level and s2 controls the saturation margin of highly reliable tracks. The state update rule is designed to (i) reward persistent observations by increasing ci[t] before confirmation, (ii) clamp the confidence to a maximum of s1 + s2 once confirmed, and (iii) penalize missed detections via a one-step decay with a non-negativity constraint, as formalized in Equation (6),                     
+
+> ci[t+1] =
+> 
+> ci[t] + 1 , i∈ I t
+> ∧ ci[t]< s 1−1.s1+s2, i∈ I t
+> ∧ ci[t]≥s1−1.
+> max  0, c i[t]−1,i / ∈ I t.
+> (6)
+
+When ci[t] gradually increases and reaches s1, the corresponding cluster is identified as a valid target, and an additional increment s2 enhances its confi-dence level. If a cluster is not detected in subsequent frames, its state value decreases by one per frame until reaching zero, where it is considered a ghost target. This update mechanism suppresses transient false alarms and provides a reliable target tracking capability. The filtered human target sequences are then used as inputs to the fall detection module. For each tracked target, we compute six lightweight geometric descriptors from the current point cloud together with a short temporal history. Specifically, the per-frame feature vector is defined as 
+
+f t = ht
+
+> avg
+
+, ∆ht, ∆zt, w t
+
+> xy
+
+, n t
+
+> pt
+
+, ℓ tz
+
+⊤. (7) Here, ht 
+
+> avg
+
+denotes the recent average height of the target, ∆ht denotes the height change over the tem-poral window, ∆zt denotes the vertical displacement of the target center, wt 
+
+> xy
+
+denotes the planar spatial extent on the ground plane, nt 
+
+> pt
+
+denotes the normal-ized point count as a proxy of point cloud density or size, and ℓtz denotes the vertical extent of the target. Together, they form a compact yet informative repre-sentation of spatiotemporal dynamics that supports robust fall-related state inference in the presence of clutter and partial observations. The six-dimensional feature tensors extracted from the point cloud are fed into a moment-based drop 5Jump Lying Squat Sit Walk Fall  
+
+> Figure 4 Six representative activities used in the evalua-tion: jump, lying, squat, sit, walk, and fall.
+
+detector. Recent progress in neural networks has shown a strong capability in learning discriminative latent representations from noisy sensory measure-ments. We therefore adopt a three-layer multilayer perceptron (MLP) as the drop detector to predict whether a drop event occurs at the current time step. Although temporal architectures are widely used for sequential modeling, their recursive computation can introduce non-negligible latency. Moreover, under limited training data, overly complex temporal mod-els may exhibit reduced cross-scenario generaliza-tion (Werthen-Brabants et al., 2022; Li et al., 2021). During training, feature vectors corresponding to the drop phase in fall sequences are labeled as the posi-tive class, whereas all feature vectors from non-fall sequences are labeled as the negative class. Given the pronounced class imbalance, we employ a weighted binary cross-entropy loss function to train the MLP drop detector,            
+
+> LwBCE =−1
+> N
+> NX
+> i=1
+> 
+> w+yilog(ˆ yi) + w−(1 −yi) log(1 −ˆyi)
+> 
+> ,
+> (8)
+
+where N is the number of training samples, yi ∈{0, 1} and ˆyi ∈ (0 , 1) denote the ground truth label and predicted probability for sample i, respectively, and w+ > 0 and w− > 0 are class weights used to compensate for the imbalance. If a drop action is detected at the current time step, the module waits for a short verification horizon, and then it computes the following post-event and pre-event metrics. First, it measures the maximum body width observed after the drop event, 
+
+Wmax ≜ max 
+
+> t=1 ,..., Tpost
+
+W (t), (9) where Tpost denotes the corresponding post event evaluation window. Then it computes the proportion of post drop frames whose average height falls below a predefined threshold, 
+
+Rh ≜ 1
+
+|T post |
+
+X
+
+> t∈T post
+
+I ¯h(t) < h th 
+
+ , (10) where I(·) denotes the indicator function. In addition, the module evaluates the average delta height within the k frames preceding the fall,          
+
+> Havg ≜1
+> |T pre |
+> X
+> t∈T pre
+> ∆h(t),Tpre ≜{tf−k, . . . , t f−1}.
+> (11)
+
+A threshold based decision rule is applied to fuse the three pooled features and infer the final fall label, 
+
+z1(t) = I(Havg (t) < −τ∆h) , (12) 
+
+z2(t) = I   Wmax (t) > τ w
+
+ ∧  Rh(t) > τ r
+
+ , (13) 
+
+ˆy(t) = I(z1(t) ∧ z2(t) ∧ D (t)) , (14) where I(·) denotes the indicator function, τ∆h, τw,and τr are predefined thresholds, and D(t) ∈ { 0, 1}
+
+is the binary drop event indicator at time t. By jointly modeling characteristic patterns preceding the fall and post-fall signatures, this rule based fusion improves robustness and yields higher fall detection accuracy than approaches that rely on a single stage or a single cue. 
+
+3.4 Decision and Action Integration 
+
+Finally, we implement a decision module that maps mmWave observations and fused target states to high-level action policies. The module enables online zero-shot robot responses using an LLM, Llama 3.1 8B, conditioned on a predefined prompt template. When a fall event is detected, the module triggers an alert. When the target remains mobile, the robot performs active following by combining the fused spatial state with control information from the people-as-planner module, including the fused target state, the target-to-robot relative distance and relative velocity, and motion planning outputs such as the commanded ve-locity and subgoal position. Together, these compo-nents form an integrated perception–decision–action pipeline that supports long-term companionship and event-driven intervention with improved robustness. 
+
+# 4 Experiments 
+
+In this section, we systematically evaluate the pro-posed framework. We assess fall detection perfor-mance under diverse environmental conditions and compare against multiple baselines. We further ex-amine the decision module’s ability to produce ap-propriate responses under different target states. In addition, we conduct an ablation study to quantify the contribution of the temporal modeling module to fall detection performance. 6(c) (b) (a) Pre-fall Drop Post-fall                                      
+
+> Figure 5 Visualization of the proposed three-stage fall detection. Columns correspond to the fall phases (pre-fall, drop, post-fall), while rows represent different scenarios: (a) low visibility, (b) normal lighting, and (c) occlusion. Each pair shows the RGB frame (left) and the corresponding mmWave radar point cloud (right).
+> Table 1 Cross-modality availability across eight indoor scenes. We report whether reliable fall detection can be achieved by each method in scenes S1–S8 (defined in Fig. 2).
+> Method S1 S2 S3 S4 S5 S6 S7 S8 YOLO-Pose ✓××✓××✓×
+> DR-SPAAM ✓✓×✓✓×✓✓
+> Ours ✓✓✓✓✓✓✓✓
+> Table 2 Evaluation of LLM-based decision making for fall and move cases using structured perception inputs.
+> Case Decision Accuracy Similarity Numerical Accuracy
+
+Fall 100.0% 81.5% 100.0% Move 100.0% 71.5% 99.0% 
+
+4.1 Experimental Setup 
+
+Our mobile robotic platform is built on the Unitree G1 robot. The mmWave sensing module uses the TI IWR6843-ISK radar. For visual comparison, we employ an Intel RealSense D455 RGB-D camera. For the LiDAR modality, we adopt the Unitree L1 LiDAR. To evaluate the cross-room generalization of the pro-posed fall detection framework, we propose the EM-Fall-Home dataset, collected from four volunteers across three scenario types: Normal Lighting, Occlu-sion, and Low Visibility, across eight distinct indoor environments. For each scenario type, we recorded 30 fall trials and 30 non-fall trials. Non-fall activi-ties include jumping, walking, lying, squatting, and sitting, resulting in 180 motion sequences in total. All sequences were manually annotated with fall and non-fall labels. Prior to fall inference, all sequences were processed by the ghost-target and non-human filtering modules. The dataset intentionally includes fall-like activities, particularly lying, squatting, and sitting, which are commonly confused with falls. Each motion sequence lasts 3 seconds, and the six evaluated poses are illustrated in Fig. 4. To train the proposed model and the compared base-lines, point cloud frames are converted into feature vector sequences using the descriptors defined in Sec-tion III-C. All learnable components are randomly initialized. The models are implemented in PyTorch and optimized using Adam with a constant learning rate of 1×10 −3. Training is conducted on an NVIDIA RTX 4070 GPU with a batch size of 32 for 20 epochs. To improve the reliability of the reported results, we perform 30 random splits for each scenario type. In each split, 20 fall sequences and 20 non-fall sequences are used for training, 5 fall sequences and 5 non-fall sequences are used for validation, and 5 fall sequences and 5 non-fall sequences are used for testing. All evaluation metrics reported below are averaged across the 30 repeated splits. 7Table 3 Performance comparison of fall detection methods under three environmental scenarios: Normal Lighting, Low Visibility, and Occlusion.       
+
+> Scenarios Method Accuracy TPR FPR F1-Score AUROC AUPRC MCC
+
+Normal Lighting 4D Image(Ahn et al., 2025) 95.0% 96.7% 6.7% 95.1% 99.0% 99.0% 90.1% Elder-Fall(Kittiyanpunya et al., 2023) 86.0% 99.3% 27.3% 87.6% 83.6% 73.2% 74.7% LT-Fall(Zhang et al., 2023) 97.3% 94.7% 0.0 % 97.3% 97.3% 97.3% 94.8% Bi-LSTM(Shrestha et al., 2020) 85.7% 96.0% 24.7% 87.0% 96.8% 97.0% 72.9% ST-GCN(Yan et al., 2018) 98.0% 98.7% 2.7% 98.0% 99.8% 99.8% 96.0%   
+
+> Ours 100.0% 100.0% 0.0
+
+% 100.0% 100.0% 100.0% 100.0% 
+
+Low Visibility 4D Image(Ahn et al., 2025) 96.3% 100.0% 7.3% 96.5% 99.5% 99.3% 92.9% Elder-Fall(Kittiyanpunya et al., 2023) 82.7% 97.3% 32.0% 84.9% 80.7% 71.6% 68.3% LT-Fall(Zhang et al., 2023) 93.7% 98.0% 10.7% 93.9% 93.7% 89.4% 87.7% Bi-LSTM(Shrestha et al., 2020) 91.7% 94.0% 10.7% 91.9% 91.8% 92.2% 83.4% ST-GCN(Yan et al., 2018) 90.0% 92.0% 12.0% 90.2% 95.0% 93.9% 80.1%    
+
+> Ours 97.0% 100.0%
+
+6.0% 97.1% 97.0% 94.3% 94.2% 
+
+Occlusion 4D Image(Ahn et al., 2025) 94.0% 96.7% 8.7% 94.2% 99.1% 99.1% 88.1% Elder-Fall(Kittiyanpunya et al., 2023) 72.9% 90.7% 46.7% 77.7% 70.7% 67.7% 47.8% LT-Fall(Zhang et al., 2023) 86.0% 86.0% 14.0% 86.0% 86.0% 81.0% 72.0% Bi-LSTM(Shrestha et al., 2020) 84.7% 99.3% 30.0% 86.6% 96.2% 94.0% 72.5% ST-GCN(Yan et al., 2018) 94.3% 92.7% 4.0% 94.2% 98.6% 98.9% 88.7%    
+
+> Ours 94.7% 100.0%
+
+10.7% 94.9% 94.7% 90.4% 89.8% 
+
+4.2 Fall Detection Performance Comparison 
+
+To evaluate the effectiveness of the proposed fall detec-tion method, we compared our method with other rep-resentative mmWave-based baselines: 4D Image(Ahn et al., 2025), Elder-Fall (Kittiyanpunya et al., 2023), LT-Fall (Zhang et al., 2023), Bi-LSTM(Shrestha et al., 2020), and ST-GCN(Yan et al., 2018). We set τ∆h = −0.5, τw = 0 .4, and τr = 0 .6 for all scenar-ios. Table 3 summarizes the quantitative comparison between our method and the baselines under three environmental conditions: normal lighting, low vis-ibility, and occlusion. First, our method achieves a fall detection TPR of 100% in all three settings, resulting in zero missed detections. This property is particularly important for fall detection systems, where false negatives incur a high safety risk. Sec-ond, while maintaining perfect TPR, our method achieves the highest F1-score, which is 97.1% and 94.9%, and MCC, which is 94.2% and 89.8%, in the two challenging scenarios of low visibility and occlu-sion. These results indicate that the improvements are not obtained at the cost of precision, but reflect better suppression of false alarms and more consistent decision behavior. Moreover, the performance degradation of our ap-                     
+
+> Table 4 Ablation study of the temporal fall analysis mod-ule.
+> Setting F1 AUPRC MCC
+> w/o temporal analysis 96.6% 93.4% 93.1% w/o post-fall 96.9% 93.9% 93.8% w/o pre-fall 97.0% 94.1% 94.0% Complete temporal analysis 97.3% 94.7% 94.6%
+> Table 5 Ablation study on the depth of the MLP classifier.
+> Setting F1-Score AUROC AUPRC MCC
+
+2 layers 90.7% 89.9% 83.4% 81.1%     
+
+> 3 layers 97.3% 97.2% 94.7% 94.6%
+
+4 layers 96.2% 96.1% 92.9% 92.4%      
+
+> Table 6 Ablation study on the temporal window duration used for fall analysis.
+> Setting F1-Score AUROC AUPRC MCC
+
+0.5 s 95.9% 95.8% 92.2% 91.9%     
+
+> 1.0 s 97.3% 97.2% 94.7% 94.6%
+
+1.5 s 95.0% 94.9% 91.4% 90.0% 
+
+8proach in complex scenes remains moderate, whereas several baselines exhibit either a sharp increase in FPR under occlusion or a noticeable drop in TPR. Our method maintains the best overall metrics with a relatively low false positive rate, demonstrating stronger robustness under observation degradation. Overall, these results suggest that our method is well-suited for cross-area and cross-environment de-ployment in real homes and mobile robotic platforms. It maintains reliable fall detection under environ-mental changes, prioritizes avoiding missed falls, and keeps false alarms within an acceptable range. Visu-alization examples are shown in Fig. 5. Finally, to highlight the advantage of mmWave sens-ing under challenging visible conditions, we further compare our method with representative baselines from other sensing modalities. Specifically, we con-sider a vision baseline based on YOLO-Pose (Maji et al., 2022) with a temporal fall detection head, and a LiDAR baseline based on DR-SPAAM (Jia et al., 2020) using the same temporal fall detection scheme. All methods are evaluated under eight different vis-ibility scenarios, and the results are summarized in Table 1. 
+
+4.3 Decision Capacity Experiment 
+
+To evaluate the decision generation capability of the proposed decision module, we select 200 structured perception instances, including 100 fall events and 100 normal motion states captured from the dataset. These instances are provided to the module, and we quantitatively measure the correctness of the gener-ated decisions. Each input is represented in a struc-tured format and includes the fused target state, the target–robot relative distance and velocity, and the motion planner outputs (commanded velocity and subgoal position). The results are reported in Table 2. Decision Accuracy measures correct state recognition; Similarity denotes the cosine similarity between gen-erated responses and reference answers; Numerical Accuracy evaluates the correctness of extracted nu-merical information. The decision module achieves a 100% success rate in both the Fall and Move scenarios, indicating reli-able correctness in state recognition and numerical information extraction. Meanwhile, the Similarity score in the Fall scenario is 81.5%, whereas it is 71.5% in the Move scenario. This difference arises because fall-related responses follow a more consis-tent alert policy, whereas normal motion responses allow greater linguistic variability. As a result, the generated outputs remain semantically correct but exhibit larger textual variation, leading to lower simi-larity scores. Moreover, because the subgoal position was missing for one Move instance, the Numerical Accuracy decreased slightly, which is 99.0%. 
+
+4.4 Ablation Experiments 
+
+To quantify the contribution of each component in the proposed three-stage fall detection scheme, we conduct an ablation study including (i) the temporal analysis stages, (ii) the MLP depth, and (iii) the tem-poral window duration. When aggregating all scenar-ios, Table 4 shows that the full three-stage temporal decision provides a clear performance gain. The com-plete model attains an F1-score of 97.3%, an AUPRC of 94.7%, and a MCC of 94.6%. Removing either the post-fall or pre-fall analysis consistently degrades per-formance, indicating that relying on instantaneous cues alone weakens the ability to distinguish true falls from fall-like actions. The impact of removing post-fall is slightly more pronounced, suggesting that post-impact pose stability and spatial structure cues play an important role in suppressing false positives. Table 5 reports the MLP-depth ablation, where a 3-layer MLP achieves the best performance. The 2-layer variant underfits, with an F1-score of 90.7%, while increasing the depth to 4 layers leads to a slight performance drop, with an F1-score of 96.2%, suggesting reduced generalization due to redundant parameters. Table 6 evaluates the temporal window duration. A 1.0 s window performs best. A 0.5 s window provides insufficient temporal context, lead-ing to an F1-score of 95.9%, whereas a 1.5 s window tends to include additional non-fall motion fragments that degrade fall detection performance, resulting in an F1-score of 95.0% and an MCC of 90.0%. 
+
+# 5 Conclusion 
+
+This work presents EM-Fall, an embodied mobile mmWave-based fall detection framework for in-home elderly care. By deploying radar sensing on a hu-manoid robotic platform, the system overcomes the coverage gaps and viewpoint limitations of static radar installations, enabling continuous and privacy-preserving monitoring in real residential environ-ments. The framework integrates spatial state es-timation, human-centered perception and fall infer-ence, and decision integration within a unified robotic pipeline. mmWave target tracking is fused with robot ego-motion to maintain consistent target states dur-ing mobile operation, while human-centered percep-tion suppresses non-human entities and multipath artifacts and temporal inference distinguishes true falls from fall-like activities. Experiments across eight 9indoor environments with four participants under normal lighting, occlusion, and low-visibility condi-tions demonstrate robust fall detection performance and stable observation under diverse environmen-tal conditions. These results suggest that embodied mobile mmWave sensing provides a practical per-ception–detection–decision foundation for long-term home companion robots. 10 References 
+
+Sejong Ahn, Museong Choi, Jongjin Lee, Jinseok Kim, and Sungtaek Chung. Non-contact fall detection system using 4d imaging radar for elderly safety based on a cnn model. Sensors , 25(11):3452, 2025. Asma Benkaci, Layth Sliman, and Hachemi Nabil Dellys. Vision-based human fall detection systems: A review. 
+
+Procedia Computer Science , 241:203–211, 2024. Eugene Casmin and Rodolfo Oliveira. Survey on context-aware radio frequency-based sensing. Sensors , 25(3): 602, 2025. Yang Chen, Feifei Dai, Shulun Huang, Daoda Qi, Chengyi Peng, Aijia Zhang, Yuan Wang, Yan Gu, and Jingjing Guo. Global, regional, and national burden of falls among older adults: findings from the global burden of disease study 2021 and projections to 2040. npj Aging ,11(1):85, 2025. Wei Hong Chin, Noel Nuo Wi Tay, Naoyuki Kubota, and Chu Kiong Loo. A lightweight neural-net with assistive mobile robot for human fall detection system. In 2020 International Joint Conference on Neural Networks (IJCNN) , pages 1–6. IEEE, 2020. Ahmad Elwaly, A Abdellatif, and Y El-Shaer. New el-dercare robot with path-planning and fall-detection capabilities. Applied Sciences , 14(6):2374, 2024. Xiang Feng, Zhengliang Shan, Zhanfeng Zhao, Zirui Xu, Tianpeng Zhang, Zihe Zhou, Bo Deng, and Zirui Guan. Millimeter-wave radar monitoring for elder’s fall based on multi-view parameter fusion estimation and recog-nition. Remote Sensing , 15(8):2101, 2023. Shuting Hu, Siyang Cao, Nima Toosizadeh, Jennifer Bar-ton, Melvin G Hector, and Mindy J Fain. Radar-based fall detection: A survey [survey]. IEEE robotics & automation magazine , 31(3):170–185, 2024. Hyunsuk Huh, Iljoo Jeong, Anna Lee, Seungchul Lee, and Young-Sik Shin. Leveraging falling acceleration and body part clustering for physics-based human fall detection with millimeter wave radar. Engineering Applications of Artificial Intelligence , 159:111500, 2025. Dan Jia, Alexander Hermans, and Bastian Leibe. Dr-spaam: A spatial-attention and auto-regressive model for person detection in 2d range data. In 2020 IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS) , pages 10270–10277. IEEE, 2020. Chainarong Kittiyanpunya, Pongsathorn Chomdee, Akkarat Boonpoonga, and Danai Torrungrueng. Millimeter-wave radar-based elderly fall detection fed by one-dimensional point cloud and doppler. Ieee Ac-cess , 11:76269–76283, 2023. Xinyu Li, Yuan He, Francesco Fioranelli, and Xiaojun Jing. Semisupervised human activity recognition with radar micro-doppler signatures. IEEE Transactions on Geoscience and Remote Sensing , 60:1–12, 2021. Yuwen Liao, Xinhang Xu, Ruofei Bai, Yizhuo Yang, Muqing Cao, Shenghai Yuan, and Lihua Xie. Fol-lowing is all you need: Robot crowd navigation using people as planners. IEEE Robotics and Automation Letters , 2025. Debapriya Maji, Soyeb Nagori, Manu Mathew, and Deepak Poddar. Yolo-pose: Enhancing yolo for multi person pose estimation using object keypoint similarity loss. In Proceedings of the IEEE/CVF conference on computer vision and pattern recognition , pages 2637– 2646, 2022. Nishat Tasnim Newaz and Eisuke Hanada. The methods of fall detection: A literature review. Sensors , 23(11): 5212, 2023. Andre Pearce, J Andrew Zhang, Richard Xu, and Kai Wu. Multi-object tracking with mmwave radar: A review. 
+
+Electronics , 12(2):308, 2023. Inês C Rocha, Marcelo Arantes, António Moreira, João L Vilaça, Pedro Morais, Demétrio Matos, and Vítor Car-valho. Monitoring wearable devices for elderly people with dementia: a review. Designs , 8(4):75, 2024. Bruno Santos, AS Oliveira, Nuno Borges Carvalho, Rui Fernandes, Andrea Cannizzaro, and Pedro Miguel Cruz. Fmcw radar point cloud multiperson tracking using a kalman filter–based approach. URSI Radio Sci. Lett. ,3:68, 2021. Aman Shrestha, Haobo Li, Julien Le Kernec, and Francesco Fioranelli. Continuous human activity classi-fication from fmcw radar with bi-lstm networks. IEEE Sensors Journal , 20(22):13607–13619, 2020. Lorin Werthen-Brabants, Geethika Bhavanasi, Ivo Couck-uyt, Tom Dhaene, and Dirk Deschrijver. Split birnn for real-time activity recognition using radar and deep learning. Scientific Reports , 12(1):7436, 2022. Sijie Yan, Yuanjun Xiong, and Dahua Lin. Spatial tem-poral graph convolutional networks for skeleton-based action recognition. In Proceedings of the AAAI confer-ence on artificial intelligence , volume 32, 2018. Yicheng Yao, Changyu Liu, Hao Zhang, Baiju Yan, Pu Jian, Peng Wang, Lidong Du, Xianxiang Chen, Baoshi Han, and Zhen Fang. Fall detection system us-ing millimeter-wave radar based on neural network and information fusion. IEEE Internet of Things Journal ,9(21):21038–21050, 2022. Duo Zhang, Xusheng Zhang, Shengjie Li, Yaxiong Xie, Yang Li, Xuanzhi Wang, and Daqing Zhang. Lt-fall: The design and implementation of a life-threatening fall detection and alarming system. Proceedings of the ACM on Interactive, Mobile, Wearable and Ubiquitous Technologies , 7(1):1–24, 2023. 
+
+11

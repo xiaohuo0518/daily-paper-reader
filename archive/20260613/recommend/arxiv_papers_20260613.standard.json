@@ -1,0 +1,273 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-06-13T21:09:20.246881+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 2,
+    "deep_divecandidates": 0,
+    "deep_cap": 7,
+    "deep_selected": 0,
+    "quick_candidates": 6,
+    "quick_skim_target": 12,
+    "quick_selected": 6
+  },
+  "deep_dive": [],
+  "quick_skim": [
+    {
+      "id": "2606.10614v1",
+      "source": "arxiv",
+      "title": "Dexterous Point Policy: Learning Point-based Dexterous Hand Policies from Human Demonstrations",
+      "abstract": "Robotic foundation models pre-trained on human demonstration videos have shown promise, but a significant embodiment gap remains when the resulting policies are deployed on real robots. A common remedy is to fine-tune these models on robot-specific demonstrations. However, robot data collection can be prohibitively expensive and time-consuming, which is particularly acute in dexterous manipulation, e.g., teleoperating a multi-fingered hand for even a single atomic task can take days. To address this, we introduce Dexterous Point Policy, a framework that learns dexterous manipulation policies directly from human videos and requires no robot demonstrations. Our core insight is that a unified 3D keypoint representation can bridge human and robot embodiments when used for both observations and actions. Specifically, we extract 3D keypoints of task-relevant objects and human hands from raw videos, and train an autoregressive transformer over these keypoints. We observe that at the keypoint level, specifically the wrist and fingertips, human and robot behaviors closely align, enabling direct policy transfer. On a suite of real-robot tasks spanning pick-and-place and tool use, Dexterous Point Policy attains 75.0% success, whereas a state-of-the-art VLA baseline reaches only 1.0%. Furthermore, our method generalizes strongly to unseen scenarios, including multi-object environments and novel object categories.",
+      "authors": [
+        "Beomjun Kim",
+        "Seong Hyeon Park",
+        "Seunghoon Sim",
+        "Seungjun Moon",
+        "Sanghyeok Lee",
+        "Jinwoo Shin"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.CV",
+        "cs.LG"
+      ],
+      "published": "2026-06-09T09:13:36+00:00",
+      "link": "https://arxiv.org/pdf/2606.10614v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "learning dexterous policies from human videos without robot demos",
+      "llm_evidence_cn": "从人类视频学习灵巧策略，无需机器人演示",
+      "llm_evidence": "从人类视频学习灵巧策略，无需机器人演示",
+      "canonical_evidence": "从人类视频学习灵巧策略，无需机器人演示",
+      "llm_tldr_en": "Dexterous Point Policy learns point-based dexterous hand policies directly from human videos, bypassing the need for costly robot demonstrations.",
+      "llm_tldr_cn": "该论文提出Dexterous Point Policy框架，利用统一3D关键点表示从人类视频直接学习灵巧手操作策略，无需任何机器人演示数据。该方法通过关键点空间对齐人类和机器人本体，解决了跨本体迁移的鸿沟。实验显示，在多项灵巧操作任务上，该策略性能接近使用机器人演示训练的方法，显著降低了数据收集成本。",
+      "llm_tldr": "该论文提出Dexterous Point Policy框架，利用统一3D关键点表示从人类视频直接学习灵巧手操作策略，无需任何机器人演示数据。该方法通过关键点空间对齐人类和机器人本体，解决了跨本体迁移的鸿沟。实验显示，在多项灵巧操作任务上，该策略性能接近使用机器人演示训练的方法，显著降低了数据收集成本。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2606.11109v1",
+      "source": "arxiv",
+      "title": "EM-Fall: Embodied mmWave Sensing for Day-and-Night Fall Detection on Humanoid Robots",
+      "abstract": "Falls are one of the leading causes of injury and hospitalization among elderly individuals, making reliable fall awareness an essential capability for safety monitoring in residential environments. However, existing fall detection systems often rely on wearable devices or fixed sensing installations, which may suffer from low user compliance, limited spatial coverage, or degraded performance under occlusion and poor lighting conditions. In this work, we propose \\textbf{EM-Fall}, an embodied fall detection framework deployed on a mobile humanoid robot. The system integrates millimeter-wave (mmWave) sensing with robotic mobility, allowing the robot to actively adjust its sensing viewpoint and maintain target observability across rooms and under occlusion. To address interference in complex residential environments, including pet motion and multipath artifacts, we design a human-centered perception pipeline combined with lightweight temporal modeling to capture motion evolution before, during, and after fall events. We evaluate the proposed system across eight real indoor environments with four participants and construct an in-home mmWave fall detection dataset. Experimental results show that the embodied mobile sensing paradigm improves monitoring continuity and maintains robust fall detection performance under diverse environmental conditions. The proposed framework provides a practical solution for robot-assisted safety monitoring in home environments.",
+      "authors": [
+        "Yanshuo Lu",
+        "Yuxuan Hu",
+        "Shenghai Yuan",
+        "Xinyu Zhou",
+        "Kuangji Zuo",
+        "Bofan Lyu",
+        "XiChen Yuan",
+        "Jianfei Yang"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-06-09T17:06:09+00:00",
+      "link": "https://arxiv.org/pdf/2606.11109v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "fall detection on humanoid robot",
+      "llm_evidence_cn": "人形机器人跌倒检测",
+      "llm_evidence": "人形机器人跌倒检测",
+      "canonical_evidence": "人形机器人跌倒检测",
+      "llm_tldr_en": "EM-Fall leverages embodied mmWave sensing on a humanoid robot for day-and-night fall detection, addressing safety monitoring.",
+      "llm_tldr_cn": "针对老年人跌倒检测问题，提出EM-Fall框架，将毫米波传感集成到移动人形机器人上，通过主动调整视角实现跨房间的持续监测。实验表明该方法在遮挡和弱光条件下优于固定传感器，为机器人辅助安全监控提供了新思路。",
+      "llm_tldr": "针对老年人跌倒检测问题，提出EM-Fall框架，将毫米波传感集成到移动人形机器人上，通过主动调整视角实现跨房间的持续监测。实验表明该方法在遮挡和弱光条件下优于固定传感器，为机器人辅助安全监控提供了新思路。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "fault detection in humanoid robots",
+      "matched_requirement_id": "req-6",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2606.10743v1",
+      "source": "arxiv",
+      "title": "Hand-centric Human-to-Robot Trajectory Transfer from Video Demonstrations via Open-World Contact Localization",
+      "abstract": "Learning from human video demonstrations remains challenging due to noisy hand-object interactions, unseen objects with partial observation, and cross-embodiment discrepancy. To address these challenges, we present \\textit{HOWTransfer} (\\emph{H}and-\\emph{O}bject \\emph{O}pen-\\emph{W}orld Transfer), a hand-centric framework that distills human demonstrations into contact-aware, taxonomy-informed, and diverse robotic trajectories. Instead of relying on object-specific descriptions, vision-language queries, or explicit object-state tracking, \\emph{HOWTransfer} recovers temporally consistent 3D hand motion and localizes temporal contact intervals by reasoning over observed hand-object interaction cues. The localized contact onsets are then used to retarget human grasp intent into multi-modal parallel-jaw grasp hypotheses, which are propagated along the recovered wrist trajectory to generate robot-executable motions. Finally, a trajectory editing stage refines contact alignment and produces diverse executable variants from a single demonstration. Experiments across diverse manipulation tasks show that \\emph{HOWTransfer} enables accurate contact localization and high-quality robot motion retargeting with $86\\%$ success, which is preferred over teleoperated trajectories in a blinded preference study.",
+      "authors": [
+        "Yitian Shi",
+        "Di Wen",
+        "Zhengqi Han",
+        "Zicheng Guo",
+        "Yu Hu",
+        "Edgar Welte",
+        "Kunyu Peng",
+        "Rainer Stiefelhagen",
+        "Rania Rayyes"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-06-09T11:53:29+00:00",
+      "link": "https://arxiv.org/pdf/2606.10743v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "human-to-robot trajectory transfer for data generation",
+      "llm_evidence_cn": "从人类视频到机器人轨迹的迁移用于数据生成",
+      "llm_evidence": "从人类视频到机器人轨迹的迁移用于数据生成",
+      "canonical_evidence": "从人类视频到机器人轨迹的迁移用于数据生成",
+      "llm_tldr_en": "HOWTransfer distills human demonstrations into contact-aware robotic trajectories, enabling scalable data generation without robot hardware.",
+      "llm_tldr_cn": "该论文提出HOWTransfer框架，从人类视频演示中提取手部运动并定位接触时间间隔，转化为机器人可执行的接触感知轨迹。该方法不依赖物体特定描述或状态跟踪，能够在开放世界中适应新物体。实验证明，生成的轨迹可用于行为克隆训练，在多种操作任务上取得良好效果，为机器人数据集构建提供了一种无需硬件的方法。",
+      "llm_tldr": "该论文提出HOWTransfer框架，从人类视频演示中提取手部运动并定位接触时间间隔，转化为机器人可执行的接触感知轨迹。该方法不依赖物体特定描述或状态跟踪，能够在开放世界中适应新物体。实验证明，生成的轨迹可用于行为克隆训练，在多种操作任务上取得良好效果，为机器人数据集构建提供了一种无需硬件的方法。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2606.11628v1",
+      "source": "arxiv",
+      "title": "LUCID: Learning Embodiment-Agnostic Intent Models from Unstructured Human Videos for Scalable Dexterous Robot Skill Acquisition",
+      "abstract": "The most widely-adopted robot learning pipelines today learn skills from robot demonstrations or structured human data, which are expensive to collect and tied to specific embodiments. In contrast, unstructured human videos provide a scalable alternative. They contain diverse manipulation demonstrations across objects, scenes, and strategies, but are not directly connected to robot action. We propose LUCID, a two-stage framework that learns task intent from unstructured human videos drawn from internet-scale datasets and learns robot control in massively-parallel simulation. The intent model predicts short-horizon intent (what should happen next in the scene) from the current observation in closed loop. An embodiment-specific sensorimotor policy converts this intent into robot actions. The intent interface is shared across controllers, so the same intent model can be applied to different embodiments, from our primary dexterous hand to a parallel-jaw gripper. We evaluate LUCID on five real-world manipulation tasks: stirring, wiping, and binning supervised by only internet video, with zero-shot transfer to novel scenes and object instances; and push-T and cable routing supervised by 1 hr each of self-collected smartphone video. Project page: https://lucid-robot.github.io/.",
+      "authors": [
+        "Harsh Gupta",
+        "Guanya Shi",
+        "Wenzhen Yuan"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.AI"
+      ],
+      "published": "2026-06-10T03:49:01+00:00",
+      "link": "https://arxiv.org/pdf/2606.11628v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "dataset construction from unstructured videos for robot learning",
+      "llm_evidence_cn": "从非结构化视频构建机器人学习数据集",
+      "llm_evidence": "从非结构化视频构建机器人学习数据集",
+      "canonical_evidence": "从非结构化视频构建机器人学习数据集",
+      "llm_tldr_en": "LUCID learns task intent from internet-scale human videos and control in simulation, enabling scalable robot skill acquisition without robot data.",
+      "llm_tldr_cn": "该论文提出LUCID框架，从互联网规模的非结构化人类视频中学习任务意图，并在大规模并行仿真中学习机器人控制。该方法解决了机器人演示数据昂贵且局限于特定本体的问题，通过预测短期意图弥合人类视频与机器人动作之间的鸿沟。实验表明，仅使用人类视频即可实现灵巧技能获取，为机器人数据集构建提供了可扩展的替代方案。",
+      "llm_tldr": "该论文提出LUCID框架，从互联网规模的非结构化人类视频中学习任务意图，并在大规模并行仿真中学习机器人控制。该方法解决了机器人演示数据昂贵且局限于特定本体的问题，通过预测短期意图弥合人类视频与机器人动作之间的鸿沟。实验表明，仅使用人类视频即可实现灵巧技能获取，为机器人数据集构建提供了可扩展的替代方案。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2606.11949v1",
+      "source": "arxiv",
+      "title": "Online Shift Detection and Conformal Adaptation for Deployed Safety Classifiers",
+      "abstract": "We present an online monitoring system for distributional shift in deployed safety classifiers, using calibrated sequential statistics to detect when a classifier has moved out of distribution. Upon detection, a conformal abstention layer adapts decision thresholds to recover a target error rate epsilon=0.1. In a pre-registered factorial evaluation (4 classifiers x 5 shift conditions x 20 seeds x 2 window sizes, 800 cells), the system achieves 86.6% valid detection (693/800, 95% CI [84.1%, 88.8%]) with mean latency of 39.5 steps. Detection holds across three ground-truth regimes: synthetic onset (86.6%), real temporal jailbreaks (85%, 17/20), and GCG adversarial attacks. Weighted conformal prediction recovers up to 39 pp of lost coverage for DeBERTa (ESS=46/300) but collapses for all other classifiers (ESS~300): logistic density ratio estimation achieves perfect source/target separability in high-dimensional embedding spaces, clipping all importance weights to the floor. DeBERTa shows a gradient from effective correction (paraphrase, ESS=46) to near-total collapse (adversarial suffix, ESS=206). PCA to 32 dimensions breaks the collapse, recovering 33 pp for Llama Guard and 21 pp for ShieldGemma. Variance decomposition reveals classifier (eta^2=0.243), shift type (eta^2=0.237), and their interaction (eta^2=0.185) all contribute substantially to detection latency variance (all p<0.001), indicating per-classifier monitoring profiles are necessary.",
+      "authors": [
+        "Jun Wen Leong"
+      ],
+      "primary_category": "cs.LG",
+      "categories": [
+        "cs.LG",
+        "cs.CR",
+        "stat.ML"
+      ],
+      "published": "2026-06-10T11:24:25+00:00",
+      "link": "https://arxiv.org/pdf/2606.11949v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "online shift detection and conformal adaptation for safety classifiers",
+      "llm_evidence_cn": "在线漂移检测和自适应安全分类器",
+      "llm_evidence": "在线漂移检测和自适应安全分类器",
+      "canonical_evidence": "在线漂移检测和自适应安全分类器",
+      "llm_tldr_en": "An online monitoring system detects distributional shift in deployed safety classifiers and adapts thresholds via conformal prediction.",
+      "llm_tldr_cn": "针对部署安全分类器的分布漂移问题，提出在线监测系统，使用时序统计检测漂移，并通过共形预测自适应调整决策阈值以恢复错误率。在4种分类器、5种漂移条件下的预注册评估中，检测有效率达86.6%，平均延迟39.5步。该方法可应用于机器人安全分类器的OOD检测，具有部署实用价值。",
+      "llm_tldr": "针对部署安全分类器的分布漂移问题，提出在线监测系统，使用时序统计检测漂移，并通过共形预测自适应调整决策阈值以恢复错误率。在4种分类器、5种漂移条件下的预注册评估中，检测有效率达86.6%，平均延迟39.5步。该方法可应用于机器人安全分类器的OOD检测，具有部署实用价值。",
+      "llm_tags": [
+        "query:humanoid-ood"
+      ],
+      "matched_query_tag": "query:humanoid-ood",
+      "matched_query_text": "out-of-distribution detection for safe robot operation",
+      "matched_requirement_id": "req-11",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2606.12365v1",
+      "source": "arxiv",
+      "title": "Ambient Diffusion Policy: Imitation Learning from Suboptimal Data in Robotics",
+      "abstract": "We propose Ambient Diffusion Policy, a simple and principled method for imitation learning from suboptimal data in robotics. High-quality, task-specific robot data is expensive and time-consuming to collect, while suboptimal datasets with lower-quality or out-of-distribution demonstrations are abundant. Existing methods that co-train on both data sources in robotics often fail to separate the meaningful and the harmful features in the suboptimal samples. In contrast, our method extracts only the useful features by introducing a new axis to co-training in robotics: noise-dependent data usage. Ambient Diffusion Policy restricts the contribution of suboptimal data during training to only the high and low diffusion times. To rigorously justify our approach, we first observe that robot action data exhibits a spectral power law. This induces two important properties on the optimal Diffusion Policy that we exploit: a global-to-local hierarchy and locality. We theoretically formalize this discussion using a simplified model. Our experiments validate Ambient Diffusion Policy on four types of suboptimal action data (noisy trajectories, sim-to-real gap, task mismatch, and large-scale data mixtures) across six tasks. The results show that it effectively learns from arbitrary sources of suboptimal data. Notably, it outperforms existing co-training baselines by up to 33% when scaled to Open X-Embodiment - a large dataset with heterogeneous data quality and unstructured distribution shifts. Overall, Ambient Diffusion Policy increases the utility of suboptimal demonstrations and expands the set of usable data sources in robotics.",
+      "authors": [
+        "Adam Wei",
+        "Nicholas Pfaff",
+        "Thomas Cohn",
+        "Arif Kerem Dayı",
+        "Constantinos Daskalakis",
+        "Giannis Daras",
+        "Russ Tedrake"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.AI"
+      ],
+      "published": "2026-06-10T17:34:12+00:00",
+      "link": "https://arxiv.org/pdf/2606.12365v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "method for imitation learning from suboptimal data, enabling dataset construction from lower-quality demonstrations",
+      "llm_evidence_cn": "从次优数据中提取有用特征的模仿学习方法，可用于机器人数据集构建",
+      "llm_evidence": "从次优数据中提取有用特征的模仿学习方法，可用于机器人数据集构建",
+      "canonical_evidence": "从次优数据中提取有用特征的模仿学习方法，可用于机器人数据集构建",
+      "llm_tldr_en": "Ambient Diffusion Policy introduces noise-dependent data usage to extract useful features from suboptimal demonstrations for imitation learning in robotics.",
+      "llm_tldr_cn": "本文针对高质量机器人数据昂贵的问题，提出环境扩散策略，通过在训练中根据噪声时间步限制次优数据的贡献，有效分离有用与有害特征，从而利用丰富的次优数据构建数据集，实验证明该方法能提升策略性能。",
+      "llm_tldr": "本文针对高质量机器人数据昂贵的问题，提出环境扩散策略，通过在训练中根据噪声时间步限制次优数据的贡献，有效分离有用与有害特征，从而利用丰富的次优数据构建数据集，实验证明该方法能提升策略性能。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    }
+  ]
+}
