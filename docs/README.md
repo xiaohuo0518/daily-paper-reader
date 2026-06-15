@@ -6,43 +6,46 @@
 </div>
 
 ## 每次日报
-- 最新运行日期：2026-06-14
-- 运行时间：2026-06-14 21:36:44 UTC
+- 最新运行日期：2026-06-15
+- 运行时间：2026-06-15 22:59:37 UTC
 - 运行状态：成功
-- 本次总论文数：7
+- 本次总论文数：8
 - 精读区：1
-- 速读区：6
+- 速读区：7
 
 ### 今日简报（AI）
-1) 今日精选7篇论文，核心围绕从人类视频到灵巧机器人演示的自主技能获取，以及高效视觉运动控制模型。  
-2) 最值得关注方向：人类视频直接生成高保真灵巧演示的EgoEngine（8.0分），以及受小脑-丘脑启发的视觉运动控制新框架CT-VAM（7.0分）。  
-3) 普通读者可重点关注：此类技术有望大幅降低机器人灵巧操作的数据获取成本，未来可关注其在不同场景的泛化性评估。
-- 详情：[/202606/14/README](/202606/14/README)
+1) 今日精读《Sensitivity Shaping for Latent Modeling》（9.0/10），速读3篇涉及人体控制、异常检测、机器人运动数据集。
+2) 最值得关注的是隐式建模中的敏感度塑形方法，可提升生成模型鲁棒性。
+3) 建议优先深入阅读精读论文，并关注其在具身智能或异常检测任务中的迁移潜力。
+- 详情：[/202606/15/README](/202606/15/README)
 
 ### 精读区论文标签
-1. [EgoEngine: From Egocentric Human Videos to High-Fidelity Dexterous Robot Demonstrations](/202606/14/2606.12604v1-egoengine-from-egocentric-human-videos-to-high-fidelity-dexterous-robot-demonstrations)  
-   标签：评分：8.0/10、query:ur
-   evidence：将自我中心人类视频转化为高保真机器人演示，实现可扩展的数据集构建。
+1. [Sensitivity Shaping for Latent Modeling](/202606/15/2606.14585v1-sensitivity-shaping-for-latent-modeling)  
+   标签：评分：9.0/10、query:humanoid-ood
+   evidence：面向安全机器人操作的分布外检测
 
 ### 速读区论文标签
-1. [CT-VAM: A Cerebello-Thalamic-Inspired Vision-Action Model for Efficient Visuomotor Control](/202606/14/2606.09572v1-ct-vam-a-cerebello-thalamic-inspired-vision-action-model-for-efficient-visuomotor-control)  
+1. [EgoPriMo: Egocentric Motion Generation for Interactive Humanoid Control](/202606/15/2606.08495v1-egoprimo-egocentric-motion-generation-for-interactive-humanoid-control)  
    标签：评分：7.0/10、query:ur
-   evidence：云边协同的视觉运动控制范式
-2. [Video2Sim2Real: Full-Stack Autonomous Dexterous Skill Acquisition from a Single Human Video](/202606/14/2606.08828v1-video2sim2real-full-stack-autonomous-dexterous-skill-acquisition-from-a-single-human-video)  
+   evidence：从第一人称人类演示学习运动先验，支持人形机器人数据集构建
+2. [D2H-AD: A Hybrid Model Utilizing Hyperdimensional Computing for Advanced Anomaly Detection](/202606/15/2606.13754v1-d2h-ad-a-hybrid-model-utilizing-hyperdimensional-computing-for-advanced-anomaly-detection)  
+   标签：评分：7.0/10、query:humanoid-ood
+   evidence：基于超维度计算的异常检测方法，适用于边缘部署
+3. [Kine2Go: Kinematic dataset for the Unitree Go2 robot with diverse gaits and motions](/202606/15/2606.14433v1-kine2go-kinematic-dataset-for-the-unitree-go2-robot-with-diverse-gaits-and-motions)  
+   标签：评分：7.0/10、query:ur
+   evidence：为宇树机器人（Go2）构建运动学数据集，直接关联宇树数据集构建
+4. [Stubborn: A Streamlined and Unified Reinforcement Learning Framework for Robust Motion Tracking and Fall Recovery for Humanoids](/202606/15/2606.12814v1-stubborn-a-streamlined-and-unified-reinforcement-learning-framework-for-robust-motion-tracking-and-fall-recovery-for-humanoids)  
    标签：评分：6.0/10、query:ur
-   evidence：从视频构建可用于仿真的数字孪生，与数据集构建相关
-3. [Your Model Already Knows: Attention-Guided Safety Filter for Vision-Language-Action Models](/202606/14/2606.09749v1-your-model-already-knows-attention-guided-safety-filter-for-vision-language-action-models)  
+   evidence：人形机器人跌倒恢复与运动跟踪的统一框架
+5. [GAIT: Legged Robot Proprioceptive State Estimation with Attention over Inertial-Leg Tokens](/202606/15/2606.14160v1-gait-legged-robot-proprioceptive-state-estimation-with-attention-over-inertial-leg-tokens)  
    标签：评分：6.0/10、query:humanoid-ood
-   evidence：利用注意力头的无训练安全过滤器，用于机器人操作中的分布外检测
-4. [RoboProcessBench: Benchmarking Process-Aware Understanding in Vision-Language Robotic Manipulation](/202606/14/2606.13040v1-roboprocessbench-benchmarking-process-aware-understanding-in-vision-language-robotic-manipulation)  
+   evidence：基于本体感受信号的人形机器人故障诊断
+6. [Hy-Embodied-0.5-VLA: From Vision-Language-Action Models to a Real-World Robot Learning Stack](/202606/15/2606.14409v1-hy-embodied-05-vla-from-vision-language-action-models-to-a-real-world-robot-learning-stack)  
    标签：评分：6.0/10、query:ur
-   evidence：为机器人失败检测提供过程感知理解的基准
-5. [Proprioceptive-visual correspondence enables self-other distinction in humanoid robots](/202606/14/2606.13222v1-proprioceptive-visual-correspondence-enables-self-other-distinction-in-humanoid-robots)  
-   标签：评分：6.0/10、query:humanoid-ood
-   evidence：利用本体感觉信号学习自我模型以区分自我与他人
-6. [ANNet: A first-principles neural network for forward and inverse dynamics](/202606/14/biorxiv-10-64898-2026-06-03-729998-v1-annet-a-first-principles-neural-network-for-forward-and-inverse-dynamics)  
-   标签：评分：6.0/10、query:humanoid-ood
-   evidence：使用本体感受信号的物理信息网络进行前向和反向动力学计算
+   evidence：涵盖数据收集的完整机器人学习栈
+7. [EgoGuide: Egocentric Guidance for Efficient Robot-Free Demonstration Collection and Learning](/202606/15/2606.14665v1-egoguide-egocentric-guidance-for-efficient-robot-free-demonstration-collection-and-learning)  
+   标签：评分：6.0/10、query:ur
+   evidence：通过自我中心引导的机器人数据集构建
 
 
 <div class="dpr-home-promo-card">

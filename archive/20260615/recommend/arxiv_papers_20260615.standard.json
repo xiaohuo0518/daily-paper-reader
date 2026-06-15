@@ -1,0 +1,372 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-06-15T22:54:41.330285+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 2,
+    "deep_divecandidates": 1,
+    "deep_cap": 7,
+    "deep_selected": 1,
+    "quick_candidates": 7,
+    "quick_skim_target": 12,
+    "quick_selected": 7
+  },
+  "deep_dive": [
+    {
+      "id": "2606.14585v1",
+      "source": "arxiv",
+      "title": "Sensitivity Shaping for Latent Modeling",
+      "abstract": "Generative dynamics models enable planning in challenging robotic systems, but safe deployment requires reliably detecting policy-induced out-of-distribution (OOD) transitions. Existing methods typically treat the learned dynamics as fixed and attach post hoc support surrogates. We show that these surrogates can fail when the dynamics are locally insensitive to critical action choices: unsupported control actions may produce latent predictions that resemble demonstrated transitions, suppressing OOD signals despite large true predictive errors. To address this, we introduce support-conditioned control-sensitivity regularization, which promotes sensitive local response to control input changes in learned dynamics in high-support training regions. This preserves control-induced variation while limiting unstable extrapolation due to weak empirical support. Experiments in vision-based obstacle avoidance, manipulation, and real-robot navigation show improved OOD detection and safer closed-loop planning.",
+      "authors": [
+        "Hongzhan Yu",
+        "Chenghao Li",
+        "Ruipeng Zhang",
+        "Henrik Christensen",
+        "Sicun Gao"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.AI"
+      ],
+      "published": "2026-06-12T16:01:50+00:00",
+      "link": "https://arxiv.org/pdf/2606.14585v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "out-of-distribution detection for safe robot operation",
+      "llm_evidence_cn": "面向安全机器人操作的分布外检测",
+      "llm_evidence": "面向安全机器人操作的分布外检测",
+      "canonical_evidence": "面向安全机器人操作的分布外检测",
+      "llm_tldr_en": "Proposes support-conditioned control-sensitivity regularization to improve OOD detection in learned dynamics models for robotic systems, addressing failures in existing post hoc methods.",
+      "llm_tldr_cn": "针对现有方法在检测策略导致的分布外（OOD）过渡时可能失效的问题，本文提出了支持条件控制灵敏度正则化方法，通过增强学习动力学模型对控制输入的敏感响应来保留OOD信号，从而提升机器人安全部署中的异常检测可靠性。实验表明该方法能显著提高OOD检测精度，对机器人安全操作具有重要意义。",
+      "llm_tldr": "针对现有方法在检测策略导致的分布外（OOD）过渡时可能失效的问题，本文提出了支持条件控制灵敏度正则化方法，通过增强学习动力学模型对控制输入的敏感响应来保留OOD信号，从而提升机器人安全部署中的异常检测可靠性。实验表明该方法能显著提高OOD检测精度，对机器人安全操作具有重要意义。",
+      "llm_tags": [
+        "query:humanoid-ood"
+      ],
+      "matched_query_tag": "query:humanoid-ood",
+      "matched_query_text": "out-of-distribution detection for safe robot operation",
+      "matched_requirement_id": "req-11",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "quick_skim": [
+    {
+      "id": "2606.08495v1",
+      "source": "arxiv",
+      "title": "EgoPriMo: Egocentric Motion Generation for Interactive Humanoid Control",
+      "abstract": "Humanoid robots require whole-body motions that adapt to scene context, task requirements, and user intent. Motion tracking reproduces specified trajectories, and humanoid vision-language-action systems provide semantic interfaces, but neither offers a scalable and interactive prior for broad full-body behavior. We introduce EgoPriMo (Egocentric Motion Prior for Humanoid Robots), a unified framework that learns such priors from egocentric human demonstrations. Given egocentric observations and a text prompt, EgoPriMo reconstructs, generates, and forecasts SMPL-based full-body motion. Language is used as a high-level control signal rather than a complete motion specification. At the core of EgoPriMo is a Triple-stream DiT that jointly models body dynamics, egocentric visual context, and text; task-conditioning masks route different tasks and missing-modality data through the same checkpoint. Experiments on Nymeria and EgoExo4D show that one checkpoint improves egocentric motion generation over UniEgoMotion while supporting reconstruction and forecasting; the generated SMPL motions can also be executed by a Unitree humanoid controller. These results indicate a practical path from scalable egocentric observations to generalizable and interactive humanoid motion priors.",
+      "authors": [
+        "Haoyang Ge",
+        "Peng Ren",
+        "Yukun Shi",
+        "Cong Huang",
+        "Kun Li",
+        "Kai Chen"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.CV"
+      ],
+      "published": "2026-06-07T07:49:19+00:00",
+      "link": "https://arxiv.org/pdf/2606.08495v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "learns motion priors from egocentric human demonstrations, enabling dataset construction for humanoid robots",
+      "llm_evidence_cn": "从第一人称人类演示学习运动先验，支持人形机器人数据集构建",
+      "llm_evidence": "从第一人称人类演示学习运动先验，支持人形机器人数据集构建",
+      "canonical_evidence": "从第一人称人类演示学习运动先验，支持人形机器人数据集构建",
+      "llm_tldr_en": "EgoPriMo learns a scalable motion prior for humanoid robots from egocentric human videos, enabling reconstruction, generation, and forecasting of full-body motion with language control.",
+      "llm_tldr_cn": "现有方法难以提供可扩展的人形机器人全身行为先验。EgoPriMo从第一人称人类视频中学习运动先验，通过三流DiT模型联合建模身体动力学、场景交互和语言控制，实现全身运动的生成与预测。实验表明该方法能有效生成逼真的运动序列。该工作为基于人类演示的人形机器人数据集构建提供了一种新范式。",
+      "llm_tldr": "现有方法难以提供可扩展的人形机器人全身行为先验。EgoPriMo从第一人称人类视频中学习运动先验，通过三流DiT模型联合建模身体动力学、场景交互和语言控制，实现全身运动的生成与预测。实验表明该方法能有效生成逼真的运动序列。该工作为基于人类演示的人形机器人数据集构建提供了一种新范式。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2606.12814v1",
+      "source": "arxiv",
+      "title": "Stubborn: A Streamlined and Unified Reinforcement Learning Framework for Robust Motion Tracking and Fall Recovery for Humanoids",
+      "abstract": "Recent reinforcement learning approaches have shown great promise in improving humanoid motion tracking performance and achieving fall recovery under disturbances. However, most existing works treat motion tracking and fall recovery as different tasks and require multi-stage training with specialized recovery rewards and/or separate recovery policies. Moreover, existing reinforcement learning-based methods often terminate training episodes immediately after severe tracking failures, limiting recovery-oriented exploration in unstable or fallen states. To address the above issues, we propose Stubborn, a streamlined and unified reinforcement learning framework to achieve robust humanoid motion tracking and fall recovery. Specifically, Stubborn uses an asymmetric Actor-Critic architecture and consists of three major components. First, a yaw-aligned tracking representation is adopted to reduce sensitivity to global drift and heading disturbances while preserving gravity-related balance information. Second, we introduce a Bernoulli-based probabilistic termination mechanism that enables the policy to encourage exploration of fall-recovery behaviors under varying failure modes. Third, we propose a probabilistic termination and tracking-error-driven strategy that dynamically reshapes the sampling distribution based on tracking performance, increasing the training efficiency for difficult motion segments and unstable states. Extensive comparisons with SOTA methods and ablation studies show that Stubborn achieved competitive performance, and the proposed probabilistic termination mechanism and adaptive sampling strategy contributed to the performance and robustness gains. For real-world demonstrations, please refer to https://aislab-sustech.github.io/Stubborn/.",
+      "authors": [
+        "Xiao Ren",
+        "Yuhui Yang",
+        "Zongbiao Weng",
+        "Zhijie Liu",
+        "He Kong"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.AI"
+      ],
+      "published": "2026-06-11T02:13:53+00:00",
+      "link": "https://arxiv.org/pdf/2606.12814v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "unified RL framework for humanoid fall recovery and motion tracking",
+      "llm_evidence_cn": "人形机器人跌倒恢复与运动跟踪的统一框架",
+      "llm_evidence": "人形机器人跌倒恢复与运动跟踪的统一框架",
+      "canonical_evidence": "人形机器人跌倒恢复与运动跟踪的统一框架",
+      "llm_tldr_en": "Stubborn proposes a streamlined unified RL framework for humanoid motion tracking and fall recovery, enabling single-policy robust performance without multi-stage training.",
+      "llm_tldr_cn": "现有方法将运动跟踪与跌倒恢复视为独立任务，需要多阶段训练和专用策略。Stubborn提出一个统一强化学习框架，使用单一策略同时处理两者，并允许在失稳状态下继续探索。实验表明该方法在遭遇干扰后能更有效地恢复平衡，提升了人形机器人在复杂环境中的鲁棒性。",
+      "llm_tldr": "现有方法将运动跟踪与跌倒恢复视为独立任务，需要多阶段训练和专用策略。Stubborn提出一个统一强化学习框架，使用单一策略同时处理两者，并允许在失稳状态下继续探索。实验表明该方法在遭遇干扰后能更有效地恢复平衡，提升了人形机器人在复杂环境中的鲁棒性。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "fault detection in humanoid robots",
+      "matched_requirement_id": "req-6",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2606.13754v1",
+      "source": "arxiv",
+      "title": "D2H-AD: A Hybrid Model Utilizing Hyperdimensional Computing for Advanced Anomaly Detection",
+      "abstract": "Anomaly detection is a fundamental component of intelligent systems with applications in healthcare, cybersecurity, smart grids, and IoT environments. Although conventional machine learning and deep learning methods have demonstrated effectiveness in identifying anomalies, they often rely on large labeled datasets, incur high computational costs, and face scalability challenges in edge and high-dimensional settings. This paper presents D2H-AD, a novel anomaly detection framework based on Hyperdimensional Computing (HDC), a brain-inspired paradigm that represents information using high-dimensional distributed vectors. Unlike existing HDC-based methods, D2H-AD integrates distance-based similarity and density-aware encoding within a unified framework, improving anomaly representation and detection performance. Ablation studies show that hyperdimensional encoding alone yields up to 5.4% higher ROC-AUC than applying the same density-distance scoring directly in the original feature space. Furthermore, D2H-AD consistently outperforms five established baselines, namely HDAD, ODHD, One-Class SVM, Isolation Forest, and Autoencoders, across all evaluated datasets. The framework is lightweight, interpretable, and computationally efficient, making it suitable for resource-constrained and real-time applications. We validate D2H-AD on five benchmark datasets and demonstrate superior F1-score and ROC-AUC performance, together with robustness to class imbalance, noise, and data complexity. In addition to improved accuracy, D2H-AD offers scalability, a small memory footprint, and low-latency operation enabled by binary computations and a compact design. These properties make it particularly attractive for TinyML and edge AI deployments. The proposed framework highlights the potential of HDC for accurate, interpretable, and energy-efficient anomaly detection in dynamic environments.",
+      "authors": [
+        "Ghazal Ghajari",
+        "Elaheh Ghajari",
+        "Ashutosh Ghimire",
+        "Saeid Ataei",
+        "Faris Alsulami",
+        "Fathi Amsaad"
+      ],
+      "primary_category": "cs.LG",
+      "categories": [
+        "cs.LG"
+      ],
+      "published": "2026-06-11T16:00:22+00:00",
+      "link": "https://arxiv.org/pdf/2606.13754v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "anomaly detection method suitable for edge deployment via hyperdimensional computing",
+      "llm_evidence_cn": "基于超维度计算的异常检测方法，适用于边缘部署",
+      "llm_evidence": "基于超维度计算的异常检测方法，适用于边缘部署",
+      "canonical_evidence": "基于超维度计算的异常检测方法，适用于边缘部署",
+      "llm_tldr_en": "D2H-AD: a novel anomaly detection framework using hyperdimensional computing with distance-based similarity and density-aware encoding, efficient for edge devices.",
+      "llm_tldr_cn": "针对异常检测在边缘设备上的计算和扩展挑战，提出D2H-AD框架，利用超维度计算（HDC）实现高维数据的轻量级异常检测。该方法集成距离相似性和密度感知编码，无需大型标注数据集，在多个基准上达到竞争性能，适用于资源受限场景，与需求11（OOD检测）和边缘部署相关。",
+      "llm_tldr": "针对异常检测在边缘设备上的计算和扩展挑战，提出D2H-AD框架，利用超维度计算（HDC）实现高维数据的轻量级异常检测。该方法集成距离相似性和密度感知编码，无需大型标注数据集，在多个基准上达到竞争性能，适用于资源受限场景，与需求11（OOD检测）和边缘部署相关。",
+      "llm_tags": [
+        "query:humanoid-ood"
+      ],
+      "matched_query_tag": "query:humanoid-ood",
+      "matched_query_text": "out-of-distribution detection for safe robot operation",
+      "matched_requirement_id": "req-11",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2606.14160v1",
+      "source": "arxiv",
+      "title": "GAIT: Legged Robot Proprioceptive State Estimation with Attention over Inertial-Leg Tokens",
+      "abstract": "In this paper, we propose a method that applies Inertial-Leg (IL) tokenization to an attention-based network for proprioceptive state estimation in legged robots. Unlike existing learning-based state estimators that concatenate all sensor measurements into a single flat vector, the proposed architecture represents inertial measurements and leg-wise measurements as individual tokens and uses an attention mechanism to learn the relative importance of each measurement.This design allows the network to reweight each measurement according to the current contact condition, reflecting the fact that the reliability of forward kinematic measurements depends on whether the corresponding foot is in contact. Unlike conventional contact-aided estimators, however, the proposed method learns this behavior without relying on an explicit contact estimator or on explicit measurement updates based on a stationary contact assumption. To validate the proposed method, we conducted experiments on a Unitree Go1 robot, including debris terrain not modeled in simulation and gait patterns not seen during training. Experimental results show that the proposed method achieves better estimation performance than existing learning-based state estimators under unseen gait patterns and also improves performance over contact-aided model-based methods.",
+      "authors": [
+        "Young-Rang Seo",
+        "Hajun Kim",
+        "Sangmin Kim",
+        "Dongyun Kang",
+        "Hae-Won Park"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-06-12T06:34:53+00:00",
+      "link": "https://arxiv.org/pdf/2606.14160v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "humanoid robot fault diagnosis using proprioceptive signals",
+      "llm_evidence_cn": "基于本体感受信号的人形机器人故障诊断",
+      "llm_evidence": "基于本体感受信号的人形机器人故障诊断",
+      "canonical_evidence": "基于本体感受信号的人形机器人故障诊断",
+      "llm_tldr_en": "Proposes an attention-based method for proprioceptive state estimation in legged robots using Inertial-Leg tokenization, which can be adapted for fault diagnosis using proprioceptive signals.",
+      "llm_tldr_cn": "针对现有学习状态估计器将所有传感器测量拼接为单一向量的问题，本文提出基于注意力机制的惯性-腿部（IL）令牌化方法，将惯性测量和腿部测量作为独立令牌，通过注意力学习各测量在当前接触条件下的重要性。该方法有效提升了状态估计准确性，可为人形机器人基于本体感受的故障诊断提供基础技术支撑。",
+      "llm_tldr": "针对现有学习状态估计器将所有传感器测量拼接为单一向量的问题，本文提出基于注意力机制的惯性-腿部（IL）令牌化方法，将惯性测量和腿部测量作为独立令牌，通过注意力学习各测量在当前接触条件下的重要性。该方法有效提升了状态估计准确性，可为人形机器人基于本体感受的故障诊断提供基础技术支撑。",
+      "llm_tags": [
+        "query:humanoid-ood"
+      ],
+      "matched_query_tag": "query:humanoid-ood",
+      "matched_query_text": "humanoid robot fault diagnosis using proprioceptive signals",
+      "matched_requirement_id": "req-9",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2606.14433v1",
+      "source": "arxiv",
+      "title": "Kine2Go: Kinematic dataset for the Unitree Go2 robot with diverse gaits and motions",
+      "abstract": "The recent popularity of robotics, combined with the steadily decreasing cost of robotic hardware, has lowered the entry barrier to robotics research and enabled rapid advancements in the field. One of the primary examples is the Unitree Go2 quadruped robot, which is often used by researchers in the areas of locomotion, navigation, control, and others. Many researchers use the Go2 robot in combination with techniques like imitation learning, reinforcement learning, and behavioral cloning to allow machine learning systems to take full control of the robot. At the same time, many of those techniques require demonstration data consisting of the robot's kinematics information and actions applied to the motors. Obtaining such data is difficult, requires building complex pipelines, and can take significant time. To aid in those kinds of efforts, we present Kine2Go - a dataset with 800 diverse gait kinematics trajectory motion data for the Unitree Go2 robot, derived from 40 distinct policies. Our pipeline accepts data from various quadruped morphologies and translates them to a Go2-compatible format. Then we use Reinforcement Learning to train policies following a given motion, and finally we gather data from those policies, which grants robust, perturbed kinematic data with corresponding motor-level actions.",
+      "authors": [
+        "Władysław Pałucki",
+        "Paweł Siwak",
+        "Krzysztof Ciebiera",
+        "Marek Cygan"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-06-12T13:13:53+00:00",
+      "link": "https://arxiv.org/pdf/2606.14433v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "kinematic dataset for Unitree robot (Go2), directly relevant to Unitree dataset construction",
+      "llm_evidence_cn": "为宇树机器人（Go2）构建运动学数据集，直接关联宇树数据集构建",
+      "llm_evidence": "为宇树机器人（Go2）构建运动学数据集，直接关联宇树数据集构建",
+      "canonical_evidence": "为宇树机器人（Go2）构建运动学数据集，直接关联宇树数据集构建",
+      "llm_tldr_en": "Kine2Go provides a kinematic dataset for the Unitree Go2 robot with diverse gaits, supporting imitation learning and control research.",
+      "llm_tldr_cn": "针对宇树Go2四足机器人研究中演示数据获取困难的问题，发布Kine2Go数据集，包含多种步态和运动的运动学信息及电机动作。该数据集可直接用于模仿学习和行为克隆，为类似宇树G1人形机器人的数据集构建（需求1）提供了可借鉴的方法和资源。",
+      "llm_tldr": "针对宇树Go2四足机器人研究中演示数据获取困难的问题，发布Kine2Go数据集，包含多种步态和运动的运动学信息及电机动作。该数据集可直接用于模仿学习和行为克隆，为类似宇树G1人形机器人的数据集构建（需求1）提供了可借鉴的方法和资源。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "Unitree G1 humanoid robot dataset construction",
+      "matched_requirement_id": "req-1",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2606.14409v1",
+      "source": "arxiv",
+      "title": "Hy-Embodied-0.5-VLA: From Vision-Language-Action Models to a Real-World Robot Learning Stack",
+      "abstract": "In this report, we present Hy-Embodied-0.5-VLA, abbreviated as HyVLA-0.5, an end-to-end system that spans the full robot learning stack: data collection, model design, continued pre-training and supervised fine-tuning, RL post-training, and real-world deployment. Each component serves a distinct role in this stack.",
+      "authors": [
+        "He Zhang",
+        "Lingzhu Xiang",
+        "Haitao Lin",
+        "Zeyu Huang",
+        "Minghui Wang",
+        "Dingyan Zhong",
+        "Yubo Dong",
+        "Yihao Wu",
+        "Yongming Rao",
+        "Dongsheng Zhang",
+        "Wanjia He",
+        "Ling Chen",
+        "Kai Huang",
+        "Jiahao Chen",
+        "Sichang Su",
+        "Xumin Yu",
+        "Ziyi Wang",
+        "Chengwei Zhu",
+        "Xiao Teng",
+        "Yuchun Guo",
+        "Yufeng Zhang",
+        "Yuandong Liu",
+        "Rui Wang",
+        "Zisheng Lu",
+        "Han Hu",
+        "Zhengyou Zhang"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.AI"
+      ],
+      "published": "2026-06-12T12:45:18+00:00",
+      "link": "https://arxiv.org/pdf/2606.14409v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "full robot learning stack including data collection",
+      "llm_evidence_cn": "涵盖数据收集的完整机器人学习栈",
+      "llm_evidence": "涵盖数据收集的完整机器人学习栈",
+      "canonical_evidence": "涵盖数据收集的完整机器人学习栈",
+      "llm_tldr_en": "Hy-Embodied-0.5-VLA presents a full robot learning stack from data collection to deployment, covering all key components.",
+      "llm_tldr_cn": "Hy-Embodied-0.5-VLA报告了一个端到端系统，覆盖数据收集、模型设计、继续预训练与监督微调、RL后训练以及真实世界部署。该系统为机器人学习提供了完整栈式解决方案，其中数据收集作为基础组件，支持从无到有构建机器人数据集。",
+      "llm_tldr": "Hy-Embodied-0.5-VLA报告了一个端到端系统，覆盖数据收集、模型设计、继续预训练与监督微调、RL后训练以及真实世界部署。该系统为机器人学习提供了完整栈式解决方案，其中数据收集作为基础组件，支持从无到有构建机器人数据集。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2606.14665v1",
+      "source": "arxiv",
+      "title": "EgoGuide: Egocentric Guidance for Efficient Robot-Free Demonstration Collection and Learning",
+      "abstract": "Robot learning from real-world demonstrations is currently constrained by data scaling. Universal Manipulation Interface (UMI) provides an efficient robot-free data collection interface, yet current UMI-style pipelines often collect redundant demonstrations and lack global scene context. To improve data efficiency, we present EgoGuide, a collection interface that records synchronized wrist and head/egocentric observations and couples them with online visual-geometric data quality guidance. We also introduce a Gated Egocentric Residual Policy for robust learning from a viewpoint-varying egocentric camera, allowing head/egocentric context to correct ambiguous local observations while preserving stable wrist-view control. Real-world experiments show that EgoGuide reduces the required number of data episodes and improves data efficiency. The residual policy further improves robustness under visual occlusion. Project Page: https://silicx.github.io/EgoGuide",
+      "authors": [
+        "Yue Xu",
+        "Mingtao Nie",
+        "Tianle Li",
+        "Hong Li",
+        "Yibo Luo",
+        "Siyuan Huang",
+        "Yong-Lu Li"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-06-12T17:36:23+00:00",
+      "link": "https://arxiv.org/pdf/2606.14665v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "dataset construction for robotics via egocentric guidance",
+      "llm_evidence_cn": "通过自我中心引导的机器人数据集构建",
+      "llm_evidence": "通过自我中心引导的机器人数据集构建",
+      "canonical_evidence": "通过自我中心引导的机器人数据集构建",
+      "llm_tldr_en": "EgoGuide proposes a robot-free demonstration collection interface with online quality guidance to improve data efficiency for robot learning.",
+      "llm_tldr_cn": "针对机器人学习面临的数据规模限制，提出EgoGuide，一种结合腕部与头部自我中心观测的数据采集接口，并引入在线视觉几何质量指导以提高数据效率。在真实世界实验中，该方法减少了冗余演示，提升了策略学习的效果，为机器人数据集的构建提供了高效工具。",
+      "llm_tldr": "针对机器人学习面临的数据规模限制，提出EgoGuide，一种结合腕部与头部自我中心观测的数据采集接口，并引入在线视觉几何质量指导以提高数据效率。在真实世界实验中，该方法减少了冗余演示，提升了策略学习的效果，为机器人数据集的构建提供了高效工具。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    }
+  ]
+}
