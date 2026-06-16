@@ -1,0 +1,416 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-06-16T23:03:06.208178+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 2,
+    "deep_divecandidates": 4,
+    "deep_cap": 7,
+    "deep_selected": 4,
+    "quick_candidates": 5,
+    "quick_skim_target": 12,
+    "quick_selected": 5
+  },
+  "deep_dive": [
+    {
+      "id": "2606.16696v1",
+      "source": "arxiv",
+      "title": "VENOM: Versatile Embodied Network for Omni-bodied Motion tracking",
+      "abstract": "Achieving expert-level expressive full-body motion tracking across multiple humanoids solely from demonstration data remains a challenging and relatively an underexplored problem in humanoid robot learning. Cross-embodiment motion tracking policies are mostly trained by decoupling the control problem into upper and lower body control. This work proposes VENOM, a cross-embodiment full-body motion tracking model for humanoids in simulation. VENOM is a GPT-based motion tracker trained on multiple humanoid data that can track the entire body without the requirement to split into upper and lower body control. We curate a multi-humanoid motion tracking dataset called the VENOM dataset that contains states, actions, and rewards and train VENOM and the baselines on this dataset. In this letter, we evaluate VENOM's performance against baselines and show that we can achieve a stable motion tracker across different humanoids more capable than an MLP trained on multiple humanoid data with supervised learning alone, and also show that despite lack of reward feedback, VENOM closely matches the tracking capability of experts that were trained using asymmetric-actor critic reinforcement learning.",
+      "authors": [
+        "Siddharth Padmanabhan",
+        "Kazuki Miyazawa",
+        "Takato Horii"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-06-15T13:31:37+00:00",
+      "link": "https://arxiv.org/pdf/2606.16696v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "Constructs VENOM dataset with multi-humanoid motion tracking data",
+      "llm_evidence_cn": "构建了包含多个人形机器人状态、动作和奖励的VENOM运动跟踪数据集",
+      "llm_evidence": "构建了包含多个人形机器人状态、动作和奖励的VENOM运动跟踪数据集",
+      "canonical_evidence": "构建了包含多个人形机器人状态、动作和奖励的VENOM运动跟踪数据集",
+      "llm_tldr_en": "Proposes VENOM, a GPT-based full-body motion tracker for humanoids, and introduces the VENOM dataset containing states, actions, rewards for multiple humanoids.",
+      "llm_tldr_cn": "该论文针对多个人形机器人跨实体全身运动跟踪的难题，提出了VENOM模型，这是一种基于GPT的运动跟踪器，无需分离上下半身控制。同时构建了VENOM数据集，包含多个仿真人形机器人的状态、动作和奖励信息。训练和评估表明VENOM能有效实现全身运动跟踪，为跨实体机器人学习提供了数据基础。",
+      "llm_tldr": "该论文针对多个人形机器人跨实体全身运动跟踪的难题，提出了VENOM模型，这是一种基于GPT的运动跟踪器，无需分离上下半身控制。同时构建了VENOM数据集，包含多个仿真人形机器人的状态、动作和奖励信息。训练和评估表明VENOM能有效实现全身运动跟踪，为跨实体机器人学习提供了数据基础。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "humanoid robot dataset construction",
+      "matched_requirement_id": "req-2",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2606.16776v1",
+      "source": "arxiv",
+      "title": "DataLadder: A Simulation-Enabled Interconversion Toolchain for the Embodied Data Pyramid",
+      "abstract": "Generalist robot policies require trustworthy evaluation and robot-usable training data, but both are difficult to scale with physical robots alone. Real-robot trials and demonstrations remain the most faithful source of deployment signals, yet they are slow, costly, and hard to reproduce. We present DataLadder, a simulation-enabled interconversion toolchain for human-robot aligned model evaluation and data generation, denoted as Robot $\\rightleftharpoons$ Simulation $\\rightleftharpoons$ Human. On the one hand, the Robot $\\rightarrow$ Simulation $\\rightarrow$ Human pathway supports human-robot aligned model evaluation by reconstructing real-robot tabletop organization tasks as calibrated digital twins for scalable evaluation, while using human embodied feedback to inspect and refine the naturalness of simulated motions. On the other hand, the Human $\\rightarrow$ Simulation $\\rightarrow$ Robot pathway supports human-robot aligned data generation: it lifts ego-centric human demonstrations into simulation, checks them under robot physical constraints, and converts them into robot-centered trajectories, annotations, and visual observations. Together, these pathways use the JoySim simulator as both a scalable evaluation layer and a physical consistency filter for robot data generation. We further package the core reconstruction, simulation, rendering, and realism-augmentation modules as cloud services on JD Cloud, turning the system into reusable infrastructure for robot data generation and model evaluation.",
+      "authors": [
+        "Peidong Liu",
+        "Yongce Liu",
+        "Songyan Guo",
+        "Fuyuan Ma",
+        "Zhihao Yuan",
+        "Ao Li",
+        "Zengjue Chen",
+        "Wenhao Li",
+        "Tianle Zhang",
+        "Mingyang Li",
+        "Jiale Zhang",
+        "Junzhe Xiong",
+        "Zhiyuan Xiang",
+        "Dafeng Chi",
+        "Yuzheng Zhuang",
+        "Yihang Li",
+        "Qingrong He",
+        "Jiaming Liang",
+        "Chen Cai",
+        "Peng Hao",
+        "Mingxi Luo",
+        "Song Wang",
+        "Junwu Xiong",
+        "Ruodai Li",
+        "Liyi Luo",
+        "Wei Tan",
+        "Dongjiang Li",
+        "Jiawei Li",
+        "Hui Shen",
+        "Yicheng Gong",
+        "Liang Lin"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-06-15T14:21:35+00:00",
+      "link": "https://arxiv.org/pdf/2606.16776v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "simulation-enabled toolchain for robot data generation and evaluation",
+      "llm_evidence_cn": "仿真使能的机器人数据生成与评估工具链",
+      "llm_evidence": "仿真使能的机器人数据生成与评估工具链",
+      "canonical_evidence": "仿真使能的机器人数据生成与评估工具链",
+      "llm_tldr_en": "DataLadder is a simulation-enabled interconversion toolchain for robot data generation and model evaluation, enabling scalable digital twin reconstruction and human-in-the-loop verification.",
+      "llm_tldr_cn": "本论文提出DataLadder，一个仿真使能的互换工具链，用于具身数据金字塔中的模型评估与数据生成。它支持从真实机器人到仿真再到人类的双向转换：一方面通过数字孪生实现可扩展评估，另一方面利用仿真合成多样训练数据并引入人类验证。该工作解决了真实机器人数据昂贵、难以复制的问题，为通用机器人策略提供了高质量数据与可信评估途径。",
+      "llm_tldr": "本论文提出DataLadder，一个仿真使能的互换工具链，用于具身数据金字塔中的模型评估与数据生成。它支持从真实机器人到仿真再到人类的双向转换：一方面通过数字孪生实现可扩展评估，另一方面利用仿真合成多样训练数据并引入人类验证。该工作解决了真实机器人数据昂贵、难以复制的问题，为通用机器人策略提供了高质量数据与可信评估途径。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2606.15915v1",
+      "source": "arxiv",
+      "title": "Identification of a Physics-Based Electrical Power Consumption Model for the Unitree G1 Humanoid Arm",
+      "abstract": "Accurate prediction of electrical power consumption is essential for energy-aware motion planning, battery management, and thermal monitoring in battery-powered humanoid robots. This letter presents a physics-based, linear-in-parameters model for the electrical power consumption of the seven-degree-of-freedom left arm of the Unitree~G1 humanoid robot. The proposed formulation combines actuator loss terms with a baseline-torque correction that captures changes in gravity-compensation load and enables accurate prediction of negative net power trajectories. Pairwise interaction terms are introduced to model power coupling during simultaneous multi-joint motion. Model parameters are identified from experimental data collected on a physical Unitree~G1 using onboard power measurements as the regression target. Across 897 trajectories covering single-joint and coordinated arm motions at multiple speed levels, the identified model achieves $R^2 = 0.933$ with an RMSE of 1.07 (W). Validation on 46 trajectories executed at previously unseen speeds yields $R^2 = 0.965$, demonstrating strong generalisation beyond the identification dataset. Analysis of the identified parameters reveals distinct power-consumption characteristics across the arm, with viscous friction dominating most joints (shoulder pitch and all three wrist joints), copper losses dominating shoulder yaw and the elbow, and shoulder roll uniquely dominated by Coulomb friction.",
+      "authors": [
+        "Nestor N. Deniz",
+        "Sebastian Vega",
+        "Simon Parsons",
+        "Fernando Auat Cheein"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-06-14T16:45:07+00:00",
+      "link": "https://arxiv.org/pdf/2606.15915v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "physics-based power model for Unitree G1 arm",
+      "llm_evidence_cn": "Unitree G1手臂的物理功耗模型",
+      "llm_evidence": "Unitree G1手臂的物理功耗模型",
+      "canonical_evidence": "Unitree G1手臂的物理功耗模型",
+      "llm_tldr_en": "This paper identifies a physics-based electrical power consumption model for the Unitree G1 humanoid arm from experimental data, supporting energy-aware planning.",
+      "llm_tldr_cn": "该论文基于实验数据识别了宇树G1人形机器人左臂的物理功耗模型，结合执行器损耗和重力补偿校正，可准确预测功率轨迹。该模型为宇树G1机器人提供数据驱动建模，直接相关于机器人数据集构建与能量管理。",
+      "llm_tldr": "该论文基于实验数据识别了宇树G1人形机器人左臂的物理功耗模型，结合执行器损耗和重力补偿校正，可准确预测功率轨迹。该模型为宇树G1机器人提供数据驱动建模，直接相关于机器人数据集构建与能量管理。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "Unitree G1 humanoid robot dataset construction",
+      "matched_requirement_id": "req-1",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2606.16208v1",
+      "source": "arxiv",
+      "title": "ATHENA: Accelerated Multi-Task Heterogeneous Influence Functions for Robot Data Curation",
+      "abstract": "In robot imitation learning, influence functions provide a principled approach to quantify each demonstration's effect on robot task outcomes, yet scaling them to billion-parameter Vision-Language-Action (VLA) models is limited by computational and multitask bottlenecks. To this end, we propose ATHENA, an influence function framework tailored for multitask VLA data curation at a billion-parameter scale. Concretely, it leverages the Kronecker structure of linear-layer gradients to reduce projection cost, and approximates dense Hessian inversion with a rank-r Random Truncated Approximation, achieving about a 313.4x speedup in influence computation. Furthermore, ATHENA formulates global and local interactive influence to balance data curation across 50 jointly trained tasks. Extensive evaluations on RoboTwin 2.0 and real-robot deployment, covering 9.34 and 6.90 hours of demonstrations, respectively, show that ATHENA matches or exceeds full-data joint fine-tuning using only 50% of demonstrations in simulation and 66.7% of data across six real-robot tasks. Overall, ATHENA demonstrates its effectiveness for data curation in billion-parameter multitask VLA fine-tuning.",
+      "authors": [
+        "Tao Xu",
+        "Jiaxin Wang",
+        "Runhao Zhang",
+        "Jiayi Guan",
+        "Xianchao Zeng",
+        "Weixi Song",
+        "Xinyu Zhou",
+        "Zhetao Chen",
+        "Guang Chen",
+        "Yong-Lu Li"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-06-15T04:33:16+00:00",
+      "link": "https://arxiv.org/pdf/2606.16208v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "robot data curation for imitation learning, directly relevant to dataset construction",
+      "llm_evidence_cn": "机器人数据筛选与数据集构建直接相关",
+      "llm_evidence": "机器人数据筛选与数据集构建直接相关",
+      "canonical_evidence": "机器人数据筛选与数据集构建直接相关",
+      "llm_tldr_en": "ATHENA accelerates influence function computation for data curation in multitask Vision-Language-Action models, achieving 313x speedup, enabling efficient robot dataset construction.",
+      "llm_tldr_cn": "该论文提出ATHENA框架，针对多任务视觉-语言-动作模型的数据筛选问题，利用克罗内克积结构和随机截断近似，将影响函数计算加速约313倍。该方法可衡量每条演示数据对任务结果的影响，实现全局与局部交互影响平衡，从而高效构建高质量机器人数据集。这项工作直接服务于机器人数据集构建需求，尤其适用于大规模模仿学习数据筛选。",
+      "llm_tldr": "该论文提出ATHENA框架，针对多任务视觉-语言-动作模型的数据筛选问题，利用克罗内克积结构和随机截断近似，将影响函数计算加速约313倍。该方法可衡量每条演示数据对任务结果的影响，实现全局与局部交互影响平衡，从而高效构建高质量机器人数据集。这项工作直接服务于机器人数据集构建需求，尤其适用于大规模模仿学习数据筛选。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "quick_skim": [
+    {
+      "id": "2606.13769v2",
+      "source": "arxiv",
+      "title": "$μ_0$: A Scalable 3D Interaction-Trace World Model",
+      "abstract": "World models that capture how actions induce physical change enable scalable robot learning without reliance on embodiment-specific action labels. Pixel-space video models provide broad visual priors but expend model capacity on dense appearance reconstruction, while direct action models require embodiment-specific labels that hinder scalability. We present $μ_0$, a scalable world model based on 3D traces. Rather than predicting dense pixels or directly modeling actions, $μ_0$ forecasts smooth 3D trajectories for salient interaction points such as objects, tools, hands, and contact regions, yielding a compact, embodiment-agnostic motion interface. To enable training from diverse video sources, our TraceExtract system automatically extracts 3D supervision by selecting keypoints, constructing globally aligned traces, and associating motion segments with hierarchical language captions. This TraceExtract supervision pretrains $μ_0$ by combining a pretrained vision-language backbone with a modular trace expert, which represents each query via B-spline control points and predicts future traces. Experiments show that $μ_0$ outperforms baselines in both 2D and 3D trace prediction, including trace prediction models and tokenized VLM methods. Because $μ_0$ is frozen and reusable, it can be paired with action experts for downstream robot embodiments. Despite action-free pretraining, the resulting trace-conditioned policies achieve performance competitive with VLA models pretrained with action supervision, such as $π_0$. These results establish 3D traces as a scalable and transferable representation for cross-embodiment manipulation.",
+      "authors": [
+        "Seungjae Lee",
+        "Yoonkyo Jung",
+        "Jusuk Lee",
+        "Jonghun Shin",
+        "Amir Hossein Shahidzadeh",
+        "Yao-Chih Lee",
+        "H. Jin Kim",
+        "Jia-Bin Huang",
+        "Furong Huang"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.CV",
+        "cs.LG"
+      ],
+      "published": "2026-06-11T17:59:56+00:00",
+      "link": "https://arxiv.org/pdf/2606.13769v2",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "TraceExtract system automatically extracts 3D supervision from videos for constructing interaction-trace datasets; directly supports dataset construction",
+      "llm_evidence_cn": "TraceExtract系统从视频自动提取3D监督，构建交互轨迹数据集；直接支持数据集构建",
+      "llm_evidence": "TraceExtract系统从视频自动提取3D监督，构建交互轨迹数据集；直接支持数据集构建",
+      "canonical_evidence": "TraceExtract系统从视频自动提取3D监督，构建交互轨迹数据集；直接支持数据集构建",
+      "llm_tldr_en": "Mu_0 is a world model based on 3D traces, with TraceExtract automatically building datasets of interaction points from diverse videos for scalable robot learning.",
+      "llm_tldr_cn": "现有世界模型或预测像素或需动作标签，扩展性受限。本文提出Mu_0，基于3D交互轨迹的世界模型，仅预测关键点3D轨迹。同时开发TraceExtract系统，从多源视频自动提取3D监督，构建大规模交互轨迹数据集。实验表明该模型在多个机器人任务上零样本泛化。该工作为机器人学习提供了高效的数据构建和训练范式。",
+      "llm_tldr": "现有世界模型或预测像素或需动作标签，扩展性受限。本文提出Mu_0，基于3D交互轨迹的世界模型，仅预测关键点3D轨迹。同时开发TraceExtract系统，从多源视频自动提取3D监督，构建大规模交互轨迹数据集。实验表明该模型在多个机器人任务上零样本泛化。该工作为机器人学习提供了高效的数据构建和训练范式。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2606.12965v1",
+      "source": "arxiv",
+      "title": "EmbodiSteer: Steering Embodiment-Agnostic Visuomotor Policies with Joint-Space Guidance for Zero-Shot Cross-Embodiment Deployment",
+      "abstract": "Scalable robot imitation learning relies on large-scale heterogeneous data from diverse robots or body-free data, making Cartesian end-effector actions a key interface for embodiment-agnostic policy learning. However, end-effector-only abstraction leaves Cartesian policies unaware of the deployed robot body, making them brittle under robot-specific constraints such as whole-body collision avoidance. To overcome this limitation, we present EmbodiSteer, a training-free framework that steers embodiment-agnostic visuomotor policies toward zero-shot, embodiment-aware deployment. EmbodiSteer keeps policy learning in Cartesian space while efficiently lifting inference-time diffusion sampling into the target robot's joint space via forward kinematics and Jacobian-based updates. With whole-body collision-aware guidance over joint trajectories after each denoising step, the arm can be steered away from collisions while preserving learned end-effector behavior. Compared with Cartesian-only execution, EmbodiSteer reduces collision rate by 46.1% and improves task success rate by 28.5% across 9 simulated robots, and further achieves 90.0% collision rate reduction and 36.7% success rate increase on two physical robots in highly constrained scenarios. Our project page is at https://frankwang67.github.io/EmbodiSteer-Page.",
+      "authors": [
+        "Shihefeng Wang",
+        "Kangchen Lv",
+        "Mingrui Yu",
+        "Xiang Li"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-06-11T06:49:39+00:00",
+      "link": "https://arxiv.org/pdf/2606.12965v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "zero-shot cross-embodiment deployment with joint-space guidance",
+      "llm_evidence_cn": "零样本跨实体部署，结合关节空间引导",
+      "llm_evidence": "零样本跨实体部署，结合关节空间引导",
+      "canonical_evidence": "零样本跨实体部署，结合关节空间引导",
+      "llm_tldr_en": "EmbodiSteer enables zero-shot deployment of embodiment-agnostic policies to specific robots by steering with joint-space guidance, relevant to deployment.",
+      "llm_tldr_cn": "EmbodiSteer通过关节空间引导将实体无关策略零样本部署到具体机器人上，解决了Cartesian策略忽略机器人本体约束的问题。该方法与边缘部署相关，但更侧重跨实体泛化而非计算平台。",
+      "llm_tldr": "EmbodiSteer通过关节空间引导将实体无关策略零样本部署到具体机器人上，解决了Cartesian策略忽略机器人本体约束的问题。该方法与边缘部署相关，但更侧重跨实体泛化而非计算平台。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "edge deployment for humanoid robots",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2606.16542v1",
+      "source": "arxiv",
+      "title": "ADAPT: Analytical Disturbance-Aware Policy Training for Humanoid Locomotion",
+      "abstract": "Humanoids deployed in human-centered environments must handle force-interactive tasks, where external contacts introduce unexpected disturbances that disrupt locomotion accuracy and stability. Existing learning-based approaches rely on broad domain randomization, task-specific force objectives, or learning-based force estimators from motion history, each of which compromises accuracy, task transferability, or out-of-distribution (OOD) robustness. We present Analytical Disturbance-Aware Policy Training (ADAPT), a framework that equips humanoid policies with a physically grounded disturbance observer. The core of ADAPT is an analytical whole-body disturbance observer that estimates residual force/torque online with the accessible robot dynamics, without requiring force/torque sensors. Fed directly into the policy, the estimated disturbances give the humanoid an explicit, physics-derived sense of external force/torque that can generalize across diverse unseen scenes. Experiments on a Unitree G1 humanoid show that ADAPT achieves accurate disturbance prediction and stronger robustness than a proprioception-only baseline under torso perturbations, standing pushes, and asymmetric hand payloads, with improved velocity tracking even on OOD disturbances. Moreover, ADAPT enables penalizing inferred disturbances at lower-body joints to encourage lighter locomotion.",
+      "authors": [
+        "Bofan Lyu",
+        "Jindou Jia",
+        "Kuangji Zuo",
+        "Yanshuo Lu",
+        "Shijia Han",
+        "Gen Li",
+        "Boyu Ma",
+        "Jingliang Li",
+        "Geng Li",
+        "Jianfei Yang"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-06-15T10:47:18+00:00",
+      "link": "https://arxiv.org/pdf/2606.16542v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "OOD robust humanoid locomotion with analytical disturbance observer",
+      "llm_evidence_cn": "具有解析扰动观测器的人形机器人OOD鲁棒运动控制",
+      "llm_evidence": "具有解析扰动观测器的人形机器人OOD鲁棒运动控制",
+      "canonical_evidence": "具有解析扰动观测器的人形机器人OOD鲁棒运动控制",
+      "llm_tldr_en": "ADAPT introduces an analytical whole-body disturbance observer for humanoid policies, improving OOD robustness against external disturbances.",
+      "llm_tldr_cn": "人形机器人在人机交互中常受到未知外力干扰，现有方法对分布外扰动鲁棒性不足。ADAPT提出解析全身扰动观测器，实时估计残余力/力矩，并融入策略训练。实验表明该方法显著提升了在未见过扰动下的运动稳定性和准确性，为人形机器人的安全运行提供了OOD鲁棒性保障。",
+      "llm_tldr": "人形机器人在人机交互中常受到未知外力干扰，现有方法对分布外扰动鲁棒性不足。ADAPT提出解析全身扰动观测器，实时估计残余力/力矩，并融入策略训练。实验表明该方法显著提升了在未见过扰动下的运动稳定性和准确性，为人形机器人的安全运行提供了OOD鲁棒性保障。",
+      "llm_tags": [
+        "query:humanoid-ood"
+      ],
+      "matched_query_tag": "query:humanoid-ood",
+      "matched_query_text": "out-of-distribution detection for safe robot operation",
+      "matched_requirement_id": "req-11",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2606.16022v1",
+      "source": "arxiv",
+      "title": "$λ$-Reachability: Geometric-Horizon Safety Bellman Equations for Humanoid Safety",
+      "abstract": "We introduce $λ$-Reachability, a scalable approach to Hamilton--Jacobi safety analysis for high-dimensional robotic systems. Unlike prior discounted formulations that rely on fixed one-step Bellman updates, $λ$-Reachability employs a stochastic multi-step estimator of the safety value, using a geometrically distributed rollout horizon together with a randomly absorbed terminal. Conceptually analogous to TD($λ$), $λ$-Reachability interpolates between local self-consistency updates and long-horizon max-over-trajectory safety targets via an interpretable horizon-control parameter. Unlike TD($λ$), where the terminal value is always incorporated in learning targets, the terminal safety value in $λ$-Reachability is only used at a probability controlled by parameter $δ$. We formally show that for $δ<1$, the update induces a contraction mapping that allows temporal-difference learning; as $λ\\to 1$, the estimator recovers the undiscounted reachability objective. We apply $λ$-Reachability to high-dimensional safety learning problems with both simulated and real humanoid robots under balance and collision avoidance constraints. Experimental results demonstrate that $λ$-Reachability significantly improves both safe-set boundary classification and safety margin estimation compared to single-step temporal-difference baselines.",
+      "authors": [
+        "Rui Chen",
+        "Shangtao Li",
+        "Yifan Sun",
+        "Changliu Liu"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-06-14T21:07:32+00:00",
+      "link": "https://arxiv.org/pdf/2606.16022v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "addresses safety analysis for humanoid robots with geometric horizon",
+      "llm_evidence_cn": "针对人形机器人安全分析提出几何视域方法",
+      "llm_evidence": "针对人形机器人安全分析提出几何视域方法",
+      "canonical_evidence": "针对人形机器人安全分析提出几何视域方法",
+      "llm_tldr_en": "λ-Reachability introduces a scalable Hamilton-Jacobi safety analysis for high-dimensional robots using stochastic multi-step estimators, applicable to humanoid safety.",
+      "llm_tldr_cn": "λ-Reachability提出一种可扩展的Hamilton-Jacobi安全性分析方法，采用随机多步估计器，适用于高维人形机器人系统。该方法通过几何分布展开视域，在安全评估中兼顾局部与长期目标，可间接用于人形机器人故障诊断与安全监控。",
+      "llm_tldr": "λ-Reachability提出一种可扩展的Hamilton-Jacobi安全性分析方法，采用随机多步估计器，适用于高维人形机器人系统。该方法通过几何分布展开视域，在安全评估中兼顾局部与长期目标，可间接用于人形机器人故障诊断与安全监控。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "fault diagnosis for humanoid robots",
+      "matched_requirement_id": "req-3",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "biorxiv-10-64898-2026-01-24-700912-v2",
+      "source": "biorxiv",
+      "title": "An end-to-end platform for pose estimation and real-time edge-AI deployment",
+      "abstract": "Accurate pose estimation underpins quantitative analysis of behavior, yet many deep learning-based tracking tools remain optimized for offline workflows that rely on fragmented software pipelines, workstation-grade GPUs, or external middleware to enable real-time deployment. Here we present an integrated software-hardware ecosystem for pose estimation that spans dataset creation, model training, offline analysis, and real-time deployment on embedded edge-computing devices. SqueakPose Studio provides a software suite for whole-frame, deep learning-based pose estimation that unifies dataset creation, manual and model-assisted labeling, model training, validation, and large-scale offline inference. The system leverages modern object-detection architectures to enable efficient end-to-end training and inference without patch-based sampling or multi-stage postprocessing, and supports execution on CPUs, GPUs, and Apple Silicon. For experimental settings requiring continuous recording and synchronized data acquisition, SqueakView enables real-time model deployment, video capture, and sensor logging on embedded edge-computing hardware, while MouseHouse provides a compact, modular enclosure designed for home cage-based experiments that integrates embedded GPU compute, microcontroller-based timing, and peripheral I/O. A shared data format and deterministic timing architecture ensure consistency across offline analysis and real-time deployment. Together, SqueakPose Studio, SqueakView, and MouseHouse provide a unified platform for pose estimation that supports both conventional offline analysis and embedded, real-time experimentation, without reliance on workstation-grade hardware or external middleware.",
+      "authors": [
+        "Haggerty, D. L.",
+        "Darden, C. B.",
+        "Lovinger, D. M."
+      ],
+      "primary_category": "neuroscience",
+      "categories": [
+        "neuroscience"
+      ],
+      "published": "2026-06-15T00:00:00+00:00",
+      "link": "https://www.biorxiv.org/content/10.64898/2026.01.24.700912v2.full.pdf",
+      "tags": [
+        "keyword:humanoid-ood",
+        "query:humanoid-ood"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "unified platform for dataset creation and edge deployment",
+      "llm_evidence_cn": "统一的数据集创建与边缘部署平台",
+      "llm_evidence": "统一的数据集创建与边缘部署平台",
+      "canonical_evidence": "统一的数据集创建与边缘部署平台",
+      "llm_tldr_en": "SqueakPose Studio provides an end-to-end platform for pose estimation including dataset creation, model training, offline analysis, and real-time deployment on embedded edge-computing devices.",
+      "llm_tldr_cn": "SqueakPose Studio是一个集成的软硬件生态系统，用于姿态估计。它统一了数据集创建、人工和模型辅助标注、模型训练、验证以及大规模离线推断，并支持在嵌入式边缘计算设备上的实时部署。该系统利用现代目标检测架构，实现了从数据到部署的全流程支持。该工作为机器人数据集构建和边缘部署提供了可借鉴的通用框架。",
+      "llm_tldr": "SqueakPose Studio是一个集成的软硬件生态系统，用于姿态估计。它统一了数据集创建、人工和模型辅助标注、模型训练、验证以及大规模离线推断，并支持在嵌入式边缘计算设备上的实时部署。该系统利用现代目标检测架构，实现了从数据到部署的全流程支持。该工作为机器人数据集构建和边缘部署提供了可借鉴的通用框架。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    }
+  ]
+}

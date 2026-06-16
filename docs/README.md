@@ -6,46 +6,49 @@
 </div>
 
 ## 每次日报
-- 最新运行日期：2026-06-15
-- 运行时间：2026-06-15 22:59:37 UTC
+- 最新运行日期：2026-06-16
+- 运行时间：2026-06-16 23:09:01 UTC
 - 运行状态：成功
-- 本次总论文数：8
-- 精读区：1
-- 速读区：7
+- 本次总论文数：9
+- 精读区：4
+- 速读区：5
 
 ### 今日简报（AI）
-1) 今日精读《Sensitivity Shaping for Latent Modeling》（9.0/10），速读3篇涉及人体控制、异常检测、机器人运动数据集。
-2) 最值得关注的是隐式建模中的敏感度塑形方法，可提升生成模型鲁棒性。
-3) 建议优先深入阅读精读论文，并关注其在具身智能或异常检测任务中的迁移潜力。
-- 详情：[/202606/15/README](/202606/15/README)
+今日精选2篇9分论文，聚焦全形态运动追踪与具身数据转换工具链，另有3篇速读关注交互世界模型和类人机器人控制。  
+最值得精读的是《VENOM》提出通用运动跟踪框架，及《DataLadder》打通具身数据金字塔的模拟-转换闭环。  
+建议优先深入VENOM的多体态适配思路，可扩展至非标准构型机器人或数字人驱动场景。
+- 详情：[/202606/16/README](/202606/16/README)
 
 ### 精读区论文标签
-1. [Sensitivity Shaping for Latent Modeling](/202606/15/2606.14585v1-sensitivity-shaping-for-latent-modeling)  
-   标签：评分：9.0/10、query:humanoid-ood
-   evidence：面向安全机器人操作的分布外检测
+1. [VENOM: Versatile Embodied Network for Omni-bodied Motion tracking](/202606/16/2606.16696v1-venom-versatile-embodied-network-for-omni-bodied-motion-tracking)  
+   标签：评分：9.0/10、query:ur
+   evidence：构建了包含多个人形机器人状态、动作和奖励的VENOM运动跟踪数据集
+2. [DataLadder: A Simulation-Enabled Interconversion Toolchain for the Embodied Data Pyramid](/202606/16/2606.16776v1-dataladder-a-simulation-enabled-interconversion-toolchain-for-the-embodied-data-pyramid)  
+   标签：评分：9.0/10、query:ur
+   evidence：仿真使能的机器人数据生成与评估工具链
+3. [Identification of a Physics-Based Electrical Power Consumption Model for the Unitree G1 Humanoid Arm](/202606/16/2606.15915v1-identification-of-a-physics-based-electrical-power-consumption-model-for-the-unitree-g1-humanoid-arm)  
+   标签：评分：8.0/10、query:ur
+   evidence：Unitree G1手臂的物理功耗模型
+4. [ATHENA: Accelerated Multi-Task Heterogeneous Influence Functions for Robot Data Curation](/202606/16/2606.16208v1-athena-accelerated-multi-task-heterogeneous-influence-functions-for-robot-data-curation)  
+   标签：评分：8.0/10、query:ur
+   evidence：机器人数据筛选与数据集构建直接相关
 
 ### 速读区论文标签
-1. [EgoPriMo: Egocentric Motion Generation for Interactive Humanoid Control](/202606/15/2606.08495v1-egoprimo-egocentric-motion-generation-for-interactive-humanoid-control)  
+1. [$μ_0$: A Scalable 3D Interaction-Trace World Model](/202606/16/2606.13769v2-0-a-scalable-3d-interaction-trace-world-model)  
    标签：评分：7.0/10、query:ur
-   evidence：从第一人称人类演示学习运动先验，支持人形机器人数据集构建
-2. [D2H-AD: A Hybrid Model Utilizing Hyperdimensional Computing for Advanced Anomaly Detection](/202606/15/2606.13754v1-d2h-ad-a-hybrid-model-utilizing-hyperdimensional-computing-for-advanced-anomaly-detection)  
+   evidence：TraceExtract系统从视频自动提取3D监督，构建交互轨迹数据集；直接支持数据集构建
+2. [ADAPT: Analytical Disturbance-Aware Policy Training for Humanoid Locomotion](/202606/16/2606.16542v1-adapt-analytical-disturbance-aware-policy-training-for-humanoid-locomotion)  
    标签：评分：7.0/10、query:humanoid-ood
-   evidence：基于超维度计算的异常检测方法，适用于边缘部署
-3. [Kine2Go: Kinematic dataset for the Unitree Go2 robot with diverse gaits and motions](/202606/15/2606.14433v1-kine2go-kinematic-dataset-for-the-unitree-go2-robot-with-diverse-gaits-and-motions)  
+   evidence：具有解析扰动观测器的人形机器人OOD鲁棒运动控制
+3. [An end-to-end platform for pose estimation and real-time edge-AI deployment](/202606/16/biorxiv-10-64898-2026-01-24-700912-v2-an-end-to-end-platform-for-pose-estimation-and-real-time-edge-ai-deployment)  
    标签：评分：7.0/10、query:ur
-   evidence：为宇树机器人（Go2）构建运动学数据集，直接关联宇树数据集构建
-4. [Stubborn: A Streamlined and Unified Reinforcement Learning Framework for Robust Motion Tracking and Fall Recovery for Humanoids](/202606/15/2606.12814v1-stubborn-a-streamlined-and-unified-reinforcement-learning-framework-for-robust-motion-tracking-and-fall-recovery-for-humanoids)  
+   evidence：统一的数据集创建与边缘部署平台
+4. [EmbodiSteer: Steering Embodiment-Agnostic Visuomotor Policies with Joint-Space Guidance for Zero-Shot Cross-Embodiment Deployment](/202606/16/2606.12965v1-embodisteer-steering-embodiment-agnostic-visuomotor-policies-with-joint-space-guidance-for-zero-shot-cross-embodiment-deployment)  
    标签：评分：6.0/10、query:ur
-   evidence：人形机器人跌倒恢复与运动跟踪的统一框架
-5. [GAIT: Legged Robot Proprioceptive State Estimation with Attention over Inertial-Leg Tokens](/202606/15/2606.14160v1-gait-legged-robot-proprioceptive-state-estimation-with-attention-over-inertial-leg-tokens)  
-   标签：评分：6.0/10、query:humanoid-ood
-   evidence：基于本体感受信号的人形机器人故障诊断
-6. [Hy-Embodied-0.5-VLA: From Vision-Language-Action Models to a Real-World Robot Learning Stack](/202606/15/2606.14409v1-hy-embodied-05-vla-from-vision-language-action-models-to-a-real-world-robot-learning-stack)  
+   evidence：零样本跨实体部署，结合关节空间引导
+5. [$λ$-Reachability: Geometric-Horizon Safety Bellman Equations for Humanoid Safety](/202606/16/2606.16022v1--reachability-geometric-horizon-safety-bellman-equations-for-humanoid-safety)  
    标签：评分：6.0/10、query:ur
-   evidence：涵盖数据收集的完整机器人学习栈
-7. [EgoGuide: Egocentric Guidance for Efficient Robot-Free Demonstration Collection and Learning](/202606/15/2606.14665v1-egoguide-egocentric-guidance-for-efficient-robot-free-demonstration-collection-and-learning)  
-   标签：评分：6.0/10、query:ur
-   evidence：通过自我中心引导的机器人数据集构建
+   evidence：针对人形机器人安全分析提出几何视域方法
 
 
 <div class="dpr-home-promo-card">
