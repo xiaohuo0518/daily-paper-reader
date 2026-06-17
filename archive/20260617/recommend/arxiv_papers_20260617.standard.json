@@ -1,0 +1,356 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-06-17T22:19:11.695806+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 2,
+    "deep_divecandidates": 3,
+    "deep_cap": 7,
+    "deep_selected": 3,
+    "quick_candidates": 5,
+    "quick_skim_target": 12,
+    "quick_selected": 5
+  },
+  "deep_dive": [
+    {
+      "id": "2606.12406v1",
+      "source": "arxiv",
+      "title": "FACTR 2: Learning External Force Sensing for Commodity Robot Arms Improves Policy Learning",
+      "abstract": "Contact-rich manipulation requires force sensitivity, but many robot arms lack dedicated force sensors due to their high cost. We present Neural External Torque Estimation (NEXT), a data-driven method that estimates external joint torques without needing any dedicated force sensors. NEXT trains in 1 minute from only 10 minutes of free-motion data, yet achieves estimates comparable to dedicated joint-torque sensors. NEXT enables force-feedback teleoperation on low-cost arms and improves policy learning through Force-Informed Re-Sampling Training (FIRST), which up-samples pre-contact and contact segments during behavior cloning. Across five long-horizon tasks, FIRST outperforms prior force-aware policies by over 17% in task progress. Together, NEXT and FIRST bring force-aware teleoperation and policy learning to off-the-shelf robots without additional sensing hardware. Video results and code are available at https://jasonjzliu.com/factr2",
+      "authors": [
+        "Steven Oh",
+        "Jason Jingzhou Liu",
+        "Tony Tao",
+        "Philip Han",
+        "Kenneth Shaw",
+        "Satoshi Funabashi",
+        "Ruslan Salakhutdinov",
+        "Deepak Pathak"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.AI",
+        "cs.LG",
+        "eess.SY"
+      ],
+      "published": "2026-06-10T17:59:35+00:00",
+      "link": "https://arxiv.org/pdf/2606.12406v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "external torque estimation from proprioceptive data for robot arms",
+      "llm_evidence_cn": "从本体感受数据估计外力矩的方法可用于人形机器人故障诊断",
+      "llm_evidence": "从本体感受数据估计外力矩的方法可用于人形机器人故障诊断",
+      "canonical_evidence": "从本体感受数据估计外力矩的方法可用于人形机器人故障诊断",
+      "llm_tldr_en": "Proposes NEXT, a data-driven method to estimate external joint torques without dedicated sensors, enabling force-aware policy learning and potentially fault detection.",
+      "llm_tldr_cn": "针对机器人缺乏力传感器的问题，提出数据驱动的外力矩估计方法NEXT，仅需10分钟自由运动数据训练1分钟即可达到专用力矩传感器精度。该方法通过Force-Informed Re-Sampling Training提升策略学习，在五个长时程任务中进步超过17%。其力矩估计能力可直接迁移至人形机器人的故障诊断场景，基于本体感受信号检测异常。",
+      "llm_tldr": "针对机器人缺乏力传感器的问题，提出数据驱动的外力矩估计方法NEXT，仅需10分钟自由运动数据训练1分钟即可达到专用力矩传感器精度。该方法通过Force-Informed Re-Sampling Training提升策略学习，在五个长时程任务中进步超过17%。其力矩估计能力可直接迁移至人形机器人的故障诊断场景，基于本体感受信号检测异常。",
+      "llm_tags": [
+        "query:humanoid-ood"
+      ],
+      "matched_query_tag": "query:humanoid-ood",
+      "matched_query_text": "humanoid robot fault diagnosis using proprioceptive signals",
+      "matched_requirement_id": "req-9",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2606.17011v1",
+      "source": "arxiv",
+      "title": "ROVE: Unlocking Human Interventions for Humanoid Manipulation via Reinforcement Learning",
+      "abstract": "Human interventions provide crucial corrective signals for post-training Vision-Language-Action (VLA) models. However, enabling seamless humanoid interventions is a formidable systems challenge due to complex whole-body kinematics and dexterous-hand control. Consequently, the collected intervention trajectories are often suboptimal, and methods that rely on human interventions as expert supervision can absorb hesitant, inefficient, or even erroneous behaviors. To address both the system and algorithmic challenges, we propose ROVE, a reinforcement learning framework for humanoid VLA post-training with imperfect human interventions. First, ROVE introduces a human-in-the-loop pipeline capable of collecting deployment and intervention data for humanoid manipulation. Second, it utilizes Optimistic Value Estimation (OVE) to prioritize high-value behaviors from mixed-quality trajectories. To further robustify value estimation, we incorporate cross-embodiment human experience videos to provide rich supervision for long-tailed failure and recovery modes. The resulting critic yields informative advantage signals, steering the VLA actor to focus on high-value behaviors rather than indiscriminately imitating all actions. On challenging real-world contact-rich and fine-grained humanoid manipulation tasks, ROVE outperforms experience-learning baselines and consistently improves across multiple rollout-intervention iterations.",
+      "authors": [
+        "Wei Xiao",
+        "Weiliang Tang",
+        "Yuying Ge",
+        "Hui Zhou",
+        "Yao Mu",
+        "Li Zhang",
+        "Yixiao Ge"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.LG"
+      ],
+      "published": "2026-06-15T17:45:06+00:00",
+      "link": "https://arxiv.org/pdf/2606.17011v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "human intervention data collection for humanoid manipulation",
+      "llm_evidence_cn": "人形机器人人类干预数据收集",
+      "llm_evidence": "人形机器人人类干预数据收集",
+      "canonical_evidence": "人形机器人人类干预数据收集",
+      "llm_tldr_en": "Introduces a RL framework for humanoid VLA post-training using human interventions, focusing on collecting and learning from suboptimal intervention data.",
+      "llm_tldr_cn": "人类干预是后期训练人形机器人VLA模型的重要信号，但采集的干预轨迹往往次优。ROVE提出一种强化学习框架，通过人在环流水线收集部署和干预数据，并利用强化学习从次优干预中学习改进策略。实验表明，该方法可有效提升人形机器人操作性能。",
+      "llm_tldr": "人类干预是后期训练人形机器人VLA模型的重要信号，但采集的干预轨迹往往次优。ROVE提出一种强化学习框架，通过人在环流水线收集部署和干预数据，并利用强化学习从次优干预中学习改进策略。实验表明，该方法可有效提升人形机器人操作性能。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "humanoid robot dataset construction",
+      "matched_requirement_id": "req-2",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2606.18043v1",
+      "source": "arxiv",
+      "title": "Uncertainty Quantification for Flow-Based Vision-Language-Action Models",
+      "abstract": "Vision-language-action models (VLAs) combine vision-language backbones with expressive generative action heads trained via flow matching on large-scale robotic datasets. Despite their strong empirical performance in robotic manipulation, VLAs lack mechanisms to quantify confidence in their predictions and to detect when their actions may be unreliable. This presents a critical limitation for real-world deployment in non-stationary environments, where models inevitably encounter scenarios outside their pretraining distribution and may fail without warning. To address this, we derive an efficient method for quantifying epistemic uncertainty in flow-matching models by leveraging velocity-field disagreement (VFD) across a small ensemble. We successfully use this uncertainty estimate for failure detection during deployment and active fine-tuning of flow-based VLAs. To this end, we propose SAVE, a framework for uncertainty-guided active multitask fine-tuning that reduces the number of costly expert demonstrations required to adapt VLAs to new tasks. Through extensive experiments on the LIBERO benchmark, we demonstrate that VFD yields better-calibrated uncertainty estimates predictive of downstream performance, that VFD achieves strong performance in detecting failures, and that uncertainty-guided data acquisition with SAVE requires at least 22% fewer samples than baselines. In summary, our work shows that quantifying epistemic uncertainty in flow-based VLAs improves both failure awareness and adaptation. Project website: tum-lsy.github.io/uq_vla/.",
+      "authors": [
+        "Ralf Römer",
+        "Maximilian Seeliger",
+        "Saida Liu",
+        "Ben Sturgis",
+        "Marco Bagatella",
+        "Daniel Marta",
+        "Andreas Krause",
+        "Angela P. Schoellig"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.LG"
+      ],
+      "published": "2026-06-16T15:19:09+00:00",
+      "link": "https://arxiv.org/pdf/2606.18043v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "epistemic uncertainty quantification for OOD detection in robot action models",
+      "llm_evidence_cn": "为机器人动作模型中的OOD检测提供认知不确定性量化方法",
+      "llm_evidence": "为机器人动作模型中的OOD检测提供认知不确定性量化方法",
+      "canonical_evidence": "为机器人动作模型中的OOD检测提供认知不确定性量化方法",
+      "llm_tldr_en": "Proposes velocity-field disagreement (VFD) to quantify epistemic uncertainty in flow-based VLA models, enabling OOD detection for safe robot deployment.",
+      "llm_tldr_cn": "该论文针对基于流的视觉-语言-动作模型（VLA）缺乏不确定性评估的问题，提出通过小集成的速度场不一致性（VFD）高效量化认知不确定性。实验表明该方法能有效检测分布外场景，提升机器人操作安全。该方法可直接用于人形机器人安全运行中的OOD检测。",
+      "llm_tldr": "该论文针对基于流的视觉-语言-动作模型（VLA）缺乏不确定性评估的问题，提出通过小集成的速度场不一致性（VFD）高效量化认知不确定性。实验表明该方法能有效检测分布外场景，提升机器人操作安全。该方法可直接用于人形机器人安全运行中的OOD检测。",
+      "llm_tags": [
+        "query:humanoid-ood"
+      ],
+      "matched_query_tag": "query:humanoid-ood",
+      "matched_query_text": "out-of-distribution detection for safe robot operation",
+      "matched_requirement_id": "req-11",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "quick_skim": [
+    {
+      "id": "2606.14992v1",
+      "source": "arxiv",
+      "title": "KATANA: A Fast, Low-Power Mapping of Kalman Filters onto Edge NPUs for Real-Time Tracking",
+      "abstract": "State estimation is the closed-loop core of every real-time tracking system, from radar surveillance and counter-UAV defense to autonomous driving and robotics. These deployments run on edge platforms, where defense systems mount on vehicles and drones, and civilian pipelines live on cars and handheld devices. Here, every additional watt of compute erodes mission duration or operational range. Two hard constraints follow: each new measurement must be fused before the next control cycle, and the total compute must fit within a strict battery and thermal power envelope. The Linear and Extended Kalman Filters (LKF, EKF) are dominant estimators on these systems, but today they execute almost exclusively on CPUs, which serialize multi-object tracking (MOT) updates, or on custom FPGA/ASIC accelerators that lengthen design cycles. Contemporary AI-PC SoCs, like the Intel Core Ultra Series 1 and 2, integrate a low-power, data-parallel Neural Processing Unit (NPU). We therefore ask whether the Kalman filter can be mapped onto this existing matrix engine to meet real-time and low-power budgets simultaneously, avoiding a dedicated accelerator and keeping the CPU and GPU free for primary workloads. We present KATANA, an NPU-aware optimization framework delivering the first end-to-end mapping of the LKF and EKF onto a commercial NPU, alongside a cross-platform characterization on shipping AI-PC silicon. KATANA applies three algebraic graph rewrites: subtract-to-add reformulation via a precomputed negative-projection matrix H_neg, static-shape tensor fusion, and block-diagonal batched parallelization, ensuring 100% of operations execute on the DPU matrix engine. On the Series 2, the optimized batched EKF reaches 223.35 FPS at 13.43 W active power, and the LKF reaches 408.73 FPS at 14.05 W, delivering up to a 97.9% reduction in dynamic energy versus the CPU implementation.",
+      "authors": [
+        "Bodhisatwa Kundu",
+        "Anish Rooj",
+        "Sumit Saha",
+        "Abhradeep Sarkar",
+        "Arghadip Das",
+        "Arnab Raha",
+        "Mrinal K. Naskar"
+      ],
+      "primary_category": "cs.AR",
+      "categories": [
+        "cs.AR",
+        "cs.LG"
+      ],
+      "published": "2026-06-12T22:26:20+00:00",
+      "link": "https://arxiv.org/pdf/2606.14992v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "maps Kalman filters onto edge NPUs for real-time robotic tracking",
+      "llm_evidence_cn": "将卡尔曼滤波器映射到边缘NPU用于实时机器人跟踪",
+      "llm_evidence": "将卡尔曼滤波器映射到边缘NPU用于实时机器人跟踪",
+      "canonical_evidence": "将卡尔曼滤波器映射到边缘NPU用于实时机器人跟踪",
+      "llm_tldr_en": "KATANA proposes a fast, low-power mapping of Kalman filters onto edge NPUs, enabling real-time state estimation for tracking in robotics and autonomous systems on power-constrained platforms.",
+      "llm_tldr_cn": "本论文提出KATANA，一种将卡尔曼滤波器高效映射到边缘NPU的方法，实现低功耗实时状态估计。该方法解决了跟踪系统在边缘部署时计算功耗受限的问题，使机器人等系统能在电池和热约束下完成实时融合。实验证明在保持精度的前提下显著降低延迟和功耗。对需要边缘部署的机器人应用具有重要参考价值。",
+      "llm_tldr": "本论文提出KATANA，一种将卡尔曼滤波器高效映射到边缘NPU的方法，实现低功耗实时状态估计。该方法解决了跟踪系统在边缘部署时计算功耗受限的问题，使机器人等系统能在电池和热约束下完成实时融合。实验证明在保持精度的前提下显著降低延迟和功耗。对需要边缘部署的机器人应用具有重要参考价值。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "edge deployment for humanoid robots",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2606.11990v2",
+      "source": "arxiv",
+      "title": "Time-Series Foundation Model Embeddings for Remaining Useful Life Estimation",
+      "abstract": "Remaining Useful Life (RUL) prediction is essential for industrial predictive maintenance, yet many learning-based approaches rely on extensive feature engineering or large labeled datasets to train task-specific sequence models. In this work, we introduce a lightweight learning approach, in which we leverage a frozen pretrained time-series foundation model (TSFM) and combine it with a small regression head for RUL estimation from multivariate sensor streams. More specifically, we use Chronos-2 as a frozen backbone to extract context window features and train a lightweight regression neural network for RUL prediction. Experiments on real-world industrial sensor data from two device types show that Chronos-2 features consistently improve over recurrent, convolutional, Transformer-based, and gradient-boosting baselines under the same preprocessing and evaluation protocol. We further analyze the impact of context length and find that performance improves significantly with longer histories, indicating that TSFM representation offer a practical and data-efficient alternative for RUL estimation in industrial settings.",
+      "authors": [
+        "Amir El-Ghoussani",
+        "Michele De Vita",
+        "Ronald Naumann",
+        "Vasileios Belagiannis"
+      ],
+      "primary_category": "cs.LG",
+      "categories": [
+        "cs.LG",
+        "cs.AI"
+      ],
+      "published": "2026-06-10T12:14:16+00:00",
+      "link": "https://arxiv.org/pdf/2606.11990v2",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "time-series foundation model for RUL prediction, transferable to robot fault diagnosis",
+      "llm_evidence_cn": "时间序列基础模型用于剩余寿命预测，可迁移至机器人故障诊断",
+      "llm_evidence": "时间序列基础模型用于剩余寿命预测，可迁移至机器人故障诊断",
+      "canonical_evidence": "时间序列基础模型用于剩余寿命预测，可迁移至机器人故障诊断",
+      "llm_tldr_en": "This work uses a frozen pretrained time-series foundation model (Chronos-2) with a lightweight regression head for RUL estimation from multivariate sensor data, demonstrating improved accuracy over recurrent models, which is relevant to fault diagnosis for humanoid robots.",
+      "llm_tldr_cn": "针对工业预测性维护中特征工程繁琐、标注数据少的问题，提出利用冻结的时间序列基础模型Chronos-2提取特征，结合轻量回归网络进行剩余寿命预测。在真实工业传感器数据上，该方法优于传统递归模型，且方法本身可迁移至人形机器人的故障诊断任务，例如利用本体感受信号进行异常检测。",
+      "llm_tldr": "针对工业预测性维护中特征工程繁琐、标注数据少的问题，提出利用冻结的时间序列基础模型Chronos-2提取特征，结合轻量回归网络进行剩余寿命预测。在真实工业传感器数据上，该方法优于传统递归模型，且方法本身可迁移至人形机器人的故障诊断任务，例如利用本体感受信号进行异常检测。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "fault diagnosis for humanoid robots",
+      "matched_requirement_id": "req-3",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2606.17385v1",
+      "source": "arxiv",
+      "title": "EgoInfinity: A Web-Scale 4D Hand-Object Interaction Data Engine for Any-View Robot Retargeting and Video-to-Action Robot Learning",
+      "abstract": "Internet videos constitute the largest reservoir of embodied human manipulation knowledge, yet converting arbitrary RGB footage into actionable robot training data remains a major bottleneck. Existing lab- or factory-collected datasets are narrow in scale and diversity, limiting open-world robot learning. Instead of proposing a static dataset, we introduce EgoInfinity, a universal 4D hand-object interaction data engine that enables web-scale data generation for robot retargeting and learning. EgoInfinity is a modular engine integrating perception, segmentation, reconstruction, interaction-aware refinement, and retargeting to automate this traditionally unscalable video-to-action problem without human-in-the-loop annotation. Its modular design lets the engine continuously benefit from advances in any incorporated component. With EgoInfinity, in-the-wild human manipulation videos are lifted into agent-agnostic, metric 4D hand-object representations, including hand trajectories, 6-DoF object poses, and contact-relevant states. Rather than naively connecting standalone components, EgoInfinity combines cross-module metric calibration with interaction-aware refinement to improve physical reliability, reducing drift and contact inconsistencies common in pure visual reconstruction. We further propose a novel motion retargeter that compiles the recovered 3D hand motions into executable joint trajectories for diverse robot morphologies, enabling video-to-action retargeting on any robot from arbitrary viewpoints and shot sizes (e.g., the human body is only partially visible). We validate EgoInfinity across perception fidelity, kinematic feasibility, contact consistency, cross-embodiment generalization, and real-robot skill acquisition (e.g., grasping, cutting, wiping, and pouring), demonstrating a scalable bridge from internet videos to executable robot behavior for open-world robot learning.",
+      "authors": [
+        "Gaotian Wang",
+        "Kejia Ren",
+        "Andrew Morgan",
+        "Yiting Chen",
+        "Howard H. Qian",
+        "Podshara Chanrungmaneekul",
+        "Kaiyu Hang"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-06-16T00:44:16+00:00",
+      "link": "https://arxiv.org/pdf/2606.17385v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "web-scale 4D hand-object interaction data engine for robot learning",
+      "llm_evidence_cn": "网络规模的4D手物交互数据引擎，为机器人学习提供自动化数据集构建",
+      "llm_evidence": "网络规模的4D手物交互数据引擎，为机器人学习提供自动化数据集构建",
+      "canonical_evidence": "网络规模的4D手物交互数据引擎，为机器人学习提供自动化数据集构建",
+      "llm_tldr_en": "Introduces EgoInfinity, a modular data engine that automates converting internet videos into robot training data via perception, segmentation, reconstruction, and retargeting.",
+      "llm_tldr_cn": "互联网视频蕴含丰富的操作知识，但难以直接转化为机器人训练数据。EgoInfinity提出模块化数据引擎，集成感知、分割、重建、交互优化和重定向，自动将任意RGB视频转化为4D手物交互数据，支持任意视角重定向和视频到动作学习。该引擎解决了数据集规模化和多样性的瓶颈，为开放世界机器人学习提供数据基础。",
+      "llm_tldr": "互联网视频蕴含丰富的操作知识，但难以直接转化为机器人训练数据。EgoInfinity提出模块化数据引擎，集成感知、分割、重建、交互优化和重定向，自动将任意RGB视频转化为4D手物交互数据，支持任意视角重定向和视频到动作学习。该引擎解决了数据集规模化和多样性的瓶颈，为开放世界机器人学习提供数据基础。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2606.14475v1",
+      "source": "arxiv",
+      "title": "Value-order Decomposition for Generalist Anomaly Detection",
+      "abstract": "Industrial anomaly detection suffers from limited data, making cross-domain generalization particularly challenging. Generalist Anomaly Detection (GAD) aims to train a unified model on a source domain that can effectively detect anomalies in unseen target domains. In the initial semantic feature space, strong entanglement between anomalies and object categories or defect types hinders effective generalization across domains. Recent works address this issue by projecting features into a residual space; however, such methods primarily increase cross-domain overlap for normal features, while anomalous features remain specific to object categories, defect types and data domains, leading to poor alignment and generalization. To address this limitation, we propose Value-order Decomposition (VOD), a simple yet effective technique that bridges \\textbf{three types of generalization gaps} across object categories, defect types (including real and synthetic defects), and data domains. VOD disentangles and suppresses object-category-, defect-type-, and domain-specific information, promoting alignment within normal and abnormal samples while preserving their separability, thereby enabling robust generalization across the three gaps. Leveraging the strong alignment between real and synthetic defects within the same object, we perform anomaly detection using only normal and synthetic-abnormal reference, and effectively generalize to unseen real defect types. Experiments on diverse industrial and medical benchmarks demonstrate that our method, using a simple cut-and-paste anomaly simulation strategy, achieves strong generalization across the three gaps.",
+      "authors": [
+        "Miaoyun Zhao",
+        "Jing Chen",
+        "Miaoni Zhao",
+        "Qiang Zhang"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV"
+      ],
+      "published": "2026-06-12T14:13:07+00:00",
+      "link": "https://arxiv.org/pdf/2606.14475v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "generalist anomaly detection method transferable to robot OOD detection",
+      "llm_evidence_cn": "通用异常检测方法可迁移至机器人OOD检测",
+      "llm_evidence": "通用异常检测方法可迁移至机器人OOD检测",
+      "canonical_evidence": "通用异常检测方法可迁移至机器人OOD检测",
+      "llm_tldr_en": "Value-order Decomposition proposes a decomposition technique for generalist anomaly detection that improves cross-domain generalization, applicable to robot safety monitoring.",
+      "llm_tldr_cn": "本文提出值序分解方法用于通用异常检测，通过解耦异常特征与类别信息增强跨域泛化。该方法在工业缺陷检测中取得先进性能，其跨域OOD检测思路可迁移至机器人安全监测场景。对基于感知的机器人异常检测具有方法论借鉴意义。",
+      "llm_tldr": "本文提出值序分解方法用于通用异常检测，通过解耦异常特征与类别信息增强跨域泛化。该方法在工业缺陷检测中取得先进性能，其跨域OOD检测思路可迁移至机器人安全监测场景。对基于感知的机器人异常检测具有方法论借鉴意义。",
+      "llm_tags": [
+        "query:humanoid-ood"
+      ],
+      "matched_query_tag": "query:humanoid-ood",
+      "matched_query_text": "out-of-distribution detection for safe robot operation",
+      "matched_requirement_id": "req-11",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2606.15317v1",
+      "source": "arxiv",
+      "title": "Covariance-Regulated Recursive Koopman Learning for Nonlinear Systems with Uncertain Time-Varying Dynamics",
+      "abstract": "Offline models for autonomous robots often fail under time-varying dynamics outside their training distribution. Koopman operator theory offers a linear representation of nonlinear dynamics via lifting, but its transition to real-time recursive estimation may suffer numerical vulnerabilities: covariance windup under low excitation when using exponential forgetting, and vanishing gain without forgetting. This paper introduces a Covariance-Regulated Recursive Koopman Learning (CR-RKL) framework with two complementary strategies--error dead-zone gating and constant-trace normalization--each independently capable of preventing covariance explosion and parameter freezing, with the latter additionally preserving the geometric structure of uncertainty. Validated on a non-holonomic differential-drive robot with wheel slip and Stribeck friction and on a 26-gram butterfly-inspired flapping-wing micro aerial vehicle, CR-RKL achieves numerically stable and accurate online modeling, and when embedded in model predictive control, it maintains reliable tracking performance under uncertain, time-varying dynamics.",
+      "authors": [
+        "Weibin Gu",
+        "Chen Yang",
+        "Lu Shi",
+        "Chao Gao"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-06-13T14:22:24+00:00",
+      "link": "https://arxiv.org/pdf/2606.15317v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "recursive Koopman learning for time-varying dynamics, applicable to anomaly detection",
+      "llm_evidence_cn": "递归Koopman学习处理时变动态，可用于异常检测",
+      "llm_evidence": "递归Koopman学习处理时变动态，可用于异常检测",
+      "canonical_evidence": "递归Koopman学习处理时变动态，可用于异常检测",
+      "llm_tldr_en": "CR-RKL introduces covariance-regulated recursive Koopman learning to handle time-varying dynamics, preventing numerical issues and enabling online adaptation for anomaly detection in robotic systems.",
+      "llm_tldr_cn": "传统离线模型在时变动态下失效。本文提出协方差调节的递归Koopman学习框架，通过误差死区门控和恒定迹归一化策略防止协方差爆炸和参数冻结，实现稳定的在线动态估计。该方法可直接应用于机器人关节信号的实时异常检测，为故障诊断提供了一种有效的时序建模工具。",
+      "llm_tldr": "传统离线模型在时变动态下失效。本文提出协方差调节的递归Koopman学习框架，通过误差死区门控和恒定迹归一化策略防止协方差爆炸和参数冻结，实现稳定的在线动态估计。该方法可直接应用于机器人关节信号的实时异常检测，为故障诊断提供了一种有效的时序建模工具。",
+      "llm_tags": [
+        "query:humanoid-ood"
+      ],
+      "matched_query_tag": "query:humanoid-ood",
+      "matched_query_text": "anomaly detection from joint position velocity torque IMU signals in humanoid robots",
+      "matched_requirement_id": "req-10",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    }
+  ]
+}

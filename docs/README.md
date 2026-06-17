@@ -6,49 +6,44 @@
 </div>
 
 ## 每次日报
-- 最新运行日期：2026-06-16
-- 运行时间：2026-06-16 23:09:01 UTC
+- 最新运行日期：2026-06-17
+- 运行时间：2026-06-17 22:24:14 UTC
 - 运行状态：成功
-- 本次总论文数：9
-- 精读区：4
+- 本次总论文数：8
+- 精读区：3
 - 速读区：5
 
 ### 今日简报（AI）
-今日精选2篇9分论文，聚焦全形态运动追踪与具身数据转换工具链，另有3篇速读关注交互世界模型和类人机器人控制。  
-最值得精读的是《VENOM》提出通用运动跟踪框架，及《DataLadder》打通具身数据金字塔的模拟-转换闭环。  
-建议优先深入VENOM的多体态适配思路，可扩展至非标准构型机器人或数字人驱动场景。
-- 详情：[/202606/16/README](/202606/16/README)
+今日共推送8篇论文，精读2篇聚焦机器人力觉感知与人形操控强化学习，速读5篇涵盖边缘NPU卡尔曼滤波、手物交互数据引擎及时间序列基础模型。最值得关注的是《FACTR 2》和《ROVE》两篇高分工作，前者提升机械臂政策学习，后者引入人类干预强化学习。建议优先精读这两篇，探索如何将外部感知与人类反馈融入机器人训练。
+- 详情：[/202606/17/README](/202606/17/README)
 
 ### 精读区论文标签
-1. [VENOM: Versatile Embodied Network for Omni-bodied Motion tracking](/202606/16/2606.16696v1-venom-versatile-embodied-network-for-omni-bodied-motion-tracking)  
-   标签：评分：9.0/10、query:ur
-   evidence：构建了包含多个人形机器人状态、动作和奖励的VENOM运动跟踪数据集
-2. [DataLadder: A Simulation-Enabled Interconversion Toolchain for the Embodied Data Pyramid](/202606/16/2606.16776v1-dataladder-a-simulation-enabled-interconversion-toolchain-for-the-embodied-data-pyramid)  
-   标签：评分：9.0/10、query:ur
-   evidence：仿真使能的机器人数据生成与评估工具链
-3. [Identification of a Physics-Based Electrical Power Consumption Model for the Unitree G1 Humanoid Arm](/202606/16/2606.15915v1-identification-of-a-physics-based-electrical-power-consumption-model-for-the-unitree-g1-humanoid-arm)  
+1. [FACTR 2: Learning External Force Sensing for Commodity Robot Arms Improves Policy Learning](/202606/17/2606.12406v1-factr-2-learning-external-force-sensing-for-commodity-robot-arms-improves-policy-learning)  
+   标签：评分：8.0/10、query:humanoid-ood
+   evidence：从本体感受数据估计外力矩的方法可用于人形机器人故障诊断
+2. [ROVE: Unlocking Human Interventions for Humanoid Manipulation via Reinforcement Learning](/202606/17/2606.17011v1-rove-unlocking-human-interventions-for-humanoid-manipulation-via-reinforcement-learning)  
    标签：评分：8.0/10、query:ur
-   evidence：Unitree G1手臂的物理功耗模型
-4. [ATHENA: Accelerated Multi-Task Heterogeneous Influence Functions for Robot Data Curation](/202606/16/2606.16208v1-athena-accelerated-multi-task-heterogeneous-influence-functions-for-robot-data-curation)  
-   标签：评分：8.0/10、query:ur
-   evidence：机器人数据筛选与数据集构建直接相关
+   evidence：人形机器人人类干预数据收集
+3. [Uncertainty Quantification for Flow-Based Vision-Language-Action Models](/202606/17/2606.18043v1-uncertainty-quantification-for-flow-based-vision-language-action-models)  
+   标签：评分：8.0/10、query:humanoid-ood
+   evidence：为机器人动作模型中的OOD检测提供认知不确定性量化方法
 
 ### 速读区论文标签
-1. [$μ_0$: A Scalable 3D Interaction-Trace World Model](/202606/16/2606.13769v2-0-a-scalable-3d-interaction-trace-world-model)  
+1. [KATANA: A Fast, Low-Power Mapping of Kalman Filters onto Edge NPUs for Real-Time Tracking](/202606/17/2606.14992v1-katana-a-fast-low-power-mapping-of-kalman-filters-onto-edge-npus-for-real-time-tracking)  
    标签：评分：7.0/10、query:ur
-   evidence：TraceExtract系统从视频自动提取3D监督，构建交互轨迹数据集；直接支持数据集构建
-2. [ADAPT: Analytical Disturbance-Aware Policy Training for Humanoid Locomotion](/202606/16/2606.16542v1-adapt-analytical-disturbance-aware-policy-training-for-humanoid-locomotion)  
-   标签：评分：7.0/10、query:humanoid-ood
-   evidence：具有解析扰动观测器的人形机器人OOD鲁棒运动控制
-3. [An end-to-end platform for pose estimation and real-time edge-AI deployment](/202606/16/biorxiv-10-64898-2026-01-24-700912-v2-an-end-to-end-platform-for-pose-estimation-and-real-time-edge-ai-deployment)  
+   evidence：将卡尔曼滤波器映射到边缘NPU用于实时机器人跟踪
+2. [EgoInfinity: A Web-Scale 4D Hand-Object Interaction Data Engine for Any-View Robot Retargeting and Video-to-Action Robot Learning](/202606/17/2606.17385v1-egoinfinity-a-web-scale-4d-hand-object-interaction-data-engine-for-any-view-robot-retargeting-and-video-to-action-robot-learning)  
    标签：评分：7.0/10、query:ur
-   evidence：统一的数据集创建与边缘部署平台
-4. [EmbodiSteer: Steering Embodiment-Agnostic Visuomotor Policies with Joint-Space Guidance for Zero-Shot Cross-Embodiment Deployment](/202606/16/2606.12965v1-embodisteer-steering-embodiment-agnostic-visuomotor-policies-with-joint-space-guidance-for-zero-shot-cross-embodiment-deployment)  
+   evidence：网络规模的4D手物交互数据引擎，为机器人学习提供自动化数据集构建
+3. [Time-Series Foundation Model Embeddings for Remaining Useful Life Estimation](/202606/17/2606.11990v2-time-series-foundation-model-embeddings-for-remaining-useful-life-estimation)  
    标签：评分：6.0/10、query:ur
-   evidence：零样本跨实体部署，结合关节空间引导
-5. [$λ$-Reachability: Geometric-Horizon Safety Bellman Equations for Humanoid Safety](/202606/16/2606.16022v1--reachability-geometric-horizon-safety-bellman-equations-for-humanoid-safety)  
-   标签：评分：6.0/10、query:ur
-   evidence：针对人形机器人安全分析提出几何视域方法
+   evidence：时间序列基础模型用于剩余寿命预测，可迁移至机器人故障诊断
+4. [Value-order Decomposition for Generalist Anomaly Detection](/202606/17/2606.14475v1-value-order-decomposition-for-generalist-anomaly-detection)  
+   标签：评分：6.0/10、query:humanoid-ood
+   evidence：通用异常检测方法可迁移至机器人OOD检测
+5. [Covariance-Regulated Recursive Koopman Learning for Nonlinear Systems with Uncertain Time-Varying Dynamics](/202606/17/2606.15317v1-covariance-regulated-recursive-koopman-learning-for-nonlinear-systems-with-uncertain-time-varying-dynamics)  
+   标签：评分：6.0/10、query:humanoid-ood
+   evidence：递归Koopman学习处理时变动态，可用于异常检测
 
 
 <div class="dpr-home-promo-card">
