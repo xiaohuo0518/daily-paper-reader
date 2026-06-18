@@ -6,44 +6,46 @@
 </div>
 
 ## 每次日报
-- 最新运行日期：2026-06-17
-- 运行时间：2026-06-17 22:24:14 UTC
+- 最新运行日期：2026-06-18
+- 运行时间：2026-06-18 21:14:55 UTC
 - 运行状态：成功
-- 本次总论文数：8
-- 精读区：3
-- 速读区：5
+- 本次总论文数：7
+- 精读区：0
+- 速读区：7
 
 ### 今日简报（AI）
-今日共推送8篇论文，精读2篇聚焦机器人力觉感知与人形操控强化学习，速读5篇涵盖边缘NPU卡尔曼滤波、手物交互数据引擎及时间序列基础模型。最值得关注的是《FACTR 2》和《ROVE》两篇高分工作，前者提升机械臂政策学习，后者引入人类干预强化学习。建议优先精读这两篇，探索如何将外部感知与人类反馈融入机器人训练。
-- 详情：[/202606/17/README](/202606/17/README)
+今天聚焦人形机器人全身学习、机器人失败经验学习以及人形机器人的操作与主动感知，共速读3篇论文，均获7.0/10评分。
+
+最值得关注的是《HumanoidArena》和《HALOMI》：前者构建了全身分层学习的基准，后者通过人类示教实现了带主动感知的人形机器人操作。
+
+建议普通读者优先阅读这两篇，它们代表了人形机器人从运动控制到复杂操作的最新交叉方向。
+- 详情：[/202606/18/README](/202606/18/README)
 
 ### 精读区论文标签
-1. [FACTR 2: Learning External Force Sensing for Commodity Robot Arms Improves Policy Learning](/202606/17/2606.12406v1-factr-2-learning-external-force-sensing-for-commodity-robot-arms-improves-policy-learning)  
-   标签：评分：8.0/10、query:humanoid-ood
-   evidence：从本体感受数据估计外力矩的方法可用于人形机器人故障诊断
-2. [ROVE: Unlocking Human Interventions for Humanoid Manipulation via Reinforcement Learning](/202606/17/2606.17011v1-rove-unlocking-human-interventions-for-humanoid-manipulation-via-reinforcement-learning)  
-   标签：评分：8.0/10、query:ur
-   evidence：人形机器人人类干预数据收集
-3. [Uncertainty Quantification for Flow-Based Vision-Language-Action Models](/202606/17/2606.18043v1-uncertainty-quantification-for-flow-based-vision-language-action-models)  
-   标签：评分：8.0/10、query:humanoid-ood
-   evidence：为机器人动作模型中的OOD检测提供认知不确定性量化方法
+- 本次无精读推荐。
 
 ### 速读区论文标签
-1. [KATANA: A Fast, Low-Power Mapping of Kalman Filters onto Edge NPUs for Real-Time Tracking](/202606/17/2606.14992v1-katana-a-fast-low-power-mapping-of-kalman-filters-onto-edge-npus-for-real-time-tracking)  
+1. [HumanoidArena: Benchmarking Egocentric Hierarchical Whole-body Learning](/202606/18/2606.17833v1-humanoidarena-benchmarking-egocentric-hierarchical-whole-body-learning)  
    标签：评分：7.0/10、query:ur
-   evidence：将卡尔曼滤波器映射到边缘NPU用于实时机器人跟踪
-2. [EgoInfinity: A Web-Scale 4D Hand-Object Interaction Data Engine for Any-View Robot Retargeting and Video-to-Action Robot Learning](/202606/17/2606.17385v1-egoinfinity-a-web-scale-4d-hand-object-interaction-data-engine-for-any-view-robot-retargeting-and-video-to-action-robot-learning)  
+   evidence：引入了一个人形机器人全身学习的仿真基准，与人形机器人数据集构建相关
+2. [Recover, Discover, Plan: Learning Skills and Concepts from Robot Failures](/202606/18/2606.18328v1-recover-discover-plan-learning-skills-and-concepts-from-robot-failures)  
    标签：评分：7.0/10、query:ur
-   evidence：网络规模的4D手物交互数据引擎，为机器人学习提供自动化数据集构建
-3. [Time-Series Foundation Model Embeddings for Remaining Useful Life Estimation](/202606/17/2606.11990v2-time-series-foundation-model-embeddings-for-remaining-useful-life-estimation)  
+   evidence：从机器人失败中学习恢复和概念发现，用于故障诊断与错误分析
+3. [HALOMI: Learning Humanoid Loco-Manipulation with Active Perception from Human Demonstrations](/202606/18/2606.18772v1-halomi-learning-humanoid-loco-manipulation-with-active-perception-from-human-demonstrations)  
+   标签：评分：7.0/10、query:ur
+   evidence：通过人类演示构建人形机器人数据集
+4. [Anomaly Detection for Sparse and Irregular Multivariate Time Series with Latent SDEs](/202606/18/2606.18898v1-anomaly-detection-for-sparse-and-irregular-multivariate-time-series-with-latent-sdes)  
+   标签：评分：7.0/10、query:humanoid-ood
+   evidence：提出生成式多变量时间序列异常检测方法，可适用于人形机器人关节信号
+5. [WT-UMI: Tactile-based Whole-Body Manipulation via Force-Supervised Contact-Aware Planning](/202606/18/2606.13232v1-wt-umi-tactile-based-whole-body-manipulation-via-force-supervised-contact-aware-planning)  
    标签：评分：6.0/10、query:ur
-   evidence：时间序列基础模型用于剩余寿命预测，可迁移至机器人故障诊断
-4. [Value-order Decomposition for Generalist Anomaly Detection](/202606/17/2606.14475v1-value-order-decomposition-for-generalist-anomaly-detection)  
-   标签：评分：6.0/10、query:humanoid-ood
-   evidence：通用异常检测方法可迁移至机器人OOD检测
-5. [Covariance-Regulated Recursive Koopman Learning for Nonlinear Systems with Uncertain Time-Varying Dynamics](/202606/17/2606.15317v1-covariance-regulated-recursive-koopman-learning-for-nonlinear-systems-with-uncertain-time-varying-dynamics)  
-   标签：评分：6.0/10、query:humanoid-ood
-   evidence：递归Koopman学习处理时变动态，可用于异常检测
+   evidence：提出全身人形机器人操作触觉接口，与人形机器人数据采集相关
+6. [Energy-Efficient Arm Reaching for a Humanoid Robot via Deep Reinforcement Learning with Identified Power Models](/202606/18/2606.15918v1-energy-efficient-arm-reaching-for-a-humanoid-robot-via-deep-reinforcement-learning-with-identified-power-models)  
+   标签：评分：6.0/10、query:ur
+   evidence：使用宇树G1人形机器人在深度强化学习框架中
+7. [Unified Motion-Action Modeling for Heterogeneous Robot Learning](/202606/18/2606.16917v1-unified-motion-action-modeling-for-heterogeneous-robot-learning)  
+   标签：评分：6.0/10、query:ur
+   evidence：从异构数据源进行多任务机器人学习，与数据集构建相关
 
 
 <div class="dpr-home-promo-card">

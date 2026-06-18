@@ -1,0 +1,332 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-06-18T21:11:48.962440+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 2,
+    "deep_divecandidates": 0,
+    "deep_cap": 7,
+    "deep_selected": 0,
+    "quick_candidates": 7,
+    "quick_skim_target": 12,
+    "quick_selected": 7
+  },
+  "deep_dive": [],
+  "quick_skim": [
+    {
+      "id": "2606.17833v1",
+      "source": "arxiv",
+      "title": "HumanoidArena: Benchmarking Egocentric Hierarchical Whole-body Learning",
+      "abstract": "Humanoid robots promise whole-body interaction in human-centered environments, but scalable policy learning remains difficult because task-level decision-making and whole-body dynamic execution are tightly coupled. A practical solution is hierarchical control, where a high-level policy predicts intermediate whole-body actions and low-level general motion trackers (GMTs) execute them as stable humanoid motion. However, existing benchmarks rarely evaluate the policy-tracker interface itself, leaving open whether intermediate whole-body actions are executable, robust under task distribution shifts, and transferable across different GMT backends. We introduce HumanoidArena, a simulation-first benchmark for egocentric hierarchical whole-body learning. The benchmark formulates policy learning as a hierarchical decision making problem: a high-level policy converts egocentric vision, proprioception, and instructions into a compact whole-body action, which is subsequently executed by a low-level GMT. Instead of treating the legs as planar transport tools, HumanoidArena emphasizes interactions where lower-body coordination is structurally necessary in task completion. We therefore design 7 leg-critical HOI/HSI tasks in which success requires foot placement, balance maintenance, posture adjustment, and whole-body reorientation. To further diagnose the hierarchical system, we evaluate policies from two complementary perspectives: perturbation-conditioned generalization and GMT-conditioned transfer. Experiments show that hierarchical control enables learned policies to solve diverse leg-critical interactions, but performance is strongly tracker-conditioned and cross-GMT transfer remains fragile. These results position HumanoidArena as a benchmark for studying transferable intermediate action representations and scalable egocentric whole-body policy learning.",
+      "authors": [
+        "Taowen Wang",
+        "Zikang Xie",
+        "Bin Yang",
+        "Yunheng Wang",
+        "Zizhao Yuan",
+        "Yuetong Fang",
+        "Yixiao Feng",
+        "Yichi Wang",
+        "Xingyu Chen",
+        "Haodong Chen",
+        "Qiwei Wu",
+        "Weisheng Xu",
+        "Lihan Chen",
+        "Lusong Li",
+        "Zecui Zeng",
+        "Renjing Xu"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-06-16T12:01:31+00:00",
+      "link": "https://arxiv.org/pdf/2606.17833v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "introduces a simulation benchmark for humanoid whole-body learning, relevant to humanoid robot dataset construction",
+      "llm_evidence_cn": "引入了一个人形机器人全身学习的仿真基准，与人形机器人数据集构建相关",
+      "llm_evidence": "引入了一个人形机器人全身学习的仿真基准，与人形机器人数据集构建相关",
+      "canonical_evidence": "引入了一个人形机器人全身学习的仿真基准，与人形机器人数据集构建相关",
+      "llm_tldr_en": "HumanoidArena is a simulation benchmark for egocentric hierarchical whole-body learning, evaluating policy-tracker interfaces. Useful for humanoid robot dataset and benchmark construction.",
+      "llm_tldr_cn": "为评估人形机器人层次化控制中策略-跟踪器接口的可执行性和鲁棒性，提出HumanoidArena仿真基准。该基准提供标准化的评估协议，并可生成大量仿真数据，对于人形机器人数据集构建和基准测试具有重要意义。",
+      "llm_tldr": "为评估人形机器人层次化控制中策略-跟踪器接口的可执行性和鲁棒性，提出HumanoidArena仿真基准。该基准提供标准化的评估协议，并可生成大量仿真数据，对于人形机器人数据集构建和基准测试具有重要意义。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "humanoid robot dataset construction",
+      "matched_requirement_id": "req-2",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2606.13232v1",
+      "source": "arxiv",
+      "title": "WT-UMI: Tactile-based Whole-Body Manipulation via Force-Supervised Contact-Aware Planning",
+      "abstract": "Whole-body humanoid manipulation of bulky, deformable, and shared-load objects requires distributed contact sensing and explicit force regulation, yet most imitation policies treat contact force only implicitly. On the other hand, different demonstration sources provide complementary modalities with inherent trade-offs: human demonstrations capture natural contact forces but not robot-executable actions, while teleoperation directly records robot actions but with less natural force regulation. This paper presents \\textbf{WT-UMI}, a wearable whole-body tactile interface worn by human operators or mounted on humanoids, providing accurate observations of tactile images, contact forces, and end-effector poses across both human demonstration and humanoid teleoperation modes. We introduce a force-conditioned target-pose correction module that converts measured human poses into contact-aware robot targets by learning corrections from teleoperation data. To leverage the natural force interaction in human data, we propose a force-supervised planner that predicts end-effector pose chunks and contact-force trajectories. The predicted contact force serves as the reference for a tactile-based admittance controller. Across five contact-rich tasks spanning deformable objects, bulky rigid objects, and human--humanoid collaboration, WT-UMI improves success rate and reduces contact-position tracking error over four policy baselines. Our project page is available at https://wt-umi.github.io/WTUMI/.",
+      "authors": [
+        "Jaehwi Jang",
+        "Zhaoyuan Gu",
+        "Alfred Cueva",
+        "Zimeng Chai",
+        "Junjie Sheng",
+        "Thong Nguyen",
+        "Himank Galundia",
+        "Yifan Wu",
+        "Huishu Xue",
+        "Isaac Legene",
+        "Ojas Mediratta",
+        "Davin Doan",
+        "Andrew Collins",
+        "Sarah Sadegh",
+        "KyoungMok Kim",
+        "Rishita Dhalbisoi",
+        "Zun Chen",
+        "Ye Zhao"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-06-11T11:45:58+00:00",
+      "link": "https://arxiv.org/pdf/2606.13232v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "presents whole-body humanoid manipulation with tactile interface, relates to humanoid robot data collection",
+      "llm_evidence_cn": "提出全身人形机器人操作触觉接口，与人形机器人数据采集相关",
+      "llm_evidence": "提出全身人形机器人操作触觉接口，与人形机器人数据采集相关",
+      "canonical_evidence": "提出全身人形机器人操作触觉接口，与人形机器人数据采集相关",
+      "llm_tldr_en": "WT-UMI provides wearable whole-body tactile interface for humanoid manipulation, enabling multi-modal data collection including tactile images, forces, and poses.",
+      "llm_tldr_cn": "本文提出WT-UMI，一种可穿戴全身触觉接口，可安装在人类操作员或人形机器人上，用于采集触觉图像、接触力和末端执行器位姿等多模态数据。该接口支持人类演示和遥操作两种方式，为人形机器人的操作数据构建提供了新途径。虽然专注于操作，但其数据采集框架可迁移至人形机器人数据集构建场景。",
+      "llm_tldr": "本文提出WT-UMI，一种可穿戴全身触觉接口，可安装在人类操作员或人形机器人上，用于采集触觉图像、接触力和末端执行器位姿等多模态数据。该接口支持人类演示和遥操作两种方式，为人形机器人的操作数据构建提供了新途径。虽然专注于操作，但其数据采集框架可迁移至人形机器人数据集构建场景。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "humanoid robot dataset construction",
+      "matched_requirement_id": "req-2",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2606.18328v1",
+      "source": "arxiv",
+      "title": "Recover, Discover, Plan: Learning Skills and Concepts from Robot Failures",
+      "abstract": "Intelligent robots should not only recover from failures, but also acquire the abstract knowledge needed to avoid them in the future. While reinforcement learning (RL) can learn reactive recovery behaviors, training a separate policy for every distinct failure mode is highly inefficient. We introduce Recovery-Driven Synthesis of Relational Concepts (ReSYNC), the first approach that progressively discovers and refines state abstractions (relational predicates) from failure-recovery experience to support abstract planning. Unlike purely reactive methods, ReSYNC jointly learns skills and concepts through an incremental dual-learning process. In the skill-learning phase, the robot uses RL to learn to recover from failures seen in training tasks. In the concept-learning phase, the robot discovers new relational predicates and refines its abstract planning model to explain and generalize the learned recovery behaviors. This interaction enables ReSYNC to convert local recoveries seen during training into global failure avoidance at test time. Across four simulated domains, we show that ReSYNC's ability to continually expand and refine its abstraction library allows it to solve long-horizon, previously unseen problems, outperforming strong baselines by over 50%. Additionally, we demonstrate sim-to-real transfer of ReSYNC, where it performs real-world non-prehensile manipulation skills and generalizes to unseen scenarios through abstract planning. Overall, ReSYNC represents a significant step toward robots that autonomously acquire abstractions for scalable, failure-aware planning in the physical world.",
+      "authors": [
+        "Bowen Li",
+        "Mayank Mishra",
+        "Y. Isabel Liu",
+        "Stone Tao",
+        "Nishanth Kumar",
+        "Alexander G. Gray",
+        "Ruwan Wickramarachchi",
+        "Jonathan Francis",
+        "Sebastian Scherer",
+        "Tom Silver"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-06-16T17:59:57+00:00",
+      "link": "https://arxiv.org/pdf/2606.18328v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "learns from robot failures to recover and discover concepts for planning",
+      "llm_evidence_cn": "从机器人失败中学习恢复和概念发现，用于故障诊断与错误分析",
+      "llm_evidence": "从机器人失败中学习恢复和概念发现，用于故障诊断与错误分析",
+      "canonical_evidence": "从机器人失败中学习恢复和概念发现，用于故障诊断与错误分析",
+      "llm_tldr_en": "ReSYNC learns recovery skills and relational concepts from robot failures, enabling abstract planning to avoid future failures, advancing fault diagnosis.",
+      "llm_tldr_cn": "本文聚焦机器人从失败中学习的问题，提出ReSYNC方法，通过增量双学习过程联合训练恢复技能和关系谓词。机器人在训练任务中学习恢复行为，并抽象出状态表征用于规划。该方法显著提升了机器人应对新故障的能力，为故障诊断与错误分析提供了新思路。",
+      "llm_tldr": "本文聚焦机器人从失败中学习的问题，提出ReSYNC方法，通过增量双学习过程联合训练恢复技能和关系谓词。机器人在训练任务中学习恢复行为，并抽象出状态表征用于规划。该方法显著提升了机器人应对新故障的能力，为故障诊断与错误分析提供了新思路。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "fault diagnosis and error analysis for humanoid robots",
+      "matched_requirement_id": "req-7",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2606.15918v1",
+      "source": "arxiv",
+      "title": "Energy-Efficient Arm Reaching for a Humanoid Robot via Deep Reinforcement Learning with Identified Power Models",
+      "abstract": "Humanoid robots performing in-field manipulation tasks, such as robotic apple harvesting, face severe energy constraints that directly limit the number of reaching motions that can be executed per battery charge. This paper presents an end-to-end, energy-aware reinforcement learning framework for the 7-degree-of-freedom left arm of the Unitree~G1 humanoid robot, combining a physics-based, experimentally identified electrical power model with a Soft Actor-Critic (SAC) policy trained in a Pinocchio-based rigid-body dynamics simulator. The RL policy operates on an incremental joint-position action space and is trained with a Hybrid Constellation Reward that combines a four-point end-effector constellation distance with a torque-norm energy proxy; after % $5\\times10^6$ training it reaches a $69.9\\%$ success rate over $1\\,000$ random targets in kinematic simulation, at a mean energy of \\SI{98.16}{\\joule} on successful episodes. Finally, on the physical Unitree~G1, the policy is validated over three independent 10-target batches, achieving a mean energy of $71.5 \\pm 48.3$\\,J, an end-effector position error of $2.64 \\pm 1.04$\\,cm, and an orientation error of $6.92 \\pm 1.33^\\circ$ -- within the \\SI{4}{\\centi\\metre}/$8.6^\\circ$ training tolerance. These results constitute a first step toward energy-aware reinforcement-learning-based arm reaching for humanoid robots.",
+      "authors": [
+        "Nestor N. Deniz",
+        "Simon Parsons",
+        "Fernando Auat Cheein"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-06-14T16:46:18+00:00",
+      "link": "https://arxiv.org/pdf/2606.15918v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "Uses Unitree G1 humanoid robot for energy-aware RL framework",
+      "llm_evidence_cn": "使用宇树G1人形机器人在深度强化学习框架中",
+      "llm_evidence": "使用宇树G1人形机器人在深度强化学习框架中",
+      "canonical_evidence": "使用宇树G1人形机器人在深度强化学习框架中",
+      "llm_tldr_en": "Presents an energy-aware deep RL framework for the Unitree G1 humanoid robot arm, combining identified power models with SAC in simulation.",
+      "llm_tldr_cn": "本文针对宇树G1人形机器人手臂提出了一种能量感知的强化学习框架，结合实测电力模型和SAC策略在仿真中训练，实现了节能控制，为能效受限的人形机器人作业提供有效方案。",
+      "llm_tldr": "本文针对宇树G1人形机器人手臂提出了一种能量感知的强化学习框架，结合实测电力模型和SAC策略在仿真中训练，实现了节能控制，为能效受限的人形机器人作业提供有效方案。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "Unitree G1 humanoid robot dataset construction",
+      "matched_requirement_id": "req-1",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2606.18772v1",
+      "source": "arxiv",
+      "title": "HALOMI: Learning Humanoid Loco-Manipulation with Active Perception from Human Demonstrations",
+      "abstract": "Human demonstrations, which can be collected at scale and naturally capture active hand-eye coordination, are a promising data source for learning humanoid loco-manipulation. However, directly transferring human demonstrations to humanoids requires a precise world-frame tracking controller, which is often brittle under Out-of-Distribution(OOD) targets, while human-to-humanoid gaps persist in both egocentric observation and action execution. To address these challenges, we present HALOMI, a scalable framework for learning humanoid loco-manipulation with active perception from human demonstrations. HALOMI extends Universal Manipulation Interface (UMI) with egocentric sensing to collect ego-view and wrist-view observations along with head-hand trajectories at scale. We further propose a manifold-constrained controller that plans in a learned latent behavior manifold to enable precise and robust head-hand tracking in the world frame. To bridge the human-to-humanoid gap, we perform ego-view alignment and introduce a controller-aware reference trajectory adaptation to reduce mismatch in both observation and action execution. We validate HALOMI on a Unitree G1 humanoid robot with an actuated neck across five real-world tasks involving navigation, grasping, bimanual manipulation, whole-body coordination, and dynamic behaviors. Across the three quantitatively evaluated tasks, HALOMI achieves an average success rate of 85\\%, while additional qualitative demonstrations show its ability to support dynamic tossing and deep-squat grasping.",
+      "authors": [
+        "Zehui Zhao",
+        "Yuxuan Zhao",
+        "Gaojing Zhang",
+        "Chenxi Liu",
+        "Maolin Zheng",
+        "Wenzhao Lian"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-06-17T07:33:37+00:00",
+      "link": "https://arxiv.org/pdf/2606.18772v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "humanoid robot dataset construction via human demonstrations",
+      "llm_evidence_cn": "通过人类演示构建人形机器人数据集",
+      "llm_evidence": "通过人类演示构建人形机器人数据集",
+      "canonical_evidence": "通过人类演示构建人形机器人数据集",
+      "llm_tldr_en": "HALOMI extends UMI with egocentric sensing to collect human demonstrations for humanoid loco-manipulation, addressing OOD issues with a precise controller and data scaling.",
+      "llm_tldr_cn": "该论文针对人形机器人移动操作学习中人类演示数据难以直接迁移的问题，提出了HALOMI框架。该方法在通用操作接口基础上引入自我中心感知，收集人类第一视角和手腕视角的演示数据，并通过精确的世界坐标系跟踪控制器实现数据迁移。实验表明该方法能有效处理分布外目标，构建高质量的人形机器人操作数据集。这项工作为从人类演示构建人形机器人数据集提供了可扩展方案。",
+      "llm_tldr": "该论文针对人形机器人移动操作学习中人类演示数据难以直接迁移的问题，提出了HALOMI框架。该方法在通用操作接口基础上引入自我中心感知，收集人类第一视角和手腕视角的演示数据，并通过精确的世界坐标系跟踪控制器实现数据迁移。实验表明该方法能有效处理分布外目标，构建高质量的人形机器人操作数据集。这项工作为从人类演示构建人形机器人数据集提供了可扩展方案。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "humanoid robot dataset construction",
+      "matched_requirement_id": "req-2",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2606.16917v1",
+      "source": "arxiv",
+      "title": "Unified Motion-Action Modeling for Heterogeneous Robot Learning",
+      "abstract": "We present Unified Motion-Action (UMA) Model, an approach that uses 3D object motion trajectories as a shared interface to bridge visuomotor control and dynamics modeling. UMA treats object motion and robot actions as co-evolving variables under a masked generative objective, in which the mask pattern determines both the supervision regime during pretraining and the inference mode at deployment. Using hindsight-relabeled motion contexts and a contrastive objective that disentangles task intent from scene geometry, UMA enables multi-task pretraining across heterogeneous data sources without requiring manually annotated task instructions. At deployment, the same pretrained parameters support motion-conditioned visuomotor control, motion-based dynamics modeling, and task adaptation from few-shot demonstrations. Pretrained on a mixture of robot demonstrations, human videos, and simulated data, UMA consistently outperforms state-of-the-art baselines specialized for each inference mode.",
+      "authors": [
+        "Yunhao Cao",
+        "Shitong Liu",
+        "Chao Feng",
+        "Meryl Zhang",
+        "Xuanchen Lu",
+        "Andrew Owens",
+        "Kuan Fang"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-06-15T16:23:42+00:00",
+      "link": "https://arxiv.org/pdf/2606.16917v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "heterogeneous robot learning from diverse data sources, relevant to dataset construction",
+      "llm_evidence_cn": "从异构数据源进行多任务机器人学习，与数据集构建相关",
+      "llm_evidence": "从异构数据源进行多任务机器人学习，与数据集构建相关",
+      "canonical_evidence": "从异构数据源进行多任务机器人学习，与数据集构建相关",
+      "llm_tldr_en": "Unified Motion-Action (UMA) model uses 3D object motion as interface to pretrain across heterogeneous robot data, enabling multi-task learning without annotations.",
+      "llm_tldr_cn": "针对异构机器人数据难以统一学习的问题，本文提出UMA模型，以3D物体运动轨迹作为共享接口，结合掩码生成目标和对比学习，实现无需人工标注的多任务预训练。该模型支持运动条件化控制与动力学建模，为机器人数据集构建提供了高效框架。",
+      "llm_tldr": "针对异构机器人数据难以统一学习的问题，本文提出UMA模型，以3D物体运动轨迹作为共享接口，结合掩码生成目标和对比学习，实现无需人工标注的多任务预训练。该模型支持运动条件化控制与动力学建模，为机器人数据集构建提供了高效框架。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2606.18898v1",
+      "source": "arxiv",
+      "title": "Anomaly Detection for Sparse and Irregular Multivariate Time Series with Latent SDEs",
+      "abstract": "Multivariate time series anomaly detection (MTSAD) is critical for a wide range of application areas, such as industrial monitoring, cybersecurity, or healthcare. Real-world data is often sparse, irregularly sampled or partially observed, yet existing methods assume uniformly sampled time series. We propose a generative approach based on Latent SDEs that projects the observed time series on a continuous-time stochastic dynamical system, directly being able to handle missing observations and irregular sampling, while also naturally capturing possible cyclic behavior that many real-world use cases inherently possess. Experiments on six anomaly benchmark datasets show that our proposed method ranks first among state-of-the-art baselines. We further demonstrate that our method remains robust under severe data sparsity, while performance significantly degrades for the tested baseline methods. These results highlight latent SDEs as a natural inductive bias for anomaly detection in multivariate time series, especially in presence of real-world irregularities.",
+      "authors": [
+        "Martin Uray",
+        "Dominik Geng",
+        "Florian Graf",
+        "Stefan Huber",
+        "Roland Kwitt"
+      ],
+      "primary_category": "cs.LG",
+      "categories": [
+        "cs.LG"
+      ],
+      "published": "2026-06-17T10:17:16+00:00",
+      "link": "https://arxiv.org/pdf/2606.18898v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "query:humanoid-ood"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "proposes generative anomaly detection for multivariate time series, adaptable to humanoid joint signals",
+      "llm_evidence_cn": "提出生成式多变量时间序列异常检测方法，可适用于人形机器人关节信号",
+      "llm_evidence": "提出生成式多变量时间序列异常检测方法，可适用于人形机器人关节信号",
+      "canonical_evidence": "提出生成式多变量时间序列异常检测方法，可适用于人形机器人关节信号",
+      "llm_tldr_en": "Proposes a generative anomaly detection method for sparse and irregular multivariate time series using Latent SDEs. Achieves state-of-the-art on six benchmarks. Applicable to robot joint signal anomaly detection.",
+      "llm_tldr_cn": "针对现实应用中多变量时间序列稀疏、不规则的问题，提出基于潜在随机微分方程（Latent SDE）的生成式异常检测方法，将观测序列投影到连续时间随机动力系统，自然处理缺失值和不规则采样。在六个异常检测基准数据集上取得最优性能。该方法可迁移至人形机器人关节信号的本体感受异常检测任务。",
+      "llm_tldr": "针对现实应用中多变量时间序列稀疏、不规则的问题，提出基于潜在随机微分方程（Latent SDE）的生成式异常检测方法，将观测序列投影到连续时间随机动力系统，自然处理缺失值和不规则采样。在六个异常检测基准数据集上取得最优性能。该方法可迁移至人形机器人关节信号的本体感受异常检测任务。",
+      "llm_tags": [
+        "query:humanoid-ood"
+      ],
+      "matched_query_tag": "query:humanoid-ood",
+      "matched_query_text": "anomaly detection from joint position velocity torque IMU signals in humanoid robots",
+      "matched_requirement_id": "req-10",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    }
+  ]
+}
