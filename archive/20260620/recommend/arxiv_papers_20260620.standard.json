@@ -1,0 +1,277 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-06-20T21:36:11.255596+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 2,
+    "deep_divecandidates": 0,
+    "deep_cap": 7,
+    "deep_selected": 0,
+    "quick_candidates": 5,
+    "quick_skim_target": 12,
+    "quick_selected": 5
+  },
+  "deep_dive": [],
+  "quick_skim": [
+    {
+      "id": "2606.16436v1",
+      "source": "arxiv",
+      "title": "V2P-Manip: Learning Dexterous Manipulation from Monocular Human Videos",
+      "abstract": "Achieving autonomous robotic dexterous manipulation requires precise, human-like action sequences at scale. As a scalable supplement to costly teleoperation data, extracting trajectories with both visual fidelity and physical plausibility from monocular videos represents a promising frontier in embodied AI. To this end, we introduce V2P-Manip, an efficient framework designed to learn dexterous manipulation policies directly from human demonstration videos. We establish an efficient, integrated pipeline encompassing 3D asset acquisition, trajectory estimation, and dexterous policy learning. To bridge the gap between visual perception and physical constraints, we introduce a two-stage refinement process to enforce spatial alignment and physical consistency. Evaluations on the TACO and OakInk benchmarks demonstrate that our approach significantly outperforms previous methods in pose accuracy, adaptability to unstructured environments, and training efficiency. Ultimately, experimental results confirm an average success rate of over 75% across multiple synthetic manipulation tasks and validate the adaptability of the extracted manipulation priors across diverse dexterous hand embodiments.",
+      "authors": [
+        "Kaihan Chen",
+        "Yanming Shao",
+        "Haifeng Ji",
+        "Xiaokang Yang",
+        "Yao Mu"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.CV"
+      ],
+      "published": "2026-06-15T09:08:11+00:00",
+      "link": "https://arxiv.org/pdf/2606.16436v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "extracts robot training datasets from monocular human videos",
+      "llm_evidence_cn": "从单目人类视频中提取机器人训练数据集",
+      "llm_evidence": "从单目人类视频中提取机器人训练数据集",
+      "canonical_evidence": "从单目人类视频中提取机器人训练数据集",
+      "llm_tldr_en": "V2P-Manip learns dexterous manipulation policies directly from human demonstration videos, providing a scalable method for constructing robot training datasets from monocular video, which is directly relevant to dataset construction for robotics.",
+      "llm_tldr_cn": "该论文提出V2P-Manip框架，旨在从单目人类视频中学习灵巧操作策略，解决遥操作数据成本高的问题。通过集成3D资产获取、轨迹估计和灵巧策略学习，并引入两阶段精炼过程确保空间对齐和物理一致性，该方法为机器人数据集的构建提供了一种可扩展的途径。实验表明，从视频中提取的轨迹能够有效训练灵巧操作策略，降低了数据收集门槛，对机器人数据集建设具有重要参考价值。",
+      "llm_tldr": "该论文提出V2P-Manip框架，旨在从单目人类视频中学习灵巧操作策略，解决遥操作数据成本高的问题。通过集成3D资产获取、轨迹估计和灵巧策略学习，并引入两阶段精炼过程确保空间对齐和物理一致性，该方法为机器人数据集的构建提供了一种可扩展的途径。实验表明，从视频中提取的轨迹能够有效训练灵巧操作策略，降低了数据收集门槛，对机器人数据集建设具有重要参考价值。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2606.16902v1",
+      "source": "arxiv",
+      "title": "Binary Tracking for Spatial QA and Navigation with Open Vision-Language Models",
+      "abstract": "This work addresses spatial question answering for service robots traversing long egocentric routes. Given a query such as \"where can I find a dry cleaner on the way back home?\", the system returns a metric coordinate that downstream navigation components can act on. Prior Spatial Question Answering approaches leverage retrieval-augmented agents built on closed-source models such as GPT-4o for path exploration. However, robots operating in the real world often cannot reliably depend on online closed-source models due to network instability, communication latency, and deployment cost. It creates a need for open-source based Spatial Question Answering approaches that can run onboard the robot, yet prior research in this direction remains limited. This work proposes BinTrack, a simple yet effective, fully open-source spatial-localization agent that leverages the temporal ordering of a robot's trajectory. BinTrack performs a binary search over the trajectory segments between two anchor landmarks identified from a query. It improves overall accuracy by up to 22.8% over other open-source implementations and even matches the reported closed-source model result on the global category of the SpaceLocQA benchmark, the most challenging setting that has so far required strong reasoning agents such as GPT-4o. Furthermore, its optimized inference strategy consistently yields more than a 1.5x inference speedup over previous approaches. Finally, this work releases GangnamLoop, a novel and practical multi-trip outdoor benchmark collected by deploying a real quadruped robot on public streets with the anonymization policy. It revisits the same locations under different outdoor conditions and pairs the robot's low viewpoint with the human owner's. The source codes and datasets are publicly available at https://github.com/ndb796/BinaryTracking",
+      "authors": [
+        "Dongbin Na",
+        "Chanwoo Kim",
+        "Soonbin Rho",
+        "Giyun Choi",
+        "Gangbok Lee",
+        "Dooyoung Hong"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.AI"
+      ],
+      "published": "2026-06-15T16:10:03+00:00",
+      "link": "https://arxiv.org/pdf/2606.16902v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "edge deployment for humanoid robots",
+      "llm_evidence_cn": "提出可在机器人上运行的开放视觉语言模型用于空间问答",
+      "llm_evidence": "提出可在机器人上运行的开放视觉语言模型用于空间问答",
+      "canonical_evidence": "提出可在机器人上运行的开放视觉语言模型用于空间问答",
+      "llm_tldr_en": "Proposes binary tracking for spatial QA using open-source VLM that can run onboard robots, addressing edge deployment.",
+      "llm_tldr_cn": "该论文针对服务机器人空间问答任务，提出基于开放视觉语言模型的二值跟踪方法，能够直接在机器人上运行，避免依赖云端API，降低了部署成本和延迟，适用于边缘部署场景。",
+      "llm_tldr": "该论文针对服务机器人空间问答任务，提出基于开放视觉语言模型的二值跟踪方法，能够直接在机器人上运行，避免依赖云端API，降低了部署成本和延迟，适用于边缘部署场景。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "edge deployment for humanoid robots",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2606.17511v1",
+      "source": "arxiv",
+      "title": "MagicSim: A Unified Infrastructure for Executable Embodied Interaction",
+      "abstract": "Robot learning and embodied agents now require simulation to serve as a shared execution substrate linking control, skills, and planning, not only as a renderer, controller testbed, or fixed task environment. Existing pipelines split these layers with \"magic\" actions, disconnected training environments, or forward-only renders that cannot reproduce, evaluate, and annotate the same episode. We present MagicSim, an embodied interaction infrastructure built around one deterministic batched runtime and a shared Markov decision process (MDP). From YAML-first specifications that decouple contents, placement, behavior, and agent exposure, MagicSim constructs diverse executable worlds spanning task families, interaction regimes, physics, layouts, sensors, avatars, and robot embodiments in one reset-and-step loop. A common execution interface grounds high-level commands through controllers, atomicskills, planner primitives, and asynchronous planning, realizing them as robot actions rather than simulator-side state edits. One task definition supports three capabilities: benchmark and RL evaluation, an autocollect interface that automatically turns commands into grounded trajectories, and agent/VLM-facing interaction. For automatic execution, commands flow through a Command->Skill->Planner->Robot->Record pipeline, while per-environment command, skill, planning, retry, annotation, and episode states advance independently above the shared physics tick. Successful rollouts are saved as structured multimodal trajectories aligning language supervision, action representations, visual/geometric representations, and task-level status with the executed episode. MagicSim thus unifies diverse world construction, embodied execution, task evaluation, automatic rollout generation, and interactive agent interfaces in one planner-in-the-loop runtime.",
+      "authors": [
+        "Haoran Lu",
+        "Songling Liu",
+        "Yue Chen",
+        "Guo Ye",
+        "Mutian Shen",
+        "Shuyang Yu",
+        "Yu Xiao",
+        "Jihai Zhao",
+        "Shang Wu",
+        "Jianshu Zhang",
+        "Xiangtian Gui",
+        "Chuye Hong",
+        "Yuran Wang",
+        "Maojiang Su",
+        "Jiayi Wang",
+        "Ruihai Wu",
+        "Zhaoran Wang",
+        "Han Liu"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.AI",
+        "cs.CV"
+      ],
+      "published": "2026-06-16T04:42:43+00:00",
+      "link": "https://arxiv.org/pdf/2606.17511v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "unified simulation infrastructure for embodied interaction, supports diverse worlds and physics",
+      "llm_evidence_cn": "统一仿真基础设施，支持多样化的交互世界和物理引擎，可用于故障注入仿真",
+      "llm_evidence": "统一仿真基础设施，支持多样化的交互世界和物理引擎，可用于故障注入仿真",
+      "canonical_evidence": "统一仿真基础设施，支持多样化的交互世界和物理引擎，可用于故障注入仿真",
+      "llm_tldr_en": "MagicSim is a unified simulation infrastructure for embodied AI, enabling diverse executable worlds with deterministic runtime and shared MDP.",
+      "llm_tldr_cn": "现有机器人仿真管线层间分离，难以复现和评估完整交互。MagicSim 提出基于确定性批处理运行时的统一仿真基础设施，通过YAML规范解耦内容、布局、行为和传感器，构建多样化的可执行世界。该架构支持多任务、多物理引擎和传感器配置，为具身智能研究提供了可复现的仿真环境。",
+      "llm_tldr": "现有机器人仿真管线层间分离，难以复现和评估完整交互。MagicSim 提出基于确定性批处理运行时的统一仿真基础设施，通过YAML规范解耦内容、布局、行为和传感器，构建多样化的可执行世界。该架构支持多任务、多物理引擎和传感器配置，为具身智能研究提供了可复现的仿真环境。",
+      "llm_tags": [
+        "query:humanoid-ood"
+      ],
+      "matched_query_tag": "query:humanoid-ood",
+      "matched_query_text": "fault injection simulation for humanoid robots in MuJoCo or similar environments",
+      "matched_requirement_id": "req-14",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2606.17030v2",
+      "source": "arxiv",
+      "title": "Qwen-RobotWorld Technical Report: Unifying Embodied World Modeling through Language-Conditioned Video Generation",
+      "abstract": "We introduce Qwen-RobotWorld, a language-conditioned video world model for embodied intelligence. With natural language as a unified action interface, it predicts physically grounded future visual trajectories from current observations across robotic manipulation, autonomous driving, indoor navigation, and human-to-robot transfer. This unified formulation provides three promising application directions: synthetic data generation for policy training augmentation, scalable virtual environments for policy evaluation, and language-guided planning signals for downstream robot control. This is achieved through a three-part design: a) Double-Stream MMDiT with MLLM Action Encoding, where a 60-layer double-stream diffusion transformer couples frozen Qwen2.5-VL semantics with video-VAE latents through layer-wise joint attention; b) Embodied World Knowledge (EWK), an 8.6M video-text corpus (200M+ frames) with action-language mapping over 20+ embodiments and 500+ action categories; and c) General+Expert Progressive Curriculum, a two-stage training strategy that first learns general visual priors and then injects embodied specialization under a shared language interface. Extensive results show strong competitiveness: ranks 1st overall on EWMBench and DreamGen Bench, outperforms all open-source models on WorldModelBench and PBench. Additional zero-shot analyses on RoboTwin-IF benchmark further support robust generalization and multi-view consistency.",
+      "authors": [
+        "Jie Zhang",
+        "Xiaoyue Chen",
+        "Anzhe Chen",
+        "Deqing Li",
+        "Gengze Zhou",
+        "Hale Yin",
+        "Haoqi Yuan",
+        "Haoyang Li",
+        "Jiahao Li",
+        "Jiazhao Zhang",
+        "Jingren Zhou",
+        "Kaiyuan Gao",
+        "Kun Yan",
+        "Lihan Jiang",
+        "Ningyuan Tang",
+        "Pei Lin",
+        "Qihang Peng",
+        "Shengming Yin",
+        "Tianhe Wu",
+        "Tianyi Yan",
+        "Xiao Xu",
+        "Yan Shu",
+        "Yanran Zhang",
+        "Ye Wang",
+        "Yi Wang",
+        "Yilei Chen",
+        "Yixian Xu",
+        "Yiyang Huang",
+        "Yuxiang Chen",
+        "Zekai Zhang",
+        "Zhendong Wang",
+        "Zixing Lei",
+        "Zhixuan Liang",
+        "Zihao Liu",
+        "Zikai Zhou",
+        "Chenxu Lv",
+        "Xiong-Hui Chen",
+        "Chenfei Wu"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV"
+      ],
+      "published": "2026-06-15T17:52:31+00:00",
+      "link": "https://arxiv.org/pdf/2606.17030v2",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "Synthetic data generation for robotic policy training",
+      "llm_evidence_cn": "用于机器人策略训练的合成数据生成",
+      "llm_evidence": "用于机器人策略训练的合成数据生成",
+      "canonical_evidence": "用于机器人策略训练的合成数据生成",
+      "llm_tldr_en": "Qwen-RobotWorld is a language-conditioned video world model that generates synthetic data and virtual environments for robotic policy training and evaluation.",
+      "llm_tldr_cn": "针对机器人数据获取成本高的问题，本文提出Qwen-RobotWorld统一世界模型。该模型以自然语言为输入，预测未来视觉轨迹，可生成合成数据增强策略训练，提供可扩展的虚拟环境用于策略评估。方法采用双流MMDiT架构和多模态大语言模型编码，在多个机器人任务上验证了数据生成的有效性。",
+      "llm_tldr": "针对机器人数据获取成本高的问题，本文提出Qwen-RobotWorld统一世界模型。该模型以自然语言为输入，预测未来视觉轨迹，可生成合成数据增强策略训练，提供可扩展的虚拟环境用于策略评估。方法采用双流MMDiT架构和多模态大语言模型编码，在多个机器人任务上验证了数据生成的有效性。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2606.19161v1",
+      "source": "arxiv",
+      "title": "HT-Bench: Benchmarking and Learning Dexterous Full-Hand Tactile Representations with Egocentric Vision",
+      "abstract": "Establishing a universal benchmark for tactile representation learning in robotic manipulation remains challenging due to the diversity of tactile sensor designs, data formats, and robot embodiments. Rather than seeking to establish such, we explore a scalable and promising direction for future development: egocentric vision paired with full-hand tactile data. To this end, we introduce \\textbf{HT-Bench}, a large-scale multi-task benchmark for dexterous full-hand tactile sensing, comprising 10M RGB frames and 7.8M tactile frames collected across 226 tasks. HT-Bench evaluates tactile representations from three key perspectives: whether they encode meaningful contact geometry, whether they can align tactile observations with visual information, and whether they generalize to unseen tasks. To assess these capabilities, HT-Bench includes four tasks: fine-grained tactile similarity retrieval, masked tactile inpainting, vision-to-tactile synthesis, and multimodal tactile frame prediction. We further propose \\textbf{HandTouch}, a vector-quantized vision--tactile encoder that learns tactile representations through progressive spatial, cross-modal, and temporal training. Across HT-Bench, HandTouch consistently outperforms representative tactile encoder baselines, improving Recall@5 on fine-grained tactile similarity retrieval from 74.65\\% to 85.23\\%, reducing RMSE on masked tactile inpainting from 0.022 to 0.010, and increasing OOD cIoU on vision-to-tactile synthesis from 0.628 to 0.705. These results demonstrate the effectiveness of HandTouch and suggest that large-scale egocentric full-hand tactile data provides a scalable basis for evaluating and advancing tactile representation learning in dexterous manipulation.",
+      "authors": [
+        "Yuzhe Huang",
+        "Jiaping Wu",
+        "Jiaming Jiang",
+        "Hezhe Lin",
+        "Aikebaier Aierken",
+        "Yunlong Wang",
+        "Kun Cheng",
+        "Ziyuan Jiao",
+        "Yuanxin Zhong"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-06-17T15:01:30+00:00",
+      "link": "https://arxiv.org/pdf/2606.19161v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "large-scale benchmark dataset construction for tactile sensing",
+      "llm_evidence_cn": "大规模触觉感知基准数据集构建",
+      "llm_evidence": "大规模触觉感知基准数据集构建",
+      "canonical_evidence": "大规模触觉感知基准数据集构建",
+      "llm_tldr_en": "HT-Bench provides a large-scale multi-task benchmark for full-hand tactile sensing with 10M RGB and 7.8M tactile frames.",
+      "llm_tldr_cn": "本文构建了HT-Bench，一个大规模灵巧手触觉感知基准数据集，包含1000万RGB帧和780万触觉帧，覆盖226个任务。该数据集用于评估触觉表征的接触几何编码、跨模态对齐和任务可迁移性。虽然专注于触觉，但其数据构建方法、多模态采集pipeline为机器人数据集建设提供了借鉴。",
+      "llm_tldr": "本文构建了HT-Bench，一个大规模灵巧手触觉感知基准数据集，包含1000万RGB帧和780万触觉帧，覆盖226个任务。该数据集用于评估触觉表征的接触几何编码、跨模态对齐和任务可迁移性。虽然专注于触觉，但其数据构建方法、多模态采集pipeline为机器人数据集建设提供了借鉴。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    }
+  ]
+}

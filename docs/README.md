@@ -6,52 +6,40 @@
 </div>
 
 ## 每次日报
-- 最新运行日期：2026-06-19
-- 运行时间：2026-06-19 22:06:28 UTC
+- 最新运行日期：2026-06-20
+- 运行时间：2026-06-20 21:40:43 UTC
 - 运行状态：成功
-- 本次总论文数：10
-- 精读区：2
-- 速读区：8
+- 本次总论文数：5
+- 精读区：0
+- 速读区：5
 
 ### 今日简报（AI）
-1) 今日聚焦人形机器人数据标准缺失与非线性系统实时故障诊断，精读两篇高分论文揭示物理AI基础设施短板。  
-2) 最值得关注的是人形机器人数据标准化（9.0分）和可微可达性驱动的主动故障诊断（8.0分），前者是物理AI落地的关键瓶颈。  
-3) 建议优先追踪人形机器人数据标准制定动态，同时关注故障诊断方法在安全关键系统的迁移应用。
-- 详情：[/202606/19/README](/202606/19/README)
+今日速读5篇论文，聚焦具身智能与视觉语言模型应用。
+
+重点关注《V2P-Manip》和《MagicSim》两篇高分工作，前者从单目视频学习灵巧操作，后者为可执行具身交互提供统一框架。
+
+建议优先深入这两篇论文的技术细节，理解视频到策略迁移及交互基础设施的设计思路。
+- 详情：[/202606/20/README](/202606/20/README)
 
 ### 精读区论文标签
-1. [Data Standards for Humanoid Robotics: The Missing Infrastructure for Physical AI](/202606/19/2606.19769v1-data-standards-for-humanoid-robotics-the-missing-infrastructure-for-physical-ai)  
-   标签：评分：9.0/10、query:ur
-   evidence：人形机器人数据集标准
-2. [Safe, Real-Time Active Model Discrimination and Fault Diagnosis for Nonlinear Systems via Differentiable Reachability](/202606/19/2606.19590v1-safe-real-time-active-model-discrimination-and-fault-diagnosis-for-nonlinear-systems-via-differentiable-reachability)  
-   标签：评分：8.0/10、query:ur
-   evidence：面向非线性系统的主动故障诊断，包含安全约束
+- 本次无精读推荐。
 
 ### 速读区论文标签
-1. [ReactVLA: Fast and Lightweight Reactive Robot Manipulation via Improved Mean Flow Action Generation](/202606/19/2606.14255v1-reactvla-fast-and-lightweight-reactive-robot-manipulation-via-improved-mean-flow-action-generation)  
+1. [V2P-Manip: Learning Dexterous Manipulation from Monocular Human Videos](/202606/20/2606.16436v1-v2p-manip-learning-dexterous-manipulation-from-monocular-human-videos)  
    标签：评分：7.0/10、query:ur
-   evidence：快速轻量级的反应式机器人操作，适用于实时边缘部署
-2. [ROBOSHACKLES: A Safety Dataset for Human-Injury Prevention in Embodied Foundation Models](/202606/19/2606.18632v1-roboshackles-a-safety-dataset-for-human-injury-prevention-in-embodied-foundation-models)  
-   标签：评分：7.0/10、query:ur
-   evidence：提出了机器人安全关键数据构建流程
-3. [Fail-RAG : A Retrieval Augmented Generation Informed Framework for Robot Failure Identification](/202606/19/2606.19598v1-fail-rag--a-retrieval-augmented-generation-informed-framework-for-robot-failure-identification)  
-   标签：评分：7.0/10、query:ur
-   evidence：基于检索增强生成的机器人故障识别框架
-4. [Topological Data Analysis for High-Dimensional Dynamic Process Monitoring](/202606/19/2606.20443v1-topological-data-analysis-for-high-dimensional-dynamic-process-monitoring)  
+   evidence：从单目人类视频中提取机器人训练数据集
+2. [MagicSim: A Unified Infrastructure for Executable Embodied Interaction](/202606/20/2606.17511v1-magicsim-a-unified-infrastructure-for-executable-embodied-interaction)  
    标签：评分：7.0/10、query:humanoid-ood
-   evidence：利用拓扑数据分析和神经ODE进行时间序列异常检测
-5. [Elastic Queries Reinforcement Learning: Self-Aware Policy Execution for VLA Models](/202606/19/2606.14375v1-elastic-queries-reinforcement-learning-self-aware-policy-execution-for-vla-models)  
+   evidence：统一仿真基础设施，支持多样化的交互世界和物理引擎，可用于故障注入仿真
+3. [Binary Tracking for Spatial QA and Navigation with Open Vision-Language Models](/202606/20/2606.16902v1-binary-tracking-for-spatial-qa-and-navigation-with-open-vision-language-models)  
    标签：评分：6.0/10、query:ur
-   evidence：适应推断调度以支持轻量级边缘部署
-6. [Proprioceptive Invariant State Estimation for Humanoid Robots on Non-Inertial Ground](/202606/19/2606.19512v1-proprioceptive-invariant-state-estimation-for-humanoid-robots-on-non-inertial-ground)  
-   标签：评分：6.0/10、query:humanoid-ood
-   evidence：使用足部IMU进行人形机器人本体感受状态估计
-7. [pdSTL: Probabilistic Differentiable Signal Temporal Logic for Stochastic Systems](/202606/19/2606.19561v1-pdstl-probabilistic-differentiable-signal-temporal-logic-for-stochastic-systems)  
-   标签：评分：6.0/10、query:humanoid-ood
-   evidence：面向不确定性下的安全规约的概率时序逻辑
-8. [PaAno+: Multiscale Encoding and Cross-Variable Attention for Time Series Anomaly Detection](/202606/19/2606.20055v1-paano-multiscale-encoding-and-cross-variable-attention-for-time-series-anomaly-detection)  
-   标签：评分：6.0/10、query:humanoid-ood
-   evidence：适用于边缘部署的轻量级时间序列异常检测方法
+   evidence：提出可在机器人上运行的开放视觉语言模型用于空间问答
+4. [Qwen-RobotWorld Technical Report: Unifying Embodied World Modeling through Language-Conditioned Video Generation](/202606/20/2606.17030v2-qwen-robotworld-technical-report-unifying-embodied-world-modeling-through-language-conditioned-video-generation)  
+   标签：评分：6.0/10、query:ur
+   evidence：用于机器人策略训练的合成数据生成
+5. [HT-Bench: Benchmarking and Learning Dexterous Full-Hand Tactile Representations with Egocentric Vision](/202606/20/2606.19161v1-ht-bench-benchmarking-and-learning-dexterous-full-hand-tactile-representations-with-egocentric-vision)  
+   标签：评分：6.0/10、query:ur
+   evidence：大规模触觉感知基准数据集构建
 
 
 <div class="dpr-home-promo-card">
