@@ -1,0 +1,321 @@
+Title: ART-Glove: Articulated Tactile Glove for Contact-Grounded Dexterous Interaction Capture
+
+URL Source: https://arxiv.org/pdf/2606.16370v1
+
+Published Time: Tue, 16 Jun 2026 02:29:19 GMT
+
+Number of Pages: 17
+
+Markdown Content:
+# ART-Glove: Articulated Tactile Glove for Contact-Grounded Dexterous Interaction Capture 
+
+Changyi Lin, Ding Zhao 
+
+Carnegie Mellon University https://linchangyi1.github.io/ART-Glove 16 Rigid    
+
+> Functional Surfaces Demonstration 22 -DoF
+> Surface Motion
+> 2048 -Taxel
+> Tactile Contact
+
+(a) ART -Glove (b) Preserved Human Dexterity (c) Contact -Grounded Capture 
+
+Figure 1: ART-Glove enables contact-grounded dexterous demonstration capture. (a) ART-Glove represents the hand with 16 rigid functional surfaces, making the hand-side contact geometry explicit. (b) Anatomically aligned articulation preserves human dexterity across natural hand poses. (c) ART-Glove records synchronized contact-grounded information, including 22-DoF surface motion and dense 2048-taxel tactile contact signals. 
+
+Abstract: We present ART-Glove, an articulated tactile glove designed to capture contact-grounded dexterous demonstrations while preserving human dexterity. ART-Glove makes hand-side contact geometry explicit with 16 rigid functional surfaces covering the fingers, thumb, and palm. Twenty-two anatomically aligned joints connect these surfaces and allow them to follow human hand motion during dexterous manipulation. Encoder-based sensing tracks surface motion, while dense piezoresistive tactile sensing records contact over the same surfaces. The complete system captures synchronized 22-DoF joint measurements and 2048-taxel tactile measurements at 120 Hz. We evaluate ART-Glove across experiments on motion freedom, joint sensing, tactile sensing, and contact-rich interaction capture, demonstrating its ability to preserve human dexterity while recording contact-grounded information that can support downstream dexterous robot learning. 
+
+Keywords: Sensorized Gloves, Dexterous Data Collection, Tactile Sensing 
+
+## 1 Introduction 
+
+Dexterous manipulation remains a central challenge in robotics due to its contact-rich interactions and high-dimensional hand control. Human demonstrations provide a natural source of supervision, as they capture expert full-hand coordination across diverse manipulation tasks. Learning from such demonstrations involves two coupled stages: humans first perform tasks to generate interaction data, and the resulting data are then converted into supervision for downstream robot learning. This pipeline imposes requirements on both sides of the capture process. On the acquisition side, the method should preserve human dexterity : the demonstrator should retain natural hand motion, effec-
+
+> arXiv:2606.16370v1 [cs.RO] 15 Jun 2026
+
+Table 1: Comparison of dexterous data collection methods.                       
+
+> Human Dexterity Contact-Grounded Information Action Label Motion Freedom Haptic Feedback Functional Area Contact Geometry Surface Motion Tactile Sensing
+> Teleoperation [1, 2, 3, 4] Robot-constrained Indirect/ limited Robot hand Known robot geometry Robot state Robot-dependent Robot commands Fingertip Exoskeleton [5, 6] Constrained Surface-mediated Fingertips Known device geometry Encoder (12-DoF) Sparse / optional Next motion Passive-Hand Linkage [7, 8, 9] Constrained Linkage-mediated Low-DoF passive hand Known robot geometry Encoder (12-DoF) Varies / optional Next motion Bare-Hand Video [10, 11, 12, 13] Free Direct Full hand Estimated deformable hand Vision (21-DoF) None / inferred Next motion Soft Sensing Gloves [14, 15, 16, 17] Near-free Near-direct Full hand Estimated deformable glove Glove-dependent Sparse / optional Next motion
+> ART-Glove (Ours) Near-free Surface-mediated Full hand Known rigid surfaces Encoder (22-DoF) Dense (2048 taxels) Next motion
+
+Note. “Surface-mediated” means that the user contacts objects through instrumented glove or device surfaces while still receiving mechanical contact feedback. “Linkage-mediated” means that contact forces are transmit-ted through a linkage from the passive robot hand. “Next motion” denotes human/device motion labels. 
+
+tive haptic feedback, and usable full-hand contact area. On the data side, the recorded demonstration should provide contact-grounded information . For contact-rich manipulation, hand kinematics alone are insufficient to specify the underlying physical interaction: the same motion can produce different outcomes depending on which hand-side surface contacts the object, the local surface geometry, how that surface moves, and when and where contact occurs. A useful demonstration should therefore make this physical interaction observable by providing known or reliably recoverable hand-side contact geometry, tracked surface motion, and measured or inferred contact state. Existing demonstration capture methods satisfy these requirements to different degrees, as summa-rized in Table 1. Teleoperation yields robot-ready data and policy action labels, but teleoperating contact-rich tasks remains difficult due to limited haptic feedback to the operator and embodiment mismatch. Rigid exoskeletons and linkage-based interfaces provide more explicit physical surfaces and mechanical force feedback, but their bulky structures, reduced degrees of freedom, or kinematic misalignment can constrain natural full-hand interaction. Bare-hand videos preserve natural dexterity and scale easily, but hand geometry, surface motion, and contact state must be inferred from visual observations; these inferences become unreliable under occlusion and contact. Soft gloves add sensing while preserving motion, but their deformable and user-dependent surfaces remain difficult to represent as accurate contact geometry. These methods therefore face a trade-off between preserving human dexterity and recording contact-grounded information. We present ART-Glove, an articulated tactile glove designed to occupy a complementary point in this trade-off. The key idea is to make the human hand-side interaction surface explicit while preserving natural dexterous behavior. ART-Glove represents the hand with 16 rigid phalanx- and palm-level functional surfaces, providing known contact geometry over the fingers, thumb, and palm. These surfaces are connected by 22 anatomically aligned joints so that they follow human hand motion while preserving near-free dexterity. Encoder-based joint sensing tracks surface motion, and dense piezoresistive tactile sensing records contact over the same surfaces. The complete system captures synchronized 22-DoF joint measurements and 2048-taxel tactile measurements at 120 Hz. With this design, ART-Glove enables humans to perform dexterous demonstrations naturally while recording contact-grounded information, including surface geometry, surface motion, and tactile contact signals. We evaluate ART-Glove as a hardware platform for contact-grounded dexterous interaction capture, focusing on preserved human dexterity, joint-angle sensing accuracy, integrated tactile response, and full-system synchronized interaction capture. 2Known Geometry        
+
+> 16 Rigid Functional Surfaces
+> Surface Motion
+> 22 Anatomically Aligned Joints
+> Tactile Contact
+> 2048 Piezoresistive Taxels
+> Synchronized Capture
+> 120 Hz Joint and Tactile Signals
+> (a) Back Side: Joint Sensing and Electronics (b) Front Side: Tactile Functional Surfaces
+
+Figure 2: System overview of ART-Glove. (a) The back side integrates articulated joint mechanisms, encoder-based joint sensing, and electronics. (b) The front side exposes tactile-covered rigid functional surfaces for full-hand interaction. The system contains 16 functional rigid surfaces, 22 anatomically aligned joints, 2048 piezoresistive taxels, and synchronized signal acquisition at 120 Hz. 
+
+## 2 Related Work 
+
+Teleoperation. Teleoperation [ 18 , 19 , 20 , 1 ] is popular for robot data collection because it directly records robot-side observations and policy actions. However, contact-rich dexterous teleoperation remains difficult because visual observations are often occluded and haptic feedback is limited. Prior systems have explored fingertip force feedback [ 21 , 3 , 22 ], vibrotactile cues [ 2, 23 ], and localized pneumatic tactile displays [ 24 ]. While these methods provide useful feedback channels, they are typically sparse, localized, or less intuitive for contact-rich full-hand manipulation. In contrast, ART-Glove allows humans to directly manipulate objects through full-hand surface-mediated contact. 
+
+Wearable Interfaces. Handheld sensorized grippers have shown that robot-free data collection can be scaled in the wild [ 25 ]. Extending this idea to dexterous hands is attractive, because wearable interfaces can let humans physically drive robot-like hand surfaces and receive more direct haptic feedback than remote teleoperation. Exoskeleton-based systems attach robot-consistent surface structures to the human hand and constrain human motion toward robot-feasible configurations [ 5,6], while linkage-based systems allow human hands to drive passive robot-like hands through mechanical linkages [ 7, 8, 9]. However, these methods can constrain natural hand motion and limit full-hand functional interaction due to reduced DoFs, bulky mechanisms, or kinematic mismatch. In contrast, ART-Glove uses anatomically aligned articulation to preserve near-free human motion while maintaining full-hand functional surfaces. 
+
+Human Videos and Soft Gloves. Bare-hand videos provide scalable human demonstrations with natural dexterity and full-hand interaction. Prior works learn dexterous priors from internet videos [ 26 ,27 ], use egocentric videos for policy pretraining or co-training with robot data [ 10 , 28 , 11 , 29 ,12 , 13 , 30 ], or reconstruct hand-object trajectories for policy learning [ 31 , 32 ]. However, video-based methods must infer deformable hand geometry, hand motion, and contact states from visual observations, which becomes unreliable under contact and occlusion. Soft wearable gloves add hand-pose or tactile sensing while largely preserving natural motion [ 14 , 15 , 16 , 17 ], but their soft and user-dependent surfaces remain difficult to represent accurately. In contrast, ART-Glove uses rigid articulated surfaces to provide known contact geometry while preserving natural human motion. 
+
+Tactile Sensing. Vision-based tactile sensors provide rich local contact information [ 33 , 34 , 35 , 36 ], but their camera-based structures are too thick to preserve haptic feedback in wearable full-hand interfaces. Piezoresistive sensors are thinner and more scalable, making them better suited for dense wearable tactile coverage [ 37 ]. Recent systems have improved piezoresistive tactile sensing through FPCB-based sensor fabrication [ 38 , 39 ] and low-crosstalk readout electronics [ 40 , 41 ]. ART-Glove builds on this line of work by integrating dense piezoresistive tactile sensing into an articulated full-hand glove to capture contact signals together with known surface geometry and surface motion. 33 Design Requirements and System Overview 
+
+ART-Glove is designed to capture contact-grounded information from dexterous human demonstra-tions while preserving human dexterity. This goal leads to four system-level requirements. First, the glove should provide known hand-side contact geometry through rigid functional surfaces. Second, these surfaces should follow the corresponding human hand segments without substantially restrict-ing natural motion. Third, contact should be measured over the same functional surfaces. Fourth, surface-motion and tactile-contact signals should be synchronized in a wearable capture system. As shown in Fig. 2, ART-Glove consists of an articulated rigid-shell glove and a compact sensing stack. The front side exposes tactile-covered rigid functional surfaces over the fingers, thumb, and palm. The back side integrates the joint mechanisms, encoder PCBs, sensor hub, readout PCB, and MCU board. The following mechanical design section (Sec. 4) describes how the rigid surfaces and anatomical articulation are realized, while the sensing design section (Sec. 5) describes how tactile contact, joint motion, and synchronized acquisition are implemented. 
+
+## 4 Mechanical Design of ART-Glove 
+
+4.1 Rigid Functional Surfaces - Distal    
+
+> -Middle
+> -Proximal
+> -Palm
+> Figure 3: Rigid functional sur-faces defined by ART-Glove.
+
+As illustrated in Fig. 3, ART-Glove represents the human hand using a set of rigid functional surface links, which define the hand-side con-tact geometry used during manipulation. Each of the four fingers is divided into three phalanx-level surfaces corresponding to the distal, middle, and proximal phalanges. The thumb is represented by three surfaces corresponding to the distal phalanx, proximal phalanx, and first metacarpal. The remaining palm contact region is covered by a rigid palm shell. Together, these 16 rigid functional surfaces over the fingers, thumb, and palm provide known contact geometry for full-hand dexterous interaction capture. Regions between adjacent surfaces are left open to provide clearance for joint motion and finger bending. 
+
+4.2 Anatomically Aligned Joints 4.2.1 From Fingertip Tracking to Full-Surface Capture 
+
+For fingertip-oriented exoskeletons [ 3 , 5, 8, 24 ], exact alignment between device and human joint axes is not always necessary, because the fingertip pose can be reconstructed from an external kinematic chain with offset joints. In contrast, ART-Glove targets full-surface interaction capture, where each rigid phalanx link serves as a functional contact surface and should move with the corresponding human hand segment. Using offset external joints would require additional linkages to recover the motion of each rigid surface link, substantially increasing mechanical complexity and constraining natural hand motion. Therefore, ART-Glove adopts anatomically aligned joints, allowing each rigid surface link to directly follow the corresponding human hand segment. 
+
+4.2.2 Anatomical Joint Arrangement - FE    
+
+> -AA
+> -AR DIP
+> PIP
+> MCP
+> IP
+> MCP
+> CMC
+> Figure 4: Anatomical arrange-ment of the 22 joints.
+
+As illustrated in Fig. 4, ART-Glove uses a 22-DoF anatomical joint arrangement to describe the motion of its rigid surface links. Each of the four fingers is modeled with four DoFs: DIP flexion/extension, PIP flexion/extension, MCP flexion/extension (MCP-FE), and MCP abduction/adduction (MCP-AA). The thumb is modeled with six DoFs: IP-FE, MCP-FE, MCP-AA, MCP axial rotation (MCP-AR), CMC-FE, and CMC axial rotation (CMC-AR). In total, the four fingers contribute 
+
+4 × 4 = 16 DoFs, and the thumb contributes 6 DoFs. 4Type III: Arc -Slot Joint Type II: Shaft -Bearing Joint Type I: Shaft -Sleeve Joint          
+
+> 1
+> 2
+> 1
+> 2
+> 3
+> 1
+> 2
+> 3
+> (a) Motion of a Finger Module (b) Spatially Adaptive Joint Mechanisms
+> 1-Encoder PCB
+> 2-Magnet
+> 3-Transmission Gear
+> Abduction
+> & Flexion
+
+Figure 5: Joint mechanism design of ART-Glove. (a) An index-finger module illustrates how the articulated shell follows finger motion. (b) Three spatially adaptive mechanisms realize anatomically aligned axes under different local clearance constraints: Type I shaft-sleeve joints, Type II shaft-bearing joints, and Type III arc-slot joints. 
+
+While many robotic hands simplify thumb motion by placing axial rotation only near the CMC region, ART-Glove includes axial-rotation DoFs at both the MCP and CMC regions to better track the motion of thumb contact surfaces. MCP-AR captures the coupled pronation/supination component associated with thumb MCP motion, while CMC-AR captures base thumb rotation associated with folding and opposition. This design is motivated by biomechanical studies [ 42 , 43 ], which show that thumb motion arises from coordinated multi-axis rotations across the CMC, MCP, and IP joints. 
+
+4.2.3 Spatially Adaptive Joint Mechanisms 
+
+Realizing anatomically aligned joints requires placing each mechanism near the desired anatomical axis while preserving clearance for hand motion and hand-object contact. The available lateral clearance varies across the hand. DIP, PIP, and thumb IP joints are relatively isolated and provide usable clearance on both sides of the joint axis. MCP-AA joints and several thumb joints have asymmetric access, where only one side can accommodate glove components. Other axes provide little lateral clearance on either side, such as the MCP-FE joints of the central fingers near the palm. These local constraints motivate three spatially adaptive joint mechanisms, as illustrated in Fig. 5. 
+
+Type I: Shaft-sleeve joints for two-side-clearance axes. DIP and PIP axes provide access on both sides, but the joint profile must remain compact to preserve inter-finger clearance for MCP-AA motion. We therefore avoid separate bearings and integrate the shaft and sleeve directly into adjacent rigid links, with metal E-clips constraining axial motion. This design reduces part count and limits the lateral protrusion to 3.7 mm from the inner glove surface to the outer joint profile on each side. For finger DIP and PIP joints, rotation is transmitted through gears to a compact sensing axis on the back of the finger, allowing the encoder PCB and magnet to be mounted without increasing inter-finger width. The same shaft-sleeve mechanism is also used for the thumb IP joint, where the encoder can be mounted directly on the less-constrained outer side. 
+
+Type II: Shaft-bearing joints for one-side-clearance axes. Several MCP and thumb joints provide sufficient clearance on one accessible side of the anatomical axis. For these axes, we use a shaft-bearing joint to improve smoothness and support. A shaft is aligned with the anatomical axis and supported by a miniature bearing on the accessible side, where the encoder PCB and magnet are also integrated for angle measurement. We use shaft-bearing joints for the MCP-AA joints of all five digits, the MCP-FE joints of the pinky and thumb, and the thumb CMC-FE joint. 
+
+Type III: Arc-slot joints for no-side-clearance axes. When neither side of the anatomical axis provides enough lateral clearance for a side-mounted shaft, we use an arc-slot joint. This occurs near the palm, where adjacent fingers are tightly packed, and at thumb axial-rotation joints, where a side-mounted support would interfere with surrounding structures. The arc-slot joint realizes the desired rotation axis without placing a shaft directly on that axis: small bearings roll inside curved slots whose center is aligned with the anatomical axis. To improve stability, each support point uses a 51    
+
+> 2
+> 2
+> 3
+> 3
+> 4
+> 5
+> Distal Middle Proximal
+> (a) Piezoresistive Tactile Sensors for the Index Finger (b) Readout and Computing Module
+> Sensor Hub
+> Readout PCB
+> STM32 MCU
+> MCU PCB
+> 6Figure 6: Sensing and readout design of ART-Glove. (a) Piezoresistive tactile modules for the index finger cover the distal, middle, and proximal rigid surface links. Numbers indicate key layers and interfaces: 1 – piezoresistive layer, 2 – 3M9077 tape, 3 – conductive layer, 4 – 3M468 tape, 5 – cover layer, and 6 – FPCB connector. (b) Readout and computing module. Distributed tactile and encoder signals are routed through the sensor hub and readout PCB to the STM32-based acquisition board.
+
+symmetric pair of bearings, and two separated arc slots increase the support baseline. Because the anatomical axis is not directly accessible for sensing, link motion is transmitted to a smaller gear whose axis can accommodate the encoder PCB and magnet. We use arc-slot joints for the MCP-FE joints of the three central fingers and for the thumb MCP-AR and CMC-AR joints. 
+
+## 5 Sensing and Data Acquisition 
+
+5.1 Full-Hand Tactile Sensing 
+
+ART-Glove uses piezoresistive tactile sensing to measure contact over its rigid functional surfaces. The 16 rigid functional surfaces are covered by a full-hand tactile skin with 64 × 32 = 2048 sensing units, or taxels . To simplify routing and assembly, the tactile skin is organized into seven modular FPCBs covering the fingers, thumb, and palm. Fig. 6(a) shows the tactile modules for the index finger, which cover the distal, middle, and proximal rigid surface links. Each tactile module has a layered structure consisting of a piezoresistive layer, conductive FPCB electrodes, adhesive layers, and a protective cover layer. A taxel is formed at each row–column electrode intersection. When contact is applied, the local resistance of the piezoresistive layer changes and is measured through the corresponding electrode pair. The cover layer protects the electrodes and provides a high-friction contact surface. The 3M9077 tape separates and bonds the conductive layers, while the 3M468 tape attaches the tactile module to the rigid shell. 
+
+5.2 Joint Angle Sensing 
+
+ART-Glove measures joint angles using compact contactless magnetic rotary encoders. Each sensing unit consists of an AS5600L magnetic rotary position sensor and a diametrically magnetized disc magnet. The magnet is mechanically coupled to the joint rotation, and the encoder PCB measures the absolute angular position from the magnetic field. As shown in Fig. 5, the magnet is placed either directly on the anatomical joint axis or on a mechanically coupled sensing axis, depending on the local joint mechanism. Encoder signals are routed through the FPCB connectors of the corresponding tactile modules, reducing additional wiring around the articulated links. 
+
+5.3 Signal Synchronization and Readout 
+
+The tactile modules connect to the sensor hub shown in Fig. 6(b), which aggregates distributed tactile and encoder signals from the glove. The readout PCB scans the structured tactile array using a low-crosstalk readout design [ 41 ], while the STM32F411CE MCU collects tactile measurements through SPI and encoder measurements through I2C. This pipeline produces synchronized joint and tactile signals at 120 Hz . The PCBs are compactly stacked and mounted on the back of the glove. More details on the tactile layout, FPCB design, and readout circuit are provided in the Appendix. 6(a) Flexion Motion (b) Abduction and Adduction Motion 
+
+> 60 °
+
+Figure 7: Finger motion enabled by ART-Glove. (a) Flexion sequence showing the finger moving from extension to flexion while the articulated shell follows the finger surface. (b) Abduction/adduction sequence showing lateral finger motion between adjacent fingers while maintaining full-hand tactile functional surfaces. 1          
+
+> 2
+> 345
+> 6
+> 7
+> 8
+> 9
+> 10
+> 0
+> 1234
+> 5678910
+> 0
+
+Figure 8: Thumb motion evaluated with the Kapandji opposition test. The thumb reaches all positions from 0 to 10, indicating that the articulated thumb module preserves a wide range of opposition motion. 
+
+## 6 Experiments 
+
+We evaluate ART-Glove along three dimensions that characterize its ability to capture contact-grounded dexterous demonstrations. First, we assess preserved human dexterity through mechanical range-of-motion measurements and representative finger and thumb motions. Second, we assess sensing capability through joint-angle sensing accuracy and tactile response. Third, we demonstrate integrated interaction capture during contact-rich manipulation tasks, where ART-Glove records synchronized surface motion and tactile contact signals. 
+
+6.1 Motion Freedom 
+
+Table 2: Mechanical range of motion of ART-Glove. 
+
+Finger Joint DIP PIP MCP-FE MCP-AA 
+
+ROM [0 ◦, 70 ◦] [0 ◦, 75 ◦] [0 ◦, 88 ◦] [−90 ◦, 90 ◦]
+
+Thumb Joint IP MCP-FE MCP-AA MCP-AR CMC-FE CMC-AR 
+
+ROM [−65 ◦, 70 ◦] [−30 ◦, 90 ◦] [−30 ◦, 30 ◦] [0 ◦, 30 ◦] [−30 ◦, 90 ◦] [0 ◦, 25 ◦]
+
+We first evaluate whether ART-Glove provides sufficient motion freedom for dexterous demonstra-tions. Table 2 reports the mechanical range of motion (ROM) of each joint type. For the four fingers, ART-Glove provides flexion ranges of 70 ◦ at DIP, 75 ◦ at PIP, and 88 ◦ at MCP-FE. These ranges allow the finger module to move continuously from an extended posture to a deeply flexed posture while the rigid surface links follow the corresponding phalanx regions, as shown in Fig. 7(a). For finger abduction/adduction, the MCP-AA joint has a nominal mechanical range of [−90 ◦, 90 ◦].In practice, the effective spreading motion is mainly limited by neighboring finger modules rather than internal joint stops. Fig. 7(b) shows that ART-Glove preserves a large range of finger abduction and adduction: the spread angle between the index finger and pinky exceeds 60 ◦.7Type III: Arc -Slot Joint Type II: Shaft -Bearing Joint Type I: Shaft -Sleeve Joint    
+
+> MAE: 0.377 °
+> RMSE: 0.462 °
+> MaxAE :1.36 8°
+> MAE: 0.387 °
+> RMSE: 0.461 °
+> MaxAE :1.262 °
+> MAE: 0.535 °
+> RMSE: 0.708 °
+> MaxAE :2.383 °
+
+Figure 9: Joint-angle sensing accuracy of the three joint mechanisms. Each mechanism is mounted to a Dynamixel XC330 servo, which provides the reference joint angle. All three mechanisms achieve sub-degree mean absolute error, with maximum absolute error below 2.4◦.(a ) (b) (c) (d) 
+
+Figure 10: Tactile sensing response of ART-Glove. (a) A circular contact produces a localized shape response. (b) Pen contact activates only the contacting functional surfaces. (c) Grasping a soft foam block produces distributed full-hand contact. (d) A tennis ball resting under gravity produces clear light-contact activation. 
+
+For the thumb, ART-Glove provides an IP range of [−65 ◦, 70 ◦] and additional MCP and CMC DoFs for flexion/extension, lateral positioning, axial rotation, and opposition-related folding. We further evaluate thumb mobility using the Kapandji opposition test, which measures the ability of the thumb to reach different regions of the hand. As shown in Fig. 8, the wearer reaches all positions while wearing ART-Glove, achieving a Kapandji score of 10, which indicates that the six-DoF thumb module preserves a wide range of thumb opposition for dexterous interaction. 
+
+6.2 Sensing Capability 6.2.1 Joint Sensing Accuracy 
+
+We evaluate the joint-angle sensing accuracy of the three joint mechanisms using the setup shown in Fig. 9. Following prior servo-based evaluations [ 4, 24 ], each mechanism is mounted to a Dynamixel XC330 servo. The servo drives the joint through repeated bidirectional angle sweeps and provides the reference angle measurement. For each mechanism, we record five continuous forward–backward cycles and compare the ART-Glove encoder measurement with the servo reference. The Type I shaft-sleeve and Type II shaft-bearing joints are tested over a 0◦–90 ◦ range, while the Type III arc-slot joint is tested over a 0◦–75 ◦ range due to its smaller mechanical range of motion. As shown in Fig. 9, all three mechanisms achieve sub-degree mean absolute error. The Type I shaft-sleeve joint shows the largest error, mainly due to the gear transmission between the joint axis and the sensing axis. The Type II shaft-bearing joint achieves lower error because its sensing axis is directly coupled to the joint without gear transmission. The Type III arc-slot joint also uses gear transmission, but its 7.4:1 transmission ratio increases the effective sensing resolution, resulting in comparable accuracy to the directly coupled Type II joint. These results indicate that the proposed joint mechanisms provide reliable joint-angle measurements. 
+
+6.2.2 Integrated Tactile Sensing 
+
+We evaluate the tactile response of ART-Glove. As shown in Fig. 10, the examples cover four properties of tactile sensing: contact shape, surface selectivity, distributed full-hand contact, and light-contact sensitivity. The wrench contact produces a localized circular activation pattern, showing that the tactile skin preserves the spatial structure of contact on the surface. The pen contact activates only the surfaces that are physically touched, while non-contacting surfaces remain inactive. This indicates that tactile activation is localized to the corresponding functional surfaces. When grasping a soft foam block, ART-Glove records distributed contact over multiple fingers and the palm, showing 8(a) Downward Ball Rotation (b) Bottle Cap Screwing (c) USB Drive Pressing Figure 11: Dexterous interaction capture with ART-Glove. We record contact-rich demonstrations across three representative tasks: (a) downward ball rotation, (b) bottle-cap screwing, and (c) USB-drive pressing. Each example shows the demonstration together with 22-DoF surface motion and 2048-taxel tactile contact. 
+
+that the tactile skin captures full-hand contact patterns. Finally, a tennis ball resting on the hand produces clear activation without intentional pressing, indicating sensitivity to light contact. These examples show that the integrated tactile skin provides spatially localized and sensitive contact measurements over the rigid functional surfaces of ART-Glove. 
+
+6.3 Dexterous Interaction Capture 
+
+We demonstrate full-system interaction capture on three contact-rich tasks, as shown in Fig. 11. The tasks are selected to stress both dexterous execution and contact-grounded recording. In downward ball rotation, the wearer must reorient the ball while maintaining contact against gravity, which requires continuous contact regulation and benefits from both motion freedom and haptic feedback. In bottle-cap screwing, the wearer rapidly rotates the cap while maintaining stable contact. The tactile maps show changing contact locations and increased activation near the end of the screwing motion. In USB-drive pressing, the thumb and middle finger stabilize the drive while the index finger presses it, demonstrating coordinated multi-finger interaction with simultaneous grasping and localized actuation. Across these demonstrations, ART-Glove records the motion of its rigid surfaces through 22-DoF joint measurements and measures tactile contact over the same surfaces. The synchronized surface-motion and tactile-contact streams provide contact-grounded demonstrations at 120 Hz. 
+
+## 7 Conclusion 
+
+We presented ART-Glove, an articulated tactile glove for contact-grounded dexterous interaction capture. ART-Glove represents the human hand with 16 rigid functional surfaces, connects these surfaces through 22 anatomically aligned joints, and integrates encoder-based joint sensing with dense piezoresistive tactile sensing. This design makes hand-side contact geometry explicit while allowing the wearer to perform dexterous manipulation with preserved human dexterity. Experiments show that ART-Glove provides sufficient motion freedom for finger and thumb motion, achieves reliable joint-angle sensing across its three joint mechanisms, captures tactile responses over the integrated functional surfaces, and records synchronized surface-motion and tactile-contact signals during contact-rich demonstrations. These results support ART-Glove as a hardware platform for collecting contact-grounded human demonstrations that can support dexterous robot learning. 98 Limitations and Discussion 
+
+Rigid Shell. The current rigid shells are 1-mm-thick PLA parts fabricated by 3D printing. Although this thickness keeps the glove lightweight, thinner shells could provide additional clearance for hand motion and further improve dexterity. Besides, shell stiffness affects tactile robustness: local shell deformation can introduce tactile artifacts, which we observe on the thumb first-metacarpal surface where soft-tissue motion and shell deformation are relatively large. Stronger materials could enable thinner shells while reducing deformation-induced tactile noise. In addition, the current fingertip shells do not include nail-like structures, making small-object pickup more difficult. Adding rigid nail extensions could improve interactions with small objects. 
+
+Joint Mechanisms. The Type III arc-slot mechanism realizes rotation about an anatomical axis without placing a shaft or support on either side of the joint. However, the current implementation relies on low-cost bearings, screw–nut fasteners, and 3D-printed slots and gears, which make the mechanism relatively bulky. Its performance is also sensitive to assembly tolerance: over-tightening increases friction, while under-tightening causes lateral wobble of the guided components and reduces motion accuracy. More compact and standardized arc-guided mechanisms, such as curved guided rails, could improve the accuracy, wearability, and robustness of ART-Glove. 
+
+Tactile Sensing. The tactile skin of ART-Glove has several limitations. First, the current piezoresistive skin only measures distributed normal contact magnitudes. Force calibration across curved surfaces remains future work. Second, the current tactile coverage is limited to the front functional surfaces of the glove. In practice, side surfaces of the fingers and thumb can also be heavily used during dexterous manipulation. Vision-based tactile sensors could provide richer contact information, but existing designs are still too bulky for dense full-hand wearable integration. Future thinner, multi-axis, and side-covering tactile sensors could further improve the tactile capability of ART-Glove. 
+
+Skill Transfer from Gloves to Robots. ART-Glove is not intended for one-to-one skill transfer from a single glove to a specific robot hand. Human hands vary substantially in size and geometry, and a universal articulated glove that fits all users while preserving dexterity is difficult to realize. Instead, ART-Glove targets a many-to-many transfer setting: demonstrations can be collected with customized gloves for different users, while robot hands can learn from a shared contact-grounded description of interaction. This description represents demonstrations through hand-side surface properties, including known geometry and nominal material, together with surface motion and contact state, rather than only joint trajectories. A robot hand therefore does not need to exactly match any individual glove; it should instead provide comparable information about its own contact surfaces, their motion, and contact state. One possible embodiment is an actuated hand based on a canonical ART-Glove-like geometry, such as an average geometry derived from the demonstration gloves. More broadly, as contact-grounded interaction data accumulate across devices and robots, learning can move from one-to-one joint matching toward modeling physical interaction between moving surfaces. 
+
+Scalable Design and Fabrication. The current prototype is designed for a specific hand size. Scaling ART-Glove to many demonstrators requires a design pipeline that can personalize both the mechanical structure and the sensing layout. This is more than geometric resizing: the rigid surface links should match each user’s phalanx and palm geometry, the joint axes should remain aligned with the user’s hand motion, and the tactile FPCBs should preserve consistent taxel-to-surface mappings across customized gloves. A promising direction is to generate these designs from hand scans captured by accessible devices such as smartphones or portable 3D scanners. The pipeline could then automatically produce fabrication files for the rigid shells, joint components, tactile FPCBs, and calibration tools. Such scalable fabrication would reduce manual design effort and enable larger multi-user datasets for contact-grounded dexterous interaction capture. 
+
+## Acknowledgments 
+
+The authors would like to thank Yuxiang Yang, Maria Bauza, Marissa Giustina, and Peide Huang from Google DeepMind for their valuable advice and discussions. 10 References 
+
+[1] X. Cheng, J. Li, S. Yang, G. Yang, and X. Wang. Open-television: Teleoperation with immersive active visual feedback. arXiv preprint arXiv:2407.01512 , 2024. [2] R. Ding, Y. Qin, J. Zhu, C. Jia, S. Yang, R. Yang, X. Qi, and X. Wang. Bunny-visionpro: Real-time bimanual dexterous teleoperation for imitation learning. In 2025 IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS) , pages 12248–12255. IEEE, 2025. [3] H. Zhang, S. Hu, Z. Yuan, and H. Xu. Doglove: Dexterous manipulation with a low-cost open-source haptic force feedback glove. arXiv preprint arXiv:2502.07730 , 2025. [4] J. Du, J. Ren, Q. Yu, N. Zhang, Y. Deng, X. Wei, Y. Liu, G. Gu, and X. Zhu. Mile: A mechanically isomorphic exoskeleton data collection system with fingertip visuotactile sensing for dexterous manipulation. arXiv preprint arXiv:2512.00324 , 2025. [5] M. Xu, H. Zhang, Y. Hou, Z. Xu, L. Fan, M. Veloso, and S. Song. Dexumi: Using hu-man hand as the universal manipulation interface for dexterous manipulation. arXiv preprint arXiv:2505.21864 , 2025. [6] Z. Si, J. E. Chen, M. E. Karagozler, A. Bronars, J. Hutchinson, T. Lampe, N. Gileadi, T. Howell, S. Saliceti, L. Barczyk, et al. Exostart: Efficient learning for dexterous manipulation with sensorized exoskeleton demonstrations. arXiv preprint arXiv:2506.11775 , 2025. [7] H.-S. Fang, B. Romero, Y. Xie, A. Hu, B.-R. Huang, J. Alvarez, M. Kim, G. Margolis, K. An-barasu, M. Tomizuka, et al. Dexop: A device for robotic transfer of dexterous human manipula-tion. arXiv preprint arXiv:2509.04441 , 2025. [8] M. Zhu, A. Zhu, J. V. S. H. Ramos, B. J. Kim, Y. Shi, Y. Wu, R. Hou, Q. Wang, E. Song, T. Fan, Y. Cui, and D. W. Hong. Whed: A wearable hand exoskeleton for natural, high-quality demonstration collection. arXiv preprint arXiv:2602.17908 , 2026. [9] A. Zhu, M. Zhu, B. J. Kim, J. V. S. Ramos, Y. Shi, Y. Wu, R. Dhar, F. Yang, R. Hou, H. Fang, et al. Dexexo: A wearability-first dexterous exoskeleton for operator-agnostic demonstration and learning. arXiv preprint arXiv:2603.17323 , 2026. [10] R. Hoque, P. Huang, D. J. Yoon, M. Sivapurapu, and J. Zhang. Egodex: Learning dexterous manipulation from large-scale egocentric video. arXiv preprint arXiv:2505.11709 , 2025. [11] S. Kareer, D. Patel, R. Punamiya, P. Mathur, S. Cheng, C. Wang, J. Hoffman, and D. Xu. Egomimic: Scaling imitation learning via egocentric video. In 2025 IEEE International Conference on Robotics and Automation (ICRA) , pages 13226–13233. IEEE, 2025. [12] R. Zheng, D. Niu, Y. Xie, J. Wang, M. Xu, Y. Jiang, F. Casta ˜neda, F. Hu, Y. L. Tan, L. Fu, et al. Egoscale: Scaling dexterous manipulation with diverse egocentric human data. arXiv preprint arXiv:2602.16710 , 2026. [13] R. Punamiya, S. Kareer, Z. Liu, J. Citron, R.-Z. Qiu, X. Cai, A. Gavryushin, J. Chen, D. Liconti, L. Y. Zhu, et al. Egoverse: An egocentric human dataset for robot learning from around the world. arXiv preprint arXiv:2604.07607 , 2026. [14] C. Wang, H. Shi, W. Wang, R. Zhang, L. Fei-Fei, and C. K. Liu. Dexcap: Scalable and portable mocap data collection system for dexterous manipulation. arXiv preprint arXiv:2403.07788 ,2024. [15] T. Tao, M. K. Srirama, J. J. Liu, K. Shaw, and D. Pathak. Dexwild: Dexterous human interactions for in-the-wild robot policies. arXiv preprint arXiv:2505.07813 , 2025. 11 [16] Y. R. Song, J. Li, R. Fu, D. Murphy, K. Zhou, R. Shiv, Y. Li, H. Xiong, C. E. Owens, Y. Du, et al. Opentouch: Bringing full-hand touch to real-world interaction. arXiv preprint arXiv:2512.16842 ,2025. [17] J. Yin, H. Qi, Y. Wi, S. Kundu, M. Lambeta, W. Yang, C. Wang, T. Wu, J. Malik, and T. Hellebrekers. Osmo: Open-source tactile glove for human-to-robot skill transfer. arXiv preprint arXiv:2512.08920 , 2025. [18] A. Handa, K. Van Wyk, W. Yang, J. Liang, Y.-W. Chao, Q. Wan, S. Birchfield, N. Ratliff, and D. Fox. Dexpilot: Vision-based teleoperation of dexterous robotic hand-arm system. In 2020 IEEE International Conference on Robotics and Automation (ICRA) , pages 9164–9170. IEEE, 2020. [19] Y. Qin, W. Yang, B. Huang, K. Van Wyk, H. Su, X. Wang, Y.-W. Chao, and D. Fox. Anyteleop: A general vision-based dexterous robot arm-hand teleoperation system. arXiv preprint arXiv:2307.04577 , 2023. [20] T. Z. Zhao, V. Kumar, S. Levine, and C. Finn. Learning fine-grained bimanual manipulation with low-cost hardware. arXiv preprint arXiv:2304.13705 , 2023. [21] M. Schwarz, C. Lenz, A. Rochow, M. Schreiber, and S. Behnke. Nimbro avatar: Interactive immersive telepresence with force-feedback telemanipulation. In 2021 IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS) , pages 5312–5319. IEEE, 2021. [22] T. Tang, X. Ji, W. Xing, C. Hao, W. Xu, L. Shao, C. Lu, Q. Yu, J. Pang, and K. Zhang. Towards human-like manipulation through rl-augmented teleoperation and mixture-of-dexterous-experts vla. arXiv preprint arXiv:2603.08122 , 2026. [23] Y. Gao, H. Ma, and P. Zheng. Glovity: Learning dexterous contact-rich manipulation via spatial wrench feedback teleoperation system. arXiv preprint arXiv:2510.09229 , 2025. [24] F. Jia, X. Niu, S. Yang, Q. Ben, T. Huang, J. Wang, J. Pang, et al. Feel robot feels: Tactile feedback array glove for dexterous manipulation. arXiv preprint arXiv:2603.28542 , 2026. [25] C. Chi, Z. Xu, C. Pan, E. Cousineau, B. Burchfiel, S. Feng, R. Tedrake, and S. Song. Universal manipulation interface: In-the-wild robot teaching without in-the-wild robots. arXiv preprint arXiv:2402.10329 , 2024. [26] K. Shaw, S. Bahl, and D. Pathak. Videodex: Learning dexterity from internet videos. In 
+
+Conference on Robot Learning , pages 654–665. PMLR, 2023. [27] K. Shaw, S. Bahl, A. Sivakumar, A. Kannan, and D. Pathak. Learning dexterity from human hand motion in internet videos. The International Journal of Robotics Research , 43(4):513–532, 2024. [28] R. Yang, Q. Yu, Y. Wu, R. Yan, B. Li, A.-C. Cheng, X. Zou, Y. Fang, X. Cheng, R.-Z. Qiu, et al. Egovla: Learning vision-language-action models from egocentric human videos. arXiv preprint arXiv:2507.12440 , 2025. [29] Y. Niu, Y. Zhang, M. Yu, C. Lin, C. Li, Y. Wang, Y. Yang, W. Yu, T. Zhang, Z. Li, et al. Human2locoman: Learning versatile quadrupedal manipulation with human pretraining. arXiv preprint arXiv:2506.16475 , 2025. [30] Y. Li, X. Wei, J. Luo, Y. Xiao, Y. Bai, G. Zhou, T. Zou, C. Gui, J. Wen, H. Zhang, et al. Egolive: A large-scale egocentric dataset from real-world human tasks. arXiv preprint arXiv:2604.23570 ,2026. [31] Z. Chen, S. Chen, E. Arlaud, I. Laptev, and C. Schmid. Vividex: Learning vision-based dexterous manipulation from human videos. In 2025 IEEE International Conference on Robotics and Automation (ICRA) , pages 3336–3343. IEEE, 2025. 12 [32] H. Chen, T. Dong, T. Wu, L. Wang, Y. Jangir, Y. Niu, Y. Ye, H. Bharadhwaj, Z. Erickson, and J. Ichnowski. Dexterous manipulation policies from rgb human videos via 3d hand-object trajectory reconstruction. arXiv preprint arXiv:2602.09013 , 2026. [33] W. Yuan, S. Dong, and E. H. Adelson. Gelsight: High-resolution robot tactile sensors for estimating geometry and force. Sensors , 17(12):2762, 2017. [34] C. Lin, H. Zhang, J. Xu, L. Wu, and H. Xu. 9dtact: A compact vision-based tactile sensor for accurate 3d shape reconstruction and generalizable 6d force estimation. IEEE Robotics and Automation Letters , 9(2):923–930, 2023. [35] B. Ward-Cherrier, N. Pestell, L. Cramphorn, B. Winstone, M. E. Giannaccini, J. Rossiter, and N. F. Lepora. The tactip family: Soft optical tactile sensors with 3d-printed biomimetic morphologies. Soft robotics , 5(2):216–227, 2018. [36] G. Zhang, Y. Du, H. Yu, and M. Y. Wang. Deltact: A vision-based tactile sensor using a dense color pattern. IEEE Robotics and Automation Letters , 7(4):10778–10785, 2022. [37] S. Sundaram, P. Kellnhofer, Y. Li, J.-Y. Zhu, A. Torralba, and W. Matusik. Learning the signatures of the human grasp using a scalable tactile glove. Nature , 569(7758):698–702, 2019. [38] D. Murphy, Y. Li, C. E. Owens, L. Stanton, P. P. Liang, Y. Luo, A. Torralba, and W. Matusik. Fits like a flex-glove: Automatic design of personalized fpcb-based tactile sensing gloves. In 
+
+Proceedings of the Extended Abstracts of the CHI Conference on Human Factors in Computing Systems , pages 1–8, 2025. [39] B. Huang and Y. Li. Flexitac: A low-cost, open-source, scalable tactile sensing solution for robotic systems. arXiv preprint arXiv:2604.28156 , 2026. [40] C. C. Johnson, D. Webb, D. Hill, and M. D. Killpack. Scaling fabric-based piezoresistive sensor arrays for whole-body tactile sensing. arXiv preprint arXiv:2508.20959 , 2025. [41] C. Lin, R. Haque, W. Hui-Ping, and D. Zhao. Hipi: Reproducible high-fidelity piezoresistive sensors for robotic manipulation. arXiv preprint arXiv:2606.11372 , 2026. [42] A. Hollister, D. J. Giurintano, W. L. Buford, L. M. Myers, and A. Novick. The axes of rotation of the thumb interphalangeal and metacarpophalangeal joints. Clinical Orthopaedics and Related Research® , 320:188–193, 1995. [43] Z.-M. Li and J. Tang. Coordination of thumb joints during opposition. Journal of biomechanics ,40(3):502–510, 2007. 13 A Additional Joint Mechanism Details 
+
+The thumb has six DoFs, as shown in Fig. 12. The thumb MCP-FE joint adopts the Type II shaft-bearing mechanism because its inner side is connected to the palm, leaving usable space mainly on the outer side. The MCP-AA and MCP-AR joints are strongly coupled during thumb opposition, which can be observed in the high-score poses of the Kapandji test. Since axial rotation is unique to the thumb, the thumb fingertip must be firmly attached to the rigid shell so that human thumb rotation can drive the corresponding glove surface. The CMC-AR and CMC-FE joints are important for enabling the thumb to reach positions 6–10 in the Kapandji test. The thumb metacarpal surface is not designed as a closed ring because the human first metacarpal is connected to the palm. As a result, CMC flexion can drive the rigid metacarpal surface by pushing against it, while CMC extension cannot reliably pull the surface back. In practice, we attach the thumb metacarpal region to the rigid surface with double-sided tape so that CMC extension can also drive the glove surface. CMC -AR   
+
+> CMC -FE MCP -FE
+> IP
+> MCP -AA MCP -AR
+> Figure 12: Thumb module design of ART-Glove.
+
+The main difference between the pinky module and the other finger modules is the MCP-FE mech-anism, as shown in Fig. 13. The pinky MCP-FE joint uses the Type II shaft-bearing mechanism because the outer side of the pinky provides usable space for a side-mounted joint. In addition, the spacing between the pinky and ring-finger bases is limited, making it difficult to place two Type III arc-slot mechanisms next to each other. DIP 
+
+> PIP
+> MCP -FE
+> MCP -AA
+> Figure 13: Pinky module design of ART-Glove.
+
+As shown in Fig. 14, the spacing between adjacent fingers is not uniform: the gap between the index and middle fingers is larger than the gap between the middle and ring fingers. If each Type III arc-slot mechanism were centered on its corresponding finger, the middle and ring mechanisms would be too close to each other and would restrict finger abduction/adduction. To preserve lateral finger motion, we laterally offset the mechanism centerlines so that the spacing between adjacent mechanism modules is more balanced. This offset improves clearance between the Type III mechanisms while keeping the rigid surface links aligned with the corresponding fingers. 14 Finger Centerline 
+
+# Mechanism Centerline Figure 14: Lateral offset of the Type III MCP-FE mechanism centerlines. Yellow dashed lines indicate finger centerlines, and red solid lines indicate mechanism centerlines. The offset balances the spacing between adjacent arc-slot mechanisms and preserves clearance for finger abduction/adduction. 
+
+## B Taxel Layout 
+
+As illustrated in Fig. 15, the tactile skin of ART-Glove contains 64 × 32 = 2048 taxels distributed across the 16 rigid functional surfaces. To preserve a structured row–column readout, the layout is organized into three row-sharing groups. The four fingers share a 32 × 32 region. The thumb metacarpal surface and palm share a 17 -row region, with each surface occupying 17 × 16 taxels. The thumb distal and proximal surfaces share the remaining 15 -row region, with the columns split between the two surfaces. This organization keeps surfaces within the same group on common row lines while allocating different column spans according to surface size. The conductive traces use a width of 0.3 mm .Thumb       
+
+> Middle Finger Ring Finger Pinky
+> Index Finger
+> Palm
+> 16 x 9
+> 6 x 9
+> 10x 9
+> 16 x 9
+> 6 x 9
+> 10x 9
+> 16 x 9
+> 6 x 9
+> 10x 9
+> 16 x 5
+> 6 x 5
+> 10x 5
+> 20 x 15
+> 12 x 15
+> 17 x 16
+> 17 x 16
+
+Figure 15: Taxel layout of the full-hand tactile skin. The 64 × 32 taxel array is distributed across the finger, thumb, and palm functional surfaces using three row-sharing groups. 
+
+15 C Encoder PCBs 
+
+As shown in Fig. 16, ART-Glove uses five encoder-PCB layouts to accommodate different joint mechanisms and local mounting constraints. These include 4 PCBs for the finger DIP joints, 4 PCBs for the finger PIP joints, 5 PCBs for the Type III arc-slot joints, 4 PCBs for the finger MCP-AA joints, and 5 PCBs for the remaining joints, including the pinky MCP-FE, thumb IP, thumb MCP-FE, thumb MCP-AA, and thumb CMC-FE joints. Together, these layouts cover all 22 sensed DoFs. All encoder PCBs use a two-layer design and communicate through a 4-pin 0.5 mm -pitch FFC connector. The connector carries power, ground, SDA, and SCL signals for I2C communication. The representative Finger DIP schematic shows the common circuit shared across the encoder PCBs, including the AS5600L sensor, decoupling capacitors, and I2C pull-up resistors. This modular PCB design allows the same sensing principle to be reused across different joint mechanisms while preserving compact routing around the articulated glove. Finger DIP Finger PIP Type III Joints Finger MCP -AA Others   
+
+> Top
+> Assembly View
+> Bottom
+> Assembly View
+> Top Layer
+> Bottom Layer
+> Schematic
+> of Finger DI P
+
+Figure 16: Encoder PCB layouts of ART-Glove. Five PCB layouts are used for different joint locations and mounting constraints: finger DIP, finger PIP, Type III arc-slot joints, finger MCP-AA, and other one-side-mounted joints. The figure shows top and bottom assembly views, top and bottom copper layers, and a representative Finger DIP schematic. 
+
+16 D Readout Electronics 
+
+Fig. 17 shows the readout electronics of ART-Glove. The electronics stack consists of three PCBs: the sensor hub, the readout PCB, and the MCU board. The sensor hub collects tactile and encoder connections from the glove. The readout PCB scans the tactile array using a low-crosstalk readout circuit. The MCU board then acquires tactile measurements through SPI and encoder measurements through I2C for synchronized recording. MCU Carrier PCB Sensor Hub PCB Readout PCB 
+
+> Top
+> Assembly View
+> Bottom
+> Assembly View
+> Top Layer
+> Bottom Layer
+> Inner Layer 1
+> Inner Layer 2
+
+Figure 17: Readout electronics of ART-Glove. The system consists of a sensor hub, readout PCB, and MCU board for routing tactile and encoder signals and acquiring synchronized data. 
+
+17

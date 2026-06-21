@@ -1,0 +1,102 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-06-21T20:22:43.427832+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 2,
+    "deep_divecandidates": 0,
+    "deep_cap": 7,
+    "deep_selected": 0,
+    "quick_candidates": 2,
+    "quick_skim_target": 12,
+    "quick_selected": 2
+  },
+  "deep_dive": [],
+  "quick_skim": [
+    {
+      "id": "2606.17200v1",
+      "source": "arxiv",
+      "title": "ACE-Ego-0: Unifying Egocentric Human and Robotic Data for VLA Pretraining",
+      "abstract": "Vision-Language-Action (VLA) models benefit from large-scale and diverse embodied data, yet scaling robot trajectory collection is costly and labor-intensive. Recent advances show that large-scale egocentric human videos provide complementary real-world supervision in pretraining. However, joint training on human and robot data remains challenging due to divergences in action spaces, embodiment structures, temporal dynamics, and supervision quality. We introduce ACE-EGO-0, a unified VLA pretraining framework jointly leveraging heterogeneous data sources. To extract large-scale pretraining supervision from egocentric human videos, we build a scalable egocentric video-to-action pipeline that converts raw human videos into robot-format pseudo-action trajectories. To make these labels comparable with robot demonstrations, ACE-EGO-0 uses a unified action representation based on camera-space actions, morphology conditioning, and time-aligned action chunking. To robustly leverage noisy pseudo-action supervision from egocentric human videos, we formulate a reliability-aware training objective with a human auxiliary loss that concentrates supervision on reliable signals. We instantiate ACE-EGO-0 on 4.53K hours of robot and simulation data, together with 1.48K hours of pseudo-action-labeled egocentric human data. Experiments show that incorporating large-scale human supervision under reliability-aware weighting consistently improves both unified joint pretraining and supervised fine-tuning. ACE-EGO-0 achieves state-of-the-art performance on RoboCasa GR1 TableTop and RoboTwin 2.0, while demonstrating strong transfer to real-world bimanual manipulation.",
+      "authors": [
+        "Hao Li",
+        "Ganlong Zhao",
+        "Yufei Liu",
+        "Haotian Hou",
+        "Guoquan Ye",
+        "Tongyan Fang",
+        "Chunxiao Liu",
+        "Siyuan Huang",
+        "Jianbo Liu",
+        "Xiaogang Wang",
+        "Hongsheng Li"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-06-15T18:40:18+00:00",
+      "link": "https://arxiv.org/pdf/2606.17200v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "unifies human and robot data for pretraining; scalable dataset construction",
+      "llm_evidence_cn": "统一人类与机器人数据用于预训练；可扩展的数据集构建",
+      "llm_evidence": "统一人类与机器人数据用于预训练；可扩展的数据集构建",
+      "canonical_evidence": "统一人类与机器人数据用于预训练；可扩展的数据集构建",
+      "llm_tldr_en": "ACE-Ego-0 converts egocentric human videos into robot-format pseudo-actions for VLA pretraining, enabling scalable dataset construction from abundant human data.",
+      "llm_tldr_cn": "该论文针对VLA预训练数据稀缺的问题，提出ACE-Ego-0框架，通过将大规模第一人称人类视频转化为机器人格式的伪动作，实现了从人类数据中可扩展地构建机器人数据集。该方法解决了人类与机器人数据在动作空间、本体结构等方面的差异，为机器人学习提供了丰富的数据来源。实验表明该预训练方法提升了下游任务性能，为人形机器人等数据构建提供了新思路。",
+      "llm_tldr": "该论文针对VLA预训练数据稀缺的问题，提出ACE-Ego-0框架，通过将大规模第一人称人类视频转化为机器人格式的伪动作，实现了从人类数据中可扩展地构建机器人数据集。该方法解决了人类与机器人数据在动作空间、本体结构等方面的差异，为机器人学习提供了丰富的数据来源。实验表明该预训练方法提升了下游任务性能，为人形机器人等数据构建提供了新思路。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "humanoid robot dataset construction",
+      "matched_requirement_id": "req-2",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2606.16370v1",
+      "source": "arxiv",
+      "title": "ART-Glove: Articulated Tactile Glove for Contact-Grounded Dexterous Interaction Capture",
+      "abstract": "We present ART-Glove, an articulated tactile glove designed to capture contact-grounded dexterous demonstrations while preserving human dexterity. ART-Glove makes hand-side contact geometry explicit with 16 rigid functional surfaces covering the fingers, thumb, and palm. Twenty-two anatomically aligned joints connect these surfaces and allow them to follow human hand motion during dexterous manipulation. Encoder-based sensing tracks surface motion, while dense piezoresistive tactile sensing records contact over the same surfaces. The complete system captures synchronized 22-DoF joint measurements and 2048-taxel tactile measurements at 120 Hz. We evaluate ART-Glove across experiments on motion freedom, joint sensing, tactile sensing, and contact-rich interaction capture, demonstrating its ability to preserve human dexterity while recording contact-grounded information that can support downstream dexterous robot learning.",
+      "authors": [
+        "Changyi Lin",
+        "Ding Zhao"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-06-15T08:07:34+00:00",
+      "link": "https://arxiv.org/pdf/2606.16370v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "captures dexterous demonstrations with joint and tactile data for robot datasets",
+      "llm_evidence_cn": "捕捉灵巧操作演示，提供关节和触觉数据，用于机器人数据集",
+      "llm_evidence": "捕捉灵巧操作演示，提供关节和触觉数据，用于机器人数据集",
+      "canonical_evidence": "捕捉灵巧操作演示，提供关节和触觉数据，用于机器人数据集",
+      "llm_tldr_en": "ART-Glove captures synchronized 22-DoF joint and 2048-taxel tactile data at 120Hz, enabling contact-grounded dexterous interaction capture for robot learning.",
+      "llm_tldr_cn": "该论文提出ART-Glove，一种关节式触觉手套，能够以120Hz同步捕捉22自由度关节数据和2048像素触觉数据。手套保留人类灵巧性，记录手部接触几何和运动。为机器人灵巧操作学习提供了高保真的演示数据集，有助于构建更加真实和多样化的机器人训练数据。",
+      "llm_tldr": "该论文提出ART-Glove，一种关节式触觉手套，能够以120Hz同步捕捉22自由度关节数据和2048像素触觉数据。手套保留人类灵巧性，记录手部接触几何和运动。为机器人灵巧操作学习提供了高保真的演示数据集，有助于构建更加真实和多样化的机器人训练数据。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "humanoid robot dataset construction",
+      "matched_requirement_id": "req-2",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    }
+  ]
+}

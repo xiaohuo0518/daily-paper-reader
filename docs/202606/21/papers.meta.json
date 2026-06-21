@@ -1,0 +1,39 @@
+{
+  "label": "2026-06-21",
+  "date": "2026-06-21",
+  "generated_at": "2026-06-21T20:24:32",
+  "count": 2,
+  "papers": [
+    {
+      "paper_id": "202606/21/2606.17200v1-ace-ego-0-unifying-egocentric-human-and-robotic-data-for-vla-pretraining",
+      "section": "quick",
+      "title_en": "ACE-Ego-0: Unifying Egocentric Human and Robotic Data for VLA Pretraining",
+      "authors": "Hao Li, Ganlong Zhao, Yufei Liu, Haotian Hou, Guoquan Ye, Tongyan Fang, Chunxiao Liu, Siyuan Huang, Jianbo Liu, Xiaogang Wang, Hongsheng Li",
+      "date": "2026-06-15",
+      "pdf": "https://arxiv.org/pdf/2606.17200v1",
+      "score": "7.0",
+      "evidence": "统一人类与机器人数据用于预训练；可扩展的数据集构建",
+      "tldr": "视觉-语言-动作模型依赖大规模多样化数据，但机器人轨迹收集成本高昂。人类第一人称视频提供了丰富的真实世界监督，但因动作空间、形态结构等差异难以联合训练。ACE-EGO-0框架通过将人类视频转换为机器人格式伪动作轨迹，并采用统一动作表示与可靠性感知训练，实现了异构数据源的有效融合。在4.53K小时机器人数据和1.48K小时人类数据上，该方法显著提升了联合预训练与微调效果，在多个基准上达到最优，并展现了向真实双臂操作的强迁移能力。",
+      "tags": "query:ur",
+      "abstract_en": "Vision-Language-Action (VLA) models benefit from large-scale and diverse embodied data, yet scaling robot trajectory collection is costly and labor-intensive. Recent advances show that large-scale egocentric human videos provide complementary real-world supervision in pretraining. However, joint training on human and robot data remains challenging due to divergences in action spaces, embodiment structures, temporal dynamics, and supervision quality. We introduce ACE-EGO-0, a unified VLA pretraining framework jointly leveraging heterogeneous data sources. To extract large-scale pretraining supervision from egocentric human videos, we build a scalable egocentric video-to-action pipeline that converts raw human videos into robot-format pseudo-action trajectories. To make these labels comparable with robot demonstrations, ACE-EGO-0 uses a unified action representation based on camera-space actions, morphology conditioning, and time-aligned action chunking. To robustly leverage noisy pseudo-action supervision from egocentric human videos, we formulate a reliability-aware training objective with a human auxiliary loss that concentrates supervision on reliable signals. We instantiate ACE-EGO-0 on 4.53K hours of robot and simulation data, together with 1.48K hours of pseudo-action-labeled egocentric human data. Experiments show that incorporating large-scale human supervision under reliability-aware weighting consistently improves both unified joint pretraining and supervised fine-tuning. ACE-EGO-0 achieves state-of-the-art performance on RoboCasa GR1 TableTop and RoboTwin 2.0, while demonstrating strong transfer to real-world bimanual manipulation.",
+      "source": "arxiv",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "paper_id": "202606/21/2606.16370v1-art-glove-articulated-tactile-glove-for-contact-grounded-dexterous-interaction-capture",
+      "section": "quick",
+      "title_en": "ART-Glove: Articulated Tactile Glove for Contact-Grounded Dexterous Interaction Capture",
+      "authors": "Changyi Lin, Ding Zhao",
+      "date": "2026-06-15",
+      "pdf": "https://arxiv.org/pdf/2606.16370v1",
+      "score": "6.0",
+      "evidence": "捕捉灵巧操作演示，提供关节和触觉数据，用于机器人数据集",
+      "tldr": "现有触觉手套难以在保持手部灵巧性的同时同步捕捉关节运动与接触信息。本文提出ART-Glove铰接式触觉手套，通过16个刚性表面和22个解剖对齐关节，结合编码器与2048个压阻触觉单元，以120Hz频率记录22自由度关节数据和接触信息。实验证明该手套不限制手部运动，可精确捕获接触接地演示，为灵巧机器人学习提供高质量数据支撑。",
+      "tags": "query:ur",
+      "abstract_en": "We present ART-Glove, an articulated tactile glove designed to capture contact-grounded dexterous demonstrations while preserving human dexterity. ART-Glove makes hand-side contact geometry explicit with 16 rigid functional surfaces covering the fingers, thumb, and palm. Twenty-two anatomically aligned joints connect these surfaces and allow them to follow human hand motion during dexterous manipulation. Encoder-based sensing tracks surface motion, while dense piezoresistive tactile sensing records contact over the same surfaces. The complete system captures synchronized 22-DoF joint measurements and 2048-taxel tactile measurements at 120 Hz. We evaluate ART-Glove across experiments on motion freedom, joint sensing, tactile sensing, and contact-rich interaction capture, demonstrating its ability to preserve human dexterity while recording contact-grounded information that can support downstream dexterous robot learning.",
+      "source": "arxiv",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "errors": []
+}
