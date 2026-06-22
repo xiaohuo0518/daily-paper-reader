@@ -6,27 +6,44 @@
 </div>
 
 ## 每次日报
-- 最新运行日期：2026-06-21
-- 运行时间：2026-06-21 20:24:25 UTC
+- 最新运行日期：2026-06-22
+- 运行时间：2026-06-22 22:46:57 UTC
 - 运行状态：成功
-- 本次总论文数：2
-- 精读区：0
-- 速读区：2
+- 本次总论文数：8
+- 精读区：2
+- 速读区：6
 
 ### 今日简报（AI）
-今日速读两篇论文，聚焦具身智能与触觉交互领域；最值得关注的是 《ACE-Ego-0》，其统一人体与机器人数据用于视觉-语言-动作预训练的思路颇具启发性；普通读者可重点跟进该方向如何降低VLA模型的训练成本。
-- 详情：[/202606/21/README](/202606/21/README)
+今日推荐8篇论文，精读两篇聚焦机器人操作中的3D资产自动标注与数据增强。最值得关注：AnnotateAnything实现自动语义标注3D资产，Pose6DAug通过物理合理多视图物体交换增强训练数据。建议优先阅读精读论文，数据增强方法可有效提升机器人策略泛化性。
+- 详情：[/202606/22/README](/202606/22/README)
 
 ### 精读区论文标签
-- 本次无精读推荐。
+1. [AnnotateAnything: Automatic Annotation of 3D Assets for Robot Manipulation](/202606/22/2606.17446v1-annotateanything-automatic-annotation-of-3d-assets-for-robot-manipulation)  
+   标签：评分：8.0/10、query:ur
+   evidence：自动标注3D资产以支持机器人操作数据集构建
+2. [Pose6DAug: Physically Plausible Multi-view Object Swapping for Robot Data Augmentation](/202606/22/2606.20118v1-pose6daug-physically-plausible-multi-view-object-swapping-for-robot-data-augmentation)  
+   标签：评分：8.0/10、query:ur
+   evidence：利用目标物体交换进行机器人策略的故障驱动数据增强
 
 ### 速读区论文标签
-1. [ACE-Ego-0: Unifying Egocentric Human and Robotic Data for VLA Pretraining](/202606/21/2606.17200v1-ace-ego-0-unifying-egocentric-human-and-robotic-data-for-vla-pretraining)  
+1. [Qwen-RobotWorld Technical Report: Unifying Embodied World Modeling through Language-Conditioned Video Generation](/202606/22/2606.17030v1-qwen-robotworld-technical-report-unifying-embodied-world-modeling-through-language-conditioned-video-generation)  
    标签：评分：7.0/10、query:ur
-   evidence：统一人类与机器人数据用于预训练；可扩展的数据集构建
-2. [ART-Glove: Articulated Tactile Glove for Contact-Grounded Dexterous Interaction Capture](/202606/21/2606.16370v1-art-glove-articulated-tactile-glove-for-contact-grounded-dexterous-interaction-capture)  
+   evidence：为策略训练生成合成数据
+2. [Qwen-RobotWorld Technical Report: Unifying Embodied World Modeling through Language-Conditioned Video Generation](/202606/22/2606.17030v3-qwen-robotworld-technical-report-unifying-embodied-world-modeling-through-language-conditioned-video-generation)  
+   标签：评分：7.0/10、query:ur
+   evidence：语言条件视频世界模型，用于合成数据生成
+3. [Perfect Demo Makes Poor Teacher: Learning Robust Alignment from Critical Motion Segments](/202606/22/2606.15587v1-perfect-demo-makes-poor-teacher-learning-robust-alignment-from-critical-motion-segments)  
    标签：评分：6.0/10、query:ur
-   evidence：捕捉灵巧操作演示，提供关节和触觉数据，用于机器人数据集
+   evidence：通过关键段重采样与恢复状态覆盖提高模仿学习鲁棒性
+4. [DREAM-Chunk: Reactive Action Chunking with Latent World Model](/202606/22/2606.18589v1-dream-chunk-reactive-action-chunking-with-latent-world-model)  
+   标签：评分：6.0/10、query:ur
+   evidence：通过测试时世界模型处理硬件执行错误
+5. [Efficiently Linking Real Scenes with Synthetic Data Generation for AI-based Cognitive Robotics and Computer Vision Applications](/202606/22/2606.20272v1-efficiently-linking-real-scenes-with-synthetic-data-generation-for-ai-based-cognitive-robotics-and-computer-vision-applications)  
+   标签：评分：6.0/10、query:ur
+   evidence：讨论连接真实场景与合成数据以支持机器人应用
+6. [Generating Robot Hands from Human Demonstrations](/202606/22/2606.20549v1-generating-robot-hands-from-human-demonstrations)  
+   标签：评分：6.0/10、query:ur
+   evidence：使用400万帧人类指尖数据生成机器人手数据集
 
 
 <div class="dpr-home-promo-card">

@@ -1,0 +1,430 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-06-22T22:39:32.688175+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 2,
+    "deep_divecandidates": 2,
+    "deep_cap": 7,
+    "deep_selected": 2,
+    "quick_candidates": 6,
+    "quick_skim_target": 12,
+    "quick_selected": 6
+  },
+  "deep_dive": [
+    {
+      "id": "2606.17446v1",
+      "source": "arxiv",
+      "title": "AnnotateAnything: Automatic Annotation of 3D Assets for Robot Manipulation",
+      "abstract": "Simulation enables scalable robot data collection, but raw 3D assets provide only geometry, lacking the semantic, interactive, and physical knowledge needed to specify where and how robots should act. In this work, we present AnnotateAnything, a general automatic annotation framework that converts passive 3D assets into manipulation-ready assets with structured, diverse, and executable manipulation labels. AnnotateAnything is built around two complementary pipelines. First, a unified visual-language annotation pipeline using vision-language reasoning to infer object semantics, interaction constraints, and 3D-grounded cues, providing human-prior guidance for identifying meaningful interaction regions. Second, a fully automatic and massively parallel physics annotation pipeline grounds these priors in each asset's geometry and physical constraints through candidate generation, geometry optimization and trajectory generation. This pipeline produces diverse and executable action annotations, including grasp poses, dexterous contacts, articulation waypoints, insertion directions, hanging affordances, and navigation targets. Using the generated annotations, we further build an asynchronous parallel simulation data-collection system across diverse objects, tasks, and robot embodiments. Experiments demonstrate that AnnotateAnything achieves superior annotation efficiency, data-collection efficiency, and task success rates over existing annotation and data-generation pipelines, while also supporting downstream tasks such as affordance detection, robotic VQA, and visual instruction finetuning. We provide project materials on the project page and plan to release the full code, annotations, and benchmark to facilitate future research. Videos, code, demo assets, and annotations are provided in supplementary materials Project page: https://tourmaline-caramel-169490.netlify.app.",
+      "authors": [
+        "Haoran Lu",
+        "Mutian Shen",
+        "Shuyang Yu",
+        "Yu Xiao",
+        "Songling Liu",
+        "Jianshu Zhang",
+        "Shang Wu",
+        "Yue Chen",
+        "Guo Ye",
+        "Jiayi Wang",
+        "Zhaoran Wang",
+        "Han Liu"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.CV"
+      ],
+      "published": "2026-06-16T03:00:58+00:00",
+      "link": "https://arxiv.org/pdf/2606.17446v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "automatic annotation of 3D assets for robot manipulation, supporting dataset construction",
+      "llm_evidence_cn": "自动标注3D资产以支持机器人操作数据集构建",
+      "llm_evidence": "自动标注3D资产以支持机器人操作数据集构建",
+      "canonical_evidence": "自动标注3D资产以支持机器人操作数据集构建",
+      "llm_tldr_en": "AnnotateAnything converts passive 3D assets into manipulation-ready assets with structured labels, enabling scalable robot data collection.",
+      "llm_tldr_cn": "针对仿真中原始3D资产缺乏操作标签的问题，提出AnnotateAnything自动标注框架。通过视觉语言推理和并行标注流水线，为3D资产生成结构化的可执行操作标签，显著提升机器人数据集构建的效率和规模。",
+      "llm_tldr": "针对仿真中原始3D资产缺乏操作标签的问题，提出AnnotateAnything自动标注框架。通过视觉语言推理和并行标注流水线，为3D资产生成结构化的可执行操作标签，显著提升机器人数据集构建的效率和规模。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2606.20118v1",
+      "source": "arxiv",
+      "title": "Pose6DAug: Physically Plausible Multi-view Object Swapping for Robot Data Augmentation",
+      "abstract": "Vision-language-action (VLA) policies have shown strong potential for general-purpose manipulation, yet they often fail on novel, out-of-distribution objects whose appearance or geometry deviates from the training distribution. The standard remedy is to collect multi-view teleoperation data for every failure case, but this scales poorly in both cost and time. We introduce Pose6DAug, a failure-driven data augmentation framework that turns a policy's own successful episodes into targeted demonstrations for its failure modes, without any new data collection. Our key insight is that each successful episode already encodes a physically valid action trajectory together with calibrated multi-view observations. By swapping only the manipulated object while preserving this trajectory, we obtain new and physically grounded demonstrations. However, naive 2D video editing breaks multi-view consistency and physical plausibility, particularly under heavy occlusion and egocentric viewpoints. Our method instead operates directly in 3D, anchoring the target object with an explicit mesh driven by a temporally coherent 6D pose trajectory, ensuring geometrically consistent renderings across all camera views. Fine-tuning a VLA on data augmented by our method improves success rates by 16.5% relative to the state-of-the-art baseline on novel objects, while preserving in-distribution performance. These results show that multi-view and physically consistent augmentation is a practical path to scalable VLA generalization.",
+      "authors": [
+        "Jonghoon Lee",
+        "Seong Hyeon Park",
+        "Byungwoo Jeon",
+        "Minha Lee",
+        "Jinwoo Shin"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.LG"
+      ],
+      "published": "2026-06-18T11:41:25+00:00",
+      "link": "https://arxiv.org/pdf/2606.20118v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "failure-driven data augmentation for robot policies using object swapping",
+      "llm_evidence_cn": "利用目标物体交换进行机器人策略的故障驱动数据增强",
+      "llm_evidence": "利用目标物体交换进行机器人策略的故障驱动数据增强",
+      "canonical_evidence": "利用目标物体交换进行机器人策略的故障驱动数据增强",
+      "llm_tldr_en": "Pose6DAug augments robot data by swapping manipulated objects in successful episodes to generate demonstrations for failure modes, without new data collection.",
+      "llm_tldr_cn": "该论文提出了Pose6DAug，一种故障驱动的数据增强框架，通过将成功操作轨迹中的被操纵物体替换为导致失败的物体，从而生成针对失败模式的目标演示，无需额外数据收集。该方法利用了成功轨迹中已有的物理有效动作和多视角观察，实现了对策略故障模式的定向增强。实验证明该方法能有效提升视觉-语言-动作策略对分布外物体的鲁棒性，为机器人数据集构建提供了一种低成本增强手段。",
+      "llm_tldr": "该论文提出了Pose6DAug，一种故障驱动的数据增强框架，通过将成功操作轨迹中的被操纵物体替换为导致失败的物体，从而生成针对失败模式的目标演示，无需额外数据收集。该方法利用了成功轨迹中已有的物理有效动作和多视角观察，实现了对策略故障模式的定向增强。实验证明该方法能有效提升视觉-语言-动作策略对分布外物体的鲁棒性，为机器人数据集构建提供了一种低成本增强手段。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "quick_skim": [
+    {
+      "id": "2606.17030v1",
+      "source": "arxiv",
+      "title": "Qwen-RobotWorld Technical Report: Unifying Embodied World Modeling through Language-Conditioned Video Generation",
+      "abstract": "We introduce Qwen-RobotWorld, a language-conditioned video world model for embodied intelligence. With natural language as a unified action interface, it predicts physically grounded future visual trajectories from current observations across robotic manipulation, autonomous driving, indoor navigation, and human-to-robot transfer. This unified formulation provides three promising application directions: synthetic data generation for policy training augmentation, scalable virtual environments for policy evaluation, and language-guided planning signals for downstream robot control. This is achieved through a three-part design: a) Double-Stream MMDiT with MLLM Action Encoding, where a 60-layer double-stream diffusion transformer couples frozen Qwen2.5-VL semantics with video-VAE latents through layer-wise joint attention; b) Embodied World Knowledge (EWK), an 8.6M video-text corpus (200M+ frames) with action-language mapping over 20+ embodiments and 500+ action categories; and c) General+Expert Progressive Curriculum, a two-stage training strategy that first learns general visual priors and then injects embodied specialization under a shared language interface. Extensive results show strong competitiveness: ranks 1st overall on EWMBench and DreamGen Bench, outperforms all open-source models on WorldModelBench and PBench. Additional zero-shot analyses on RoboTwin-IF benchmark further support robust generalization and multi-view consistency.",
+      "authors": [
+        "Jie Zhang",
+        "Xiaoyue Chen",
+        "Anzhe Chen",
+        "Chenxu Lv",
+        "Deqing Li",
+        "Gengze Zhou",
+        "Hang Yin",
+        "Haoqi Yuan",
+        "Haoyang Li",
+        "Jiahao Li",
+        "Jiazhao Zhang",
+        "Jingren Zhou",
+        "Kaiyuan Gao",
+        "Kun Yan",
+        "Lihan Jiang",
+        "Ningyuan Tang",
+        "Pei Lin",
+        "Qihang Peng",
+        "Shengming Yin",
+        "Tianhe Wu",
+        "Tianyi Yan",
+        "Xiao Xu",
+        "Yan Shu",
+        "Yanran Zhang",
+        "Ye Wang",
+        "Yi Wang",
+        "Yilei Chen",
+        "Yixian Xu",
+        "Yiyang Huang",
+        "Yuxiang Chen",
+        "Zekai Zhang",
+        "Zhendong Wang",
+        "Zhixing Lei",
+        "Zhixuan Liang",
+        "Zihao Liu",
+        "Zikai Zhou",
+        "Xiong-Hui Chen",
+        "Chenfei Wu"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV"
+      ],
+      "published": "2026-06-15T17:52:31+00:00",
+      "link": "https://arxiv.org/pdf/2606.17030v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "synthetic data generation for policy training",
+      "llm_evidence_cn": "为策略训练生成合成数据",
+      "llm_evidence": "为策略训练生成合成数据",
+      "canonical_evidence": "为策略训练生成合成数据",
+      "llm_tldr_en": "Qwen-RobotWorld uses language-conditioned video generation to create synthetic data for robot policy training, serving as a world model for embodied intelligence.",
+      "llm_tldr_cn": "本文提出Qwen-RobotWorld，一种语言条件视频世界模型，通过自然语言接口预测物理视觉轨迹，可用于生成合成数据以增强策略训练、构建虚拟评估环境，并为机器人控制提供规划信号。该模型统一了操作、导航等多个领域，展示了世界模型在数据集构建方面的潜力。",
+      "llm_tldr": "本文提出Qwen-RobotWorld，一种语言条件视频世界模型，通过自然语言接口预测物理视觉轨迹，可用于生成合成数据以增强策略训练、构建虚拟评估环境，并为机器人控制提供规划信号。该模型统一了操作、导航等多个领域，展示了世界模型在数据集构建方面的潜力。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2606.15587v1",
+      "source": "arxiv",
+      "title": "Perfect Demo Makes Poor Teacher: Learning Robust Alignment from Critical Motion Segments",
+      "abstract": "Expert demonstrations are widely assumed to be the gold standard for robot imitation learning. Yet for fine-grained manipulation such as insertion, stacking, and alignment, we uncover a counterintuitive failure mode: fluent demonstrations can be poor teachers. A skilled teleoperator compresses the decisive moments of alignment and recovery into a brief temporal window, leaving the policy flooded with redundant free-space motion and starved of supervision exactly where precision determines success. We address this bottleneck at two levels. At the data level, slowing down near alignment and resampling critical segments both help, yet the gain comes mainly from broadening the coverage of recovery states the policy must learn, not from reweighting frames it already has. Such data-side fixes, however, leave the policy's per-frame view untouched: a single image still maps directly to an action, and the local motion that governs correction stays implicit. We therefore turn to the representation level and introduce STAIR (\\textbf{S}patio-\\textbf{T}emporal feature \\textbf{A}s an \\textbf{I}nterface for \\textbf{R}obot learning), a compact dynamic feature that bridges the vision-language model and the action expert, distilling the short-horizon motion already recorded in each trajectory into dense, motion-aware supervision. Trained on fluent data alone, STAIR recovers most of the deliberate-demonstration gain ($50.0$ to $62.2\\%$ overall, approaching the $64.4\\%$ of deliberate demonstrations). These results call for a more pedagogical view of robot data, optimized for machine learnability rather than human efficiency alone.",
+      "authors": [
+        "Mingyu Liu",
+        "Zeju Li",
+        "Jiuhe Shu",
+        "Hanqing Wang",
+        "Yuhao Chao",
+        "Hao Chen",
+        "Chunhua Shen"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-06-14T04:15:29+00:00",
+      "link": "https://arxiv.org/pdf/2606.15587v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "data resampling and critical segment coverage for robust imitation learning",
+      "llm_evidence_cn": "通过关键段重采样与恢复状态覆盖提高模仿学习鲁棒性",
+      "llm_evidence": "通过关键段重采样与恢复状态覆盖提高模仿学习鲁棒性",
+      "canonical_evidence": "通过关键段重采样与恢复状态覆盖提高模仿学习鲁棒性",
+      "llm_tldr_en": "Focusing on critical motion segments and broadening recovery state coverage improves imitation learning performance more than slowing down demonstrations.",
+      "llm_tldr_cn": "该工作发现流畅的专家演示在精细操作中反而是糟糕的老师，因为关键对齐和恢复信息被压缩在极短时间内。通过慢放对齐段和重采样关键段，以及扩大恢复状态覆盖范围，显著提升了策略的鲁棒性。实验表明，恢复状态的多样性比单纯增加数据量更关键。",
+      "llm_tldr": "该工作发现流畅的专家演示在精细操作中反而是糟糕的老师，因为关键对齐和恢复信息被压缩在极短时间内。通过慢放对齐段和重采样关键段，以及扩大恢复状态覆盖范围，显著提升了策略的鲁棒性。实验表明，恢复状态的多样性比单纯增加数据量更关键。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2606.17030v3",
+      "source": "arxiv",
+      "title": "Qwen-RobotWorld Technical Report: Unifying Embodied World Modeling through Language-Conditioned Video Generation",
+      "abstract": "We introduce Qwen-RobotWorld, a language-conditioned video world model for embodied intelligence. With natural language as a unified action interface, it predicts physically grounded future visual trajectories from current observations across robotic manipulation, autonomous driving, indoor navigation, and human-to-robot transfer. This unified formulation provides three promising application directions: synthetic data generation for policy training augmentation, scalable virtual environments for policy evaluation, and language-guided planning signals for downstream robot control. This is achieved through a three-part design: a) Double-Stream MMDiT with MLLM Action Encoding, where a 60-layer double-stream diffusion transformer couples frozen Qwen2.5-VL semantics with video-VAE latents through layer-wise joint attention; b) Embodied World Knowledge (EWK), an 8.6M video-text corpus (200M+ frames) with action-language mapping over 20+ embodiments and 500+ action categories; and c) General+Expert Progressive Curriculum, a two-stage training strategy that first learns general visual priors and then injects embodied specialization under a shared language interface. Extensive results show strong competitiveness: ranks 1st overall on EWMBench and DreamGen Bench, outperforms all open-source models on WorldModelBench and PBench. Additional zero-shot analyses on RoboTwin-IF benchmark further support robust generalization and multi-view consistency.",
+      "authors": [
+        "Jie Zhang",
+        "Xiaoyue Chen",
+        "Anzhe Chen",
+        "Dayiheng Liu",
+        "Deqing Li",
+        "Gengze Zhou",
+        "Hale Yin",
+        "Haoqi Yuan",
+        "Haoyang Li",
+        "Jiahao Li",
+        "Jiazhao Zhang",
+        "Jingren Zhou",
+        "Kaiyuan Gao",
+        "Kun Yan",
+        "Lihan Jiang",
+        "Ningyuan Tang",
+        "Pei Lin",
+        "Qihang Peng",
+        "Shengming Yin",
+        "Tianhe Wu",
+        "Tianyi Yan",
+        "Xiao Xu",
+        "Yan Shu",
+        "Yanran Zhang",
+        "Ye Wang",
+        "Yi Wang",
+        "Yilei Chen",
+        "Yixian Xu",
+        "Yiyang Huang",
+        "Yuxiang Chen",
+        "Zekai Zhang",
+        "Zhendong Wang",
+        "Zixing Lei",
+        "Zhixuan Liang",
+        "Zihao Liu",
+        "Zikai Zhou",
+        "Chenxu Lv",
+        "Xiong-Hui Chen",
+        "Chenfei Wu"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV"
+      ],
+      "published": "2026-06-15T17:52:31+00:00",
+      "link": "https://arxiv.org/pdf/2606.17030v3",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "language-conditioned video world model for synthetic data generation",
+      "llm_evidence_cn": "语言条件视频世界模型，用于合成数据生成",
+      "llm_evidence": "语言条件视频世界模型，用于合成数据生成",
+      "canonical_evidence": "语言条件视频世界模型，用于合成数据生成",
+      "llm_tldr_en": "Qwen-RobotWorld generates physically grounded future video from language and observations, enabling synthetic data for policy training and evaluation.",
+      "llm_tldr_cn": "针对机器人数据采集成本高的问题，提出语言条件视频世界模型Qwen-RobotWorld。以自然语言为统一接口，预测物理合理的未来视频，可生成合成数据用于策略训练增强、虚拟环境评估和规划信号，为机器人数据集构建提供可扩展的方案。",
+      "llm_tldr": "针对机器人数据采集成本高的问题，提出语言条件视频世界模型Qwen-RobotWorld。以自然语言为统一接口，预测物理合理的未来视频，可生成合成数据用于策略训练增强、虚拟环境评估和规划信号，为机器人数据集构建提供可扩展的方案。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2606.18589v1",
+      "source": "arxiv",
+      "title": "DREAM-Chunk: Reactive Action Chunking with Latent World Model",
+      "abstract": "Action chunking has become a common interface for vision-language-action (VLA) models, enabling low-frequency policy inference to drive high-frequency robot execution. However, once an action chunk is committed, its open-loop execution can be brittle under stochastic dynamics, hardware execution errors, and partial observability. We propose DREAM-Chunk, a test-time scaling method that augments chunking-based policies with a lightweight latent world model, without requiring additional policy fine-tuning. At test time, DREAM-Chunk samples multiple candidate action chunks, rolls out their predicted latent futures, and selects actions from the chunk whose predicted state best matches the observed rollout. In this way, DREAM-Chunk uses additional test-time computation to cover multiple plausible stochastic futures and improve reactivity during long-horizon chunk execution. On the Kinetix benchmark, DREAM-Chunk improves robustness under increasing action noise and benefits from larger candidate sample sizes, especially when demonstrations contain corrective behaviors. We further validate DREAM-Chunk on four manipulation tasks across two robot platforms and two VLA policies under various sources of stochasticity. Across simulation and hardware experiments, DREAM-Chunk improves the robustness of action-chunking policies in stochastic dynamics.",
+      "authors": [
+        "Wenxi Chen",
+        "Kaidi Zhang",
+        "Chi Lin",
+        "Zhiyuan Zhang",
+        "Yu She",
+        "Yuejiang Liu",
+        "Raymond A. Yeh",
+        "Shaoshuai Mou",
+        "Yan Gu"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-06-17T01:28:07+00:00",
+      "link": "https://arxiv.org/pdf/2606.18589v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "Handles hardware execution errors via test-time world model",
+      "llm_evidence_cn": "通过测试时世界模型处理硬件执行错误",
+      "llm_evidence": "通过测试时世界模型处理硬件执行错误",
+      "canonical_evidence": "通过测试时世界模型处理硬件执行错误",
+      "llm_tldr_en": "DREAM-Chunk augments action chunking with a lightweight latent world model at test time to handle execution errors and stochastic dynamics without retraining.",
+      "llm_tldr_cn": "动作分块策略在开放循环执行中易受硬件错误和随机动态影响。提出DREAM-Chunk，在测试时结合轻量级潜在世界模型，采样多个候选动作块并基于状态预测选择最优块。无需微调策略，显著提升鲁棒性。",
+      "llm_tldr": "动作分块策略在开放循环执行中易受硬件错误和随机动态影响。提出DREAM-Chunk，在测试时结合轻量级潜在世界模型，采样多个候选动作块并基于状态预测选择最优块。无需微调策略，显著提升鲁棒性。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "fault diagnosis and error analysis for humanoid robots",
+      "matched_requirement_id": "req-7",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2606.20272v1",
+      "source": "arxiv",
+      "title": "Efficiently Linking Real Scenes with Synthetic Data Generation for AI-based Cognitive Robotics and Computer Vision Applications",
+      "abstract": "AI vision models are a driving factor for the potential use case scenarios of cognitive robotics within in the industry and household applications. A large array of methods from semantic environment analysis towards 6D and grasping pose estimation have been proposed based on the latest AI achievements. However, such advancements require further strong and efficient methods w.r.t. training data and AI-architectures, which are capable in synergy to tackle current challenges, precision limits, and scalability beyond domain gaps. In this paper, we discuss these current limits and trends in the related state-of-the-art which are challenging those. Further we discuss our current work in progress on bridging the domain gap between simulations and real world applications by linking those in the training data generation.",
+      "authors": [
+        "Paul Koch",
+        "Vivek Chavan",
+        "André Sers",
+        "Adem Karakurt",
+        "Paul Hofmann",
+        "Mohamad Zaher Ziadeh",
+        "Jörg Krüger"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.CV"
+      ],
+      "published": "2026-06-18T14:17:38+00:00",
+      "link": "https://arxiv.org/pdf/2606.20272v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "discusses linking real scenes with synthetic data for robotics",
+      "llm_evidence_cn": "讨论连接真实场景与合成数据以支持机器人应用",
+      "llm_evidence": "讨论连接真实场景与合成数据以支持机器人应用",
+      "canonical_evidence": "讨论连接真实场景与合成数据以支持机器人应用",
+      "llm_tldr_en": "Discusses current limits in linking real scenes with synthetic data generation for AI-based cognitive robotics and computer vision, and presents work in progress on bridging the domain gap.",
+      "llm_tldr_cn": "该论文综述了当前将真实场景与合成数据生成相连接的方法和挑战，针对AI认知机器人和计算机视觉应用。讨论了现有方法在精度、可扩展性和跨域差距方面的局限，并介绍了作者在该方向上的初步工作。对于机器人数据集构建具有方法学参考价值。",
+      "llm_tldr": "该论文综述了当前将真实场景与合成数据生成相连接的方法和挑战，针对AI认知机器人和计算机视觉应用。讨论了现有方法在精度、可扩展性和跨域差距方面的局限，并介绍了作者在该方向上的初步工作。对于机器人数据集构建具有方法学参考价值。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2606.20549v1",
+      "source": "arxiv",
+      "title": "Generating Robot Hands from Human Demonstrations",
+      "abstract": "Robot learning has advanced rapidly in learning control, but learning the physical body of a robot remains much more difficult because jointly searching over design and control creates a very large combinatorial problem. Here, we present a data-driven framework for generating robot hands from human demonstrations. Instead of learning a complex controller together with each candidate design, we generate robot hand designs using the same simple control policy used after fabrication: matching fingertip positions through inverse kinematics. Using more than 4 million frames of human fingertip motion from everyday manipulation, our algorithm optimizes tree-structured robot hands to reproduce desired target motions. The framework produced both a 6-degree-of-freedom (DoF) general-purpose hand and lower-DoF task-specific hands with spatial four-bar mimic joints. To accelerate the search over designs, we trained a reinforcement-learning (RL) actor to propose good hand designs and joint angles, reducing search time from hours to minutes. We fabricated the mechanisms directly as one-piece articulated structures with print-in-place joints. In real-world experiments, the 6-DoF hand achieved highly accurate teleoperated fingertip tracking better than available commercial robot hands, whereas the specialized 3-DoF hands reproduced structured human and synthetic trajectories with reduced mechanical complexity. These results showed that large-scale human motion data can be used not only to train robot controllers but also as a reference for optimizing and generating the physical embodiment of robots.",
+      "authors": [
+        "Sha Yi",
+        "Nicklas Hansen",
+        "Xueqian Bai",
+        "Carmelo Sferrazza",
+        "Michael T. Tolley",
+        "Xiaolong Wang"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-06-18T17:57:21+00:00",
+      "link": "https://arxiv.org/pdf/2606.20549v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "uses 4M human fingertip frames to generate robot hand dataset",
+      "llm_evidence_cn": "使用400万帧人类指尖数据生成机器人手数据集",
+      "llm_evidence": "使用400万帧人类指尖数据生成机器人手数据集",
+      "canonical_evidence": "使用400万帧人类指尖数据生成机器人手数据集",
+      "llm_tldr_en": "Proposes a data-driven framework for generating robot hands from human demonstrations, using over 4 million frames of fingertip motion to optimize hand designs.",
+      "llm_tldr_cn": "针对机器人手部设计中的联合搜索困难，提出从人类演示数据驱动生成手部设计的框架。利用超过400万帧人类指尖运动数据，通过逆运动学匹配指尖位置来优化树状结构手，无需复杂控制器联合搜索。实验生成了6自由度通用手，成功复现目标运动。该方法为机器人手部数据集构建提供了新范式。",
+      "llm_tldr": "针对机器人手部设计中的联合搜索困难，提出从人类演示数据驱动生成手部设计的框架。利用超过400万帧人类指尖运动数据，通过逆运动学匹配指尖位置来优化树状结构手，无需复杂控制器联合搜索。实验生成了6自由度通用手，成功复现目标运动。该方法为机器人手部数据集构建提供了新范式。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    }
+  ]
+}
