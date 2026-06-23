@@ -1,0 +1,613 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-06-23T21:55:47.400393+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 2,
+    "deep_divecandidates": 7,
+    "deep_cap": 7,
+    "deep_selected": 7,
+    "quick_candidates": 7,
+    "quick_skim_target": 12,
+    "quick_selected": 7
+  },
+  "deep_dive": [
+    {
+      "id": "2606.20748v1",
+      "source": "arxiv",
+      "title": "Toward Machine Risk Perception: Integrating Trust Calibration and Precursor-Based Risk Estimation for Humanoid",
+      "abstract": "Humanoid robots are emerging as co-workers in smart manufacturing, yet their dynamic, human-like movements introduce safety risks that differ fundamentally from those of fixed or wheeled robots. Conventional safety paradigms based on reactive force or distance limits fail to capture the sequential, uncertain nature of humanoid failures. This study proposes a precursor-driven, trust-calibrated framework to enable proactive humanoid risk perception. Accident evolution is modeled through sequential precursor cues using a Logistic-Exponential (LE) formulation that couples logistic escalation from diverse precursors with exponential decay for temporal dissipation. Trust is defined as the inverse of the estimated accident probability, allowing humanoids to adapt behavior in real time, reducing aggressiveness when risk intensifies, and restoring confidence as stability returns. A multi-source dataset of 126 documented events and 241 precursors revealed twelve dominant accident modes, most evolving through overlapping cues within one second. A simulated case study (\"fall-onto-human\") demonstrated how the LE-Trust coupling can trigger early intervention and prevent collapse. The results advance humanoid safety from static thresholds toward dynamic, evidence-based inference, establishing a foundation for risk-aware and trustworthy human-robot collaboration in Industry 5.0 environments.",
+      "authors": [
+        "He Wen"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.HC"
+      ],
+      "published": "2026-06-18T00:04:02+00:00",
+      "link": "https://arxiv.org/pdf/2606.20748v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "precursor-based risk estimation for humanoid fault diagnosis",
+      "llm_evidence_cn": "基于前驱信号的人形机器人故障诊断风险估计",
+      "llm_evidence": "基于前驱信号的人形机器人故障诊断风险估计",
+      "canonical_evidence": "基于前驱信号的人形机器人故障诊断风险估计",
+      "llm_tldr_en": "Proposes a trust-calibrated framework for humanoid risk perception using sequential precursor cues, modeling accident evolution for proactive fault diagnosis.",
+      "llm_tldr_cn": "该论文提出一种信任校准的前驱驱动风险感知框架，利用序贯前驱线索建模事故演进过程，实现人形机器人主动故障诊断。区别于传统反应式安全方法，该框架能捕捉故障的序列性和不确定性，提升安全预警能力。",
+      "llm_tldr": "该论文提出一种信任校准的前驱驱动风险感知框架，利用序贯前驱线索建模事故演进过程，实现人形机器人主动故障诊断。区别于传统反应式安全方法，该框架能捕捉故障的序列性和不确定性，提升安全预警能力。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "fault diagnosis for humanoid robots",
+      "matched_requirement_id": "req-3",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2606.22971v1",
+      "source": "arxiv",
+      "title": "Humanoid-OmniOcc: Stereo-Based Full-View Occupancy Dataset for Embodied AI",
+      "abstract": "Occupancy prediction at voxel-level granularity is essential for safe robotic navigation and interaction in complex environments. Existing occupancy datasets, however, are predominantly designed for autonomous driving with vehicle-centric biases -- forward-facing cameras, far-field geometry, and static road priors -- limiting their applicability to embodied humanoid perception. We present Humanoid-OmniOcc, a large-scale panoramic stereo-based occupancy dataset tailored for humanoid robots. The dataset encompasses 15 diverse simulated indoor scenes and 5 real-world environments, yielding over 155K samples with broad scene and style diversity. Importantly, the dataset is designed around a Real2Sim2Real closed-loop paradigm: real sensor specifications drive physically accurate simulation, simulation produces large-scale annotated training data, and models trained in simulation are directly evaluated on real-world captures -- enabling iterative refinement of the sim-to-real pipeline. We further propose \\textbf{H}umanoid \\textbf{S}urround \\textbf{S}tereo-guided \\textbf{Occ}upancy model (Humanoid-OmniOcc) that exploits robust depth priors for accurate 2D-to-3D lifting. Extensive experiments show that Humanoid-OmniOcc consistently outperforms monocular baselines and generalizes well to both unseen simulated test scenes and real-world environments, validating the effectiveness of the Real2Sim2Real design. Code and data will be available upon acceptance at https://d-robotics-ai-lab.github.io/humanoid-omniocc.",
+      "authors": [
+        "Xianda Guo",
+        "Bohao Zhang",
+        "Chenwei Huang",
+        "Shiyuan Chen",
+        "Ruilin Wang",
+        "Yiqun Duan",
+        "Cong Yang",
+        "Qin Zou",
+        "Wei Sui"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.CV"
+      ],
+      "published": "2026-06-22T07:52:25+00:00",
+      "link": "https://arxiv.org/pdf/2606.22971v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "humanoid robot occupancy dataset",
+      "llm_evidence_cn": "人形机器人占据数据集",
+      "llm_evidence": "人形机器人占据数据集",
+      "canonical_evidence": "人形机器人占据数据集",
+      "llm_tldr_en": "Humanoid-OmniOcc provides a large-scale panoramic stereo occupancy dataset for humanoid robots with 15 simulated and 5 real scenes, using a Real2Sim2Real closed-loop paradigm to ensure real sensor fidelity.",
+      "llm_tldr_cn": "现有占据数据集多面向自动驾驶，不适用于人形机器人。Humanoid-OmniOcc构建了大规模全景立体占据数据集，包含15个模拟场景和5个真实环境，采用Real2Sim2Real闭环范式保证传感器真实性，为人形机器人感知和导航提供了关键数据基础。",
+      "llm_tldr": "现有占据数据集多面向自动驾驶，不适用于人形机器人。Humanoid-OmniOcc构建了大规模全景立体占据数据集，包含15个模拟场景和5个真实环境，采用Real2Sim2Real闭环范式保证传感器真实性，为人形机器人感知和导航提供了关键数据基础。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "humanoid robot dataset construction",
+      "matched_requirement_id": "req-2",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2606.21386v1",
+      "source": "arxiv",
+      "title": "VLA-FAIL: Efficient Task Failure Detection for Finetuned Vision-Language-Action Models",
+      "abstract": "Vision-language-action models (VLAs) achieve state-of-the-art performance on many robotic manipulation tasks, yet they can still behave unpredictably in out-of-distribution scenarios. Runtime failure detection is therefore essential for the safe real-world deployment of VLAs. However, existing task failure detectors require computationally expensive action sampling, are based on architectural assumptions that limit their applicability to VLAs, or need access to failure rollouts. We propose VLA-FAIL, a lightweight and broadly applicable failure detection framework for VLAs that combines two novel failure detectors with minimal overhead, without requiring failure data. The first, last-layer Mahalanobis distance (LLMD), detects out-of-distribution states by measuring token-wise deviations in last-layer features relative to the training data. The second, action chunk consistency (ACC), exploits the temporal overlap induced by receding-horizon control and detects failures when consecutive action chunks become inconsistent. To capture the trade-off between detection accuracy and detection latency, we introduce AUCPDT, a threshold-independent metric that jointly evaluates precision, recall, and detection time. Through extensive real-world and simulation experiments, we demonstrate that LLMD and ACC capture complementary failure modes whose combination enables reliable and early failure detection across diverse tasks, frequently outperforming significantly more expensive baseline methods.",
+      "authors": [
+        "Florian Seligmann",
+        "Emiliyan Gospodinov",
+        "Enes Ulas Dincer",
+        "Gerhard Neumann"
+      ],
+      "primary_category": "cs.LG",
+      "categories": [
+        "cs.LG",
+        "cs.CV"
+      ],
+      "published": "2026-06-19T12:51:21+00:00",
+      "link": "https://arxiv.org/pdf/2606.21386v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "out-of-distribution detection for VLA failure detection",
+      "llm_evidence_cn": "针对VLA模型的分布外检测用于失败检测",
+      "llm_evidence": "针对VLA模型的分布外检测用于失败检测",
+      "canonical_evidence": "针对VLA模型的分布外检测用于失败检测",
+      "llm_tldr_en": "Proposes lightweight OOD-based failure detectors for VLAs without needing failure data, using last-layer Mahalanobis distance and other methods.",
+      "llm_tldr_cn": "VLA-FAIL 提出了一种轻量级的任务失败检测框架，用于视觉-语言-动作模型。它结合了最后层马氏距离等两个新型检测器，无需失败数据即可在推理时检测分布外场景导致的失败。该方法计算开销小，可用于安全关键的机器人部署。",
+      "llm_tldr": "VLA-FAIL 提出了一种轻量级的任务失败检测框架，用于视觉-语言-动作模型。它结合了最后层马氏距离等两个新型检测器，无需失败数据即可在推理时检测分布外场景导致的失败。该方法计算开销小，可用于安全关键的机器人部署。",
+      "llm_tags": [
+        "query:humanoid-ood"
+      ],
+      "matched_query_tag": "query:humanoid-ood",
+      "matched_query_text": "out-of-distribution detection for safe robot operation",
+      "matched_requirement_id": "req-11",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2606.17385v2",
+      "source": "arxiv",
+      "title": "EgoInfinity: A Web-Scale 4D Hand-Object Interaction Data Engine for Any-View Robot Retargeting and Video-to-Action Robot Learning",
+      "abstract": "Internet videos constitute the largest reservoir of embodied human manipulation knowledge, yet converting arbitrary RGB footage into actionable robot training data remains a major bottleneck. Existing lab- or factory-collected datasets are narrow in scale and diversity, limiting open-world robot learning. Instead of proposing a static dataset, we introduce EgoInfinity, a universal 4D hand-object interaction data engine that enables web-scale data generation for robot retargeting and learning. EgoInfinity is a modular engine integrating perception, segmentation, reconstruction, interaction-aware refinement, and retargeting to automate this traditionally unscalable video-to-action problem without human-in-the-loop annotation. Its modular design lets the engine continuously benefit from advances in any incorporated component. With EgoInfinity, in-the-wild human manipulation videos are lifted into agent-agnostic, metric 4D hand-object representations, including hand trajectories, 6-DoF object poses, and contact-relevant states. Rather than naively connecting standalone components, EgoInfinity combines cross-module metric calibration with interaction-aware refinement to improve physical reliability, reducing drift and contact inconsistencies common in pure visual reconstruction. We further propose a novel motion retargeter that compiles the recovered 3D hand motions into executable joint trajectories for diverse robot morphologies, enabling video-to-action retargeting on any robot from arbitrary viewpoints and shot sizes (e.g., the human body is only partially visible). We validate EgoInfinity across perception fidelity, kinematic feasibility, contact consistency, cross-embodiment generalization, and real-robot skill acquisition (e.g., grasping, cutting, wiping, and pouring), demonstrating a scalable bridge from internet videos to executable robot behavior for open-world robot learning.",
+      "authors": [
+        "Gaotian Wang",
+        "Kejia Ren",
+        "Andrew Morgan",
+        "Yiting Chen",
+        "Howard H. Qian",
+        "Podshara Chanrungmaneekul",
+        "Kaiyu Hang"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-06-16T00:44:16+00:00",
+      "link": "https://arxiv.org/pdf/2606.17385v2",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "web-scale data engine for robot retargeting and learning",
+      "llm_evidence_cn": "大规模数据引擎用于机器人重定向和学习",
+      "llm_evidence": "大规模数据引擎用于机器人重定向和学习",
+      "canonical_evidence": "大规模数据引擎用于机器人重定向和学习",
+      "llm_tldr_en": "EgoInfinity is a modular data engine that converts internet videos into 4D hand-object interaction data for robot retargeting and learning, solving the video-to-action bottleneck at web scale.",
+      "llm_tldr_cn": "从互联网视频自动生成机器人训练数据是开放世界学习的关键瓶颈。本文提出EgoInfinity，一个模块化数据引擎，集成感知、分割、重建、交互优化和重定向，从野生RGB视频生成4D手-物交互数据，支持机器人重定向和学习。该引擎可大规模扩展，为人形机器人数据集构建提供了有效途径。",
+      "llm_tldr": "从互联网视频自动生成机器人训练数据是开放世界学习的关键瓶颈。本文提出EgoInfinity，一个模块化数据引擎，集成感知、分割、重建、交互优化和重定向，从野生RGB视频生成4D手-物交互数据，支持机器人重定向和学习。该引擎可大规模扩展，为人形机器人数据集构建提供了有效途径。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2606.20754v1",
+      "source": "arxiv",
+      "title": "Perturbation-Based Uncertainty for Failure Detection in Vision-Language-Action Models",
+      "abstract": "Vision-Language-Action (VLA) models have shown strong performance in robotic manipulation, but reliable uncertainty quantification remains challenging, particularly under distribution shift. Unlike autoregressive policies, many modern VLA models generate continuous actions through regression or flow-based generation, where explicit predictive probabilities are unavailable. Moreover, existing approaches often rely on stochastic action sampling or supervised failure labels, limiting their applicability across diverse pretrained VLA models. In this work, we propose a label-free and model-agnostic framework for inference-time uncertainty estimation through hidden activation perturbations, motivated by Bayesian perspectives on local model variations. Specifically, we inject Gaussian perturbations into transformer hidden activations and estimate epistemic signals from disagreement across perturbed action predictions. Experiments on LIBERO and LIBERO-PRO show that perturbation-based uncertainty consistently improves failure detection under distribution shift compared to sampling-based uncertainty, providing a practical uncertainty signal for VLA models.",
+      "authors": [
+        "Yousung Lee",
+        "Dongsoo Har"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-06-18T05:41:45+00:00",
+      "link": "https://arxiv.org/pdf/2606.20754v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "failure detection in VLA robots via perturbation-based uncertainty",
+      "llm_evidence_cn": "基于扰动的VLA机器人故障检测不确定性",
+      "llm_evidence": "基于扰动的VLA机器人故障检测不确定性",
+      "canonical_evidence": "基于扰动的VLA机器人故障检测不确定性",
+      "llm_tldr_en": "Proposes a label-free, model-agnostic framework for uncertainty estimation in VLA models through hidden activation perturbations, enabling failure detection under distribution shift without training. Applicable to diverse VLA models.",
+      "llm_tldr_cn": "该论文提出一种无标签、模型无关的不确定性估计框架，通过对隐藏激活进行扰动来评估VLA模型的不确定性，从而在分布偏移下实现故障检测，无需额外训练。该方法适用于多种预训练VLA模型，为机器人故障诊断提供了通用工具。",
+      "llm_tldr": "该论文提出一种无标签、模型无关的不确定性估计框架，通过对隐藏激活进行扰动来评估VLA模型的不确定性，从而在分布偏移下实现故障检测，无需额外训练。该方法适用于多种预训练VLA模型，为机器人故障诊断提供了通用工具。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "fault diagnosis for humanoid robots",
+      "matched_requirement_id": "req-3",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2606.22142v1",
+      "source": "arxiv",
+      "title": "RoboLineage: Agent-Native Data Lifecycle Governance Across Robot Policy Iterations",
+      "abstract": "We present RoboLineage, an agent-native data lifecycle governance system for robot policy iteration. Modern robot policies improve through repeated data collection, review, retraining, evaluation, and release decisions, but the evidence connecting these steps is often scattered across local tools, scripts, and expert memory. RoboLineage makes this lifecycle explicit by representing rollouts, reviews, dataset decisions, training runs, policy metadata, evaluations, deployment recommendations, and next-collection plans as typed lineage artifacts. Agents interpret embodied rollout evidence, adapt accepted data to existing training stacks, maintain data health, and summarize cross-iteration state under explicit artifact boundaries. In real-robot manipulation workflows, RoboLineage makes routine policy iteration faster and more auditable while maintaining downstream policy performance. We open source RoboLineage as a lightweight lifecycle layer for different robot embodiments and training families. Project page: https://robolineage.github.io/",
+      "authors": [
+        "Qian Luo",
+        "Wentao Guo",
+        "Zhennan Qin",
+        "Nanchun Guo",
+        "Yunhan Zhao",
+        "Yi Ma",
+        "Yanchao Yang"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-06-20T16:48:51+00:00",
+      "link": "https://arxiv.org/pdf/2606.22142v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "robot data lifecycle governance for dataset construction",
+      "llm_evidence_cn": "机器人数据生命周期治理与数据集构建",
+      "llm_evidence": "机器人数据生命周期治理与数据集构建",
+      "canonical_evidence": "机器人数据生命周期治理与数据集构建",
+      "llm_tldr_en": "RoboLineage provides an agent-native data lifecycle governance system for robot policy iteration, explicitly managing rollouts, dataset decisions, training runs, and deployment recommendations to support dataset construction and iteration.",
+      "llm_tldr_cn": "针对现代机器人策略迭代中数据收集、审核、训练和部署证据分散的问题，RoboLineage提出了一个智能体原生的数据生命周期治理系统。该系统通过将轨迹回放、数据集决策、训练运行和部署建议表示为类型化血缘工件，使整个数据构建过程显式化。在真实机器人上的实验表明，该方法有效管理了跨迭代的数据健康状态，为机器人数据集构建和策略改进提供了系统化支撑。",
+      "llm_tldr": "针对现代机器人策略迭代中数据收集、审核、训练和部署证据分散的问题，RoboLineage提出了一个智能体原生的数据生命周期治理系统。该系统通过将轨迹回放、数据集决策、训练运行和部署建议表示为类型化血缘工件，使整个数据构建过程显式化。在真实机器人上的实验表明，该方法有效管理了跨迭代的数据健康状态，为机器人数据集构建和策略改进提供了系统化支撑。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2606.22174v1",
+      "source": "arxiv",
+      "title": "OpenHLM: An Empirical Recipe for Whole-Body Humanoid Loco-Manipulation",
+      "abstract": "Whole-body humanoid loco-manipulation requires coordinating the robot's entire kinematic chain. However, most existing systems typically decouple the upper and lower bodies into separate controllers, limiting such coordination and yielding behaviors similar to those of a wheeled dual-arm platform. In this paper, we ask what it takes to build a whole-body native vision-language-action (VLA) model that maps language and pixels directly to all of the humanoid's degrees of freedom. We conduct a systematic empirical study organized as a roadmap of one-variable-at-a-time experiments across three phases: whole-body teleoperation, VLA model design, and heterogeneous co-training. Our study yields several intriguing findings: a joint-based whole-body teleoperation interface outperforms alternatives that only partially expose the humanoid's degrees of freedom; a VLA pretrained on static and wheeled dual-arm platforms transfers surprisingly well to a humanoid's full action space; and co-training with HuMI, the humanoid analog of UMI, extends the policy to new objects and instructions without additional whole-body teleoperation on those targets. Following this roadmap yields OpenHLM, an open-source recipe for whole-body humanoid loco-manipulation. In a challenging long-horizon task that spans a wide vertical range of the humanoid, OpenHLM outperforms two state-of-the-art humanoid VLA baselines (GR00T N1.6 and $Ψ_0$) using less than half the total demonstration time. Our code, training data, and model checkpoints are available at [https://openhlm-project.github.io/].",
+      "authors": [
+        "Yingdong Hu",
+        "Haodong Zhu",
+        "Boyuan Zheng",
+        "Yihang Hu",
+        "Tong Zhang",
+        "Zunhao Chen",
+        "Junming Zhao",
+        "Ruiqian Nai",
+        "Yang Gao"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-06-20T18:02:50+00:00",
+      "link": "https://arxiv.org/pdf/2606.22174v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "whole-body teleoperation data collection for humanoid",
+      "llm_evidence_cn": "人形机器人全身遥控操作数据采集",
+      "llm_evidence": "人形机器人全身遥控操作数据采集",
+      "canonical_evidence": "人形机器人全身遥控操作数据采集",
+      "llm_tldr_en": "Presents an empirical study of building whole-body VLA for humanoid loco-manipulation, including teleoperation data pipeline and model design.",
+      "llm_tldr_cn": "OpenHLM 系统研究了构建全身人形机器人 VLA 模型的全流程，包括全身遥控操作数据采集、模型设计及异质协同训练。研究发现基于关节的遥控操作表示更优，并给出了多个性能提升的配置。这项工作为构建人形机器人操作数据集提供了重要参考。",
+      "llm_tldr": "OpenHLM 系统研究了构建全身人形机器人 VLA 模型的全流程，包括全身遥控操作数据采集、模型设计及异质协同训练。研究发现基于关节的遥控操作表示更优，并给出了多个性能提升的配置。这项工作为构建人形机器人操作数据集提供了重要参考。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "humanoid robot dataset construction",
+      "matched_requirement_id": "req-2",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "quick_skim": [
+    {
+      "id": "2606.22261v1",
+      "source": "arxiv",
+      "title": "Learning a Normal World Model for Few-Shot Boundary-Calibrated Abnormality Detection",
+      "abstract": "Abnormality detection in complex systems faces two practical barriers: abnormal labels are scarce, and binary labels do not quantify how far an event has departed from normal behavior. We study a normal-world modeling formulation for this setting. Instead of learning a large and incomplete space of abnormal classes, the model learns the normal world from abundant normal events and uses a few abnormal examples only to calibrate the boundary of normality. We instantiate this idea as a Hypergraph Entropic Normal-World Model. The model represents multivariate sensor windows as context-conditioned hypergraphs, where hyperedges capture high-order relations among groups of variables. It then defines abnormality by an entropy-aware normal-world energy that combines temporal prediction surprise, hypergraph consistency surprise, and latent normal-manifold departure. On the NASA C-MAPSS turbofan degradation benchmark, the proposed full energy achieves strong zero-shot and few-shot performance across all four subsets and reaches AUROC 0.9983 on FD004, the most complex setting with multiple operating conditions and fault modes. Beyond standard detection metrics, we introduce mechanistic validation tests to probe whether the energy encodes normal-world structure rather than a superficial input-output mapping. The learned energy accepts unseen healthy engines, increases along degradation trajectories, and sharply penalizes context-mismatched cross-variable coupling breaks. These results suggest that normal-world energy can serve as an anomaly score, a graded risk measure, and a testable representation of normal system behavior under severe abnormal-label scarcity.",
+      "authors": [
+        "Weizhi Nie",
+        "Weichao Liu",
+        "Weijie Wang",
+        "Yuting Su"
+      ],
+      "primary_category": "cs.LG",
+      "categories": [
+        "cs.LG",
+        "cs.GT"
+      ],
+      "published": "2026-06-20T23:15:34+00:00",
+      "link": "https://arxiv.org/pdf/2606.22261v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "abnormality detection using normal world model and few-shot calibration",
+      "llm_evidence_cn": "基于正态世界模型和少样本校准的异常检测",
+      "llm_evidence": "基于正态世界模型和少样本校准的异常检测",
+      "canonical_evidence": "基于正态世界模型和少样本校准的异常检测",
+      "llm_tldr_en": "Proposes a hypergraph entropic normal-world model for abnormality detection that learns normal behavior from abundant data and calibrates boundary with few anomalies.",
+      "llm_tldr_cn": "现实异常检测中异常样本稀缺且缺乏量化标准。本文提出超图熵正态世界模型，从大量正常样本中学习正态行为，并利用少量异常样本校准正常边界。该方法通过上下文条件超图捕获多变量传感器窗口的高阶关系，并基于熵感知度量定义异常程度。在多个基准数据集上实现了优异的少样本异常检测性能。",
+      "llm_tldr": "现实异常检测中异常样本稀缺且缺乏量化标准。本文提出超图熵正态世界模型，从大量正常样本中学习正态行为，并利用少量异常样本校准正常边界。该方法通过上下文条件超图捕获多变量传感器窗口的高阶关系，并基于熵感知度量定义异常程度。在多个基准数据集上实现了优异的少样本异常检测性能。",
+      "llm_tags": [
+        "query:humanoid-ood"
+      ],
+      "matched_query_tag": "query:humanoid-ood",
+      "matched_query_text": "out-of-distribution detection for safe robot operation",
+      "matched_requirement_id": "req-11",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2606.16917v2",
+      "source": "arxiv",
+      "title": "Unified Motion-Action Modeling for Heterogeneous Robot Learning",
+      "abstract": "We present Unified Motion-Action (UMA) Model, an approach that uses 3D object motion trajectories as a shared interface to bridge visuomotor control and dynamics modeling. UMA treats object motion and robot actions as co-evolving variables under a masked generative objective, in which the mask pattern determines both the supervision regime during pretraining and the inference mode at deployment. Using hindsight-relabeled motion contexts and a contrastive objective that disentangles task intent from scene geometry, UMA enables multi-task pretraining across heterogeneous data sources without requiring manually annotated task instructions. At deployment, the same pretrained parameters support motion-conditioned visuomotor control, motion-based dynamics modeling, and task adaptation from few-shot demonstrations. Pretrained on a mixture of robot demonstrations, human videos, and simulated data, UMA consistently outperforms state-of-the-art baselines specialized for each inference mode.",
+      "authors": [
+        "Yunhao Cao",
+        "Shitong Liu",
+        "Chao Feng",
+        "Meryl Zhang",
+        "Xuanchen Lu",
+        "Andrew Owens",
+        "Kuan Fang"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-06-15T16:23:42+00:00",
+      "link": "https://arxiv.org/pdf/2606.16917v2",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "uses 3D object motion trajectories as shared interface for multi-task pretraining across heterogeneous data, enabling dataset construction without manual annotation",
+      "llm_evidence_cn": "使用3D物体运动轨迹作为共享接口，实现异构数据上的多任务预训练，无需手动标注，促进数据集构建",
+      "llm_evidence": "使用3D物体运动轨迹作为共享接口，实现异构数据上的多任务预训练，无需手动标注，促进数据集构建",
+      "canonical_evidence": "使用3D物体运动轨迹作为共享接口，实现异构数据上的多任务预训练，无需手动标注，促进数据集构建",
+      "llm_tldr_en": "UMA models object motion and robot actions jointly under a masked generative objective, enabling multi-task pretraining on heterogeneous data for both control and dynamics modeling.",
+      "llm_tldr_cn": "机器人学习面临异构数据源难以统一利用的问题。UMA以3D物体运动轨迹为共享接口，在掩码生成目标下联合建模物体运动和机器人动作，通过后见之明重标注和对比学习解耦任务意图与场景几何，实现无需人工标注的多任务预训练。训练后的模型同时支持运动条件控制与动力学建模，为机器人数据集构建提供新范式。",
+      "llm_tldr": "机器人学习面临异构数据源难以统一利用的问题。UMA以3D物体运动轨迹为共享接口，在掩码生成目标下联合建模物体运动和机器人动作，通过后见之明重标注和对比学习解耦任务意图与场景几何，实现无需人工标注的多任务预训练。训练后的模型同时支持运动条件控制与动力学建模，为机器人数据集构建提供新范式。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2606.22907v1",
+      "source": "arxiv",
+      "title": "Improving Robotic Imitation Learning via Trajectory Standardization",
+      "abstract": "Imitation learning for robotic manipulation relies on large sets of human demonstration trajectories, which are often noisy and temporally irregular due to variable operator speed, intermittent pauses, and inconsistent action density. A common preprocessing strategy is time-uniform downsampling to shorten sequences, but it cannot effectively remove speed-induced non-uniformity or redundant pauses. This mismatch degrades data quality and hinders policy learning. To address this issue, we propose Information-Standardized Trajectory Resampling (ISR), an offline preprocessing method for effective imitation learning. ISR resamples each trajectory by enforcing approximately equal information distance between adjacent points. Specifically, we map trajectories onto an information-modulated Riemannian manifold and perform geodesic-equidistant parameterization. We construct an information-intensity field from velocity and acceleration norms: the velocity term removes small-motion redundancy, while the acceleration term preserves high-curvature and fine-manipulation phases. We evaluate ISR on three real-world manipulation tasks with mainstream imitation learning policies. Compared with the baseline time-uniform 3x downsampling, ISR improves task success rates by about 25%, remains robust across datasets collected from different operators, and reduces both dataset size and training cost. The code and videos are publicly available at https://d-robotics-ai-lab.github.io/isr.page.",
+      "authors": [
+        "Licheng Yang",
+        "Lingfeng Qian",
+        "Fei Zheng",
+        "Yonghao He",
+        "Wei Sui",
+        "Shuangshuang Li",
+        "Hu Su"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.CV"
+      ],
+      "published": "2026-06-22T06:46:26+00:00",
+      "link": "https://arxiv.org/pdf/2606.22907v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "trajectory preprocessing method for better data quality",
+      "llm_evidence_cn": "轨迹预处理方法以提升数据质量",
+      "llm_evidence": "轨迹预处理方法以提升数据质量",
+      "canonical_evidence": "轨迹预处理方法以提升数据质量",
+      "llm_tldr_en": "Proposes Information-Standardized Trajectory Resampling (ISR) to remove non-uniformity in demonstration trajectories, improving imitation learning.",
+      "llm_tldr_cn": "针对模仿学习中的演示轨迹噪声和时域不均匀性，提出信息标准化轨迹重采样（ISR）方法。ISR通过保持相邻点间信息距离近似相等来重采样轨迹，有效消除速度变化和停顿引入的非均匀性，显著提升下游策略学习效果。",
+      "llm_tldr": "针对模仿学习中的演示轨迹噪声和时域不均匀性，提出信息标准化轨迹重采样（ISR）方法。ISR通过保持相邻点间信息距离近似相等来重采样轨迹，有效消除速度变化和停顿引入的非均匀性，显著提升下游策略学习效果。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2606.20990v1",
+      "source": "arxiv",
+      "title": "Duet: Dual-Robot Understanding via Efficient Teaching",
+      "abstract": "Dual-robot collaboration enables tasks that exceed the reach and payload of a single robot, such as collaboratively transporting objects across environments and executing coordinated handovers. Data acquisition is the primary bottleneck for training these systems. To this end, we introduce DUET, a dual-robot learning framework for mobile manipulation. For efficient data collection, we create a unified dual-embodiment synchronized VR-based teleoperation system for in-domain heterogeneous robot data collection. We further develop a complementary tracking pipeline that records human-human coordination and collaborative mobile manipulation priors. To allow efficient learning, we introduce an Action Chunking Transformer based architecture that first pretrains collaborative policies on efficient human-human demonstrations, before finetuning them on a minimal set of real-robot teleoperation trajectories. We develop a benchmark of four collaborative tasks to evaluate our framework using a Unitree G1 humanoid and a Dexmate Vega1 mobile manipulator. The results demonstrate that harnessing human priors not only yields superior task performance compared to baselines trained only on robot data, but also reduces the total human effort required for data collection. Our human data collection pipeline achieves 5.4x acceleration on average from teleoperation, but we perform equally or better than robot-only data trained policies across all tasks. Our project page is available at https://zhaoy37.github.io/Duet/.",
+      "authors": [
+        "Yiqi Zhao",
+        "Ruohai Ge",
+        "Celina Shiyu Wang",
+        "Junjie Ye",
+        "Muchen Xu",
+        "Minhao Li",
+        "Sergey Zakharov",
+        "Basile Van Hoorick",
+        "Vitor Campagnolo Guizilini",
+        "Leonidas Guibas",
+        "Gaurav S. Sukhatme",
+        "Jyotirmoy V. Deshmukh",
+        "Yue Wang"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-06-18T23:47:27+00:00",
+      "link": "https://arxiv.org/pdf/2606.20990v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "dual-robot dataset collection framework",
+      "llm_evidence_cn": "双机器人数据采集框架",
+      "llm_evidence": "双机器人数据采集框架",
+      "canonical_evidence": "双机器人数据采集框架",
+      "llm_tldr_en": "DUET framework enables efficient dual-robot dataset collection via VR teleoperation and human-human tracking, then pretrains collaborative policies with an Action Chunking Transformer.",
+      "llm_tldr_cn": "双机器人学习面临数据采集瓶颈，DUET框架通过统一双体VR遥操作和人体协作跟踪管道高效收集异构数据，并利用动作分块Transformer预训练协作策略，为机器人数据集构建提供了有效范例。",
+      "llm_tldr": "双机器人学习面临数据采集瓶颈，DUET框架通过统一双体VR遥操作和人体协作跟踪管道高效收集异构数据，并利用动作分块Transformer预训练协作策略，为机器人数据集构建提供了有效范例。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2606.23126v1",
+      "source": "arxiv",
+      "title": "MambaADv2: Evolving Duality-enhanced State Space Model for Unsupervised Anomaly Detection",
+      "abstract": "While recent advancements in anomaly detection have demonstrated the efficacy of CNN- and Transformer-based approaches, these architectures face inherent limitations: CNNs struggle to capture long-range dependencies, whereas Transformers suffer from quadratic computational complexity. Consequently, Mamba-based architectures have attracted considerable attention, as they successfully combine superior long-range dependency modeling with linear computational complexity. By critically rethinking the structural evolution across the Mamba lineage 1-3 series, this paper proposes MambaADv2, a framework tailored for multi-class unsupervised anomaly detection. MambaADv2 comprises a pre-trained encoder and a Mamba-inspired decoder, equipped with Duality-enhanced State Space (DSS) modules across multiple scales. The proposed DSS module effectively models both global dependencies and local representations by integrating parallel-cascaded Hybrid State Space (HSS) blocks and frequency-enhanced convolution operations. The structure of the Hybrid State Space (HSS) block is tailored by following the SSD-based Mamba lineage and incorporating Mamba3-style position-aware state-space modeling, leveraging the dual computational paths of linear recurrence and parallel matrix formulation to model local continuity and global contextual comparison, thereby better serving the core anomaly detection objective of precisely reconstructing normal representations while magnifying anomalous deviations. Additionally, we propose a semantics-adaptive progressive scanning strategy that decays scanning complexity along the feature pyramid.",
+      "authors": [
+        "Xiaobin Hu",
+        "Haoyang He",
+        "Bo Yin",
+        "Yu He",
+        "Lei Xie",
+        "Jiangning Zhang",
+        "Yu-Gang Jiang",
+        "Shuicheng Yan"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV"
+      ],
+      "published": "2026-06-22T10:14:06+00:00",
+      "link": "https://arxiv.org/pdf/2606.23126v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "unsupervised anomaly detection framework",
+      "llm_evidence_cn": "无监督异常检测框架",
+      "llm_evidence": "无监督异常检测框架",
+      "canonical_evidence": "无监督异常检测框架",
+      "llm_tldr_en": "MambaADv2 proposes a Mamba-based decoder for multi-class unsupervised anomaly detection, achieving linear complexity and long-range dependency modeling, applicable to robot safety.",
+      "llm_tldr_cn": "当前的异常检测方法受限于CNN的长程依赖不足和Transformer的二次复杂度。本文提出MambaADv2，基于Mamba架构的编码器-解码器框架，用于多类无监督异常检测，兼具线性复杂度和长程建模能力。在图像异常检测基准上取得优异结果，其方法论可直接迁移至机器人时序信号异常检测。",
+      "llm_tldr": "当前的异常检测方法受限于CNN的长程依赖不足和Transformer的二次复杂度。本文提出MambaADv2，基于Mamba架构的编码器-解码器框架，用于多类无监督异常检测，兼具线性复杂度和长程建模能力。在图像异常检测基准上取得优异结果，其方法论可直接迁移至机器人时序信号异常检测。",
+      "llm_tags": [
+        "query:humanoid-ood"
+      ],
+      "matched_query_tag": "query:humanoid-ood",
+      "matched_query_text": "out-of-distribution detection for safe robot operation",
+      "matched_requirement_id": "req-11",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2606.21088v1",
+      "source": "arxiv",
+      "title": "MV-WAM: Manifold-Aware World Action Model with Value Augmentation",
+      "abstract": "Achieving robust and generalizable manipulation across diverse environments remains a fundamental challenge in embodied robotics. Recent world action models achieve strong in-domain performance, yet their gains do not extend proportionally to out-of-distribution scenarios. We attribute this to a structural mismatch between visual and action modalities, whose intrinsically heterogeneous manifolds cause joint optimization to disproportionately degrade action robustness under distribution shift. To address this, we propose MV-WAM, a novel end-to-end framework that jointly models visual prediction, action generation, and value estimation designed to effectively leverage video priors during both training and inference for enhanced action generalization. Key to this unification is a cross-modality causal mask that hierarchically grounds actions in predicted video frames and value function tokens in both modalities. To further narrow the generalization gap, MV-WAM adopts a manifold-aware optimization scheme that explicitly accounts for the structural heterogeneity across modalities. Finally, MV-WAM introduces a progress-value regulation mechanism that estimates task completion and detects misalignment between predicted frames and generated actions, enabling the policy to autonomously identify execution deviations and recover through value-guided rollback. On the RoboTwin simulation, MV-WAM achieves a 55.7% mean success rate on random scenarios without any randomized action supervision, outperforming the strongest baseline by 29.3%. MV-WAM achieves a 77.5% mean success rate across four real-world tasks of varying difficulty on a dual-arm robot. Our results demonstrate that manifold-aware cross-modal alignment is essential for robust policy generalization, offering a path toward deployable robotic manipulation.",
+      "authors": [
+        "Jintao Chen",
+        "Peidong Jia",
+        "Qingpo Wuwu",
+        "Jiaming Liu",
+        "Mengfei Du",
+        "Chun-Kai Fan",
+        "Xiaowei Chi",
+        "Hao Chen",
+        "Chengyu Bai",
+        "Zezhong Qian",
+        "Hao Wang",
+        "Jiajun Cao",
+        "Weishi Mi",
+        "Xiaozhu Ju",
+        "Jian Tang",
+        "Shanghang Zhang"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-06-19T04:35:18+00:00",
+      "link": "https://arxiv.org/pdf/2606.21088v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "addresses out-of-distribution scenarios for robust robot manipulation, relevant to OOD detection for safe operation",
+      "llm_evidence_cn": "关注分布外场景下机器人操作的鲁棒性，与安全操作的OOD检测相关",
+      "llm_evidence": "关注分布外场景下机器人操作的鲁棒性，与安全操作的OOD检测相关",
+      "canonical_evidence": "关注分布外场景下机器人操作的鲁棒性，与安全操作的OOD检测相关",
+      "llm_tldr_en": "MV-WAM improves action robustness under distribution shift by joint modeling of visual prediction, action generation, and value estimation with manifold-aware learning.",
+      "llm_tldr_cn": "现有世界动作模型在域内表现良好，但分布外场景下动作鲁棒性显著下降。MV-WAM提出流形感知的端到端框架，联合建模视觉预测、动作生成和价值估计，利用视频先验增强动作泛化。实验表明该方法在分布偏移下保持更稳健的动作性能，对机器人安全操作有重要意义。",
+      "llm_tldr": "现有世界动作模型在域内表现良好，但分布外场景下动作鲁棒性显著下降。MV-WAM提出流形感知的端到端框架，联合建模视觉预测、动作生成和价值估计，利用视频先验增强动作泛化。实验表明该方法在分布偏移下保持更稳健的动作性能，对机器人安全操作有重要意义。",
+      "llm_tags": [
+        "query:humanoid-ood"
+      ],
+      "matched_query_tag": "query:humanoid-ood",
+      "matched_query_text": "out-of-distribution detection for safe robot operation",
+      "matched_requirement_id": "req-11",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2606.21791v1",
+      "source": "arxiv",
+      "title": "Single-Event Upsets in 3D Gaussian Splatting Rendering: Bit-Level Criticality, Spatial Extent, and a Parallel Support Guard",
+      "abstract": "Three-dimensional Gaussian splatting is a standard real-time scene representation increasingly deployed on hardware exposed to transient faults, such as spaceborne processors and robotic edge devices where silent data corruption occurs. A trained model is a large array of floating-point parameters in GPU memory, where a single-event upset corresponds to a single flipped bit. This paper measures these effects and constructs a defense. A GPU-resident parallel fault-injection engine applies over 3.8 million controlled single-bit upsets across four scenes, six fields, all bit positions, and three numeric formats (fp32, fp16, bf16), using 5.3 GPU-hours. The effect is highly concentrated: most upsets leave the image perceptually unchanged due to high redundancy, but a small set of high-order bits principally the logarithmic scale's sign bit enlarge a single primitive to cover up to 75.7% of the frame. A closed-form perturbation bound derived from the IEEE-754 layout and pipeline activations predicts this per-bit ordering. This concentration motivates a support guard: a per-primitive clamp of each parameter to the coordinate box observed during training, costing 76 us per frame. Over 768,000 guarded upsets, the worst corruption footprint is restricted to 11.68% of the frame. We prove the guard leaves clean models unchanged and prevents frame-covering corruption. Under an accumulated dose of 20,000 simultaneous upsets, the unguarded renderer degrades to 10.6 dB, whereas the guarded renderer remains at 21.8 dB. The corruption footprint also dictates the number of tile/compositing nodes contaminated in distributed renderers, where the per-node guard contains it.",
+      "authors": [
+        "Faruk Alpay",
+        "Baris Basaran"
+      ],
+      "primary_category": "cs.GR",
+      "categories": [
+        "cs.GR",
+        "cs.DC"
+      ],
+      "published": "2026-06-19T22:54:25+00:00",
+      "link": "https://arxiv.org/pdf/2606.21791v1",
+      "tags": [
+        "keyword:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "fault injection methodology for robotic edge devices",
+      "llm_evidence_cn": "面向机器人边缘设备的故障注入方法",
+      "llm_evidence": "面向机器人边缘设备的故障注入方法",
+      "canonical_evidence": "面向机器人边缘设备的故障注入方法",
+      "llm_tldr_en": "This paper measures single-event upsets in 3D Gaussian splatting rendering on robotic edge devices using a GPU-resident fault-injection engine, analyzing bit-level criticality and proposing a defense.",
+      "llm_tldr_cn": "针对边缘机器人设备中3D高斯泼溅渲染的瞬态故障问题，本文使用GPU驻留并行故障注入引擎，跨越4个场景、6个字段、所有位位置和三种数值格式进行了超过380万次受控单比特翻转实验。发现大多数翻转对输出影响极小，但少数关键位可导致严重退化。基于此提出了并行支持守卫防御方法，为机器人边缘部署的可靠性分析提供了方法论借鉴。",
+      "llm_tldr": "针对边缘机器人设备中3D高斯泼溅渲染的瞬态故障问题，本文使用GPU驻留并行故障注入引擎，跨越4个场景、6个字段、所有位位置和三种数值格式进行了超过380万次受控单比特翻转实验。发现大多数翻转对输出影响极小，但少数关键位可导致严重退化。基于此提出了并行支持守卫防御方法，为机器人边缘部署的可靠性分析提供了方法论借鉴。",
+      "llm_tags": [
+        "query:humanoid-ood"
+      ],
+      "matched_query_tag": "query:humanoid-ood",
+      "matched_query_text": "fault injection simulation for humanoid robots in MuJoCo or similar environments",
+      "matched_requirement_id": "req-14",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    }
+  ]
+}

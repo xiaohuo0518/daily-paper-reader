@@ -1,0 +1,396 @@
+Title: Proceedings of
+
+URL Source: https://arxiv.org/pdf/2606.20748v1
+
+Published Time: Tue, 23 Jun 2026 00:06:24 GMT
+
+Number of Pages: 8
+
+Markdown Content:
+Author Preprint 
+
+Accepted for presentation at the ASME 2026 Manufacturing Science and Engineering Conference 
+
+Final conference version to appear in the official proceedings 
+
+# MSEC2026-174968 
+
+# TOWARD MACHINE RISK PERCEPTION: INTEGRATING TRUST CALIBRATION AND PRECURSOR-BASED RISK ESTIMATION FOR HUMANOID 
+
+He Wen 
+
+AI Safety Lab, Bailey College of Engineering & Technology, Indiana State University, 
+
+Terre Haute, IN 
+
+ABSTRACT 
+
+Humanoid robots are emerging as co-workers in smart manufacturing, yet their dynamic, human-like movements introduce safety risks that differ fundamentally from those of fixed or wheeled robots. Conventional safety paradigms based on reactive force or distance limits fail to capture the sequential, uncertain nature of humanoid failures. This study proposes a precursor-driven, trust-calibrated framework to enable proactive humanoid risk perception. Accident evolution is modeled through sequential precursor cues using a Logistic– Exponential (LE) formulation that couples logistic escalation from diverse precursors with exponential decay for temporal dissipation. Trust is defined as the inverse of the estimated accident probability, allowing humanoids to adapt behavior in real time, reducing aggressiveness when risk intensifies, and restoring confidence as stability returns. A multi-source dataset of 126 documented events and 241 precursors revealed twelve dominant accident modes, most evolving through overlapping cues within one second. A simulated case study (“fall-onto-human”) demonstrated how the LE–Trust coupling can trigger early intervention and prevent collapse. The results advance humanoid safety from static thresholds toward dynamic, evidence-based inference, establishing a foundation for risk-aware and trustworthy human–robot collaboration in Industry 5.0 environments. 
+
+Keywords: Humanoid; risk perception; precursor; trust; human–robot collaboration 
+
+1. INTRODUCTION 
+
+The rapid emergence of humanoid robots in industrial environments signals a paradigm shift in smart manufacturing [1]. Unlike conventional collaborative robots that operate within constrained kinematic envelopes, humanoids combine bipedal locomotion, whole-body dynamic control, and dexterous manipulation [2,3]. This morphology enables them to navigate human-designed workspaces, perform semi-structured tasks, and collaborate with workers in roles traditionally reserved for humans, such as part retrieval, bin holding, tool handover, and ergonomic load positioning [4]. As manufacturers seek greater flexibility, rapid reconfiguration, and labor augmentation, humanoids are becoming viable co-workers on assembly lines, logistics zones, and maintenance environments. 
+
+However, humanoid deployment also introduces afundamentally different risk landscape [5,6]. Traditional industrial robot safety frameworks assume rigid mechanical bases, deterministic motion profiles, and safeguarded work envelopes [7,8]. Collaborative robots (cobots) extend this paradigm by limiting speed and force, supporting compliant interaction, and incorporating human presence sensing [9,10]. Yet these protections are insufficient for humanoids. Their ability to walk, bend, regain balance, and perform fast momentum-driven recovery movements generates failure modes, such as slips, torso-rotation impacts, leg-swing collisions, and object drops, that have no equivalents in fixed-base systems [6,11]. Safety challenges are amplified by real-world uncertainty: imperfect perception, occlusions, human unpredictability, and system latency can produce rapid shifts from nominal behavior to unstable, high-energy motion [12]. 
+
+Current robotic safety methods predominantly rely on reactive constraints, including force limits, emergency stops, or predefined safety zones [7,9]. These mechanisms assume that hazards manifest abruptly and can be addressed by halting motion upon threshold violation. In contrast, human safety behavior is anticipatory; workers monitor subtle precursor cues such as balance shifts, hesitation, shaky grip, gaze diversion, posture changes, or environmental clutter to foresee danger and adjust behavior proactively [13–15]. To operate as safe industrial teammates, humanoids must similarly perceive weak signals, update internal confidence, and intervene before a hazardous contact, fall, or misjudgment materializes [16,17]. At the very least, they must not harm humans. This requires them to have a certain level of risk perception capability, which can be rule-based or data-driven, and even human empathy to strengthen mutual trust. 
+
+Therefore, two pressing frontier issues need to be addressed: machine risk perception and trust calibration [18–20]. In this work, machine risk perception refers to a system’s capability to infer the likelihood of hazardous outcomes from evolving precursor cues under uncertainty. Trust calibration denotes the dynamic adjustment of a machine’s internal confidence and behavior in response to perceived risk, avoiding both overconfidence and excessive conservatism. 
+
+Specifically, machine risk perception has traditionally been grounded in industrial robot safety standards (e.g., ISO 10218, ISO/TS 15066), which emphasize reactive safeguards such as force/velocity limits and speed-and-separation monitoring [21]. More recent human-robot collaboration (HRC) research moves toward proactive approaches, leveraging perception, human-motion forecasting, and probabilistic planning to anticipate contact rather than merely respond to threshold violations [22– 24]. Safety-critical control, chance-constrained planning, and predictive safety filters further formalize risk-aware autonomy under uncertainty [25,26], while the National Institute of Standards and Technology (NIST) guidance extends dynamic protective-distance computation for factory deployment. Human-factors studies underscore trust calibration as central to safe collaboration, highlighting the need to adjust behavior under uncertainty rather than maintain static assurance [27–29]. However, these advances predominantly concern fixed-base or wheeled platforms; humanoids introduce unique hazards, such as fall dynamics, balance recovery, grip instability, and occlusion-driven perception lapses, that require interpreting weak precursor cues and modulating internal confidence continuously. This gap motivates a precursor-driven, trust-calibrated safety framework tailored to humanoid behavior in shared workspaces. 
+
+Therefore, this paper introduces a precursor-driven, trust-calibrated framework that enables humanoids to perceive and anticipate emerging risks proactively. The framework models hazard evolution through sequential precursor cues, estimates accident probability via a Logistic–Exponential (LE) process, and dynamically adjusts internal trust as the inverse of risk. This trust-guided mechanism allows humanoids to modulate motion and interaction behaviors adaptively, promoting cautious operation under rising uncertainty and restoring confidence as stability returns. The main contributions are as follows: 
+
+i. Development of a unified accident–precursor taxonomy for humanoid collaboration in industrial settings. 
+
+ii. Formulation of a dynamic trust model reflecting machine confidence under perceptual, behavioral, and control uncertainty. 
+
+iii. Integration of a logistic–exponential probabilistic model to capture risk escalation and decay analogous to human vigilance. 
+
+iv. Demonstration of a case study showing how trust-modulated control can prevent near-miss incidents in shared workspaces. 
+
+By uniting principles from robotics, safety science, and human-factors research, this work establishes a foundation for humanoid safety grounded in anticipation, adaptive trust, and risk-aware reasoning, moving beyond static safeguards toward proactive, evidence-driven safety intelligence. 
+
+2. METHODOLOGY 
+
+The methodological framework consists of four interconnected steps that transform empirical observation into a quantitative, adaptive model of humanoid risk perception and trust (FIGURE 1). Each step builds logically upon the previous one, moving from qualitative evidence extraction to probabilistic inference and behavioral regulation. The detailed description of steps is presented in the following subsections. 
+
+FIGURE 1: RESEARCH FRAMEWORK 
+
+2.1 Step 1: Data collection 
+
+To construct a grounded evidence base, a multi-source data strategy was employed to capture real human-humanoid interaction risks. The data corpus comprised: 
+
+i. peer-reviewed robotics and safety literature from Web of Science, Google Scholar, and ArXiv; 
+
+ii. publicly available industrial safety reports and laboratory demonstration notes from manufacturer websites and other public sources; and 
+
+iii. systematic observation of humanoid operation videos from YouTube. 
+
+This triangulation ensured both external validity (coverage of formal and informal safety documentation) and ecological realism (actual humanoid field behavior). Especially, each video or report segment was annotated using a standardized template capturing task type, environment, human–robot spatial relationship, deviation characteristics (kinematic, perceptual, or human behavioral), precursor timing, and escalation sequence. Publicly available humanoid operation videos were used solely for qualitative precursor identification. To ensure credibility, videos were screened based on source reliability (e.g., manufacturer channels, research laboratories, and conference demonstrations), sufficient visual resolution and camera stability, clear visibility of humanoid motion and human proximity, and a well-defined task context. Edited, staged, or purely promotional content was excluded. These videos were not used for training or validating control models. 
+
+Coding followed an inductive qualitative approach with iterative refinement. Only negative deviations preceding ahazard state were classified as precursors. Each event was annotated from normal operation through precursor onset, escalation, and hazard manifestation. Inter-coder agreement (Cohen’s 𝜅𝜅 = 0.86 ) verified labeling consistency. 
+
+The outcome of Step 1 was a structured database comprising accident modes and precursor signatures, each temporally sequenced to support conditional inference in subsequent analysis. 
+
+2.2 Step 2: Accident–precursor association 
+
+In this step, statistical analysis was conducted to quantify the relationship between each accident mode and its dominant precursors. All coded events from Step 1 were aggregated to calculate the occurrence frequency of both accidents and precursors. Co-occurrence patterns were then examined to establish associations between specific precursor combinations and corresponding accident outcomes. 
+
+For each accident type, dominant precursors were identified based on their conditional probability of occurrence and relative frequency. These associations formed the foundation for subsequent probabilistic modeling, allowing the system to infer how precursor signals collectively contribute to different accident modes in human–humanoid collaboration. 
+
+2.3 Step 3: Probability estimation 
+
+This step applied the Logistic–Exponential framework to estimate the probability of accident occurrence as a function of precursor accumulation and recurrence over time [30]. The LE model integrates a logistic escalation for precursor diversity with an exponential saturation for precursor recurrence, enabling dynamic risk perception similar to human vigilance: 
+
+𝑃𝑃 (𝑡𝑡 ) = 1 − 𝑒𝑒 −𝑐𝑐 𝑞𝑞 
+
+1 + 𝑒𝑒 −𝑎𝑎 (𝑚𝑚−𝑏𝑏 ) , (1) 
+
+where 𝑚𝑚 is the number of distinct precursor types, 𝑞𝑞 is their frequency within a time window, and 𝑎𝑎 , 𝑏𝑏 , 𝑐𝑐 are calibration parameters. Specifically, the threshold parameter b represents the precursor diversity level at which accident probability escalates nonlinearly and is informed by observed accident cascades. The gain parameter a controls escalation steepness and is selected through sensitivity testing to balance responsiveness and numerical stability, while the decay parameter c captures the temporal dissipation of isolated or outdated precursor signals. The parameters are calibrated at the dataset level to demonstrate feasibility rather than universality; automated calibration and platform- or task-specific tuning are left for future work. 
+
+The logistic term captures the nonlinear growth of risk as diverse precursors co-occur, while the exponential term models the diminishing influence of isolated or outdated signals. Consequently, 𝑃𝑃 (𝑡𝑡 ) rises sharply when multiple precursors appear in succession and stabilizes as conditions normalize, providing a quantitative foundation for subsequent trust assessment and adaptive control. A case study will be conducted in Steps 3 and 4 to show the application. 
+
+2.4 Step 4: Dynamic trust assessment 
+
+Trust was defined as the inverse of the estimated accident probability, representing the humanoid’s confidence in maintaining safe operation: 
+
+𝑇𝑇 (𝑡𝑡 ) = 1 − 𝑃𝑃 (𝑡𝑡 ). (2) 
+
+As the predicted accident probability 𝑃𝑃 (𝑡𝑡 ) increases due to precursor accumulation, trust 𝑇𝑇 (𝑡𝑡 ) proportionally decreases, signaling reduced system reliability. Conversely, when precursor activity subsides and 𝑃𝑃 (𝑡𝑡 ) declines, trust gradually recovers. 
+
+This simple inverse relationship allows the humanoid to translate probabilistic risk perception directly into adaptive behavioral control, ensuring that higher perceived risk automatically triggers more cautious actions or safety overrides. In this work, conceptual trust denotes the machine’s internal confidence inferred from probabilistic risk estimation, whereas control-level trust refers to the operational use of this confidence as a modulation signal affecting motion aggressiveness, compliance, or safety overrides. Trust is thus treated as an internal state variable bridging risk inference and control adaptation, rather than a human subjective construct. 
+
+Lastly, the framework separates offline analysis from online inference. Offline components include data collection, event coding, taxonomy construction, and LE parameter calibration. Online components map live sensor streams to precursor classes and update accident probability and trust in real time. For example, inertial measurement units (IMUs) provide balance precursors, force/torque sensors capture manipulation precursors, and vision confidence reflects perceptual precursors. Aggregated precursor evidence modulates supervisory safety behaviors without replacing low-level control. 
+
+3. RESULTS 
+
+3.1 Data collection 
+
+A comprehensive multi-source data collection yielded an empirically grounded dataset describing how human-humanoid interaction risks emerge in industrial contexts. The final corpus comprised 126 documented events drawn from 48 peer-reviewed publications, 15 publicly released industrial demonstration reports, and 63 systematically coded online videos depicting humanoid activities such as walking, tool handover, co-carrying, and assembly assistance. Each source was examined for physical proximity between human and robot, observable deviations from nominal performance, and subsequent hazardous outcomes. 
+
+All events were independently labeled by two trained coders using the standardized precursor–accident template. One coder was the author, and the other was a professional data annotation contractor recruited through Appen, an established annotation platform, with prior experience in video-based labeling tasks. All annotations were cross-checked to ensure consistency and reliability. Training consisted of instruction using a standardized coding manual, pilot annotation on a shared subset of events, and iterative calibration discussions to resolve discrepancies prior to full annotation. 
+
+An agreement on precursor identification was reached, Cohen’s 𝜅𝜅 = 0.86 , confirming high consistency. Events covered nine industrial task categories (assembly, inspection, logistics, maintenance, fastening, handover, navigation, co-carrying, and balance recovery) and represented five leading humanoid platforms (e.g., Atlas, Digit, Apollo, HRP-5P, TALOS). This ensured ecological validity and diversity across mechanical architectures and control policies. 
+
+3.2 Accident and precursor 
+
+3.2.1 Accident modes 
+
+From the 126 recorded events, twelve recurrent accident modes were identified, as summarized in  Table 1 .
+
+Table 1: Accident Modes in Human–Humanoid Collaboration 
+
+Code  Accident mode  Frequency (n, %) 
+
+A1  Fall onto human  18 (14.3%) 
+
+A2  Arm/torso strike  15 (11.9%) 
+
+A3  Leg swing contact  10 (7.9%) 
+
+A4  Crush/pinch at handover  12 (9.5%) 
+
+A5  Dropped object/tool  11 (8.7%) 
+
+A6  Navigation conflict  9 (7.1%) 
+
+A7  Startle reaction  8 (6.3%) 
+
+A8  Perception-error motion  13 (10.3%) 
+
+A9  Control/power fault  7 (5.6%) 
+
+A10  Tool-related harm  9 (7.1%) 
+
+A11  Co-carry instability  8 (6.3%) 
+
+A12  Stop/restart mishap  6 (4.8%) 
+
+Total  - 126 (100%) 
+
+It shows that accident outcomes in human–humanoid collaboration are distributed across multiple modes rather than dominated by a single failure type. Fall- and impact-related events, including fall onto human (14.3%) and arm/torso strike (11.9%), are the most prevalent, reflecting risks associated with bipedal stability and whole-body motion. Manipulation- and perception-related incidents together account for a substantial fraction of cases, indicating that object handling and sensing uncertainty are critical contributors to hazardous behavior and motivating a precursor-based safety framework. These twelve modes reflect both classical robotic hazards (e.g., impact, crush, and pinch) and humanoid-specific dynamics (e.g., fall, leg swing, and co-carry instability) that arise from bipedal balance and human-like motion patterns. 
+
+3.2.2 Precursor classification 
+
+From the coded dataset, 241 precursor instances were identified across all recorded human-humanoid interaction events and categorized into six functional groups reflecting different failure origins: 
+
+i. Motion/Balance Precursors: sway amplitude increase, micro-slip, torso angular spike. 
+
+ii. Manipulation Precursors: grip micro-slip, force oscillation, tilt drift. 
+
+iii. Perceptual Precursors: occlusion, low vision-confidence, ID switching. 
+
+iv. Human Behavioral Precursors: rapid reach-in, gaze diversion, posture lowering. 
+
+v. Navigation Precursors: narrowing clearance, path intersection. 
+
+vi. System/Telemetry Precursors: torque saturation, latency spike, communication delay. 
+
+The six functional precursor groups serve as an interpretable abstraction linking raw sensor-level deviations to accident modes. By grouping precursors according to failure origin rather than platform-specific signals, the taxonomy supports modular 
+
+mapping between sensing, probabilistic inference, and trust-based control, enabling generalization across humanoid platforms and tasks. 
+
+Table 2  summarizes the accident–precursor taxonomy by grouping observed accident modes according to their dominant precursor classes. The six functional precursor groups serve as an interpretable abstraction linking raw sensor-level deviations to accident modes. By grouping precursors according to failure origin rather than platform-specific signals, the taxonomy supports modular mapping between sensing, probabilistic inference, and trust-based control, enabling generalization across humanoid platforms and tasks. 
+
+Table 2: Precursor Class and Associated Accident Mode 
+
+Precursor class  Accident modes 
+
+Motion/Balance  A1, A2, A11 
+
+Manipulation  A4, A5, A10, A11 
+
+Perceptual  A6, A8 
+
+Human behavioral  A7, A12 
+
+Navigation  A3, A6 
+
+System/Telemetry  A9, A12 
+
+Detailed statistics are shown in FIGURE 2. Specifically, motion/balance (29%) and manipulation (23%) precursors dominate, indicating that most humanoid risks arise from instability and grip errors rather than perception or control faults. Perceptual (18%) and human behavioral (15%) precursors contribute moderately, reflecting visual uncertainty and human inattention. Navigation (9%) and system/telemetry (6%) are less frequent but still critical for situational awareness. Overall, over half of all precursors originate from motion and manipulation deviations, underscoring their central role in humanoid accident evolution. 
+
+FIGURE 2: PRECURSOR DISTRIBUTION 
+
+Moreover, temporal analysis indicated that approximately 73% of accidents involved two or more overlapping precursors within a 0.5–1.5 s window, demonstrating that humanoid accidents typically evolve through sequential, compounding deviations rather than single instantaneous faults. This short temporal window highlights a crucial opportunity for early-warning detection and risk anticipation in humanoid control systems. 
+
+3.2.3 Accident-precursor association 
+
+To understand how precursors interact to produce different accident outcomes, typical causal cascades were identified and summarized in  Table 3 . Each cascade describes a chain of three dominant precursor signals that consistently precede a specific accident mode. There are undoubtedly more precursors, but the LE model indicates that accident probability becomes very high when three distinct precursors co-occur (approximately 0.8), suggesting that compound deviations rather than isolated faults dominate humanoid accident evolution. Therefore, this study only shows the case with a maximum of 3 predictors. 
+
+Table 3: Typical precursor cascades. 
+
+Code  Precursor 1  Precursor 2  Precursor 3 
+
+A1  Foot micro-slip  Torso angular spike 
+
+Center-of-mass lateral deviation 
+
+A2  Excessive arm velocity 
+
+Rapid torso recovery 
+
+Human proximity breach 
+
+A3  Swing-leg drift  Path overlap  Narrow shared space 
+
+A4  Timing mismatch 
+
+Grip oscillation 
+
+Handover occlusion 
+
+A5  Grip micro-slip  Wrist instability 
+
+Mass misestimation 
+
+A6  Path convergence 
+
+Visual occlusion 
+
+High approach speed 
+
+A7  Abrupt motion onset 
+
+Unexpected restart 
+
+Human inattentiveness 
+
+A8  Confidence collapse 
+
+Visual degradation 
+
+Limb/tool misclass. 
+
+A9  Torque saturation 
+
+Control latency spike  Actuator drift 
+
+A10  Tool-tip oscillation 
+
+Unsafe orientation 
+
+Loss of tool stability 
+
+A11  Uneven load sharing 
+
+Phase mismatch  Grip desync 
+
+A12  Delayed stop  Restart overshoot  Timing mismatch 
+
+These precursor cascades reveal that most humanoid accidents result from compound deviations in motion stability, perception, and coordination rather than isolated faults. Understanding these sequential dependencies provides aquantitative foundation for probabilistic risk modeling in the next step. 
+
+3.3 Probability and trust estimation with case study 
+
+A concise case study (A1: Fall onto human) was conducted to demonstrate how the LE model and dynamic trust assessment jointly enable adaptive humanoid safety behavior. The fall-onto-human mode represents one of the most critical humanoid safety risks, characterized by sudden instability, momentum transfer, and high injury potential. This scenario was simulated based on the observed precursor cascade: foot micro-slip → torso angular spike → center -of-mass (CoM) lateral deviation, which occurred within approximately 1.2 seconds in real operation videos. 
+
+At the initial time 𝑡𝑡 0 = 0.00 𝑠𝑠 , a micro-slip occurred at the support foot due to a minor surface irregularity. This triggered small perturbations in the torso angle as the humanoid attempted recovery. Within the next 0.48 s ( 𝑡𝑡 1 ), a torso angular spike (counter-rotation) emerged, followed by a CoM lateral deviation at 𝑡𝑡 2 = 1.12 𝑠𝑠 exceeding the stability margin; an instability pattern is frequently seen in bipedal robots like Atlas or Digit during rapid transitions. These sequential precursors, temporally proximate and kinematically coupled, are ideal for testing the LE model’s sensitivity to precursor accumulation and recurrence. 
+
+Using the calibrated parameters 𝑎𝑎 = 1.6 , 𝑏𝑏 = 2 , and 𝑐𝑐 =1.2 , the probability of accident occurrence was computed by Eq. (1). The results for each step are summarized in  Table 4 .
+
+Table 4: Results of Accident Probability of Fall onto Human. 
+
+Time  Precursor Active  𝒎𝒎  𝒒𝒒  𝑷𝑷 (𝒕𝒕 )
+
+𝑡𝑡 0 Foot micro-slip only  1 1 0.12 
+
+𝑡𝑡 1 + Torso angular spike  2 2 0.46 
+
+𝑡𝑡 2 + CoM lateral deviation  3 3 0.81 
+
+As shown in  Table 4 , the estimated accident probability increases nonlinearly as additional precursors accumulate within a short temporal window. When only a single precursor is present ( 𝑡𝑡 0 ), the probability remains low (0.12), indicating nominal stability. The introduction of a second independent precursor ( 𝑡𝑡 1)produces a sharp increase in estimated risk (0.46), reflecting escalation driven by dual-source instability. When a third precursor emerges ( 𝑡𝑡 2), the probability rises to a high-risk level (0.81), signaling imminent loss of stability. This progression illustrates how the proposed LE formulation captures rapid risk escalation resulting from compounded precursor evidence, consistent with observed humanoid fall dynamics. 
+
+The logistic term amplifies risk sharply when m > b = 2 ,reflecting nonlinear escalation from multiple independent cues. Meanwhile, the exponential term ( 1 − 𝑒𝑒 −𝑐𝑐 𝑞𝑞  ) saturates as recurrence intensifies, modeling how continuous imbalance sustains high perceived danger. 
+
+Trust is dynamically updated by Eq. (2), representing the humanoid’s real-time confidence in maintaining stability. Thus, 
+
+𝑇𝑇 (𝑡𝑡 0) = 0.88 , 𝑇𝑇 (𝑡𝑡 1) = 0.54 , 𝑇𝑇 (𝑡𝑡 2) = 0.19 . Once 𝑇𝑇 (𝑡𝑡 ) < 0.3 ,the humanoid’s controller engages safety protocols: 
+
+i. Step suppression: halt the next planned step to prevent further momentum transfer; 
+
+ii. Arm reconfiguration: extend arms outward for counter-torque stabilization; 
+
+iii. Compliance tuning: increase joint damping and foot contact stiffness; 
+
+iv. Emergency braking: initiate power-assist balance lock. 
+
+These trust-driven interventions successfully restored stability in the simulation, preventing full collapse and avoiding operator contact. The case study is a simulation-based demonstration of the proposed framework’s logic and interpretability. No experimental validation is claimed. The simulation illustrates how trust-driven safety protocols would be engaged when estimated risk exceeds critical levels, serving as a proof of concept rather than a validated controller. 
+
+Thus, the LE–Trust model coupling reproduces human-like vigilance and reflex: probability surges sigmoidally with precursor diversity, while trust drops inversely, prompting immediate caution. This mapping provides an intuitive and computationally efficient basis for humanoid risk perception. In practical deployment, such a model enables humanoids to self-modulate behavior before critical failure, detecting balance-related risks milliseconds before a fall, translating precursor awareness into graded confidence, and ensuring safety without relying solely on reactive shutdowns. 
+
+4. DISCUSSIONS 
+
+The results underscore the distinctive nature of humanoid risk dynamics, where accidents arise from compound, temporally correlated precursors rather than single-point failures. The identification of twelve accident modes and six precursor classes demonstrates that human-humanoid collaboration encompasses a broader and more sequential risk topology than conventional industrial robots. More than 70% of incidents involved overlapping precursors within a one-second interval, confirming that instability and human interaction hazards emerge through cascading deviations. This finding supports the hypothesis that proactive safety intelligence, rather than purely reactive safeguards, is essential for maintaining stability in bipedal, whole-body control systems. Some other reflections on the results are: 
+
+First, the LE framework successfully modeled the nonlinear growth and decay of accident probability as precursors accumulated or dissipated. The logistic term captured the rapid escalation in perceived risk once multiple precursors co-occurred, while the exponential component effectively represented the temporal decay of older, isolated deviations. This dual mechanism provides a compact yet expressive model of how humanoids can approximate human-like vigilance, reacting strongly to concurrent anomalies but gradually relaxing when conditions normalize. The Fall-onto-Human scenario demonstrated that when the precursor count exceeded the logistic threshold ( 𝑏𝑏 = 2 ), the probability rose sharply to 0.81, signaling an imminent accident. This behavior parallels empirical studies of human situational awareness, where risk perception rises steeply once multiple weak cues combine into a recognizable threat pattern. 
+
+Second, mapping trust inversely to probability provides a direct and interpretable mechanism for adaptive control. Trust decreased proportionally as precursors intensified, prompting automatic activation of stabilization strategies: step suppression, arm reconfiguration, and compliance tuning, without requiring pre-coded threshold rules. This approach transforms trust from a cognitive construct into a measurable control variable, linking psychological models of human reliance to robotic actuation. The inverse trust–probability coupling thus operationalizes the concept of appropriate reliance in machine systems: confidence is earned or lost dynamically through evidence of system stability and contextual uncertainty. Such calibration prevents both over-trust (continued operation under risk) and under-trust (premature halts), aligning humanoid decision-making with human expectations of situational prudence. 
+
+Moreover, the integration of precursor-based modeling and trust regulation extends beyond humanoid safety to broader artificial intelligence (AI) reliability and explainability frameworks. At first, the precursor taxonomy introduces astructured means of representing weak signals that precede failures, analogous to leading indicators in process safety. In addition, the LE model formalizes how uncertainty evolves through interaction history, bridging safety science with probabilistic learning. Furthermore, the trust inference process provides a behaviorally interpretable signal for supervisory systems, enabling hybrid human–AI coordination. In practice, embedding such probabilistic trust estimators into humanoid control architectures could support risk-aware autonomy, allowing robots to self-moderate aggressiveness, speed, or proximity in real time. 
+
+Last, traditional collaborative robot safety standards (e.g., ISO 10218, ISO/TS 15066) focus on deterministic limits, such as speed, force, and separation distances. While effective for constrained manipulators, these metrics cannot capture the continuous, multi-dimensional uncertainties inherent in humanoid motion. The proposed framework advances beyond these static paradigms by treating safety as a dynamic inference problem. Rather than reacting to threshold violations, the humanoid infers hazard likelihood from ongoing sensors and behavioral signals. Compared with recent reinforcement-learning-based safety filters or chance-constrained planners, the LE–Trust model offers greater interpretability and computational efficiency, making it suitable for deployment on embedded controllers where low-latency risk updates are critical. 
+
+Despite its explanatory strength, this study has several limitations. This study should be interpreted as a conceptual and methodological foundation for humanoid risk perception rather than a deployment-ready safety system. The dataset relies partly on secondary sources and video-based observation, and the LE model assumes precursor independence and a one-dimensional trust representation for interpretability. Before safety-critical deployment, the framework requires validation through hardware-in-the-loop experiments or high-fidelity digital twins, along with extensions to correlated precursors and multi-dimensional trust modeling. Since the present study focuses on conceptual formulation and illustrative demonstration through a representative case study, comprehensive quantitative evaluation, including multi-scenario testing, comparison with baseline safety methods, and performance metrics, will be pursued in future work using full control-stack integration. 
+
+In addition, the LE formulation is intentionally heuristic rather than derived from first-principles control theory. It is designed as an interpretable, low-complexity abstraction of precursor accumulation and dissipation, informed by empirical accident patterns and human risk perception literature. The objective is probabilistic risk inference and trust modulation, not closed-loop stability guarantees or optimal control. A formal global sensitivity analysis is beyond the scope of this study; however, a one-at-a-time parameter perturbation (±20% for 𝑎𝑎 
+
+and 𝑐𝑐 , and 𝑏𝑏 ± 1 ) preserved the qualitative behavior of the model, low risk under isolated precursors, sharp escalation under two to three co-occurring precursors, and recovery with decay, indicating robustness of the main conclusions. Future work will conduct systematic global sensitivity analysis and data-driven parameter learning using digital-twin and hardware-in-the-loop experiments to support deployment in safety-critical humanoid systems. 
+
+Ultimately, this work situates humanoid safety within the larger discourse of machine risk perception and trustworthy autonomy. By bridging human-factors theory with probabilistic modeling, it demonstrates that safety can emerge not only from physical compliance but from cognitive emulation, robots that interpret precursors, assess confidence, and act cautiously under uncertainty. Such a paradigm aligns with the vision of Industry 5.0, emphasizing collaboration, resilience, and human-centric design. The proposed precursor–trust coupling thus represents a foundational step toward humanoids capable of reasoning about their own reliability and maintaining mutual trust in shared workspaces. 
+
+5. CONCLUSIONS 
+
+This study proposed a precursor-driven, trust-calibrated framework for proactive humanoid safety in smart manufacturing. By linking sequential precursor cues to probabilistic accident estimation through an LE model, humanoids gain the ability to perceive and anticipate emerging risks rather than react to threshold violations. Trust, defined as the inverse of accident probability, enables dynamic adjustment of control behaviors, reducing aggressiveness when risk rises and restoring confidence as conditions stabilize. 
+
+The results demonstrate that humanoid accidents typically evolve from compounding precursors within seconds, underscoring the need for continuous, evidence-based risk perception. The LE–Trust coupling provides a simple yet effective mechanism to translate uncertainty into adaptive caution, bridging human-factors theory and real-time control. 
+
+This framework shifts humanoid safety from static limits to dynamic inference, advancing toward machines that reason about risk and act with human-like prudence. Future work will validate the model on full-scale platforms and integrate data-driven precursor weighting for real-time deployment in collaborative manufacturing environments. 
+
+ACKNOWLEDGEMENTS 
+
+The author gratefully acknowledges the financial support provided by the Bailey Faculty Fellowship for this research. 
+
+REFERENCES 
+
+[1] Malik, A. A., Masood, T., and Brem, A., 2024, “Intelligent Humanoid Robots in Manufacturing,” Companion of the 2024 ACM/IEEE International Conference on Human-Robot Interaction, Association for Computing Machinery, New York, NY, USA, pp. 20–27. https://doi.org/10.1145/3610978.3640765. 
+
+[2] Sheng, Q., Zhou, Z., Li, J., Mi, X., Xiang, P., Chen, Z., Xu, H., Jia, S., Wu, X., Cui, Y., Ye, S., Yu, J., Du, Y., Zhai, S., Xu, K., Yang, Y., Lou, Z., Song, Z., Yin, Z., Sun, Y., Xiong, R., Zou, J., and Yang, H., 2025, “A Comprehensive Review of Humanoid Robots,” SmartBot, 1(1), p. e12008. https://doi.org/10.1002/smb2.12008. 
+
+[3] Radosavovic, I., Xiao, T., Zhang, B., Darrell, T., Malik, J., and Sreenath, K., 2024, “Real-World Humanoid Locomotion with Reinforcement Learning,” Sci. Robot., 9(89), p. eadi9579. https://doi.org/10.1126/scirobotics.adi9579. 
+
+[4] Duan, H., Yang, Y., Li, D., and Wang, P., 2024, “Human–Robot Object Handover: Recent Progress and Future Direction,” Biomimetic Intelligence and Robotics, 4(1), p. 100145. https://doi.org/10.1016/J.BIROB.2024.100145. 
+
+[5] Adesiji, A. D., Ibitoye, S. E., Mahamood, R. M., Olayemi, O. A., Omoniyi, P. O., Jen, T.-C., and Akinlabi, E. T., 2025, “Safety Considerations in Deployment of Robotic Systems – A Systematic Review,” J. Field Robot., n/a(n/a). https://doi.org/10.1002/rob.70022. 
+
+[6] Giallanza, A., La Scalia, G., Micale, R., and La Fata, C. M., 2024, “Occupational Health and Safety Issues in Human-Robot Collaboration: State of the Art and Open Challenges,” Saf. Sci., 169, p. 106313. https://doi.org/10.1016/J.SSCI.2023.106313. 
+
+[7] Haddadin, Sami, Haddadin, Simon, Khoury, Augusto, Rokahr, Tim, Parusel, Sven, Burgkart, Rainer, Bicchi, Antonio, and Albu-Schäffer, Alin, 2012, “On Making Robots Understand Safety: Embedding Injury Knowledge into Control,” Int. J. Rob. Res., 31(13), pp. 1578–1602. https://doi.org/10.1177/0278364912462256. 
+
+[8] Park, J.-J., and Song, J.-B., 2010, “Safe Joint Mechanism Using Inclined Link with Springs for Collision Safety and Positioning Accuracy of a Robot Arm,” 2010 IEEE International Conference on Robotics and Automation, pp. 813– 818. https://doi.org/10.1109/ROBOT.2010.5509492. 
+
+[9] Scholz, C., Cao, H.-L., Imrith, E., Roshandel, N., Firouzipouyaei, H., Burkiewicz, A., Amighi, M., Menet, S., Sisavath, D. W., Paolillo, A., Rottenberg, X., Gerets, P., Cheyns, D., Dahlem, M., Ocket, I., Genoe, J., Philips, K., Stoffelen, B., den Bosch, J., Latre, S., and Vanderborght, B., 2025, “Sensor-Enabled Safety Systems for Human–Robot Collaboration: A Review,” IEEE Sens. J., 25(1), pp. 65–88. https://doi.org/10.1109/JSEN.2024.3496905. 
+
+[10] Patil, S., Vasu, V., and Srinadh, K. V. S., 2023, “Advances and Perspectives in Collaborative Robotics: AReview of Key Technologies and Emerging Trends,” Discover Mechanical Engineering, 2(1), p. 13. https://doi.org/10.1007/s44245-023-00021-8. 
+
+[11] Kotha, S. S., Akter, N., Abhi, S. H., Das, S. K., Islam, M. R., Ali, M. F., Ahamed, M. H., Islam, M. M., Sarker, S. K., Badal, M. F. R., Das, P., Tasneem, Z., and Hasan, M. M., 2024, “Next Generation Legged Robot Locomotion: A Review on Control Techniques,” Heliyon, 10(18), p. e37237. https://doi.org/10.1016/J.HELIYON.2024.E37237. 
+
+[12] Dhanda, M., Rogers, B. A., Hall, S., Dekoninck, E., and Dhokia, V., 2025, “Reviewing Human-Robot Collaboration in Manufacturing: Opportunities and Challenges in the Context of Industry 5.0,” Robot. Comput. Integr. Manuf., 93, p. 102937. https://doi.org/10.1016/J.RCIM.2024.102937. 
+
+[13] Slovic, Paul, and Peters, Ellen, 2006, “Risk Perception and Affect,” Curr. Dir. Psychol. Sci., 15(6), pp. 322–325. https://doi.org/10.1111/j.1467-8721.2006.00461.x. 
+
+[14] Siegrist, M., and Árvai, J., 2020, “Risk Perception: Reflections on 40 Years of Research,” Risk Analysis, 40(S1), pp. 2191–2206. https://doi.org/10.1111/risa.13599. 
+
+[15] Slovic, P., 1987, “Perception of Risk,” Science (1979)., 236(4799), pp. 280–285. https://doi.org/10.1126/science.3563507. 
+
+[16] Hjorth, S., and Chrysostomou, D., 2022, “Human– Robot Collaboration in Industrial Environments: A Literature Review on Non-Destructive Disassembly,” Robot. Comput. Integr. Manuf., 73, p. 102208. https://doi.org/10.1016/J.RCIM.2021.102208. 
+
+[17] Semeraro, F., Griffiths, A., and Cangelosi, A., 2023, “Human–Robot Collaboration and Machine Learning: ASystematic Review of Recent Research,” Robot. Comput. Integr. Manuf., 79, p. 102432. https://doi.org/10.1016/J.RCIM.2022.102432. 
+
+[18] Wen, H., Sajid, Z., and Arunthavanathan, R., 2025, “Risk Perception in Complex Systems: A Comparative Analysis of Process Control and Autonomous Vehicle Failures,” AI, 6(8). https://doi.org/10.3390/ai6080164. 
+
+[19] Wischnewski, M., Krämer, N., and Müller, E., 2023, “Measuring and Understanding Trust Calibrations for Automated Systems: A Survey of the State-Of-The-Art and Future Directions,” Proceedings of the 2023 CHI Conference on Human Factors in Computing Systems, Association for Computing Machinery, New York, NY, USA. https://doi.org/10.1145/3544548.3581197. 
+
+[20] Lee, John D, and See, Katrina A, 2004, “Trust in Automation: Designing for Appropriate Reliance,” Hum. Factors, 46(1), pp. 50–80. https://doi.org/10.1518/hfes.46.1.50_30392. 
+
+[21] Chemweno, P., Pintelon, L., and Decre, W., 2020, “Orienting Safety Assurance with Outcomes of Hazard Analysis and Risk Assessment: A Review of the ISO 15066 Standard for Collaborative Robot Systems,” Saf. Sci., 129, p. 104832. https://doi.org/10.1016/J.SSCI.2020.104832. 
+
+[22] Dhanda, M., Rogers, B. A., Hall, S., Dekoninck, E., and Dhokia, V., 2025, “Reviewing Human-Robot Collaboration in Manufacturing: Opportunities and Challenges in the Context of Industry 5.0,” Robot. Comput. Integr. Manuf., 93, p. 102937. https://doi.org/10.1016/J.RCIM.2024.102937. 
+
+[23] Xia, G., Ghrairi, Z., Heuermann, A., and Thoben, K. D., 2025, “Enhancing Sustainability of Human-Robot Collaboration in Industry 5.0: Context- and Interaction-Aware Human Motion Prediction for Proactive Robot Control,” J. Manuf. Syst., 82, pp. 376–388. https://doi.org/10.1016/J.JMSY.2025.06.022. 
+
+[24] Semeraro, F., Griffiths, A., and Cangelosi, A., 2023, “Human–Robot Collaboration and Machine Learning: ASystematic Review of Recent Research,” Robot. Comput. Integr. Manuf., 79, p. 102432. https://doi.org/10.1016/J.RCIM.2022.102432. 
+
+[25] Duan, K., and Zou, Z., 2025, “Safety-Constrained Deep Reinforcement Learning Control for Human–Robot Collaboration in Construction,” Autom. Constr., 174, p. 106130. https://doi.org/10.1016/J.AUTCON.2025.106130. 
+
+[26] Merckaert, K., Convens, B., Nicotra, M. M., and Vanderborght, B., 2024, “Real-Time Constraint-Based Planning and Control of Robotic Manipulators for Safe Human–Robot Collaboration,” Robot. Comput. Integr. Manuf., 87, p. 102711. https://doi.org/10.1016/J.RCIM.2023.102711. 
+
+[27] Ramchurn, S. D., Stein, S., and Jennings, N. R., 2021, “Trustworthy Human-AI Partnerships,” iScience, 24(8), p. 102891. https://doi.org/10.1016/J.ISCI.2021.102891. 
+
+[28] Lee, J. D., and Moray, N., 1994, “Trust, Self-Confidence, and Operators’ Adaptation to Automation,” Int. J. Hum.-Comput. Stud., 40(1), pp. 153–184. https://doi.org/10.1006/ijhc.1994.1007. 
+
+[29] Falcone, R., and Castelfranchi, C., 2004, “Trust Dynamics: How Trust Is Influenced by Direct Experiences and by Trust Itself,” Proceedings of the Third International Joint Conference on Autonomous Agents and Multiagent Systems, 2004. AAMAS 2004., pp. 740–747. 
+
+[30] Wen, H., 2026, “A New Perspective on Precursors and Rare Events from a Systematic Review,” J. Loss Prev. Process Ind., 99, p. 105785. https://doi.org/10.1016/j.jlp.2025.105785.
