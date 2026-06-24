@@ -1,0 +1,427 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-06-24T21:52:40.741076+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 2,
+    "deep_divecandidates": 2,
+    "deep_cap": 7,
+    "deep_selected": 2,
+    "quick_candidates": 8,
+    "quick_skim_target": 12,
+    "quick_selected": 8
+  },
+  "deep_dive": [
+    {
+      "id": "2606.24173v1",
+      "source": "arxiv",
+      "title": "Lightweight Transformer Models for On-Device Fault Detection: A Benchmark Study on Resource-Constrained Deployment",
+      "abstract": "On-device fault detection enables real-time diagnostics without cloud dependency, but deploying machine learning models on resource-constrained hardware demands careful tradeoffs between accuracy, latency, and model size. We present a benchmark comparing traditional ML methods (Random Forest, XGBoost, SVM, Logistic Regression) against lightweight transformer architectures (DistilBERT, TinyBERT-6L, TinyBERT-4L, MobileBERT) for binary fault detection across three public datasets: NASA C-MAPSS turbofan degradation, SECOM semiconductor manufacturing, and UCI AI4I 2020 predictive maintenance. We evaluate classification performance (F1-score, AUC), model size, and CPU inference latency, and further assess INT8 dynamic quantization and a two-stage adaptive inference pipeline. Our results reveal that on well-separated sensor data (C-MAPSS), lightweight transformers match traditional ML at 87.8% F1 but at 100x the model size and 9000x the latency. TinyBERT-4L emerges as the most deployment-friendly transformer at 55 MB and 18 ms CPU latency. INT8 quantization reduces size by 25% while preserving 86.9% F1. Our adaptive pipeline, routing 97.9% of predictions through a quantized triage model and only 2.1% to a larger expert, achieves 87.6% F1 at 19.5 ms average latency. On severely imbalanced datasets (SECOM, UCI-PM), both traditional and transformer methods struggle significantly, highlighting fundamental limitations of current approaches for extreme class imbalance in fault detection. All code is publicly available.",
+      "authors": [
+        "Disha Patel"
+      ],
+      "primary_category": "cs.LG",
+      "categories": [
+        "cs.LG",
+        "cs.AI"
+      ],
+      "published": "2026-06-23T05:54:33+00:00",
+      "link": "https://arxiv.org/pdf/2606.24173v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "benchmarks lightweight transformer models for on-device fault detection on resource-constrained hardware; directly relevant to edge deployment for humanoid robots",
+      "llm_evidence_cn": "在资源受限硬件上对设备端故障检测的轻量级Transformer模型进行基准测试；与人类机器人边缘部署直接相关",
+      "llm_evidence": "在资源受限硬件上对设备端故障检测的轻量级Transformer模型进行基准测试；与人类机器人边缘部署直接相关",
+      "canonical_evidence": "在资源受限硬件上对设备端故障检测的轻量级Transformer模型进行基准测试；与人类机器人边缘部署直接相关",
+      "llm_tldr_en": "Benchmarks lightweight transformers (DistilBERT, TinyBERT, MobileBERT) against traditional ML for fault detection on resource-constrained hardware, evaluating accuracy, latency, and model size with INT8 quantization.",
+      "llm_tldr_cn": "针对资源受限硬件上的设备端故障检测，本文对轻量级Transformer模型（DistilBERT、TinyBERT、MobileBERT）与传统机器学习方法进行了基准比较。在NASA C-MAPSS、SECOM和UCI AI4I数据集上，评估了F1分数、AUC、模型大小和CPU推理延迟，并进一步测试了INT8动态量化效果。结果表明，轻量级Transformer在保持竞争力的同时，适合边缘部署，为人类机器人实时故障检测的模型选择提供了参考。",
+      "llm_tldr": "针对资源受限硬件上的设备端故障检测，本文对轻量级Transformer模型（DistilBERT、TinyBERT、MobileBERT）与传统机器学习方法进行了基准比较。在NASA C-MAPSS、SECOM和UCI AI4I数据集上，评估了F1分数、AUC、模型大小和CPU推理延迟，并进一步测试了INT8动态量化效果。结果表明，轻量级Transformer在保持竞争力的同时，适合边缘部署，为人类机器人实时故障检测的模型选择提供了参考。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "edge deployment for humanoid robots",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2606.24350v1",
+      "source": "arxiv",
+      "title": "SlipSense: Multimodal Sensing for Online Slip Detection in Legged Robots",
+      "abstract": "Legged robots rely on accurate ground interaction awareness to traverse variable terrains, such as slippery surfaces. Existing slip detection methods often rely on kinematics and proprioception, which lack the sensitivity to detect early-stage slips that occur prior to catastrophic instability. Thus, this paper presents SlipSense, a novel framework for online force-based slip detection using a custom lightweight sensorized foot for quadrupeds to detect slip. The framework integrates a multimodal sensor design with a LSTM-based model to infer ground reaction forces and detect slip-indicative anomalies during locomotion. The proposed framework is deployed on a Unitree Go1 quadruped to demonstrate blind online slip detection over a slippery terrain. Our method detects early-stage slips down to an average displacement of 24.1 +/-6.4mm with an overall accuracy of 85.9%. This represents a 3.3-fold finer detection resolution and a 24% relative accuracy improvement over a standard kinematic baseline that uses foot velocity inferred through state estimation. The work in this paper serves as a foundation for force-aware gait adaptation in legged robotic locomotion, allowing future controllers to estimate terrain friction and adjust constraints, thus improving the overall stability of the system.",
+      "authors": [
+        "Iris Szu-Yao Liu",
+        "Chien Chern Cheah",
+        "Meng Yee Michael Chuah"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-06-23T09:40:36+00:00",
+      "link": "https://arxiv.org/pdf/2606.24350v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "deploys LSTM-based anomaly detection on Unitree Go1 quadruped for slip detection",
+      "llm_evidence_cn": "在宇树Go1四足机器人上部署基于LSTM的异常检测用于滑移检测",
+      "llm_evidence": "在宇树Go1四足机器人上部署基于LSTM的异常检测用于滑移检测",
+      "canonical_evidence": "在宇树Go1四足机器人上部署基于LSTM的异常检测用于滑移检测",
+      "llm_tldr_en": "Presents SlipSense, an LSTM-based framework for online slip detection using force sensing on a Unitree Go1 quadruped, demonstrating real-time anomaly detection on an edge robot.",
+      "llm_tldr_cn": "本文提出SlipSense框架，通过定制轻量化传感足部集成多模态传感器和LSTM模型，在宇树Go1四足机器人上实现基于力的在线滑移检测。该方法能在盲态下检测滑移异常，展示了边缘机器人上的实时异常检测能力。",
+      "llm_tldr": "本文提出SlipSense框架，通过定制轻量化传感足部集成多模态传感器和LSTM模型，在宇树Go1四足机器人上实现基于力的在线滑移检测。该方法能在盲态下检测滑移异常，展示了边缘机器人上的实时异常检测能力。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "edge deployment of Unitree robots research",
+      "matched_requirement_id": "req-8",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "quick_skim": [
+    {
+      "id": "2606.24450v1",
+      "source": "arxiv",
+      "title": "NoContactNoWorries: Estimating Contact through Vision and Proprioception for In-Hand Dexterous Manipulation",
+      "abstract": "Perceiving physical contact is fundamental to dexterous manipulation. While robots often rely on dedicated hardware tactile sensors, humans exhibit a remarkable ability to infer contact by integrating visual information with an innate sense of their body's pose and movement. Inspired by this embodied perceptual skill, we investigate whether a robot can learn to infer contact from vision, an approach that also offers a scalable alternative to tactile hardware specifically for binary contact estimation, which faces practical challenges in cost, fragility, and integration. We present NoContactNoWorries, a transformer-based multimodal framework that fuses RGB-D vision with the robot's proprioception to infer binary contact states as a pseudo-tactile signal for hand-object interactions. We validate by training a single contact prediction model on multiple objects and show that the inferred contact signal supports downstream reinforcement learning agents for in-hand object reorientation, generalizing to novel objects. Experiments in both simulation and on a real-world robot validate our approach, highlighting the feasibility of inferring contact from vision and proprioception. Project Page: https://soham2560.github.io/no-contact-no-worries/",
+      "authors": [
+        "Soham Patil",
+        "Avirup Das",
+        "Sourabh Bhosale",
+        "Spandan Roy"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.AI"
+      ],
+      "published": "2026-06-23T11:36:46+00:00",
+      "link": "https://arxiv.org/pdf/2606.24450v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "uses vision and proprioception for contact estimation; proprioceptive signals similar to those used in humanoid fault diagnosis",
+      "llm_evidence_cn": "使用视觉和本体感受估计接触；本体感受信号与人类机器人故障诊断所用类似",
+      "llm_evidence": "使用视觉和本体感受估计接触；本体感受信号与人类机器人故障诊断所用类似",
+      "canonical_evidence": "使用视觉和本体感受估计接触；本体感受信号与人类机器人故障诊断所用类似",
+      "llm_tldr_en": "NoContactNoWorries uses a transformer-based multimodal framework fusing RGB-D vision and robot proprioception to infer binary contact, enabling contact estimation without dedicated tactile sensors.",
+      "llm_tldr_cn": "针对机器人操作中物理接触感知依赖专用触觉传感器的问题，本文提出基于Transformer的多模态框架，融合RGB-D视觉与本体感受信号实现二值接触推断。该方法模仿人类整合视觉与自身姿态的能力，在无需触觉硬件条件下准确估计接触状态。虽然任务为接触估计而非故障诊断，但其本体感受信号处理和融合技术可直接迁移至人类机器人故障诊断场景。",
+      "llm_tldr": "针对机器人操作中物理接触感知依赖专用触觉传感器的问题，本文提出基于Transformer的多模态框架，融合RGB-D视觉与本体感受信号实现二值接触推断。该方法模仿人类整合视觉与自身姿态的能力，在无需触觉硬件条件下准确估计接触状态。虽然任务为接触估计而非故障诊断，但其本体感受信号处理和融合技术可直接迁移至人类机器人故障诊断场景。",
+      "llm_tags": [
+        "query:humanoid-ood"
+      ],
+      "matched_query_tag": "query:humanoid-ood",
+      "matched_query_text": "humanoid robot fault diagnosis using proprioceptive signals",
+      "matched_requirement_id": "req-9",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2606.20031v1",
+      "source": "arxiv",
+      "title": "A Neuromorphic Reinforcement Learning Framework for Efficient Pathfinding in Robotic Mobile Fulfillment Systems",
+      "abstract": "Dynamic environmental changes, confined workspaces, and stringent real-time constraints make pathfinding in Robotic Mobile Fulfillment Systems (RMFS) a challenging problem for conventional search- and rule-based methods, which typically suffer from high computational complexity and long decision latency. While reinforcement learning (RL) has emerged as a powerful alternative, deploying learned policies with extreme energy efficiency on resource-constrained hardware remains an open challenge. We present SDQN-RMFS, an end-to-end framework that achieves high-fidelity deployment of an RL-trained policy from a full-precision artificial neural network (ANN) through to a neuromorphic chip. By computing only when triggered by sparse events, this framework unlocks ultra-low-power RMFS pathfinding. Our full-stack pipeline operates as follows: an ANN policy is first efficiently trained via a collision-allowing strategy to densify informative trajectories, and then converted into a spiking neural network (SNN) via a hard-label knowledge distillation approach. This effectively addresses the output distribution mismatch, preserving policy capability across the ANN-to-SNN pipeline while substantially reducing inference latency. Hardware experiments demonstrate up to 11,281$\\times$ energy savings and a nearly two-fold reduction in latency compared to a high-performance GPU baseline, while maintaining decision quality on par with the original trained policy. These results establish physical neuromorphic inference as a practical and energy-sustainable pathway for large-scale RMFS operations.",
+      "authors": [
+        "Junzhe Xu",
+        "Zecui Zeng",
+        "Lusong Li",
+        "Yuetong Fang",
+        "Renjing Xu"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.AI"
+      ],
+      "published": "2026-06-18T10:04:28+00:00",
+      "link": "https://arxiv.org/pdf/2606.20031v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "edge deployment of RL on neuromorphic hardware",
+      "llm_evidence_cn": "强化学习策略在神经形态芯片上的边缘部署",
+      "llm_evidence": "强化学习策略在神经形态芯片上的边缘部署",
+      "canonical_evidence": "强化学习策略在神经形态芯片上的边缘部署",
+      "llm_tldr_en": "Proposes a neuromorphic framework for deploying RL policies on energy-efficient hardware, relevant to edge deployment for robotics.",
+      "llm_tldr_cn": "该论文针对仓储机器人路径规划问题，提出SDQN-RMFS框架，将强化学习策略从全精度ANN部署到神经形态芯片，实现高效能边缘计算。虽然面向仓储机器人，其边缘部署方法论对需求4（人形机器人边缘部署）具有借鉴意义，但未涉及人形机器人本体。",
+      "llm_tldr": "该论文针对仓储机器人路径规划问题，提出SDQN-RMFS框架，将强化学习策略从全精度ANN部署到神经形态芯片，实现高效能边缘计算。虽然面向仓储机器人，其边缘部署方法论对需求4（人形机器人边缘部署）具有借鉴意义，但未涉及人形机器人本体。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "edge deployment for humanoid robots",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2606.24466v1",
+      "source": "arxiv",
+      "title": "FT-WBC: Learning Fault-Tolerant Whole-Body Control for Legged Loco-Manipulation",
+      "abstract": "Legged manipulators combine the mobility of legged platforms with the manipulation capability of robotic arms. However, arm-induced Center-of-Mass shifts and dynamic disturbances make the system more prone to instability under actuator failures, potentially leading to falls, task failures, or safety risks. Existing fault-tolerant control methods mainly focus on locomotion alone, leaving the coupled problem of whole-body stability and arm reachability in fault-tolerant loco-manipulation largely unaddressed. To bridge this gap, we propose FT-WBC, a fault-tolerant loco-manipulation framework for robust whole-body control of legged manipulators under actuator failures. FT-WBC adopts a decoupled upper- and lower-body policy architecture and introduces two key modules: a Fault Estimator (FE) and a Posture Adaptation Module (PAM). The FE predicts faulty joints from lower-body proprioceptive histories, while the PAM uses this fault information to adapt the base posture plan generated by the arm policy, converting potentially unstable posture requests into safe and executable base posture commands. Through this fault-aware posture adaptation mechanism, FT-WBC synthesizes compensatory gaits under actuator failures and preserves as much arm workspace as possible while maintaining whole-body stability. Simulation and real-world experiments show that FT-WBC significantly improves survival rate and workspace under weakening or locked failures, and transfers zero-shot to a real legged manipulator in the real world.",
+      "authors": [
+        "Yudong Zhong",
+        "Pengfei Mai",
+        "Sikai Guo",
+        "Jiahang Cao",
+        "Zhihai Bi",
+        "Qiuyue Liu",
+        "Ziyan Feng",
+        "Jinni Zhou",
+        "Jun Ma"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-06-23T11:58:45+00:00",
+      "link": "https://arxiv.org/pdf/2606.24466v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "fault-tolerant whole-body control for legged manipulators under actuator failures",
+      "llm_evidence_cn": "腿部运动操作器在致动器故障下的故障容忍全身控制",
+      "llm_evidence": "腿部运动操作器在致动器故障下的故障容忍全身控制",
+      "canonical_evidence": "腿部运动操作器在致动器故障下的故障容忍全身控制",
+      "llm_tldr_en": "FT-WBC proposes a fault-tolerant whole-body control framework for legged manipulators handling actuator failures, relevant to fault diagnosis and detection.",
+      "llm_tldr_cn": "FT-WBC针对腿部运动操作器在致动器故障下容易失稳的问题，提出了一种故障容忍全身控制框架。该框架采用上下半身解耦的策略架构，通过在线检测故障并调整控制分配，实现了在部分致动器失效时仍能保持全身稳定和操作可达性。仿真实验验证了其在多种故障场景下的鲁棒性，为人形机器人等腿式系统的故障诊断和容错控制提供了有效方法。",
+      "llm_tldr": "FT-WBC针对腿部运动操作器在致动器故障下容易失稳的问题，提出了一种故障容忍全身控制框架。该框架采用上下半身解耦的策略架构，通过在线检测故障并调整控制分配，实现了在部分致动器失效时仍能保持全身稳定和操作可达性。仿真实验验证了其在多种故障场景下的鲁棒性，为人形机器人等腿式系统的故障诊断和容错控制提供了有效方法。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "fault diagnosis for humanoid robots",
+      "matched_requirement_id": "req-3",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2606.20031v2",
+      "source": "arxiv",
+      "title": "A Neuromorphic Reinforcement Learning Framework for Efficient Pathfinding in Robotic Mobile Fulfillment Systems",
+      "abstract": "Dynamic environmental changes, confined workspaces, and stringent real-time constraints make pathfinding in Robotic Mobile Fulfillment Systems (RMFS) a challenging problem for conventional search- and rule-based methods, which typically suffer from high computational complexity and long decision latency. While reinforcement learning (RL) has emerged as a powerful alternative, deploying learned policies with extreme energy efficiency on resource-constrained hardware remains an open challenge. We present SDQN-RMFS, an end-to-end framework that achieves high-fidelity deployment of an RL-trained policy from a full-precision artificial neural network (ANN) through to a neuromorphic chip. By computing only when triggered by sparse events, this framework unlocks ultra-low-power RMFS pathfinding. Our full-stack pipeline operates as follows: an ANN policy is first efficiently trained via a collision-allowing strategy to densify informative trajectories, and then converted into a spiking neural network (SNN) via a hard-label knowledge distillation approach. This effectively addresses the output distribution mismatch, preserving policy capability across the ANN-to-SNN pipeline while substantially reducing inference latency. Hardware experiments demonstrate up to 11,281$\\times$ energy savings and a nearly two-fold reduction in latency compared to a high-performance GPU baseline, while maintaining decision quality on par with the original trained policy. These results establish physical neuromorphic inference as a practical and energy-sustainable pathway for large-scale RMFS operations.",
+      "authors": [
+        "Junzhe Xu",
+        "Zecui Zeng",
+        "Lusong Li",
+        "Yuetong Fang",
+        "Renjing Xu"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.AI"
+      ],
+      "published": "2026-06-18T10:04:28+00:00",
+      "link": "https://arxiv.org/pdf/2606.20031v2",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "focuses on deploying RL policy to neuromorphic chip for energy efficiency, relevant to edge deployment for robots",
+      "llm_evidence_cn": "专注于将强化学习策略部署到神经形态芯片以实现高能效，与机器人边缘部署相关",
+      "llm_evidence": "专注于将强化学习策略部署到神经形态芯片以实现高能效，与机器人边缘部署相关",
+      "canonical_evidence": "专注于将强化学习策略部署到神经形态芯片以实现高能效，与机器人边缘部署相关",
+      "llm_tldr_en": "SDQN-RMFS is an end-to-end framework that deploys a pathfinding RL policy from a full-precision ANN onto a neuromorphic chip, achieving extreme energy efficiency for resource-constrained robotic systems.",
+      "llm_tldr_cn": "在移动机器人系统中，强化学习策略部署到资源受限硬件面临能效挑战。本文提出SDQN-RMFS框架，将全精度人工神经网络策略通过端到端流程部署到神经形态芯片，仅在触发时计算，显著降低能耗。该方法展示了在边缘硬件上高效部署机器人学习策略的可行途径。",
+      "llm_tldr": "在移动机器人系统中，强化学习策略部署到资源受限硬件面临能效挑战。本文提出SDQN-RMFS框架，将全精度人工神经网络策略通过端到端流程部署到神经形态芯片，仅在触发时计算，显著降低能耗。该方法展示了在边缘硬件上高效部署机器人学习策略的可行途径。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "edge deployment for humanoid robots",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2606.21669v1",
+      "source": "arxiv",
+      "title": "Online Learning of Robust Legged Odometry with Minimal Exteroceptive Supervision",
+      "abstract": "Robust locomotion and navigation for legged robots relies heavily on dependable odometry. Traditional multi-sensor fusion for such state estimation requires meticulous sensor calibration and platform-specific kinematic modeling, which complicates deployment. Industrially packaged exteroceptive sensors can provide accurate motion tracking but remain vulnerable to perceptually degraded conditions. We thus develop a plug-and-play, robust legged odometry system that eliminates the need for explicit exteroceptive-to-proprioceptive calibration or system kinematic modeling. Our approach leverages established exteroceptive motion pipelines as a continuous supervisory signal to train an online learned velocity neural network directly from proprioceptive data. An Invariant EKF (InEKF) is then used to fuse the learned proprioceptive or exteroceptive velocity (if any) and IMU data. When exteroception fails due to environmental degradation, the system seamlessly falls back to using the learned proprioceptive model, yielding a resilient legged odometry that readily adapts to new hardware. We demonstrate the platform-agnostic, easily deployable nature of our approach on different quadruped platforms, showcasing promising results in maintaining robust motion estimation across challenging scenarios.",
+      "authors": [
+        "Abhijeet M. Kulkarni",
+        "Yuze Du",
+        "Guoquan Huang"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-06-19T18:20:55+00:00",
+      "link": "https://arxiv.org/pdf/2606.21669v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "online learning of leg odometry from proprioceptive signals with minimal exteroceptive supervision",
+      "llm_evidence_cn": "利用最小外部传感器监督从本体感知信号在线学习腿部里程计",
+      "llm_evidence": "利用最小外部传感器监督从本体感知信号在线学习腿部里程计",
+      "canonical_evidence": "利用最小外部传感器监督从本体感知信号在线学习腿部里程计",
+      "llm_tldr_en": "Develops a plug-and-play robust legged odometry system that learns online from proprioceptive signals using minimal exteroceptive supervision, enabling reliable state estimation without calibration.",
+      "llm_tldr_cn": "针对四足机器人里程计依赖多传感器标定和平台建模的问题，提出即插即用的鲁棒里程计系统。利用外部运动管道作为连续监督信号，在线训练仅基于本体感知的速度神经网络，无需显式的内外传感器标定。该方法在退化环境下仍保持鲁棒，为基于本体感知的异常检测提供了可靠的里程计基础。",
+      "llm_tldr": "针对四足机器人里程计依赖多传感器标定和平台建模的问题，提出即插即用的鲁棒里程计系统。利用外部运动管道作为连续监督信号，在线训练仅基于本体感知的速度神经网络，无需显式的内外传感器标定。该方法在退化环境下仍保持鲁棒，为基于本体感知的异常检测提供了可靠的里程计基础。",
+      "llm_tags": [
+        "query:humanoid-ood"
+      ],
+      "matched_query_tag": "query:humanoid-ood",
+      "matched_query_text": "Anomaly detection in humanoid robot using proprioceptive signals",
+      "matched_requirement_id": "req-15",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2606.23085v1",
+      "source": "arxiv",
+      "title": "Foresight: Failure Detection for Long-Horizon Robotic Manipulation with Action-Conditioned World Model Latents",
+      "abstract": "Long-horizon tasks are common in real-world robotic deployments, yet failure detection for such tasks remains underexplored. Detecting failures in long-horizon robotic tasks is particularly challenging because failure onset is often ambiguous and dense temporal annotations are typically unavailable. We present Foresight, a failure detection framework that monitors manipulation trajectories using latent representations from an action-conditioned world model. Foresight is trained using only final task-level success or failure labels. By leveraging predictive world-model embeddings, our method provides a unified framework for failure detection across different policies. We further use functional conformal prediction (FCP) to calibrate detection thresholds adaptively. We evaluate Foresight with state-of-the-art vision-language-action policies in simulation on LIBERO-Long, ManiSkill-Long, and BEHAVIOR-1K, compare it against state-of-the-artfailure detection methods, and validate it on real robots with three long-horizon tasks on a ReactorX-200 arm and one task on a Franka arm. Our results suggest that action-conditioned world-model embeddings provide a scalable representation for reliable failure monitoring in long-horizon manipulation.",
+      "authors": [
+        "Haoran Zhang",
+        "Yifu Lu",
+        "Boyang Wang",
+        "Xuhui Kang",
+        "Yen-Ling Kuo",
+        "Zezhou Cheng",
+        "Mengdi Wang",
+        "Odest Chadwicke Jenkins"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-06-22T09:32:28+00:00",
+      "link": "https://arxiv.org/pdf/2606.23085v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "failure detection for robotic manipulation using world model latents",
+      "llm_evidence_cn": "基于世界模型潜特征的机器人操作失败检测",
+      "llm_evidence": "基于世界模型潜特征的机器人操作失败检测",
+      "canonical_evidence": "基于世界模型潜特征的机器人操作失败检测",
+      "llm_tldr_en": "Foresight detects failures in long-horizon robot manipulation using action-conditioned world model latents, trained with only final success/failure labels.",
+      "llm_tldr_cn": "该论文提出Foresight框架，利用动作条件世界模型的潜特征检测长时程机器人操作中的失败。仅需最终任务成功/失败标签训练，无需密集时序标注。方法统一适用于不同策略，但实验主要在操作领域，未专门针对人形机器人或本体感受信号。",
+      "llm_tldr": "该论文提出Foresight框架，利用动作条件世界模型的潜特征检测长时程机器人操作中的失败。仅需最终任务成功/失败标签训练，无需密集时序标注。方法统一适用于不同策略，但实验主要在操作领域，未专门针对人形机器人或本体感受信号。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "fault detection in humanoid robots",
+      "matched_requirement_id": "req-6",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2606.23754v1",
+      "source": "arxiv",
+      "title": "Verifiable Foundation Models for Robot Safety",
+      "abstract": "Deploying foundation models for robot control raises a central challenge: the expressive power that enables rich, multimodal perception also makes these models opaque and difficult to analyze formally, rendering them intractable for existing verification tools. In this paper, we present FEARL (Foundation-Enabled Assured Robot Learning), a framework that addresses this tension through a modular architectural decomposition. FEARL separates the policy into a large Controller (C) responsible for high-dimensional perception and task reasoning, and a small Safety module (S) that receives low-dimensional observations from dedicated safety sensors together with a bounded context embedding from C and produces the final action. Since many robot safety requirements, such as collision avoidance and workspace boundary constraints, can be expressed over these safety sensor observations, formal verification can be applied to S rather than to the full foundation-model backbone. This makes formal analysis tractable with existing tools while preserving the Controller's expressive power for task reasoning. To show that the decomposed policy remains capable of solving diverse tasks, we evaluate FEARL on three simulated robotic domains using multiple Controller backbones and training procedures, including pretrained off-the-shelf vision-language-action models. We further transfer the learned policy from one of our simulated tasks to a physical robot, suggesting that the low-dimensional safety interface supports practical sim-to-real transfer.",
+      "authors": [
+        "Davide Corsi",
+        "Kyungmin Kim",
+        "Roy Fox"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.LG"
+      ],
+      "published": "2026-06-22T03:10:51+00:00",
+      "link": "https://arxiv.org/pdf/2606.23754v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "addresses robot safety via modular decomposition with a safety module using low-dimensional observations, akin to OOD detection for safe operation",
+      "llm_evidence_cn": "通过模块化分解和安全模块（使用低维观测）解决机器人安全性，类似于安全操作的OOD检测",
+      "llm_evidence": "通过模块化分解和安全模块（使用低维观测）解决机器人安全性，类似于安全操作的OOD检测",
+      "canonical_evidence": "通过模块化分解和安全模块（使用低维观测）解决机器人安全性，类似于安全操作的OOD检测",
+      "llm_tldr_en": "FEARL separates the robot policy into a large controller and a small safety module, enabling formal verification for safety properties while leveraging rich perception, relevant to out-of-distribution detection for safe robot operation.",
+      "llm_tldr_cn": "大模型机器人控制难以形式化验证，安全性无法保证。本文提出FEARL框架，将策略分解为感知任务控制器和专用安全模块；安全模块接收低维传感器观测和控制器上下文嵌入，输出最终动作。该架构使安全需求（如避碰）可被形式化验证，从而在保持大模型能力的同时确保安全操作边界。",
+      "llm_tldr": "大模型机器人控制难以形式化验证，安全性无法保证。本文提出FEARL框架，将策略分解为感知任务控制器和专用安全模块；安全模块接收低维传感器观测和控制器上下文嵌入，输出最终动作。该架构使安全需求（如避碰）可被形式化验证，从而在保持大模型能力的同时确保安全操作边界。",
+      "llm_tags": [
+        "query:humanoid-ood"
+      ],
+      "matched_query_tag": "query:humanoid-ood",
+      "matched_query_text": "out-of-distribution detection for safe robot operation",
+      "matched_requirement_id": "req-11",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2606.24049v1",
+      "source": "arxiv",
+      "title": "SPACE: Enabling Learning from Cross-Robot Data Toward Generalist Policies",
+      "abstract": "In robot learning, scaling training datasets across diverse embodiments and environments has become a dominant paradigm for learning generalizable robot policies. These policies are commonly trained via behavior cloning to imitate actions from pre-collected demonstrations. However, since robot actions are tied to the dynamics of the data collection robot, different robots may require different actions to achieve the same motion. This discrepancy hinders both policy training and deployment across diverse robots. To address this, we propose using Cartesian state delta as a universal action representation across robots, and introduce State Prediction and Adaptive Command Execution (SPACE) framework. SPACE handles robot dynamics variation at three levels: across different embodiments, across hardware units of the same embodiment, and within a single robot during operation. It consists of two components: (i) a Cartesian state delta policy that predicts geometric end-effector displacement, and (ii) Action Adapter, which converts the predicted Cartesian state delta into robot-specific control commands. Experiments show that SPACE substantially outperforms policies that directly predict control commands when learning from data collected across different embodiments and across hardware units of the same embodiment. SPACE also remains robust under dynamics shifts at deployment, including changes in control frequency, object weight, and controller gains. The project page is available at http://haeone.site/space-website/.",
+      "authors": [
+        "Haeone Lee",
+        "Byeongguk Jeon",
+        "Suchae Jeong",
+        "Jian Kim",
+        "Kimin Lee"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-06-23T01:32:40+00:00",
+      "link": "https://arxiv.org/pdf/2606.24049v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "cross-robot dataset representation for generalist policies",
+      "llm_evidence_cn": "跨机器人数据集表示用于通用策略学习",
+      "llm_evidence": "跨机器人数据集表示用于通用策略学习",
+      "canonical_evidence": "跨机器人数据集表示用于通用策略学习",
+      "llm_tldr_en": "Proposes Cartesian state delta as universal action representation to enable learning from cross-robot datasets, relevant to dataset construction for robotics.",
+      "llm_tldr_cn": "该论文针对跨机器人数据难以共享的问题，提出使用笛卡尔状态增量作为通用动作表示，并构建SPACE框架处理机器人动力学差异。通过行为克隆从异构机器人数据集中学习通用策略。该方法直接服务于机器人数据集构建与利用，虽面向策略学习，其数据表示思想对数据集构建有参考价值。",
+      "llm_tldr": "该论文针对跨机器人数据难以共享的问题，提出使用笛卡尔状态增量作为通用动作表示，并构建SPACE框架处理机器人动力学差异。通过行为克隆从异构机器人数据集中学习通用策略。该方法直接服务于机器人数据集构建与利用，虽面向策略学习，其数据表示思想对数据集构建有参考价值。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    }
+  ]
+}
