@@ -1,0 +1,187 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-06-25T22:19:31.702469+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 2,
+    "deep_divecandidates": 2,
+    "deep_cap": 7,
+    "deep_selected": 2,
+    "quick_candidates": 2,
+    "quick_skim_target": 12,
+    "quick_selected": 2
+  },
+  "deep_dive": [
+    {
+      "id": "2606.25591v1",
+      "source": "arxiv",
+      "title": "WOLF-VLA: Whole-Body Humanoid Optimal Locomotion Framework for Vision-Language-Action Learning",
+      "abstract": "Vision-Language-Action (VLA) models have recently demonstrated strong generalization in robotic manipulation, yet their applicability to whole-body, contact-rich humanoid locomotion remains severely underexplored due to data scarcity, the absence of dynamically consistent demonstrations, and the difficulty of encoding optimality and safety in learning-based pipelines. This work introduces a unified framework WOLF-VLA that integrates whole-body optimal-control (OC) motion synthesis with large-scale multi-modal dataset to train VLAs capable of generating humanoid locomotion policies directly from natural-language instructions. We construct a comprehensive dataset of dynamically feasible humanoid trajectories across six locomotion-related task families, each parameterized by environmental variations, object colors, placements, and visual distractors. We train a VLA model using the collected joint trajectories, ego-centric visual observations and natural language instruction, yielding a policy that exhibits strong reasoning and robustness to initial-condition variability, and competitive performance across several tasks and environment settings. A systematic ablation study demonstrates the impact of each modality on the model performance. The full dataset, model checkpoints, and benchmarking simulation suite will be openly released, establishing a reproducible dynamically consistent benchmark for whole-body humanoid locomotion rich VLA control and enabling future research in scalable transfer of instruction-driven locomotion policies.",
+      "authors": [
+        "Melya Boukheddimi",
+        "Omar Adjali",
+        "Daniel Sontag",
+        "Frank Kirchner"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-06-24T08:59:59+00:00",
+      "link": "https://arxiv.org/pdf/2606.25591v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "constructs comprehensive dataset of humanoid locomotion trajectories for VLA training",
+      "llm_evidence_cn": "构建大规模人形机器人运动轨迹数据集用于VLA训练",
+      "llm_evidence": "构建大规模人形机器人运动轨迹数据集用于VLA训练",
+      "canonical_evidence": "构建大规模人形机器人运动轨迹数据集用于VLA训练",
+      "llm_tldr_en": "WOLF-VLA integrates whole-body optimal-control with large-scale multi-modal dataset to train VLAs for humanoid locomotion from natural language.",
+      "llm_tldr_cn": "人形机器人运动学习面临数据稀缺和动态一致性缺失。本文提出WOLF-VLA框架，通过最优控制合成动态可行的运动轨迹，构建大规模多模态数据集，并训练视觉-语言-动作模型直接根据自然语言指令生成运动策略。实验表明该方法能够实现多种运动模式，且数据集的构建为后续人形机器人研究提供了基础。",
+      "llm_tldr": "人形机器人运动学习面临数据稀缺和动态一致性缺失。本文提出WOLF-VLA框架，通过最优控制合成动态可行的运动轨迹，构建大规模多模态数据集，并训练视觉-语言-动作模型直接根据自然语言指令生成运动策略。实验表明该方法能够实现多种运动模式，且数据集的构建为后续人形机器人研究提供了基础。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "humanoid robot dataset construction",
+      "matched_requirement_id": "req-2",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2606.22998v1",
+      "source": "arxiv",
+      "title": "TEXEDO : Test Time Scaling for Controller-aware Language-conditioned Humanoid Motion Generation",
+      "abstract": "Text-conditioned motion generation is a promising interface for programming humanoid robots, yet current generators are often trained on human motion datasets retargeted to robot morphologies. Although such data provides rich semantic and kinematic priors, it fails to capture the nuances of whole-body tracking controllers, including balance, contact dynamics, actuation limits, and controller-specific failure modes. As a result, generated motions can be semantically plausible but difficult or impossible for the robot to execute. We introduce TEXEDO, a test-time scaling framework for humanoid motion generation that improves motion quality without requiring a stronger underlying generator. Given a text prompt, TEXEDO samples multiple candidate motions from a pretrained text-conditioned generator and selects the best motion that is both executable and task-aligned. The reward model combines a dynamic feasibility verifier, distilled from whole-body tracking rollouts to predict physical executability, with a semantic alignment verifier that measures text-motion alignment in a learned co-embedding space. Our pipeline treats dynamic feasibility as a hard constraint and semantic alignment as the selection objective within the feasible set. Through large-scale simulation studies and real-world deployment on a Unitree G1 humanoid robot, we show that TEXEDO consistently improves both tracking fidelity and text alignment. These results demonstrate that grounded verification is an effective path toward deployable language-guided humanoid motion generation. Project website: https://jianuocao.github.io/TEXEDO/",
+      "authors": [
+        "Jianuo Cao",
+        "Yuxin Chen",
+        "Yuzhen Song",
+        "Masayoshi Tomizuka",
+        "Chenran Li",
+        "Thomas Tian"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-06-22T08:14:35+00:00",
+      "link": "https://arxiv.org/pdf/2606.22998v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "controller-aware humanoid motion generation addressing failure modes",
+      "llm_evidence_cn": "考虑控制器的人形运动生成，处理故障模式",
+      "llm_evidence": "考虑控制器的人形运动生成，处理故障模式",
+      "canonical_evidence": "考虑控制器的人形运动生成，处理故障模式",
+      "llm_tldr_en": "Proposes test-time scaling for humanoid motion generation that accounts for controller-specific failure modes, improving executability.",
+      "llm_tldr_cn": "该论文提出TEXEDO，一种测试时缩放框架，用于生成考虑人形机器人控制器特点的运动。它通过采样多种运动并利用控制器反馈评估可执行性，避免因忽略平衡、接触动力学和执行极限而导致的失效模式。实验表明，该方法在不增加生成器复杂度的情况下显著提高了运动的物理可行性，对故障分析和安全运动生成有重要价值。",
+      "llm_tldr": "该论文提出TEXEDO，一种测试时缩放框架，用于生成考虑人形机器人控制器特点的运动。它通过采样多种运动并利用控制器反馈评估可执行性，避免因忽略平衡、接触动力学和执行极限而导致的失效模式。实验表明，该方法在不增加生成器复杂度的情况下显著提高了运动的物理可行性，对故障分析和安全运动生成有重要价值。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "fault diagnosis for humanoid robots",
+      "matched_requirement_id": "req-3",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "quick_skim": [
+    {
+      "id": "2606.25965v1",
+      "source": "arxiv",
+      "title": "Mixture-of-Experts RL for Fault-Tolerant Legged Locomotion",
+      "abstract": "Legged robots deployed in planetary exploration and other remote environments must maintain reliable locomotion despite actuator failures and challenging terrain conditions. Although reinforcement learning has achieved strong results in legged locomotion, monolithic policies can struggle to efficiently represent the diverse control strategies required to compensate for different fault conditions. In this work, we propose a fault-aware modular control architecture that explicitly leverages fault-diagnosis information to activate specialized control experts associated with distinct actuator failure modes. Experimental results show that explicit fault-conditioned modular policies consistently outperform monolithic policies of comparable size, achieving higher locomotion performance across failure scenarios. Moreover, the proposed modular architecture retains competitive performance even under significantly reduced network capacity, highlighting its suitability for compute-constrained robotic platforms, such as those typically employed in space applications. The code associated with this work is available at: https://github.com/iit-DLSLab/fault-locomotion-isaaclab.",
+      "authors": [
+        "Giulio Turrisi",
+        "Ozan Pali",
+        "Luca Oneto",
+        "Claudio Semini"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-06-24T15:35:30+00:00",
+      "link": "https://arxiv.org/pdf/2606.25965v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "fault-aware modular control using fault-diagnosis information for legged locomotion",
+      "llm_evidence_cn": "利用故障诊断信息的故障感知模块化控制用于腿部运动",
+      "llm_evidence": "利用故障诊断信息的故障感知模块化控制用于腿部运动",
+      "canonical_evidence": "利用故障诊断信息的故障感知模块化控制用于腿部运动",
+      "llm_tldr_en": "Proposes mixture-of-experts RL with fault-conditioned modules for fault-tolerant legged locomotion, consistently outperforming monolithic policies.",
+      "llm_tldr_cn": "腿部机器人在执行器故障下需要多种控制策略。本文提出基于故障诊断信息的模块化强化学习架构，为不同故障模式训练专用专家策略，并通过故障信号激活。实验表明模块化策略在运动性能和鲁棒性上显著优于同尺寸单一策略。该方法展示了故障诊断信息在机器人控制中的价值。",
+      "llm_tldr": "腿部机器人在执行器故障下需要多种控制策略。本文提出基于故障诊断信息的模块化强化学习架构，为不同故障模式训练专用专家策略，并通过故障信号激活。实验表明模块化策略在运动性能和鲁棒性上显著优于同尺寸单一策略。该方法展示了故障诊断信息在机器人控制中的价值。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "fault detection in humanoid robots",
+      "matched_requirement_id": "req-6",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2606.18610v1",
+      "source": "arxiv",
+      "title": "SC3-Eval: Evaluating Robot Foundation Models via Self-Consistent Video Generation",
+      "abstract": "Evaluating generalist robot manipulation policies in the real world is expensive, slow, and difficult to scale. Action-conditioned video world models offer a scalable alternative by simulating policy rollouts. Autoregressive rollouts accumulate compounding errors, observations across multiple camera views must remain mutually consistent, and the evaluator must generalize to policies whose behaviors lie outside the training distribution. We address these challenges with SC3-Eval, a self-consistent video generation recipe that adapts a pre-trained video foundation model into an accurate policy evaluator by enforcing three complementary forms of consistency. First, forward-inverse dynamics consistency jointly trains the model to predict frames from actions and to recover actions from frames, anchoring generated rollouts to a physically plausible action manifold and counteracting the drift a forward-only model cannot penalize. Second, cross-view consistency trains the model to inpaint each camera view from the other, keeping the multi-camera observation coherent over long rollouts without any explicit memory mechanism. Third, test-time consistency reuses the inverse dynamics mode at inference as a per-action-chunk uncertainty signal that terminates rollouts whose generated frames drift away from the requested actions. We also demonstrate SC3-Eval rollouts reproduce the failure modes that policies exhibit in real-world rollouts, supporting fine-grained diagnostic comparison rather than aggregate ranking alone. Across seven real-world vision-language-action policies, SC3-Eval attains a closed-loop Pearson correlation of $0.929$ and MMRV of $0.119$, outperforming three strong prior video-model-based baselines, and generalizes to new tasks.",
+      "authors": [
+        "Wei-Cheng Tseng",
+        "Gashon Hussein",
+        "Yuzhu Dong",
+        "Allen Z. Ren",
+        "Lucy X. Shi",
+        "XuDong Wang",
+        "Sergey Levine",
+        "Zhaoshuo Li",
+        "Jinwei Gu",
+        "Florian Shkurti",
+        "Ming-Yu Liu",
+        "Quan Vuong"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.CV"
+      ],
+      "published": "2026-06-17T02:15:46+00:00",
+      "link": "https://arxiv.org/pdf/2606.18610v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "OOD evaluation of robot policies via video generation",
+      "llm_evidence_cn": "通过视频生成进行机器人策略的分布外评估",
+      "llm_evidence": "通过视频生成进行机器人策略的分布外评估",
+      "canonical_evidence": "通过视频生成进行机器人策略的分布外评估",
+      "llm_tldr_en": "SC3-Eval uses self-consistent video generation to evaluate robot policies under OOD, enforcing forward-inverse dynamics consistency.",
+      "llm_tldr_cn": "本文针对真实世界评估昂贵且难以规模化的问题，提出基于自一致视频生成的机器人基础模型评估方法SC3-Eval，通过前向-逆动态一致性等三种约束，使视频模型能准确评估分布外策略的 rollout，为机器人安全中的OOD检测提供了替代方案。",
+      "llm_tldr": "本文针对真实世界评估昂贵且难以规模化的问题，提出基于自一致视频生成的机器人基础模型评估方法SC3-Eval，通过前向-逆动态一致性等三种约束，使视频模型能准确评估分布外策略的 rollout，为机器人安全中的OOD检测提供了替代方案。",
+      "llm_tags": [
+        "query:humanoid-ood"
+      ],
+      "matched_query_tag": "query:humanoid-ood",
+      "matched_query_text": "out-of-distribution detection for safe robot operation",
+      "matched_requirement_id": "req-11",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    }
+  ]
+}
