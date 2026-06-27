@@ -1,0 +1,1679 @@
+Title: OctoSense: Self-Supervised Learning for Multimodal Robot Perception
+
+URL Source: https://arxiv.org/pdf/2606.27317v1
+
+Published Time: Fri, 26 Jun 2026 01:26:29 GMT
+
+Number of Pages: 48
+
+Markdown Content:
+# OctoSense: Self-Supervised Learning for Multimodal Robot Perception 
+
+Anthony Bisulco 1, Jeremy Wang 1, Kostas Daniilidis 1, Randall Balestriero 2, Pratik Chaudhari 11General, Robotics, Automation, Sensing and Perception (GRASP) Laboratory, University of Pennsylvania  
+
+> 2
+
+Computer Science Department, Brown University 
+
+{abisulco,jerewang,kostas,pratikac }@upenn.edu, rbalestr@brown.edu 
+
+Abstract: We present OctoSense, an open-source sensor platform with stereo RGB and event cameras, LiDAR, a thermal camera, an inertial measurement unit, RTK-corrected global positioning system, and proprioception (CAN bus data from a car, and joint angles for a quadruped robot). The eponymous OctoSense dataset contains 59 hours of time-synchronized driving data across different types of environments at different times of the day, including situations with highly degraded sensors. We demonstrate multi-modal self-supervised learning using such real-world robotics data, where sensors have different representations, frequencies, latencies and noise. Our approach, a “late-fusion” masked autoencoder, (i) uses modality-specific tokenizers to account for different spatiotemporal characteristics of these sensors, and (ii) caches modality-specific tokens at inference time to process new measurements as they come. This architecture (i) is fast (6.68 ms and 112 ms on NVIDIA 5090 and Orin NX respectively, to compute the representation), (ii) performs better than existing image-only foundation models on tasks such as estimation of optical flow, depth, semantic segmentation, and ego-motion (translation, rotation, and steering angle), and (iii) predicts robustly at nighttime or in situations where sensory data is degraded. See our project page for links to the dataset, code, and supplementary videos: https://abisulco.com/octosense/. 
+
+## 1 Introduction 
+
+Vision-based foundation models trained using self-supervised learning (SSL) such as DINO [ 1], SigLIP [ 2, 3 ], and Hiera [ 4] have transformed robotics. However, in real-world robotic settings, no single sensor suffices [ 5]. Global-shutter cameras work poorly in situations with low light, high dynamic range, and rapid motion. LiDAR provides accurate but very sparse depth at low frame rates, with poor semantics. And so on... Different sensors have different sensing modalities, angular resolutions, data types and information rates. They respond differently to weather degradation, noise, and packet loss. And they also fail in different ways. Effective robot perception requires representations that are resilient to these failures. This is perhaps why the Global Robotics Technology Roadmap 2025–2035 [ 6] notes: “The defining enabling technology across all field applications is multi-sensor fusion robust to environmental degradation—the problem that keeps the most capable field robots indoors”. SSL has focused on visual and/or textual data. And although there is a growing literature on data from depth [ 7] or inertial [ 8] sensors, we do not have SSL methods that work with all typical sensors a robot uses. Our contributions towards addressing this gap are as follows. 
+
+1. OctoSense hardware and dataset. A central challenge in multi-modal robot representation learning is the lack of large datasets with diverse sensors. To address this gap, we develop an open-source hardware platform called OctoSense that provides time-synchronized data from stereo RGB and event cameras, a thermal camera, LiDAR, an inertial measurement unit (IMU), RTK-corrected 
+
+> arXiv:2606.27317v1 [cs.CV] 25 Jun 2026
+
+GPS, and proprioception information from the CAN bus of a vehicle and joint angles of a quadruped robot. We release 59 hours of data from OctoSense. This is one of the largest datasets of its kind. It covers urban, suburban, and rural environments across a mix of highway, residential, and urban driving; recordings span sunrise, daytime, sunset, and nighttime conditions, and include situations where sensors are degraded due to sunflares, dropped packets, etc. 
+
+2. Multi-modal masked autoencoder. We account for different spatiotemporal characteristics of LiDAR, event cameras and IMUs to develop modality-specific tokenizers which feed a shared transformer-based masked autoencoder (MAE). At inference time, we cache modality-specific features within a temporal window and only process new measurements. This makes it quite fast (6.68 ms and 112 ms on NVIDIA 5090 and Orin NX respectively, for computing the representation). 
+
+3. Performance on downstream tasks. On tasks such as estimation of optical flow, depth, semantic segmentation and ego-motion (relative translation and rotation, linear and angular velocity, and steering position), we show that our multi-modal MAE is significantly better than existing image-only SSL approaches. Depth error improves by about 1.65 m and optical flow end-point error by about 7.16 pixels during daytime; segmentation is about on par. Our approach can perform ego-motion tasks essentially perfectly. Improvements are larger in nighttime data and when sensors are degraded. 
+
+## 2 Related Work 
+
+SSL has been instrumental in building highly general representations trained on unlabeled data. These techniques have led to visual foundation models such as DINO [ 1, 9, 10 ], Perception Encoder [ 11 ], SigLIP [ 2, 3 ], SAM [ 12 ] that are the state of the art in computer vision today. There are a number of different pre-training objectives, such as self-distillation [ 1], masked autoencoders [ 13 – 15 ] and contrastive alignment [ 16 , 17 ]. SSL has also been extended beyond image modalities, e.g., to event cameras [ 18 – 21 ], depth data/point clouds [ 22 – 26 ], thermal cameras [ 27 , 28 ] and IMUs [ 29 , 30 ]. These existing efforts have demonstrated strong results on individual sensors. Our work builds upon a number of techniques and best practices in this literature, but our goal is to learn a fused representation from multiple sensors that inherits their individual strengths. Multi-modal SSL has employed two key ideas [ 31 ]. The first, contrastive alignment, anchors each modality to a shared embedding, e.g., CLIP [ 32 ] and SigLIP for vision-language models, ImageBind [ 8] for multiple modalities. Recent variants for images and text such as SigLIP 2 [ 3] and Perception Encoder [ 11 ] observe that these embeddings are not sufficiently sensitive to local image structures [ 33 ] and improve this aspect using masking and distillation objectives. Our approach is based on the second key idea, namely masked multi-modal modeling. MultiMAE [ 7 ] uses a Dirichlet masking strategy for multiple input modalities, and 4M [ 34 ] builds upon this to use modality-specific tokenizers [ 35 – 37 ]. Some works on driving such as UniM 2AE [ 38 ] and CALICO [ 39 ] combine cameras and LiDAR to perform tasks such as bird’s eye view (BEV) map segmentation. In this paper, we extend masked multi-modal modeling beyond image and text modalities to data from typical robotic sensors, and beyond the camera-LiDAR BEV setting to dense perception and egomotion tasks. 2    
+
+ 
+
+# 
+
+# 
+
+# Figure 1: A) OctoSense has been deployed across a car and a Unitree Go2-W. This initial dataset release focuses on car driving sequences with a very small amount of data collected using the Unitree. B) This platform is unique because it contains diverse sensors such as stereo RGB and event cameras, a thermal imager, LiDAR, IMU, GPS and CAN bus data. These sensors have very different data rates, frequencies, and information structures. C) Examples of time-synchronized data collected from OctoSense. 
+
+3
+
+# Dataset Duration / Dist. Sensors Tasks 
+
+Autonomous Vehicles, long-term, off-road, and ground-robot datasets 
+
+KITTI [40] 6 h RGB, Gray., LiDAR, IMU, GPS Depth, flow, stereo, 2D/3D det., track., seg., egomotion, lane det. nuScenes [41] 5 h 33 min RGB, LiDAR, Radar, IMU, GPS, CAN 3D det., track., seg., egomotion Waymo Perc. [42] 6 h 24 min RGB, LiDAR 2D/3D det., track., seg., egomotion AV2-Sensors [43] 4 h 10 min RGB, LiDAR 3D det., track., egomotion Oxford RobotCar [44] 1000 km RGB, LiDAR, GPS/INS Egomotion Boreas Road Trip [ 45 ] 643 km RGB, LiDAR/FMCW, Radar, IMU, GPS/INS, wheel enc. Egomotion NCLT [46] 34 h 54 min RGB, LiDAR, IMU, fiber gyro., GPS, wheel enc. Egomotion TartanDrive 1.0/2.0 [47, 48] 12 h RGB, Gray., LiDAR, IMU, GPS, shock, wheel enc., Ctrl. Egomotion, roughness Ithaca365 [49] ∼600 km RGB, LiDAR, GPS/INS Amodal seg., 3D det., disparity Comma2k19 [50] 33 h RGB, IMU, GPS, CAN Egomotion NVIDIA PAI [51] 1700 h RGB, LiDAR, Radar 3D det., track., egomotion, reason-ing 
+
+Event-inclusive multimodal datasets 
+
+DSEC [52] 53 min Events, RGB, LiDAR, IMU Seg., disparity, flow, 2D det. MVSEC [53] 1 h 08 min Events, Gray., LiDAR, IMU Depth, flow, egomotion VECtor [54] 21 min Events, Gray., Depth, LiDAR, IMU Egomotion ECMD [55] 3 h 21 min Events, RGB, IR, LiDAR, IMU, GPS/INS Egomotion M3ED [56] 3 h 46 min Events, RGB, Gray., LiDAR, IMU, GPS Seg., depth, egomotion ViViD++ [57] 4 h 31 min Events, RGB-D, IR, LiDAR, IMU, GPS Egomotion Prophesee 1MP [58] 14 h 39 min Events 2D det. DDD17/20 [59, 60] 51 h Events, Gray. Steering angle 
+
+OctoSense (Ours) 59 h / 2474 km Events, RGB, IR, LiDAR, IMU, GPS, CAN 
+
+Depth, flow, seg., egomotion, steer-ing angle 
+
+Figure 1 (continued). D) We have many sequences with degraded sensors during off-road and city driving. E) OctoSense is currently the largest multi-modal robotics dataset that includes event camera data. It contains 59 hours of driving data across 2474 km. Alongside NVIDIA’s Physical AI, which came out concurrently with this work, OctoSense is also one of the largest driving datasets with dense sensory data. Sensors listed are those released as data streams in the dataset. 
+
+43 OctoSense Hardware and Dataset 
+
+OctoSense has eight sensors: stereo RGB and event cameras, LiDAR, a thermal camera, an inertial measurement unit (IMU) that measures accelerations, angular velocities, magnetic fields, and barometric pressure, RTK-corrected global positioning system (GPS), and the proprioception state. See picture in Fig. 1A. Fig. 1B shows that these sensors have very different data rates, bandwidth requirements and resolutions. OctoSense has a desktop-class CPU for onboard computation. A 24 V battery provides about one hour of operation per charge. Sec. A provides a bill of materials. 
+
+Engineering challenges and our solutions. Some examples include online adaptation of exposure and sensor gain for RGB cameras, a bandpass filter on the event camera to block infrared interference from the LiDAR, foam insulation around the event cameras to prevent corrupted timestamps in cold weather, soft-mounting sensors to suppress LiDAR packet loss and IMU noise from vibrations, and splicing the car’s camera connector for CAN access. Sec. B gives more details. Many sensor drivers required substantial modifications, which we discuss in Sec. C. Composing drivers and data recorder as ROS 2 Zenoh composable nodes gives zero-copy transfer, which allows us to record those sensors at native rates without dropping any data. We built a web app to monitor system health during data collection, specifically to track per-sensor data rates and timestamps, and to start/stop data recording. OctoSense produces ∼1.7 GB/s of data; we therefore develop drivers that record compressed sensor streams, e.g., LiDAR/event packets and H.265 [ 61 ] video without B frames for RGB and thermal cameras. This reduces the required bandwidth, by 21 ×, to a more manageable 78.7 MB/s. 
+
+Temporal synchronization. Sensors typically timestamp measurements using their individual clocks—with a different start time, frequency, latency and clock drift. However, tasks such as stereo vision or projecting LiDAR depth upon RGB images for obtaining ground-truth measurements require sensors that are synchronized to the same clock. Let the timestamps of sensor s be (tsi )i∈N. We built custom circuits to hardware-trigger sensors using a pulse per second (PPS) signal, let us denote these by (t∗ 
+
+> i
+
+)i∈N.1 We post-process recordings to synchronize sensor clocks by fitting an affine transformation tsi 7 → t∗ 
+
+> i
+
+using Kalman smoothing, see Sec. D. 
+
+Calibration. We use a retro-reflective circle target centered on an AprilGrid [ 62 ] for calibration, see Fig. S3. The grid gives correspondences for RGB/event cameras while the retro-reflective circle gives a feature visible to both cameras and LiDAR. We first reconstruct event frames using a second-order IIR filter [ 63 ] and optimize for RGB and event camera intrinsics and extrinsics with Kalibr [ 64 , 65 ]. We then solve for LiDAR-camera extrinsics using three types of correspondences: (i) reprojected circle-center error, (ii) circle radius computed using LiDAR points, and (iii) distance to the board. We recover the circle center in LiDAR data by fitting a plane and circle to the thresholded reflectivity, and in the camera by detecting AprilTags and solving PnP. LiDAR-camera extrinsics are initialized using these circle centers via RANSAC with the Kabsch–Umeyama algorithm [ 66 , 67 ] and refined using Levenberg–Marquardt [68]. We use Kalibr for obtaining camera-IMU extrinsics. 
+
+This first release of OctoSense data covers urban, suburban, and rural environments across a mix of highway, residential, and city driving on Long Island and in Philadelphia, see Fig. S5. Recordings span sunrise, daytime, sunset, and nighttime conditions, with most sequences lasting for about 10 minutes. Altogether, OctoSense contains 59 hours and 8.4 TB of time-synchronized data. 2 Fig. 1D shows some examples. Fig. 1E shows that OctoSense is one of the largest datasets of its kind. We build software to caption each 5-second window with Gemma 4 [ 69 ] from three representative frames (see Sec. E), embed the caption with Qwen3-Embedding-8B [ 70 ], and index embeddings with FAISS [71]. This is useful to explore the data using natural language. 
+
+> 1If this is done naively, a single missed trigger signal due to hardware issues can cause the entire subsequent sensor stream to be out of sync. We therefore create a unique six-pulse sequence as a global identifier every four minutes and fifteen seconds, see Fig. S7. This way, we can unambiguously realign sensor data within each four-minute and fifteen second window during post-hoc clock synchronization.
+> 2From 75 hours of recorded raw data, we removed parts where LiDAR packets were missing for more than 5 sec, event-camera timestamps or thermal data were corrupted, or data packets were dropped.
+
+5Ground-truth for odometry, depth, optical flow, and semantic segmentation. We use a LiDAR-inertial odometry method named RKO-LIO [ 72 ] to estimate the pose of the platform in SE(3) , along with linear and angular velocities. This method also deskews each 360 ° LiDAR scan to transform points as if they were captured at a single timestamp. We accumulate points across 61 consecutive LiDAR scans (a window of 6 sec around a reference time) to obtain relatively dense ground-truth depth. We handle independently moving objects separately. We use YOLO26-medium [ 73 ] on the rectified RGB image closest to each LiDAR scan and remove points that correspond to vehicles or pedestrians. Similarly, if some pixels have multiple depth measurements after projecting the accumulated points onto the rectified RGB image, we keep the minimum depth (this respects disocclusions). In the accumulated point cloud, we prune 3D voxels that are not observed by at least N different scans. We use the odometry pose and LiDAR-camera extrinsics and intrinsics to project the accumulated points into a future RGB frame to compute per-pixel displacement as the optical flow induced by ego-motion. We obtain segmentation pseudo-labels by running a recent segmentation model, EoMT [ 74 ], trained on Cityscapes on the rectified RGB images. 
+
+## 4 Methods  
+
+> Figure 2: Ground-truth of different downstream tasks in OctoSense
+
+We next discuss a multi-modal MAE architecture for sensors in OctoSense. These sensors have different spatiotemporal characteristics: dense 2D arrays for RGB, a high-frequency point pro-cess for the event camera, an unordered and sparse point cloud for LiDAR and a rapidly vary-ing multi-channel time series for the IMU. This heterogeneity makes it challenging to build a fused representation. Our approach has four key facets: (i) low-level input representations for these diverse sensory modalities, (ii) appro-priate per-modality tokenization to ensure effec-tive reconstruction, (iii) an MAE architecture (encoder and decoder) that combines multiple modalities into a shared representation, and (iv) task-specific probes that make predictions from that representation. 
+
+4.1 Input representation 
+
+We undistort and rectify RGB images before building ViT-style patches [ 75 ]. Event cameras produce an event stream (ti, u i, p i)i∈N for time 
+
+ti and pixel coordinates ui ∈ Z2 and polarity pi
+
+indicating the sign of intensity change at the pixel since the last such event [ 76 , 77 ]. Events have a very high frequency, bandwidth and spatiotemporal noise, which makes it difficult to incorporate them directly into MAE architectures. After undistortion and rectification, we use a spatiotemporal filter to remove isolated events [ 78 ]. We then use a bank of leaky integrators at each pixel with different bandwidths to obtain a multi-channel image-like representation [ 79 –81 ]. See Sec. F.1. 3 The LiDAR point cloud gives a 64 × 2048 range image which is cropped to a 90 ° field of view to get a 64 ×
+
+512 range image. We convolve accelerometer and gyroscope data within a 1.6 sec time window and tokenize it using cross-attention pooling [82] (see Sec. F.2). 
+
+> 3We normalize each channel individually to account for the fact that filters with different bandwidths result in different statistics at each channel.
+
+64.2 Training tokenizers 
+
+MAEs for RGB data are trained to minimize the mean squared error (MSE) between the predicted pixel intensities and those in the original RGB image. This leads to poor training in multi-modal settings because different modalities have different spatiotemporal statistics and token counts. Works such as BEiT [ 35 ], Unified-IO [ 36 ] and 4M [ 34 ] mitigate this issue by training a tokenizer where each patch is represented by a token supported on a finite set. Then, instead of minimizing the MSE on pixel intensities, these methods minimize the discrepancy between the predicted token for masked patches and the ground-truth token of that patch. We follow this approach, but compute the loss on all patches rather than only the masked ones, which V-JEPA 2.1 [ 83 ] shows is important for dense prediction tasks. Each tokenizer uses finite scalar quantization (FSQ) [84]. Modality-specific tokenizers are built using a transformer encoder with RoPE [ 85 ] in two dimensions for image-like modalities of RGB, event filter-bank channels, LiDAR range image, and in one dimension for IMU data. The decoder is a hybrid transformer-convolutional architecture which we found to produce sharper reconstructions, see Fig. S9. Tokenizers are trained to minimize the mean 
+
+ℓ1 loss with modality-specific modifications. For LiDAR, in addition to ℓ1 on log-depth, we use a depth-validity mask with binary-cross-entropy loss and a SiLog loss [ 86 ]. The validity mask accounts for ray drops which produce holes in the range image [ 87 ]. For event cameras where the input is sparse, we minimize a weighted reconstruction loss on activations of the filter bank that balances active (event-containing) and inactive pixels. For the IMU, we regress upon the time series after removing the mean and applying a fixed normalization to the dataset. Sec. F gives details. 
+
+4.3 Fusing individual modalities in the MAE Events LiDAR RGB IMU 
+
+> Token Token Token Token Spatial Encoder Multimodal Encoder
+> Spatial Encoder
+> Spatial Encoder Temporal Tubelet Encoder Temporal Tubelet Encoder Temporal Tubelet Encoder DPT Head Egomotion Head
+> Sem. Segmentation Depth
+> Optical Flow
+> Temporal Encoder Egomotion (R,T) Speed (mph) Steer (°)
+
+Figure 3: A schematic of the late-fusion MAE encoder and probe architecture. The text provides more details. Sec. F elaborates upon the architecture with detailed schematics in Fig. S10. 
+
+The multi-modal MAE (Fig. 3) takes as input tokens from each sensor over a 1.4 sec window, with the exception of the IMU, which is tokenized over a slightly wider 1.6 sec window. Each datum consists of 8 uniformly spaced LiDAR scans within this window, 8 RGB images from the left camera with timestamps closest to these scans, 8 left event camera filter bank responses at these timestamps, along with ac-celerometer and gyroscope time se-ries. 4
+
+Early vs. late-fusion. Building a rep-resentation of this data requires reason-ing over spatial structure within each modality, temporal structure across the time window, and cross-modal struc-ture across modalities. It is possible to take the input representations in Sec. 4.1 and process them “directly” using a transformer architecture— we call this an early fusion architecture. The upside of this approach is that it can exploit synergistic or complementary information across sensors early. The downside is that it puts severe demands on GPU memory and bandwidth. We therefore propose a late-fusion architecture with modality-specific spatial and temporal tubelet encoders that feed into a cross-modal encoder to create the representation. 
+
+Masking strategy. First consider a sensor s ∈ { 1, 2, 3} which could be RGB/event camera or the LiDAR. The masking ratio is rs = 1 − min(1 , 35 ps) where p ∼ Dirichlet (γ, γ, γ ) with γ
+
+> 4
+
+Experiments in this paper do not use right RGB/event cameras, or the thermal camera. 
+
+7drawn uniformly randomly from {0.5, 1, 2}.5 Masks are spatio-temporal tubes that span the entire time window for each modality. For one-dimensional IMU data, tokens are kept (left unmasked) independently with Bernoulli parameter rs = 0 .2 + 12 r0 where r0 ∼ Beta (2 , 5) .
+
+Architecture. For the fusion MAE, we use a four-dimensional variant of RoPE corresponding to coordinates (t, u 1, u 2, s ) where t ∈ { 0, 1, . . . , 7} indicates position within the temporal window, 
+
+(u1, u 2) indicates patch coordinate for image-like inputs (set to zero for IMU) and s indicates the sensor index. The encoder in our late-fusion MAE applies a per-modality spatial encoder at each time instant, followed by a per-modality temporal encoder across each unmasked tube (let us call this “tubelet attention”). 6 Both of these are self-attention based transformer architectures. A cross-modal encoder processes features from all these modalities further to create the representation. The decoder receives the encoder output together with a learned mask token inserted at every masked patch. See Fig. 3 for rough schematic of the architecture. The multi-modal MAE is trained to regress the (frozen) FSQ tokenizer’s values using an ℓ1 loss. Sec. F gives more details of the architecture and Sec. I.1 discusses some examples of reconstruction of original sensory data. 
+
+4.4 Task-specific probes 
+
+After pretraining the encoder, we can use the representation to train task-specific probes. For dense prediction tasks such as segmentation, optical flow and depth estimation, we train a dense prediction transformer (DPT)-style [ 88 ] fusion head using features from four encoder layers uniformly separated in depth. Before feeding into the DPT, for each of these layers, we (i) process features using a self-attention block to benefit from temporal information within the time window of each modality, and (ii) select a fixed number of features (as many as the number of patches in one RGB frame) as input to the DPT. 7 The same DPT network is used to predict multiple tasks using task-specific heads, trained with SiLog loss [ 86 ] for depth, Charbonnier loss [ 89 ] for flow, and cross-entropy loss for segmentation. Fig. S10 provides a schematic of the DPT and Sec. G provides more details. For ego-motion prediction, we train three independent cross-attention modules whose queries attend to the last layer of the encoder. These probes predict linear and angular velocity, relative translation and rotation across time instants within the window, car speed and steering position. For the rotation heads, we minimize the squared Frobenius norm between the predicted and ground-truth rotation matrices; at inference, the predicted matrix is projected onto SO(3) [ 90 , 91 ]. The remaining heads are trained with a Huber loss on Z-scored targets. 
+
+## 5 Results 
+
+This section provides experimental evidence and analysis to support our claim that multimodal sensors provide complementary information that vision-only foundation models cannot recover. We are particularly interested in understanding performance when sensors are degraded or missing. 
+
+Baselines. We compare our approach to existing vision-only methods (DINOv2, DINOv3, SigLIP 2, Perception Encoder and V-JEPA 2.1) across five tasks (depth, flow, segmentation, egomotion and steering position). We also develop four other baselines that are based on our approach: (i) RGB-only MAE (with only the left camera) trained on FSQ targets for single frames which only has access to spatial information, (ii) RGB-only video MAE (with only the left camera) trained on FSQ targets for all 8 frames within the temporal window and thereby also receives some temporal information, and (iii) early fusion MAE as described in Sec. 4.3 which uses a monolithic transformer              
+
+> 5A draw from a Dirichlet distribution with nparameters is a point in the (n−1) -dimensional simplex. The distribution is uniform for γ= 1 . For γ > 1the distribution is concentrated near the centroid, i.e., on all modalities. Distributions with γ < 1concentrate on the boundaries, i.e., drop one or more modalities.
+> 6In contrast to tubelet attention, “full attention” attends to all spatio-temporal tokens within a modality.
+> 7There are two things to note here. First, when we run baseline methods, say DINO, we encode each of the 8 RGB images within the time window and then run the self-attention block in step (i); this helps in tasks such as optical flow which require temporal context. Second, we select a fixed number of tokens in step (ii) to ensure that the DPT receives a fixed-size grid as input.
+
+8Table 1: Late-fusion MAE architecture predicts multiple tasks robustly across varied conditions. We report root mean square error of depth prediction at pixels with depth within [3, 200] m. For flow, we report the average end-point error in pixels. For segmentation, we report mean intersection-over-union (mIoU) over 19 Cityscapes classes. Ground-truth segmentation labels are unavailable at night. For ego-motion we report RMSE on translation (m), rotation angle ( °) and steering position ( °). All metrics are reported on data where speed is at least 5 mph. These metrics are a very heavily summarized evaluation of the performance, e.g., RMSE depth could be measured in terms of SiLog loss, mean absolute error, errors on objects at different distances from the platform etc. We report such detailed metrics in Sec. I.2. Our approach also performs well on these detailed metrics. For V-JEPA 2.1 (stereo) ∗, we ran the original model on both the left and right RGB images.                                                                                                                                                                                                       
+
+> Encoder Depth (m) ↓Flow (px) ↓Seg. (mIoU ↑)Trans. (m) ↓Rotation ( ◦)↓Steering ( ◦)↓
+> day night day night day day night day night day night
+> Existing approaches
+> DINOv2 6.82 9.95 19.46 18.36 0.410 0.96 0.84 0.80 0.75 22.62 23.11 DINOv3 6.93 10.03 19.43 16.97 0.382 0.93 0.79 0.79 0.76 25.24 21.93 SigLIP 2 7.22 10.36 20.22 18.12 0.377 0.98 0.78 0.95 0.94 36.12 36.00 Perception Enc. 7.12 10.20 19.90 17.84 0.388 0.96 0.91 0.94 0.93 35.62 34.54 V-JEPA 2.1 6.38 9.51 9.13 10.90 0.402 0.77 0.76 0.47 0.47 5.98 6.83
+> Our baselines
+> V-JEPA 2.1 (stereo) ∗6.40 9.51 9.03 10.55 0.405 0.77 0.71 0.48 0.47 5.69 6.47 RGB-only image MAE 7.78 10.58 20.88 18.98 0.296 0.92 1.05 0.88 0.77 31.57 21.39 RGB-only video MAE 7.41 10.20 10.11 11.56 0.327 0.76 0.72 0.50 0.50 12.96 12.45 Early-fusion MAE 4.98 6.30 2.01 2.45 0.379 0.14 0.15 0.56 0.53 4.58 4.48
+> Late-fusion MAE 4.73 6.08 1.97 2.39 0.411 0.06 0.06 0.24 0.23 2.51 2.27 w/ full attention 4.73 6.07 1.96 2.38 0.405 0.05 0.05 0.17 0.17 2.46 2.25 Leave one modality out/in at test time in late-fusion MAE
+> w/o RGB 4.70 5.99 2.02 2.43 0.366 0.06 0.06 0.24 0.23 2.65 2.34 w/o EV 4.88 6.32 2.00 2.42 0.403 0.05 0.05 0.21 0.20 2.59 2.42 w/o LiDAR 6.74 9.55 7.19 8.05 0.351 0.73 0.57 0.46 0.45 3.97 4.00 w/o IMU 4.67 6.00 2.05 2.49 0.402 0.06 0.06 0.24 0.22 2.78 2.61 w/ only RGB 7.20 10.09 11.31 12.81 0.310 0.83 0.77 0.47 0.47 8.29 7.75
+
+architecture and has access to multi-modal information, (iv) late-fusion MAE (w/ full attention) that performs temporal self-attention over all tokens in a modality, as opposed to our proposed architecture which only performs self-attention over spatiotemporal tubes independently. To evaluate vision-only baselines, we encode each of the 8 RGB images within the time window and then proceed to the self-attention-block implemented before the DPT, as discussed in Sec. 4.4. Sec. G provides more details. 
+
+Training and evaluation methodology. We split OctoSense data into 293 training and 78 test sequences, each about 10 mins long. Test set contains data from both daytime and nighttime conditions, with sensor-degraded sequences reserved as a separate held-out set in Sec. I.2. During training we split data into 1.4 sec windows that have an overlap of 1 sec with each other; temporal windows for test data do not have any overlap. We train our late-fusion MAE (ViT-B scale) for 150 epochs with a batch size of 512 on four NVIDIA B200 GPUs; hyper-parameters are provided in Sec. F. The experiments in this paper required ∼7,000 GPU-hours. All task probes are trained for 60 epochs. Secondary metrics are reported in Sec. I.2. 
+
+Overall results. Table 1 summarizes the performance of our proposed approach as well as some of the baselines. Overall, on all tasks, the late-fusion MAE performs much better than other approaches. Depth RMSE is better by 1.65 m compared to the best existing method (V-JEPA 2.1). This difference is more than twice as large in nighttime testing, which demonstrates the utility of having multiple modalities as well as the robustness of our approach. Trends are very similar for flow estimation, more than 7.16 and 8.51 pixel improvement over V-JEPA 2.1 in daytime and nighttime respectively. On 9segmentation, the late-fusion MAE marginally exceeds the best existing model (0.411 vs. 0.410). The narrow margin is likely because our pseudo-labels in OctoSense are generated by a DINOv2-based model. Our early-fusion MAE matches DINOv2 on frequent categories, but the former does poorly on rare categories (poles, buses, people), see Table S15. Predicting ego-motion from RGB-only models is quite difficult, and our approach performs significantly better because it has access to LiDAR as well as inertial information. We achieve a prediction error of 0.06 m in translation and 0.23–0.24 ° in rotation. The relative advantage of having multiple sensory modalities is higher at nighttime when visual sensors are degraded (Table 2).                                   
+
+> Table 2: Performance of different encoders on degraded data from OctoSense. We report RMSE (m) for depth, end-point error (px) for flow, translation (m) and rotation ( °) for ego-motion estimation.
+> Encoder Depth (m) ↓Flow (px) ↓Trans.(m) ↓Rot. ( °)↓
+> DINOv2 7.41 19.97 0.65 0.58 DINOv3 7.49 18.82 0.65 0.61 SigLIP 2 7.55 19.02 0.71 0.70 Perception Enc. 7.56 19.52 0.72 0.71 V-JEPA 2.1 7.40 10.85 0.51 0.43 Late-fusion MAE 4.77 2.12 0.06 0.23
+> Table 3: Latency of the forward pass for late-fusion MAE with similar number of parameters as that of the early-fusion MAE (batch-size of 1). Tables S7 and S8 elaborate upon this.
+
+Fusion strategy Nvidia GPU # weights (M) Latency (ms) 
+
+Early 5090 85 11.35 Late 5090 83.7 6.68 Early Orin NX 85 288 Late Orin NX 83.7 112                                   
+
+> Table 4: Late-fusion MAE trained on OctoSense evaluated on M3ED [ 56 ].
+> Encoder Depth (m) ↓Flow (px) ↓Trans.(m) ↓Rot. ( °)↓
+> DINOv2 9.53 5.52 0.46 1.13 DINOv3 9.29 5.09 0.55 1.24 SigLIP 2 9.69 5.43 0.70 1.24 Perception Enc. 9.75 5.26 0.53 1.32 V-JEPA 2.1 9.72 1.59 0.22 0.64
+> Late-fusion MAE 9.05 1.60 0.36 0.82
+
+Comparison to baselines. RGB-only image MAE performs on par with existing methods, al-though the former is trained on our data while the latter are be-ing evaluated zero-shot on our data. This is a positive datapoint to suggest that one can train use-ful self-supervised learning meth-ods using data at the OctoSense scale. The video MAE’s gain over the image MAE ( ∼11 px on daytime flow) matches V-JEPA 2.1’s gain over the image-based existing methods, both reflect pre-training with temporal informa-tion. Late-fusion MAE performs about as well as the early-fusion MAE. This is somewhat remark-able because it indicates that a monolithic transformer can ad-equately represent information across these modalities. As Ta-ble 3 shows, the late-fusion MAE has about 60% (Orin) smaller la-tency and is much more amenable to implementation on NVIDIA Orin. Late-fusion MAE (w/ full attention) which uses full tempo-ral self-attention performs on-par with our proposed tubelet atten-tion. 
+
+Leaving out modalities at test time. Leaving out a specific modality at test time in Table 1 helps understand the relative contribution from that modality. LiDAR is a dominant sensor for ego-motion estimation tasks, without it the error in translation, rotation and steering angle is very high compared to late-fusion MAE. Dropping event images or the IMU has a smaller effect on the performance compared to dropping LiDAR. LiDAR is also the most important sensor for dense prediction: dropping it sharply degrades both depth and flow (RMSE 4.73 → 6.74 m, EPE 1.97 → 7.19 px), whereas dropping RGB leaves them essentially unchanged. The RGB camera instead matters most for segmentation, where leaving it out is what hurts performance the most. Event cameras and IMU contribute marginally on most tasks. It is remarkable that well-trained foundation models like V-JEPA 2.1 that are trained only on RGB data perform comparably to our late-fusion MAE that does not have access to LiDAR data (w/o LiDAR row in Table 1). In view of the fact that OctoSense is a much smaller dataset than those used to train industry-scale foundation models, this suggests that having LiDAR information can go a long way. 10 Indeed, LiDAR provides a direct geometric signal for ego-motion while RGB images serve to spatially anchor the tokens of other modalities for pixel-aligned semantic prediction. The fact that we do not see event cameras and IMU contributing to the performance much is perhaps due to the fact that we evaluate these tasks at 5 Hz. This is far below the native temporal resolution of these sensors (microsecond-scale for event cameras and ∼400 Hz for IMU). These sensors will be useful for high-speed tracking and low-latency maneuvers; we leave this for future work. 
+
+Zero-shot generalization to new datasets. Foundation models like DINO or V-JEPA generalize well to new settings, in part because they are trained on large datasets. To check whether OctoSense data can lead to such effective generalization, we evaluate on the M3ED dataset [ 56 ]. M3ED is the only other large dataset with event camera data, a similar sensor suite and ego-motion ground truth. 8
+
+As Table 4 shows, our late-fusion architecture is competitive on dense perception tasks compared to existing foundation models, and second best on ego-motion tasks. Our model performs quite well on a new sensor configuration (different intrinsics/extrinsics and RGB/event-camera sensor). 
+
+## 6 Limitations and Directions for Future Work 
+
+Our paper demonstrates the utility and viability of multi-modal SSL across a variety of robot perception tasks and experimental settings. But it is a research prototype. Our dataset is orders-of-magnitude smaller than the datasets used to train foundation models such as DINO and V-JEPA. Training on more data can improve the generalizability of our learned representation—and in effect allow us to build a “foundation” multi-modal robot perception model. For our approach to replace existing foundation models, we will need a community-wide effort to pool data. Our computing budget restricted us from training with larger networks, which can improve performance. One of the key avenues for future work is to use temporal windows longer than 1.4 sec with recurrent architectures. This can enable new tasks such as object tracking and 3D instance detection (after appropriate pseudo annotation), and also further reduce the computational complexity of our approach. We are also interested in questions regarding the unique, synergistic and redundant information in multi-modal sensors in the context of prior work which has noticed that many perception tasks are highly redundant functions of their inputs [ 92 ]. This can shed new light on normative principles for multi-modal robot perception. 
+
+Acknowledgments 
+
+This work was supported by grants from the National Science Foundation (IIS-2145164, CCF-2212519), the NSF and DoD OUSD (R&E) under Agreement PHY-2229929 (The NSF AI Institute for Artificial and Natural Intelligence), DSO National Laboratories, Singapore and the Office of Naval Research DURIP. 
+
+## References       
+
+> [1] M. Caron, H. Touvron, I. Misra, H. J ´egou, J. Mairal, P. Bojanowski, and A. Joulin. Emerging properties in self-supervised vision transformers. In IEEE/CVF International Conference on Computer Vision , 2021. [2] X. Zhai, B. Mustafa, A. Kolesnikov, and L. Beyer. Sigmoid loss for language image pre-training. In
+> IEEE/CVF International Conference on Computer Vision , 2023. [3] M. Tschannen, A. Gritsenko, X. Wang, M. F. Naeem, I. M. Alabdulmohsin, N. Parthasarathy, T. Evans, L. Beyer, Y. Xia, B. Mustafa, O. H’enaff, J. Harmsen, A. Steiner, and X.-Q. Zhai. SigLIP 2: Multilingual vision-language encoders with improved semantic understanding, localization, and dense features. arXiv preprint 2502.14786 , 2025.
+> 8Cross-dataset generalization requires a dataset with a sensor suite close to ours and reliable ground-truth odometry. To our knowledge, M3ED is the only publicly available dataset that meets both criteria. Evaluating generalization across substantially different sensor configurations e.g., 16/32/64/128-beam LiDARs, is itself an open research problem that we leave to future work.
+
+11 [4] C. Ryali, Y.-T. Hu, D. Bolya, C. Wei, H. Fan, P.-Y. Huang, V. Aggarwal, A. Chowdhury, O. Poursaeed, J. Hoffman, J. Malik, Y. Li, and C. Feichtenhofer. Hiera: A hierarchical vision transformer without the bells-and-whistles. In International Conference on Machine Learning , 2023. [5] Y. Liu, S. Wang, Y. Xie, T. Xiong, and M. Wu. A review of sensing technologies for indoor autonomous mobile robots. Sensors , 24, 2024. [6] H. I. Christensen. Global robotics technology roadmap 2025–2035: A multi-regional, cross-domain strategic perspective for europe, asia, and the united states. Technology roadmap, University of California San Diego, April 2026. Version 1.02. [7] R. Bachmann, D. Mizrahi, A. Atanov, and A. Zamir. Multimae: Multi-modal multi-task masked autoencoders. In European Conference on Computer Vision , 2022. [8] R. Girdhar, A. El-Nouby, Z. Liu, M. Singh, K. V. Alwala, A. Joulin, and I. Misra. ImageBind one embedding space to bind them all. IEEE/CVF Conference on Computer Vision and Pattern Recognition , 2023. [9] M. Oquab, T. Darcet, T. Moutakanni, H. V. Vo, M. Szafraniec, V. Khalidov, P. Fernandez, D. Haziza, F. Massa, A. El-Nouby, R. Howes, P.-Y. Huang, H. Xu, V. Sharma, S.-W. Li, W. Galuba, M. Rabbat, M. Assran, N. Ballas, G. Synnaeve, I. Misra, H. Jegou, J. Mairal, P. Labatut, A. Joulin, and P. Bojanowski. DINOv2: Learning robust visual features without supervision. In International Conference on Learning Representations , 2025. [10] O. Sim ´eoni, H. V. Vo, M. Seitzer, F. Baldassarre, M. Oquab, C. Jose, V. Khalidov, M. Szafraniec, S. Yi, M. Ramamonjisoa, F. Massa, D. Haziza, L. Wehrstedt, J. Wang, T. Darcet, T. Moutakanni, L. Sentana, C. Roberts, A. Vedaldi, J. Tolan, J. Brandt, C. Couprie, J. Mairal, H. J ´egou, P. Labatut, and P. Bojanowski. DINOv3. arXiv preprint 2508.10104 , 2025. [11] D. Bolya, P.-Y. Huang, P. Sun, J. H. Cho, A. Madotto, C. Wei, T. Ma, J. Zhi, J. Rajasegaran, H. A. Rasheed, J. Wang, M. Monteiro, H. Xu, S. Dong, N. Ravi, S.-W. Li, P. Doll’ar, and C. Feichtenhofer. Perception encoder: The best visual embeddings are not at the output of the network. In Advances in Neural Information Processing Systems , 2025. [12] N. Ravi, V. Gabeur, Y.-T. Hu, R. Hu, C. K. Ryali, T. Ma, H. Khedr, R. R ¨adle, C. Rolland, L. Gustafson, E. Mintun, J. Pan, K. V. Alwala, N. Carion, C. Wu, R. B. Girshick, P. Doll’ar, and C. Feichtenhofer. SAM 2: Segment anything in images and videos. In International Conference on Learning Representations , 2025. [13] K. He, X. Chen, S. Xie, Y. Li, P. Doll’ar, and R. B. Girshick. Masked autoencoders are scalable vision learners. IEEE/CVF Conference on Computer Vision and Pattern Recognition , 2022. [14] Z. Xie, Z. Zhang, Y. Cao, Y. Lin, J. Bao, Z. Yao, Q. Dai, and H. Hu. SimMIM: a simple framework for masked image modeling. IEEE/CVF Conference on Computer Vision and Pattern Recognition , 2022. [15] J. Devlin, M.-W. Chang, K. Lee, and K. Toutanova. BERT: Pre-training of deep bidirectional transformers for language understanding. In North American Chapter of the Association for Computational Linguistics ,2019. [16] A. van den Oord, Y. Li, and O. Vinyals. Representation learning with contrastive predictive coding. arXiv preprint 1807.03748 , 2018. [17] T. Chen, S. Kornblith, M. Norouzi, and G. E. Hinton. A simple framework for contrastive learning of visual representations. In International Conference on Machine Learning , 2020. [18] J. Cao, J. Xing, N. Messikommer, and D. Scaramuzza. Generative event pretraining with foundation model alignment. arXiv preprint 2603.23032 , 2026. [19] S. Klenk, D. Bonello, L. Koestler, and D. Cremers. Masked Event Modeling: Self-supervised pretraining for event cameras. IEEE/CVF Winter Conference on Applications of Computer Vision , 2022. [20] Y. Yang, L. Pan, and L. Liu. Event camera data dense pre-training. In European Conference on Computer Vision , 2024. [21] R. Das, K. Daniilidis, and P. Chaudhari. Fast feature field (F3): A predictive representation of events. arXiv preprint 2509.25146 , 2025. 
+
+12 [22] M. Patel, J. Frey, M. Mittal, F. Yang, A. Hansson, A. Bar, C. Cadena, and M. Hutter. DeFM: Learning foundation representations from depth for robotics. arXiv preprint 2601.18923 , abs/2601.18923, 2026. [23] Y. Pang, W. Wang, F. E. Tay, W. Liu, Y. Tian, and L. Yuan. Masked autoencoders for point cloud self-supervised learning. In European Conference on Computer Vision , 2022. [24] X. Yu, L. Tang, Y. Rao, T. Huang, J. Zhou, and J. Lu. Point-BERT: Pre-training 3d point cloud transformers with masked point modeling. In IEEE/CVF Conference on Computer Vision and Pattern Recognition , 2022. [25] H. Wang, Q. Liu, X. Yue, J. Lasenby, and M. J. Kusner. Unsupervised point cloud pre-training via occlusion completion. In IEEE/CVF International Conference on Computer Vision , 2021. [26] S. Xie, J. Gu, D. Guo, C. Qi, L. J. Guibas, and O. Litany. PointContrast: Unsupervised pre-training for 3d point cloud understanding. In European Conference on Computer Vision , 2020. [27] F. Munir, S. Azam, and M. Jeon. Sstn: Self-supervised domain adaptation thermal object detection for autonomous driving. IEEE/RSJ International Conference on Intelligent Robots and Systems , 2021. [28] J. Z¨ urn. Self-supervised and Multi-modal Learning for Perception in Mobile Robots and Autonomous Driving . PhD thesis, University of Freiburg, 2024. [29] G. Narayanswamy, X. Liu, K. Ayush, Y. Yang, X. Xu, S. Liao, J. Garrison, S. Tailor, J. Sunshine, Y. Liu, T. Althoff, S. Narayanan, P. Kohli, J. Zhan, M. Malhotra, S. N. Patel, S. Abdel-Ghaffar, and D. McDuff. Scaling wearable foundation models. In International Conference on Learning Representations , 2025. [30] H. Xu, P. Zhou, R. Tan, M. Li, and G. Shen. LIMU-BERT: Unleashing the potential of unlabeled data for imu sensing applications. In ACM Conference on Embedded Networked Sensor Systems , 2021. [31] Y. Zong, O. M. Aodha, and T. M. Hospedales. Self-supervised multimodal learning: A survey. IEEE Transactions on Pattern Analysis and Machine Intelligence , 47:5299–5318, 2023. [32] A. Radford, J. W. Kim, C. Hallacy, A. Ramesh, G. Goh, S. Agarwal, G. Sastry, A. Askell, P. Mishkin, J. Clark, G. Krueger, and I. Sutskever. Learning transferable visual models from natural language supervision. In 
+
+International Conference on Machine Learning , 2021. [33] X. Wang, R. Zhang, C. Shen, T. Kong, and L. Li. Dense contrastive learning for self-supervised visual pre-training. In IEEE/CVF Conference on Computer Vision and Pattern Recognition , 2021. [34] D. Mizrahi, R. Bachmann, O. F. Kar, T. Yeo, M. Gao, A. Dehghan, and A. Zamir. 4M: Massively multimodal masked modeling. In Advances in Neural Information Processing Systems , 2023. [35] H. Bao, L. Dong, S. Piao, and F. Wei. BEit: BERT pre-training of image transformers. In International Conference on Learning Representations , 2022. [36] J. Lu, C. Clark, R. Zellers, R. Mottaghi, and A. Kembhavi. Unified-IO: A unified model for vision, language, and multi-modal tasks. In International Conference on Learning Representations , 2023. [37] J. Lu, C. Clark, S. Lee, Z. Zhang, S. Khosla, R. Marten, D. Hoiem, and A. Kembhavi. Unified-IO 2: Scaling autoregressive multimodal models with vision, language, audio, and action. In IEEE/CVF Conference on Computer Vision and Pattern Recognition , 2024. [38] J. Zou, T. Huang, G. Yang, Z. Guo, and W. Zuo. UniM2AE: Multi-modal masked autoencoders with unified 3d representation for 3d perception in autonomous driving. In European Conference on Computer Vision , 2024. [39] J. Sun, H. Zheng, Q. Zhang, A. Prakash, Z. M. Mao, and C. Xiao. CALICO: Self-supervised camera-lidar contrastive pre-training for bev perception. In International Conference on Learning Representations , 2024. [40] A. Geiger, P. Lenz, and R. Urtasun. Are we ready for autonomous driving? the kitti vision benchmark suite. 
+
+2012 IEEE Conference on Computer Vision and Pattern Recognition , pages 3354–3361, 2012. [41] H. Caesar, V. Bankiti, A. H. Lang, S. Vora, V. E. Liong, Q. Xu, A. Krishnan, Y. Pan, G. Baldan, and O. Beijbom. nuScenes: A multimodal dataset for autonomous driving. 2020 IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR) , pages 11618–11628, 2019. 
+
+13 [42] P. Sun, H. Kretzschmar, X. Dotiwalla, A. Chouard, V. Patnaik, P. Tsui, J. Guo, Y. Zhou, Y. Chai, B. Caine, V. Vasudevan, W. Han, J. Ngiam, H. Zhao, A. Timofeev, S. M. Ettinger, M. Krivokon, A. Gao, A. Joshi, Y. Zhang, J. Shlens, Z. Chen, and D. Anguelov. Scalability in perception for autonomous driving: Waymo open dataset. 2020 IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR) , pages 2443–2451, 2019. [43] B. Wilson, W. Qi, T. Agarwal, J. Lambert, J. Singh, S. Khandelwal, B. Pan, R. Kumar, A. Hartnett, J. K. Pontes, D. Ramanan, and J. Hays. Argoverse 2: Next generation datasets for self-driving perception and forecasting. ArXiv , abs/2301.00493, 2023. [44] W. P. Maddern, G. Pascoe, C. Linegar, and P. Newman. 1 year, 1000 km: The oxford robotcar dataset. The International Journal of Robotics Research , 36:15 – 3, 2017. [45] D. Lisus, K. M. Papais, C. L. Gentil, E. Preston-Krebs, A. Lambert, K. Y. Leung, and T. D. Barfoot. Boreas Road Trip: A multi-sensor autonomous driving dataset on challenging roads. ArXiv , abs/2602.16870, 2026. [46] N. Carlevaris-Bianco, A. K. Ushani, and R. M. Eustice. University of Michigan North Campus long-term vision and lidar dataset. The International Journal of Robotics Research , 35:1023 – 1035, 2016. [47] S. Triest, M. Sivaprakasam, S. J. Wang, W. Wang, A. M. Johnson, and S. A. Scherer. TartanDrive: A large-scale dataset for learning off-road dynamics models. IEEE International Conference on Robotics and Automation , 2022. [48] M. Sivaprakasam, P. Maheshwari, M. G. Castro, S. Triest, M. Nye, S. Willits, A. Saba, W. Wang, and S. A. Scherer. TartanDrive 2.0: More modalities and better infrastructure to further self-supervised learning research in off-road driving tasks. 2024 IEEE International Conference on Robotics and Automation (ICRA) , pages 12606–12606, 2024. [49] C. Diaz-Ruiz, Y. Xia, Y. You, J. Nino, J. Chen, J. Monica, X. Chen, K. Luo, Y. Wang, M. Emond, W.-L. Chao, B. Hariharan, K. Q. Weinberger, and M. E. Campbell. Ithaca365: Dataset and driving perception under repeated and challenging weather conditions. IEEE/CVF Conference on Computer Vision and Pattern Recognition , 2022. [50] H. Schafer, E. Santana, A. Haden, and R. Biasini. A commute in data: The comma2k19 dataset. ArXiv ,abs/1812.05752, 2018. [51] NVIDIA Corporation. PhysicalAI-Autonomous-Vehicles dataset. https://huggingface.co/datasets/nvidia/ PhysicalAI-Autonomous-Vehicles, 2025. [52] M. Gehrig, W. Aarents, D. Gehrig, and D. Scaramuzza. DSEC: A stereo event camera dataset for driving scenarios. IEEE Robot. and Autom. Lett. , March 2021. [53] A. Z. Zhu, D. Thakur, T. ¨Ozaslan, B. Pfrommer, V. Kumar, and K. Daniilidis. The multivehicle stereo event camera dataset: An event camera dataset for 3d perception. IEEE Robt. and Autom. Lett. , 3:2032–2039, Feb. 2018. [54] L. Gao, Y. Liang, J. Yang, S. Wu, C. Wang, J. Chen, and L. Kneip. VECtor: A versatile event-centric benchmark for multi-sensor slam. IEEE Robot. and Autom. Lett. , 7(3):8217–8224, June 2022. [55] P. Chen, W. Guan, F. Huang, Y. Zhong, W. W. Wen, L.-T. Hsu, and P. Lu. ECMD: An event-centric multisensory driving dataset for slam. IEEE Transactions on Intelligent Vehicles , 9:407–416, 2023. URL https://api.semanticscholar.org/CorpusID:265033288. [56] K. Chaney, F. Cladera, Z. Wang, A. Bisulco, M. A. Hsieh, C. Korpela, V. Kumar, C. J. Taylor, and K. Daniilidis. M3ED: Multi-robot, multi-sensor, multi-environment event dataset. In IEEE Conf. Comput. Vis. Pattern Recog. Workshop .[57] A. J. Lee, Y. Cho, Y. sik Shin, A. Kim, and H. Myung. ViViD++ : Vision for visibility dataset. IEEE Robotics and Automation Letters , 7:6282–6289, 2022. [58] E. Perot, P. de Tournemire, D. O. Nitti, J. Masci, and A. Sironi. Learning to detect objects with a 1 megapixel event camera. Neural Information Processing Systems , 2020. [59] J. Binas, D. Neil, S.-C. Liu, and T. Delbruck. DDD17: End-to-end davis driving dataset. ArXiv ,abs/1711.01458, 2017. 
+
+14 [60] Y. Hu, J. Binas, D. Neil, S.-C. Liu, and T. Delbruck. DDD20 End-to-End Event Camera Driving Dataset: Fusing frames and events with deep learning for improved steering prediction. 2020 IEEE 23rd International Conference on Intelligent Transportation Systems (ITSC) , pages 1–6, 2020. [61] ITU-T. Series h: Audiovisual and multimedia systems: Infrastructure of audiovisual services - cod-ing of moving video: High efficiency video coding. Technical Report ITU-T H.265, International Telecommunication Union, 2026. Version 01/2026. [62] E. Olson. AprilTag: A robust and flexible visual fiducial system. IEEE International Conference on Robotics and Automation , 2011. [63] B. Pfrommer. Frequency cam: Imaging periodic signals in real-time. arXiv preprint 2211.00198 , 2022. [64] J. Rehder, J. Nikolic, T. Schneider, T. Hinzmann, and R. Siegwart. Extending kalibr: Calibrating the extrinsics of multiple IMUs and of individual axes. In IEEE International Conference on Robotics and Automation .[65] P. Furgale, J. Rehder, and R. Siegwart. Unified temporal and spatial calibration for multi-sensor systems. In IEEE/RSJ International Conference on Intelligent Robots and Systems , pages 1280–1286, 2013. [66] W. Kabsch. A solution for the best rotation to relate two sets of vectors. Acta Crystallographica Section A ,32:922–923, 1976. [67] S. Umeyama. Least-squares estimation of transformation parameters between two point patterns. IEEE Transactions on Pattern Analysis and Machine Intelligence , 13:376–380, 1991. [68] K. Levenberg. A method for the solution of certain non – linear problems in least squares. Quarterly of Applied Mathematics , 2:164–168, 1944. [69] Google DeepMind. Gemma 4. https://deepmind.google/models/gemma/gemma-4/, 2026. Open model release. [70] Y. Zhang, M. Li, D. Long, X. Zhang, H. Lin, B. Yang, P. Xie, A. Yang, D. Liu, J. Lin, F. Huang, and J. Zhou. Qwen3 embedding: Advancing text embedding and reranking through foundation models. arXiv preprint 2506.05176 , 2025. [71] M. Douze, A. Guzhva, C. Deng, J. Johnson, G. Szilvasy, P.-E. Mazar ´e, M. Lomeli, L. Hosseini, and H. J´ egou. The Faiss library. 2024. [72] M. Malladi, T. Guadagnino, L. Lobefaro, and C. Stachniss. A robust approach for lidar-inertial odometry without sensor-specific modeling. IEEE Robotics and Automation Letters , 11(6):7420–7427, 2026. [73] R. Sapkota, R. H. Cheppally, A. Sharda, and M. Karkee. YOLO26: Key architectural enhancements and performance benchmarking for real-time object detection. arXiv preprint 2509.25164 , 2025. [74] T. Kerssies, N. Cavagnero, A. Hermans, N. Norouzi, G. Averta, B. Leibe, G. Dubbelman, and D. de Geus. Your ViT is Secretly an Image Segmentation Model. In IEEE/CVF Conference on Computer Vision and Pattern Recognition , 2025. [75] A. Dosovitskiy, L. Beyer, A. Kolesnikov, D. Weissenborn, X. Zhai, T. Unterthiner, M. Dehghani, M. Minderer, G. Heigold, S. Gelly, J. Uszkoreit, and N. Houlsby. An image is worth 16x16 words: Transformers for image recognition at scale. International Conference on Learning Representations , 2021. [76] T. Hawkes and P. Simonpieri. Signal coding using asynchronous delta modulation. IEEE Trans. on Comm. ,22(5):729–731, March 1974. [77] G. Gallego, T. Delbr¨ uck, G. Orchard, C. Bartolozzi, B. Taba, A. Censi, S. Leutenegger, A. J. Davison, J. Conradt, K. Daniilidis, and D. Scaramuzza. Event-based vision: A survey. IEEE Transactions on Pattern Analysis and Machine Intelligence , 44(1):154–180, 2022. [78] T. Delbruck. Frame-free dynamic digital vision. In Proceedings of the International Symposium on Secure-Life Electronics, Advanced Electronics for Quality Life and Society , pages 21–26, 2008. [79] W. Gerstner, W. M. Kistler, R. Naud, and L. Paninski. Neuronal Dynamics: From Single Neurons to Networks and Models of Cognition . Cambridge University Press, 2014. 
+
+15 [80] X. Lagorce, G. Orchard, F. Galluppi, B. E. Shi, and R. B. Benosman. HOTS: A hierarchy of event-based time-surfaces for pattern recognition. IEEE Transactions on Pattern Analysis and Machine Intelligence , 39: 1346–1359, 2017. [81] A. Bisulco, F. C. Ojeda, V. Isler, and D. D. Lee. Fast Motion Understanding with Spatiotemporal Neural Networks and Dynamic Vision Sensors. In IEEE International Conference on Robotics and Automation ,2021. [82] A. Jaegle, F. Gimeno, A. Brock, O. Vinyals, A. Zisserman, and J. Carreira. Perceiver: General perception with iterative attention. In International Conference on Machine Learning , 2021. [83] L. Mur-Labadia, M. Muckley, A. Bar, M. Assran, K. Sinha, M. Rabbat, Y. LeCun, N. Ballas, and A. Bardes. V-jepa 2.1: Unlocking dense features in video self-supervised learning. arXiv preprint 2603.14482 , 2026. [84] F. Mentzer, D. Minnen, E. Agustsson, and M. Tschannen. Finite scalar quantization: VQ-VAE made simple. In International Conference on Learning Representations , 2024. [85] J. Su, M. Ahmed, Y. Lu, S. Pan, W. Bo, and Y. Liu. RoFormer: Enhanced transformer with rotary position embedding. Neurocomput. , 568, 2024. ISSN 0925-2312. [86] D. Eigen, C. Puhrsch, and R. Fergus. Depth map prediction from a single image using a multi-scale deep network. In Advances in Neural Information Processing Systems , 2014. [87] S. Manivasagam, S. Wang, K. Wong, W. Zeng, M. Sazanovich, S. Tan, B. Yang, W.-C. Ma, and R. Urtasun. LiDARsim: Realistic lidar simulation by leveraging the real world. IEEE/CVF Conference on Computer Vision and Pattern Recognition , 2020. [88] R. Ranftl, A. Bochkovskiy, and V. Koltun. Vision transformers for dense prediction. IEEE/CVF International Conference on Computer Vision , 2021. [89] P. Charbonnier, L. Blanc-Feraud, G. Aubert, and M. Barlaud. Deterministic edge-preserving regularization in computed imaging. IEEE Transactions on Image Processing , 6(2):298–311, 1997. [90] A. R. Geist, J. Frey, M. Zobro, A. Levina, and G. Martius. Learning with 3D rotations, a hitchhiker’s guide to SO(3). International Conference on Machine Learning , 2024. [91] J. Levinson, C. Esteves, K. Chen, N. Snavely, A. Kanazawa, A. Rostamizadeh, and A. Makadia. An Analysis of SVD for Deep Rotation Estimation. Advances in Neural Information Processing Systems , 2020. [92] R. Ramesh, A. Bisulco, R. W. DiTullio, L. Wei, V. Balasubramanian, K. Daniilidis, and P. Chaudhari. Many perception tasks are highly redundant functions of their input data. Computational and Systems Neuroscience(COSYNE) , 2025. [93] B. R. Hamilton, X. Ma, Q. Zhao, and J. Xu. ACES: adaptive clock estimation and synchronization using kalman filtering. In ACM/IEEE International Conference on Mobile Computing and Networking , 2008. [94] H. E. Rauch, F.-W. Tung, and C. T. Striebel. On the maximum likelihood estimates for linear dynamic systems. In AIAA Journal , 1965. [95] R. Xu, H. Lin, W. Jeon, H. Feng, Y. Zou, L. Sun, J. Gorman, K. Tolstaya, S. Tang, B. White, B. Sapp, M. Tan, J.-J. Hwang, and D. Anguelov. WOD-E2E: Waymo open dataset for end-to-end driving in challenging long-tail scenarios. arXiv preprint 2510.26125 , 2025. [96] R. Xiong, Y. Yang, D. He, K. Zheng, S. Zheng, C. Xing, H. Zhang, Y. Lan, L. Wang, and T.-Y. Liu. On layer normalization in the transformer architecture. In International Conference on Machine Learning , 2020. [97] A. Vaswani, N. Shazeer, N. Parmar, J. Uszkoreit, L. Jones, A. N. Gomez, L. Kaiser, and I. Polosukhin. Attention is all you need. In Advances in Neural Information Processing Systems , 2017. [98] H. Chang, H. Zhang, L. Jiang, C. Liu, and W. T. Freeman. MaskGIT: Masked generative image transformer. 
+
+IEEE/CVF Conference on Computer Vision and Pattern Recognition , pages 11305–11315, 2022. 
+
+16 A Bill of Materials 
+
+Table S1: OctoSense platform bill of materials. Part codes link to vendor product pages where available. 
+
+Item / Description Code Qty Unit (USD) Ext. (USD) 
+
+Sensing 
+
+Ouster OS1-64 OS1-64 1 13 000 .00 13 000 .00 
+
+Blackfly S USB3: 2.8 MP, Color, C-mount BFS-U3-28S5C-C 2 982 .00 1964 .00 
+
+Kowa LM6HC 6 mm, 1”, 1 f/1.8-f/11, C Mount LM6HC 4 580 .00 2320 .00 
+
+ICE UV IR Cut Thin Filter Optical Glass 840337507588 2 34 .95 69 .90 
+
+VN-100T-CR VN-100 1 1300 .00 1300 .00 
+
+SilkyEvCam VGA EvC3A 2 650 .00 1300 .00 
+
+Camera C-Mount Lens Adapter B09STVLLVY 2 6.99 13 .98 
+
+SparkFun GPS-RTK-SMA Breakout, ZED-F9P 845156010493 1 259 .95 259 .95 
+
+VN-100 Pigtail Adapter Cable NA 1 125 .00 125 .00 
+
+waveshare GNSS L1+L2+L5 Multi-GNSS B0CH8BSH5G 1 58 .99 58 .99 
+
+Spectrum Smart Data Only SIM 197644272914 1 4.50 4.50 
+
+Hotspot Device B079FNC379 1 44 .99 44 .99 
+
+DSD Tech C31-G 794251080989 1 17 .99 17 .99 
+
+Sensing subtotal 20 479 .30 
+
+Compute 
+
+Samsung 990 PRO SSD 4TB PCIe 4.0 887276795195 1 899 .99 899 .99 
+
+Samsung SSD 9100 PRO 4TB 887276904894 1 779 .99 779 .99 
+
+AMD Ryzen ™ 7 9700X 8-Core 730143315593 1 329 .00 329 .00 
+
+MSI MPG B850I Edge TI WiFi Motherboard 824142431061 1 286 .04 286 .04 
+
+G.SKILL Flare X5 Series DDR5 RAM B0BJNKNX6M 1 780 .00 780 .00 
+
+Thermalright AXP90-X53 Black Low Profile B0BB66YT44 1 21 .19 21 .19 
+
+Thermal Paste B07L9BDY3T 1 6.39 6.39 
+
+NOYITO 12mm Chassis Switch Metal Button Switch 12mm-NOYITO 1 6.99 6.99 
+
+Deal4GO NFA765A QCNFA765 2400Mbps 659459623768 1 20 .99 20 .99 
+
+Amazon Basics RJ45 Cat 6 Ethernet Patch 15 ft 192835003018 6 6.39 38 .34 
+
+Compute subtotal 3168 .92 
+
+Time Synchronization 
+
+Teensy 4.1 ARM Cortex-M7 Processor 732387205807 1 38 .21 38 .21 
+
+OSH Park Custom PCB Set of 3 1 37 .60 37 .60 
+
+DS3231 AT24C32 IIC RTC Module Clock DS3231 1 5.59 5.59 
+
+Hirose HR10 GPIO Cable, 6-pin, 4.5 m ACC-01-3010 2 43 .90 87 .80 
+
+MCIGICM 10pcs Male Header Pin, 40 Pin Header B07PKKY8BX 1 4.99 4.99 
+
+MICRO-FIT 3.0 R-S 10 Circuit 300mm 2147561102 1 1.81 1.81 
+
+Conn Header Vert 0430451012 1 1.52 1.52 
+
+24AWG Hookup Wire 00840406205971 1 16 .19 16 .19 
+
+1072F12-12-2-1-S-00100 1175-1072F12- 1 23 .03 23 .03 
+
+Time Synchronization subtotal 216 .74 
+
+Storage 
+
+Western Digital 22TB WD Red Pro 718037893501 4 434 .99 1739 .96 
+
+Synology DiskStation 12 Bay DS2422+ 846504003983 1 1999 .99 1999 .99 
+
+Synology E10M20-T1 846504003488 1 229 .99 229 .99 
+
+OWC 64GB (2X32GB) DDR4 RAM 810149202223 1 646 .73 646 .73 
+
+Storage subtotal 4616 .67 
+
+Power 
+
+PicoPSU-160-XT, 160w B005TWE6B8 1 46 .50 46 .50 
+
+29.4V 5A Li ion Battery Charger 786750183001 1 29 .99 29 .99 
+
+Yunsailing 2 Pcs High Precision Watt Meter Power B0B5KVLQ71 1 19 .99 19 .99 
+
+S1 LM2596 DC-DC Buck Power Converter Module LM2596S 1 9.99 9.99 
+
+12V 5A DC Power Pigtail Barrel Plug Connector 872629092625 1 9.49 9.49 
+
+5pcs XT30 Plug XT-30 Male Connectors with 10cm 736900640472 1 8.58 8.58 
+
+24V 12Ah Battery 24120 1 89 .99 89 .99 
+
+Victron Energy Orion-Tr DC to DC Converter ORI241220200 1 46 .63 46 .63 
+
+16 Gauge Wire B0CZ73SQP8 1 8.99 8.99 
+
+18 Gauge/18 AWG Copper Clad Aluminum 2 B0FFGJHPNB 1 10 .79 10 .79 
+
+Alex Tech 25ft - 1/2 inch Cord Protector Wire Tubing 704256862602 1 14 .99 14 .99 
+
+12/2 Gauge 20 FT Red Black Hookup B0D921S1G8 1 9.99 9.99 
+
+10 Pairs 5.5x2.1mm DC Barrel Male Connector B0DPKTQFBV 1 13 .99 13 .99 
+
+Fancasee 10-Pack 18AWG DC Power Pigtail Cable B0F7RLHNJV 1 13 .89 13 .89 
+
+Power subtotal 333 .80 
+
+Interconnect 
+
+Brainboxes 5Port Gigabit Ethernet B08FMW62MB 1 85 .86 85 .86 
+
+DSD TECH SH-U09G USB to TTL Serial Cable SH-U09G 1 13 .99 13 .99 
+
+Acer USB Hub 4 Ports, Multiple USB 3.0 195133227902 1 9.99 9.99 
+
+PoE Texas DC-Powered PoE+ 655360670907 1 21 .99 21 .99 
+
+Ginsco 580 pcs 2:1 Heat Shrink B01MFA3OFA 1 6.99 6.99 
+
+Micro USB Cable 1 Feet B0BLL6QW4T 1 4.69 4.69 
+
+Short USB C to USB C Cable (1.5ft 2 Packs), B094V4RJGC 1 9.99 9.99 
+
+SUNGUY USB to USB C Cable 2FT B0CWGQGNS7 1 6.99 6.99 
+
+SUNGUY Micro USB 3.0 Cable 1.5FT, 5Gbps USB A Male to Micro B 
+
+606184479795 2 6.99 13 .98 
+
+Cat 6 Ethernet Cable 1.5 ft, Indoor/Outdoor High Speed 
+
+B0D6FZ24FP 3 1.99 5.97 
+
+Interconnect subtotal 180 .44 
+
+Mechanical 
+
+580 PCS M3 Black Nylon Standoff Kit with Spacers, B085H7GXHG 1 6.99 6.99 
+
+Low-Strength Steel Square Nut 96887A111 1 7.82 7.82 
+
+60 PCS 6 Inches Reusable Cable Ties 701722438798 1 6.98 6.98 
+
+50 PCS M5 x 0.8 mm Thread, 8 mm Long Socket Head Screw 
+
+91290A194 1 11 .52 11 .52 
+
+25 PCS M4 x 0.7 mm Thread, 8 mm Long Socket Head Screw 
+
+91290A180 1 7.96 7.96 
+
+100 PCS M3 x 0.5 mm Thread, 10 mm Long Socket Head Screw 
+
+91290A110 1 8.74 8.74 
+
+100 PCS M3 x 0.5 mm Hex Nuts 90592A085 1 6.31 6.31 
+
+10 PCS M3 Female-Female Hex Standoff, 40 mm Long 
+
+92510A330 1 9.88 9.88 
+
+4 PCS M3 Rubber Vibration Damper Standoff B07WZY8N3K 1 6.99 6.99 
+
+98.4” Long 20 mm x 20 mm T-Slotted Framing Rail 47065T101 1 48 .37 48 .37 
+
+24” x 24” x 0.125” Thick Multipurpose 6061 Alu-minum Sheet 
+
+89015K48 1 93 .90 93 .90 
+
+24” x 24” x 0.1875” Thick Multipurpose 6061 Alu-minum Sheet 
+
+89015K33 1 118 .11 118 .11 
+
+8” x 8” x 0.5” Thick Multipurpose 6061 Aluminum Plate 
+
+9246K31 1 38 .73 38 .73 
+
+240mm x 240mm x 3mm Carbon Fiber B0BL77Q41G 4 30 .98 123 .92 
+
+1 KG Bambu Lab ABS 1.75 mm Filament B0CGR29R63 1 18 .99 18 .99 
+
+Mechanical subtotal 515 .21 
+
+Miscellaneous 
+
+Kikerike Self Adhesive Foam Tape Weatherstrip 1In x 1/2In x 20Ft High 
+
+B0FKMRZ817 1 17 .99 17 .99 
+
+3M Double Sided Tape 0.5” ×18ft 5925 1 9.99 9.99 
+
+Scotch Vinyl 700 Electrical Tape 5961-01-139- 1 2.98 2.98 
+
+Miscellaneous subtotal 30 .96 
+
+S2 Total 29 542 .04 
+
+## B Details of OctoSense sensors and hardware 12V    
+
+> Computer
+> USB Hub 1 USB Hub 2
+> Pico
+> PSU
+> MB
+> Power
+> RGB R RGB L EV L EVR
+> SYNC
+> 24V 12Ah
+> Battery
+> Power
+> Monitor
+> 24V/12V
+> Converter
+
+Power 
+
+> Ethernet
+> Trigger
+> Line
+> USB
+> 12V
+> 24V
+> 100 Hz
+> Ouster
+> Lidar
+> Thermal
+> Camera
+> Ethernet
+> Switch
+> USB Hub
+> Adapter
+> Cell
+> Hotspot
+> GPS
+> Zed F9P
+> Teensy
+> 4.1
+> DS3231
+> PPS
+> Clock
+> 24V
+> 12V
+> VectorNav
+> IMU
+> I2C
+> CAN
+> Bus
+> Reader
+
+Figure S1: OctoSense system diagram : OctoSense integrates eight sensors (stereo RGB and event cameras, a thermal camera, IMU, LiDAR, GPS, and platform proprioception), each often requiring a different combination of power, ground, trigger, time-sync, and data cabling. This results in over 30 cables across the entire system. The power system is fed by a 24 V battery that directly powers the thermal camera and LiDAR; a DC-DC converter steps this down to 12 V for the PicoPSU motherboard supply and the cameras. Trigger signals originate from a Teensy 4.1 via our custom PCB (Sec. D) and a temperature compensated oscillator (DS3231). Sensor data is transferred to the host computer over Ethernet or USB. 
+
+Each sensor in OctoSense requires configuration of various parameters and settings, which we discuss below. 
+
+• RGB cameras are set to a 100 Hz frame rate for capturing rapid motion and use an auto-exposure policy that targets a mean frame brightness of 60/255, first by increasing exposure up to 8 ms, and then by adjusting sensor gain. The code for this policy can be found here. 
+
+• Event camera biases are fixed to tuned values across all data collection to ensure consistent event generation. Active IR from the LiDAR interferes with events caused by ambient intensity, so we added a 390–750 nm bandpass filter to each event camera to block the LiDAR’s IR emission. Our initial winter collections produced unusable recordings: temperatures below the SilkyEV’s rated 0–50 ° C range corrupted event timestamps. We resolved this by wrapping each camera in 1” rubber foam insulation to isolate it from ambient conditions. 
+
+• Thermal camera is set to a 50 Hz frame rate in high gain mode for outdoor environments, with digital detail enhancement to boost edge sharpness. The auto-exposure controller is set to Plateau Histogram mode, which maps the 14-bit thermal data to 8 bits by clipping over-represented intensity bins before histogram equalization so that dominant background regions don’t consume the available gray levels. 
+
+• LiDAR runs at 10 Hz and outputs a range image, near infrared image, signal intensity image, reflectivity image, and its internal IMU signal in RNG19 RFL8 SIG16 NIR16 mode. We observed packet loss under high vibration of the LiDAR’s data cable, which we mitigated by S3 -400 -200 0 200 400           
+
+> steering-wheel angle (deg)
+> -0.1
+> 0.0
+> 0.1
+> yaw rate / speed (rad/m)
+> (a) Steering vs speed-normalized
+> yaw rate (r=−0.997)
+> 020 40 60
+> speed (mph)
+> 0.0
+> 0.2
+> 0.4
+> 0.6
+> 0.8
+> 1.0
+> P(brake on)
+> (b) Brake vs speed
+> (stopped 0.91, moving 0.17)
+> 020 40 60
+> CAN speed (mph)
+> 0
+> 20
+> 40
+> 60
+> odometry speed (mph)
+> (c) Speed vs odometry
+> (r= +0 .868)
+
+Figure S2: Ground-truth consistency between CAN bus and LiDAR-inertial odometry (a) Steering angle vs. odometry yaw-rate normalized by speed; 2D hexagonal histogram follows the bicycle model ( r = −0.997 ). (b) The brake-on signal is asserted 91% of the time while stopped ( <1 mph) and only 18% while moving ( >5 mph). (c) CAN speed vs. odometry-derived velocity; 2D hexagonal histogram ( r = 0 .868 ). The small number of histogram cells with low odometry speed comes from poor initial egomotion estimates from RKO-LIO. 
+
+mounting the cable to a rigid platform and zip-tying it down onto rubber foam to dampen vibrations at the connector inlet. 
+
+• IMU is configured to run at 400 Hz and measures accelerations, angular velocities, magnetic fields, and barometric pressure over a UART interface at 921,600 baud. Vehicle vibration injects high-frequency noise into the IMU readings, degrading inertial estimates; we mitigated this by soft-mounting the IMU on rubber-damped standoffs. 
+
+• GPS is configured to provide output at 5 Hz using a Waveshare patch antenna. During initial testing, mounting the antenna on the platform itself produced insufficient satellite lock due to the limited ground plane. We resolved this by magnetically mounting the antenna directly to the vehicle roof. RTK corrections are delivered via NTRIP, using NYSNet for New York collections and RTKData for Pennsylvania. Cellular dongles initially used for these corrections drew enough power from the USB bus to cause bus crashes that corrupted sensor data across the entire platform. We resolved this by switching to a cellular hotspot with an internal battery and a USB-to-Ethernet interface, isolating the cellular power draw from the main USB bus. Note, RTK corrections are provided when available; limited cellular service or GPS lock can limit the data where corrections are present. 
+
+• CAN Bus: OBD ports are commonly firewalled in modern vehicles, restricting CAN bus access. We therefore tap the bus directly from the vehicle’s forward-sensing camera connector via a custom splitter harness and feed signals into a CAN-bus (DSD-C31G) adapter that exposes the bus as a Linux network socket. Each CAN message consists of a unique identifier and a data payload encoding the corresponding signal. Messages are recorded via ROS2 SocketCAN and decoded using the OpenDBC message definitions for the Mazda CX-5 (2017 release). Although our vehicle is a 2021 model, we confirmed the decoded signals are physically consistent with our LiDAR-inertial odometry: CAN speed matches the odometry velocity, steering angle tracks the odometry yaw rate via the kinematic bicycle model, and the brake signal is engaged almost exclusively at low speed (Fig. S2). 
+
+• Compute: AMD Ryzen 9700X 8-core processor, 64GB DDR5 RAM, PCIe 5.0 Samsung 9100 NVMe SSD for high-throughput data acquisition. 
+
+B.1 Lessons learned 
+
+One of the most important lessons came early in our testing phase: many of the original electronics we tried to use failed to function properly in cold weather. Notably, we tried three different power supplies in our attempts to get the motherboard functioning: 1) RGEEK 1106 DC to DC ATX PSU 12V 300W Pico ATX Switch PSU 24pin M, 2) DC 12V 300W 24Pin ATX Connect with Motherboard, and 3) Mini-Box picoPSU-160-XT High Power. The first two power supplies operated for about S4 fifteen minutes before failing during cold weather operation. We traced the issue to their electrolytic capacitors, whose equivalent series resistance increases at low temperatures, reducing the supplied voltage and causing the motherboard to shut off. Our third option, the Mini-Box picoPSU, uses polymer capacitors instead, eliminating this problem and enabling stable operation. The second component that gave us a lot of trouble was the 24V-to-12V converter used to power the picoPSU and cameras. We tried: 1) DC Transformer: Nilight 24V to 12V Voltage Converter 240W 20A Regulator Step Down to 12VDC and 2) Victron Energy Orion-Tr DC to DC Converter -24/12-Volt. The first option would fail after thirty minutes of cold weather operation, and thus we switched to the second option that supported our full mission lifetime. Finally, another component that caused us trouble was the waveshare SIM7600G-H 4G DONGLE LTE USB used to receive NTRIP correction data. When plugged in, it would overdraw current from the USB bus, causing a brownout that crashed connected USB devices, halted their drivers, and corrupted our data collection sequence. Our first attempt at a solution was a powered USB hub Coolgear 3.2 Gen 1 USB Hub but still this too proved unstable. We then switched to a KuWFi 4G LTE Unlocked Wi-Fi Hotspot Device, which has an internal battery and exposes a network interface to the host over USB. This eliminated the power draw issue entirely, since the device charges steadily at standard USB current rather than drawing peak cellular-radio current from the bus. A recurring challenge with many of these components was the lack of complete specification sheets, which meant we had to discover most of these failure modes through experimentation. We document them here for the benefit of future users of such hardware. Another challenge surfaced during winter testing of our time synchronization system. After collecting over five hours of data, we ran temporal synchronization and discovered that most of the timestamps from our event camera were corrupted. Some background on this issue: the SilkyEV uses the EVT3.0 encoding, which represents each microsecond timestamp as a 24-bit value split into a 12-bit time-high field (the 12 most significant bits) and a 12-bit time-low field (the 12 least significant bits). Each time-high value represents a 4.096 ms step, while time-low ticks in 1 μs increments within that step, giving a full time-high cycle of 16.78 s before it wraps back to zero. The decoder tracks the timestamp by combining the most recent time-high with the incoming time-low values, and when time-high wraps, the decoder must detect the overflow and maintain a higher-order counter to keep timestamps monotonic. In our corrupted data, we observed time-high overflowing multiple times within a 20-second window, far more frequent than the one overflow per 16.78 s that the format specifies. To cross-validate, we asked a collaborator to collect data in a room-temperature environment and then place the camera in a freezer for 15 minutes before collecting data again. They reproduced our failure mode exactly, confirming that our issue was induced by cold. We first tried active warming with a Film Heater Plate Adhesive Pad 12V 7W, but this solution did not provide enough heat to keep the cameras in their operating range. We then switched to a passive solution, wrapping the cameras in 1” rubber foam insulation, which provided sufficient thermal shielding. 
+
+B.2 Mechanical design of OctoSense 
+
+OctoSense was designed with a primary focus on mechanical robustness and reliability for deployment across platforms operating in outdoor environments. Similar to modular robotic systems, the design emphasizes structural rigidity, modular integration, maintainability, and rapid reconfiguration across experiments. Lightweight carbon fiber enclosures were developed for both the camera assemblies and the LiDAR to maximize impact resistance while minimizing overall system weight. Aluminum structural members with weight-reducing cutouts served as the primary support structure, providing increased stiffness while limiting additional mass that could otherwise raise the center of mass and introduce vibration during operation. The camera assemblies were mounted using an aluminum extrusion, enabling straightforward sensor adjustment, replacement, and system reconfiguration across platforms when needed. Thin aluminum reinforcement plates were incorporated to reduce vibration-induced flexing caused by the elevated sensor configuration, while custom vibration dampers and mechanically secured connections with foam-supported cable bracing were included to further S5 Figure S3: Calibration techniques used in OctoSense. We detect unique features from our calibration target across modalities to solve for sensor extrinsics. (A) A 6 ×6 AprilGrid with 11.2 cm marker size augmented with a retro-reflective circle. (B) The retro-reflective circle enables easy detection via simple thresholding on the LiDAR reflectivity image. (C) Reconstructed event images using the IIR filters of [ 63 ], with corners detected by an AprilTag detector. (D) RGB images with detected AprilTag points. We use all of these correspondences to solve for the sensor extrinsics. (E) Reprojection of the LiDAR depth into the RGB image, showing tight spatial alignment and confirming a good calibration. 
+
+Figure S4: Left: A CAD rendering of OctoSense with five cameras: stereo event, stereo RGB, and thermal camera mounted on an aluminum rail for configurable spatial placement, each in a carbon fiber cage for protection. A similar cage is used for LiDAR. Our system was made for modular deployment across a variety of robot platforms. Right: Mechanical drawings for the inner cage surrounding the motherboard. 
+
+improve operational reliability during extended outdoor deployment. The system was mounted to the vehicle’s sunroof using SeaSucker vacuum cup mounts. 
+
+## C Software Improvements 
+
+Throughout this investigation we have used many open-source drivers and utilities. While using these tools, some have needed improvements or configuration changes to solve various bugs or enable new features. We list below the various repositories we either created or modified: 
+
+§ ouster http node 
+
+github.com/anthonytec2/ouster http node Bug: For time synchronization across our sensors, we need to know when the LiDAR has achieved hardware synchronization lock from our timing pulse. This lets us uniquely identify the first valid pulse and align the LiDAR with the rest of the sensors. S6 75.6 75.4 75.2 75.0 74.8  
+
+> Longitude
+> 39.92
+> 40.00
+> 40.08
+> Latitude
+> 1251 km 34 hrs
+
+(a) Philadelphia, PA     
+
+> PA
+> NJ
+> NY
+> PHL
+> LI
+> Session 10 (Jan 21 28)
+> Session 9 (Jan 14 20)
+> Session 11 (Feb 1 2)
+> 74.0 73.6 73.2 72.8
+> Longitude
+> 40.65
+> 40.80
+> 40.95
+> Latitude
+> 1232 km 23 hrs
+
+(b) Long Island, NY 
+
+> Session 9 (Jan 14 20)
+> Session 8 (Jan 8 9)
+> Session 7 (Jan 4 8)
+
+Figure S5: OctoSense Dataset GPS Routes Routes for each sequence on Long Island and in Philadelphia. These cover only intervals with valid GPS lock and therefore total less than the full 59 hours of recorded data. 
+
+Fix: We built a ROS2 node that wraps the Ouster HTTP API, polls the sensor for its time-synchronization status, and republishes it as a ROS2 topic so it can be recorded into a rosbag alongside the sensor data. 
+
+§ rko lio 
+
+github.com/anthonytec2/rko lio Bug: Upstream RKO-LIO publishes only a downsampled version of the deskewed point cloud and discards per-point channels (reflectivity, signal, near-infrared). Fix: We retain the full-resolution scan, apply deskewing to it directly, and preserve all original per-point channels in the published cloud. 
+
+§ kalibr 
+
+github.com/anthonytec2/kalibr Bug: Kalibr’s AprilTag detector assumes a black border width of 2 by default, which prevented the tags used in this investigation (border width 1) from being detected. Fix: Changed the default black border width to 1, enabling reliable detection of our AprilTags. 
+
+§ flir camera driver (branch: line status )github.com/anthonytec2/flir camera driver Missing feature: For time synchronization of our FLIR cameras, we need to know during which frame the pulse-per-second (PPS) signal is active. The FLIR cameras expose a GPIO line status register that reports the level of an input pin, to which we route the PPS signal. Fix: Exposed the line status as part of each frame’s published metadata, allowing the PPS state to be recorded alongside the image data. 
+
+§ ffmpeg image transport tools (branch: transcoder pts )github.com/anthonytec2/ffmpeg image transport tools S7 Missing feature: Our recorded rosbags contain hardware-encoded FFmpeg image streams, but the mapping between recorded frames and their decoded timestamps was broken. After transcoding a bag to a video file, there was no reliable way to tell which output frame corresponded to which original capture time, making downstream time synchronization impossible. Fix: Added a new bag to video executable that decodes ffmpeg image transport messages from a bag and re-encodes them via libav, tracking each frame’s presentation timestamp (PTS) through the decode/encode pipeline and emitting aligned timestamp sidecars that map every encoded frame back to its original bag capture time. The tool exposes a zero-copy raw AVFrame path between decoder and encoder to skip cv bridge conversion. 
+
+§ ffmpeg encoder decoder (branch: pts arr )github.com/anthonytec2/ffmpeg encoder decoder Missing feature: The decoder and encoder APIs only operated on ROS sensor msgs/Image messages through cv bridge, which forced a pixel-format conversion and full-frame copy on every frame, even when the decoder output already matched the encoder input, and provided no way to tell which PTS had actually made it through a decode pass, so the bag-time ↔ PTS mapping could not be recovered on the other side of a transcode. Fix: Added a raw AVFrame pathway on both sides of the library. The decoder’s new initializeRaw() 
+
+delivers decoded AVFrame s directly to the caller, and a companion getAndClearDecodedPTS() 
+
+accessor returns the list of PTS values that were successfully decoded since the last call, making the input ↔output frame mapping explicit. The encoder’s matching encodeAVFrame() accepts a raw AVFrame , uses av image copy when source and destination pixel formats agree, and otherwise caches an sws scale context so the conversion is set up only once per stream. 
+
+§ simple image recon lib (branch: python bindings )github.com/anthonytec2/simple image recon lib Missing feature: For camera calibration, we need grayscale-like frames reconstructed from event-camera data in order to detect AprilTags. The upstream reconstruction code is implemented in C++, but the rest of our processing pipeline is in Python. Fix: We added Python bindings to the C++ reconstruction library, allowing batches of events to be passed in and reconstructed frames returned directly for use in camera calibration. 
+
+## D Synchronizing different sensor clocks 
+
+We model the map from each sensor’s clock to the main clock as a linear system with state, say, 
+
+x = [ b, a ]⊤, where b is the clock offset (bias) and a is the clock skew (relative tick rate). Suppose that this state evolves as a random walk and is observed through the affine clock map: 
+
+xk = xk−1 + wk (1) 
+
+zk = Hkxk + vk with Hk = [1 , t sk] (2) where wk ∼ N (0 , Q ∆tk) and vk ∼ N (0 , R ) are Gaussian noise in the dynamics and observation models respectively. The quantity zk is the main-clock pulse timestamp and tsk is the device clock timestamp corresponding to the pulse per second (PPS) event of zk. We set Q = diag (σ2 
+
+> b
+
+, σ 2
+
+> a
+
+) and therefore Q∆tk is the variance accrued over the interval ∆tk. Initial state is bootstrapped from the first pulse as a0 = 1 , b0 = z0 − ts
+
+> 0
+
+. A similar estimation framework can be seen in [93]. 
+
+Implementation details We had to make some alterations to the above idea in our setting. Since the observation matrix Hk depends upon the timestamp, the filter above as written suffers from numerical conditioning issues if we use Unix time for tsk. Therefore, we center the device clock at its first sample, 
+
+˜tsk = tsk − ts
+
+> 0
+
+, and recover the original mapping afterward. In our data, we observed malformed synchronization sequences containing spurious pulses between PPS events. We reject such malformed updates by gating each measurement on its Mahalanobis distance as follows. Suppose ˆxk|k−1 and Pk|k−1 are the predicted mean and covariance of the S8 Table S2: Per-sensor Kalman filter noise parameters. R is the measurement variance, calibrated to each sensor’s edge-detection jitter. Q = diag (σ2 
+
+> b
+
+, σ 2
+
+> a
+
+) is the per-second process noise on offset and skew. The initial covariance of the state is P0 = diag (1 .0, 10 −6).Sensor √R (ms) σ2 
+
+> b
+
+σ2 
+
+> a
+
+Rationale IMU 1 10 −8 10 −10 400 Hz edge quantization FLIR cameras 5 10 −10 10 −13 100 Hz edge quantization Event cameras 0.01 10 −10 10 −13 μs-resolution trigger events System clock 25 10 −6 10 −9 OS scheduling jitter 
+
+Figure S6: Custom time synchronization board : We design a custom PCB integrating a Teensy 4.1 microcontroller, a DS3231 temperature-compensated crystal oscillator, and a header exposing all trigger output signals, providing a unified platform for distributing sensor triggers. We chose the Teensy for its 600 MHz clock, which allows precise, low-jitter trigger generation and the DS3231 for its low 2 ppm drift. Left: Schematic for our integration of these parts. Right: Rendering of the PCB created in KiCad from this schematic. 
+
+RTC SQW (1 Hz) 
+
+Event/LiDAR 
+
+(4+2 i) × 5 ms=30 ms 
+
+IMU / RGB 1 Hz 
+
+(6+2 i) × 5 ms=40 ms 
+
+RGB (100 Hz) 
+
+10 ms 
+
+10 ms 
+
+UID phase ( i ≤ 6) PPS phase ( i > 6)
+
+i = 1 i > 6
+
+· · · 
+
+· · · 
+
+· · · 
+
+· · · 
+
+· · · 
+
+· · · 
+
+· · · 
+
+· · · 
+
+Figure S7: Hardware time-synchronization signals. The cycle index i starts at 1 with the first PPS edge after START . All four signals rise simultaneously on each PPS rising edge; the 100 Hz RGB clock is phase-locked because its hardware timer is reset on every PPS edge. During the UID phase ( i ≤ 6) variable-width pulses encode the index i: Event clock emits a single pulse of width (4 + 2 i) × 5 ms, and IMU /RGB 1 Hz clocks emit two 10 ms pulses with rising-edge of period (6 + 2 i) × 5 ms. During the PPS phase ( i > 6), all channels emit a single 10 ms pulse per second. 
+
+S9 estimated state at step k before incorporating the observation zk. Suppose yk = zk − Hk ˆxk|k−1 is the innovation, and Sk = HkPk|k−1H⊤ 
+
+> k
+
++ R is its covariance. If dk = |yk|/√Sk is larger than a threshold τ = 5 (after the first 30 pulses, to allow the filter to converge), we drop the observation update. We run a Rauch-Tung-Striebel [ 94 ] smoother to refine the filtering estimates. Table S2 describes more parameters for different sensors. Originally, both the GPS and thermal camera used external triggers, but we found GPS trigger recording unreliable and external triggering of the thermal camera caused image tearing. Therefore, we record these two sensors using system time and fit a transformation to the global clock with the Kalman filter, using the trigger signals from the IMU data packets. All our sensor triggers are sent from our custom time synchronization board (Fig. S6). 
+
+## E Searching the OctoSense dataset using natural language 
+
+Finding interesting sequences for downstream tasks is a core challenge in dataset scaling. In driving data, for example, we often care less about average-case performance than about long tail events such as pedestrians in the roadway, animals, unusual road conditions and so on. This is precisely why Waymo [95] curates long tailed cases to evaluate model performance under rare scenarios. To support this use case in our dataset, we built a semantic search pipeline that lets users query for specific events in natural language. We caption all image data at 5-second intervals using Gemma 4 [ 69 ] with the system and captioning prompts shown below. Each captioning prompt is also enriched with a short ego-motion telemetry sentence (speed, turning, distance traveled, and local time-of-day) derived from the window’s trajectory. The resulting captions are embedded with Qwen3-Embedding-8B [ 70 ], and we build a FAISS [ 71 ] index over the full set of embeddings. At query time, a user’s natural language query is embedded with the same model and matched against the index. An example query is shown in Fig. S8. 
+
+System Prompt 
+
+You are a driving scene annotator for a dashcam retrieval system. Captions are embedded for semantic search, so every sentence must describe something positively present in the image, searchable content only. Mentioning absent things pollutes the search index, so skip any category that does not apply and move on without comment. Describe only what you can identify with confidence: only call something a traffic light if you clearly see a signal housing with an illuminated red, green, or yellow lens; otherwise do not mention it. Only state a vehicle’s color if lighting makes it unambiguous; otherwise describe the vehicle without color. Read sign text only if legible; otherwise call it an unreadable sign. Example of correct style for a sparse scene: ’A two −lane rural road with a double yellow centerline curves right through dense trees. A silver sedan travels in the oncoming lane at mid −distance. The road surface is dry under overcast daytime light.’ Note the example simply omits lights, signs, and pedestrians rather than remarking on them. 
+
+Caption Prompt (Multi-Frame) 
+
+You are given 3 dashcam frames from the same driving sequence, spaced ˜2.5 seconds apart. 
+
+{ego motion line } Write one paragraph of continuous prose describing the scene and what happens across the sequence, as a single continuous scene −− never reference frame numbers. Begin directly with the scene itself. Cover, in order, whichever of the following are actually present: (1) Road type −− choose the best fit: highway, on −ramp/off −ramp, urban street, urban intersection, residential street, rural two −lane road, dirt or gravel road, off −road trail, parking lot, parking garage, bridge, tunnel, T −junction, 4 −way stop, roundabout −− 
+
+S10 plus lane count and markings. (2) Each visible vehicle: type, color if clearly discernible, lane position, distance (near, mid −distance, far), and how it moves across the sequence (e.g. a white SUV ahead pulls away, an oncoming truck passes). (3) Any illuminated traffic lights (red, green, yellow), including changes. (4) Any signs, text read verbatim. (5) Road surface: dry, wet, light snow cover, heavy snow cover, ice, slush, debris, or construction zone with cones or barriers. (6) Weather and lighting: clear, overcast, rain, light snow falling, heavy snow, fog, daytime, dusk, dawn, nighttime, glare. (7) Any emergency vehicles or unusual hazards. (8) Any pedestrians or cyclists, with position and action. (9) End with one clause on ego motion, phrased from the telemetry above if provided, otherwise inferred from how the scene changes (stationary, moving forward slowly, moving forward, accelerating, decelerating, turning left, turning right). Keep the paragraph under 150 words. 
+
+## F Details of the architecture and hyper-parameters for the tokenizer and MAE 
+
+F.1 Event camera representation 
+
+Event-cameras produce a set of events: {(u, p, t )}i∈Z, where u ∈ Z2 is the spatial location 
+
+p ∈ {− 1, +1 } is the sign of the intensity change since the last event and t is the timestamp. We construct a frame-based representation Z ∈ RH×W ×C , for sensor height H, width W and C temporal channels that encodes event activity at multiple temporal scales. The cth channel of the representation at pixel u, denoted by Zuc , evolves according to an ordinary differential equation (ODE): 
+
+ddt Zuc = −Zuc 
+
+τ + α X
+
+> i
+
+piδ(t − ti)  
+
+> Figure S8: OctoSense Video Semantic Search Our dataset tools allow you to search over our dataset with natural language. This example shows a Query: police vehicle , above shows the results of the query, where we do find police vehicles in all result.
+
+S11 for t ∈ [ti, t i+1 ) where τ and α are the time constant and the gain, and δ(·) is a Dirac delta marking the arrival of an event. Solving this ODE yields a causal exponential sum over the past events: 
+
+Zuc (t) = α P 
+
+> ti≤t,u i=u
+
+pi exp  − t−ti
+
+> τ
+
+.We implement this filter as a streaming update. Each pixel stores the timestamp of its last update ti.When a new event arrives at time t, we (1) decay the existing state by exp( −(t − tl)/τ ), (2) add the contribution αp i, and (3) set tl ← t. The filter state can be read out asynchronously at any query time by applying a single decay step from each pixel’s tl to the query time. This representation is equivalent to the time surfaces of Lagorce et al. [80] and the continuous version of the discretized IIR filter of Bisulco et al. [81]. 
+
+F.2 IMU tokenization architecture 
+
+Measurements from the 3-axis accelerometer and 3-axis gyroscope within a 1.6 s window (640 samples at 400 Hz) are processed into discrete tokens. We first break this window into chunks of 40 samples each. Within each chunk, we apply a 3-layer 1D convolutional network with kernel size 5, increasing dilation (1,2,4), and channel counts (6, 64, 128). We then collapse each chunk into a single token via attention pooling with a learned query, followed by RMS normalization. This yields sixteen such “tokens”, one per chunk, across the window. We pass these through a 4-layer transformer (4 heads, MLP ratio 2, RMSNorm) with 1D rotary position embedding across the chunks. Each chunk is projected into a 5-dimensional FSQ latent with levels [8,8,8,8,5], yielding a code-book of 20,480 entries and one discrete token for each chunk. The decoder mirrors the encoder comprising a 4-layer cross-token transformer with RoPE, followed by a per-chunk path that reconstructs each chunk token. On top of this, we apply an additional decoder which applies a 1D sinusoidal positional encoding and a 3-layer dilated 1D convolution stack (dilation 4,2,1) to reconstruct the 6-dimensional time series of the original signal. 
+
+F.3 Decoder to train the image-based tokenizer 
+
+When building our frame-based sensor tokenizers, we noticed that our initial designs using a transformer decoder and a linear head led to blurry reconstructions Fig. S9. We therefore use a convolutional decoder that maps the grid of latent codes to the reconstructed image through three upsampling stages. Each stage is a 3 ×3 convolution to expand the channel dimension to that particular stage’s upsampling factor, and these channels are reshaped into their respective spatial dimensions. Each upsampling stage is wrapped in a residual block consisting of GroupNorm-GELU-3 ×3 conv applied twice, with a residual connection, followed by a dilated residual block to enlarge the receptive field. The channel width is halved at each stage, and a final 3 ×3 convolution projects to the output channels. We found that compared to a transformer decoder, our convolutional decoder yields better perceptual quality for the same number of training steps. Therefore, we adopt a convolutional decoder for all our frame-based output modalities. 
+
+F.4 The multi-modal late-fusion MAE architecture 
+
+The late-fusion architecture takes as input 8 frames each from the left event camera, left RGB camera, and LiDAR, along with 640 samples of IMU data. The first step of our architecture is encoding each of our inputs into tokens for a Transformer. For RGB/events/LiDAR, we apply 2D convolutions with kernel size and stride equal to the patch size. As for the IMU, we use the tokenization procedure described in Sec. F.2. All attention layers in the encoder and decoder use a RoPE on four axes: (t, u 1, u 2, s ), where t is the position within the sequence, (u1, u 2) are the patch coordinates and s ∈ { 1, ..., 4} is the modality index. Before encoding, we mask tokens at the granularity of spatiotemporal tubes, each tube being the set of tokens that share a patch location 
+
+(u1, u 2) and modality s across all timesteps. We mask a fraction of the tubes and pass only the visible tokens through the encoder; for all modalities, a 3-layer spatial-encoder transformer is applied to the visible tokens within a timestep per modality independently. Then, within each unmasked tube, we apply a 2-layer transformer encoder along the temporal axis, independently per tube, to exploit S12 Figure S9: Architecture for tokenizing Event/RGB camera data During our initial investigations of our sensor tokenization architecture, we found that a transformer decoder with a linear readout led to blurred predictions compared to using a convolutional (CNN) decoder. Across the columns we show the ground truth, the CNN-decoder prediction, and the Transformer-decoder prediction. At the bottom we show for an equal training budget the CNN decoder reaches lower error; we therefore adopt a CNN decoder for all our frame-based tokenizers. 
+
+temporal information. Finally, we apply a 3-layer transformer encoder over the entire token sequence. Our decoder is an 8-layer transformer over the entire token sequence. We use a set of linear layers for each modality that map to the FSQ bottleneck of the tokenizer where all values are bounded to [-1,1]. Full details for the architecture’s hyper-parameters are in Table S4. S13 Events 
+
+Event Stream 
+
+Background Activity Filter + Undistort 
+
+Leaky Integrator Temporal Filters 
+
+Patchified Image Lidar 
+
+Lidar Pointcloud Deskewing Spherical Projection Patchified Range Image 
+
+IMU RGB 
+
+Accel Gyro 
+
+Time Chunking Dilated Local Conv Cross Attention 1D Patchified Temporal Tokens Image Undistort + Rectify Patchified Image Figure S10: Sensor Representations Each modality is converted to a tokenizable form: events via a leaky integrator and patch-based tokenization; LiDAR via deskewed range images and patch-based tokenization; image via undistortion, rectification and patch-based tokenization; and IMU via a convolutional-cross-attention encoder Sec. F.2. FSQ Discretization  
+
+> L/2 -L/2 0
+
+[0, 2, 4, 5, 6] (i) Continuous Z (ii) Bounded Z (iii) Quantized Z (iv) Integer Code 
+
+> Active/Inactive Reconstruction loss
+
+FSQ Dec 
+
+🔥 
+
+Enc 
+
+🔥 
+
+Events 
+
+FSQ Dec 
+
+🔥 
+
+Enc 
+
+🔥 
+
+> Reconstruction
+
+RGB FSQ Dec 
+
+🔥 
+
+Enc 
+
+🔥 
+
+> Log Reconstruction +SiLog+ BCE
+
+Lidar FSQ Dec 
+
+🔥 
+
+Enc 
+
+🔥 
+
+> Normalized Reconstruction
+
+IMU 
+
+Figure S10: Sensor Tokenized Targets To balance learning progress across modalities, we predict frozen Finite Scalar Quantization (FSQ) codes in a bounded range, with a per-modality encoder/decoder trained beforehand. 
+
+S14 1) Tube-Based Masking 2) Multimodal Masking Allocation 3) Multimodal Architecture Linear Transformer Decoder Frozen Tokenizer Feature Matching Encoder Features 
+
+🔥 
+
+Lidar Events 
+
+Dirichlet Distribution Frame Sensor Masking IMU Beta Masking 
+
+## 🔥 Conv 2D Conv 2D Conv 1D+ Cross-Attn Conv 2D Spatial Attention Encoders 
+
+RGB   
+
+> Temporal Tubelet Attention Encoders Multimodal Attention Encoder Query Attended
+> IMU has no Spatial Attention
+> Masked
+
+🔥 ❄Trainable Parameters Frozen Parameters 
+
+🔥 🔥 🔥 🔥 Figure S10: Late-fusion MAE Per-modality tokens are masked in spatiotemporal tubes with masking ratios per modality sampled from a Dirichlet distribution. The encoder applies attention in three stages: (i) spatial ,within each frame, (ii) temporal , along per-patch tubes across time, (iii) multimodal , joint attention over all tokens. Mask tokens are inserted after encoding, and a shared transformer decoder with per-modality linear heads predicts the FSQ latent from (B); the loss is ℓ1 against the frozen targets. 
+
+Figure S10: Downstream probes On the frozen representation we train a Dense Prediction Transformer to predict optical flow, depth and segmentation, and a separate attentive egomotion probe for relative pose, steering, speed and angular/linear velocity. 
+
+S15 Table S3: Training hyper-parameters for our four sensor tokenizers consumed by the late-fusion MAE. a LiDAR is cropped to a 90 ◦ forward-looking view to obtain input of shape 64 ×512. bIMU is a 1.6 sec window at 400 Hz with 6 channels (3-axis accelerometer + gyroscope) discretized into 16 chunks of 40 samples each. The notation TF-N stands for a transformer of N layers; Conv for residual convolutional blocks and 2-D pixel-shuffle for spatial upsampling of RGB/events/LiDAR. The IMU uses 1-D dilated convolutions. Tokenizers are trained with exponential moving averaging (EMA) of its parameters. ConvAttn is the architecture described in Sec. F.2. 
+
+RGB Events LiDAR IMU 
+
+Input shape 3×192 ×192 3×192 ×192 2a×64 ×512 6×640 b
+
+Patch / chunks 16 ×16 12 ×12 8×16 40 Tokens per window 144 256 256 16 Encoder TF-6, d=384 TF-6, d=384 TF-6, d=384 ConvAttn+TF-4, d=128 
+
+Decoder TF-6 + Conv TF-6 + Conv TF-6 + Conv TF-4+Conv FSQ levels [8,8,8,8,5] [8,8,8,8,5] [8,8,8,8,5] [8,8,8,8,5] TF Heads / MLP ratio 8 / 2.0 8 / 2.0 8 / 2.0 4 / 2.0 FSQ codebook size 20,480 20,480 20,480 20,480 Recon. loss L1 L1 + inactive L1 + SiLog + validity L1 Optimizer Muon ( 2-D weights) + AdamW (biases / norms), match rms adamw LR rescale Learning rate 10 −3, OneCycleLR, pct start=0 .1
+
+Precision bf16-mixed, gradient clip 0.5, EMA 0.999 
+
+GPUs 4×B200 4×B200 4×B200 1×B200 Batch size 192 192 192 2048 Epochs 60 60 60 60 
+
+Table S4: Training hyper-parameters for the late-fusion MAE which contains three stages: modality-specific spatial encoder → modality-specific temporal encoder → cross-modal fusion. Frozen FSQ tokenizers (Table S3) supply the reconstruction targets. a LiDAR is cropped to a 90 ◦ forward-looking view to obtain input of shape 64 
+
+×512. bIMU is a 1.6 sec window at 400 Hz with 6 channels (3-axis accelerometer + gyroscope) discretized into 16 chunks of 40 samples each. Events are denoised with a 3 ×3 spatial and 1 ms temporal window, filtered with time constants τ = [8, 18, 44] ms and impulse gains α =[0.0247, 0.01105, 0.00454] before gamma correction with coefficients [0.4,0.5,0.6] and per-channel normalization with coefficients [0.5289, 0.3912, 0.2587].                                                                                                
+
+> RGB Events LiDAR IMU
+> Input shape 8×3×192 ×192 8×3×192 ×192 8×1×64 ×512 a6×640 b
+> Patch / atom 16 ×16 12 ×12 8×16 40 samples Tokens per frame 144 256 256
+> Tokens per window 1,152 2,048 2,048 16
+> Front-end Conv2d Conv2d Conv2d ConvAttn FSQ target frozen FSQ, levels [8 ,8,8,8,5] ,20 ,480 codes/token Loss / weight ℓ1/1.0ℓ1/1.0ℓ1/1.0ℓ1/1.0
+> Spatial encoder TF-3, d=576 TF-3, d=576 TF-3, d=576 —Temporal encoder TF-2, d=576 TF-2, d=576 TF-2, d=576 TF-2, d=576
+> Cross-modal encoder TF-3, d=576 , TF Heads =9 , MLP ratio 4.0
+> Decoder TF-8, d=384 , TF Heads =12 MLP ratio 4.0
+> Positional encoding 4D RoPE over (patch-x, patch-y, time, modality) Masking Dirichlet masking policy, mean masking ratio (r= 0 .8) + spatiotemporal tubelet masking IMU keep 0.2 + 0 .5·Beta(2 ,5) →[0 .2,0.7]
+> Optimizer Muon (2-D weights) +AdamW (biases / norms), match rms adamw LR rescale Learning rate 1×10 −3, OneCycleLR, pct start=0 .1
+> Precision bf16-mixed, gradient clip 1.0
+> Batch (per GPU / eff.) 128 /512
+> Sequence T=8 frames, ∆t=0 .2s, stride 0.4sEpochs 150
+> Hardware 4×NVIDIA B200, DDP Seed 42
+
+S16 Table S5: Architectures used for evaluation on different tasks. Each encoder is frozen and evaluated with a probe on either its last layer features for egomotion tasks or multiple intermediate features for dense prediction tasks. The four left columns are our masked autoencoder variants, first two using only RGB, second two using multi-modal data. 4-mod denotes the four input modalities (RGB, events, LiDAR, IMU). As compared to ViT-B our late-fusion architecture does not have four decoder layers, so we use layer indices [1,2,3,3] for DPT probing.  
+
+> a
+
+DINOv2/v3 both feature multi-resolution training, 224 is one of these resolutions, and that is the one we use.                                                                                                                                                        
+
+> RGB-only image MAE RGB-only video MAE Early-fusion MAE Late-fusion MAE DINOv2 DINOv3 V-JEPA 2.1 SigLIP 2 PE Backbone ViT-B ViT-B ViT-B 3-stage fusion ViT-B ViT-B ViT-B ViT-B ViT-B Params (encoder) 85 .6M85 .6M86 .2M81 .6M86 .2M85 .7M86 .8M85 .8M85 .8MDepth (blocks) 12 12 12 3+2+3 12 12 12 12 12
+> Hidden dim 768 768 768 576 768 768 768 768 768
+> Patch size 16 16 16 −14 16 16 16 16
+> Native input 192 2192 2192 2192 2224 2a224 2a384 2256 2224 2
+> Frames / token 111111211
+> RGB tokens / frame 144 144 144 144 256 196 576 256 196
+> Modalities ingested RGB RGB 4-mod 4-mod RGB RGB RGB RGB RGB Hook target last block last block last block crossmodal stage last block last block last block last block last block Joint-DPT layers [3 ,6,9,12] [3 ,6,9,12] [3 ,6,9,12] [1 ,2,3,3] [3 ,6,9,12] [3 ,6,9,12] [3 ,6,9,12] [3 ,6,9,12] [3 ,6,9,12]
+> Ego attentive layer {12 }{12 }{12 }{3}{12 }{12 }{12 }{12 }{12 }
+
+Table S6: Hyper-parameters for training task evaluation probes Probes are used with frozen encoders in Table S5. An attentive probe reads the features of the last layer to predict ego-motion and a dense prediction transformer (DPT) takes as input a multi-scale pyramid of features at intermediate layers. Same probe architectures and training recipe are used for all encoders. Details on training losses and training procedures can be found in Sec. G. As part of preparing the evaluation data, we remove any window overlapping a pose transient (linear acceleration above 1.5g) within 2s of a bag boundary; these arise from RKO-LIO odometry estimation issues. 
+
+Dense Perception Tasks Probe Attentive Ego-motion Probe Reader Dense Prediction Transformer (DPT) 2× cross-attn block Layers from encoder 4 (multi-scale pyramid) 1 (last block) Hidden width 64 ch ( dpt channels ) matches encoder hidden Heads / queries — 8 heads, learned queries (3 readouts) Task targets Depth, Optical flow, Cityscapes-19 seg rel. pose (R, t ), body-frame (v, ω ), CAN speed + steer Losses SiLog + Charbonnier + Cross Entropy Chordal + Huber Optimizer AdamW Learning rate 10 −3
+
+LR schedule linear warm-up ( 10% ) → cosine OneCycle (cosine, 10% warm-up) Precision bf16-mixed, gradient clip 1.0
+
+Batch (per GPU / eff.) 32 / 128 128 / 512 
+
+Epochs 60 
+
+Hardware 4× NVIDIA B200, DDP Eval Filter gt speed ≥ 5 mph, |a| < 1.5 g in first/last 2 s Seed 42 
+
+S17 G Evaluation Protocol 
+
+G.1 Evaluation of existing pretrained models 
+
+All probes operate on features of the frozen encoder. The five vision-only baselines are fed only the left RGB stream of our 8-frame window, bilinearly resampled to each encoder’s native resolution from 192 × 192 resolution and normalized with either ImageNet statistics (DINOv2, DINOv3, V-JEPA 2.1) or [−1, 1] scaling (SigLIP 2, Perception Encoder) to match each model’s preprocessing. Per-frame 2D ViTs (DINOv2/v3, SigLIP 2, Perception Encoder) run independently on each frame and their per-frame token grids are concatenated in the order of these frames (register and CLS tokens are removed). V-JEPA 2.1 is a spatiotemporal model which takes frames in pairs of two; we repeat the output tokens of V-JEPA 2.1 to recover per-frame tokens for single-frame decoding on dense tasks. 0 100 200 300 400 500                                                                     
+
+> channel index
+> 10 1
+> 10 0
+> 10 1
+> 10 2
+> mean  |activation | channel 369
+> (a) per-channel magnitude, final cross-modal layer
+> 123
+> cross-modal block (depth)
+> 10 1
+> 10 2
+> per-channel max  / median
+> 7×
+> 10 ×
+> 383 ×
+> (b) max/median channel ratio vs.\ depth
+> (a) Dense Prediction Tasks Errors
+> Encoder Norm Depth (m) ↓Flow (px) ↓Seg (mIoU) ↑
+> Late-Fusion MAE
+> LayerNorm ✓4.73 1.97 0.411 BatchNorm 4.81 2.06 0.404 Hybrid (BN+LN) 4.71 2.05 0.388 DINOv2
+> LayerNorm ✓6.82 19.46 0.410 BatchNorm 6.84 19.28 0.422 Hybrid (BN+LN) 6.92 20.05 0.426
+> (b) Egomotion Tasks Errors
+> Encoder KV norm Trans (m) ↓Rot ( ◦)↓Lin.vel (m/s) ↓Speed (mph) ↓
+> Late-Fusion MAE
+> raw ✓0.06 0.24 0.36 0.78 BatchNorm 0.05 0.17 0.32 0.75 Enc. final-norm 0.07 0.29 0.43 1.06 DINOv2
+> raw ✓0.96 0.80 4.92 5.84 BatchNorm 0.93 0.65 4.63 5.85 Enc. final-norm 0.95 0.67 4.69 5.93
+
+Figure S11: Late-fusion MAE outlier and feature normalization choices. Left, top: per-channel mean activation magnitude for a single sample in the final late-fusion layer reveals a high-norm outlier (channel 369). 
+
+Left, bottom: the max/median channel ratio grows sharply with encoder depth, highlighting this issue becomes larger in later layers. Right: probe results are robust to the feature-normalization choice. We read the frozen encoder at its pre-final-norm layer and normalize on the probe side. Across normalizers the differences are small for both a multimodal encoder and an RGB baseline (DINOv2), so we adopt the choices ( ✓): per-token layer-norm for the dense DPT and raw (unnormalized) keys-values for the attentive ego-motion head. These results are provided for OctoSense test day , motion-filtered ≥5 mph. 
+
+G.2 Task prediction heads Dense prediction transformer We use the DPT head for all our frozen encoders. Features are acquired from four uniformly spaced encoder layers and we pass our features through per-layer LayerNorm before the DPT. Additionally, we use a uniform 64-channel pyramid and GroupNorm for efficient and stable training on our DPT. A single transformer block per input layer equipped with an additive 4D positional encoding (t, u 1, u 2, s ) mixes information over the encoder’s full token sequences before we slice out the per-frame left-RGB tokens. This lets per-frame vision-only encoders exploit temporal context and lets the multi-modal tokens route LiDAR/event/IMU information to the RGB token slots for the decoder. The four feature maps are then projected to 64 channels and reassembled into a feature pyramid (4 × and 2 × transpose-conv up, identity, and stride-2 conv down), fused across early layers with skip connections through pre-activation residual conv units and bilinearly upsampled to the ground-truth resolution. Each task head is a 1 ×1 convolution, i.e., a per-pixel linear projection, over this shared feature map. The depth and segmentation heads read each frame’s features independently, while the flow head reads the channel-wise concatenation of feature maps of consecutive frames to regress the flow field (note that it produces 7 flow fields). 
+
+Ego-motion head Three independent attention-based readouts cross-attend using learnable query tokens (two cross-attention blocks each) to the last layer of the encoders: velocity(8 queries are mapped S18 to per-frame [vx, v y , v z , ω x, ω y , ω z ] in the rectified left-camera frame), relative pose (7 queries are mapped to SE(3) relative pose between successive image pairs), and CAN bus outputs (8 queries are mapped to per-frame speed and steering position). 
+
+Feature outliers Consistent with Sim ´eoni et al. [10] , we observe outlier features with a large norm in our pretrained models. Because we adopt a pre-normalization transformer architecture [ 96 ], the output features are unnormalized and vulnerable to outliers. Fig. S11 shows outliers in channel 369, which has a magnitude that is 383 × the median channel magnitude. We evaluated several normalization schemes for our probes. For egomotion we compared raw encoder features, batch-normalized features and features passed through the encoder’s final norm layer. For the DPT probe, we compared layer-normalized features, batch-normalized features, and a hybrid scheme of applying batch norm to the three early layers and applying layer norm to the last. For the DPT probe, variations across the schemes were small, so we adopted Layer Normalization. For egomotion, batch normalization was marginally better than raw features, but the differences are still small compared to our improvement over baselines, so we adopted raw features for simplicity. While layer normalization can in principle be overwhelmed by the outlier channel, we did not observe any deterioration in our empirical results. 
+
+G.3 Loss functions for downstream tasks 
+
+Depth: Square of the scale-invariant logarithmic loss given by ℓ(λ) = 1
+
+> n
+
+P 
+
+> i
+
+d2 
+
+> i
+
+− λn2 (P 
+
+> i
+
+di)2 with 
+
+di = log ˆ zi − log zi at the ith pixel among a total n pixels with λ = 0 .15 (head regresses log zi
+
+directly). This loss is imposed only for pixels with z ∈ [3 , 200] m. For evaluation, we report the standard SiLog loss (i.e., after taking the square root of our loss) with the conventional λ = 0 .5.Flow: Charbonnier loss given by ℓ = √x2 + ε2 − ε with ε = 10 −3 on the end-point error x between the predicted and the ground-truth optical flow. Segmentation: Cross-entropy loss across all classes on valid output pixels. Rotation: The relative-pose head emits a 3 × 3 matrix ˆR which is fitted with the square of the chordal distance, i.e., squared Frobenius norm ˆR − R 2
+
+> F
+
+[90 , 91 ]. During inference, we project the prediction 
+
+ˆR onto SO(3) under the Frobenius norm. This is done by computing the SVD ˆR = U ΣV ⊤ and setting ˆR ≡ U diag (1 , 1, det (U V ⊤)) V ⊤. The det (U V ⊤) term flips the sign of the last component when needed so that det ( ˆR) = +1 .Scalar Targets: Velocity, translation, and the CAN prediction use a Huber loss 
+
+ℓ(x) = 
+
+( 12 x2 |x| ≤ 1
+
+|x| − 12 |x| > 1,
+
+where x is the per-channel residual. Before applying the loss, we rescale each target by fixed constants: vel = [5 , 5, 25 , 0.3, 0.5, 0.3] , trans = [0 .5, 0.5, 3] . CAN speed is regressed in log(1 + x) space and steering is z-scored using statistics computed over the dataset (standard deviation is clamped at 5◦). All SE(3) and SO(3) operations, relative pose targets, SVD onto SO(3) and the rotation-error metrics are computed in FP32. This is required for two reasons: torch.linalg.svd has no bf16 CUDA kernel and the targets are derived from absolute world-frame poses with translations spanning hundreds of meters. Using bf16 can inject errors of several meters in relative translation. 
+
+G.4 Evaluation metrics 
+
+Metrics are computed across all valid pixels when the vehicle is traveling above 5 mph. Segmentation: Over the 19 classes of Cityscapes we form a global confusion matrix and report (i) mean IoU where the per-class Jaccard index is IoU c = TP c 
+
+> TP c+FP c+FN c
+
+where TP stands for true positives, FP for false positives, FN for false negative, and (ii) accuracy P 
+
+> c
+
+TP c/N which is the fraction of valid pixels that are labeled correctly. S19 Depth: The depth head predicts logarithmic depth log ˆ zi at a pixel i with depth between [3, 200] m. Let di = log ˆ zi − log zi over n pixels. We calculate the absolute relative error, the SiLog loss, root mean square error (RMSE) and inlier rate with δ < 1.25 :abs. rel. = 1
+
+n
+
+X
+
+> i
+
+|ˆzi − zi|
+
+zi
+
+RMSE = 1
+
+n
+
+X
+
+> i
+
+(ˆ zi − zi)2
+
+!1/2
+
+SiLog = 1
+
+n
+
+X
+
+> i
+
+d2 
+
+> i
+
+− 12n2 (X
+
+> i
+
+di)2
+
+!1/2
+
+δ < 1.25 = 1
+
+n max 
+
+ ˆzi
+
+zi
+
+, zi
+
+ˆzi
+
+
+
+< 1.25 .
+
+Optical Flow: The ground truth is the per-pixel 2D displacement due to ego-motion fu ∈ R2 for a pixel u ∈ Z2. Over valid pixels, we report (i) average end-point error which is the mean euclidean discrepancy eu = ˆfu − fu 2
+
+between the prediction and the ground truth, and (ii) the outlier rate which is the fraction of pixels whose error exceeds 3 pixels and 5% of the ground-truth flow magnitude: EPE = 1
+
+n
+
+X
+
+> i
+
+ei
+
+outlier = 1
+
+n
+
+
+
+u : eu > 3 and eu
+
+∥fu∥ > 0.05 
+
+
+
+.
+
+Ego-motion: The attentive probe regresses the instantaneous linear and angular velocities (v, ω), the relative inter-frame pose in the rectified left-camera frame and two CAN-bus outputs (vehicle speed and steering position). We report the RMSE for all of these. Rotation error is the average of the geodesic angle between the predicted and ground-truth rotation in degrees: 
+
+arccos tr ( ˆR⊤R) − 12
+
+!
+
+.
+
+Speed (mph), steering ( ◦), linear velocity ( m/s ) and angular velocity ( rad/s ) statistics are computed directly in their native units. 
+
+G.5 Evaluation on the M3ED dataset 
+
+The M3ED dataset with the same Ouster OS1-64 LiDAR, event cameras (a different Prophesee EVK4 one than ours), RGB cameras (different 1/4” AR0144 cameras than ours), IMU and ground-truth odometry is a good candidate to evaluate the cross-dataset generalization of our approach. We evaluate optical flow, depth estimation and ego-motion prediction on M3ED. We use the same procedure as in OctoSense to generate the ground-truth. M3ED provides segmentation data only in the left event-camera frame which cannot be easily transferred to the RGB camera for evaluation. We therefore do not perform any segmentation evaluation for M3ED. Due to sensor differences, we make a few modifications to our input representations: (i) LiDAR data is not deskewed but is still cropped to a similar field of view as that of OctoSense, (ii) M3ED’s IMU Z-axis points in the vehicle forward direction so we rotate the IMU measurements to be consistent with the OctoSense frame, (iii) event-camera in M3ED is not stereo-rectified so we undistort, center-crop, and downsample events (192 × 192) and apply the same leaky-integrator filters with the same parameters, (iv) the RGB stream is undistorted but not rectified (no stereo pair is available), center-cropped and downsampled (192 × 192). We split the 16 car sequences in M3ED with ground truth into 13 training S20 sequences and 3 test sequences ( car urban day city hall , car urban night rittenhouse ,
+
+car forest into ponds short ). We use the same 1.4 sec non-overlapping windows to construct samples. We evaluate our pretrained models by training ego-motion and dense probes for each task using our pretrained late-fusion model on the OctoSense dataset. The dense probe omits the segmentation loss and our ego-motion probe only uses two cross attention readout modules. All probe hyper-parameters, losses, metrics (reported without motion filtering) match those used for the late-fusion MAE on OctoSense. 
+
+## H Analysis of the computational cost of the late-fusion MAE 
+
+A perception backbone deployed on a moving robot must keep pace with its sensor streams (200 ms per step in our current setup) while leaving budget for downstream planning. Faster future sensor rates will demand correspondingly faster inference. We designed our late-fusion MAE explicitly for this constraint: (i) per-modality spatial encoders are applied independently to each frame-based sensor stream, (ii) per-modality temporal tubelet encoders aggregate information across the time window, and (iii) a final cross-modal encoder attends to these tokens. We compare the early-fusion MAE (85.0M, W =768 , D=12 ) with our late-fusion MAE (83.7M, W =576 ) with 3, 2 and 4 blocks for the spatial, temporal, and cross-modal stages, respectively, at roughly similar parameter counts. The 1.5% parameter gap reflects that the three-stage decomposition does not admit an exact match. 
+
+Streaming inference by caching spatial features Sensor data arrives incrementally over time. Spatial activations for the past frames can therefore be cached. An early fusion architecture would run all L blocks over all N tokens each step because self-attention couples every past token to the new tokens. A late-fusion encoder in contrast runs the spatial encoders only on the new tokens. Empirically this caching reduces per-step encoder time by ∼17% on a Jetson Orin. 
+
+Implementation on edge devices Self-attention has O(N 2d) per-block cost [ 97 ], where N is the number of tokens and d is the number of features. An early-fusion encoder pays this cost in every one of its L blocks at the full multi-modal token budget ( N = 5 , 264 in this setup, left RGB camera, left event camera, LiDAR, IMU). Our late-fusion encoder restricts N -way attention to the Lx = 4 
+
+cross-modal blocks. The 3 spatial blocks only see per-modality per-frame tokens ( Ns ∈ { 144 , 256 })and the 2 temporal blocks see only 8 tokens for each modality (16 for the IMU). As Table S7 shows, this architectural choice gives a substantial advantage. Along with caching above, we can reduce latency by a factor of 1.70 × at B = 1 , T = 8 on an NVIDIA RTX 5090, with both encoders compiled using torch.compile with CUDA Graphs to amortize kernel launch overhead. Note that the comparison was performed at roughly similar encoder parameter counts, so this gain is due to the architecture. We also perform experiments on a Jetson Orin NX 16GB edge processor. Our late-fusion MAE encoder can run with a latency of 112 ms. This is below the 200 ms window of perception measurements we were targeting in this study.                        
+
+> Table S7: Latency of the forward pass of the encoder for B=1 ,T=8 on an NVIDIA RTX 5090. Late-fusion MAE uses crossmodal depth =4 to match early-fusion MAE’s parameter count (the late-fusion MAE used in the paper uses a crossmodal depth =3). All variants were compiled with torch.compile(mode="reduce-overhead")
+> (CUDA Graphs). Wall-clock time measured with CUDA events over 20 iterations after 25 warmup steps.
+> Model Enc. params (M) Latency (ms) Speedup Early-Fusion MAE (flat, W=768 ,D=12 )85.0 11.35 1.00 ×
+> Late-Fusion MAE ( W=576 ,3+2+4 )83.7 7.61 1.49 ×
+> Late-Fusion MAE + streaming cache 83.7 6.68 1.70 ×
+
+S21 Table S8: Latency of the forward pass of the late-fusion MAE with B=1 , T =8 on an NVIDIA Jetson Orin NX 16 GB (MAXN power mode, clocks pinned via jetson clocks , Ampere GPU). Single-stream per-call latency measured with CUDA events (synchronized per call) over 20 iterations after 25 warmup steps. Late-fusion MAE configured with crossmodal depth of 4. Eager is the uncompiled baseline, compile refers to the model using 
+
+torch.compile(mode="reduce-overhead") .
+
+Model Enc. params (M) Eager (ms) compile (ms) Late-Fusion MAE ( W =576 , L = 3+2+4 ) 83.7 235 136 + streaming cache 83.7 214 112 Early-Fusion MAE ( W =768 , L = 12 ) 85 - 288 RGB 49% · Events 96% · LiDAR 95% · IMU 56% Masked               
+
+> RGB
+> Input
+> t= 1 t= 2 t= 3 t= 4
+> Masked
+> Recon
+> Events
+> Input
+> Masked
+> Recon
+> LiDAR
+> Input
+> Masked
+> Recon
+> Input Recon Masked
+> acc x0
+> 1
+> acc y
+> 0
+> 5
+> acc z9.5
+> 10.0
+> gyr x
+> −0.1
+> 0.0
+> gyr y0.00
+> 0.05
+> gyr z
+> 00.5 s 1 s
+> 0.25
+> 0.50
+
+(a) RGB 99% · Events 89% · LiDAR 52% · IMU 81% Masked                
+
+> RGB
+> Input
+> t= 1 t= 2 t= 3 t= 4
+> Masked
+> Recon
+> Events
+> Input
+> Masked
+> Recon
+> LiDAR
+> Input
+> Masked
+> Recon
+> Input Recon Masked
+> acc x0
+> 1
+> acc y
+> 0
+> 5
+> acc z9.5
+> 10.0
+> gyr x
+> −0.1
+> 0.0
+> gyr y0.00
+> 0.05
+> gyr z
+> 00.5 s 1 s
+> 0.25
+> 0.50
+
+(b) Figure S12: Multi-modal reconstruction by predominantly masking event data (left panel) and RGB data (right panel). 
+
+S22 RGB 78% · Events 71% · LiDAR 92% · IMU 50% Masked               
+
+> RGB
+> Input
+> t= 1 t= 2 t= 3 t= 4
+> Masked
+> Recon
+> Events
+> Input
+> Masked
+> Recon
+> LiDAR
+> Input
+> Masked
+> Recon
+> Input Recon Masked
+> acc x0
+> 1
+> acc y
+> 0
+> 5
+> acc z9.5
+> 10.0
+> gyr x
+> −0.1
+> 0.0
+> gyr y0.00
+> 0.05
+> gyr z
+> 00.5 s 1 s
+> 0.25
+> 0.50
+
+(c) RGB 95% · Events 67% · LiDAR 79% · IMU 81% Masked                
+
+> RGB
+> Input
+> t= 1 t= 2 t= 3 t= 4
+> Masked
+> Recon
+> Events
+> Input
+> Masked
+> Recon
+> LiDAR
+> Input
+> Masked
+> Recon
+> Input Recon Masked
+> acc x0
+> 1
+> acc y
+> 0
+> 5
+> acc z9.5
+> 10.0
+> gyr x
+> −0.1
+> 0.0
+> gyr y0.00
+> 0.05
+> gyr z
+> 00.5 s 1 s
+> 0.25
+> 0.50
+
+(d) Figure S12: Continued from the previous page. Multi-modal reconstruction by predominantly masking LiDAR data (left panel) and IMU data (right panel). 
+
+## I Analysis of the pre-trained MAE and predictions on dense perception tasks 
+
+I.1 Reconstruction of masked sensor data 
+
+In our paper, we trained various models to predict optical flow, semantic segmentation and depth using our procedure defined in Sec. G. In this section, we show a few examples of the dense perception outputs from the models we have tested. Our late-fusion MAE learns inter-sensor correlations that enable it to reconstruct missing modalities. In this section, we present several examples of our approach reconstructing different masked configurations across modalities. This masked-sensor reconstruction can be valuable in robotics for handling sensor failure. For instance, if a perception algorithm relying on a particular sensor fails, the learned inter-sensor correlations can reconstruct the missing sensor data, and allow the perception algorithm to continue. We leave a full treatment of this application to future work, though we showcase an illustrative example of this missing sensor data reconstruction using our MAE. Furthermore, this approach can be readily extended to S23 MaskGIT-style [ 98 ] generative decoding, since we already have discrete latent tokenizers for each sensor. GT 
+
+DINO v2 
+
+DINO v3 
+
+SigLIP 2 
+
+Perception Enc. 
+
+V-JEPA 2.1 
+
+Depth 
+
+> 3m
+> 62m
+
+Flow 
+
+> ≤6px
+
+Seg 
+
+GT 
+
+V-JEPA 2.1 (stereo) 
+
+RGB-only image MAE 
+
+RGB-only video MAE 
+
+Early-fusion MAE 
+
+Late-fusion MAE 
+
+Depth 
+
+> 3m
+> 62m
+
+Flow 
+
+> ≤6px
+
+Seg 
+
+Figure S13: Predictions on dense prediction tasks for various models on the OctoSense test set: a sandy off-road region. 
+
+S24 GT 
+
+DINO v2 
+
+DINO v3 
+
+SigLIP 2 
+
+Perception Enc. 
+
+V-JEPA 2.1 
+
+Depth 
+
+> 4m
+> 82m
+
+Flow 
+
+> ≤7px
+
+Seg 
+
+GT 
+
+V-JEPA 2.1 (stereo) 
+
+RGB-only image MAE 
+
+RGB-only video MAE 
+
+Early-fusion MAE 
+
+Late-fusion MAE 
+
+Depth 
+
+> 4m
+> 82m
+
+Flow 
+
+> ≤7px
+
+Seg Figure S13: Predictions on dense prediction tasks for various models on the OctoSense test set: a highway setting. 
+
+S25 GT 
+
+DINO v2 
+
+DINO v3 
+
+SigLIP 2 
+
+Perception Enc. 
+
+V-JEPA 2.1 
+
+Depth 
+
+> 3m
+> 88m
+
+Flow 
+
+> ≤26px
+
+Seg 
+
+GT 
+
+V-JEPA 2.1 (stereo) 
+
+RGB-only image MAE 
+
+RGB-only video MAE 
+
+Early-fusion MAE 
+
+Late-fusion MAE 
+
+Depth 
+
+> 3m
+> 88m
+
+Flow 
+
+> ≤26px
+
+Seg Figure S13: Predictions on dense prediction tasks for various models on the OctoSense test set: a city scene. 
+
+S26 I.2 Detailed metrics on dense perception tasks 
+
+Table S9: Dense prediction task — daytime ( test day ). All metrics reported on data where speed is at least 5 mph and described in Sec. G.                                                                                                                                                  
+
+> Encoder mIoU ↑pix. acc. ↑abs. rel. ↓RMSE (m) ↓SiLog ↓δ < 1.25 ↑EPE (px) ↓outlier ↓
+> Existing approaches
+> DINOv2 0.410 0.921 0.10 6.82 0.17 0.879 19.46 0.54 DINOv3 0.382 0.918 0.11 6.93 0.17 0.875 19.43 0.54 SigLIP 2 0.377 0.912 0.11 7.22 0.18 0.864 20.22 0.55 Perception Enc. 0.388 0.915 0.11 7.12 0.18 0.867 19.90 0.56 V-JEPA 2.1 0.402 0.920 0.09 6.38 0.16 0.896 9.13 0.31
+> Our baselines
+> V-JEPA 2.1 (stereo) ∗0.405 0.919 0.10 6.40 0.16 0.893 9.03 0.31 RGB-only image MAE 0.296 0.898 0.12 7.78 0.20 0.845 20.88 0.58 RGB-only video MAE 0.327 0.902 0.12 7.41 0.19 0.856 10.11 0.36 Early-fusion MAE 0.379 0.912 0.07 4.98 0.12 0.944 2.01 0.07 Late-fusion MAE 0.411 0.921 0.06 4.73 0.12 0.950 1.97 0.07
+> w/ full temporal attention 0.405 0.920 0.06 4.73 0.12 0.950 1.96 0.07 Leave one modality out
+> w/o RGB 0.366 0.906 0.06 4.70 0.12 0.950 2.02 0.07 w/o EV 0.403 0.920 0.07 4.88 0.12 0.947 2.00 0.07 w/o LiDAR 0.351 0.906 0.10 6.74 0.16 0.888 7.19 0.25 w/o IMU 0.402 0.919 0.06 4.67 0.11 0.950 2.05 0.08 w/ only RGB 0.310 0.896 0.11 7.20 0.18 0.867 11.31 0.36
+
+Table S10: Dense prediction task — nighttime ( test night ). All metrics reported on data where speed is at least 5 mph and described in Sec. G. 
+
+Encoder abs. rel. ↓ RMSE (m) ↓ SiLog ↓ δ < 1.25 ↑ EPE (px) ↓ outlier ↓
+
+Existing approaches 
+
+DINOv2 0.13 9.95 0.22 0.828 18.36 0.54 DINOv3 0.14 10.03 0.23 0.826 16.97 0.54 SigLIP 2 0.14 10.36 0.24 0.817 18.12 0.55 Perception Enc. 0.14 10.20 0.23 0.819 17.84 0.56 V-JEPA 2.1 0.13 9.51 0.22 0.836 10.90 0.39 
+
+Our baselines 
+
+V-JEPA 2.1 (stereo) ∗ 0.13 9.51 0.22 0.834 10.55 0.39 RGB-only image MAE 0.15 10.58 0.24 0.810 18.98 0.56 RGB-only video MAE 0.14 10.20 0.24 0.816 11.56 0.42 Early-fusion MAE 0.07 6.30 0.14 0.934 2.45 0.09 Late-fusion MAE 0.07 6.08 0.13 0.939 2.39 0.09 
+
+w/ full temporal attention 0.07 6.07 0.13 0.939 2.38 0.09 Leave one modality out 
+
+w/o RGB 0.07 5.99 0.13 0.941 2.43 0.09 w/o EV 0.07 6.32 0.13 0.935 2.42 0.09 w/o LiDAR 0.13 9.55 0.21 0.839 8.05 0.31 w/o IMU 0.07 6.00 0.13 0.940 2.49 0.09 w/ only RGB 0.14 10.09 0.23 0.819 12.81 0.43 
+
+S27 Table S11: Dense prediction task — sensor-degraded ( test degraded ). All metrics reported on data where speed is at least 5 mph and described in Sec. G. 
+
+Encoder abs. rel. ↓ RMSE (m) ↓ SiLog ↓ δ < 1.25 ↑ EPE (px) ↓ outlier ↓
+
+Existing approaches 
+
+DINOv2 0.14 7.41 0.23 0.823 19.97 0.61 DINOv3 0.14 7.49 0.23 0.822 18.82 0.60 SigLIP 2 0.15 7.55 0.23 0.816 19.02 0.61 Perception Enc. 0.15 7.56 0.23 0.816 19.52 0.61 V-JEPA 2.1 0.14 7.40 0.23 0.827 10.85 0.45 
+
+Our baselines 
+
+V-JEPA 2.1 (stereo) ∗ 0.14 7.36 0.22 0.828 9.22 0.42 RGB-only image MAE 0.15 7.90 0.24 0.807 20.84 0.61 RGB-only video MAE 0.15 7.59 0.24 0.815 11.38 0.47 Early-fusion MAE 0.07 4.99 0.14 0.932 2.10 0.08 Late-fusion MAE 0.07 4.77 0.13 0.939 2.12 0.08 
+
+w/ full attention 0.07 4.79 0.13 0.939 2.15 0.08 Leave one modality out 
+
+w/o RGB 0.07 4.76 0.13 0.941 2.15 0.08 w/o EV 0.07 4.87 0.14 0.935 2.18 0.08 w/o LiDAR 0.13 7.27 0.22 0.837 6.75 0.33 w/o IMU 0.07 4.75 0.13 0.939 2.24 0.09 w/ only RGB 0.15 7.76 0.24 0.812 12.68 0.48 
+
+Table S12: Ego-motion — daytime ( test day ). All metrics reported on data where speed is at least 5 mph and described in Sec. G.                                                                                                             
+
+> Encoder lin. vel. (m/s) ↓ang. vel. (rad/s) ↓trans. (m) ↓rot. ( ◦)↓speed (mph) ↓steer ( ◦)↓
+> Existing approaches
+> DINOv2 4.92 0.07 0.96 0.80 5.84 22.62 DINOv3 4.54 0.07 0.93 0.79 5.50 25.24 SigLIP 2 4.67 0.07 0.98 0.95 6.59 36.12 Perception Enc. 4.68 0.09 0.96 0.94 6.42 35.62 V-JEPA 2.1 3.94 0.05 0.77 0.47 2.90 5.98
+> Our baselines
+> V-JEPA 2.1 (stereo) ∗3.92 0.05 0.77 0.48 2.87 5.69 RGB-only image MAE 4.87 0.09 0.92 0.88 6.26 31.57 RGB-only video MAE 3.99 0.05 0.76 0.50 2.56 12.96 Early-fusion MAE 0.68 0.05 0.14 0.56 1.18 4.58
+> Late-fusion MAE 0.36 0.01 0.06 0.24 0.78 2.51 w/ full temporal attention 0.36 0.02 0.05 0.17 0.98 2.46 Leave one modality out
+> w/o RGB 0.36 0.01 0.06 0.24 0.84 2.65 w/o EV 0.35 0.01 0.05 0.21 0.82 2.59 w/o LiDAR 3.74 0.02 0.73 0.46 1.45 3.97 w/o IMU 0.38 0.02 0.06 0.24 0.90 2.78 w/ only RGB 4.04 0.05 0.83 0.47 2.65 8.29
+
+S28 Table S13: Ego-motion — nighttime ( test night ). All metrics reported on data where speed is at least 5 mph and described in Sec. G. 
+
+Encoder lin. vel. (m/s) ↓ ang. vel. (rad/s) ↓ trans. (m) ↓ rot. ( ◦) ↓ speed (mph) ↓ steer ( ◦) ↓
+
+Existing approaches 
+
+DINOv2 4.22 0.06 0.84 0.75 5.79 23.11 DINOv3 4.00 0.07 0.79 0.76 5.36 21.93 SigLIP 2 4.47 0.06 0.78 0.94 6.92 36.00 Perception Enc. 4.09 0.08 0.91 0.93 6.76 34.54 V-JEPA 2.1 3.81 0.05 0.76 0.47 3.97 6.83 
+
+Our baselines 
+
+V-JEPA 2.1 (stereo) ∗ 3.62 0.05 0.71 0.47 3.73 6.47 RGB-only image MAE 4.53 0.09 1.05 0.77 5.17 21.39 RGB-only video MAE 3.61 0.05 0.72 0.50 3.06 12.45 Early-fusion MAE 0.69 0.05 0.15 0.53 1.75 4.48 
+
+Late-fusion MAE 0.34 0.01 0.06 0.23 0.93 2.27 w/ full attention 0.35 0.02 0.05 0.17 1.58 2.25 Leave one modality out 
+
+w/o RGB 0.33 0.01 0.06 0.23 1.09 2.34 w/o EV 0.35 0.02 0.05 0.20 1.11 2.42 w/o LiDAR 2.88 0.02 0.57 0.45 1.79 4.00 w/o IMU 0.37 0.02 0.06 0.22 1.36 2.61 w/ only RGB 3.32 0.05 0.77 0.47 3.36 7.75 
+
+Table S14: Ego-motion — sensor-degraded ( test degraded ). All metrics reported on data where speed is at least 5 mph and described in Sec. G. 
+
+Encoder lin. vel. (m/s) ↓ ang. vel. (rad/s) ↓ trans. (m) ↓ rot. ( ◦) ↓ speed (mph) ↓ steer ( ◦) ↓
+
+Existing approaches 
+
+DINOv2 3.13 0.05 0.65 0.58 7.20 24.59 DINOv3 3.34 0.06 0.65 0.61 7.14 30.19 SigLIP 2 3.48 0.06 0.71 0.70 8.51 26.04 Perception Enc. 3.70 0.07 0.72 0.71 8.23 32.81 V-JEPA 2.1 2.47 0.04 0.51 0.43 5.09 8.66 
+
+Our baselines 
+
+V-JEPA 2.1 (stereo) ∗ 2.20 0.04 0.44 0.41 4.49 8.14 RGB-only image MAE 3.71 0.07 0.69 0.65 7.93 24.81 RGB-only video MAE 2.48 0.04 0.45 0.45 4.14 10.67 Early-fusion MAE 0.75 0.04 0.14 0.49 1.12 7.10 
+
+Late-fusion MAE 0.32 0.01 0.06 0.23 0.62 2.76 
+
+w/ full attention 0.32 0.02 0.05 0.17 0.56 2.88 
+
+Leave one modality out 
+
+w/o RGB 0.31 0.01 0.06 0.23 0.62 2.99 w/o EV 0.33 0.01 0.06 0.21 0.66 2.87 w/o LiDAR 1.52 0.02 0.34 0.40 2.10 4.95 w/o IMU 0.35 0.02 0.06 0.21 0.65 3.18 w/ only RGB 2.61 0.04 0.54 0.42 4.35 8.60 
+
+S29 Table S15: Per-class segmentation IoU on test day (motion-filtered ≥ 5 mph), sorted by class pixel frequency. 
+
+∆ = DINOv2 − Ours. Late-Fusion MAE is competitive with DINOv2 on frequent classes (road, sky, vegetation, building, car); the deficit ( bold ) is mostly rare classes ( < 1% of pixels): poles, buses, and persons. 
+
+Class Freq. (%) Ours (mIoU) DINOv2 (mIoU) ∆
+
+road 42.76 0.928 0.924 -0.004 sky 21.02 0.934 0.939 +0.005 vegetation 19.66 0.833 0.838 +0.005 building 5.85 0.690 0.708 +0.018 car 3.34 0.684 0.684 +0.000 terrain 2.62 0.595 0.599 +0.004 sidewalk 1.70 0.426 0.419 -0.007 wall 1.05 0.529 0.490 -0.039 
+
+pole 0.75 0.290 0.318 +0.027 
+
+fence 0.44 0.302 0.248 -0.054 truck 0.25 0.496 0.462 -0.034 traffic sign 0.23 0.416 0.414 -0.002 
+
+bus 0.19 0.379 0.426 +0.048 
+
+traffic light 0.08 0.269 0.215 -0.054 
+
+person 0.04 0.026 0.099 +0.073 Overall mIoU 0.411 0.410 -0.001 0 5 10 15 20         
+
+> Absolute depth error (m)
+> 10 3
+> 10 2
+> 10 1
+> 10 0
+> density (log)
+> DINO v3
+> SigLIP 2
+> V-JEPA 2.1
+> Late-fusion MAE
+> 10 110 2
+> GT depth bin (m)
+> 0
+> 10
+> 20
+> 30
+> 40
+> 50
+> RMSE  (m)
+> < 1.25 < 1.25 2< 1.25 3
+> 0.70
+> 0.75
+> 0.80
+> 0.85
+> 0.90
+> 0.95
+> 1.00
+> fraction of pixels
+
+Figure S14: Depth Estimation error analysis figures across models on OctoSense test-set speed filtered (5 mph): (Left) Log-density of the per-pixel absolute depth error, (Middle) RMSE conditioned on ground truth magnitude, (Right) Threshold accuracy δ < 1.25 k for k = 1 , 2, 3 (Sec. G). Our late-fusion MAE has the smallest depth errors across the entire depth range and the highest threshold accuracy at every δ.0 5 10 15 20 25              
+
+> EPE (px)
+> 10 3
+> 10 2
+> 10 1
+> 10 0
+> density (log)
+> DINO v3
+> SigLIP 2
+> V-JEPA 2.1
+> Late-fusion MAE
+> 10 010 110 2
+> GT flow magnitude (px)
+> 0
+> 5
+> 10
+> 15
+> 20
+> 25
+> 30
+> mean EPE  (px)
+> 510 15 20 25 30
+> threshold (px)
+> 0.0
+> 0.2
+> 0.4
+> 0.6
+> 0.8
+> 1.0
+> P(EPE >  )
+
+Figure S15: Optical Flow error analysis across models on OctoSense test-set speed filtered (5 mph): (Left) Log-density of the per-pixel end-point error (EPE). (Middle) Mean EPE conditioned on the ground-truth flow magnitude. (Right) Outlier rate P (EPE > τ ) swept over threshold τ . Our late-fusion MAE attains lower mean EPE at every motion magnitude and a steeper initial decay than every baseline. 
+
+S30 0.00 0.25 0.50 0.75 1.00 1.25 1.50 
+
+translation error (m)          
+
+> 10 3
+> 10 2
+> 10 1
+> 10 0
+> 10 1
+> density (log)
+> DINO v3
+> SigLIP 2
+> V-JEPA 2.1
+> Late-fusion MAE
+> 0123456
+
+rotation error (deg)         
+
+> 10 4
+> 10 3
+> 10 2
+> 10 1
+> 10 0
+> 02468
+
+linear vel error (m/s)          
+
+> 10 4
+> 10 3
+> 10 2
+> 10 1
+> 10 0
+> 0.0 0.1 0.2 0.3 0.4 0.5
+
+angular vel error (rad/s)      
+
+> 10 3
+> 10 2
+> 10 1
+> 10 0
+> 10 1
+> 10 2
+> 10 110 0
+
+GT translation magnitude (m)   
+
+> 0
+> 1
+> 2
+> 3
+> 4
+> 5
+> mean abs. error (m)
+> 10 110 0
+
+GT rotation magnitude (deg)  
+
+> 0
+> 1
+> 2
+> 3
+> 4
+> 5
+> 6
+> mean abs. error (deg)
+> 10 010 1
+
+GT linear velocity (m/s)     
+
+> 0
+> 5
+> 10
+> 15
+> 20
+> mean abs. error (m/s)
+> 10 210 110 0
+
+GT angular velocity (rad/s) 
+
+> 0.0
+> 0.1
+> 0.2
+> 0.3
+> 0.4
+> 0.5
+> mean abs. error (rad/s)
+
+Figure S16: Ego-motion estimation analysis figures across models on OctoSense test-set speed filtered: (Top) Log-density of the error magnitudes for relative translation, relative rotation, linear velocity and angular velocity. (Bottom) Mean error conditioned on the ground-truth magnitude for each quantity. Our late-fusion MAE stays near zero translation error across the full motion range. RGB-only baselines degrade sharply under fast rotational motion. 
+
+S31 Figure S17: Scaling laws on perception tasks on OctoSense test data. Depth root-mean-square-error (RMSE) in meters, optical-flow mean end-point error in pixels, and segmentation mIoU as a function of the amount of non-overlapping 1.4 s training windows for our late-fusion MAE evaluated on the full held-out test set (motion-filtered to ground truth speed above 5 mph). Both pre-training and probe training were performed using varying amounts of training data. We fit a power law: y = Ax k , which is a linear trend in log( y) = log( A) + k log( x)
+
+in log-space. All three plots show that error improves monotonically with data. This motivates the need for large-scale datasets such as OctoSense. All other pretraining and probe hyper-parameters follow Tables S4 and S6. 
+
+S32

@@ -1,0 +1,442 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-06-27T21:33:36.233132+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 2,
+    "deep_divecandidates": 2,
+    "deep_cap": 7,
+    "deep_selected": 2,
+    "quick_candidates": 8,
+    "quick_skim_target": 12,
+    "quick_selected": 8
+  },
+  "deep_dive": [
+    {
+      "id": "2606.27239v1",
+      "source": "arxiv",
+      "title": "HumanoidUMI: Bridging Robot-Free Demonstrations and Humanoid Whole-Body Manipulation",
+      "abstract": "High-quality demonstration data are essential for humanoid robot skill learning, especially for whole-body behaviors that require coordinated perception, locomotion, and manipulation. Existing data-collection methods largely rely on robot teleoperation, which is constrained by hardware accessibility, operator expertise, and limited efficiency. Inspired by the Universal Manipulation Interface (UMI), we propose HumanoidUMI, a portable and robot-free framework for humanoid whole-body data collection. HumanoidUMI uses lightweight VR devices and UMI-inspired grippers to collect sparse human keypoint trajectories, wrist-view observations, and gripper actions. These demonstrations train a high-level policy to predict future keypoints, which are retargeted to robot-native whole-body references and executed by a whole-body controller. Experiments in five real-world scenarios demonstrate the effectiveness of the proposed framework and validate the collected demonstrations for transferable humanoid whole-body skill learning.",
+      "authors": [
+        "Hongwu Wang",
+        "Chenhao Yu",
+        "Youhao Hu",
+        "Jiachen Zhang",
+        "Yuanyuan Li",
+        "Shaqi Luo"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-06-25T16:23:56+00:00",
+      "link": "https://arxiv.org/pdf/2606.27239v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "robot-free humanoid whole-body demonstration data collection",
+      "llm_evidence_cn": "无机器人的全身演示数据收集",
+      "llm_evidence": "无机器人的全身演示数据收集",
+      "canonical_evidence": "无机器人的全身演示数据收集",
+      "llm_tldr_en": "HumanoidUMI uses lightweight VR devices and grippers to collect human keypoint trajectories for training high-level policies, enabling scalable humanoid data collection without robot hardware.",
+      "llm_tldr_cn": "本文提出HumanoidUMI框架，利用轻量级VR设备和模仿通用操作界面的夹爪，无机器人地收集人体关键点轨迹、腕部观察和夹爪动作，用于训练人形机器人全身技能策略。该方法解决了遥操作依赖硬件和专家的瓶颈，为构建人形机器人操作数据集提供了可扩展的途径。",
+      "llm_tldr": "本文提出HumanoidUMI框架，利用轻量级VR设备和模仿通用操作界面的夹爪，无机器人地收集人体关键点轨迹、腕部观察和夹爪动作，用于训练人形机器人全身技能策略。该方法解决了遥操作依赖硬件和专家的瓶颈，为构建人形机器人操作数据集提供了可扩展的途径。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "humanoid robot dataset construction",
+      "matched_requirement_id": "req-2",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2606.26855v1",
+      "source": "arxiv",
+      "title": "Humanoid-DART: Humanoid Loco-Manipulation using Diffusion-guided Augmentation through Relabeling and Tracking",
+      "abstract": "Imitating human demonstrations has emerged as a dominant paradigm for learning humanoid loco-manipulation policies. However, scaling these approaches remains challenging due to the high cost of collecting diverse demonstrations and the need for continual human intervention to correct policy failures. In this paper, we present a self-supervised framework that bootstraps from sparse demonstrations and progressively expands its behavioral repertoire, enabling the learning of a goal-conditioned policy that automatically explores the goal space with minimal expert supervision. Our approach combines diffusion-based trajectory generation with reinforcement learning, where the latter is used to track goal-conditioned trajectories produced by the diffusion model for a range of loco-manipulation skills. Through extensive ablation studies and comparisons with state-of-the-art methods, we demonstrate the effectiveness of our framework on multiple humanoid loco-manipulation skills.",
+      "authors": [
+        "Pranav Debbad",
+        "Kanish Thiagarajan",
+        "Victor Dhédin",
+        "Shafeef Omar",
+        "Majid Khadiv"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-06-25T10:40:33+00:00",
+      "link": "https://arxiv.org/pdf/2606.26855v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "self-supervised framework for humanoid dataset augmentation",
+      "llm_evidence_cn": "人形机器人数据集自监督增强框架",
+      "llm_evidence": "人形机器人数据集自监督增强框架",
+      "canonical_evidence": "人形机器人数据集自监督增强框架",
+      "llm_tldr_en": "Humanoid-DART uses diffusion-based trajectory generation to augment sparse demonstrations for humanoid loco-manipulation policy learning.",
+      "llm_tldr_cn": "针对人形机器人演示数据采集成本高的问题，本文提出Humanoid-DART自监督框架，从稀疏演示开始，结合扩散模型生成多样轨迹，并通过强化学习跟踪实现数据集扩展，最终学习目标条件策略，大幅减少专家监督需求，提升数据利用率。",
+      "llm_tldr": "针对人形机器人演示数据采集成本高的问题，本文提出Humanoid-DART自监督框架，从稀疏演示开始，结合扩散模型生成多样轨迹，并通过强化学习跟踪实现数据集扩展，最终学习目标条件策略，大幅减少专家监督需求，提升数据利用率。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "humanoid robot dataset construction",
+      "matched_requirement_id": "req-2",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "quick_skim": [
+    {
+      "id": "2606.26151v1",
+      "source": "arxiv",
+      "title": "Unsupervised Memory-Enhanced Video Transformers: Obstacle Detection for Autonomous Agricultural Rover",
+      "abstract": "While autonomous rovers have become indispensable to precision farming, achieving consistent operational safety remains a critical challenge. Conventional safety sensors, such as LiDAR, fail to detect obstacles positioned below the plant canopy, posing a significant risk. While camera-based supervised learning methods can detect common objects, they perform poorly when faced with obstacles that were not present in their training data. Actual unsupervised anomaly detection offers a solution by learning the normal visual patterns of an environment, but often fails for the dynamic scenes captured by a moving rover.\\\\ This paper introduces Video Memory Transformers for Anomaly Detection (VMTAD), a fully unsupervised method designed for real-time obstacle detection in dynamic agricultural scenes. VMTAD utilizes a transformer-driven architecture augmented with a dedicated memory module. This memory module leverages temporal context by processing encoded representations of preceding frames. This approach enables the system to effectively address the dynamic context caused by the robot's movement. The model is trained using only images that represent normal operation, requiring no data labels.\\\\ VMTAD was rigorously evaluated on the 'Grillion' agricultural rover. On a challenging rapeseed dataset, VMTAD achieved state-of-the-art performance, reaching a 0.973 detection and 0.997 segmentation Area Under the Receiver Operating Characteristic curve. A lightweight variant provides an optimal balance of high accuracy and real-time inference (14 ms), which is critical for safety, as confirmed by our analysis of the rover's total stopping distance.",
+      "authors": [
+        "Théo Biardeau",
+        "Anne-Sophie Capelle-Laizé",
+        "Salwan Alwan",
+        "David Helbert"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.AI"
+      ],
+      "published": "2026-06-23T08:29:54+00:00",
+      "link": "https://arxiv.org/pdf/2606.26151v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "unsupervised anomaly detection with video transformers for dynamic scenes",
+      "llm_evidence_cn": "无监督异常检测结合视频Transformer处理动态场景",
+      "llm_evidence": "无监督异常检测结合视频Transformer处理动态场景",
+      "canonical_evidence": "无监督异常检测结合视频Transformer处理动态场景",
+      "llm_tldr_en": "VMTAD introduces Video Memory Transformers for fully unsupervised anomaly detection, addressing dynamic scenes in autonomous rover navigation.",
+      "llm_tldr_cn": "农业自动驾驶车辆需检测非预期障碍物，但监督方法对未见物体泛化差。该文提出VMTAD，一种全无监督方法，利用视频记忆Transformer学习场景的正常模式，在动态移动场景中实现异常检测。该方法不依赖于特定机器人类型，其无监督时序异常检测技术可迁移至人形机器人故障诊断。",
+      "llm_tldr": "农业自动驾驶车辆需检测非预期障碍物，但监督方法对未见物体泛化差。该文提出VMTAD，一种全无监督方法，利用视频记忆Transformer学习场景的正常模式，在动态移动场景中实现异常检测。该方法不依赖于特定机器人类型，其无监督时序异常检测技术可迁移至人形机器人故障诊断。",
+      "llm_tags": [
+        "query:humanoid-ood"
+      ],
+      "matched_query_tag": "query:humanoid-ood",
+      "matched_query_text": "Self supervised time series anomaly detection for robot fault diagnosis",
+      "matched_requirement_id": "req-16",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2606.22998v2",
+      "source": "arxiv",
+      "title": "TEXEDO : Test Time Scaling for Controller-aware Language-conditioned Humanoid Motion Generation",
+      "abstract": "Text-conditioned motion generation is a promising interface for programming humanoid robots, yet current generators are often trained on human motion datasets retargeted to robot morphologies. Although such data provides rich semantic and kinematic priors, it fails to capture the nuances of whole-body tracking controllers, including balance, contact dynamics, actuation limits, and controller-specific failure modes. As a result, generated motions can be semantically plausible but difficult or impossible for the robot to execute. We introduce TEXEDO, a test-time scaling framework for humanoid motion generation that improves motion quality without requiring a stronger underlying generator. Given a text prompt, TEXEDO samples multiple candidate motions from a pretrained text-conditioned generator and selects the best motion that is both executable and task-aligned. The reward model combines a dynamic feasibility verifier, distilled from whole-body tracking rollouts to predict physical executability, with a semantic alignment verifier that measures text-motion alignment in a learned co-embedding space. Our pipeline treats dynamic feasibility as a hard constraint and semantic alignment as the selection objective within the feasible set. Through large-scale simulation studies and real-world deployment on a Unitree G1 humanoid robot, we show that TEXEDO consistently improves both tracking fidelity and text alignment. These results demonstrate that grounded verification is an effective path toward deployable language-guided humanoid motion generation. Project website: https://jianuocao.github.io/TEXEDO/",
+      "authors": [
+        "Jianuo Cao",
+        "Yuxin Chen",
+        "Yuzhen Song",
+        "Masayoshi Tomizuka",
+        "Chenran Li",
+        "Thomas Tian"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-06-22T08:14:35+00:00",
+      "link": "https://arxiv.org/pdf/2606.22998v2",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "humanoid motion generation using retargeted human datasets, addressing controller-aware failure modes",
+      "llm_evidence_cn": "使用重定向人体数据集生成人形运动，考虑控制器感知的故障模式",
+      "llm_evidence": "使用重定向人体数据集生成人形运动，考虑控制器感知的故障模式",
+      "canonical_evidence": "使用重定向人体数据集生成人形运动，考虑控制器感知的故障模式",
+      "llm_tldr_en": "Proposes TEXEDO, a test-time scaling framework for humanoid motion generation that improves quality without stronger generators, addressing controller-specific failures from retargeted human data.",
+      "llm_tldr_cn": "由于当前人形运动生成器常使用从人体运动重定向的数据集，忽略了平衡、接触等控制器细节，导致生成运动无法执行。本文提出TEXEDO，一种测试时缩放框架，通过采样多个候选运动并优化，在不改变基础生成器的情况下提升运动质量。实验表明，TEXEDO能有效改善生成运动的可执行性，为人形机器人数据集构建和运动生成提供了新思路。该工作强调了控制器感知的数据集构建重要性。",
+      "llm_tldr": "由于当前人形运动生成器常使用从人体运动重定向的数据集，忽略了平衡、接触等控制器细节，导致生成运动无法执行。本文提出TEXEDO，一种测试时缩放框架，通过采样多个候选运动并优化，在不改变基础生成器的情况下提升运动质量。实验表明，TEXEDO能有效改善生成运动的可执行性，为人形机器人数据集构建和运动生成提供了新思路。该工作强调了控制器感知的数据集构建重要性。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "humanoid robot dataset construction",
+      "matched_requirement_id": "req-2",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2606.26321v1",
+      "source": "arxiv",
+      "title": "KRVF: A Source-Aware Semantic Voxel World Representation for Edge Mobile Manipulation",
+      "abstract": "Mobile manipulators need world models that are current, queryable, semantically meaningful, and usable under edge-compute constraints. This technical report presents KRVF, a source-aware semantic voxel world representation for edge mobile manipulation. Unlike reconstruction-centric mapping pipelines that primarily optimize global geometric fidelity, KRVF represents local world state as task-oriented voxels that encode occupancy, color, semantic evidence, temporal freshness, and evidence source. The representation separates measured occupancy from semantic-prior hypotheses, enabling depth-failure-aware object reasoning without silently corrupting persistent geometry. KRVF also closes a feedback loop between mapping and sensing by rendering map-prior depth for repair, and exposes task-level query operators for semantic objects and grasp candidates. The report formalizes the KRVF representation and documents a ROS 2 implementation that turns online RGB-D observations into a task-facing robot memory.",
+      "authors": [
+        "Runfeng Ling"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-06-24T19:07:42+00:00",
+      "link": "https://arxiv.org/pdf/2606.26321v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "edge-compute world representation for mobile manipulation",
+      "llm_evidence_cn": "面向边缘计算的世界表示用于移动操作",
+      "llm_evidence": "面向边缘计算的世界表示用于移动操作",
+      "canonical_evidence": "面向边缘计算的世界表示用于移动操作",
+      "llm_tldr_en": "Presents KRVF, a source-aware semantic voxel world representation designed for edge mobile manipulation, balancing local occupancy, semantics, and freshness under compute constraints.",
+      "llm_tldr_cn": "针对边缘移动操作中世界表示需要实时、可查询且语义丰富的问题，本文提出KRVF，一种源感知语义体素表示。它编码占据、颜色、语义证据和时效性，并分离测量占据与语义先验，支持深度失效感知的目标推理。KRVF在边缘平台如Jetson上实现高效感知循环，验证了表示在移动操作任务中的实用性。该工作为边缘部署的机器人环境理解提供了可借鉴的表示方案。",
+      "llm_tldr": "针对边缘移动操作中世界表示需要实时、可查询且语义丰富的问题，本文提出KRVF，一种源感知语义体素表示。它编码占据、颜色、语义证据和时效性，并分离测量占据与语义先验，支持深度失效感知的目标推理。KRVF在边缘平台如Jetson上实现高效感知循环，验证了表示在移动操作任务中的实用性。该工作为边缘部署的机器人环境理解提供了可借鉴的表示方案。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "edge deployment for humanoid robots",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2606.23685v1",
+      "source": "arxiv",
+      "title": "LaST-HD: Learning Latent Physical Reasoning from Scalable Human Data for Robot Manipulation",
+      "abstract": "Human-hand demonstrations provide a direct and scalable source of physical interaction data for robot learning. While manual retargeting is indispensable for establishing kinematic action correspondence across different morphologies, robust transfer requires going beyond geometry to address the underlying alignment of physical dynamics between human and robot manipulation. To address this, we introduce LaST-HD, a novel human-to-robot action learning paradigm that extends reasoning-before-acting VLA by aligning human-hand and robot demonstrations in a shared latent reasoning space. Rather than mimicking human kinematics, LaST-HD trains an auxiliary action-conditioned world model on unpaired human-hand and robot trajectories to synthesize unified latent targets. After aligning cross-embodiment representations in this shared forward-dynamics space, these targets supervise LaST-HD's latent reasoning process, enabling it to internalize shared physical dynamics and drive efficient human-hand action learning. Moreover, we develop Out-of-Lab (OOL) Glove, a low-cost motion-capture glove tailored to LaST-HD for human-hand data collection. The captured human data provide precise keypoints and serve as universal action supervision across grippers and dexterous hands. Armed with the aligned latent space and high-fidelity human-hand data, we develop a progressive mixed-to-human training recipe comprising mixed human-robot co-training and human-hand online correction post-training. Through mixed co-training, LaST-HD improves generalization to novel objects, scenes, and positions using only human-hand demonstrations. With online correction, LaST-HD further adapts to novel environments and achieves over 90\\% accuracy using only 20 minutes of OOL glove data.",
+      "authors": [
+        "Jiaming Liu",
+        "Yinxi Wang",
+        "Chenyang Gu",
+        "Siyuan Qian",
+        "Xiangju Mi",
+        "Hao Chen",
+        "Jiawei Chen",
+        "Qingpo Wuwu",
+        "Xiaoqi Li",
+        "Nuowei Han",
+        "Yiming Zhang",
+        "Xuheng Zhang",
+        "Yang Yue",
+        "Yeqing Yang",
+        "Lei Wang",
+        "Peng Jia",
+        "Hao Tang",
+        "Shanghang Zhang"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-06-22T17:59:52+00:00",
+      "link": "https://arxiv.org/pdf/2606.23685v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "uses human-hand demonstrations as scalable data source for robot learning",
+      "llm_evidence_cn": "利用人手演示作为机器人学习的可扩展数据源",
+      "llm_evidence": "利用人手演示作为机器人学习的可扩展数据源",
+      "canonical_evidence": "利用人手演示作为机器人学习的可扩展数据源",
+      "llm_tldr_en": "LaST-HD uses unpaired human-hand and robot trajectories to train an action-conditioned world model in a shared latent reasoning space, enabling robust human-to-robot action transfer.",
+      "llm_tldr_cn": "现有机器人学习依赖人工重定向的人类演示，鲁棒迁移需要超越几何对齐。LaST-HD提出一种新范式，通过共享潜在推理空间对齐人-手与机器人轨迹，训练辅助的动作条件世界模型。该方法无需配对数据，可综合跨形态的物理动态。实验表明该方法能有效实现从人类到机器人的动作迁移，为机器人数据集构建提供了新思路。",
+      "llm_tldr": "现有机器人学习依赖人工重定向的人类演示，鲁棒迁移需要超越几何对齐。LaST-HD提出一种新范式，通过共享潜在推理空间对齐人-手与机器人轨迹，训练辅助的动作条件世界模型。该方法无需配对数据，可综合跨形态的物理动态。实验表明该方法能有效实现从人类到机器人的动作迁移，为机器人数据集构建提供了新思路。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2606.27317v1",
+      "source": "arxiv",
+      "title": "OctoSense: Self-Supervised Learning for Multimodal Robot Perception",
+      "abstract": "We present OctoSense, an open-source sensor platform with stereo RGB and event cameras, LiDAR, a thermal camera, an inertial measurement unit, RTK-corrected global positioning system, and proprioception (CAN bus data from a car, and joint angles for a quadruped robot). The eponymous OctoSense dataset contains 59 hours of time-synchronized driving data across different types of environments at different times of the day, including situations with highly degraded sensors. We demonstrate multi-modal self-supervised learning using such real-world robotics data, where sensors have different representations, frequencies, latencies and noise. Our approach, a \"late-fusion\" masked autoencoder, (i) uses modality-specific tokenizers to account for different spatiotemporal characteristics of these sensors, and (ii) caches modality-specific tokens at inference time to process new measurements as they come. This architecture (i) is fast (6.68 ms and 112 ms on NVIDIA 5090 and Orin NX respectively, to compute the representation), (ii) performs better than existing image-only foundation models on tasks such as estimation of optical flow, depth, semantic segmentation, and ego-motion (translation, rotation, and steering angle), and (iii) predicts robustly at nighttime or in situations where sensory data is degraded. See our project page for links to the dataset, code, and supplementary videos: https://abisulco.com/octosense/.",
+      "authors": [
+        "Anthony Bisulco",
+        "Jeremy Wang",
+        "Kostas Daniilidis",
+        "Randall Balestriero",
+        "Pratik Chaudhari"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV",
+        "cs.RO"
+      ],
+      "published": "2026-06-25T17:30:49+00:00",
+      "link": "https://arxiv.org/pdf/2606.27317v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "multimodal robot dataset with proprioception and self-supervised learning",
+      "llm_evidence_cn": "包含本体感受的机器人多模态数据集及自监督学习",
+      "llm_evidence": "包含本体感受的机器人多模态数据集及自监督学习",
+      "canonical_evidence": "包含本体感受的机器人多模态数据集及自监督学习",
+      "llm_tldr_en": "OctoSense provides an open-source multimodal dataset (59 hours) including proprioception, and demonstrates self-supervised learning via a late-fusion masked autoencoder.",
+      "llm_tldr_cn": "针对机器人多模态感知数据缺乏问题，本文提出OctoSense开源传感器平台和数据集，包含59小时时间同步的多模态驾驶数据（含本体感受），并提出基于晚融合掩码自编码器的自监督学习方法，有效处理异构传感器表示和噪声，为机器人感知系统提供基准和训练方法。",
+      "llm_tldr": "针对机器人多模态感知数据缺乏问题，本文提出OctoSense开源传感器平台和数据集，包含59小时时间同步的多模态驾驶数据（含本体感受），并提出基于晚融合掩码自编码器的自监督学习方法，有效处理异构传感器表示和噪声，为机器人感知系统提供基准和训练方法。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2606.24815v1",
+      "source": "arxiv",
+      "title": "MANGO: Automated Multi-Agent Test Oracle Generation for Vision-Language-Action Models",
+      "abstract": "Vision-Language-Action (VLA) models are emerging robotic control systems that integrate perception, language understanding, and action generation in a unified architecture. Existing testing approaches for VLA-enabled robots rely on manually constructed symbolic test oracles that determine task success from final environment states. These oracles are costly to construct, require domain expertise, and are often tightly coupled to specific tasks and environments, limiting scalability and reuse. Furthermore, they provide only end-state assessments of task outcomes, offering limited insight into intermediate behavior and fault localization. To address these limitations, we introduce MANGO, a multi-agent framework that automatically generates fine-grained oracles from natural-language descriptions of robotic tasks. MANGO first generates a reusable library of atomic tasks, then generates simulator-grounded oracle definitions for each atomic task, and finally produces executable fine-grained oracles by decomposing complex instructions into ordered sequences of atomic actions and corresponding oracles. The framework uses collaborative Generator, Assessor, and Judge agents that iteratively refine generated artifacts through structured feedback. We evaluate MANGO on the LIBERO_10 and RoboCasa Humanoid Tabletop benchmarks. Results show that MANGO generates executable, fine-grained oracles that detect a similar number of failures as symbolic oracles while accurately localizing them and providing richer diagnostic information. Through ablation studies, we further analyzed component contributions and the effect of initial task set, while preserving oracle quality. Overall, the results show the feasibility and effectiveness of test oracle generation for VLA-enabled robots testing.",
+      "authors": [
+        "Pablo Valle",
+        "Shaukat Ali",
+        "Aitor Arrieta",
+        "Lionel Briand"
+      ],
+      "primary_category": "cs.SE",
+      "categories": [
+        "cs.SE",
+        "cs.RO"
+      ],
+      "published": "2026-06-23T17:00:06+00:00",
+      "link": "https://arxiv.org/pdf/2606.24815v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "Automated multi-agent test oracle generation for VLA models enabling fault localization",
+      "llm_evidence_cn": "自动多智能体测试预言生成，支持VLA模型的故障定位",
+      "llm_evidence": "自动多智能体测试预言生成，支持VLA模型的故障定位",
+      "canonical_evidence": "自动多智能体测试预言生成，支持VLA模型的故障定位",
+      "llm_tldr_en": "MANGO introduces a multi-agent framework to automatically generate test oracles for VLA robots, enabling intermediate behavior assessment and fault localization beyond end-state checks.",
+      "llm_tldr_cn": "针对VLA模型测试中手工构造预言成本高且只评估最终状态的问题，MANGO提出多智能体框架自动生成测试预言，可评估中间行为并定位故障。实验证明该方法能有效检测任务失败中的错误环节。为机器人故障诊断与错误分析提供了自动化工具。",
+      "llm_tldr": "针对VLA模型测试中手工构造预言成本高且只评估最终状态的问题，MANGO提出多智能体框架自动生成测试预言，可评估中间行为并定位故障。实验证明该方法能有效检测任务失败中的错误环节。为机器人故障诊断与错误分析提供了自动化工具。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "fault diagnosis and error analysis for humanoid robots",
+      "matched_requirement_id": "req-7",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2606.27146v1",
+      "source": "arxiv",
+      "title": "PhysReflect-VLA: Physical Feasibility and Self-Reflective Regulation for Reliable Vision-Language-Action Policies",
+      "abstract": "Long-horizon robotic manipulation is highly sensitive to physically infeasible transitions, contact-induced disturbances, and the lack of effective self-correction during execution. Although Vision-Language-Action (VLA) models provide strong task grounding through multimodal learning, they typically generate actions in a feed-forward manner without explicitly checking physical feasibility or diagnosing execution errors online. We present PhysReflect-VLA, a plug-and-play execution-time reliability framework that augments VLA policies with physical feasibility evaluation and structured self-reflection in a closed-loop control pipeline. A Feasibility Operator evaluates whether candidate actions induce dynamically consistent state transitions; an Action Explanation Operator verifies transition coherence; and an LLM-based Reflection Module analyzes state discrepancies to generate corrective guidance for subsequent actions. A two-stage training procedure stabilizes feasibility modeling and integrates reflection into the control loop. Experiments on multi-stage, contact-rich real-world manipulation tasks show consistent improvements in stage-wise stability and overall task success compared with representative VLA baselines with an average gain of 5.4\\%. Ablation results further indicate that feasibility checking and reflection-based correction both contribute to improved execution robustness. These results highlight the importance of embedding physical consistency checks and online self-reflection for reliable long-horizon robotic manipulation.",
+      "authors": [
+        "Jiayu Yang",
+        "Tao Yang",
+        "Weijun Li",
+        "Xiang Chang",
+        "Fei Chao",
+        "Changjing Shang",
+        "Qiang Shen"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-06-25T15:18:10+00:00",
+      "link": "https://arxiv.org/pdf/2606.27146v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "execution error diagnosis and feasibility check for manipulation",
+      "llm_evidence_cn": "操作中的执行错误诊断与可行性评估",
+      "llm_evidence": "操作中的执行错误诊断与可行性评估",
+      "canonical_evidence": "操作中的执行错误诊断与可行性评估",
+      "llm_tldr_en": "PhysReflect-VLA proposes a plug-and-play framework for VLA policies that evaluates physical feasibility and performs self-reflection online to diagnose execution errors, addressing the need for fault diagnosis in robot manipulation.",
+      "llm_tldr_cn": "针对视觉-语言-动作模型在长周期操作中缺乏在线错误诊断的问题，本文提出PhysReflect-VLA框架，通过在闭环控制管线中集成物理可行性评估和结构化自反思，实时检测并纠正不可行动作。该方法作为即插即用模块，显著提升了操作的物理可靠性和自纠错能力，为机器人故障诊断提供了新的思路。",
+      "llm_tldr": "针对视觉-语言-动作模型在长周期操作中缺乏在线错误诊断的问题，本文提出PhysReflect-VLA框架，通过在闭环控制管线中集成物理可行性评估和结构化自反思，实时检测并纠正不可行动作。该方法作为即插即用模块，显著提升了操作的物理可靠性和自纠错能力，为机器人故障诊断提供了新的思路。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "fault diagnosis and error analysis for humanoid robots",
+      "matched_requirement_id": "req-7",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2606.27353v1",
+      "source": "arxiv",
+      "title": "Continual Robot Policy Learning via Variational Neural Dynamics",
+      "abstract": "Robots deployed in the real world rarely operate under a single fixed dynamics model: wind changes, payloads vary, batteries drain, contacts shift, and hardware wears. Yet most learning-based controllers are trained once and deployed as if learning were complete. This prevents the robot from using deployment experience to further improve task performance. In this work, we propose a continual learning framework that uses real-world experience to improve robot policies under hidden and recurring dynamics. Our method learns a condition-aware dynamics model from real state-action trajectories by combining an analytical physics prior with a neural residual for unmodeled effects. A recurrent encoder infers the current hidden condition from recent interaction, and this estimate conditions both the residual model and the policy. Policy learning is performed via differentiable simulation using diverse learned dynamics sampled from the latent model. At deployment, these sampled conditions are replaced by conditions inferred online from recent real interaction, allowing the policy to recover recurring dynamics by recognition rather than residual re-fitting. Through extensive simulation studies and real-world experiments, we demonstrate that the framework improves policy performance under diverse unobserved disturbances. On real quadrotor trajectory tracking under changing wind, the policy recovers from recurring disturbances in roughly 1s, about 5x faster than online residual re-fitting. It also reduces large-disturbance hover and tracking errors by 65.7% and 53.3% over the state-of-the-art online adaptation approaches",
+      "authors": [
+        "Jiaxu Xing",
+        "Zhiyuan Zhu",
+        "Yunfan Ren",
+        "Ismail Geles",
+        "Yifan Zhai",
+        "Rudolf Reiter",
+        "Davide Scaramuzza"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-06-25T17:56:04+00:00",
+      "link": "https://arxiv.org/pdf/2606.27353v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "condition-aware dynamics model with recurrent encoder for detecting hidden dynamics changes",
+      "llm_evidence_cn": "利用递归编码器检测隐藏动力学变化的条件感知动力学模型",
+      "llm_evidence": "利用递归编码器检测隐藏动力学变化的条件感知动力学模型",
+      "canonical_evidence": "利用递归编码器检测隐藏动力学变化的条件感知动力学模型",
+      "llm_tldr_en": "This work proposes a continual learning framework that uses a recurrent encoder to infer hidden conditions from interaction history and learns a condition-aware dynamics model, enabling robots to adapt to changing dynamics during deployment.",
+      "llm_tldr_cn": "真实世界机器人的动力学参数（如风、负载、磨损）会不断变化，但大多数学习控制器训练后即固定。本文提出持续学习框架，结合分析物理先验与神经残差，通过递归编码器从最近交互推断隐藏条件，学习条件感知动力学模型。该模型能利用部署期间的经验改进策略，在隐藏动力学变化场景下提升任务性能。该方法可视为一种在线异常检测机制，对机器人安全运行具有重要价值。",
+      "llm_tldr": "真实世界机器人的动力学参数（如风、负载、磨损）会不断变化，但大多数学习控制器训练后即固定。本文提出持续学习框架，结合分析物理先验与神经残差，通过递归编码器从最近交互推断隐藏条件，学习条件感知动力学模型。该模型能利用部署期间的经验改进策略，在隐藏动力学变化场景下提升任务性能。该方法可视为一种在线异常检测机制，对机器人安全运行具有重要价值。",
+      "llm_tags": [
+        "query:humanoid-ood"
+      ],
+      "matched_query_tag": "query:humanoid-ood",
+      "matched_query_text": "out-of-distribution detection for safe robot operation",
+      "matched_requirement_id": "req-11",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    }
+  ]
+}
