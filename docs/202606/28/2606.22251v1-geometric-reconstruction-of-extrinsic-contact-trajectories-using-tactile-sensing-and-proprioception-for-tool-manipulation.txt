@@ -1,0 +1,465 @@
+Title: Geometric Reconstruction of Extrinsic Contact Trajectories using Tactile Sensing and Proprioception for Tool Manipulation
+
+URL Source: https://arxiv.org/pdf/2606.22251v1
+
+Published Time: Tue, 23 Jun 2026 01:54:05 GMT
+
+Number of Pages: 8
+
+Markdown Content:
+# Geometric Reconstruction of Extrinsic Contact Trajectories using Tactile Sensing and Proprioception for Tool Manipulation 
+
+Seojung Min 1, Yoonjin Kim 1, Jeong-Jung Kim 2 and Jung Kim 1
+
+Abstract — Tactile sensing enables robots to perceive rich contact information at the grasp, supporting tasks such as object recognition, in-hand pose estimation, and slip detection. However, in many tool-mediated manipulation tasks, the in-teraction that determines task success occurs at the tool tip, away from the tactile sensor, making direct sensing of tool-environment contact difficult, particularly when the contact moves during interaction. In this work, we reconstruct the trajectory of extrinsic tool-tip contact using tactile sensing and robot proprioception. We formulate tool-tip trajectory reconstruction as a geometric inference problem under a single-point contact assumption. Our method first estimates the global tool-tip contact location from a calibration segment designed to approximate fixed-point behavior, and then reconstructs the full trajectory by composing relative tool motion estimated from tactile marker observations under continuous contact. Across n = 51 trials with multiple trajectories, tools, wrist poses, and grasp configurations, the proposed pipeline achieves a trajectory RMSE of 8.59 ± 2.41 mm in the world frame and a shape RMSE of 5.96 ± 1.16 mm, while operating online at 
+
+14 .00 ± 4.11 Hz. Overall, the results show that extrinsic tool-tip trajectory geometry can be recovered consistently from grasp-level tactile sensing, with trajectory shape remaining stable across variations in tools, wrist poses, and grasp configurations. 
+
+I. I NTRODUCTION 
+
+Tactile sensing provides rich information about physi-cal interaction and has become an important modality for robotic manipulation, particularly in situations where vision is unreliable due to occlusion or limited viewpoints. Recent vision-based tactile sensors such as GelSight [1], DIGIT [2], TacTip [3], GelSlim [4], and 9dtact [5] enable high-resolution measurement of contact geometry, shear, and slip, support-ing both learning-based and geometry-based manipulation approaches [6], [7]. Most prior work focuses on intrinsic tactile perception ,where contact occurs directly at the hand-object interface and the grasped object is the primary subject of interaction. Representative problems include object classification and material recognition from tactile cues [8]–[11], in-hand pose 
+
+*This work was supported in part by the National Research Council of Science and Technology as part of the project titled “Development of core technologies for robot general purpose task artificial intelligence (RoGeTA) framework” under Grant NK261B. 
+
+> 1
+
+S. Min, Y. Kim and J. Kim are with Department of Mechanical Engineering, Korea Advanced Institute of Science and Technology, Dae-jeon 34141, Republic of Korea. seojung.min@kaist.ac.kr, yjk05@kaist.ac.kr, jungkim@kaist.ac.kr 
+
+> 2
+
+J. J. Kim is with Department of AI Machinery, Korea Insti-tute of Machinery and Materials, Daejeon 34141, Republic of Korea. 
+
+rightcore@kimm.re.kr 
+
+Fig. 1. Experimental setup and interaction scenario. (a) Overall system setup, (b) Grooved structure defining the ground-truth trajectories (top view and cross-section), (c) Stage I: the end-effector moves slightly while the tool tip remains fixed, and (d) Stage II: the end-effector moves straight while the tool tip follows the groove. 
+
+estimation using tactile geometry and proprioception [12]– [16], and slip or shear detection for grasp stability and tactile servoing [4], [17]–[19]. However, many real-world manipulation tasks are tool-mediated. In such tasks including writing, scraping, cutting, or insertion [20]–[22], the grasp stabilizes a tool while task success depends on the interaction between the tool tip and the environment. This interaction constitutes an extrinsic contact that occurs at a spatially separated location from the tactile sensor. As a result, the robot must infer the state of the tool-environment contact indirectly from deformation observed at the grasp. A growing body of work has addressed extrinsic contact from the perspective of state estimation. Ma et al. [23] intro-duced a geometric formulation that localizes extrinsic contact        
+
+> arXiv:2606.22251v1 [cs.RO] 20 Jun 2026 Fig. 2. Two-stage reconstruction pipeline. We estimate per-frame 6-DoF relative tool motion ( Rt,tt) from dual tactile marker trajectories and anchor the initial tool-tip contact point ˆ pB(0)using a fixed-point calibration segment (Stage I). The full tool-tip trajectory ˆ pB(t)is then reconstructed by propagating the anchored point through the estimated motions (Stage II).
+
+by exploiting consistency between tactile measurements and assumed contact constraints. Subsequent work incorporated active control strategies to regulate contact configurations for tasks such as peg-in-hole insertion [24], [25]. Learning-based approaches have also been explored, for example Neural Contact Fields [26], which estimate extrinsic contact probabilistically from tactile observations. Related studies extend this direction to joint estimation of contact and object pose or reconstruction of extrinsic contact surfaces [27]–[29]. While these approaches focus primarily on estimating contact states, they do not explicitly address the reconstruction of continuous contact motion over time. In parallel, extrinsic contact has also been studied as a signal for manipulation control. Prior work regulates contact configurations to enable tasks such as pivoting, sliding, or non-prehensile manipulation using tactile feedback [30]– [32]. In these approaches, extrinsic contact is actively main-tained and controlled to guide task execution. As a result, contact information is primarily used as a variable for control or policy learning rather than as a geometric quantity to be explicitly reconstructed over time. In contrast to prior work that estimates extrinsic contact states or regulates contact for manipulation, we reconstruct the continuous trajectory of extrinsic tool-tip contact during tool-mediated interaction. We formulate trajectory recon-struction as a geometric inference problem from tactile marker motion and robot proprioception under a single dominant point-contact assumption. A calibration segment provides an initial anchor by approximating fixed-point be-havior in the world frame, and the full trajectory is then recovered by propagating this anchor through tactile-derived relative rigid motions. The setup and pipeline are shown in Fig. 1 and Fig. 2. We make the following contributions:  
+
+> •
+
+We formulate extrinsic contact inference as trajectory reconstruction from in-hand tactile sensing and propri-oception.  
+
+> •
+
+We propose a two-stage geometric pipeline with anchor-ing and propagation using relative rigid motion from tactile markers.  
+
+> •
+
+We provide multi-condition experiments ( n = 51) and show that world-frame error is dominated by anchoring bias while trajectory shape remains stable. II. M ETHODOLOGY 
+
+Rather than estimating extrinsic contact as a single static state, we reconstruct the temporal evolution of the tool-tip contact in the robot base frame. We adopt a geometry-based formulation that relies solely on tactile marker deformation and robot proprioception, without assuming object priors or learned contact models. The proposed method consists of two temporally distinct stages. At each time step, we estimate the 6-DoF rigid motion of the tool relative to the initial valid frame from tactile marker trajectories. This motion estimate serves as a shared geometric signal for both stages of the method. Stage I (Initial Contact Anchoring) uses these 6-DoF motions from an initial calibration segment to estimate the global tool-tip contact point via a fixed-point constraint. Stage II (Trajectory Reconstruction) propagates the anchored contact point through the full sequence of tool motions to recover the complete tool-tip trajectory. The geometric principle of the two-stage reconstruction is illustrated in Fig. 3, and Algorithm 1 summarizes the full two-stage online pipeline. 
+
+A. Problem Formulation 
+
+Frames: We use a left/right tactile image frame F(ℓ) 
+
+> I
+
+and 
+
+F(r) 
+
+> I
+
+(pixels), corresponding tactile sensor frames F(ℓ) 
+
+> S
+
+and 
+
+F(r) 
+
+> S
+
+, a robot end-effector frame FE , and the robot base frame 
+
+FB (world frame). Fig. 3. Geometric principle of the two-stage reconstruction. (a) Stage I (anchoring): during calibration, the tool tip is approximately stationary in the base/world frame, yielding fixed-point constraints that estimate the initial contact ˆ pB(0). (b) Stage II (propagation): the anchored point is propagated through the estimated relative rigid motions (Rt , tt ) from tactile markers to reconstruct ˆ pB(t).
+
+Signals: At each time step t, we acquire dual tactile RGB images I(ℓ) 
+
+> t
+
+and I(r) 
+
+> t
+
+from the left/right sensors and the robot end-effector pose BTE (t) ∈ SE (3) from proprioception. 
+
+Goal: Reconstruct the tool-tip trajectory ˆpB(t) ∈ R3 in the base frame using only in-hand tactile sensing and robot proprioception. 
+
+Assumptions: The tool is rigidly grasped throughout the interaction, with no slip between the tool and the elastomer pads of the tactile sensors. The extrinsic interaction is dominated by a single effective point constraint at the tool tip. We evaluate under passive contact constraints induced by a grooved environment, which maintains continuous extrinsic contact and restricts the tool-tip motion to a structured trajectory. Each trial begins with a calibration segment during which the tool tip is approximately stationary in the base frame (Sec. II-E). 
+
+Time indexing and trial structure: We consider a single interaction trial indexed by discrete time t ∈ { 0, 1, . . . , Tend },where Tend denotes the final time step of the sequence. Each trial consists of two consecutive segments: an initial calibration segment K = {0, 1, . . . , Tcal }, during which the tool tip is approximately stationary in the base frame, and a subsequent reconstruction segment R = {Tcal + 1, . . . , Tend },during which the tool tip moves continuously under environ-ment constraints. 
+
+B. Tactile Image Processing and Marker Tracking 
+
+At each time step, we collect tactile RGB frames from dual tactile sensors (GelSight Mini) and track the motion of surface markers. Assuming rigid contact between the tool and the elastomer pads, the marker displacements correspond to a single rigid-body motion, which we estimate as the tool motion (Sec. II-D). Marker tracking and depth reconstruction are implemented based on the official GelSight Mini SDK, with minor modifications and per-sensor calibration to ensure consistent metric scaling and depth normalization. 
+
+Marker tracking (2D): For each sensor, marker cen-ters are detected in the initial frame and tracked frame-to-frame using pyramidal Lucas-Kanade (LK) optical flow implemented in OpenCV. We use a window size of 15 × 15, two pyramid levels, and termination criteria of 10 iterations or ε = 0.03. Tracking is initialized once at the beginning of each trial and maintained throughout the interaction. 
+
+Depth reconstruction (3D lifting): For each tactile RGB frame, we reconstruct a dense depth map following the Gel-Sight Mini SDK pipeline. Specifically, (i) per-pixel surface normals are predicted using a lightweight neural network from normalized RGB values and pixel coordinates, and (ii) Poisson integration is applied to recover depth from the es-timated gradients. To account for sensor-specific offsets, we subtract a pre-recorded baseline depth map for each sensor before converting depth values to metric units. Marker pixels are excluded from normal estimation using an intensity-range mask. 
+
+Depth-based marker selection: Not all tracked markers are equally informative due to partial contact and spatially non-uniform indentation. At the beginning of each trial, we select K = 8 informative markers based on indentation depth while discarding the top-3 extreme-depth outliers. The selected marker indices are then fixed and used consistently for the remainder of the trial. 
+
+Output representation: For each sensor s ∈ { ℓ, r} and time step t, the above procedure yields a fixed set of K
+
+tracked markers with 3D coordinates in the sensor frame 
+
+F(s) 
+
+> S
+
+,
+
+xS(s) 
+
+> i,t
+
+∈ R3, i = 1, . . . , K, (1) which serves as the input to the base-frame transformation described in Sec. II-C. 
+
+C. Coordinate Transformation to the Base Frame 
+
+Given the reconstructed 3D marker locations xS(s) 
+
+> i,t
+
+in each sensor frame, we transform them to the robot base frame in two steps: (i) sensor frame to end-effector frame, and (ii) end-effector frame to base frame. Each sensor is associated with a pre-calibrated rigid trans-form to the robot end-effector frame, denoted as E T(ℓ) 
+
+> S
+
+and Algorithm 1 Two-Stage Tool-Tip Reconstruction  
+
+> 1:
+
+Input: tactile images I(ℓ) 
+
+> t
+
+, I(r) 
+
+> t
+
+, end-effector pose BTE (t),sensor-to-EE transforms E T(ℓ) 
+
+> S
+
+, E T(r) 
+
+> S
+> 2:
+
+Output: reconstructed trajectory { ˆpB(t)}Tend  
+
+> t=0
+> 3:
+
+Detect and select K markers per sensor at t = 0 
+
+> 4:
+
+for t = 0, 1, . . . , Tend do  
+
+> 5:
+
+Track markers and lift to 3D in sensor frames  
+
+> 6:
+
+Transform to base frame and stack Xt 
+
+> 7:
+
+Estimate relative motion (Rt , tt ) via Kabsch  
+
+> 8:
+
+if t ∈ K then (Stage I)  
+
+> 9:
+
+Accumulate (I − Rt )p ≈ tt 
+
+> 10:
+
+else (Stage II)  
+
+> 11:
+
+if t = min (R) then  
+
+> 12:
+
+Solve ˆ pB(0) from accumulated constraints  
+
+> 13:
+
+end if  
+
+> 14:
+
+Propagate: ˆ pB(t) = Rt ˆpB(0) + tt 
+
+> 15:
+
+end if  
+
+> 16:
+
+end for  
+
+> E
+
+T(r) 
+
+> S
+
+. These transforms are treated as constant throughout the experiments. Using the robot proprioceptive pose BTE (t), the base-frame marker coordinates are obtained as 
+
+xB,(s) 
+
+> i,t
+
+= BTE (t) E T(s) 
+
+> S
+
+xS(s) 
+
+> i,t
+
+. (2) For each sensor, we stack the base-frame marker coordi-nates into 
+
+X(s) 
+
+> t
+
+=
+
+
+
+xB,(s)
+
+> 1,t
+
+...
+
+xB,(s)
+
+> K,t
+
+ ∈ RK×3. (3) The full marker set used for rigid motion estimation is obtained by concatenating the left and right sensor stacks: 
+
+Xt =
+
+"
+
+X(ℓ)
+
+> t
+
+X(r)
+
+> t
+
+#
+
+∈ RN×3, N = 2K. (4) where N denotes the total number of markers at time t.
+
+D. 6-DoF Relative Tool Motion Estimation via Kabsch 
+
+Let X0 ∈ RN×3 denote the stacked base-frame marker positions at the initial valid time step, and Xt ∈ RN×3 the marker positions at time t, where N = 2K is fixed across the sequence. We estimate a rigid transform (Rt , tt ) consisting of a rotation matrix Rt ∈ SO (3) and a translation vector tt ∈ R3
+
+that maps the initial marker configuration to the current one by minimizing the pointwise alignment error. 
+
+(Rt , tt ) = arg min  
+
+> R∈SO (3),t∈R3
+> N
+
+# ∑
+
+> i=1
+
+∥R x i,0 + t − xi,t ∥22 . (5) This problem is solved using the Kabsch algorithm [33], which provides a closed-form SVD-based solution for opti-mal rigid alignment when point correspondences are known. The resulting (Rt , tt ) represents the 6-DoF relative rigid motion of the tool from the initial marker configuration to that at time t. Note that (Rt , tt ) is not an absolute pose in FB,but a motion estimate defined w.r.t. the initial valid frame. 
+
+E. Stage I: Initial Contact Anchoring 
+
+Stage I estimates the initial tool-tip contact location ˆpB(0) ∈ R3 in the robot base frame using the calibration segment K defined in Sec. II-A. We adopt the fixed-point constraint formulation introduced by Ma et al. [23], which models extrinsic contact under a stationary point assump-tion. In this work, the formulation is used as an anchoring primitive for subsequent trajectory reconstruction. During an initial calibration segment, the tool tip is maintained approximately stationary with respect to the base frame at an unknown location pB(0). To induce observable tactile deformation while preserving this stationary contact, we apply a small pre-planned motion that generates measur-able marker displacement without causing slip between the tool and the elastomer pads. Given the estimated rigid poses (Rk, tk) of the tool at time k with respect to its initial configuration (Sec. II-D), the fixed-point assumption implies 
+
+pB(0) ≈ RkpB(0) + tk, k ∈ K . (6) Rearranging yields 
+
+(I − Rk)pB(0) ≈ tk. (7) Stacking these constraints over all calibration frames k ∈ K 
+
+gives the linear least-squares problem ˆpB(0) = arg min 
+
+> p
+
+
+
+I − Rk1
+
+...
+
+I − Rk|K|
+
+ p −
+
+
+
+tk1
+
+...
+
+tk|K|
+
+
+
+> 22
+
+. (8) 
+
+F. Stage II: Trajectory Reconstruction 
+
+Given the anchored initial contact location ˆ pB(0) estimated in Stage I, Stage II reconstructs the full tool-tip trajectory over the reconstruction segment t ∈ R using the relative rigid motion estimates. For each time step t ∈ R , the rigid transform (Rt , tt )
+
+estimated in Sec. II-D represents the 6-DoF motion of the tool with respect to its initial configuration. Assuming rigid grasp without slip between the tool and the tactile pads, the contact point evolves according to the same rigid motion. Since xBi,t are expressed in the base frame, the relative transform (Rt , tt ) maps base-frame coordinates of the initial configuration to base-frame coordinates at time t.The reconstructed tool-tip trajectory is therefore given by ˆpB(t) = Rt ˆpB(0) + tt . (9) This formulation yields a trajectory-level estimate of extrinsic contact motion, rather than a per-frame contact state. While Stage I provides a global anchoring of the contact point, Stage II propagates this estimate temporally using frame-wise rigid motion inferred from tactile marker deformation. The resulting trajectory { ˆpB(t)}Tt=0 captures the continuous evolution of the tool-tip contact in the base frame. (d) 
+
+O1 O2 O3 O4(b) (c) (a) G2(-15 ˚)
+
+G3(+5 ˚)
+
+G1(0 ˚)
+
+W1(0 ˚, -5 ˚, 60 ˚)W2(0 ˚, 0 ˚, 60 ˚)W3(5 ˚, 0 ˚, 45 ˚)
+
+> Straight
+
+T 1T 2T 3T 4T 5            
+
+> 200mm Circular arc (max 8mm) Sinusoidal (50mm, 4mm) Sinusoidal (20mm, 2mm) Sinusoidal (100mm, 8mm) Fig. 4. Experimental conditions. We evaluate robustness across variations in (a) trajectory (where two numbers of sinusoids denote period and amplitude, respectively), (b) tool geometry, (c) wrist pose (where the three angles stand for Euler angles in the robot base frame), and (d) grasp configuration.
+
+III. E XPERIMENTS 
+
+We evaluate the proposed pipeline where the tool tip inter-acts with a planar grooved trajectories that constrains contact motion. The groove provides a structured and reproducible constraint for trajectory-level evaluation. 
+
+A. Experimental Setup 
+
+Robot and Control: A UR5e manipulator equipped with a Robotiq 2F-85 parallel gripper is used. The robot operates under Cartesian position control using MoveIt-based plan-ning. Extrinsic contact is maintained purely by the groove constraint. 
+
+Tactile Sensing: Two GelSight Mini sensors are mounted on the gripper fingers and used in all experiments. RGB frames are resized to 320 × 240 for online processing. We                     
+
+> TABLE I SUMMARY OF EXPERIMENTAL CONDITION SETS .EACH SET VARIES ONE FACTOR WHILE KEEPING THE OTHERS FIXED .
+> Set Trajectory Object Wrist Grasp
+> AT1–T5O1W1G1
+> BT3O1–O4W1G1
+> CT3O2W1–W3G1
+> DT3O1W1G1–G3
+
+report the measured end-to-end loop rate and frames per trial rather than commanded speed. 
+
+Tools: Four pencil-like tools ( O1–O4) are evaluated, each 8.6 cm in principal-axis length. Cross-sections include rect-angular, hexagonal, cylindrical, and a bent variant. All tool tips are designed to fit a groove to promote approximate point-contact behavior. 
+
+Groove and Trajectories: The grooved surface is fabri-cated via PLA 3D printing with a semicircular cross-section of 3 mm diameter. Five centerline trajectories are defined over a 200 mm x-range: (T1) straight line, (T2) circular arc with maximum lateral deviation of 8 mm, ( T3) sinusoid with period 50 mm and amplitude 4 mm, ( T4) sinusoid with period 20 mm and amplitude 2 mm, ( T5) sinusoid with period 100 mm and amplitude 8 mm. 
+
+Interaction Protocol: For each trial, the robot grasps the tool with predefined wrist pose and grasp configuration. The tool tip is aligned with the groove start point before execution. During Stage I, a small pre-planned end-effector motion is applied while the groove constraint keeps the tool tip approximately fixed in the base frame. During Stage II, the end-effector moves 20 cm along the world-frame +x
+
+direction under Cartesian control. Although the commanded motion is purely along x, the groove geometry induces lateral tool-tip motion along ±y according to the trajectory shape. 
+
+Condition Sets and Dataset Size: 
+
+A total of n = 51 trials are conducted across four condition sets (Table I), varying trajectory, tool geometry, wrist pose, and grasp configuration. The corresponding experimental variations are visually summarized in Fig. 4. 
+
+B. Ground Truth and Evaluation 
+
+Ground Truth: Ground truth is defined as the groove centerline trajectory in the robot base frame. For each trajec-tory, the analytic curve is anchored at the measured starting point pgt (0). Since the tool tip conforms to the groove cross-section and promotes approximate point-contact behavior, the centerline provides a physically meaningful approximation of the effective contact trajectory. 
+
+Metrics: We report three complementary metrics (in mil-limeters): (i) trajectory RMSE (world frame) RMSE tra j =
+
+rms (∥ ˆpB(t) − pgt (t)∥2), (ii) initial contact error ∥ ˆpB(0) −
+
+pgt (0)∥, and (iii) shape RMSE (initial-point aligned) ,where ˆ pshape (t) = ˆpB(t) − ˆpB(0) + pgt (0) and RMSE shape =
+
+rms (∥ ˆpshape (t) − pgt (t)∥2).-0.6 -0.55 -0.5 -0.45 -0.4                             
+
+> xworld [m]
+> -0.12 -0.1 -0.08 -0.06 -0.04 -0.02 0
+> yworld  [m]
+> T1 (n=3) T2 (n=3) T3 (n=3) T4 (n=3) T5 (n=3)
+> Estimated (All trials) Ground Truth
+> -0.06 -0.04 O1 (n=3)
+> -0.06 -0.04 O2 (n=3)
+> -0.06 -0.04 O3 (n=3)
+> -0.6 -0.55 -0.5 -0.45 -0.4
+> xworld [m]
+> -0.06 -0.04 O4 (n=3)
+> -0.06 -0.04 W1 (n=5)
+> -0.06 -0.04
+> yworld  [m]  W2 (n=5)
+> -0.6 -0.55 -0.5 -0.45 -0.4
+> xworld [m]
+> -0.06 -0.04 W3 (n=5)
+> -0.06 -0.04 G1 (n=3)
+> -0.06 -0.04 G2 (n=3)
+> -0.6 -0.55 -0.5 -0.45 -0.4
+> xworld [m]
+> -0.06 -0.04 G3 (n=3)
+> Set A: Trajectory Diversity Set B: Object (Tool) Geometry Set C: Wrist Pose Set D: Grasp Config.
+
+Fig. 5. Qualitative trajectory reconstruction. Reconstructed trajectories (blue) are overlaid across trials and compared with ground-truth trajectories (black) under representative condition sets. TABLE II OVERALL RECONSTRUCTION PERFORMANCE (n = 51). 
+
+Metric Mean ± Std 
+
+Trajectory RMSE (world frame) [mm] 8.59 ± 2.41 Shape RMSE (initial-point aligned) [mm] 5.96 ± 1.16 Initial contact error [mm] 9.48 ± 3.77 Loop rate [Hz] 14 .00 ± 4.11 
+
+IV. R ESULTS 
+
+A. Reconstruction Accuracy and Error Structure 
+
+Table II summarizes reconstruction performance across all 
+
+n = 51 trials. The proposed method achieves a trajectory RMSE of 8 .59 ± 2.41 mm in the world frame. Because this metric reflects both initialization error and trajectory propagation, we additionally evaluate trajectory shape accuracy after aligning the initial contact point. Af-ter this alignment, the shape RMSE decreases to 5 .96 ±
+
+1.16 mm. This reduction indicates that a substantial portion of the world-frame trajectory error originates from bias in the initial anchoring stage rather than distortion of the reconstructed trajectory geometry. Qualitative trajectory overlays shown in Fig. 5 illustrate this behavior. Across trials, reconstructed trajectories fol-low the characteristic curvature patterns of the ground-truth groove trajectories. For example, sinusoidal trajectories retain their periodic structure, and circular arc trajectories preserve their overall curvature. In all cases, the dominant deviation between estimated and ground-truth trajectories appears as an approximately constant translational offset rather than progressive distortion along the trajectory. To analyze the origin of this offset, we examine the relationship between anchoring accuracy and trajectory re-construction error. The initial contact error is measured as the Euclidean distance between the estimated initial contact point and the ground-truth trajectory origin. Across all trials, the mean initial contact error is 9 .48 ± 3.77 mm. Fig. 6 shows the relationship between the initial contact er-ror and trajectory reconstruction accuracy. Trajectory RMSE exhibits a strong correlation with the initial contact error (Spearman’s ρ = 0.80), whereas shape RMSE shows weak correlation with the same quantity (Spearman’s ρ = 0.16). This difference reveals a clear separation between two sources of reconstruction error. Errors introduced during the anchoring stage primarily affect the absolute world-frame position of the reconstructed trajectory, while errors in relative motion estimation influence the trajectory geometry during propagation. Together, these results indicate that while anchoring ac-curacy determines the absolute localization of the trajectory, the rigid-motion propagation stage recovers the relative ge-ometry of the tool-tip motion with high consistency. 
+
+B. Robustness Across Conditions 
+
+To evaluate robustness across experimental variations, we analyze reconstruction accuracy across the four condition sets summarized in Table I. These condition sets indepen-dently vary trajectory type, tool geometry, wrist pose, and grasp configuration. Fig. 7 shows the distribution of shape RMSE across condition sets. Despite these variations, the mean shape error remains within 5 .0–6 .6 mm across all sets. This rel-atively narrow range suggests that the proposed reconstruc-tion pipeline is not strongly sensitive to these experimental factors. In particular, variations in trajectory shape do not lead to systematic degradation in reconstruction accuracy. Both smooth trajectories such as straight lines and circular arcs and higher-frequency sinusoidal trajectories are reconstructed with comparable accuracy. Similarly, changes in tool geom-etry do not significantly affect reconstruction performance, indicating that the method does not rely on a specific tool shape beyond the assumption of a dominant tool-tip contact. Variations in wrist pose and grasp configuration also pro-duce only minor differences in shape RMSE. This suggests that the proposed method remains stable across moderate changes in sensor orientation and contact configuration at the grasp. Qualitative overlays in Fig. 5 further confirm the robust-ness of the method. Across all condition sets, reconstructed trajectories closely follow the structure of the ground-truth trajectories, with no condition set exhibiting systematic fail-ure or instability. 
+
+C. Runtime Performance 
+
+The full reconstruction pipeline operates at 14 .00 ±
+
+4.11 Hz (Table II), with observed loop rates ranging from 6.14 Hz to 23 .68 Hz. This runtime includes tactile image acquisition, marker tracking, depth reconstruction, rigid motion estimation, and trajectory propagation (Algorithm 1). The majority of the computation time arises from tactile image processing and depth reconstruction, while the geometric estimation steps incur negligible overhead. Despite these processing requirements, the loop rate re-mains sufficient for continuous online trajectory reconstruc-tion during tool-mediated interaction. The pipeline processes tactile observations incrementally, allowing the tool-tip tra-jectory to be updated as new measurements become avail-able. V. D ISCUSSION AND CONCLUSION 
+
+This work reframes extrinsic contact inference as a tra-jectory reconstruction problem and demonstrates that tool-tip trajectories can be recovered online from in-hand tactile 0 10 20 
+
+> Init. contact error [mm]
+> 246810 12 14
+> Trajectory RMSE [mm]
+
+;S = 0.80   
+
+> 010 20
+> Init. contact error [mm]
+> 246810 12 14
+> Shape RMSE [mm]
+
+;S = 0.16               
+
+> Fig. 6. Error decomposition. Trajectory RMSE (world frame) correlates strongly with initial contact error, whereas shape RMSE shows weak correlation, indicating that global anchoring bias dominates absolute error. ABCD
+
+Condition set   
+
+> 03.4 6.7 10.1
+> Shape RMSE [mm]
+> Fig. 7. Shape error across condition sets. Distribution of shape RMSE (initial-point aligned) for Sets A–D.
+
+sensing and robot proprioception using a simple two-stage geometric pipeline (Fig. 2–3). Across diverse trajectories, tools, wrist poses, and grasp configurations, the reconstructed paths consistently preserve the characteristic geometry of the underlying trajectories (Fig. 5). Error decomposition further reveals that world-frame trajectory error is strongly correlated with the initial contact error, while the initial-point-aligned shape error shows weak correlation (Fig. 6). This indicates that the dominant source of error in the current system is a near-constant global offset introduced during the anchoring stage rather than progressive distortion during trajectory propagation. Once the initial contact point is anchored, the relative rigid motion inferred from tactile marker deformation provides a stable signal for recovering the geometry of tool motion over time. This observation suggests that the reconstructed trajec-tory shape may remain informative even when the absolute anchoring of the contact point is imperfect. For example, in tool-mediated interactions that involve tracing geometric constraints, such as contour tracing or tactile exploration of surface features, the geometry of the contact trajectory itself provides meaningful information about the interaction. A key limitation of the present study lies in the contact as-sumptions underlying the reconstruction model. The current formulation assumes a dominant single-point contact at the tool tip with continuous contact during interaction. To satisfy these assumptions and enable controlled evaluation, we use a grooved environment that passively constrains the tool tip and maintains stable contact throughout the motion. While this setup provides a clean trajectory-level ground truth and isolates the estimation problem, it does not represent more general manipulation scenarios where contact conditions may vary, slip may occur, or contact may be intermittent. Future work will therefore focus on extending the frame-work beyond passive constraints by incorporating contact-maintenance strategies such as tactile servoing or force-based control. Rather than removing the underlying contact assumptions, such control strategies could actively regu-late the interaction to maintain the conditions required by the reconstruction algorithm, enabling the same estimation framework to operate in less structured environments. An-other promising direction is to use reconstructed tool-tip traces to infer local environment geometry during interaction, supporting tactile exploration and geometry estimation in tool-mediated manipulation. ACKNOWLEDGMENT Portions of the manuscript were edited with the assistance of ChatGPT (OpenAI). All technical content, experiments, and conclusions were developed and verified by the authors. REFERENCES [1] W. Yuan, S. Dong, and E. H. Adelson, “Gelsight: High-resolution robot tactile sensors for estimating geometry and force,” Sensors , vol. 17, no. 12, p. 2762, 2017. [2] M. Lambeta, P.-W. Chou, S. Tian, B. Yang, B. Maloon, V. R. Most, D. Stroud, R. Santos, A. Byagowi, G. Kammerer et al. , “Digit: A novel design for a low-cost compact high-resolution tactile sensor with application to in-hand manipulation,” IEEE Robotics and Automation Letters , vol. 5, no. 3, pp. 3838–3845, 2020. [3] B. Ward-Cherrier, N. Pestell, L. Cramphorn, B. Winstone, M. E. Giannaccini, J. Rossiter, and N. F. Lepora, “The tactip family: Soft optical tactile sensors with 3d-printed biomimetic morphologies,” Soft robotics , vol. 5, no. 2, pp. 216–227, 2018. [4] I. H. Taylor, S. Dong, and A. Rodriguez, “Gelslim 3.0: High-resolution measurement of shape, force and slip in a compact tactile-sensing finger,” in 2022 International Conference on Robotics and Automation (ICRA) . IEEE, 2022, pp. 10 781–10 787. [5] C. Lin, H. Zhang, J. Xu, L. Wu, and H. Xu, “9dtact: A compact vision-based tactile sensor for accurate 3d shape reconstruction and generalizable 6d force estimation,” IEEE Robotics and Automation Letters , vol. 9, no. 2, pp. 923–930, 2023. [6] S. Luo, N. F. Lepora, W. Yuan, K. Althoefer, G. Cheng, and R. Dahiya, “Tactile robotics: An outlook,” IEEE Transactions on Robotics , 2025. [7] H. Li, Y. Lin, C. Lu, M. Yang, E. Psomopoulou, and N. F. Lepora, “Classification of vision-based tactile sensors: A review,” IEEE Sen-sors Journal , 2025. [8] A. J. Spiers, M. V. Liarokapis, B. Calli, and A. M. Dollar, “Single-grasp object classification and feature extraction with simple robot hands and tactile sensors,” IEEE transactions on haptics , vol. 9, no. 2, pp. 207–220, 2016. [9] S. Luo, W. Mou, K. Althoefer, and H. Liu, “Iterative closest labeled point for tactile object shape recognition,” in 2016 IEEE/RSJ Interna-tional Conference on Intelligent Robots and Systems (IROS) . IEEE, 2016, pp. 3137–3142. [10] W. Yuan, C. Zhu, A. Owens, M. A. Srinivasan, and E. H. Adelson, “Shape-independent hardness estimation using deep learning and a gelsight tactile sensor,” in 2017 IEEE International Conference on Robotics and Automation (ICRA) . IEEE, 2017, pp. 951–958. [11] S. Luo, W. Yuan, E. Adelson, A. G. Cohn, and R. Fuentes, “Vitac: Feature sharing between vision and tactile sensing for cloth texture recognition,” in 2018 IEEE International Conference on Robotics and Automation (ICRA) . IEEE, 2018, pp. 2722–2727. [12] J. Bimbo, S. Luo, K. Althoefer, and H. Liu, “In-hand object pose estimation using covariance-based tactile to geometry matching,” IEEE Robotics and Automation Letters , vol. 1, no. 1, pp. 570–577, 2016. [13] M. B. Villalonga, A. Rodriguez, B. Lim, E. Valls, and T. Sechopoulos, “Tactile object pose estimation from the first touch with geometric contact rendering,” in Conference on Robot Learning . PMLR, 2021, pp. 1015–1029. [14] M. Bauza, A. Bronars, and A. Rodriguez, “Tac2pose: Tactile object pose estimation from the first touch,” The International Journal of Robotics Research , vol. 42, no. 13, pp. 1185–1209, 2023. [15] T. Kelestemur, R. Platt, and T. Padir, “Tactile pose estimation and policy learning for unknown object manipulation,” in Proceedings of the 21st International Conference on Autonomous Agents and Multiagent Systems , 2022, pp. 742–750. [16] S. Yang, W. D. Kim, H. Park, S. Min, H. Han, and J. Kim, “In-hand object classification and pose estimation with sim-to-real tactile transfer for robotic manipulation,” IEEE Robotics and Automation Letters , vol. 9, no. 1, pp. 659–666, 2023. [17] J. Lloyd and N. F. Lepora, “Pose-and-shear-based tactile servoing,” 
+
+The International Journal of Robotics Research , vol. 43, no. 7, pp. 1024–1055, 2024. [18] C. J. Ford, H. Li, M. G. Catalano, M. Bianchi, E. Psomopoulou, and N. F. Lepora, “Shear-based grasp control for multi-fingered underactuated tactile robotic hands,” IEEE Transactions on Robotics ,2025. [19] K. Aquilina, D. A. Barton, and N. F. Lepora, “Tactile control for object tracking and dynamic contour following,” Robotics and Autonomous Systems , vol. 178, p. 104710, 2024. [20] Y. Shirai, D. K. Jha, A. U. Raghunathan, and D. Hong, “Tactile tool manipulation,” in 2023 IEEE International Conference on Robotics and Automation (ICRA) . IEEE, 2023, pp. 12 597–12 603. [21] C. Zhao, L. Xie, B. Huang, S. Wang, and D. Ma, “Tactile-driven dex-terous in-hand writing via extrinsic contact sensing,” IEEE Robotics and Automation Letters , 2025. [22] C. Higuera, J. Ortiz, H. Qi, L. Pineda, B. Boots, and M. Mukadam, “Perceiving extrinsic contacts from touch improves learning insertion policies,” arXiv preprint arXiv:2309.16652 , 2023. [23] D. Ma, S. Dong, and A. Rodriguez, “Extrinsic contact sensing with relative-motion tracking from distributed tactile measurements,” in 
+
+2021 IEEE international conference on robotics and automation (ICRA) . IEEE, 2021, pp. 11 262–11 268. [24] S. Kim and A. Rodriguez, “Active extrinsic contact sensing: Ap-plication to general peg-in-hole insertion,” in 2022 International Conference on Robotics and Automation (ICRA) . IEEE, 2022, pp. 10 241–10 247. [25] S. Kim, D. K. Jha, D. Romeres, P. Patre, and A. Rodriguez, “Simul-taneous tactile estimation and control of extrinsic contact,” in 2023 IEEE International Conference on Robotics and Automation (ICRA) .IEEE, 2023, pp. 12 563–12 569. [26] C. Higuera, S. Dong, B. Boots, and M. Mukadam, “Neural contact fields: Tracking extrinsic contact with tactile sensing,” arXiv preprint arXiv:2210.09297 , 2022. [27] A. Sipos and N. Fazeli, “Simultaneous contact location and object pose estimation using proprioception and tactile feedback,” in 2022 IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS) . IEEE, 2022, pp. 3233–3240. [28] M. Van der Merwe, K. Ota, D. Berenson, N. Fazeli, and D. K. Jha, “Simultaneous extrinsic contact and in-hand pose estimation via distributed tactile sensing,” IEEE Robotics and Automation Letters ,vol. 11, no. 3, pp. 2394–2401, 2026. [29] Y. Kim, W. D. Kim, and J. Kim, “Object extrinsic contact surface reconstruction through extrinsic contact sensing from visuo-tactile measurements,” in 2025 IEEE/RSJ International Conference on Intel-ligent Robots and Systems (IROS) . IEEE, 2025, pp. 20 968–20 973. [30] N. Doshi, O. Taylor, and A. Rodriguez, “Manipulation of unknown objects via contact configuration regulation,” in 2022 International Conference on Robotics and Automation (ICRA) . IEEE, 2022, pp. 2693–2699. [31] A. Bronars, S. Kim, P. Patre, and A. Rodriguez, “Texterity: Tactile ex-trinsic dexterity,” in 2024 IEEE International Conference on Robotics and Automation (ICRA) . IEEE, 2024, pp. 7976–7983. [32] M. Oller, D. Berenson, and N. Fazeli, “Tactile-driven non-prehensile object manipulation via extrinsic contact mode control.” [33] W. Kabsch, “A solution for the best rotation to relate two sets of vectors,” Foundations of Crystallography , vol. 32, no. 5, pp. 922–923, 1976.

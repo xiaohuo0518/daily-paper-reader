@@ -1,0 +1,313 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-06-28T21:07:22.143785+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 2,
+    "deep_divecandidates": 0,
+    "deep_cap": 7,
+    "deep_selected": 0,
+    "quick_candidates": 7,
+    "quick_skim_target": 12,
+    "quick_selected": 7
+  },
+  "deep_dive": [],
+  "quick_skim": [
+    {
+      "id": "2606.26046v1",
+      "source": "arxiv",
+      "title": "RoboAtlas: Contextual Active SLAM",
+      "abstract": "We present RoboAtlas, a contextual Active SLAM framework that adaptively balances geometric exploration and semantic reasoning using a scalable 3D semantic mapping system, OpenRoboVox. RoboAtlas integrates frontier exploration, global semantic-map reasoning, and egocentric VLM-based reasoning through a contextual multi-armed bandit that transitions from exploration to semantically guided navigation as scene understanding improves. We evaluate the system in simulation and on a Unitree Go2 robot in large-scale real-world environments exceeding 1800 m2 with approx. 30k mapped semantic instances, achieving a 100% task success rate. On the GOAT-Bench \"Val Unseen\" benchmark, RoboAtlas achieves state-of-the-art performance with highest reported success rate (SR) of 90.6%, using GPT-4o, improving over the strongest prior baseline by 17.8 percentage points in SR. Using the much smaller Qwen2.5-VL-7B model, it still achieves 88.8% SR, outperforming all baselines using GPT-4o in SR, and revealing the importance of the information gained by our semantic mapping framework over simply replacing the underlying foundation model. The results demonstrate that grounding foundation models with large-scale 3D semantic maps enables robust and efficient contextual Active SLAM.",
+      "authors": [
+        "Alexander Schperberg",
+        "Shivam K. Panda",
+        "Abraham P. Vinod",
+        "M. K. Jawed",
+        "Stefano Di Cairano"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.CV"
+      ],
+      "published": "2026-06-24T17:26:07+00:00",
+      "link": "https://arxiv.org/pdf/2606.26046v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "active SLAM system deployed on Unitree Go2 robot, demonstrates edge deployment",
+      "llm_evidence_cn": "主动SLAM系统部署在宇树Go2机器人上，展示了边缘部署能力",
+      "llm_evidence": "主动SLAM系统部署在宇树Go2机器人上，展示了边缘部署能力",
+      "canonical_evidence": "主动SLAM系统部署在宇树Go2机器人上，展示了边缘部署能力",
+      "llm_tldr_en": "RoboAtlas presents a contextual Active SLAM framework evaluated on Unitree Go2 in large-scale real-world environments, achieving high task success.",
+      "llm_tldr_cn": "该工作提出RoboAtlas上下文主动SLAM框架，结合几何探索与语义推理，并在宇树Go2机器人上大规模真实环境测试（超过1800平方米）。系统在GOAT-Bench上取得先进性能。该工作体现了机器人边缘部署中的SLAM系统，但非故障诊断。",
+      "llm_tldr": "该工作提出RoboAtlas上下文主动SLAM框架，结合几何探索与语义推理，并在宇树Go2机器人上大规模真实环境测试（超过1800平方米）。系统在GOAT-Bench上取得先进性能。该工作体现了机器人边缘部署中的SLAM系统，但非故障诊断。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "edge deployment of Unitree robots research",
+      "matched_requirement_id": "req-8",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2606.22251v1",
+      "source": "arxiv",
+      "title": "Geometric Reconstruction of Extrinsic Contact Trajectories using Tactile Sensing and Proprioception for Tool Manipulation",
+      "abstract": "Tactile sensing enables robots to perceive rich contact information at the grasp, supporting tasks such as object recognition, in-hand pose estimation, and slip detection. However, in many tool-mediated manipulation tasks, the interaction that determines task success occurs at the tool tip, away from the tactile sensor, making direct sensing of tool-environment contact difficult, particularly when the contact moves during interaction. In this work, we reconstruct the trajectory of extrinsic tool-tip contact using tactile sensing and robot proprioception. We formulate tool-tip trajectory reconstruction as a geometric inference problem under a single-point contact assumption. Our method first estimates the global tool-tip contact location from a calibration segment designed to approximate fixed-point behavior, and then reconstructs the full trajectory by composing relative tool motion estimated from tactile marker observations under continuous contact. Across n=51 trials with multiple trajectories, tools, wrist poses, and grasp configurations, the proposed pipeline achieves a trajectory RMSE of 8.59 +/- 2.41 mm in the world frame and a shape RMSE of 5.96 +/- 1.16 mm, while operating online at 14.00 +/- 4.11 Hz. Overall, the results show that extrinsic tool-tip trajectory geometry can be recovered consistently from grasp-level tactile sensing, with trajectory shape remaining stable across variations in tools, wrist poses, and grasp configurations.",
+      "authors": [
+        "Seojung Min",
+        "Yoonjin Kim",
+        "Jeong-Jung Kim",
+        "Jung Kim"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-06-20T22:28:16+00:00",
+      "link": "https://arxiv.org/pdf/2606.22251v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "uses proprioception (joint angles, forces) to reconstruct contact trajectories, relevant to proprioceptive signal processing",
+      "llm_evidence_cn": "利用本体感受（关节角度、力）重建接触轨迹，与本体感受信号处理相关",
+      "llm_evidence": "利用本体感受（关节角度、力）重建接触轨迹，与本体感受信号处理相关",
+      "canonical_evidence": "利用本体感受（关节角度、力）重建接触轨迹，与本体感受信号处理相关",
+      "llm_tldr_en": "Reconstructs extrinsic contact tool-tip trajectories using tactile sensing and robot proprioception, formulated as geometric inference under single-point contact assumption.",
+      "llm_tldr_cn": "工具操作中工具末端接触难以直接感知，本文利用触觉传感器和机器人本体感受信号，将工具末端接触轨迹重建视为几何推理问题。方法基于单点接触假设，通过估计接触点位置和方向实现轨迹重建。该工作展示了本体感受在接触推断中的潜力，其信号处理技术可应用于仿人机器人基于本体感受的故障检测。",
+      "llm_tldr": "工具操作中工具末端接触难以直接感知，本文利用触觉传感器和机器人本体感受信号，将工具末端接触轨迹重建视为几何推理问题。方法基于单点接触假设，通过估计接触点位置和方向实现轨迹重建。该工作展示了本体感受在接触推断中的潜力，其信号处理技术可应用于仿人机器人基于本体感受的故障检测。",
+      "llm_tags": [
+        "query:humanoid-ood"
+      ],
+      "matched_query_tag": "query:humanoid-ood",
+      "matched_query_text": "humanoid robot fault diagnosis using proprioceptive signals",
+      "matched_requirement_id": "req-9",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2606.26829v1",
+      "source": "arxiv",
+      "title": "Identifying the Unknown: Prompt-Free Open Vocabulary Anomaly Recognition for Robot-Object Interaction",
+      "abstract": "Robots operating in real-world environments must in general be able to recognize previously unseen objects. As robotic systems move toward open-world autonomy, there is a growing, yet largely unmet, need for open vocabulary object detectors that are prompt-free and efficient enough for continuous deployment. We present AnomNOVIC, a two-stage known-workspace framework that combines a masked autoencoder (MAE) trained for anomaly detection, with NOVIC, a powerful real-time prompt-free open vocabulary image classifier. The MAE produces generic object-agnostic bounding boxes, allowing NOVIC to classify salient image regions without requiring a predefined candidate class list. We evaluate AnomNOVIC against strong open vocabulary baselines in a tabletop robot-object environment featuring the NICOL humanoid robot, reaching 47.1% AP / 57.5% AP50 for prompt-free recognition, and 59.0% AP / 72.5% AP50 if class candidates are provided. Across additional datasets, including an in-the-wild test set with 48 unique objects, AnomNOVIC reaches up to 82.6% prompt-free detection and classification accuracy. These results significantly surpass all tested open vocabulary baselines, including YOLO-World-v2, OWLv2, and YOLOE.",
+      "authors": [
+        "Philipp Allgeuer",
+        "Jan-Gerrit Habekost",
+        "Stefan Wermter"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV"
+      ],
+      "published": "2026-06-25T10:09:32+00:00",
+      "link": "https://arxiv.org/pdf/2606.26829v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "open vocabulary anomaly recognition for robot-object interaction using MAE anomaly detection",
+      "llm_evidence_cn": "使用MAE异常检测的机器人-物体交互开放词汇异常识别",
+      "llm_evidence": "使用MAE异常检测的机器人-物体交互开放词汇异常识别",
+      "canonical_evidence": "使用MAE异常检测的机器人-物体交互开放词汇异常识别",
+      "llm_tldr_en": "Proposes AnomNOVIC, a two-stage framework combining MAE anomaly detection with open vocabulary classification for prompt-free recognition of unseen objects during robot-object interaction.",
+      "llm_tldr_cn": "该论文提出了AnomNOVIC，一种两阶段框架，结合掩码自编码器（MAE）进行异常检测和开放词汇分类器NOVIC，实现机器人-物体交互中无提示识别未知物体。该方法无需预定义候选类别，通过MAE生成通用边界框，再由NOVIC分类区域。实验表明，该框架在开放词汇物体检测任务上优于现有方法，适用于机器人自主性和安全性提升。",
+      "llm_tldr": "该论文提出了AnomNOVIC，一种两阶段框架，结合掩码自编码器（MAE）进行异常检测和开放词汇分类器NOVIC，实现机器人-物体交互中无提示识别未知物体。该方法无需预定义候选类别，通过MAE生成通用边界框，再由NOVIC分类区域。实验表明，该框架在开放词汇物体检测任务上优于现有方法，适用于机器人自主性和安全性提升。",
+      "llm_tags": [
+        "query:humanoid-ood"
+      ],
+      "matched_query_tag": "query:humanoid-ood",
+      "matched_query_text": "Open set recognition in robotics for safety and anomaly detection",
+      "matched_requirement_id": "req-17",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2606.23565v1",
+      "source": "arxiv",
+      "title": "HoloAgent-0: A Unified Embodied Agent Framework with 3D Spatial Memory",
+      "abstract": "LLM agents follow a practical execution loop in digital environments: they reason over structured states, invoke tools, inspect feedback, and revise actions. Extending this loop to physical robots is difficult because physical execution is continuous, embodiment-dependent, uncertain, and constrained by safety. Existing embodied-AI systems have advanced manipulation, spatial understanding, navigation, and humanoid control, but these capabilities often remain specialized modules or loosely coupled decision loops. In this work, we introduce HoloAgent-0, a unified embodied agent framework for real-world robot deployment. Embodied AgentOS converts language instructions into executable skill graphs, schedules robot resources, monitors execution, and triggers clarification or re-planning from runtime feedback. HoloAgent-0 organizes heterogeneous robot models and controllers through three coupled layers: Embodied AgentOS for closed-loop execution, 3D spatial memory for physical world grounding, and embodied skills for robot action. We deploy HoloAgent-0 on real hardware and evaluate its spatial memory, long-horizon navigation, and closed-loop execution across motion generation, object search, cross-robot coordination, and mobile manipulation.",
+      "authors": [
+        "Xiaolin Zhou",
+        "Liu Liu",
+        "Tingyang Xiao",
+        "Wei Feng",
+        "Fa Fu",
+        "Xinrui Meng",
+        "Xinjie Wang",
+        "Jialiang Han",
+        "Boyang Yu",
+        "Yun Du",
+        "Wei Sui",
+        "Zhizhong Su"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.CV"
+      ],
+      "published": "2026-06-22T16:31:48+00:00",
+      "link": "https://arxiv.org/pdf/2606.23565v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "unified framework for real-world robot deployment including humanoid control",
+      "llm_evidence_cn": "包含人形控制的真实机器人部署统一框架",
+      "llm_evidence": "包含人形控制的真实机器人部署统一框架",
+      "canonical_evidence": "包含人形控制的真实机器人部署统一框架",
+      "llm_tldr_en": "HoloAgent-0 provides a unified framework for deploying embodied agents with 3D spatial memory, applicable to humanoid robot edge deployment scenarios.",
+      "llm_tldr_cn": "将LLM智能体系统扩展到物理机器人面临连续性、具身性和安全约束等挑战。该论文提出HoloAgent-0统一框架，通过将语言指令转化为可执行技能图、调度资源并监控执行，实现了真实世界机器人部署。框架支持包括人形控制在内的多种具身能力，为机器人边缘端部署提供了可扩展的系统架构。",
+      "llm_tldr": "将LLM智能体系统扩展到物理机器人面临连续性、具身性和安全约束等挑战。该论文提出HoloAgent-0统一框架，通过将语言指令转化为可执行技能图、调度资源并监控执行，实现了真实世界机器人部署。框架支持包括人形控制在内的多种具身能力，为机器人边缘端部署提供了可扩展的系统架构。",
+      "llm_tags": [
+        "query:ur:composite"
+      ],
+      "matched_query_tag": "query:ur:composite",
+      "matched_query_text": "Papers central to 查找宇树G1人形机器人的数据集构建、故障诊断、错误分析以及边缘端部署的相关论文, especially work that connects or combines: Unitree G1 humanoid robot dataset construction; humanoid robot dataset construction; fault diagnosis for humanoid robots; edge deployment for humanoid robots; dataset construction for robotics; fault detection in humanoid robots; fault diagnosis and error analysis for humanoid robots; edge deployment of Unitree robots research.",
+      "matched_requirement_id": "req-composite-ur",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2606.26861v1",
+      "source": "arxiv",
+      "title": "Cascaded Multi-Granularity Pruning for On-Device LLM Inference in Industrial IoT",
+      "abstract": "Deploying large language models (LLMs) on Industrial Internet of Things (IIoT) edge devices demands extreme compression, yet existing structured pruning methods collapse at high compression ratios due to one-shot importance estimation, and their cross-architecture behavior remains unpredictable. This article presents a cascaded multi-granularity pruning framework that removes layers, attention heads, and feed-forward channels in coarse-to-fine order, with lightweight low-rank recovery between stages to re-estimate component importance. An information-theoretic analysis motivates this ordering, and the Structural Independence Assumption (SIA) is formalized as a checkable condition predicting whether per-component pruning criteria are reliable for a given architecture: Multi-Head Attention (MHA)+GELU designs satisfy the SIA, whereas Grouped Query Attention (GQA)+SwiGLU designs violate it. On bearing fault diagnosis spanning 88M to 6.25B-parameter models, the framework extends achievable compression to 13.8 times on MHA+GELU architectures with 83.82% accuracy (+3.70 percentage points (pp) over the strongest baseline), while exposing a ~74pp accuracy collapse on GQA+SwiGLU architectures that violate the SIA. Deployed on an industrial slewing bearing fault diagnosis platform with NVIDIA DGX Spark, compressed models reduce inference latency by up to 67.2% and peak memory by 62.5%, demonstrating viability for IIoT edge inference.",
+      "authors": [
+        "Jinghan Wang",
+        "Yanjun Chen",
+        "Wei Zhang",
+        "Xiaotong Huang",
+        "Tianchen Liu",
+        "Gaoliang Peng"
+      ],
+      "primary_category": "cs.CL",
+      "categories": [
+        "cs.CL"
+      ],
+      "published": "2026-06-25T10:44:48+00:00",
+      "link": "https://arxiv.org/pdf/2606.26861v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "edge deployment model compression for on-device inference",
+      "llm_evidence_cn": "边缘部署模型压缩用于设备端推理",
+      "llm_evidence": "边缘部署模型压缩用于设备端推理",
+      "canonical_evidence": "边缘部署模型压缩用于设备端推理",
+      "llm_tldr_en": "A cascaded pruning framework with low-rank recovery enables extreme LLM compression for on-device inference in IIoT, relevant to edge deployment of robot intelligence.",
+      "llm_tldr_cn": "在IIoT边缘设备上部署LLM需要极高压缩率，现有方法在高压缩比下失效。该论文提出级联多粒度剪枝框架，按层、注意力头、前馈通道的粗到细顺序剪枝，并通过轻量低秩恢复重新估计重要性。信息论分析支持该排序，实验表明在不同架构上高压缩比下仍保持稳定性能。该工作为机器人边缘端的模型压缩提供了可行方案。",
+      "llm_tldr": "在IIoT边缘设备上部署LLM需要极高压缩率，现有方法在高压缩比下失效。该论文提出级联多粒度剪枝框架，按层、注意力头、前馈通道的粗到细顺序剪枝，并通过轻量低秩恢复重新估计重要性。信息论分析支持该排序，实验表明在不同架构上高压缩比下仍保持稳定性能。该工作为机器人边缘端的模型压缩提供了可行方案。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "edge deployment for humanoid robots",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2606.24628v1",
+      "source": "arxiv",
+      "title": "ArtiTwinSplat: Interactable Digital Twin Reconstruction via Gaussian Splatting from RGB-D videos",
+      "abstract": "Deploying robots in unstructured real-world environments needs accurate, interactive models of the objects. Constructing these models at scale remains a critical bottleneck for robotic system integration. We present ArtiTwinSplat, a framework that automatically constructs articulated, photo-realistic digital twins of objects directly from RGB-D videos, requiring no CAD models, simulation assets, or manual annotations. Our method is built on 3D Gaussian Splatting that preserve geometric fidelity and photometric realism, coupled with an unsupervised articulation discovery pipeline that recovers part structure and joint kinematics from observed motion alone. With tracking and optimization stages our method provides stable, queryable digital twins that support real-time rendering, viewpoint control, and interactive manipulation. Unlike prior methods confined to simulation, ArtiTwinSplat operates directly on real-world observations and produces twins that are immediately usable by downstream robot planning and learning systems. This method offers a practical, scalable pathway toward digital twin construction, lowering the integration barrier for articulated object manipulation in embodied AI and human-robot collaboration contexts.",
+      "authors": [
+        "Pranjal Mishra",
+        "René Zurbrügg",
+        "Max Wilder-Smith",
+        "Marco Hutter",
+        "Marc Pollefeys",
+        "Zuria Bauer",
+        "Hermann Blum"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.CV"
+      ],
+      "published": "2026-06-23T14:24:07+00:00",
+      "link": "https://arxiv.org/pdf/2606.24628v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "automatic digital twin reconstruction from RGB-D videos for interactive simulation, enabling fault injection environments",
+      "llm_evidence_cn": "从RGB-D视频自动重建可交互数字孪生，可用于构建故障注入仿真环境",
+      "llm_evidence": "从RGB-D视频自动重建可交互数字孪生，可用于构建故障注入仿真环境",
+      "canonical_evidence": "从RGB-D视频自动重建可交互数字孪生，可用于构建故障注入仿真环境",
+      "llm_tldr_en": "ArtiTwinSplat reconstructs articulated digital twins from RGB-D videos using Gaussian Splatting and unsupervised articulation discovery, enabling interactive simulation.",
+      "llm_tldr_cn": "该论文提出ArtiTwinSplat框架，从RGB-D视频自动构建铰接、逼真的物体数字孪生，无需CAD模型或人工标注。利用3D高斯泼溅保持几何与光度真实感，并通过无监督铰接发现恢复部件结构与关节运动学。该方法可用于机器人仿真环境构建，为故障注入模拟提供基础。",
+      "llm_tldr": "该论文提出ArtiTwinSplat框架，从RGB-D视频自动构建铰接、逼真的物体数字孪生，无需CAD模型或人工标注。利用3D高斯泼溅保持几何与光度真实感，并通过无监督铰接发现恢复部件结构与关节运动学。该方法可用于机器人仿真环境构建，为故障注入模拟提供基础。",
+      "llm_tags": [
+        "query:humanoid-ood"
+      ],
+      "matched_query_tag": "query:humanoid-ood",
+      "matched_query_text": "fault injection simulation for humanoid robots in MuJoCo or similar environments",
+      "matched_requirement_id": "req-14",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2606.25212v1",
+      "source": "arxiv",
+      "title": "RigPI: Dynamic Parameter Identification of Rigid Body via VLM-Seeded Differentiable Simulation",
+      "abstract": "Accurate physical parameter identification of manipulated objects is fundamental to advanced robotic manipulation and the construction of faithful digital twins. However, acquiring physically consistent inertial and frictional properties from real-world interactions remains challenging due to sensing noise, modeling errors, and limited prior knowledge. This paper presents \\textbf{RigPI}, a systematic framework for identifying dynamic parameters of both unconstrained rigid bodies and multi-link rigid bodies during robot-object interaction. RigPI integrates vision-based semantic priors, force-torque measurements, and motion observations within a differentiable simulation pipeline. A vision-language model (VLM) provides informed initialization and a constrained search space, while gradient information from a differentiable physics simulator enables efficient and stable parameter refinement. The proposed two-stage optimization strategy alleviates sensitivity to noise and avoids physically implausible solutions. Extensive real-world experiments on objects with revolute and prismatic joints demonstrate that RigPI achieves accurate and stable parameter estimates, and successfully reproduces manipulation trajectories on a real robot with parameter-aware predictive validity. These results highlight the effectiveness and robustness of RigPI for real-world robotic system identification tasks.",
+      "authors": [
+        "Xincheng He",
+        "Rongrong Zhang",
+        "Wei Jiang",
+        "Wenqiang Xu"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-06-23T22:15:42+00:00",
+      "link": "https://arxiv.org/pdf/2606.25212v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "differentiable simulation pipeline for dynamic parameter identification, reusable for fault injection",
+      "llm_evidence_cn": "可微仿真管线用于动力学参数识别，可复用于故障注入",
+      "llm_evidence": "可微仿真管线用于动力学参数识别，可复用于故障注入",
+      "canonical_evidence": "可微仿真管线用于动力学参数识别，可复用于故障注入",
+      "llm_tldr_en": "RigPI integrates VLM semantic priors, force-torque and motion data in a differentiable simulation to identify object dynamics, enabling construction of digital twins and simulation-based testing.",
+      "llm_tldr_cn": "物理参数辨识是机器人操作和数字孪生构建的基础，但受限于噪声和先验知识。本文提出RigPI框架，融合视觉语言模型先验、力-力矩测量和运动观测，在可微仿真管线中辨识刚体动力学参数。该方法可生成高保真仿真环境，为仿人机器人故障注入仿真提供技术支撑。实验证明其参数辨识精度优于传统方法，有助于仿真测试。",
+      "llm_tldr": "物理参数辨识是机器人操作和数字孪生构建的基础，但受限于噪声和先验知识。本文提出RigPI框架，融合视觉语言模型先验、力-力矩测量和运动观测，在可微仿真管线中辨识刚体动力学参数。该方法可生成高保真仿真环境，为仿人机器人故障注入仿真提供技术支撑。实验证明其参数辨识精度优于传统方法，有助于仿真测试。",
+      "llm_tags": [
+        "query:humanoid-ood"
+      ],
+      "matched_query_tag": "query:humanoid-ood",
+      "matched_query_text": "fault injection simulation for humanoid robots in MuJoCo or similar environments",
+      "matched_requirement_id": "req-14",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    }
+  ]
+}

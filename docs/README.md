@@ -6,50 +6,44 @@
 </div>
 
 ## 每次日报
-- 最新运行日期：2026-06-27
-- 运行时间：2026-06-27 21:40:03 UTC
+- 最新运行日期：2026-06-28
+- 运行时间：2026-06-28 21:10:20 UTC
 - 运行状态：成功
-- 本次总论文数：10
-- 精读区：2
-- 速读区：8
+- 本次总论文数：7
+- 精读区：0
+- 速读区：7
 
 ### 今日简报（AI）
-人形机器人操控研究今日迎来两篇高分论文，核心突破在于无需真实机器人数据即可实现全身操控。最值得关注的两大方向：通过扩散模型与重标记技术实现人形机操作泛化，以及利用无演示数据迁移至人形机器人，显著降低数据采集门槛。下一步可重点探索此类方法在成本可控的实验室场景下的可复现性。
-- 详情：[/202606/27/README](/202606/27/README)
+今日速读了7篇论文，涵盖机器人SLAM、异常识别及工业物联网大模型推理三大方向。  
+最值得关注的是《RoboAtlas》中的上下文主动SLAM，以及《Identifying the Unknown》提出的无提示开放词汇异常识别。  
+建议后续重点了解这些方法如何推动机器人在未知环境中的自主导航与安全交互。
+- 详情：[/202606/28/README](/202606/28/README)
 
 ### 精读区论文标签
-1. [HumanoidUMI: Bridging Robot-Free Demonstrations and Humanoid Whole-Body Manipulation](/202606/27/2606.27239v1-humanoidumi-bridging-robot-free-demonstrations-and-humanoid-whole-body-manipulation)  
-   标签：评分：9.0/10、query:ur
-   evidence：无机器人的全身演示数据收集
-2. [Humanoid-DART: Humanoid Loco-Manipulation using Diffusion-guided Augmentation through Relabeling and Tracking](/202606/27/2606.26855v1-humanoid-dart-humanoid-loco-manipulation-using-diffusion-guided-augmentation-through-relabeling-and-tracking)  
-   标签：评分：8.0/10、query:ur
-   evidence：人形机器人数据集自监督增强框架
+- 本次无精读推荐。
 
 ### 速读区论文标签
-1. [Unsupervised Memory-Enhanced Video Transformers: Obstacle Detection for Autonomous Agricultural Rover](/202606/27/2606.26151v1-unsupervised-memory-enhanced-video-transformers-obstacle-detection-for-autonomous-agricultural-rover)  
+1. [RoboAtlas: Contextual Active SLAM](/202606/28/2606.26046v1-roboatlas-contextual-active-slam)  
+   标签：评分：7.0/10、query:ur
+   evidence：主动SLAM系统部署在宇树Go2机器人上，展示了边缘部署能力
+2. [Identifying the Unknown: Prompt-Free Open Vocabulary Anomaly Recognition for Robot-Object Interaction](/202606/28/2606.26829v1-identifying-the-unknown-prompt-free-open-vocabulary-anomaly-recognition-for-robot-object-interaction)  
    标签：评分：7.0/10、query:humanoid-ood
-   evidence：无监督异常检测结合视频Transformer处理动态场景
-2. [KRVF: A Source-Aware Semantic Voxel World Representation for Edge Mobile Manipulation](/202606/27/2606.26321v1-krvf-a-source-aware-semantic-voxel-world-representation-for-edge-mobile-manipulation)  
+   evidence：使用MAE异常检测的机器人-物体交互开放词汇异常识别
+3. [Cascaded Multi-Granularity Pruning for On-Device LLM Inference in Industrial IoT](/202606/28/2606.26861v1-cascaded-multi-granularity-pruning-for-on-device-llm-inference-in-industrial-iot)  
    标签：评分：7.0/10、query:ur
-   evidence：面向边缘计算的世界表示用于移动操作
-3. [OctoSense: Self-Supervised Learning for Multimodal Robot Perception](/202606/27/2606.27317v1-octosense-self-supervised-learning-for-multimodal-robot-perception)  
-   标签：评分：7.0/10、query:ur
-   evidence：包含本体感受的机器人多模态数据集及自监督学习
-4. [TEXEDO : Test Time Scaling for Controller-aware Language-conditioned Humanoid Motion Generation](/202606/27/2606.22998v2-texedo--test-time-scaling-for-controller-aware-language-conditioned-humanoid-motion-generation)  
-   标签：评分：6.0/10、query:ur
-   evidence：使用重定向人体数据集生成人形运动，考虑控制器感知的故障模式
-5. [LaST-HD: Learning Latent Physical Reasoning from Scalable Human Data for Robot Manipulation](/202606/27/2606.23685v1-last-hd-learning-latent-physical-reasoning-from-scalable-human-data-for-robot-manipulation)  
-   标签：评分：6.0/10、query:ur
-   evidence：利用人手演示作为机器人学习的可扩展数据源
-6. [MANGO: Automated Multi-Agent Test Oracle Generation for Vision-Language-Action Models](/202606/27/2606.24815v1-mango-automated-multi-agent-test-oracle-generation-for-vision-language-action-models)  
-   标签：评分：6.0/10、query:ur
-   evidence：自动多智能体测试预言生成，支持VLA模型的故障定位
-7. [PhysReflect-VLA: Physical Feasibility and Self-Reflective Regulation for Reliable Vision-Language-Action Policies](/202606/27/2606.27146v1-physreflect-vla-physical-feasibility-and-self-reflective-regulation-for-reliable-vision-language-action-policies)  
-   标签：评分：6.0/10、query:ur
-   evidence：操作中的执行错误诊断与可行性评估
-8. [Continual Robot Policy Learning via Variational Neural Dynamics](/202606/27/2606.27353v1-continual-robot-policy-learning-via-variational-neural-dynamics)  
+   evidence：边缘部署模型压缩用于设备端推理
+4. [Geometric Reconstruction of Extrinsic Contact Trajectories using Tactile Sensing and Proprioception for Tool Manipulation](/202606/28/2606.22251v1-geometric-reconstruction-of-extrinsic-contact-trajectories-using-tactile-sensing-and-proprioception-for-tool-manipulation)  
    标签：评分：6.0/10、query:humanoid-ood
-   evidence：利用递归编码器检测隐藏动力学变化的条件感知动力学模型
+   evidence：利用本体感受（关节角度、力）重建接触轨迹，与本体感受信号处理相关
+5. [HoloAgent-0: A Unified Embodied Agent Framework with 3D Spatial Memory](/202606/28/2606.23565v1-holoagent-0-a-unified-embodied-agent-framework-with-3d-spatial-memory)  
+   标签：评分：6.0/10、query:ur
+   evidence：包含人形控制的真实机器人部署统一框架
+6. [ArtiTwinSplat: Interactable Digital Twin Reconstruction via Gaussian Splatting from RGB-D videos](/202606/28/2606.24628v1-artitwinsplat-interactable-digital-twin-reconstruction-via-gaussian-splatting-from-rgb-d-videos)  
+   标签：评分：6.0/10、query:humanoid-ood
+   evidence：从RGB-D视频自动重建可交互数字孪生，可用于构建故障注入仿真环境
+7. [RigPI: Dynamic Parameter Identification of Rigid Body via VLM-Seeded Differentiable Simulation](/202606/28/2606.25212v1-rigpi-dynamic-parameter-identification-of-rigid-body-via-vlm-seeded-differentiable-simulation)  
+   标签：评分：6.0/10、query:humanoid-ood
+   evidence：可微仿真管线用于动力学参数识别，可复用于故障注入
 
 
 <div class="dpr-home-promo-card">
