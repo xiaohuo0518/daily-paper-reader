@@ -1,0 +1,597 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-07-04T21:28:28.219259+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 2,
+    "deep_divecandidates": 6,
+    "deep_cap": 7,
+    "deep_selected": 6,
+    "quick_candidates": 7,
+    "quick_skim_target": 12,
+    "quick_selected": 7
+  },
+  "deep_dive": [
+    {
+      "id": "2606.31836v1",
+      "source": "arxiv",
+      "title": "RoboTacDex: A Dexterous Visual-Tactile-Action Dataset for Humanoid Manipulation",
+      "abstract": "In the field of robot learning, large-scale and diverse demonstration trajectories provide the fundamental basis for enhancing robotic manipulation ability. We introduce RoboTacDex, a large, multi-modal, and diverse dataset of dexterous manipulation behaviors performed with a humanoid robot. Built on the publicly accessible humanoid robot Unitree G1, RoboTacDex consists of 6k trajectories covering 19 tasks, 23 skills, and interactions with 22 objects. RoboTacDex provides comprehensive records including multi-view RGB and depth information, tactile feedback, and detailed semantic annotations. Furthermore, the dataset features a variety of relatively challenging tasks that can only be completed by dual arms and dexterous hands, aiming to mimic human-like operational logic and simulate real-world manipulation complexity. To ensure data collection quality, we develop an improved multi-camera synchronization system to enable millisecond data synchronization and recording of modalities. In our experiments, we evaluate three representative imitation learning models on our dataset,   analyzing their performance as well as their respective strengths and limitations across different task categories. Successful trial results and a moderate level of generalization capabilities across a suite of tasks indicate the effectiveness and diversity of the collected dataset. Our dataset will be open-sourced soon.",
+      "authors": [
+        "Xinyi Wang",
+        "Donghan Li",
+        "Zi'Ang Chen",
+        "Chong Yu",
+        "Chen Xin",
+        "Peng Ye",
+        "Yingkai Sun",
+        "Tao Chen"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-06-30T15:39:29+00:00",
+      "link": "https://arxiv.org/pdf/2606.31836v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 10.0,
+      "llm_evidence_en": "dataset for Unitree G1 humanoid robot",
+      "llm_evidence_cn": "基于宇树G1人形机器人的数据集",
+      "llm_evidence": "基于宇树G1人形机器人的数据集",
+      "canonical_evidence": "基于宇树G1人形机器人的数据集",
+      "llm_tldr_en": "A large-scale multi-modal dataset of dexterous manipulation on Unitree G1 humanoid robot, covering 6k trajectories, 19 tasks, with visual-tactile-action data.",
+      "llm_tldr_cn": "该论文针对人形机器人灵巧操作数据缺乏的问题，基于宇树G1人形机器人构建了RoboTacDex数据集，包含6000条轨迹、19个任务、22个物体交互，提供多视角RGB-D、触觉反馈和语义标注，为机器人的多模态学习和操作技能研究提供了丰富的基准资源。",
+      "llm_tldr": "该论文针对人形机器人灵巧操作数据缺乏的问题，基于宇树G1人形机器人构建了RoboTacDex数据集，包含6000条轨迹、19个任务、22个物体交互，提供多视角RGB-D、触觉反馈和语义标注，为机器人的多模态学习和操作技能研究提供了丰富的基准资源。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "Unitree G1 humanoid robot dataset construction",
+      "matched_requirement_id": "req-1",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2606.32009v1",
+      "source": "arxiv",
+      "title": "Human-as-Humanoid: Enabling Zero-Shot Humanoid Learning from Ego-Exo Human Videos with Human-Aligned Embodiments",
+      "abstract": "Vision-language-action (VLA) models across robot embodiments require high-quality observation--action supervision to learn deployable action distributions, yet scaling such robot data remains difficult, especially for high-DoF humanoids. Teleoperation provides controller-aligned supervision, while human egocentric videos capture diverse bimanual manipulation but do not directly provide executable robot actions. We introduce Human-as-Humanoid, a human-to-humanoid supervision framework that enables near-real-time human-centric action generation, making human demonstrations usable for high-DoF humanoid VLA training by jointly aligning the robot embodiment, the sensing setup, and the action-label interface. Built on PrimeU, a human-aligned 60-DoF upper-body humanoid, Human-as-Humanoid uses synchronized ego-exo videos to pair deployment-aligned egocentric observations with exocentric motion recovery, retargets the recovered human motion through staged Inverse Kinematics (IK) into controller-aligned 60-DoF action chunks, and trains the VLA model with Forward Kinematics (FK)-aware supervision to preserve wrist and fingertip task-space geometry. This converts large-scale human demonstrations from visual observations into executable observation--action supervision for the target humanoid. Experiments validate the conversion chain at the motion-recovery, robot-action-space, and real-robot deployment levels. Human-as-Humanoid yields a 4.8--7.2x raw demonstration-throughput gain over humanoid teleoperation in our data-collection analysis, and on several downstream tasks, policies post-trained only with the converted human labels generalize to real-robot deployment without target-task robot demonstrations. The official project website is available at https://zgc-embodyai.github.io/Human-as-Humanoid.",
+      "authors": [
+        "Xiaopeng Lin",
+        "Ruoqi Yang",
+        "Shijie Lian",
+        "Zhaolong Shen",
+        "Bin Yu",
+        "Changti Wu",
+        "Haibao Liu",
+        "Yuxiang Zhang",
+        "Hong Li",
+        "Qiyuan Su",
+        "Haochen Liu",
+        "Xuguo He",
+        "Yukun Shi",
+        "Cong Huang",
+        "Zhirui Zhang",
+        "Bojun Cheng",
+        "Kai Chen"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-06-30T17:44:16+00:00",
+      "link": "https://arxiv.org/pdf/2606.32009v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "humanoid robot dataset construction via human video supervision",
+      "llm_evidence_cn": "通过人类视频监督构建人形机器人数据集",
+      "llm_evidence": "通过人类视频监督构建人形机器人数据集",
+      "canonical_evidence": "通过人类视频监督构建人形机器人数据集",
+      "llm_tldr_en": "Human-as-Humanoid framework enables zero-shot humanoid learning by using ego-exo human videos to generate action labels, addressing data scarcity for high-DoF humanoids.",
+      "llm_tldr_cn": "人形机器人数据构建面临标注难、扩展性差的问题。本文提出Human-as-Humanoid框架，通过联合对齐机器人本体、感知设置和动作标签接口，将人类第一/第三人称视频转化为人形机器人可执行的动作数据，实现近实时的类人动作生成。该方法为零样本人形机器人VLA训练提供了高质量监督信号，有效缓解了高自由度人形机器人的数据稀缺问题。",
+      "llm_tldr": "人形机器人数据构建面临标注难、扩展性差的问题。本文提出Human-as-Humanoid框架，通过联合对齐机器人本体、感知设置和动作标签接口，将人类第一/第三人称视频转化为人形机器人可执行的动作数据，实现近实时的类人动作生成。该方法为零样本人形机器人VLA训练提供了高质量监督信号，有效缓解了高自由度人形机器人的数据稀缺问题。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "humanoid robot dataset construction",
+      "matched_requirement_id": "req-2",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2606.30645v1",
+      "source": "arxiv",
+      "title": "VLK: Learning Humanoid Loco-Manipulation from Synthetic Interactions in Reconstructed Scenes",
+      "abstract": "Perception-based humanoid loco-manipulation requires connecting egocentric observations and task instructions to whole-body motion. Learning this mapping requires synchronized egocentric images, language commands, and robot-compatible kinematic trajectories, yet no existing data source provides this complete tuple at scale. We address this bottleneck by generating vision-language-kinematics (VLK) supervision synthetically in reconstructed scenes. Our pipeline leverages 3D Gaussian Splatting to reconstruct metric-scale indoor environments, synthesizes navigation and object-interaction trajectories using privileged scene information, and renders paired egocentric observations after the fact. We produce 48,000 paired trajectories with no human intervention and train a VLK policy that predicts short-horizon whole-body kinematic trajectories. A whole-body tracker converts these predictions into actions on the physical humanoid. We evaluate on the physical Unitree G1 performing navigation and single-object transport, demonstrating that synthesized interactions in reconstructed scenes provide effective supervision for sim-to-real perception-based humanoid loco-manipulation. Project Website: https://vision-language-kinematics.github.io/",
+      "authors": [
+        "Yen-Jen Wang",
+        "Jiaman Li",
+        "Sirui Chen",
+        "Takara E. Truong",
+        "Pei Xu",
+        "Pieter Abbeel",
+        "Rocky Duan",
+        "Koushil Sreenath",
+        "Angjoo Kanazawa",
+        "Carmelo Sferrazza",
+        "Guanya Shi",
+        "Karen Liu"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.AI",
+        "cs.GR",
+        "eess.SY"
+      ],
+      "published": "2026-06-29T17:59:55+00:00",
+      "link": "https://arxiv.org/pdf/2606.30645v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "synthetic dataset construction for humanoid loco-manipulation",
+      "llm_evidence_cn": "为人形机器人构建合成数据集",
+      "llm_evidence": "为人形机器人构建合成数据集",
+      "canonical_evidence": "为人形机器人构建合成数据集",
+      "llm_tldr_en": "VLK generates 48,000 synthetic vision-language-kinematics trajectories for humanoid loco-manipulation, addressing the lack of scalable data for learning.",
+      "llm_tldr_cn": "该论文针对人形机器人操作任务缺乏大规模配对数据的问题，提出了一种合成数据生成流水线。利用3D高斯泼溅重建室内场景，并结合特权场景信息合成导航和物体交互轨迹，最终生成48,000条视觉-语言-运动学轨迹。该工作为构建人形机器人数据集提供了有效方法，直接支持了数据集构建需求。",
+      "llm_tldr": "该论文针对人形机器人操作任务缺乏大规模配对数据的问题，提出了一种合成数据生成流水线。利用3D高斯泼溅重建室内场景，并结合特权场景信息合成导航和物体交互轨迹，最终生成48,000条视觉-语言-运动学轨迹。该工作为构建人形机器人数据集提供了有效方法，直接支持了数据集构建需求。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "humanoid robot dataset construction",
+      "matched_requirement_id": "req-2",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2606.31682v1",
+      "source": "arxiv",
+      "title": "HABIT: Human-Aware Behavior and Interaction Training Dataset for Robot Manipulation",
+      "abstract": "Large-scale demonstration datasets have been central to recent progress in general-purpose robot policies. However, existing datasets are collected in human-absent settings, and policies trained on such data may perform tasks competently in isolation but fail to exhibit human-aware behaviors. To address this gap, we introduce HABIT, a large-scale robot demonstration dataset for human-present environments. We organize tasks into three roles capturing distinct modes of human-robot interaction: Collaborator, where human and robot jointly accomplish a task; Coworker, where they pursue separate tasks in a shared space; and Supervisor, where the human directs the robot. The dataset comprises over 10K episodes and over 160 hours across 60 tasks. Our experiments show that training on human-present data elicits human-aware behaviors that robot-only data fails to produce: spatiotemporal synchronization in Collaborator tasks, yielding in Coworker tasks, and gesture grounding in Supervisor tasks. Moreover, training on HABIT enables rapid adaptation to new human-robot interaction tasks. By introducing human presence as a new axis of dataset diversity, HABIT extends robot policies to environments shared with humans.",
+      "authors": [
+        "Jaehwi Song",
+        "Suchae Jeong",
+        "Byeongguk Jeon",
+        "Sungdong Kim",
+        "Minjoon Seo",
+        "Hyungmok Son",
+        "Kimin Lee"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-06-30T13:58:19+00:00",
+      "link": "https://arxiv.org/pdf/2606.31682v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "large-scale robot demonstration dataset for human-aware manipulation",
+      "llm_evidence_cn": "大规模人机交互机器人演示数据集",
+      "llm_evidence": "大规模人机交互机器人演示数据集",
+      "canonical_evidence": "大规模人机交互机器人演示数据集",
+      "llm_tldr_en": "A large-scale robot manipulation dataset with over 10K episodes in human-present environments across 60 tasks and three interaction roles.",
+      "llm_tldr_cn": "该论文针对机器人策略训练中缺乏人机共存场景数据的问题，构建了HABIT数据集，包含超过1万条演示轨迹和160小时数据，涵盖协作、共事和监督三种交互角色，共60个任务，为训练具有人机交互意识的机器人策略提供了大规模标准化数据支持。",
+      "llm_tldr": "该论文针对机器人策略训练中缺乏人机共存场景数据的问题，构建了HABIT数据集，包含超过1万条演示轨迹和160小时数据，涵盖协作、共事和监督三种交互角色，共60个任务，为训练具有人机交互意识的机器人策略提供了大规模标准化数据支持。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2607.00272v1",
+      "source": "arxiv",
+      "title": "ASPIRE: Agentic /Skills Discovery for Robotics",
+      "abstract": "Traditional robot programming is challenging: it requires orchestrating multimodal perception, managing physical contact dynamics, and handling diverse configurations and execution failures. We introduce ASPIRE (Agentic Skill Programming through Iterative Robot Exploration), a continual learning system that autonomously writes and refines robot control programs in a code-as-policy paradigm while compounding experience into a reusable skill library. ASPIRE discovers skills that persist across tasks, simulation and real-world settings, and embodiments. It operates in an open-ended loop with three components: (1) a closed-loop robot execution engine that exposes fine-grained multimodal traces, enabling autonomous failure diagnosis, repair synthesis, and validation; (2) a continually expanding skill library that distills validated fixes into reusable, transferable knowledge; and (3) evolutionary search that generates diverse task sequences and control programs to explore beyond single-trajectory refinement. ASPIRE surpasses prior methods by up to 77% on LIBERO-Pro manipulation under perturbation, 72% on Robosuite bimanual handover, and 32% on BEHAVIOR-1K long-horizon household tasks. Its accumulated library also enables zero-shot generalization to unseen long-horizon tasks: on LIBERO-Pro Long, ASPIRE achieves 31% success versus 4% for prior methods despite their use of test-time reasoning and retries. Finally, simulation-discovered skills provide initial evidence of sim-to-real transfer, substantially reducing real-robot programming effort across different embodiments and robot APIs.",
+      "authors": [
+        "Runyu Lu",
+        "Yubo Wu",
+        "Ethan Kou",
+        "Letian Fu",
+        "Wenli Xiao",
+        "Ajay Mandlekar",
+        "Yinzhen Xu",
+        "Guanya Shi",
+        "Ken Goldberg",
+        "Ang Chen",
+        "Mosharaf Chowdhury",
+        "Yuke Zhu",
+        "Linxi \"Jim\" Fan",
+        "Guanzhi Wang"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.AI",
+        "cs.MA"
+      ],
+      "published": "2026-06-30T23:38:46+00:00",
+      "link": "https://arxiv.org/pdf/2607.00272v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "autonomous failure diagnosis and repair synthesis in robot programming",
+      "llm_evidence_cn": "机器人编程中的自主故障诊断与修复合成",
+      "llm_evidence": "机器人编程中的自主故障诊断与修复合成",
+      "canonical_evidence": "机器人编程中的自主故障诊断与修复合成",
+      "llm_tldr_en": "ASPIRE is a continual learning system that autonomously writes and refines robot control programs, with fine-grained multimodal traces enabling failure diagnosis and repair.",
+      "llm_tldr_cn": "该论文针对传统机器人编程难以处理多模态感知和接触动力学的挑战，提出了ASPIRE系统，该系统以代码即策略的方式自主编写和优化控制程序，并通过闭环执行引擎暴露细粒度多模态轨迹，实现自主故障诊断、修复合成和验证。实验表明ASPIRE在多种任务和平台上积累了可复用的技能库。这项工作直接涉及故障诊断与错误分析，可应用于人形机器人。",
+      "llm_tldr": "该论文针对传统机器人编程难以处理多模态感知和接触动力学的挑战，提出了ASPIRE系统，该系统以代码即策略的方式自主编写和优化控制程序，并通过闭环执行引擎暴露细粒度多模态轨迹，实现自主故障诊断、修复合成和验证。实验表明ASPIRE在多种任务和平台上积累了可复用的技能库。这项工作直接涉及故障诊断与错误分析，可应用于人形机器人。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "fault diagnosis and error analysis for humanoid robots",
+      "matched_requirement_id": "req-7",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2607.02501v1",
+      "source": "arxiv",
+      "title": "Embodied.cpp: A Portable Inference Runtime of Embodied AI Models on Heterogeneous Robots",
+      "abstract": "Embodied AI models now span vision-language-action (VLA) models and world-action models (WAMs), but practical deployment remains fragmented across model-specific Python stacks, backend assumptions, and robot-side glue code, especially on heterogeneous edge devices. Existing inference runtimes are designed mainly for request-response serving and therefore do not satisfy the runtime contract of embodied deployment: multi-rate execution inside closed-loop control, latency-first batch-1 inference on heterogeneous hardware, and extensible embodied interfaces beyond fixed token I/O. We present Embodied.cpp, a portable C++ inference runtime for embodied models. Based on an architectural analysis of representative VLA models and WAMs, Embodied.cpp captures a shared execution path and organizes it into five layers: input adapters, sequence builders, backbone execution, head plugins, and deployment adapters. The runtime provides modular multi-rate execution, latency-first fused inference, and extensible operator and I/O support, enabling deployment across heterogeneous devices, robots, and simulators through one backend abstraction. We evaluate Embodied.cpp on two VLA models, HY-VLA and pi0.5, and on a preliminary WAM benchmark using a LingBot-VA Transformer block. The VLA deployments achieve successful closed-loop execution with 100.0% and 91.0% task success rates, respectively. The WAM benchmark reduces block memory from 312.2 MiB to 88.1 MiB. These results show that Embodied.cpp improves deployment efficiency while preserving high accuracy across diverse embodied model architectures.",
+      "authors": [
+        "Ling Xu",
+        "Chuyu Han",
+        "Borui Li",
+        "Hao Wu",
+        "Shiqi Jiang",
+        "Ting Cao",
+        "Chuanyou Li",
+        "Sheng Zhong",
+        "Shuai Wang"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.CV",
+        "cs.OS"
+      ],
+      "published": "2026-07-02T17:58:28+00:00",
+      "link": "https://arxiv.org/pdf/2607.02501v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "portable inference runtime for embodied AI on heterogeneous edge devices",
+      "llm_evidence_cn": "面向异构边缘设备的具身AI模型可移植推理运行时",
+      "llm_evidence": "面向异构边缘设备的具身AI模型可移植推理运行时",
+      "canonical_evidence": "面向异构边缘设备的具身AI模型可移植推理运行时",
+      "llm_tldr_en": "Embodied.cpp provides a portable C++ inference runtime for embodied AI models, enabling multi-rate latency-first execution on heterogeneous edge devices for closed-loop robot control.",
+      "llm_tldr_cn": "现有具身AI模型部署受限于模型特定Python栈和异构边缘设备支持不足。本文提出Embodied.cpp，一个便携式C++推理运行时，支持多速率执行、延迟优先推理和可扩展接口，在异构边缘设备上实现闭环控制。该工作直接服务于人形机器人等具身智能体的边缘部署需求，提供了高效可靠的推理基础设施。",
+      "llm_tldr": "现有具身AI模型部署受限于模型特定Python栈和异构边缘设备支持不足。本文提出Embodied.cpp，一个便携式C++推理运行时，支持多速率执行、延迟优先推理和可扩展接口，在异构边缘设备上实现闭环控制。该工作直接服务于人形机器人等具身智能体的边缘部署需求，提供了高效可靠的推理基础设施。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "edge deployment for humanoid robots",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "quick_skim": [
+    {
+      "id": "2607.00720v1",
+      "source": "arxiv",
+      "title": "Detecting the Undetectable: Enhancing Unsupervised time series Anomaly Detection via Active Learning",
+      "abstract": "Despite the increasing sophistication of industrial AI systems, the ability to reliably detect subtle and noisy anomalies in complex time series data remains a critical yet unresolved challenge. In large-scale industrial applications, labeling time series data is often prohibitively expensive and time-consuming, making unsupervised learning a practical and widely adopted approach. However, existing unsupervised methods frequently struggle to distinguish near-normal anomalies from normal patterns and are vulnerable to noise contamination within normal samples. To address these limitations, we propose a novel framework that leverages active learning to iteratively enhance the performance of unsupervised models. Our framework's core contributions are (1) a masked time-series reconstruction feedback strategy that forces the model to learn robust temporal dependencies, and (2) a minimax learning strategy that promotes robustness by differentially treating normal and abnormal samples. This process encourages the model to better capture the dynamics of subtle and noisy patterns. The proposed framework is evaluated across 28 test cases involving four multivariate time-series datasets and seven unsupervised backbone models. Experimental results demonstrate a 12.39% improvement in AUC compared to the original models, confirming that our method can be readily integrated into existing unsupervised reconstruction-based anomaly detection systems to significantly enhance their performance.",
+      "authors": [
+        "Seung Hun Han",
+        "Hyeongwon Kang",
+        "Jinwoo Park",
+        "Pilsung Kang"
+      ],
+      "primary_category": "cs.LG",
+      "categories": [
+        "cs.LG",
+        "cs.AI"
+      ],
+      "published": "2026-07-01T10:08:49+00:00",
+      "link": "https://arxiv.org/pdf/2607.00720v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "time series anomaly detection with active learning, transferable to robot OOD detection",
+      "llm_evidence_cn": "时间序列异常检测结合主动学习，可迁移至机器人OOD检测",
+      "llm_evidence": "时间序列异常检测结合主动学习，可迁移至机器人OOD检测",
+      "canonical_evidence": "时间序列异常检测结合主动学习，可迁移至机器人OOD检测",
+      "llm_tldr_en": "Proposes a framework combining unsupervised learning and active learning to improve time series anomaly detection, applicable for OOD detection in robots to enhance operational safety.",
+      "llm_tldr_cn": "工业时间序列异常检测常面临标签稀缺和噪声干扰，现有无监督方法难以区分近正常异常。本文提出一种主动学习增强框架，在无监督特征基础上迭代选择最不确定的样本进行人工标注，从而逐步优化检测器，有效提升对细微和隐蔽异常的识别能力。实验表明该方法在多个基准上显著优于纯无监督方法，为机器人安全运维中的OOD检测提供了可迁移的无监督增强范式，并为后续边缘部署轻量化模型提供了坚实基础。",
+      "llm_tldr": "工业时间序列异常检测常面临标签稀缺和噪声干扰，现有无监督方法难以区分近正常异常。本文提出一种主动学习增强框架，在无监督特征基础上迭代选择最不确定的样本进行人工标注，从而逐步优化检测器，有效提升对细微和隐蔽异常的识别能力。实验表明该方法在多个基准上显著优于纯无监督方法，为机器人安全运维中的OOD检测提供了可迁移的无监督增强范式，并为后续边缘部署轻量化模型提供了坚实基础。",
+      "llm_tags": [
+        "query:humanoid-ood"
+      ],
+      "matched_query_tag": "query:humanoid-ood",
+      "matched_query_text": "out-of-distribution detection for safe robot operation",
+      "matched_requirement_id": "req-11",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2606.28529v1",
+      "source": "arxiv",
+      "title": "The Speedup Paradox: Rethinking Inference Speed-Quality Trade-off in Embodied Tasks",
+      "abstract": "Embodied foundation models have recently been widely used to improve robot generalization and task success rates. Previous works apply lossy efficient-inference techniques such as quantization, pruning, and asynchronous inference, accepting small action quality degradation in exchange for lower per-step computation cost and inter-action latency. However, unlike traditional static ML tasks, embodied tasks involve repeated interaction with the environment, and task-level performance is determined not only by per-step cost, but also by closed-loop effects unique to embodied execution, which remain insufficiently characterized in current efficient-inference studies. In this work, we propose TISED (\\underline{T}ask-level \\underline{I}nference \\underline{S}peedup \\underline{E}ffect \\underline{D}ecomposition), an analytical framework that unifies diverse lossy inference optimization techniques and decomposes their effects on static and dynamic tasks, and uncovers some paradoxical effects on task-level performance: (1) on \\textit{static tasks}, optimization sometimes can lengthen end-to-end per-task completion time even as per-step latency drops; (2) on \\textit{dynamic tasks}, moderate lossy optimization can raise task success rate even above the baseline; and (3) the monotonicity and sweet-spot location of both effects can shift with hardware configuration. Together, our findings provide a new perspective on adapting inference optimization techniques to embodied tasks.",
+      "authors": [
+        "Yujin Wang",
+        "Junli Chen",
+        "Yixuan Li",
+        "Shunan Dong",
+        "Huazhong Yang",
+        "Yongpan Liu",
+        "Hongyang Jia"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.AI",
+        "cs.CV"
+      ],
+      "published": "2026-06-26T18:28:52+00:00",
+      "link": "https://arxiv.org/pdf/2606.28529v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "analysis of inference speed-quality trade-off in embodied tasks for edge deployment",
+      "llm_evidence_cn": "面向边缘部署的具身任务推理速度-质量权衡分析",
+      "llm_evidence": "面向边缘部署的具身任务推理速度-质量权衡分析",
+      "canonical_evidence": "面向边缘部署的具身任务推理速度-质量权衡分析",
+      "llm_tldr_en": "The Speedup Paradox reveals that lossy efficient-inference techniques in embodied tasks suffer from closed-loop effects, and proposes TISED to evaluate task-level trade-offs.",
+      "llm_tldr_cn": "具身任务中推理加速技术（如量化、剪枝）的损失在闭环执行中被放大，导致任务性能下降。本文提出TISED框架，从任务层面系统评估推理速度与动作质量的权衡，揭示了简单追求低延迟可能反而降低任务成功率的悖论。该研究为边缘部署的推理优化设计提供了关键指导。",
+      "llm_tldr": "具身任务中推理加速技术（如量化、剪枝）的损失在闭环执行中被放大，导致任务性能下降。本文提出TISED框架，从任务层面系统评估推理速度与动作质量的权衡，揭示了简单追求低延迟可能反而降低任务成功率的悖论。该研究为边缘部署的推理优化设计提供了关键指导。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "edge deployment for humanoid robots",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2607.01111v1",
+      "source": "arxiv",
+      "title": "FAR: Failure-Aware Retry for Test-Time Recovery and Continual Policy Improvement",
+      "abstract": "Robot policies inevitably encounter failures when deployed in real environments. Naive retries often repeat the same mistakes, while many existing recovery methods rely on human intervention. In this paper, we propose Failure-Aware Retry (FAR), a framework that enables robots to learn from previous failures at test time, adapt their behavior accordingly, and eventually complete the task autonomously. FAR combines Failure-Contrastive Preference Adaptation, which constructs preference learning data from failures to steer the policy away from previously unsuccessful behaviors, with lightweight action perturbations during retries to encourage local exploration. We further incorporate successful recovery trajectories into a training loop for continual policy improvement. Experiments in both simulation and real-world manipulation tasks show that FAR substantially improves success rates and robustness, with average gains of 17.6% over the standard diffusion policy in simulation and 11.7% in the real world. In addition, FAR significantly improves data efficiency under both reset and timestep budgets during continual policy improvement by exploiting informative failure cases.",
+      "authors": [
+        "Haoran Hao",
+        "Shahram Najam Syed",
+        "Jeffrey Ichnowski",
+        "Jeff Schneider"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.AI",
+        "cs.LG"
+      ],
+      "published": "2026-07-01T16:01:54+00:00",
+      "link": "https://arxiv.org/pdf/2607.01111v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "Failure-aware retry framework for test-time recovery from robot failures, enabling error analysis and improvement",
+      "llm_evidence_cn": "故障感知重试框架，用于机器人测试时从失败中恢复，实现错误分析与持续改进",
+      "llm_evidence": "故障感知重试框架，用于机器人测试时从失败中恢复，实现错误分析与持续改进",
+      "canonical_evidence": "故障感知重试框架，用于机器人测试时从失败中恢复，实现错误分析与持续改进",
+      "llm_tldr_en": "Proposes Failure-Aware Retry (FAR) that enables robots to learn from previous failures at test time through failure-contrastive preference adaptation and lightweight action perturbations, achieving autonomous recovery.",
+      "llm_tldr_cn": "本论文针对机器人部署中遇到故障后无法自主恢复的问题，提出了故障感知重试（FAR）框架。FAR通过故障对比偏好适应从失败中学习，引导策略避开之前不成功的行为，并结合轻量动作扰动鼓励局部探索。在真实机器人任务上的实验表明，FAR能够实现测试时的自主恢复和持续改进。该方法为机器人故障分析和错误恢复提供了有效的自主学习机制。",
+      "llm_tldr": "本论文针对机器人部署中遇到故障后无法自主恢复的问题，提出了故障感知重试（FAR）框架。FAR通过故障对比偏好适应从失败中学习，引导策略避开之前不成功的行为，并结合轻量动作扰动鼓励局部探索。在真实机器人任务上的实验表明，FAR能够实现测试时的自主恢复和持续改进。该方法为机器人故障分析和错误恢复提供了有效的自主学习机制。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "fault diagnosis and error analysis for humanoid robots",
+      "matched_requirement_id": "req-7",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2606.28529v2",
+      "source": "arxiv",
+      "title": "The Speedup Paradox: Rethinking Inference Speed-Quality Trade-off in Embodied Tasks",
+      "abstract": "Embodied foundation models have recently been widely used to improve robot generalization and task success rates. Previous works apply lossy efficient-inference techniques such as quantization, pruning, and asynchronous inference, accepting small action quality degradation in exchange for lower per-step computation cost and inter-action latency. However, unlike traditional static ML tasks, embodied tasks involve repeated interaction with the environment, and task-level performance is determined not only by per-step cost, but also by closed-loop effects unique to embodied execution, which remain insufficiently characterized in current efficient-inference studies. In this work, we propose TISED (\\underline{T}ask-level \\underline{I}nference \\underline{S}peedup \\underline{E}ffect \\underline{D}ecomposition), an analytical framework that unifies diverse lossy inference optimization techniques and decomposes their effects on static and dynamic tasks, and uncovers some paradoxical effects on task-level performance: (1) on \\textit{static tasks}, optimization sometimes can lengthen end-to-end per-task completion time even as per-step latency drops; (2) on \\textit{dynamic tasks}, moderate lossy optimization can raise task success rate even above the baseline; and (3) the monotonicity and sweet-spot location of both effects can shift with hardware configuration. Together, our findings provide a new perspective on adapting inference optimization techniques to embodied tasks.",
+      "authors": [
+        "Yujin Wang",
+        "Junli Chen",
+        "Yixuan Li",
+        "Shunan Dong",
+        "Huazhong Yang",
+        "Yongpan Liu",
+        "Hongyang Jia"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.AI",
+        "cs.CV"
+      ],
+      "published": "2026-06-26T18:28:52+00:00",
+      "link": "https://arxiv.org/pdf/2606.28529v2",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "analysis of inference speed-quality trade-off in embodied tasks for edge deployment",
+      "llm_evidence_cn": "面向边缘部署的具身任务推理速度-质量权衡分析",
+      "llm_evidence": "面向边缘部署的具身任务推理速度-质量权衡分析",
+      "canonical_evidence": "面向边缘部署的具身任务推理速度-质量权衡分析",
+      "llm_tldr_en": "The Speedup Paradox reveals that lossy efficient-inference techniques in embodied tasks suffer from closed-loop effects, and proposes TISED to evaluate task-level trade-offs.",
+      "llm_tldr_cn": "具身任务中推理加速技术（如量化、剪枝）的损失在闭环执行中被放大，导致任务性能下降。本文提出TISED框架，从任务层面系统评估推理速度与动作质量的权衡，揭示了简单追求低延迟可能反而降低任务成功率的悖论。该研究为边缘部署的推理优化设计提供了关键指导。",
+      "llm_tldr": "具身任务中推理加速技术（如量化、剪枝）的损失在闭环执行中被放大，导致任务性能下降。本文提出TISED框架，从任务层面系统评估推理速度与动作质量的权衡，揭示了简单追求低延迟可能反而降低任务成功率的悖论。该研究为边缘部署的推理优化设计提供了关键指导。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "edge deployment for humanoid robots",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2607.02046v1",
+      "source": "arxiv",
+      "title": "Fast and Accurate Anomaly Detection in Time Series",
+      "abstract": "Anomaly detection is a critical and evolving field in Machine Learning, with applications targeting different domains such as cybersecurity, finance, healthcare, manufacturing and IoT (Internet of Things) systems. Traditionally, anomaly detection algorithms have been designed using both supervised and unsupervised learning paradigms. The fundamental challenge in real-world anomaly detection scenarios is related to the inherent class imbalance (anomalies are typically rare) and, for supervised methods, to the scarcity of labelled anomalous data. Indeed, labelling is both expensive and time-consuming. Conversely unsupervised methods do not require labelling, but may suffer from high false positive rates when deployed in safety-critical applications. In this work we introduce a novel unsupervised algorithm for anomaly detection in time series based on the Haar discrete wavelet and a suitably designed $t$-test. We establish the theoretical foundation of the proposed $t$-test and, through extensive experimentation across 343 datasets, demonstrate that our algorithm outperforms state-of-the-art unsupervised and self-supervised benchmarks.",
+      "authors": [
+        "Emanuele Mele",
+        "Massimo Cafaro",
+        "Angelo Coluccia",
+        "Italo Epicoco"
+      ],
+      "primary_category": "cs.LG",
+      "categories": [
+        "cs.LG"
+      ],
+      "published": "2026-07-02T11:14:51+00:00",
+      "link": "https://arxiv.org/pdf/2607.02046v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "query:humanoid-ood"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "Fast anomaly detection in time series applicable to joint signals",
+      "llm_evidence_cn": "快速时间序列异常检测方法，可应用于关节信号",
+      "llm_evidence": "快速时间序列异常检测方法，可应用于关节信号",
+      "canonical_evidence": "快速时间序列异常检测方法，可应用于关节信号",
+      "llm_tldr_en": "Proposes a fast and accurate unsupervised anomaly detection method for time series, addressing class imbalance and high false positive rates, applicable to robot sensor signals.",
+      "llm_tldr_cn": "该论文针对时间序列异常检测中类别不平衡和标注数据稀缺的问题，提出了一种快速且准确的无监督异常检测方法。该方法通过设计高效的检测算法，在多个领域的数据集上取得了较低的误报率和较高的检测精度。虽然论文未具体针对人形机器人，但其通用方法可直接应用于机器人关节位置、速度、力矩等本体感受信号的异常检测，为故障诊断提供技术支持。",
+      "llm_tldr": "该论文针对时间序列异常检测中类别不平衡和标注数据稀缺的问题，提出了一种快速且准确的无监督异常检测方法。该方法通过设计高效的检测算法，在多个领域的数据集上取得了较低的误报率和较高的检测精度。虽然论文未具体针对人形机器人，但其通用方法可直接应用于机器人关节位置、速度、力矩等本体感受信号的异常检测，为故障诊断提供技术支持。",
+      "llm_tags": [
+        "query:humanoid-ood"
+      ],
+      "matched_query_tag": "query:humanoid-ood",
+      "matched_query_text": "anomaly detection from joint position velocity torque IMU signals in humanoid robots",
+      "matched_requirement_id": "req-10",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2606.31694v1",
+      "source": "arxiv",
+      "title": "RCT: A Robot-Collected Touch-Vision-Language Dataset for Tactile Generalization",
+      "abstract": "For robots manipulating open-world objects, tactile representations must generalize to unseen materials. We introduce RCT (Robotic Contact Tactile), a robot-collected touch-vision-language dataset with 29,279 tactile frames from full robot presses on 122 industrial reference materials in 7 categories, recorded with three DIGIT sensors at multiple contact positions. RCT preserves each press as a contact sequence, enabling held-out evaluation across materials, categories, sensors, contact positions, and contact sequences. Frames from one press are strongly correlated: frame-random splits can place near-duplicate observations of the same physical interaction in both training and test. With the encoder held fixed, removing contact-sequence overlap reduces tactile-to-text Recall@1 by 17.7 percentage points. When materials are additionally held out at training time, performance drops sharply, leaving held-out-material Recall@1 at 25.1 +/- 6.1% averaged over three held-out draws. The public TVL/HCT split shows the same structure: every test contact sequence appears in training, and raw-pixel nearest neighbors recover the correct sequence in 98.3% of cases. Uniformly sampling a press improves contrastive training, and RCT-trained embeddings improve category probes on unseen materials. RCT makes contact-sequence-aware, held-out-material evaluation reproducible and exposes novel-material generalization as a central challenge for robotic tactile perception. The RCT dataset is open-sourced at https://faerber-lab.github.io/RCT/",
+      "authors": [
+        "Jingbo He",
+        "Michael Färber",
+        "Roberto Calandra"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.AI",
+        "cs.CL",
+        "cs.CV"
+      ],
+      "published": "2026-06-30T14:05:33+00:00",
+      "link": "https://arxiv.org/pdf/2606.31694v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "robot-collected tactile dataset for robotics",
+      "llm_evidence_cn": "机器人收集的触觉数据集，用于机器人数据集构建",
+      "llm_evidence": "机器人收集的触觉数据集，用于机器人数据集构建",
+      "canonical_evidence": "机器人收集的触觉数据集，用于机器人数据集构建",
+      "llm_tldr_en": "RCT is a robot-collected touch-vision-language dataset with 29,279 tactile frames from robot presses on 122 materials, enabling held-out evaluation for tactile generalization.",
+      "llm_tldr_cn": "该论文针对机器人操作中触觉表示泛化到未见材料的问题，提出了RCT数据集，该数据集通过机器人按压122种工业材料收集了29,279个触觉帧，并保留了接触序列结构。实验表明，去除接触序列重叠后，跨材料、跨传感器的泛化评估更加可靠。这项工作为机器人触觉学习提供了标准化基准，推动了触觉泛化研究。",
+      "llm_tldr": "该论文针对机器人操作中触觉表示泛化到未见材料的问题，提出了RCT数据集，该数据集通过机器人按压122种工业材料收集了29,279个触觉帧，并保留了接触序列结构。实验表明，去除接触序列重叠后，跨材料、跨传感器的泛化评估更加可靠。这项工作为机器人触觉学习提供了标准化基准，推动了触觉泛化研究。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2607.00218v1",
+      "source": "arxiv",
+      "title": "EgoSafetyBench: A Diagnostic Egocentric Video Benchmark for Evaluating Embodied VLMs as Runtime Safety Guards",
+      "abstract": "Vision-language models (VLMs) are now proposed as runtime safety guards for embodied agents in homes and factories. A deployable guard must catch genuinely unsafe situations while avoiding unnecessary intervention on routine but superficially alarming activity, a distinction that binary safety benchmarks obscure. We introduce EgoSafetyBench, an egocentric video benchmark of 1,200 robot-view scenarios annotated at half-second granularity, to evaluate VLMs as streaming guards across two tracks. The situational track (800 scenarios) spans four families, from routine and safe-but-suspicious scenes to obvious and contextual hazards. The visual-channel track (400 scenarios) targets in-scene text-a sign, sticker, or label visible in the scene-that can misrepresent the physical situation, pairing each misleading sign with a truthful version to test both whether a guard flags the text as misleading and whether the text corrupts its physical-safety judgment. Both tracks use contrastive ladders: near-identical scenarios differing only in a single visible deciding cue, so a correct call must hinge on that cue rather than the overall scene type. We evaluate ten open- and closed-source VLMs. We find that while guards reliably recognize videos containing hazards, they often miss specific hazardous moments, particularly contextual hazards. Furthermore, misleading in-scene signs degrade all tested guards: vulnerable models miss up to a third of hazards, while robust models over-intervene on safe content. Matched controls reveal that apparent safety robustness often reflects indiscriminate alarming rather than true physical reasoning.",
+      "authors": [
+        "Siddhant Panpatil",
+        "Arth Singh",
+        "Mijin Koo",
+        "Chaeyun Kim",
+        "Haon Park",
+        "Dasol Choi"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV",
+        "cs.AI"
+      ],
+      "published": "2026-06-30T21:50:49+00:00",
+      "link": "https://arxiv.org/pdf/2607.00218v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "benchmark for evaluating embodied VLMs as runtime safety guards",
+      "llm_evidence_cn": "用于评估具身VLM作为运行时安全守卫的基准",
+      "llm_evidence": "用于评估具身VLM作为运行时安全守卫的基准",
+      "canonical_evidence": "用于评估具身VLM作为运行时安全守卫的基准",
+      "llm_tldr_en": "EgoSafetyBench is an egocentric video benchmark of 1,200 robot-view scenarios annotated at half-second granularity to evaluate VLMs as streaming safety guards.",
+      "llm_tldr_cn": "该论文针对将VLMs作为具身代理运行时安全守卫的需求，构建了EgoSafetyBench基准，包含1200个机器人视角的带注释场景。基准设计了情境跟踪（含安全、可疑、危险等类别）和视觉渠道跟踪两个任务。实验揭示了当前VLM在辨别安全与可疑场景上的不足。这项工作为机器人安全操作提供了系统评估工具，可推广至人形机器人安全检测。",
+      "llm_tldr": "该论文针对将VLMs作为具身代理运行时安全守卫的需求，构建了EgoSafetyBench基准，包含1200个机器人视角的带注释场景。基准设计了情境跟踪（含安全、可疑、危险等类别）和视觉渠道跟踪两个任务。实验揭示了当前VLM在辨别安全与可疑场景上的不足。这项工作为机器人安全操作提供了系统评估工具，可推广至人形机器人安全检测。",
+      "llm_tags": [
+        "query:humanoid-ood"
+      ],
+      "matched_query_tag": "query:humanoid-ood",
+      "matched_query_text": "out-of-distribution detection for safe robot operation",
+      "matched_requirement_id": "req-11",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    }
+  ]
+}

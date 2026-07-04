@@ -1,0 +1,1347 @@
+Title: The Speedup Paradox: Rethinking Inference Speed-Quality Trade-off in Embodied Tasks
+
+URL Source: https://arxiv.org/pdf/2606.28529v2
+
+Published Time: Wed, 01 Jul 2026 00:37:03 GMT
+
+Number of Pages: 23
+
+Markdown Content:
+# The Speedup Paradox: Rethinking Inference Speed-Quality Trade-off in Embodied Tasks 
+
+Yujin Wang Junli Chen Yixuan Li Shunan Dong Huazhong Yang Yongpan Liu Hongyang Jia 
+
+Tsinghua University 
+
+yujin-wa24@mails.tsinghua.edu.cn hjia@tsinghua.edu.cn cat 
+
+> 0.11
+
+3.output 
+
+> dog
+> 0.82
+> rabbit
+> 0.06
+> ...
+> cat
+> 0.11
+
+3.output 
+
+> dog
+> 0.82
+> rabbit
+> 0.06
+> ...
+
+1.perception  2.inference 
+
+Vision 
+
+info 
+
+Probabi 
+
+lities  
+
+> Traditional
+> ML Tasks
+> Embodied
+> Control Tasks
+> static
+> static
+> dynamic
+> dynamic dynamic static
+
+1.perception  2.inference 
+
+3.get action 4.execute 
+
+Vision/Text 
+
+info 
+
+Action 
+
+vector 
+
+Robot 
+
+commands 
+
+Next position  
+
+> static
+> static
+> dynamic
+> dynamic dynamic static
+
+1.perception  2.inference 
+
+3.get action 4.execute 
+
+Vision/Text 
+
+info 
+
+Action 
+
+vector 
+
+Robot 
+
+commands 
+
+Next position  
+
+> static dynamic
+> stable
+> accuracy unstable
+> accuracy
+> collapsed
+
+single 
+
+pass 
+
+multiple 
+
+pass  
+
+> inference
+> fast inference
+> slow
+> ③The trends shifts with
+> hardware( low /high )
+> high -end
+> hardware
+> low -end
+> hardware
+> high -end
+> hardware
+> low -end
+> hardware
+> react
+> fast react
+> slow
+> inference
+> slow
+> inference
+> fast
+> high action
+> quality
+> low action
+> quality
+> collapsed
+> stable
+> accuracy unstable
+> accuracy
+
+metric trending: usually monotonic, hardware independent 
+
+metric trending: maybe non -monotonic, hardware dependent           
+
+> e.g. Resnet
+> e.g. diffusion policy
+> Optimization ratio Optimization ratio
+> Optimization ratio Optimization ratio Optimization ratio
+> Optimization ratio Optimization ratio Optimization ratio
+> Latency
+> Task acc.
+> Action chunk num
+> Delay time
+> collapsed
+> Static task acc.
+> Per -chunk latency
+> Dynamic task acc.
+> ②Lossy optimization
+> sometimes can improve
+> dynamic success
+> End to end time
+> ①A per -step speedup need not
+> speed up the task
+> Static Demo:
+> Pick & Place
+> Dynamic Demo:
+> Conveyor Pick
+> Demo
+> Visualization
+> low -end hardware high -end hardware
+> high
+> compress
+> ratio
+> low
+> compress
+> ratio
+> 0s 15s 30s 0s 65s 90s
+> high
+> compress
+> ratio
+> low
+> compress
+> ratio
+> low -end hardware high -end hardware
+> start end start end process
+
+①Paradox: faster per -step configuration 
+
+has longer per -task latency 
+
+②Paradox: lossy optimization achieves 
+
+higher accuracy in dynamic scenario 
+
+③Comparison: hardware shifts the 
+
+best configuration 
+
+Figure 1: Overview of the speed-quality trade-off in embodied inference. Unlike static ML tasks, where stronger lossy optimization monotonically trades accuracy for per-step speed, lightweight-ing embodied policies yields non-monotonic task-level behavior: both end-to-end completion time (static tasks) and task success rate (dynamic tasks) may exhibit a sweet spot, whose location further shifts with the deployment hardware. 
+
+Abstract: Embodied foundation models have recently been widely used to im-prove robot generalization and task success rates. Previous works apply lossy efficient-inference techniques such as quantization, pruning, and asynchronous inference, accepting small action quality degradation in exchange for lower per-step computation cost and inter-action latency. However, unlike traditional static ML tasks, embodied tasks involve repeated interaction with the environment, and task-level performance is determined not only by per-step cost, but also by closed-loop effects unique to embodied execution, which remain insufficiently charac-terized in current efficient-inference studies. In this work, we propose TISED (Task-level Inference Speedup Effect Decomposition), an analytical framework that unifies diverse lossy inference optimization techniques and decomposes their effects on static and dynamic tasks, and uncovers some paradoxical effects on task-level performance: (1) on static tasks , optimization sometimes can lengthen end-to-end per-task completion time even as per-step latency drops; (2) on dy-namic tasks , moderate lossy optimization can raise task success rate even above the baseline; and (3) the monotonicity and sweet-spot location of both effects can shift with hardware configuration. Together, our findings provide a new perspec-tive on adapting inference optimization techniques to embodied tasks. 
+
+> arXiv:2606.28529v2 [cs.RO] 30 Jun 2026
+
+Keywords: Embodied Tasks, Lightweight, Quantization, Pruning, Hardware-Software Co-design, Asynchronous Inference. 
+
+1 Introduction 
+
+Embodied models such as Vision-Language-Action models (VLA) [1, 2, 3, 4, 5, 6, 7, 8] and World-Action Models (WAM) [9, 10, 11, 12] have been widely deployed across diverse embodied sce-narios. These models are typically obtained by fine-tuning large-scale pretrained vision-language models [13, 14] and world models [15, 16], yielding strong cross-task generalization and improved robustness to environmental variation. However, to fully accommodate these capabilities, they usu-ally have large parameter counts and compute FLOPs at inference time, posing a key barrier to edge deployment and real-time control. To address this, many recent works apply lossy inference optimization techniques to embodied mod-els, such as quantization [17, 18], cache reuse [19, 20, 21], sampling step reduction [22, 23, 24], and asynchronous scheduling [25, 26, 27]. These methods have been shown to reduce per-step inference latency or shorten the gap between consecutive action chunks with slight accuracy degradation. Em-bodied tasks, however, differ fundamentally: Each cycle of the inference-execution loop consists of one policy inference and the subsequent action execution, and the loop runs for many such cycles be-fore a rollout terminates. The per-step latency reductions from these methods therefore capture only a fragment of task-level performance: they ignore how many cycles the rollout ultimately requires until success, how the environment evolves during model inference, and how all of these interact with hardware performance across inference and execution costs. To analyze how lossy inference optimization shapes embodied task performance beyond per-step latency, we propose TISED (Task-level Inference Speedup Effect Decomposition) analysis in Fig-ure 1. First, we place policy-intrinsic and execution-aware optimization on a common per-chunk time formula. Building on this unified view, we model the end-to-end objective separately for the two task regimes: on static tasks, end-to-end completion time is jointly determined by the per-chunk inference time and the number of chunks that the full rollout requires; on dynamic tasks, task success rate is jointly determined by action quality and observation staleness. We empirically test these predictions with a progressive-lightweighting sweep across task types, model backbones, optimization methods, and compute platforms, from which three observations emerge: (1) On static tasks, end-to-end completion time is sometimes non-monotonic in the lightweighting strength due to the deterioration of action quality (per-step inference latency reduc-tion ̸ = end-to-end per-task latency reduction). (2) On dynamic tasks, task success rate is sometimes 
+
+non-monotonic in the lossy optimization strength due to the trade-off between degraded action qual-ity and reduced observation staleness (static task accuracy ̸ = dynamic task accuracy). (3) Fixing the task and lightweighting method, the above trends and the location of the sweet spot shifts with the hardware compute budget. Together, these three observations show that the per-step speed-quality trade-off familiar from static ML no longer predicts task-level outcomes in embodied closed-loop execution—speed and quality interact through rollout length, action delay, and hardware budget. 
+
+2 Related Works 
+
+2.1 Embodied Foundation Models 
+
+Recent progress in vision-language-action models (VLA) [1, 2, 3, 4, 5, 6, 7, 8] and world-action models (WAM) [9, 10, 11, 12] have enabled stronger open-world generalization, task adaptation, and large-scale policy transfer. However, these capabilities come at a high inference cost. For example, by default π0 [3] (3.3B parameters) is deployed on high-end consumer GPUs such as RTX 4090, and Cosmos-Policy [9] (2B parameters) on datacenter-class accelerators such as H100. This is a key barrier to edge deployment and low-latency control. In this work, rather than scaling capabilities or enhancing generalization, we study how to deploy these models efficiently in the inference-execution loop. 22.2 Lossy Optimizations for Embodied Model Inference 
+
+To reduce the computational burden of embodied models, recent work has explored a range of lossy lightweight inference strategies. These methods can be grouped into two categories: (1) Policy-intrinsic optimization , which reduces the cost of each forward pass through techniques such as quan-tization [17, 18, 28, 29], denoise step reduction [30, 31, 32, 33], and cache reuse [19, 20, 21, 34]. For example, Q-VLA [18] analyzes how different components of a VLA vary in quantization sensitivity and assigns mixed precision accordingly to minimize the resulting action error; VLA-Cache [19] ex-ploits the sparsity of background visual information across perception steps and reuses less-salient tokens to reduce redundant computation. (2) Execution-aware optimization , which improves ef-fective control frequency by overlapping inference with execution, such as asynchronous schedul-ing [25, 26, 27]. For example, VLASH [25] rolls the robot state forward using the previously gen-erated action chunk to predict the state at execution time, and further reduces prediction-execution misalignment by fine-tuning. Most of these works focus only on reducing the latency of a single inference, leaving a systematic analysis of end-to-end effects in embodied scenarios largely unex-plored. In this work, rather than targeting a specific lightweight algorithm, we provide a unified modeling framework to analyze the unique impact of such algorithms on embodied tasks. 
+
+2.3 Efficiency-Accuracy Trade-off Characterizations 
+
+Aggressive lossy optimization methods can achieve significant gains in latency or energy efficiency while harming the accuracy. Previous works such as Deep Compression [35] established a trade-off between efficiency and accuracy in deep learning models. Subsequently, a lot of research has attempted to push this Pareto frontier forward in vision and language models [36, 37, 38, 39, 40]. In embodied systems, this relationship becomes more complex due to error accumulation and closed-loop feedback. Works such as [41, 42] introduced a new trade-off between efficiency and accuracy in time-sensitive tasks, but their scope was limited to object detection or LLM agents. Works such as [34, 43, 44] have characterized the inference performance of VLA models across various hardware devices but lack task-level performance. Work [45] provides valuable analysis of the negative impact of model lightweighting on execution in embodied task scenarios, while their focus is on the negative side. In this work, we further explore the synergy between the positive and negative effects of lightweight optimization and conduct a cross-hardware study. 
+
+3 Task-Level Inference Speedup Effect Decomposition 
+
+Embodied inference optimization operates within an inference-execution loop, not during a sin-gle forward pass. Therefore, a per-step speedup does not translate directly into a task-level gain: it changes both how many control cycles a rollout needs and how stale the observation is when the resulting action is executed. These two effects give rise to different failure modes in differ-ent task regimes. We develop this view into TISED, which analyzes task-level performance across lightweighting strength, task dynamics, and hardware budget. TISED places policy-intrinsic and execution-aware optimization on a common closed-loop time axis, and separates the end-to-end effect into cycle time, rollout length, and action delay. We use two task regimes throughout the paper. In a static task , the task-relevant environment state remains effectively unchanged during model inference (e.g., static pick & place task). In this regime, lightweighting primarily affects movement smoothness and total execution time. In a dynamic task ,the task-relevant environment state evolves while the model is still computing the next action (e.g., picking a rolling ball or playing ping-pong). In this regime, lightweighting changes both action qual-ity and reaction speed – the inference speed directly affects the policy’s ability to react to dynamic environments. More detailed analysis and derivation can be found in Appendix A. 
+
+3.1 Basic Timing Model 
+
+As shown in Figure 2, let Tinf be the latency of one full-model policy inference, n the action chunk size [46], and Tact the duration of one action. In the synchronous full-model baseline, one chunk consists of one inference followed by n executed actions. We use this baseline chunk time as the reference cost: 
+
+Tchunk = Tinf + nT act . (1) 3Model   
+
+> Inference
+> Machine
+> Execute (a) Baseline (c) Execution -aware Optimization (b) Policy -intrinsic Optimization
+> Tinf
+> nT act
+> αTinf
+> n′Tact
+> Tinf -n′Tact
+
+Figure 2: Dataflow of the inference-execution loop in different optimization settings. The black dashed box indicates the per-chunk latency. 
+
+Policy-Intrinsic Optimization. Policy-intrinsic methods reduce computation inside the policy network. We represent their timing effect by a latency ratio α ∈ (0 , 1] . This ratio can be changed by adjusting the number of quantization layers, the pruning ratio, and so on. Under this class of methods, the realized per-chunk time and per-chunk speedup are: 
+
+T pl cycle (α) = αT inf + nT act , ηpl chunk (α) = Tchunk 
+
+T pl cycle (α) . (2) The cost is that stronger lightweighting may reduce action quality. 
+
+Execution-Aware Optimization. Execution-aware methods like asynchronous inference change how inference is scheduled with robot execution, and they usually require complex system schedul-ing. To simplify the analysis, we performed abstract modeling of asynchronous inference by emu-lating work [25]. We summarize the scheduling knob by an action overlap depth n′ ∈ { 0, . . . , n },the number of primitive actions whose execution can overlap with the next inference. The realized per-chunk time and per-chunk speedup are: 
+
+T ea cycle (n′) = Tinf + nT act − min {Tinf , n ′Tact }, ηea chunk (n′) = Tchunk 
+
+T ea cycle (n′) . (3) By overlapping the next inference with the current chunk’s execution, each new action is computed from an observation taken before those actions complete, so the policy acts on an increasingly out-dated view of the environment and also degrades the action quality. 
+
+3.2 Task-level Model End-to-End Time. A complete embodied task spans many action chunks. The total number of chunks is not a fixed constant: it is an outcome of the rollout under the selected optimization. For the baseline and the two optimization classes, the task completion times are: 
+
+T base task = N base Tchunk , T pl task (α) = N pl (α)T pl cycle (α), T ea task (n′) = N ea (n′)T ea cycle (n′). (4) Here N base , N pl (α), and N ea (n′) are the total numbers of chunks used by the corresponding roll-outs. The end-to-end speedup should compare per-task completion time against the baseline: 
+
+ηpl e2e (α) = T base task 
+
+T pl task (α) = N base 
+
+N pl (α) ηpl chunk (α), ηea e2e (n′) = T base task 
+
+T ea task (n′) = N base 
+
+N ea (n′) ηea chunk (n′). (5) 
+
+N (·) has no closed form, but it grows monotonically as lightweighting strengthens—either via reduced model capacity (under policy-intrinsic compression) or via observation staleness (under execution-aware scheduling). Per-task time therefore need not track per-step time, and may even move in the opposite direction. 
+
+Overlooked Factor 1 : On static tasks, per-step speedup does not predict per-task speedup— degraded action quality can inflate the chunk count. 
+
+Action Delay. We also track the residual action delay, i.e., the time from an observation to the first action that can be executed from the corresponding policy output: 
+
+Dbase act = Tinf , Dpl act (α) = αT inf , Dea act (n′) = max {0, T inf − n′Tact }. (6) Dynamic-task analysis further depends on Dact , which captures the observation staleness accumu-lated by the time the corresponding action executes. To cover both policy-intrinsic and execution-aware optimization, let u denote the operating point of the chosen method: u = α for policy-intrinsic 4optimization and u = n′ for execution-aware optimization. We use a structured surrogate to capture the two dominant factors in dynamic success: 
+
+bPsucc (u) = Φ( q(u), z (u)) , z(u) = Dact (u)ωenv , ∂Φ/∂q ≥ 0, ∂Φ/∂z ≤ 0. (7) where q(u) represents the action quality, ωenv is the environment change rate (e.g., conveyor speed or moving-target velocity), z(u) = Dact (u)ωenv measures how far the environment drifts during the action delay, and Φ maps these two factors to a success rate. In words: dynamic success goes up when actions are more accurate, and goes down when the environment has drifted far from what the policy actually saw. As lightweighting strengthens, q(u) typically falls (less computation or staler input) while z(u) may also fall (faster inference shortens the observation-to-action gap). The outcome for dynamic-task success therefore depends on the relative strength of these two trends. 
+
+Overlooked Factor 2 : On dynamic tasks, per-step accuracy does not predict per-task accuracy—reduced observation staleness can outweigh the quality loss. 
+
+Compute Hardware. The timing terms above are not intrinsic to the policy alone. Tinf is deter-mined by the compute platform that runs the policy, whereas Tact is fixed by the robot execution side and the task setting. (1) For static tasks, let ρ = Tinf /T act denote the inference-to-execution time ratio. For a fixed task and a fixed optimization setting, the per-chunk speedups can be written as: 
+
+ηpl chunk (ρ) = ρ + nαρ + n , ηea chunk (ρ) = ρ + nρ + n − min {ρ, n ′} . (8) It means that the same lightweighting setting can yield different task-level effects on different com-pute platforms. (2) For dynamic tasks, the delay Dact can also be impacted by hardware ability, thereby affecting z(u) and bPsucc (u).
+
+Overlooked Factor 3 : Across compute platforms, per-task trends do not generalize—the sweet spot shifts with the hardware’s compute budget. 
+
+4 Experiments 
+
+Section 3 shows that per-step latency is an incomplete proxy for embodied inference optimization. In this section, we empirically characterize how this proxy breaks down through controlled sweeps of lightweighting across task regimes, policy models, optimization methods, and compute platforms. These sweeps are designed to answer three questions: whether per-chunk speedup translates into end-to-end speedup in static tasks, whether reduced action delay translates into better accuracy in dynamic tasks, and whether the shape of the task-level trend and the location of its sweet spot are hardware-dependent. The full experimental combinations, sweep ranges, and implementation details are reported in Appendix B and C. 
+
+4.1 Setup Policy Models. We evaluate policy models at different scales. We use MLP-Mixer [47, 25] and diffusion policy [23] models for simple control tasks, and we also use foundation-scale embodied models in complex environment tasks, including VLAs such as π0.5 [4] and DynamicVLA [48], and WAMs such as Cosmos-Policy [9] and LingBot-VA [10]. 
+
+Optimization Methods. For policy-intrinsic optimization, we use quantization, pruning, and sampling-step reduction to accelerate the model inference. To characterize task-level trends with fine granularity, we construct a series of progressively lightweight operating points for each method to adjust α. For execution-aware optimization, we follow the asynchronous inference settings in VLASH [25] and progressively vary the overlap depth n′.
+
+Compute Platforms. We evaluate the latency of policy models’ inference on edge devices such as the Jetson AGX Orin [49] (denoted AGX 15W/30W/50W ) and server-class GPUs, including the RTX 3090 [50] and the Ada 6000 [51]. The power of edge devices can be adjusted to achieve different levels of computational capability. 5Config SR (%) α N Tchunk (s) Ttask (s) fp16 64.0 1.00 15.94 0.993 15.83 w8a8 76.0 0.83 16.13 0.961 15.50 w4-t1 66.0 0.82 16.09 0.958 15.42 w4-t2 40.0 0.79 15.85 0.953 15.10 w4-t3 58.0 0.78 15.72 0.951 14.95                                                                                                                            
+
+> w4-t4 10.0 0.76 20.20 0.946 19.11 w4-t5 0.0 0.73 N.A. 0.940 N.A.
+> (a) Cosmos policy @ Robocasa @ PnP Sink To Counter @ quantization @ Ada 6000
+> Config SR (%) αNTchunk (s) Ttask (s) fp16 100.0 1.00 14.10 0.993 14.00
+> w8a8 100.0 0.83 16.24 0.961 15.61 w4-t1 100.0 0.82 15.88 0.958 15.21 w4-t2 68.0 0.79 18.06 0.953 17.20 w4-t3 70.0 0.78 19.06 0.951 18.12 w4-t4 12.0 0.76 24.00 0.946 22.71 w4-t5 0.0 0.73 N.A. 0.940 N.A.
+> (b) Cosmos policy @ Robocasa @ Turn Off Microwave @ quantization @ Ada 6000
+> Config SR (%) αNTchunk (s) Ttask (s) base 90.0 1.00 14.9 2.045 32.19 p1 86.0 0.98 14.9 2.009 31.68 p2 84.0 0.88 15.3 1.820 29.66 p3 76.0 0.88 15.1 1.822 29.23
+> p4 34.0 0.89 22.2 1.838 43.42
+> (c) LingBot-VA @ LeRobot @ stack bowls 3 @ pruning @ Ada 6000
+> Config SR (%) n′NTchunk (s) Ttask (s) d0 93.0 051.4 3.255 167.16 d1 94.4 149.8 3.222 160.61
+> d2 93.6 251.6 3.189 164.43 d3 92.8 353.8 3.155 169.80 d4 84.4 457.3 3.122 178.89
+> (d) pi0.5 @ LIBERO @ 4 task avg @ async @ AGX 50W 0.3 0.2 0.1 0.0 0.1 0.2
+> EEF x 0.2
+> 0.1
+> 0.0
+> 0.1
+> 0.2
+> 0.3
+> EEF y
+> 0.0
+> 0.1
+> 0.2
+> 0.3
+> 0.4
+> n′= 0: 142 steps
+> n′= 2: 157 steps
+> n′= 4: 173 steps
+> EEF z
+> (e) Trajectory n′=0 n′=4
+> (f) Key frames
+
+Figure 3: Static-task results under policy model @ task @ sub-task @ optimization method @ hardware settings. (a)–(d) report SR, optimization strength, N , Tchunk , and Ttask . To avoid interference from timeouts in failed tasks, the reported number N is obtained by averaging over all successful trials . For specific configuration details, see Appendix B.1. (e) and (f) visualize the simulation case in (d). 
+
+Simulation Task Setup. We evaluate both task regimes defined in Section 3. For static tasks, we use LIBERO [52], RoboCasa [53], and RoboTwin-2.0 [54]. These benchmarks primarily involve manipulation tasks such as grasping and placing stationary objects, where the task-relevant object states remain effectively unchanged during policy inference. For dynamic tasks, we use Kinetix [55] and DOM [48]. These benchmarks’ task-relevant states continue to evolve during policy inference, and their latency-injection protocols allow us to emulate different inference delays. 
+
+Real-World Task Setup. We further evaluate our observations on a real UR5e robotic arm [56]. In the static setting, the robot needs to pick up a cube on the tabletop and place it in a target box. In the dynamic setting, the robot needs to grasp a cube moving on a conveyor. These two settings share the same manipulation objective but differ in whether the task-relevant object state evolves during policy inference. 
+
+4.2 Empirical Finding 1: A Per-Step Speedup Need Not Speed Up the Static Task 
+
+As shown in Figure 3, across all four model–task pairs, lightweighting—policy-intrinsic ( α) or execution-aware ( n′)—monotonically reduces the per-chunk time Tchunk , but action quality also declines, so the chunk count N grows. Their product Ttask = N ·Tchunk thus depends on which trend dominates. In Figure 3(a), (c), and (d), N stays nearly flat under mild lightweighting and inflates sharply past a task-specific operating point, so Ttask traces a U-shape with an interior minimum below the baseline. Figure 3(b) is the corner case: N inflates from the very first optimization step, so no setting beats the baseline. Figure 3(e) and (f) visualize the underlying mechanism on a representative asynchronous trial: as n′ grows, the robot arm traces longer end-effector paths and makes more failed grasp attempts before completing the task. 
+
+Empirical Finding 1 : On static tasks, Ttask is non-monotonic in lightweighting strength— an interior sweet spot may exist between two regimes: mild lightweighting reduces Ttask via per-chunk speedup, aggressive lightweighting inflates the chunk count N and reverses the gain. 
+
+4.3 Empirical Finding 2: An Imprecise but Faster Reaction Can Improve the Dynamic Task 
+
+On dynamic tasks, lightweighting—policy-intrinsic ( α) or execution-aware ( n′)—drives two com-peting trends: action quality q falls because computation drops, but observation staleness z =
+
+Dact ωenv also falls because the policy reacts on fresher observations. Task success rate Psucc thus depends on which trend dominates. Figure 4(a) (Kinetix) shows the regime flip: under the zero-delay assumption ( inf-hw ), accuracy peaks usually at the larger sampling count s; once realistic delay is injected to simulate AGX 15W’s inference latency, smaller s becomes the better choice because the reaction-speed gain outweighs the per-step quality loss. Figure 4(b) (DOM-CR) sweeps both s and the environment speed ωenv : at every speed, the best configuration is neither the lowest-delay nor the finest-action one, but an interior sweet spot that balances q and z; the sweet-spot location itself shifts with ωenv . Figure 4(c) visualizes the paradox in DOM-CR scene. 6setting car catapult catcher grasp lunar cheetah                                                 
+
+> Ideal – zero inference delay
+> inf-hw s1 0.984 0.555 0.953 0.984 0.914 0.672
+> inf-hw s3 1.000 0.727 0.984 0.984 0.914 0.836
+> inf-hw s5 0.992 0.680 0.969 0.953 0.922 0.898
+> AGX 15W Simulation– with measured delay
+> agx15 s1 d0 0.984 0.555 0.953 0.984 0.914 0.672
+> agx15 s3 d1 0.938 0.461 0.586 0.844 0.914 0.836
+> agx15 s5 d2 0.820 0.477 0.500 0.805 0.867 0.844
+> (a) MLP-Mixer @ Kinetix
+> speed steps Dact (ms) SR(%) 100% 114.28 68 216.25 76
+> 519.92 74 10 25.69 70 125% 114.28 36 216.25 34 519.92 48
+> 10 25.69 46
+> (b) DynamicVLA @ DOM-CR \
+> Step=10
+> Step=2
+> \
+> Step=10
+> Step=2 (c) DOM-CR Visualization
+
+Figure 4: (a) Accuracy on Kinetix’s 6 sub-tasks. inf-hw assumes that policy inference is instanta-neous (i.e., zero delay). s[step] denotes the number of network iterations. In actual deployment, we measured the policy’s inference speed on AGX 15W device and converted its inference delay into an equivalent number of delay steps d[delay] in the simulator as shown in Appendix B.2. (b) Accuracy on the DOM-CR sub-task. ”speed” indicates the motion speed of objects in the task relative to the original object speed in the dataset. (c) DOM-CR simulator visualization. 0 1 2 3 4
+
+> n′
+> 0
+> 50
+> 100
+> 150
+> total time (s)
+> RTX 3090
+> 6000 Ada
+> AGX 50W
+> AGX 30W
+> AGX 10W
+> 13.7
+> 16.6
+> 47.4
+> 92.5
+> 160.6
+
+(a) Static task (b) Dynamic task 
+
+Figure 5: (a) On different hardware platforms, the average time required for pi0.5 to complete the LIBERO task versus the asynchronous step n′ , with the red dashed line indicating how its sweet spot shifts with hardware; (b) On different hardware platforms, the task accuracy of Kinetix (left) and DOM CR (right) versus the sampling steps, where the location of highest accuracy has shifted. 
+
+Empirical Finding 2 : On dynamic tasks, task success rate Psucc is non-monotonic in lightweighting strength—an interior sweet spot may exist between two regimes: mild lightweighting raises Psucc by reducing observation staleness z, aggressive lightweighting col-lapses action quality q and reverses the gain. 
+
+4.4 Empirical Finding 3: The Trend and Optimum Shifts with Hardware 
+
+Empirical Findings 1 and 2 established that a sweet spot may exist on both static and dynamic tasks. We next ask whether its location is hardware-dependent. To isolate the hardware effect, we fix the task and the lightweighting sweep, and vary only the inference hardware, which changes the inference-to-execution ratio ρ = Tinf /T act . Figure 5(a) (static, async sweep over n′): on high-performance hardware ( ρ small), the per-chunk speedup ηchunk is large enough that the gain from inference optimization outweighs the chunk-count inflation, so the sweet spot drifts toward more aggressive overlap; on low-performance hardware ( ρ large), the per-chunk gain shrinks while N
+
+inflates rapidly, so the sweet spot retreats to milder overlap. Figure 5(b) (dynamic, sampling-step sweep over s): on high-performance hardware, inference delay Dact is no longer the dominant factor limiting accuracy, so the sweet spot favors larger s where the policy retains higher action quality 
+
+q; on low-performance hardware, observation staleness z dominates and the policy must trade off action quality against reaction speed, so the sweet spot shifts to smaller s. Across both regimes, the sweet-spot location is qualitatively sensitive to the hardware compute budget; the quantitative derivation is in Appendix A.2. 
+
+Empirical Finding 3 : Across compute platforms, the per-task sweet spot shifts with the hard-ware’s compute budget that affects ρ.74.5 Real-World Experiments 
+
+We conduct two real-world studies on a UR5e robot arm as shown in Figure 6. For the static task, we use a fine-tuned π0.5 model [4] and measure Tinf and Ttask over all successful trials under different sampling-step settings. Table 1a shows that the two metrics exhibit opposite trends as lightweighting becomes more aggressive. For the dynamic experiment, we use a fine-tuned diffusion policy model [23] and compute the score based on the relative position between the gripper and the cube. Table 1c shows that diffusion policies with fewer sampling steps can achieve higher dynamic-task scores, because their faster reaction outweighs the loss in action quality. Tables 1b and 1d further show that the sweet-spot step in both regimes shifts across hardware. Figures 6c and 6d visualize this static-task paradox at the trajectory level: as the sampling step decreases, the grasp-distance trace shows visibly more oscillation. Together, these two real-world studies provide physical evidence for the speedup paradox and corresponding hardware shift.     
+
+> (a) Static setting (b) Dynamic setting sweet spot:
+> step=10 move to the object
+> pick the object
+> place the object
+> action quality
+> degradation (c) Gripper width visualization (fast HW) sweet spot:
+> step=5 move to the object
+> pick the object place the object
+> action quality
+> degradation (d) Gripper width visualization (slow HW)
+
+Figure 6: Real-world experiment visualization on the UR5e platform. (a)(b) Task setups (static pick-and-place; dynamic conveyor grasp). (c)(d) Static-task grasp trajectories under varying step counts with corresponding inference latencies on fast (Ada 6000) and slow (AGX 50W) hardware.                                      
+
+> Config Tinf (s) NTtask (s) Succ. step=1 0.162 57.4 45.42 5/5 step=7 0.186 49.2 38.74 5/5 step=10 0.199 47.2 37.26 5/5
+> (a) Static paradox
+> HW s=1 s=5 s=7 s=10 RTX 4070 44.6 41.5 38.6 37.1
+> AGX 50W 159.5 108.5 116.9 119.2
+> (b) Static drift
+> Config Dact (s) Pos. 1 Pos. 2 Pos. 3 step=16 0.77 10/20 7/20 9/20 step=4 0.41 16/20 13/20 16/20
+> (c) Dynamic paradox
+> HW s=4 s=16 RTX 4070 48/60 50/60
+> AGX 30W 45/60 26/60
+> (d) Dynamic drift
+
+Table 1: Real-world results on the UR5e platform. (a) Static paradox (Empirical Finding 1): faster per-step inference yields slower per-task time (RTX 4070). (b) Static drift (Empirical Finding 3): sweet step shifts from 10 (RTX 4070) to 5 (AGX 50W). (c) Dynamic paradox (Empirical Finding 2): fewer sampling steps give higher success (AGX 30W). (d) Dynamic drift (Empirical Finding 3): sweet step shifts from 16 (RTX 4070) to 4 (AGX 30W). 
+
+5 Conclusion 
+
+We present TISED, a task-level decomposition framework for analyzing lossy inference optimiza-tion in embodied policies. Beyond per-step latency, TISED decomposes optimization into per-chunk speedup, rollout chunk count, action delay, and compute-hardware dependence. Across policy-intrinsic and execution-aware optimization, which validated in both simulation and real-world UR5e experiments, we identify two paradoxes and one drift: (1) faster per-step inference can yield slower 
+
+per-task time on static tasks; (2) less precise inference can yield higher success on dynamic tasks; and (3) the per-task sweet spot drifts with the deployment hardware. More fundamentally, these results elevate closed-loop computation to its own design axis, coupling speed, quality, dynamics, and hardware as joint determinants of task-level performance. 
+
+6 Limitations 
+
+This work has several limitations. (1) Our framework treats per-chunk time and chunk count as the dominant degrees of freedom; second-order effects such as scheduling jitter, and OS-level schedul-ing latency are abstracted away and may matter for more precise analysis. (2) For execution-aware optimization, we model asynchronous inference as a simplified overlap depth, not as a full server-client implementation; production schedulers may exhibit additional queueing or contention effects. (3) For the static tasks, we approximate N as a function of action quality alone; other effects such as motion jerk and grasp stability is observed but not formally modeled. (4) For the dynamic tasks, extremely high-frequency interactions (e.g., table tennis) are out of scope. (5) Our real-world vali-dation is restricted to a single UR5e platform and two task families; large-scale physical validation is left to future work. 8References 
+
+[1] M. J. Kim, K. Pertsch, S. Karamcheti, T. Xiao, A. Balakrishna, S. Nair, R. Rafailov, E. Foster, G. Lam, P. Sanketi, et al. Openvla: An open-source vision-language-action model. arXiv preprint arXiv:2406.09246 , 2024. [2] M. Shukor, D. Aubakirova, F. Capuano, P. Kooijmans, S. Palma, A. Zouitine, M. Aractingi, C. Pascal, M. Russi, A. Marafioti, et al. Smolvla: A vision-language-action model for afford-able and efficient robotics. arXiv preprint arXiv:2506.01844 , 2025. [3] K. Black, N. Brown, D. Driess, A. Esmail, M. Equi, C. Finn, N. Fusai, L. Groom, K. Hausman, B. Ichter, et al. π0: A vision-language-action flow model for general robot control. arXiv preprint arXiv:2410.24164 , 2024. [4] K. Black, N. Brown, J. Darpinian, K. Dhabalia, D. Driess, A. Esmail, M. R. Equi, C. Finn, N. Fusai, M. Y. Galliker, et al. π0.5: a vision-language-action model with open-world general-ization. In 9th Annual Conference on Robot Learning , 2025. [5] A. Brohan, N. Brown, J. Carbajal, Y. Chebotar, J. Dabis, C. Finn, K. Gopalakrishnan, K. Haus-man, A. Herzog, J. Hsu, J. Ibarz, B. Ichter, A. Irpan, T. Jackson, S. Jesmonth, N. J. Joshi, R. Julian, D. Kalashnikov, Y. Kuang, I. Leal, K.-H. Lee, S. Levine, Y. Lu, U. Malla, D. Man-junath, I. Mordatch, O. Nachum, C. Parada, J. Peralta, E. Perez, K. Pertsch, J. Quiambao, K. Rao, M. Ryoo, G. Salazar, P. Sanketi, K. Sayed, J. Singh, S. Sontakke, A. Stone, C. Tan, H. Tran, V. Vanhoucke, S. Vega, Q. Vuong, F. Xia, T. Xiao, P. Xu, S. Xu, T. Yu, and B. Zitkovich. Rt-1: Robotics transformer for real-world control at scale, 2023. URL 
+
+https://arxiv.org/abs/2212.06817 .[6] A. Brohan, N. Brown, J. Carbajal, Y. Chebotar, X. Chen, K. Choromanski, T. Ding, D. Driess, A. Dubey, C. Finn, P. Florence, C. Fu, M. G. Arenas, K. Gopalakrishnan, K. Han, K. Hausman, A. Herzog, J. Hsu, B. Ichter, A. Irpan, N. Joshi, R. Julian, D. Kalashnikov, Y. Kuang, I. Leal, L. Lee, T.-W. E. Lee, S. Levine, Y. Lu, H. Michalewski, I. Mordatch, K. Pertsch, K. Rao, K. Reymann, M. Ryoo, G. Salazar, P. Sanketi, P. Sermanet, J. Singh, A. Singh, R. Soricut, H. Tran, V. Vanhoucke, Q. Vuong, A. Wahid, S. Welker, P. Wohlhart, J. Wu, F. Xia, T. Xiao, P. Xu, S. Xu, T. Yu, and B. Zitkovich. Rt-2: Vision-language-action models transfer web knowledge to robotic control. In arXiv preprint arXiv:2307.15818 , 2023. [7] Octo Model Team, D. Ghosh, H. Walke, K. Pertsch, K. Black, O. Mees, S. Dasari, J. Hejna, C. Xu, J. Luo, T. Kreiman, Y. Tan, L. Y. Chen, P. Sanketi, Q. Vuong, T. Xiao, D. Sadigh, C. Finn, and S. Levine. Octo: An open-source generalist robot policy. In Proceedings of Robotics: Science and Systems , Delft, Netherlands, 2024. [8] S. Liu, L. Wu, B. Li, H. Tan, H. Chen, Z. Wang, K. Xu, H. Su, and J. Zhu. Rdt-1b: a diffusion foundation model for bimanual manipulation. arXiv preprint arXiv:2410.07864 , 2024. [9] M. J. Kim, Y. Gao, T.-Y. Lin, Y.-C. Lin, Y. Ge, G. Lam, P. Liang, S. Song, M.-Y. Liu, C. Finn, et al. Cosmos policy: Fine-tuning video models for visuomotor control and planning. arXiv preprint arXiv:2601.16163 , 2026. [10] L. Li, Q. Zhang, Y. Luo, S. Yang, R. Wang, F. Han, M. Yu, Z. Gao, N. Xue, X. Zhu, et al. Causal world modeling for robot control. arXiv preprint arXiv:2601.21998 , 2026. [11] S. Ye, Y. Ge, K. Zheng, S. Gao, S. Yu, G. Kurian, S. Indupuru, Y. L. Tan, C. Zhu, J. Xi-ang, A. Malik, K. Lee, W. Liang, N. Ranawaka, J. Gu, Y. Xu, G. Wang, F. Hu, A. Narayan, J. Bjorck, J. Wang, G. Kim, D. Niu, R. Zheng, Y. Xie, J. Wu, Q. Wang, R. Julian, D. Xu, Y. Du, Y. Chebotar, S. Reed, J. Kautz, Y. Zhu, L. J. Fan, and J. Jang. World action models are zero-shot policies, 2026. URL https://arxiv.org/abs/2602.15922 .9[12] A. Ye, B. Wang, C. Ni, G. Huang, G. Zhao, H. Li, H. Li, J. Li, J. Lv, J. Liu, M. Cao, P. Li, Q. Deng, W. Mei, X. Wang, X. Chen, X. Zhou, Y. Wang, Y. Chang, Y. Li, Y. Zhou, Y. Ye, Z. Liu, and Z. Zhu. Gigaworld-policy: An efficient action-centered world–action model, 2026. URL https://arxiv.org/abs/2603.17240 .[13] X. Zhai, B. Mustafa, A. Kolesnikov, and L. Beyer. Sigmoid loss for language image pre-training. In Proceedings of the IEEE/CVF international conference on computer vision , pages 11975–11986, 2023. [14] L. Beyer, A. Steiner, A. S. Pinto, A. Kolesnikov, X. Wang, D. Salz, M. Neumann, I. Alabdul-mohsin, M. Tschannen, E. Bugliarello, et al. Paligemma: A versatile 3b vlm for transfer. arXiv preprint arXiv:2407.07726 , 2024. [15] N. Agarwal, A. Ali, M. Bala, Y. Balaji, E. Barker, T. Cai, P. Chattopadhyay, Y. Chen, Y. Cui, Y. Ding, et al. Cosmos world foundation model platform for physical ai. arXiv preprint arXiv:2501.03575 , 2025. [16] D. Hafner, J. Pasukonis, J. Ba, and T. Lillicrap. Mastering diverse domains through world models. arXiv preprint arXiv:2301.04104 , 2023. [17] J. Zhang, Y. Hsieh, Z. Wan, H. Lin, X. Wang, Z. Wang, Y. Lei, and M. Zhang. Quantvla: Scale-calibrated post-training quantization for vision-language-action models, 2026. URL https: //arxiv.org/abs/2602.20309 .[18] Y. Xu, Y. Yang, Z. Fan, Y. Liu, Y. Li, B. Li, and Z. Zhang. Qvla: Not all channels are equal in vision-language-action model’s quantization, 2026. URL https://arxiv.org/abs/2602. 03782 .[19] S. Xu, Y. Wang, C. Xia, D. Zhu, T. Huang, and C. Xu. Vla-cache: Efficient vision-language-action manipulation via adaptive token caching. arXiv preprint arXiv:2502.02175 , 2025. [20] Y. Li, Y. Meng, Z. Sun, K. Ji, C. Tang, J. Fan, X. Ma, S. Xia, Z. Wang, and W. Zhu. Sp-vla: A joint model scheduling and token pruning approach for vla model acceleration. arXiv preprint arXiv:2506.12723 , 2025. [21] H. Wang, J. Xu, Y. Xiang, J. Pan, Y. Zhou, Y.-L. Li, and G. Dai. Specprune-vla: Accelerat-ing vision-language-action models via action-aware self-speculative pruning. arXiv preprint arXiv:2509.05614 , 2025. [22] C. Lu, Y. Zhou, F. Bao, J. Chen, C. Li, and J. Zhu. Dpm-solver: A fast ode solver for diffusion probabilistic model sampling in around 10 steps. arXiv preprint arXiv:2206.00927 , 2022. [23] C. Chi, Z. Xu, S. Feng, E. Cousineau, Y. Du, B. Burchfiel, R. Tedrake, and S. Song. Diffusion policy: Visuomotor policy learning via action diffusion, 2024. URL https://arxiv.org/ abs/2303.04137 .[24] Z. Wang, Z. Li, A. Mandlekar, Z. Xu, J. Fan, Y. Narang, L. Fan, Y. Zhu, Y. Balaji, M. Zhou, M.-Y. Liu, and Y. Zeng. One-step diffusion policy: Fast visuomotor policies via diffusion distillation, 2024. URL https://arxiv.org/abs/2410.21257 .[25] J. Tang, Y. Sun, Y. Zhao, S. Yang, Y. Lin, Z. Zhang, J. Hou, Y. Lu, Z. Liu, and S. Han. Vlash: Real-time vlas via future-state-aware asynchronous inference. arXiv preprint arXiv:2512.01031 , 2025. [26] Y. Shi, D. Guo, T. Zhao, F. Gao, L. Shi, C. Yu, Z. Mo, Q. Xiao, X. Peng, Q. Liao, et al. Stream-ingvla: Streaming vision-language-action model with action flow matching and adaptive early observation. arXiv preprint arXiv:2603.28565 , 2026. [27] Y. Lu, Z. Liu, X. Fan, Z. Yang, J. Hou, J. Li, K. Ding, and H. Zhao. Faster: Rethinking real-time flow vlas, 2026. URL https://arxiv.org/abs/2603.19199 .10 [28] H. Wang, C. Xiong, R. Wang, and X. Chen. Bitvla: 1-bit vision-language-action models for robotics manipulation. 2025. [29] X. Yan, Z. Wan, F. Ye, X. Yu, H. Du, Y. You, and I. Tsang. Hbvla: Pushing 1-bit post-training quantization for vision-language-action models, 2026. URL https://arxiv.org/ abs/2602.13710 .[30] K. Ji, J. Zhou, Y. Meng, Y. Li, H. Cui, and Z. Wang. Sparse actiongen: Accelerating diffusion policy with real-time pruning, 2026. URL https://arxiv.org/abs/2601.12894 .[31] A. Prasad, K. Lin, J. Wu, L. Zhou, and J. Bohg. Consistency policy: Accelerated visuomotor policies via consistency distillation, 2024. URL https://arxiv.org/abs/2405.07503 .[32] M. Clemente, L. Brunswic, R. H. Yang, X. Zhao, Y. Khalil, H. Lei, A. Rasouli, and Y. Li. Two-steps diffusion policy for robotic manipulation via genetic denoising, 2025. URL https: //arxiv.org/abs/2510.21991 .[33] S. Li, L. Sun, and Y. Chen. One-step flow policy: Self-distillation for fast visuomotor policies, 2026. URL https://arxiv.org/abs/2603.12480 .[34] K. Zhou, Q. Chen, D. Peng, Z. Li, X. Li, and J. Gu. Characterizing vision-language-action models across xpus: Constraints and acceleration for on-robot deployment, 2026. URL 
+
+https://arxiv.org/abs/2604.24447 .[35] S. Han, H. Mao, and W. J. Dally. Deep compression: Compressing deep neural networks with pruning, trained quantization and huffman coding. arXiv preprint arXiv:1510.00149 , 2015. [36] A. G. Howard, M. Zhu, B. Chen, D. Kalenichenko, W. Wang, T. Weyand, M. Andreetto, and H. Adam. Mobilenets: Efficient convolutional neural networks for mobile vision applications, 2017. URL https://arxiv.org/abs/1704.04861 .[37] G. Xiao, J. Lin, M. Seznec, H. Wu, J. Demouth, and S. Han. SmoothQuant: Accurate and efficient post-training quantization for large language models. In Proceedings of the 40th International Conference on Machine Learning , 2023. [38] J. Lin, J. Tang, H. Tang, S. Yang, W.-M. Chen, W.-C. Wang, G. Xiao, X. Dang, C. Gan, and S. Han. Awq: Activation-aware weight quantization for llm compression and acceleration. In 
+
+MLSys , 2024. [39] T. Liang, J. Glossner, L. Wang, S. Shi, and X. Zhang. Pruning and quantization for deep neural network acceleration: A survey, 2021. URL https://arxiv.org/abs/2101.09671 .[40] X. Zhu, J. Li, Y. Liu, C. Ma, and W. Wang. A survey on model compression for large language models, 2024. URL https://arxiv.org/abs/2308.07633 .[41] M. Li, Y. Wang, and D. Ramanan. Towards streaming perception. In ECCV , 2020. [42] H. Kang, Q. Zhang, H. Cai, W. Xu, T. Krishna, Y. Du, and T. Weissman. Win fast or lose slow: Balancing speed and accuracy in latency-sensitive decisions of llms. Advances in Neural Information Processing Systems , 38:150862–150884, 2026. [43] W. Jiang, J. Clemons, K. Sankaralingam, and C. Kozyrakis. How fast can i run my vla? demystifying vla inference performance with vla-perf, 2026. URL https://arxiv.org/ abs/2602.18397 .[44] A. Taherin, J. Lin, A. Akbari, A. Akbari, P. Zhao, W. Chen, D. Kaeli, and Y. Wang. Cross-platform scaling of vision-language-action models from edge to cloud gpus, 2026. URL 
+
+https://arxiv.org/abs/2509.11480 .11 [45] Z. Li, H. Yang, Z. Chen, Y. Chen, C. Li, et al. From inference efficiency to embodied efficiency: Revisiting efficiency metrics for vision-language-action models. arXiv preprint arXiv:2603.19131 , 2026. [46] T. Z. Zhao, V. Kumar, S. Levine, and C. Finn. Learning fine-grained bimanual manipulation with low-cost hardware. arXiv preprint arXiv:2304.13705 , 2023. [47] I. Tolstikhin, N. Houlsby, A. Kolesnikov, L. Beyer, X. Zhai, T. Unterthiner, J. Yung, A. Steiner, D. Keysers, J. Uszkoreit, M. Lucic, and A. Dosovitskiy. Mlp-mixer: An all-mlp architecture for vision, 2021. URL https://arxiv.org/abs/2105.01601 .[48] H. Xie, B. Wen, J. Zheng, Z. Chen, F. Hong, H. Diao, and Z. Liu. Dynamicvla: A vision-language-action model for dynamic object manipulation. arXiv preprint arXiv:2601.22153 ,2026. [49] NVIDIA Jetson AGX Orin — nvidia.com. https://www.nvidia.com/en-us/ autonomous-machines/embedded-systems/jetson-orin/ , . [50] 3090 & 3090 Ti Graphics Cards — nvidia.com. https://www.nvidia.com/en-us/ geforce/graphics-cards/30-series/rtx-3090/ , . [51] NVIDIA RTX 6000 Ada Generation Graphics Card — nvidia.com. https://www.nvidia. com/en-us/products/workstations/rtx-6000/ , . [52] B. Liu, Y. Zhu, C. Gao, Y. Feng, Q. Liu, Y. Zhu, and P. Stone. Libero: Benchmarking knowl-edge transfer for lifelong robot learning. arXiv preprint arXiv:2306.03310 , 2023. [53] S. Nasiriany, A. Maddukuri, L. Zhang, A. Parikh, A. Lo, A. Joshi, A. Mandlekar, and Y. Zhu. Robocasa: Large-scale simulation of everyday tasks for generalist robots. In Robotics: Science and Systems (RSS) , 2024. [54] T. Chen, Z. Chen, B. Chen, Z. Cai, Y. Liu, Z. Li, Q. Liang, X. Lin, Y. Ge, Z. Gu, W. Deng, Y. Guo, T. Nian, X. Xie, Q. Chen, K. Su, T. Xu, G. Liu, M. Hu, H.-a. Gao, K. Wang, Z. Liang, Y. Qin, X. Yang, P. Luo, and Y. Mu. Robotwin 2.0: A scalable data generator and benchmark with strong domain randomization for robust bimanual robotic manipulation. arXiv preprint arXiv:2506.18088 , 2025. [55] M. Matthews, M. Beukman, C. Lu, and J. Foerster. Kinetix: Investigating the training of general agents through open-ended physics-based control tasks. 2025. URL https://arxiv. org/abs/2410.23208 .[56] e-Series Robots — universal-robots.com. https://www.universal-robots.com/ products/e-series/ .[57] S. Ashkboos, A. Mohtashami, M. L. Croci, B. Li, P. Cameron, M. Jaggi, D. Alistarh, T. Hoefler, and J. Hensman. Quarot: Outlier-free 4-bit inference in rotated llms, 2024. URL https: //arxiv.org/abs/2404.00456 .[58] R. Cadene, S. Alibert, F. Capuano, M. Aractingi, A. Zouitine, P. Kooijmans, J. Choghari, M. Russi, C. Pascal, S. Palma, M. Shukor, J. Moss, A. Soare, D. Aubakirova, Q. Lhoest, Q. Gallou´ edec, and T. Wolf. Lerobot: An open-source library for end-to-end robot learning. In The Fourteenth International Conference on Learning Representations , 2026. URL https: //arxiv.org/abs/2602.22818 .[59] C. Chi, Z. Xu, C. Pan, E. Cousineau, B. Burchfiel, S. Feng, R. Tedrake, and S. Song. Universal manipulation interface: In-the-wild robot teaching without in-the-wild robots, 2024. URL 
+
+https://arxiv.org/abs/2402.10329 .12 [60] E. J. Hu, Y. Shen, P. Wallis, Z. Allen-Zhu, Y. Li, S. Wang, L. Wang, and W. Chen. Lora: Low-rank adaptation of large language models, 2021. URL https://arxiv.org/abs/2106. 09685 .[61] A. Radford, J. W. Kim, C. Hallacy, A. Ramesh, G. Goh, S. Agarwal, G. Sastry, A. Askell, P. Mishkin, J. Clark, G. Krueger, and I. Sutskever. Learning transferable visual models from natural language supervision, 2021. URL https://arxiv.org/abs/2103.00020 .[62] A. Dosovitskiy, L. Beyer, A. Kolesnikov, D. Weissenborn, X. Zhai, T. Unterthiner, M. De-hghani, M. Minderer, G. Heigold, S. Gelly, J. Uszkoreit, and N. Houlsby. An image is worth 16x16 words: Transformers for image recognition at scale, 2021. URL https: //arxiv.org/abs/2010.11929 .13 Contents 
+
+A Detailed Analysis of the TISED (Section 3) 15 
+
+A.1 When Does a “Sweet Spot” Exist? . . . . . . . . . . . . . . . . . . . . . . . . . . 15 A.2 How Does the “Sweet Spot” Move with Hardware? . . . . . . . . . . . . . . . . . 17 A.3 Assumptions and Limitations . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 18 
+
+B Simulation Experiment Details (Section 4.2, 4.3, 4.4) 18 
+
+B.1 Optimization Method Settings . . . . . . . . . . . . . . . . . . . . . . . . . . . . 18 B.2 Task Settings . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 20 B.3 Result Visualization . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 21 
+
+C Real-World Experiment Details (Section 4.5) 22 
+
+C.1 Static Experiment Settings . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 22 C.2 Dynamic Experiment Settings . . . . . . . . . . . . . . . . . . . . . . . . . . . . 23 
+
+D Additional Discussions 23 
+
+D.1 About “Successful-Only Trial’s Chunks” . . . . . . . . . . . . . . . . . . . . . . . 23 D.2 Stability and Motion Smoothness . . . . . . . . . . . . . . . . . . . . . . . . . . . 23 14 A Detailed Analysis of the TISED (Section 3) 1
+
+This section provides a quantitative interpretation of the task-level inference speedup effect de-2
+
+composition (TISED) introduced in the main paper. Table 2 summarizes the notation used in the 3
+
+derivation. 4
+
+Symbol Meaning Symbol Meaning 
+
+h Compute hardware platform. ρh Ratio Tinf ,h /T act .
+
+α Policy-intrinsic inference-time ratio, with α ∈ [αmin , 1] .
+
+n′ Discrete asynchronous overlap depth, with n′ ∈ { 0, . . . , n }.
+
+αmin Smallest α whose policy accuracy re-mains above zero. 
+
+Tinf ,h Baseline inference time on h. Tact Execution time of one atomic action. 
+
+n Actions in one chunk. T base chunk ,h Baseline action-chunk time. 
+
+T pl /ea chunk ,h Optimized per-chunk time. N pl /ea Chunks required for task completion. 
+
+T pl /ea task ,h End-to-end completion time. Dpl /ea act ,h Observation-to-action delay. 
+
+q Action quality. ωenv Environment evolution rate. 
+
+zh Staleness exposure Dact ,h ωenv . Φ Task response function. 
+
+Psucc ,h Modeled dynamic-task success rate. 
+
+> 5
+
+Table 2: Notation used in the quantitative analysis of the TISED framework. 
+
+A.1 When Does a “Sweet Spot” Exist? 6
+
+A.1.1 Optimization Variables 7
+
+Policy-Intrinsic Optimization. We analyze the inference-time ratio α ∈ [αmin , 1] , where smaller 8
+
+α means more aggressive lightweighting. All derivatives with respect to α below are therefore 9
+
+taken in the direction of less aggressive lightweighting. When reading the same result along the 10 
+
+optimization-strength direction used in the plots, the direction is reversed. 11 
+
+Execution-Aware Optimization. We analyze the overlap depth n′ ∈ { 0, . . . , n }, where larger n′
+
+> 12
+
+means more aggressive overlap between inference and action execution. 13 
+
+A.1.2 Static Tasks 14 
+
+Policy-Intrinsic Optimization. For static tasks, we have 15 
+
+T pl task ,h (α) = N pl (α)T pl chunk ,h (α), T pl chunk ,h (α) = αT inf ,h + nT act . (9) Increasing α means moving toward a more conservative policy: action quality improves and the 16 
+
+required chunk count decreases, i.e., dN pl (α)/dα < 0, but each chunk becomes slower. These two 17 
+
+monotone effects act in opposite directions on T pl task ,h = N pl T pl chunk ,h : mild lightweighting can be 18 
+
+dominated by the per-chunk speedup, whereas aggressive lightweighting can be dominated by the 19 
+
+growth of N pl . The derivative of T pl task ,h with respect to α can be written as a competition between 20 
+
+the cost of slower chunks and the benefit of requiring fewer chunks: 21 
+
+dT pl task ,h (α)dα = N pl (α)Tinf ,h 
+
+| {z }
+
+> cost: slower chunks
+
+−
+
+
+
+− dN pl (α)dα
+
+
+
+(αT inf ,h + nT act )
+
+| {z }
+
+> benefit: fewer chunks
+
+. (10) An interior minimum occurs only when the derivative of the task time changes sign: 22 
+
+dT pl task ,h (α)dα α=αmin 
+
+< 0, dT pl task ,h (α)dα α=1 
+
+> 0. (11) Otherwise, the shortest Ttask setting can lie at one endpoint. 23 
+
+15 Execution-Aware Optimization. For execution-aware optimization, the corresponding objective 24 
+
+is 25 
+
+T ea task ,h (n′) = N ea (n′)T ea chunk ,h (n′), T ea chunk ,h (n′) = Tinf ,h + nT act − min {Tinf ,h , n ′Tact } .
+
+(12) Larger n′ means more aggressive overlap. Increasing n′ can reduce T ea chunk ,h by hiding more in-26 
+
+ference behind action execution, but excessive overlap may increase N ea because action quality or 27 
+
+observation–execution alignment degrades. Let ∆f (n′) = f (n′ + 1) − f (n′); then 28 
+
+∆T ea task ,h (n′) = T ea task ,h (n′ + 1) − T ea task ,h (n′)= ∆ N ea (n′)T ea chunk ,h (n′ + 1) 
+
+| {z }
+
+> cost: more chunks
+
+− N ea (n′) −∆T ea chunk ,h (n′)| {z }
+
+> benefit: faster chunks
+
+. (13) An interior discrete sweet spot appears when the first overlap step improves completion time but 29 
+
+excessive overlap later hurts: 30 
+
+∆T ea task ,h (0) < 0, ∆T ea task ,h (n − 1) > 0. (14) Otherwise, the shortest Ttask setting can lie at one endpoint. 31 
+
+A.1.3 Dynamic Tasks 32 
+
+Policy-Intrinsic Optimization. We model the policy-intrinsic dynamic-task success rate as 33 
+
+P pl succ ,h (α) ≈ Φ
+
+
+
+qpl (α), z pl  
+
+> h
+
+(α)
+
+
+
+, zpl  
+
+> h
+
+(α) = Dpl act ,h (α)ωenv = αT inf ,h ωenv . (15) Here Φ is assumed to be monotone in the two arguments: 34 
+
+Φq = ∂Φ
+
+∂q ≥ 0, Φz = ∂Φ
+
+∂z ≤ 0,
+
+meaning that better action quality increases the modeled success rate, while larger staleness ex-35 
+
+posure decreases it. Increasing α usually improves action quality but also increases action delay: 36 
+
+dqpl (α)/dα ≥ 0 and dzpl  
+
+> h
+
+(α)/dα = Tinf ,h ωenv > 0. Thus, differentiating the surrogate response 37 
+
+gives 38 
+
+dP pl succ ,h (α)dα ≈ Φq
+
+dqpl (α)dα| {z }
+
+> benefit: better action quality
+
+− [−Φz ] Tinf ,h ωenv 
+
+| {z }
+
+> cost: larger action delay
+
+. (16) An interior dynamic-task sweet spot appears when this trade-off creates a sign change: 39 
+
+dP pl succ ,h 
+
+dα α=αmin 
+
+> 0, dP pl succ ,h 
+
+dα α=1 
+
+< 0. (17) Otherwise, the best Psucc setting can lie at one of the endpoints. 40 
+
+Execution-Aware Optimization. The same response model becomes 41 
+
+P ea succ ,h (n′) ≈ Φ( qea (n′), z ea  
+
+> h
+
+(n′)) , zea  
+
+> h
+
+(n′) = max {0, T inf ,h − n′Tact }ωenv . (18) Increasing n′ means more aggressive execution-aware optimization. It can reduce staleness exposure 42 
+
+by hiding inference behind action execution, but it may also degrade action quality or observation– 43 
+
+execution alignment. Let ∆f (n′) = f (n′ + 1) − f (n′). Then ∆zea  
+
+> h
+
+(n′) ≤ 0 before overlap 44 
+
+saturation, while ∆qea (n′) can be negative when deeper overlap hurts action quality. A first-order 45 
+
+finite-difference approximation gives 46 
+
+∆P ea succ ,h (n′) ≈ [−Φz ] [ −∆zea  
+
+> h
+
+(n′)] 
+
+| {z }
+
+> benefit: smaller action delay
+
+− Φq [−∆qea (n′)] 
+
+| {z }
+
+> cost: degraded action quality
+
+. (19) The corresponding discrete condition for an interior dynamic-task sweet spot is 47 
+
+∆P ea succ ,h (0) > 0, ∆P ea succ ,h (n − 1) < 0. (20) Otherwise, the best Psucc setting can lie at one endpoint. 48 
+
+16 A.2 How Does the “Sweet Spot” Move with Hardware? 49 
+
+A.2.1 Static Tasks: Take Execution-Aware Optimization as Example 50 
+
+We assume N ea (n′ + 1) ≥ N ea (n′). The hardware-dependent sweet spot is 51 
+
+(n′)⋆h ∈ arg min  
+
+> n′∈{ 0,...,n }
+
+N ea (n′) ( ρh + n − min( ρh, n ′)) . (21) For a local interpretation, suppose a reference hardware h0 with ρ0 has an old sweet spot (n′)⋆
+
+> 0
+
+. If 52 
+
+(n′)⋆ 
+
+> 0
+
+lies in the unsaturated branch, i.e., (n′)⋆ 
+
+> 0
+
+< ρ 0, then 53 
+
+T ea task (n′; ρ) = Tact N ea (n′)( ρ + n − n′). (22) The complete derivative with respect to n′ and the reference sweet-spot condition are 54 
+
+∂T ea task 
+
+∂n ′ = Tact 
+
+ dN ea (n′)dn′ (ρ + n − n′) − N ea (n′)
+
+
+
+,∂T ea task 
+
+∂n ′ n′=( n′)⋆ 
+
+> 0,ρ =ρ0
+
+= Tact 
+
+ dN ea (n′)dn′ (ρ0 + n − n′) − N ea (n′)
+
+
+
+> n′=( n′)⋆
+> 0
+
+= 0 .
+
+(23) Evaluating the slope at the same old setting after changing hardware to ρ1 gives 55 
+
+∂T ea task 
+
+∂n ′ n′=( n′)⋆ 
+
+> 0,ρ =ρ1
+
+= Tact (ρ1 − ρ0) dN ea (n′)dn′ n′=( n′)⋆
+
+> 0
+
+. (24) We have dN ea (n′)dn′ ≥ 0, corresponding to N ea (n′ + 1) − N ea (n′) ≥ 0 in the finite sweep. Thus, in 56 
+
+the unsaturated branch, slower compute hardware with ρ1 > ρ 0 gives a positive local slope at the 57 
+
+old sweet spot, so the relaxed optimum tends to move toward smaller n′.58 
+
+If the new hardware places the setting in the saturated branch, i.e., n′ ≥ ρ1, the per-chunk time 59 
+
+becomes T ea chunk = nT act and no longer decreases with deeper overlap. Under dN ea  
+
+> dn′
+
+≥ 0, increasing 60 
+
+n′ in this branch can only keep or increase T ea task .61 
+
+A.2.2 Dynamic Tasks: Take Policy-Intrinsic Optimization as Example 62 
+
+For the measured policy-intrinsic sweep, 63 
+
+α⋆h ∈ arg max  
+
+> αi∈A
+
+Φ
+
+
+
+qpl  
+
+> i
+
+, α iρhTact ωenv 
+
+
+
+, (25) where qpl  
+
+> i
+
+denotes the measured or induced action quality at setting αi. Suppose a reference hard-64 
+
+ware h0 with ρ0 has an interior dynamic sweet spot α⋆
+
+> 0
+
+, we have 65 
+
+P pl succ (α; ρ) ≈ Φ qpl (α), αρT act ωenv 
+
+ , (26) Let zpl (α, ρ ) = αρT act ωenv . The complete derivative with respect to α is 66 
+
+∂P pl succ 
+
+∂α = Φ q
+
+ qpl (α), z pl (α, ρ ) dqpl (α)dα + Φ z
+
+ qpl (α), z pl (α, ρ ) ρT act ωenv , (27) where Φq and Φz denote the partial derivatives of Φ with respect to action quality and normalized 67 
+
+staleness, respectively. The reference sweet spot therefore satisfies 68 
+
+
+
+Φq
+
+dqpl 
+
+dα + Φ z ρ0Tact ωenv 
+
+ 
+
+> α=α⋆
+> 0,ρ =ρ0
+
+= 0 . (28) Ignoring higher-order sensitivity changes of Φ, the local slope after changing hardware to ρ1 be-69 
+
+comes 70 
+
+∂P pl succ 
+
+∂α α=α⋆ 
+
+> 0,ρ =ρ1
+
+≈ (ρ1 − ρ0)Tact ωenv Φz |α=α⋆  
+
+> 0,ρ =ρ0
+
+. (29) Here z = αρT act ωenv denotes normalized staleness, and Φz ≤ 0 means that larger staleness lowers 71 
+
+success. Therefore, a slower compute platform with ρ1 > ρ 0 makes the old sweet spot have a nega-72 
+
+tive local slope, so the maximizer tends to move toward smaller α, i.e., a lower-delay but potentially 73 
+
+lower-quality policy setting. 74 
+
+17 A.3 Assumptions and Limitations 75 
+
+The analysis above is intentionally structured but lightweight. The analysis above makes several 76 
+
+idealized assumptions. First, quantities such as N pl (α) and N ea (n′) are specified only through 77 
+
+their qualitative trends. Their concrete functional forms are task-dependent and must be obtained 78 
+
+from empirical measurement. Second, Φ is used only as an abstract response function that describes 79 
+
+how dynamic-task success depends on action quality and action delay. We do not assume that Φ has 80 
+
+a fixed parametric form or represents a calibrated physical law. 81 
+
+B Simulation Experiment Details (Section 4.2, 4.3, 4.4) 82 
+
+This section describes how we design the optimization methods and choose the task regimes. 83 
+
+B.1 Optimization Method Settings 84 
+
+We summarize the policy models used in the main paper and their corresponding static and dynamic 85 
+
+evaluation configurations in Tables 3 and 4. 86                           
+
+> Model Task and optimization method Default action-generation steps
+> nAction freq. (Hz) Texec (ms) nT exec (ms) Cosmos-Policy LIBERO &Asynchronous Inference; RoboCasa & Quantization 116 20 50.0 800.0 LingBot-VA RoboTwin & Pruning 10 216.7 60.0 120.0
+> π0.5LIBERO & Asynchronous Inference 10 530 33.3 166.7
+
+Table 3: Simulation static-task configurations. 
+
+Model Task and optimization method Default refinement-steps MLP-Mixer Kinetix & flow-style refinement-step reduction 5DynamicVLA DOM-CR & flow-matching refinement-step reduction 10 
+
+Table 4: Simulation dynamic-task configurations. 
+
+Quantization. At the operator level, we replace the FP16 linear layers in Transformer-based 87 
+
+policies with integer linear operators, including int4-weight/int4-activation (W4A4) and int8-88 
+
+weight/int8-activation (W8A8) variants. The additional quantization and dequantization operators 89 
+
+are fused into the surrounding operators to reduce inference overhead. We do not apply extra trans-90 
+
+formations such as smoothing [37] or rotation [57]. To obtain fine-grained operating points and 91 
+
+expose potential sweet spots, we construct a progressive tier-10 quantization sweep as in [42]; the 92 
+
+Cosmos-Policy quantization configurations are listed in Table 5. 93 
+
+Pruning. For the pruning sweep, we use LingBot-VA [10] on RoboTwin tasks and implement 94 
+
+a KV-cache pruning method. In the default RoboTwin setting, attn window =72, which allocates 95 
+
+up to 36 historical visual-latent chunks and 36 historical action chunks in the baseline cache. Our 96 
+
+pruning further shortens the readable window inside this native cache. Let Cvis  
+
+> <t
+
+and Cact  
+
+> <t
+
+denote the 97 
+
+valid visual-latent and action KV slots retained by the native attention window before step t. The 98 
+
+pruned attention reads only 99 
+
+Rt = Recent Wlat 
+
+ Cvis 
+
+> <t
+
+ ∪ Recent Wact 
+
+ Cact 
+
+> <t
+
+ , ht = Attn( qt, K Rt , V Rt ) , (30) where Recent W (·) keeps the most recent W slots of the corresponding cache stream. Figure 7 100 
+
+illustrates the difference between the native-window baseline and our read-window pruning. The 101 
+
+pruned setting keeps cache writing unchanged but exposes only the most recent Wlat and Wact 102 
+
+entries to attention. 103 
+
+Table 6 lists the operating points used in the sweep. To make the pruning strength directly compa-104 
+
+rable across settings, we first report the total readable KV budget retained relative to the baseline. 105 
+
+18 Main label Speedup vs. FP16 W4A4 sites Remaining higher-precision sites fp16 1.00 × None All candidate sites remain FP16. w8a8 1.33 × None All candidate sites use W8A8. w4-t1 1.36 × ca.out@late W8A8: 
+
+ca.out@early/mid sa.*@all ca.q/k/v@all mlp.l1/l2@all 
+
+w4-t2 1.41 × ca.out@late mlp.l1@early 
+
+W8A8: 
+
+ca.out@early/mid mlp.l1@mid/late sa.*@all ca.q/k/v@all mlp.l2@all 
+
+w4-t3 1.42 × ca.out@early/late mlp.l1@early 
+
+W8A8: 
+
+ca.out@mid mlp.l1@mid/late sa.*@all ca.q/k/v@all mlp.l2@all 
+
+w4-t4 1.47 × ca.out@early/late mlp.l1@early/late 
+
+W8A8: 
+
+ca.out@mid mlp.l1@mid sa.*@all ca.q/k/v@all mlp.l2@all 
+
+w4-t5 1.53 × ca.out@early/late mlp.l1@all 
+
+W8A8: 
+
+ca.out@mid sa.*@all ca.q/k/v@all mlp.l2@all 
+
+w4-t6 1.55 × ca.out@all mlp.l1@all 
+
+W8A8: 
+
+sa.*@all ca.q/k/v@all mlp.l2@all 
+
+w4-t7 1.67 × ca.out@all mlp.l1/l2@all 
+
+W8A8: 
+
+sa.*@all ca.q/k/v@all 
+
+w4-t8 1.88 × ca.out@all mlp.l1/l2@all sa.q/k/out@all 
+
+W8A8: 
+
+sa.v@all ca.q/k/v@all 
+
+w4-t9 2.05 × sa.q/k/v/out@all ca.q/out@all mlp.l1/l2@all 
+
+W8A8: 
+
+ca.k/v@all 
+
+w4-t10 2.09 × sa.q/k/v/out@all ca.q/k/v/out@all mlp.l1/l2@all 
+
+None; all candidate sites use W4A4. 
+
+Table 5: Mapping between the quantization shorthand and the progressive tier-10 Cosmos-Policy quantization settings. Speedup is measured from LIBERO 5-step latency profiling relative to all-FP16. The sweep starts from all-W8A8 and progressively converts selected DiT attention/MLP linear sites to W4A4. Here, early/mid/late denote DiT blocks B0--B9/B10--B19/B20--B27 ;
+
+sa , ca , and mlp denote self-attention, cross-attention, and feed-forward MLP sites; q/k/v/out 
+
+denote attention projections, and l1/l2 denote the two MLP linear layers. 19 (a) Baseline: Default KV Read Window  (b) Pruned: Smaller KV Read Window     
+
+> older recent Readable KV
+> Default window
+> = latent tokens = action tokens
+> Smaller window
+> older
+> recent
+> Computations
+> over time
+> older recent Readable KV
+> older
+> recent
+> Computations
+> over time
+> = latent tokens = action tokens
+
+Figure 7: KV-cache read-window pruning for LingBot-VA. The baseline attends to all valid visual-latent and action KV slots retained by the native attention window. The pruned setting further restricts attention to the most recent readable cache windows, while the cache-writing path remains unchanged.                               
+
+> Config Readable KV Compression Ratio Visual KV budget Action KV budget Visual hist. chunks Action hist. chunks base 100.0% 8640 1152 36.0 36.0 p1 13.1% 1024 256 4.3 8.0 p2 6.5% 512 128 2.1 4.0 p3 3.3% 256 64 1.1 2.0 p4 1.6% 128 32 0.5 1.0
+
+Table 6: LingBot-VA KV-cache read-window configurations. The “readable KV Compression Ra-tio” column reports the total readable KV Compression Ratio, visual plus action, normalized by the baseline, so smaller values indicate more aggressive lightweighting. Baseline are determined by the native attention window, and pruning reduces only the readable KV budget inside that window. This normalized value decreases monotonically from base to p4 , so smaller values indicate more 106 
+
+aggressive lightweighting. The KV-budget columns then report the maximum number of readable 107 
+
+historical tokens for the visual-latent and action streams. The chunk columns convert these to-108 
+
+ken budgets using the RoboTwin configuration. Each visual-latent chunk contains 240 KV tokens, 109 
+
+and each action chunk contains 32 KV tokens. For example, 1024 /256 means that each action-110 
+
+generation step can read at most the most recent 1024 visual-latent KV entries and 256 action KV 111 
+
+entries, corresponding to roughly 4.3 visual chunks and 8 action chunks. 112 
+
+Action-Generation Step-Count Reduction. We reduce the number of action-generation steps 113 
+
+used to generate each action chunk. We then evaluate a progressive step sweep to characterize the 114 
+
+trade-off between computing speed and action quality. 115 
+
+Asynchronous Inference. We adopt the simplified asynchronous-inference model from 116 
+
+VLASH [25]. The overlap depth between inference and execution is controlled by n′: at simulation 117 
+
+step t, the policy receives the stale observation from t − n′ steps earlier. This emulates delayed 118 
+
+machine-vision input due to overlapping policy inference and action execution. 119 
+
+B.2 Task Settings 120 
+
+We group the simulation benchmarks according to the task regimes defined in the main paper: 121 
+
+LIBERO, RoboCasa, and the LeRobot(RoboTwin) tasks are used as static-task benchmarks, while 122 
+
+Kinetix and DOM-CR are used as dynamic-task benchmarks. 123 
+
+LIBERO. LIBERO [52] is a tabletop manipulation benchmark suite designed to evaluate policy 124 
+
+generalization and knowledge transfer across object, spatial, goal, and long-horizon task variations. 125 
+
+We use it as a controlled static-task setting because the task-relevant object and goal states are 126 
+
+assumed to remain unchanged during policy inference. 127 
+
+20 RoboCasa. RoboCasa [53] provides large-scale simulated household manipulation tasks with di-128 
+
+verse kitchen layouts, objects, and task instances. Despite the static-scene assumption, RoboCasa 129 
+
+tasks are typically more challenging than those in LIBERO. 130 
+
+LeRobot. LeRobot [58] is an open-source robot-learning ecosystem that standardizes datasets, 131 
+
+policy training, and evaluation interfaces across simulated and real manipulation tasks. For LingBot-132 
+
+VA, the data and evaluation interface follow the LeRobot-style format, while the underlying simu-133 
+
+lated environments are generated from RoboTwin [54], a SAPIEN-based dual-arm manipulation 134 
+
+benchmark with multi-camera observations and diverse bimanual tasks. These tasks are treated as 135 
+
+static manipulation tasks because task-relevant objects do not deliberately move during policy infer-136 
+
+ence. 137 
+
+Kinetix. Kinetix [55] is a 2D physics-based control benchmark with procedurally designed tasks 138 
+
+involving contact-rich interaction, object manipulation, locomotion, balance, and timing-sensitive 139 
+
+control. The policy is an iterative, flow-style action generator with an MLP-Mixer architecture [25], 140 
+
+and we vary the number of refinement steps in {1, 3, 5} to trade off zero-delay action quality against 141 
+
+inference latency. We evaluate both zero-delay inference, denoted as inf-hw in the main text, 142 
+
+and hardware-induced delay. For the latter, we profile inference latency τ and map it to an inte-143 
+
+ger control-step delay d = round( τ / 33 .33ms) , since Kinetix applies actions every two 16.67 ms 144 
+
+physics steps. Consequently, different profiled latencies can fall into the same simulator delay bin. 145                                          
+
+> Execution setting Steps τ(ms) dEffective delay (ms) Ada 6000 11.80 00.00 Ada 6000 33.81 00.00 Ada 6000 59.82 00.00 AGX 30W 17.78 00.00 AGX 30W 321.44 133.33 AGX 30W 535.80 133.33 AGX 15W 17.78 00.00 AGX 15W 333.75 133.33 AGX 15W 554.63 266.67
+
+Table 7: Kinetix latency-to-delay configuration. 
+
+DOM. The Dynamic Object Manipulation (DOM) benchmark is introduced with Dynam-146 
+
+icVLA [48] to evaluate policies on moving-object manipulation, where the environment continues to 147 
+
+evolve during inference delay. It organizes dynamic scenarios along three dimensions: interaction, 148 
+
+perception, and generalization. We focus on Closed-loop Reactivity (CR), a sub-dimension of in-149 
+
+teraction that evaluates how quickly a policy adjusts to objects moving at different speeds. We vary 150 
+
+the action expert’s refinement steps in {1, 2, 5, 10 } and inject simulator delays calibrated to emulate 151 
+
+inference latency on different hardware platforms. We evaluate object-motion speed scales of 100% 152 
+
+and 125% relative to the original dataset. For each combination of object speed, refinement-step 153 
+
+setting, and latency condition, we run 50 trials and report the task success rate and action delay. 154 
+
+B.3 Result Visualization 155 
+
+Figure 8 replots the four static-task tables in Section 4.2 as line charts. All three quantities are 156 
+
+normalized by the corresponding baseline value in each panel. The star marks the operating point 157 
+
+with the lowest Ttask .158 
+
+Notably, the variation trends manifest differently across different tasks. For example, for the pick-159 
+
+and-place sink-to-counter task in Figure 8(a), N remains roughly stable through moderate quanti-160 
+
+zation, so the latency reduction dominates and the shortest per-task time appears at w4-t3 . For the 161 
+
+turn-off-microwave task in Figure 8(b), N increases quickly even under mild quantization, so the 162 
+
+full-precision baseline remains the shortest end-to-end time. 163 
+
+21 fp16    
+
+> w8a8
+> w4-t1
+> w4-t2
+> w4-t3
+> w4-t4
+> w4-t5
+> 0.95
+> 1.00
+> 1.05
+> 1.10
+> 1.15
+> 1.20
+> 1.25
+> relative to baseline
+> (a) Cosmos @ RoboCasa PnP
+> fp16
+> w8a8
+> w4-t1
+> w4-t2
+> w4-t3
+> w4-t4
+> w4-t5
+> 1.0
+> 1.1
+> 1.2
+> 1.3
+> 1.4
+> 1.5
+> 1.6
+> 1.7
+> relative to baseline
+> (b) Cosmos @ RoboCasa Microwave
+> base
+> p1
+> p2
+> p3
+> p4
+> 0.9
+> 1.0
+> 1.1
+> 1.2
+> 1.3
+> 1.4
+> 1.5
+> relative to baseline
+> (c) LingBot-VA @ LeRobot stack bowls
+> d0
+> d1
+> d2
+> d3
+> d4
+> 0.96
+> 0.98
+> 1.00
+> 1.02
+> 1.04
+> 1.06
+> 1.08
+> 1.10
+> 1.12
+> relative to baseline
+> (d) pi0.5 @ LIBERO async
+> Tchunk NTtask best
+
+Figure 8: Visualization of the static-task measurements reported in Section 4.2. Values are normal-ized within each panel by the baseline configuration. In (a), (c), and (d), mild optimization reduces 
+
+Ttask , while more aggressive settings eventually increase the required chunk count N enough to reverse the gain, producing an interior sweet spot. In (b), the baseline is already the best measured point, showing that such a sweet spot is not guaranteed and its existence and location are task-dependent. 
+
+C Real-World Experiment Details (Section 4.5) 164 
+
+We use a UR5e robot arm [56] to validate the two task regimes in the physical world. The real-165 
+
+world robot setup follows UMI [59], with the mirrors on the gripper removed. The setup consists of 166 
+
+a UR5e robot arm, a UMI gripper, and a GoPro camera for RGB observation. All experiments were 167 
+
+conducted with the same robot arm speed setting of 30% and a control frequency of 10 Hz. 168 
+
+To evaluate how compute capability, i.e., ρ, affects Ttask or task accuracy, we first profile 169 
+
+the policy model’s inference latency Tinf across different hardware platforms. We then intro-170 
+
+duce a hardware-latency scaling factor λ on the RTX 4070 platform, i.e., Ttask ,simulated =171 
+
+λT task ,original , ρ simulated = λρ original , which allows us to simulate the inference behavior of dif-172 
+
+ferent compute platforms under the same task environment. 173 
+
+C.1 Static Experiment Settings 174 
+
+We collected 198 expert demonstrations using the UMI gripper and fine-tuned the π0.5 [4] model 175 
+
+for 30,000 training steps using LoRA [60]. During LoRA fine-tuning, we initialized the policy from 176 
+
+the π0.5-base model, which consists of two components: a VLM backbone and an action expert. 177 
+
+The VLM backbone is PaliGemma [14], composed of a SigLIP vision encoder and a Gemma-2B 178 
+
+language model, while the action expert is a 300M Gemma model. We fine-tuned both components 179 
+
+with a learning rate of 2.5 × 10 −5 and a batch size of 32. 180 
+
+The static manipulation task requires the robot to pick up a red cube on the tabletop and place it into 181 
+
+a target box. A trial is considered successful only if the gripper fingers open and release the cube 182 
+
+22 into the target box. Each rollout started from the same predefined initial position. For each rollout 183 
+
+setting, we conducted 5 trials and reported the corresponding task performance. 184 
+
+C.2 Dynamic Experiment Settings 185 
+
+We collected 196 expert demonstrations using the UMI gripper and trained the diffusion policy [23] 186 
+
+for 130 epochs. The diffusion policy model is composed of a pretrained ViT vision encoder and a 187 
+
+DiT action decoder. The DiT module was trained from scratch with a learning rate of 3.0 × 10 −4.188 
+
+For the visual encoder, we initialized the ViT backbone from the CLIP [61] pretrained ViT-L/14 189 
+
+model [62] and trained it with a learning rate of 3.0 × 10 −5 and a batch size of 32. 190 
+
+The dynamic manipulation task requires the robot to grasp the red cube as it moves on a conveyor. 191 
+
+We evaluate grasping performance using a three-level score: 2 indicates that the red cube is suc-192 
+
+cessfully grasped and held by both gripper fingers; 1 indicates that only one gripper finger contacts 193 
+
+the red cube; and 0 indicates that neither gripper finger reaches the red cube. This scoring criterion 194 
+
+reports both the robot’s reaction speed and motion quality in the dynamic task. The conveyor moved 195 
+
+at a constant speed of 6.25 cm/s during evaluation. For each rollout setting, we conducted 30 trials. 196 
+
+Specifically, we used three fixed initial positions and performed 10 trials for each position. 197 
+
+D Additional Discussions 198 
+
+D.1 About “Successful-Only Trial’s Chunks” 199 
+
+Following the successful-episode reporting protocol in prior work [45], we report chunk number and 200 
+
+completion time only over successful rollouts: 201 
+
+Nsucc = E[N | success] , Ttask ,succ = E[Ttask | success] . (31) The successful-only convention avoids an artifact of simulator rollouts: when a task fails, the sim-202 
+
+ulator may continue executing additional chunks and corrective attempts until the rollout horizon is 203 
+
+reached. Including timeout trajectories would inflate N and Ttask , so the averages would reflect the 204 
+
+simulator termination rule instead of the efficiency of completed executions. 205 
+
+D.2 Stability and Motion Smoothness 206 
+
+Prior work [45] analyzed in simulation several embodied-efficiency indicators that deteriorate as the 207 
+
+degree of lightweighting increases, such as jerk. We additionally conduct real-world experiments on 208 
+
+the UR5e platform. 209 
+
+For an end-effector trajectory x0, . . . , xK−1 sampled at interval ∆t, we quantify motion jerk as 210 
+
+bJ = 1
+
+K − 3
+
+> K−4
+
+X
+
+> k=0
+
+xk+3 − 3xk+2 + 3 xk+1 − xk
+
+∆t3
+
+> 22
+
+. (32) We report bJ over static task trials for each step setting in Table 8. The result shows that stronger 211 
+
+lightweighting leads to larger motion jerk in real-world execution. This result is consistent with the 212 
+
+simulator observation in work [45], indicating that aggressive lightweighting can reduce the policy 213 
+
+model’s computation while degrading physical motion quality. 214 
+
+Table 8: Real-world jerk under different step settings. Steps 1 5 7 10 
+
+bJ (m2/s6) 0.512 0.334 0.313 0.283 
+
+23
