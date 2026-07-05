@@ -1,0 +1,54 @@
+{
+  "label": "2026-07-05",
+  "date": "2026-07-05",
+  "generated_at": "2026-07-05T21:27:26",
+  "count": 3,
+  "papers": [
+    {
+      "paper_id": "202607/05/2606.30456v1-vision-language-action-models-experimental-insights-from-a-real-world-ur5-platform",
+      "section": "quick",
+      "title_en": "Vision-Language-Action Models: Experimental Insights from a Real-World UR5 Platform",
+      "authors": "Mathilde Hochedel, Marc Lalonde",
+      "date": "2026-06-29",
+      "pdf": "https://arxiv.org/pdf/2606.30456v1",
+      "score": "7.0",
+      "evidence": "真实机器人数据采集与RLDS格式数据集构建",
+      "tldr": "针对Vision-Language-Action（VLA）模型从仿真研究向真实机器人迁移的难题，本文在UR5e平台上搭建了完整的数据采集、RLDS格式数据集转换、OpenVLA模型微调与部署流水线。通过系统性真实实验发现，离线指标与物理机器人闭环行为之间存在持续性差距，该差距主要源于动作语义、坐标系约定、模态时间对齐、图像预处理一致性及数据集质量等系统级因素。研究将VLA机器人部署重新定义为系统集成问题，而非仅模型容量问题，提供了可复现的评估框架和实验洞见。",
+      "tags": "query:ur",
+      "abstract_en": "This project investigates whether recent Vision-Language-Action (VLA) models can be transferred from controlled research benchmarks to a real-world robotic platform, specifically a UR5e manipulator, in a reproducible and operationally meaningful manner. The work integrates real-robot data acquisition, dataset engineering (compatible with the RLDS format), and the fine-tuning and deployment of OpenVLA and OpenVLA-OFT models, with systematic validation of action representations and control interfaces. The project resulted in several foundational assets: (i) a complete real-robot data acquisition pipeline, (ii) a dataset conversion workflow aligned with RLDS standards, (iii) an initial fine-tuning and inference infrastructure for VLA models, and (iv) a structured set of experimental observations grounded in real-robot trials. These elements collectively establish a reproducible framework for evaluating learning-based manipulation systems beyond simulation. Empirically, the experiments reveal a consistent gap between promising offline indicators and unstable closed-loop behavior on the physical system: this gap cannot be attributed solely to model limitations, it is strongly influenced by action semantics, coordinate frame conventions, temporal alignment between modalities, image preprocessing consistency, and dataset coverage and quality. These observations lead to a key interpretation: the successful deployment of VLA systems in real-world settings depends less on incremental improvements in model capacity and more on precise control of the entire data-model-control pipeline. The project reframes VLA-based robotics from a primarily model-centric challenge to a system-level problem; it highlights the difficulty of running robust task execution on the real robot and provides a clear, experimentally grounded understanding of the conditions required for reliable deployment.",
+      "source": "arxiv",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "paper_id": "202607/05/2607.01067v1-human-centric-transferable-tactile-pre-training-for-dexterous-robotic-manipulation",
+      "section": "quick",
+      "title_en": "Human-Centric Transferable Tactile Pre-Training for Dexterous Robotic Manipulation",
+      "authors": "Chi Zhang, Penglin Cai, Ziheng Xi, Haoqi Yuan, Hao Luo, Wanpeng Zhang, Sipeng Zheng, Chaoyi Xu, Zongqing Lu",
+      "date": "2026-07-01",
+      "pdf": "https://arxiv.org/pdf/2607.01067v1",
+      "score": "7.0",
+      "evidence": "面向灵巧机器人操作的大规模触觉-动作数据集，有助于数据集构建",
+      "tldr": "触觉感知是实现灵巧操作的关键，但现有触觉数据集规模小、覆盖窄，且VLA模型缺乏动力学建模。本文构建大规模人类触觉动作数据集H-Tac，并提出TTP预训练系统，通过统一触觉与动作空间实现人类到机器人的知识迁移，并利用触觉专家预测未来触觉显式建模接触动力学。实验表明该方法在仿真和真实机器人上均表现出优越的泛化与精细操作能力。这项工作为大规模触觉预训练与人机迁移开辟了新路径。",
+      "tags": "query:ur",
+      "abstract_en": "As an essential modality for dexterous and contact-rich tasks, tactile sensing provides precise force feedback that cannot be reliably inferred from vision. However, limited by hardware and data collection systems, existing datasets with tactility remain small in scale and narrow in contact coverage. Meanwhile, Vision-Language-Action (VLA) models with tactile modality are constrained on dynamics-agnostic post-training, which limits the performance ceiling on downstream tasks. In this paper, we present H-Tac, a large-scale tactile-action dataset with 160-hour egocentric human videos containing more than 300 tasks and 135k episodes. Building upon this, we propose Transferable Tactile Pre-Training (TTP), a system of tactile-based pre-training on human data for fine-grained robotic tasks. To bridge the gap between humans and robots, we use unified tactile and action spaces throughout the pre-training and post-training phases, preserving prior knowledge during human-to-robot transfer. By leveraging a tactile expert for future tactile prediction, our framework explicitly models the contact dynamics and precise physical interactions. Extensive experiments in simulation and on real robots demonstrate that our model achieves superior performance, exhibiting robust generalization and fine-grained manipulation capabilities. TTP paves the way for scalable tactile pre-training via human-to-robot transfer.",
+      "source": "arxiv",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "paper_id": "202607/05/2606.28813v1-human2any-human-to-robot-transfer-via-constraint-aware-compositional-planning",
+      "section": "quick",
+      "title_en": "Human2Any: Human-to-Robot Transfer via Constraint-Aware Compositional Planning",
+      "authors": "Shuo Cheng, Chuye Zhang, Alfred Cueva, Caelan Garrett, Ajay Mandlekar, Danfei Xu",
+      "date": "2026-06-27",
+      "pdf": "https://arxiv.org/pdf/2606.28813v1",
+      "score": "6.0",
+      "evidence": "从人类视频学习可复用交互先验的框架，用于机器人操作",
+      "tldr": "人体视频是机器人操作的可扩展监督源，但存在身体差异和场景变化。Human2Any学习对象中心交互运动先验，并通过约束感知组合规划将其迁移到不同机器人上。在Franka桌面和RBY-1人形机器人上验证了无需真实训练数据的鲁棒操作，实现了跨体迁移和场景泛化。",
+      "tags": "query:ur",
+      "abstract_en": "Human videos are a scalable source of supervision for robot manipulation, as they are abundant and naturally capture rich object interactions. However, transferring human demonstrations to robots remains challenging due to embodiment mismatch, scene variation, and robot-specific feasibility constraints. We present Human2Any, a framework for learning reusable object-centric interaction priors from human videos without requiring real-world robot demonstrations in the target task contexts. Human2Any represents manipulation through object-object interaction motion, capturing task-relevant scene changes while abstracting away embodiment-specific details. It composes learned interaction priors with robot-side feasibility reasoning and motion planning, allowing the same human-derived knowledge to adapt to different embodiments, scene geometries, and task contexts. We validate Human2Any across diverse manipulation settings, including real-world experiments on a Franka tabletop setup and an RBY-1 humanoid mobile robot, demonstrating robust interaction-centric manipulation without real-world robot training data. Project website: https://human2any.github.io/.",
+      "source": "arxiv",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "errors": []
+}
