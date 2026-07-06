@@ -6,32 +6,28 @@
 </div>
 
 ## 每次日报
-- 最新运行日期：2026-07-05
-- 运行时间：2026-07-05 21:27:17 UTC
+- 最新运行日期：2026-07-06
+- 运行时间：2026-07-06 21:46:58 UTC
 - 运行状态：成功
-- 本次总论文数：3
-- 精读区：0
-- 速读区：3
+- 本次总论文数：2
+- 精读区：1
+- 速读区：1
 
 ### 今日简报（AI）
-1) 今天推荐三篇机器人前沿研究：视觉-语言-行动模型实验、触觉预训练及人机任务转移规划。  
-2) 最值得关注的是两项7分工作：视觉-语言-行动模型在真实机械臂上的实验验证，以及基于触觉预训练的灵巧操作迁移方法。  
-3) 建议优先阅读前两篇，了解多模态模型落地与触觉技能泛化的实用思路。
-- 详情：[/202607/05/README](/202607/05/README)
+今天精读高分论文《REPAIR-Bench: A Benchmark for Robot Error Perception And Interaction Recovery》，速读《ROSA: A Robotics Foundation Model Serving System for Robot Factories》，共2篇。  
+最值得关注的方向是机器人错误感知与交互恢复的评估基准，以及面向工厂的机器人基础模型服务系统。  
+建议优先研读REPAIR-Bench，理解其故障处理评估框架，再结合ROSA观察机器人模型的工业部署趋势。
+- 详情：[/202607/06/README](/202607/06/README)
 
 ### 精读区论文标签
-- 本次无精读推荐。
+1. [REPAIR-Bench: A Benchmark for Robot Error Perception And Interaction Recovery](/202607/06/2606.29937v1-repair-bench-a-benchmark-for-robot-error-perception-and-interaction-recovery)  
+   标签：评分：8.0/10、query:ur
+   evidence：机器人错误感知与故障检测基准；机器人数据集构建
 
 ### 速读区论文标签
-1. [Vision-Language-Action Models: Experimental Insights from a Real-World UR5 Platform](/202607/05/2606.30456v1-vision-language-action-models-experimental-insights-from-a-real-world-ur5-platform)  
+1. [ROSA: A Robotics Foundation Model Serving System for Robot Factories](/202607/06/2607.01088v1-rosa-a-robotics-foundation-model-serving-system-for-robot-factories)  
    标签：评分：7.0/10、query:ur
-   evidence：真实机器人数据采集与RLDS格式数据集构建
-2. [Human-Centric Transferable Tactile Pre-Training for Dexterous Robotic Manipulation](/202607/05/2607.01067v1-human-centric-transferable-tactile-pre-training-for-dexterous-robotic-manipulation)  
-   标签：评分：7.0/10、query:ur
-   evidence：面向灵巧机器人操作的大规模触觉-动作数据集，有助于数据集构建
-3. [Human2Any: Human-to-Robot Transfer via Constraint-Aware Compositional Planning](/202607/05/2606.28813v1-human2any-human-to-robot-transfer-via-constraint-aware-compositional-planning)  
-   标签：评分：6.0/10、query:ur
-   evidence：从人类视频学习可复用交互先验的框架，用于机器人操作
+   evidence：机器人工厂边缘端部署共享GPU池
 
 
 <div class="dpr-home-promo-card">

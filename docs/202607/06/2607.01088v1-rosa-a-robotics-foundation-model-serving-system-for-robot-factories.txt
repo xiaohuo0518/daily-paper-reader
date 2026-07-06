@@ -1,0 +1,739 @@
+Title: ROSA: A Robotics Foundation Model Serving System for Robot Factories
+
+URL Source: https://arxiv.org/pdf/2607.01088v1
+
+Published Time: Thu, 02 Jul 2026 01:15:49 GMT
+
+Number of Pages: 16
+
+Markdown Content:
+# ROSA : A Robotics Foundation Model Serving System for Robot Factories 
+
+## Wenqi Jiang 1 Jason Clemons 1 Rowland O’Flaherty 1 Hugo Hadfield 1
+
+## Alperen Degirmenci 1 Shuran Song 1,2 Yashraj Narang 1 Christos Kozyrakis 1,2 1NVIDIA Research 2Stanford University 
+
+## Abstract 
+
+Robotics foundation models (RFMs) are making general-purpose robots increasingly practical for factory deployments. While RFM serving systems are central to this vision, existing systems are largely shaped by a single-robot, single-model assumption: inference is treated as an edge-computing prob-lem handled by an on-robot or dedicated nearby GPU, and the serving objective is to minimizing the latency of a single action model. In this paper, we propose R OSA , the Robotics O riented Serving A rchitecture, an RFM serving system for robot facto-ries designed around three key principles. First, R OSA adopts 
+
+shared GPU-pool serving , allowing a fleet of robots to ac-cess powerful server-class GPUs over the network in order to improve inference performance, battery duration, and GPU utilization. Second, R OSA provides a robotics-aware program-ming abstraction and system design that supports multi-model pipelines, per-task performance requirements, and failure han-dling. Third, R OSA uses factory-objective-driven scheduling 
+
+to maximize SLO-qualified factory productivity rather than minimizing individual request latency. We implement R OSA 
+
+on top of Ray Serve for distributed orchestration, with vLLM, PyTorch, and JAX as model-serving backends, and evaluate it on both real robots and synthetic large-scale workloads. The results show that R OSA improves factory productivity by up to 12.06 × over conventional dedicated serving systems. 
+
+## 1 Introduction 
+
+Embodied AI is emerging as a central frontier in the next phase of AI, promising physical agents that can perceive complex environments, reason over long-horizon tasks, and execute pre-cise actions in the real world. Central to this shift are robotics foundation models (RFMs), including Vision-Language-Action (VLA) models [6, 8, 22, 51, 52], World Action Models (WAMs) [1, 47, 50], and the surrounding reasoning and control models that support robotic execution. By integrating semantic language understanding with sensor inputs in the action-generation loop, these models have demonstrated 
+
+Figure 1: Robots working on various tasks in a factory. unprecedented generalization capabilities across diverse tasks, from manipulation to navigation [5, 6, 16, 18, 35, 40, 44]. A promising use case for RFMs is the deployment of general-purpose robots, such as humanoids and manipulators, in highly-automated robot factories . For example, Figure AI has explored humanoid deployments in BMW manufacturing facilities for automotive assembly-line tasks [14], Tesla is pursuing a similar vision with Optimus [41], and Amazon continues to scale warehouse robot fleets for inventory movement, sortation, and package handling [2, 33]. RFM serving systems are central to this vision, since such deployments rely on continuous streams of model inference to generate robot actions and monitor task execution. Although recent work has begun to optimize RFM inference from both algorithmic and systems perspectives [6, 11, 30, 36, 47], we argue that the RFM serving problem for robot factories is neither well defined nor well solved, due in part to two pervasive misconceptions: 
+
+Misconception 1: robotics foundation model serving is strictly an edge computing problem. The prevailing deployment paradigm couples each robot with an onboard System-on-Chip (SoC) or a dedicated GPU server. However, one SoC per robot is not only expensive but also provides limited performance because robot platforms often have tight power and thermal budgets [17]. Offloading inference to a dedicated GPU server leads to better performance [19], but this one-to-one serving paradigm still under-utilizes GPUs: a GPU 1
+
+> arXiv:2607.01088v1 [cs.RO] 1 Jul 2026
+
+serving only one robot cannot exploit inter-robot request batch-ing, and in the common synchronous inference setting [6, 8], the GPU remains idle while waiting for the robot to finish ex-ecuting the current action and issue the next inference request. 
+
+Misconception 2: the main serving objective is to minimize inference latency for a single action model. First, reliable robotic task execution often requires additional models beyond action prediction, such as high-level planning, safety checking, and task progression monitoring models, which should also be considered in the serving system design. Second, action model inference latency should not be the sole optimization objective. For example, a robot factory may aim to maximize productivity, measured as total action throughput across robots, while satisfying the latency service-level objectives (SLOs) of all required model components. 
+
+ROSA : efficient, reliable, and model-agnostic RFM serving. 
+
+In this paper, we rethink the robot-factory serving problem through three questions: (a) what requirements arise from the robotics perspective, (b) how should serving systems be designed to satisfy these requirements, and (c) what optimization objectives should guide scheduling decisions? We argue that future RFM serving systems for robot factories should be built around three core principles, regardless of the specific models they serve: 
+
+Principle 1: server-scale, shared RFM serving infras-tructure. While conventional deployments equip each robot with an onboard GPU or a dedicated edge server, we argue that future robotic factories will increasingly rely on shared GPU-pool serving systems, where multiple robots share a centralized pool of compute resources. This transition is motivated by three key advantages (A1–A3). (A1) Better inference performance through access to data-center-class hardware. On-robot accelerators are significantly less powerful than modern data-center GPUs. For example, NVIDIA’s Jetson Thor and B100 are manufactured in the same generation of technology, yet the latter provided 29 × memory bandwidth and 3.5 × compute capability (fp8) compared to the former. As robotics foundation models continue to grow in size, the latency reduction achieved through faster inference can outweigh the additional network communication delay, particularly in stable industrial networks [19]. Instead, on-robot SoCs can be used for low-compute, high-frequency actuator control and safety fallback operations. (A2) Extended operational duration for battery-powered robots. Many mobile robots rely on battery-powered plat-forms [17]. Hosting compute-intensive inference locally increases power consumption and shortens operational duration. For example, Figure AI’s Figure 02 robot features a 2.25 kWh battery yielding a runtime of roughly five hours, with its dual onboard NVIDIA RTX GPUs comprising up to half of the system’s total power. Offloading inference to centralized infrastructure reduces onboard energy usage, thereby extending battery duration and improving robot ROSA: E ffi cient Robotics Foundation Model Serving         
+
+> Routing and Batching
+> GPU Resources Model Placement
+> 1
+> 1
+> 3
+> 3
+> AObservation Upload
+> GPU Worker
+> System 1
+> GPU Worker
+> System 1
+> GPU Worker
+> Safety
+> GPU Worker
+> Monitor System 2
+> GPU Worker
+> ……
+> Gateway Gateway …ROSA Scheduler
+> …
+> Task Config
+> 2
+> DAction Download
+> BRequest Routing
+> CModel Inference
+> Solving Schedule Dataflow
+> Serving Request Dataflow
+> 3Request Frequency
+> & Inference Profiles
+
+Figure 2: R OSA system overview. availability without requiring frequent recharging cycles. (A3) Improved hardware utilization and cost efficiency. With requests arriving from multiple robots, a shared serving system enables inter-robot batching, thereby improving GPU utiliza-tion compared to one-to-one deployments that serve at most one request at a time. Furthermore, centralized serving systems eliminate the need to equip each robot with dedicated accelera-tors, reducing the total hardware footprint and capital cost, espe-cially since not all robots måay be active simultaneously, which would otherwise lead to significant resource underutilization. 
+
+Principle 2: robotics-aware programming abstraction and system design. Robotic serving infrastructure must not only execute inference requests, but also expose a programming ab-straction that specifies all robot serving requirements (R1–R3): (R1) Orchestration across heterogeneous models. Depending on the type of the task, a robot may require not only an action prediction model, but also a reasoning model for long-horizon task decomposition, a safety model to avoid collisions, and a monitor model to evaluate task progression. (R2) Heterogeneous performance requirements. Different robots, tasks, and operating environments impose different performance demands: some stationary robots may tolerate higher inference latency, while robots operating in dynamic environments require tighter response time. (R3) Safety and task-failure handling. The system must let users specify how robots respond when a safety model raises a warning, an inference request misses its latency SLO, or a task-progression monitor detects task failure. These exceptions should trigger configured fallback actions, such as stopping execution, returning to a default safe state, resending a request, retrying the task, or escalating to human intervention. 
+
+Principle 3: factory-objective-driven system scheduling. 
+
+Instead of minimizing inference latency for a single robot, the serving scheduler should optimize a factory-level objective. In this paper, we use weighted robot action throughput : each robot action represents one unit of task progress, and each task is assigned a weight that captures its priority or economic value. The serving scheduler maximizes the weighted action 2rate across the robot fleet 1 by deciding how to allocate servers, choose batching configurations, and route robot requests, while satisfying each task’s latency and invocation-rate SLOs. 
+
+Design and implementation. To materialize these principles, we build R OSA , a RFM serving system for robot factories, as shown in Figure 2. To plan for a serving schedule, the scheduler takesa as input (1) a declarative task configuration that specifies the robot fleet, model components, prompts, SLOs, and fallback policies, and (2) the available GPU resources and profiling information for each model 1 . The ROSA scheduler combines heuristics and Integar Linear Programming (ILP) to maximize productivity while meeting performance SLOs 2 and generates a schedule including model placement, request routing, batching configuration, and per-task action rates 3 . In the serving path, robot clients upload observations to a gateway A , which routes each model request to the scheduled GPU worker B ; the worker executes the corresponding model inference C , such as System 1, System 2, safety, or monitor, and returns the result to the robot D . R OSA uses Ray Serve [31] as the distributed serving orchestrator and supports various model-specific inference runtime such as vLLM [23], PyTorch, or JAX. 
+
+Evaluation. We evaluate R OSA on both a real Franka Panda robot and synthetic multi-robot workloads replaying real robot observations. On eight NVIDIA H200 GPUs with up to 64 virtual robots, R OSA improves productivity by up to 12.06 ×
+
+over dedicated serving baselines that allocate either one GPU per robot or one GPU per model per robot. Even compared with shared-server baselines that use the same serving infrastructure but do not use the R OSA scheduler, R OSA 
+
+improves SLO-qualified factory action throughput by up to 2.44 ×. Ablations show that these gains come from scheduler decisions including request-rate control, resource allocation across model components, and profiling-guided batching. In summary, our work presents an early effort toward efficient RFM serving and makes three main contributions :• We identify two common misconceptions in existing RFM serving, and propose three design principles for robot factories: shared server-scale infrastructure, robotics-aware programming abstraction and system design, and factory-objective-driven scheduling. • We design and implement R OSA , a server-scale, model-agnostic RFM serving system shared across robots. R OSA 
+
+provides (1) a declarative task interface for specifying model composition, SLOs, safety fallbacks, and retry policies, and (2) a scheduler that maximizes factory action throughput while satisfying performance constraints. • We evaluate R OSA on both real robots and large-scale simu-lated workloads, showing that it can satisfy various robotics serving requirements while improving serving efficiency.   
+
+> 1In this paper, the term fleet refers to the set of robots rather than servers.
+
+## 2 Background and Related Work 2.1 Robot Factory 
+
+The emergence of robotics foundation models (RFM) enables a new paradigm of general-purpose robots (e.g., humanoid or arms) to perform a wide range of tasks, such as packaging, sorting, inspection, and assembly assistance [2, 14, 33, 41]. A promising near-term deployment scenario is the robot factory : a human-supervised industrial environment in which fleets of general-purpose robots execute known production tasks while human operators handle exceptions. In such a factory, robots may either work on uniform tasks, such as bulk item packaging or clothes folding, or be orchestrated across heterogeneous tasks, much like human workers handling different tasks in an assembly line. Early versions of this robot factory vision are already being explored by industry leaders. For example, Figure AI has deployed humanoid robots in BMW manufacturing facilities for sheet-metal handling and other automotive production tasks. Amazon has scaled large fleets of warehouse robots for inventory movement, sortation, and package handling, with human operators available to intervene when robots fail to complete an action, encounter uncertainty, or reach a safety-critical state. 
+
+## 2.2 Robotics Foundation Models 
+
+2.2.1 Action Models System 1 for low-level action generation. Action models are the core building block of RFMs: they take robot observations and task instructions as input and generate sequences of low-level actions for the robot to execute. For example, Vision-Language-Action (VLA) models [6, 8, 22, 51, 52] typically combine visual perception and semantic language understanding through a vision-language model (VLM) back-bone, then decode robot actions using an action-generation head such as a diffusion transformer (DiT). World Action Models (WAMs) [1, 47, 50], by contrast, predict actions together with future environment states, such as upcoming camera observations, enabling the model to reason about both what the robot should do to reach the desired future state. These action models are often viewed as the robot’s “System 1”: they provide fast, reactive control for translating simple instructions into executable actions. 
+
+2.2.2 Multi-Model Pipelines Beyond Action Models 
+
+In a robot factory, serving a low-level action model is often not enough. Reliable robot execution requires a multi-model pipeline that combines action generation with higher-level planning, operational safety, and task progression monitoring. 
+
+System 2 for high-level planning. Complex real-world tasks require not only reactive control but also deliberative “System 2” reasoning, analogous to slow thinking in contrast 3to the fast reactive behavior of System 1 [7, 15, 37, 49]. These System 2 models, often VLMs with reasoning capabilities, decompose long-horizon tasks into simpler subgoals and pass the generated language instructions to the System 1 model for action generation. For example, in an assembly-kit task, a System 2 model may inspect the workspace, identify the required parts, decide an ordering such as “pick the screw pack, place it in the tray, then insert the manual,” and issue each subgoal to the action model for execution. Because System 2 operates at the task-planning level, it typically runs at a lower frequency than System 1, such as once every several or tens of System 1 invocations. 
+
+Operational safety. Robots must also satisfy safety con-straints, such as stopping before colliding with nearby humans, objects, or workspace boundaries. One way to support this is to invoke a safety VLM that takes the current camera observation and a safety-constraint prompt as input, and judges whether the robot’s current state or planned action is unsafe [20, 32, 43]. Such models can be invoked periodically, for example once per second, to provide higher-level semantic safety checks alongside low-level onboard safety mechanisms. 
+
+Task progression monitoring. Robot factories also need mechanisms to determine whether a task has succeeded or failed, as existing action models typically only predict actions without explicitly verifying task completion [12,13,28]. A task-monitor VLM judge, similar to the safety model, can periodi-cally inspect robot observations and execution history to assess task progress. When a failure is detected, the system can trigger a retry, update the System 2 prompt with past execution feed-back, or escalate to a human operator after repeated failures. 
+
+## 2.3 Related Work and Research Gap 
+
+Existing work on efficient RFM inference has focused pre-dominantly on System 1 action models. These efforts reduce computation through smaller models [25, 36, 38, 45], quan-tization [22, 42], selective VLM layer skipping [46, 48], fewer denoising steps in diffusion-based action experts [6], KV-cache reuse for multi-token action prediction [21], and dynamically adjusting the reasoning model invocation frequency [26]. Inference latency can also be reduced through system-level optimizations such as CUDA graphs and operator fusion [30]. While these works are important steps forward, they are still not sufficient for efficient RFM serving in robot factories. First, they primarily optimize System 1 action prediction, which is only one component of the multi-model pipeline required for reliable robot operation (§2.2.2 and §3.1). Second, they typically assume a single inference system serving a single robot, which does not capture factory-scale deployments with fleets of robots potentially sharing a pool of compute resources (§2.1 and §3.2). Third, as a consequence, existing systems have not provided the programming interface and scheduling mechanisms needed for multi-robot, server-scale serving of multi-model RFM pipelines (§3.3 and §3.4). Finally, many techniques are tied to specific model architectures, making it unclear how they can be adapted to rapidly evolving RFM designs; for example, RFM architectures have shifted from autoregressive VLA models to diffusion-based VLA models and emerging world-action models in only the past two years [6, 8, 22, 47]. In this paper, we address these gaps. 
+
+## 3 ROSA : Efficient Serving for Robot Factories 
+
+We present R OSA , a server-scale, GPU-pool-based RFM serv-ing system for robot factories. As shown in Figure 2, a fleet of robots sends inference requests to a shared GPU cluster, which uses R OSA scheduler to determine optimal serving strategies. In this section, we formalize the robot-factory serving problem, motivate centralized cluster-scale serving, introduce the declar-ative programming abstraction, present R OSA scheduling mechanisms, and finally describe the system implementation. 
+
+## 3.1 RFM Serving Problem Formulation 
+
+Robot factory serving scenario. A robot factory consists of a fleet of robots controlled by a shared set of robotics foundation models. These robots may perform either the same task or different tasks, and each task may require a different composition of RFMs, such as System 1 action models, System 2 planning models, safety models, and task-monitor models. Each task also specifies its own prompts and performance requirements, including latency and throughput targets. In this setting, the goal of the RFM serving system is twofold. 
+
+Basic serving requirements. First, the system must satisfy the serving requirements of each robot by (1) deploying the required model composition and (2) meeting the associated performance constraints. For example, a simple pick-and-place task may require only a System 1 action model and a task-monitor model, while a long-horizon assembly task may additionally require periodic System 2 planning as well as a safety model that runs at 2 Hz with a 500 ms latency constraint. 
+
+Optimization objectives. Second, the system should optimize for factory-level objectives rather than simply minimizing the latency of individual inference requests. In many robot-factory settings, reducing latency below a task-specific threshold may provide little additional benefit to task success, while requiring excessive compute resources, such as dedicating one or more GPUs to a single robot. Instead, natural factory-level serving should maximize factory throughput, measured as the total weighted robot action rate across the robot fleet, while satisfying each task’s latency and throughput requirements. 
+
+## 3.2 Shared RFM Serving Architecture 
+
+To meet the system goals specified in §3.1, we argue that robot factories favor a centralized, server-scale RFM serving system shared across a fleet of robots, while the robot-side 4SoC only needs minimal compute capacity to handle local control and safety fallback operations. Compared with one-to-one deployments, where each robot is paired with onboard accelerators such as NVIDIA Jetson-class SoCs or a nearby GPU workstation or edge server, a pooled serving system provides three key advantages :• Support for larger models and faster inference. Onboard accelerators like Jetson are substantially more constrained than data-center GPUs in compute throughput, memory capacity, and memory bandwidth. As RFMs grow in size and complexity, some models, e.g., reasoning models, may be difficult or impos-sible to serve efficiently on robot-local hardware. Centralized clusters can instead use a pool of data-center-class accelerators, enabling larger models and lower inference latency. • Longer operational duration for mobile robots. For battery-powered mobile robots, onboard inference can consume a significant fraction of the robot’s power budget and reduce operating time, e.g., by up to roughly half for Figure AI’s Figure 02 robot. Offloading RFM inference to centralized infrastructure reduces onboard compute and thermal demands, extending battery duration and improving robot availability. The robot can still retain lightweight local compute, such as CPUs or microcontrollers, for low-level control, emergency stopping, and other safety-critical mechanisms. • Better hardware utilization and cost efficiency. A dedicated inference system suffers from two sources of resource under-utilization: (1) action-model inference is interleaved with physical robot execution, leaving the serving hardware idle while the robot executes an action if no other model component is running, and (2) a single robot sends only one inference request at a time, which further under-utilizes the inference hardware due to the lack of request batching. In contrast, a shared serving system eliminates the need to provision dedicated accelerators for every robot and improves utilization by (1) serving requests from other robots while one robot is exe-cuting an action, and (2) enabling inter-robot request batching. 
+
+Design trade-offs. Centralized serving introduces network and queuing overheads relative to dedicated serving, but these overheads are manageable in robot-factory environments. First, the added network latency can be kept small by provisioning stable wired or wireless networks, whose cost is modest compared with GPU infrastructure. For example, well-engineered WiFi 7 deployments can achieve sub-5 ms latency [4, 27], which is one to two orders of magnitude smaller than the RFM inference latencies we observe, e.g., tens to hundreds of milliseconds for action models and multiple seconds for System 2 reasoning. Second, sharing resources across robots can introduce queuing delay, but this can be con-trolled through scheduling. R OSA uses calibrated scheduling to ensure that robot performance requirements are met while improving overall factory-level efficiency, as we show in §3.4. 
+
+Robot-side system responsibilities. Centralized serving does not completely eliminate the need for onboard SoCs, which retain two main responsibilities. 
+
+First, the robot-side system performs high-frequency local control. The server-side action model outputs an action chunk that describes a trajectory or motion plan, but this output must still be converted into actuator-level commands, such as joint torques, using real-time proprioceptive and force feedback. This control loop often runs at 100 Hz or above with a small neural network [24, 29]. Due to the tight latency budget for net-work communication, the control policy computation should remain on the robot, which is feasible as prior work such as SONIC [29] shows that such policies can be small enough to run on CPU-based onboard compute for humanoid robots. 
+
+Second, the robot-side runtime enforces local safety and failure handling. When a cluster-served safety model raises a warning, the robot must be able to react locally. In addition, each model may have a latency SLO, and the robot-side runtime must detect missed inference deadlines caused by network jitter or server failures. Upon such safety or timing violations, the robot transitions to a safe state specified by our programming interface (§3.3), such as stopping execution or planning a trajectory back to the robot’s default safe state. 
+
+## 3.3 ROSA Programming Abstraction 
+
+To capture the performance and safety requirements specified in §3.1, R OSA provides a declarative programming interface for describing the factory serving workload. Figure 3 shows an example of this interface. The descriptor first declares the server cluster and robot fleet used by the deployment (lines 1– 12). It then specifies the robot tasks to be served, where each task descriptor includes attributes including model compo-sition, performance requirements, safety violation handling, and task retry policy. We now elaborate these attributes. 
+
+Model composition. A task descriptor first specifies the set of model components required by the task. For example, the sim-ple pick-and-place task (line 15) uses only two components: a System 1 action model and a task-progression monitor. In contrast, product inspection (line 42) requires a more complex pipeline, adding a System 2 planner and a safety checker. The descriptor also specifies the dependencies among model components. For example, the inspection task couples System 2 planning, System 1 action generation, and physical action execution. It invokes System 2 once for every System 1 action prediction (line 45), allowing the planner to re-evaluate the product after each small motion. Each System 1 prediction is then followed by 500 ms of action execution (line 44). In contrast, the safety and task-progression monitor components are independent periodic checks, whose inference requests are triggered independently of the System 1–System 2 chain. 
+
+Performance requirements. Each model component in a task may declare its own P99 latency requirement and invocation rate. For example, the pick-and-place task requires each System 1 action prediction to complete within 200 ms (line 17), 51 # Part 1: Server cluster                                                                    
+
+> 2server_cluster:
+> 3num_servers: 8
+> 4gpu_type: NVIDIA H200
+> 56# Part 2: Robot fleet
+> 7robot_fleet:
+> 8- task: pick_and_place_simple
+> 9num_robots: 16
+> 10 11 - task: inspect_product
+> 12 num_robots: 16
+> 13 14 # Part 3.1: Task I (Pick and Place)
+> 15 pick_and_place_simple:
+> 16 pipeline:
+> 17 action_period_ms: 200
+> 18 19 task_retry:
+> 20 max_task_retries: 3
+> 21 on_max_task_retries: stop_and_call_human
+> 22 23 safety_and_slo_violation:
+> 24 max_consecutive_safety_replan: 10
+> 25 max_consecutive_slo_violation: 3
+> 26 on_max_violation: stop_and_call_human
+> 27 28 components:
+> 29 system1:
+> 30 model: nvidia/GR00T-N1.6-3B
+> 31 prompt: "pick package and place in bin"
+> 32 slo_ms: 200
+> 33 fallback: stop_and_resend
+> 34 35 monitor:
+> 36 model: Qwen2.5-VL-7B-Instruct
+> 37 prompt: "ongoing, done, or failed?"
+> 38 freq_hz: 0.5
+> 39 slo_ms: 2000
+> 40 fallback: stop_and_resend
+> 41 # Part 3.2: Task II (Inspect Product)
+> 42 inspect_product:
+> 43 pipeline:
+> 44 action_period_ms: 500
+> 45 system2_to_system1_call_ratio: 1
+> 46 47 task_retry:
+> 48 max_task_retries: 3
+> 49 on_max_task_retries: stop_and_call_human
+> 50 51 safety_and_slo_violation:
+> 52 max_consecutive_safety_replan: 10
+> 53 max_consecutive_slo_violation: 3
+> 54 on_max_violation: stop_and_call_human
+> 55 56 components:
+> 57 system1:
+> 58 model: nvidia/GR00T-N1.6-3B
+> 59 prompt: "move to inspect package face"
+> 60 slo_ms: 500
+> 61 fallback: stop_and_resend
+> 62 63 system2:
+> 64 model: Qwen2.5-VL-7B-Instruct
+> 65 prompt: "check defects; choose next view"
+> 66 slo_ms: 2000
+> 67 fallback: use_last_plan
+> 68 69 safety:
+> 70 model: Qwen2.5-VL-3B-Instruct
+> 71 prompt: "is the workcell safe?"
+> 72 freq_hz: 2
+> 73 slo_ms: 500
+> 74 fallback: stop_and_replan
+> 75 76 monitor:
+> 77 model: Qwen2.5-VL-7B-Instruct
+> 78 prompt: "ongoing, done, or failed?"
+> 79 freq_hz: 0.5
+> 80 slo_ms: 2000
+> 81 fallback: stop_and_resend
+
+Figure 3: R OSA provides a declarative programming abstraction specifies the servers, the robot fleet, and detailed task requirements. lower than that of the inspection task (line 60). As another example, the safety-checking model in the inspection task is invoked twice per second and has a P99 latency requirement of 500 ms (line 72). 
+
+Safety and SLO violations handling. Safety violations can arise either because a safety model explicitly raises a warning or because an inference request misses its latency SLO, making the returned prediction stale. When the safety model raises a warning, such as detecting a human near the workcell, the robot executes the configured safety fallback, e.g., stopping and replanning (line 74). An alter-native option is planning a trajectory back to the robot’s default safe state instead of just stopping the execution. If repeated replanning cannot resolve the safety concern, the task-level retry policy escalates to human intervention (line 54). SLO violations are handled separately. Although the serving system aims to satisfy latency SLOs with high probability, e.g., 99%, violations may still occur due to network jitter, server overload, or network and serving failures. When a component misses its SLO, the robot executes the component-level fallback policy, such as stopping the robot and resending the request (line 61). If several consecutive SLO violations occur, indicating that the server may be unavailable or overloaded, the robot escalates to human intervention according to the configured retry policy (line 54). 
+
+Task retry policy. A robot may fail at the task level, for example by failing to place an object into the target bin. Such failures are detected by the task-progression monitor, which classifies the task state as ongoing, done, or failed (line 78). When a task failure is detected, the system resets the robot to its initial state and retries the task. If the task continues to fail after the configured retry budget, e.g., three retries, the system halts execution and requests human intervention (line 48). 
+
+## 3.4 ROSA Scheduler 
+
+3.4.1 Scheduler Overview Scheduling decisions. The R OSA scheduler turns the declara-tive workload specification in Figure 3 into a serving schedule with four main decisions: (1) placement : which model com-ponent each server hosts; (2) routing : which server each robot uses for each model request; (3) batching : which batching configuration each server uses; and (4) request rate : which inference request frequency each robot uses for each model. Since ROSA targets robot-factory deployments, the scheduler makes several workload and serving assumptions. First, the expected workload is known before serving starts: 6the number of robots, task specifications, available GPUs, per-component SLOs, and the constant system1/system2 invocation ratio are provided by the declarative configuration. This allows R OSA to compute a static serving schedule that maximizes factory throughput for long-running workloads. Second, given the known workloads, the scheduler can leverage the profiling data for each model. Third, we assume typical synchronous execution, where System 1 inference is interleaved with action execution (Figure 4) rather than overlapped with it, because asynchronous execution can reduce task accuracy when predictions are generated from stale observations [3, 9, 34, 39]. Fourth, as many robots share the GPU pool, each model receives enough aggregate requests, thus R OSA dedicates each GPU worker to a single model rather than colocating multiple models, avoiding performance interference that can lead to SLO violations. Finally, for batching, R OSA searches over various batch sizes for System 1 action models that satisfy the latency SLO. For other autoregressive generation models, R OSA assumes continuous batching, where individual requests are directly added to and removed from ongoing inference batches, following the convention of existing LLM serving systems [10, 23]. 
+
+Scheduling requirements and objectives. Let R, S, and M be the sets of robots, servers, and model components, respectively. Each robot r ∈ R requires a set of model components Mr ⊆ M.For each required component m ∈ Mr, the task specification may provide a latency deadline Dr,m and, for periodically in-voked components, a fixed invocation rate ¯λr,m. A schedule is feasible only if every required component is served and all spec-ified latency and invocation-rate requirements are satisfied. Among feasible schedules, R OSA optimizes factory-level productivity rather than individual request latency. For a homogeneous fleet, all robots execute the same task and have the same value weight, so the scheduler searches for a shared action rate f , where fr = f for all robots r ∈ R, and maximizes factory action throughput, i.e., max ∑r∈R fr. For a heteroge-neous fleet, robots are grouped by task class c; class c contains 
+
+Kc robots, receives action rate fc, and has value weight vc.max 
+
+> f
+> C
+
+# ∑
+
+> c=1
+
+vcKc fc s.t. Kc fc ≥ Fmin  
+
+> c
+
+, ∀c. (1) Here Fmin  
+
+> c
+
+is the minimum total action throughput required by task class c, which prevents the optimizer from starving low-weight or high-cost task classes. To optimize this objective, the scheduler classifies model components into two groups. As illustrated by the inference timeline in Figure 4, goal-coupled models , G = {S1 , S2 },determine the robot’s action rate f . In contrast, obligation models , O = {safe , mon }, run at configured frequencies and must satisfy latency SLOs, but serving them faster than required does not directly improve the factory objective. The scheduler therefore provisions obligation models with the minimum feasible server footprint, then uses the remaining System 2 
+
+> System 1
+> Safety
+> Monitor
+> Robot Action
+> Timeline
+> dependency
+
+Figure 4: An example multi-model RFM inference pipeline. resources to maximize the rates of goal-coupled models. 
+
+Steady-state scheduling and runtime adaptation. Factory workloads are typically long running, and the number of robots assigned to each task is often known in advance. R OSA 
+
+therefore uses a steady-state solver to compute high-quality schedules for the expected workload. This solver runs at cluster-management timescales and can afford profiling-driven feasibility checks and ILP-based packing. Runtime changes, such as robot arrivals or GPU failures, are handled by faster adaptation mechanisms: placement-preserving admission con-trol, hot-standby failover, and background global rescheduling when local adaptation is insufficient (§3.4.4). The rest of this section first introduces the steady-state solver for robot fleets serving homogeneous and heteroge-neous tasks (§3.4.2 and §3.4.3), and then describes the runtime adaptation mechanisms (§3.4.4). 
+
+3.4.2 Homogeneous Task Scheduling 
+
+We first consider a homogeneous fleet in which all robots share the same task configuration: the same required models, action execution time tact , System 2 horizon H, and latency requirements. In this case, the objective in §3.4.1 reduces to maximizing a single shared action rate f .
+
+> # Algorithm: homogeneous task scheduling # Step 1: provision obligation models pi_obl, S_obl = provision_obligations(R, S, O, L) # Step 2: binary search for maximum action rate S_goal = S - S_obl lo, hi, best = 0, f_max, None while hi - lo > eps: f = (lo + hi) / 2 # Step 2.1: generate feasible per-server configs P = enumerate_server_configurations(f, L, S_goal) # Step 2.2: solve full-system configs pi_goal = pack_configurations_ILP(P, R, S_goal) # Step 2.3: check frequency feasibility if pi_goal is feasible and f <= closed_loop_rate(pi_goal): best = (pi_obl + pi_goal, f); lo = f else: hi = f return best
+
+Step 1: provision obligation models. The scheduler first computes the aggregate load imposed by obligation models: 
+
+λsafe = ∑
+
+> r∈R
+
+¯λr,safe , λmon = ∑
+
+> r∈R
+
+¯λr,mon . (2) It then finds the minimum feasible server footprint for these models using measured serving profiles. For each model m
+
+and hardware type h, R OSA measures a latency distribution 
+
+Lm,h(b, λ) for each batching configuration b and aggregate 7request rate λ. For example, for each System 1 batch size, we profile latency at ten request rates, ranging from 10% to 100% of the measured maximum throughput for that batch size. A server assignment for an obligation model is feasible only if the required SLO percentile of this distribution is below the model’s latency deadline. 
+
+Step 2: search for the maximum action rate. After provision-ing obligation models with minimal resources, the scheduler uses the remaining servers Sgoal to maximize the shared action frequency f . It performs a binary search over f , between zero and an upper bound fmax computed by assuming zero inference latency. For each candidate f , each robot induces request rates 
+
+λr,S1 = f and λr,S2 = f /H for the goal-coupled models. 
+
+Step 2.1: enumerate feasible per-server configurations. 
+
+For the candidate f , R OSA constructs a set of feasible server configuration P ( f ) from the measured serving profiles. A configuration p ∈ P ( f ) specifies the model it hosts, the batch size, and the number of robots it serves. For example, a System 1 server configuration may represent one server using batch size b to serve k robot streams, producing aggregate load 
+
+k f . A System 2 server configuration for k robot streams instead sees load k f /H with continuous batching ( b = 1). A server configuration is valid only if it fits in memory and satisfies the required latency SLO under the corresponding load. Thus, SLO feasibility is enforced during configuration generation rather than as a separate ILP constraint in the next step. 
+
+Step 2.2: choose server configurations with an ILP. Given 
+
+P ( f ), the scheduler solves an integer linear program (ILP) to cover all robot streams using the remaining servers. Let 
+
+yp ∈ Z≥0 be the number of servers assigned to configuration 
+
+p, and let ap,m ∈ Z≥0 be the number of robot streams of model 
+
+m served by one server using configuration p. The ILP solves 
+
+yp with the following constraints: 
+
+# ∑     
+
+> p∈P(f)
+> yp≤ | Sgoal |,
+
+# ∑        
+
+> p∈P(f)
+> ypap,m=|R|(∀m∈
+
+G). (3) 
+
+The first constraint limits the number of selected servers, while the second ensures that every robot is assigned to a server for every required goal-coupled model. Among feasible packings, the ILP minimizes a tie-breaking cost based on measured latency and the number of servers used. 
+
+Step 2.3: validate and update the action rate. If the con-figuration packing is feasible, the scheduler checks whether the induced latencies still support the candidate action rate. A robot does not generate unbounded open-loop inference traffic: it waits for action-model inference, physically executes the action, and amortizes any System 2 planning latency across the actions that reuse the plan. Let ℓS1 and ℓS2 be the measured mean latencies induced by the selected configurations. These latencies impose a closed-loop upper bound on the achievable action rate: 
+
+f ≤ floop = 1
+
+tact +ℓS1 +ℓS2 /H (4) If both the packing constraints in Equation (3) and the closed-loop condition in Equation (4) hold, the scheduler records the candidate schedule and searches for a higher f ;otherwise, it searches for a lower f .
+
+3.4.3 Heterogeneous Task Scheduling 
+
+We next consider robot fleets that consist of different tasks, such as the example in Figure 3, where some robots run a simple pick-and-place task while others run product inspection. Different tasks may use different model components, action periods, System 2 invocation ratios, and latency SLOs. As introduced in §3.4.1, R OSA groups robots by task class c,where class c contains Kc robots and receives action rate 
+
+fc. Thus, heterogeneous scheduling replaces the single homogeneous rate f with a class-rate vector f = ( f1,..., fC).Compared with homogeneous scheduling, heterogeneous scheduling changes two parts: the scalar binary search becomes a multi-dimensional search, and each server configuration may need to account for task classes. R OSA 
+
+handles the first with adaptive frontier search and the second with isolated packing plus compaction. 
+
+Adaptive search over heterogeneous action rates. While ho-mogeneous scheduling uses binary search over a single action rate f , heterogeneous scheduling must search over a rate vector 
+
+f . A dense grid search over this multi-dimensional space has complexity exponential in the number of task classes. R OSA 
+
+therefore uses a greedy adaptive frontier search to navigate the space. Figure 5 illustrates a two-task example with action rates f1 and f2. The green region denotes rate vectors that are feasible under the placement and SLO checks described next, while the red region denotes rate vectors that are infeasible. At each iteration, R OSA selects the rate dimension with the largest potential weighted objective gain according to Equation (1). It then evaluates a new candidate vector by moving halfway between the current feasible rate and the optimistic upper bound along that dimension. If the candidate vector is feasible (as we will describe in the next paragraph), R OSA advances the feasible frontier; otherwise, monotonicity allows R OSA 
+
+to prune all rate vectors that are component-wise larger. The search stops when the remaining possible improvement falls below a tolerance or when a time budget is reached. 
+
+Frequency feasibility check with ILP-heuristic packing. 
+
+In contrast to homogeneous scheduling, which checks action frequency feasibility with ILP, we introduce a two-stage ILP-heuristic primitive that is repeatedly used in heterogeneous scheduling. First, R OSA performs isolated packing : each server configuration serves one model component for one task class, and an ILP selects configurations to cover the robot streams. Second, R OSA applies compaction : servers hosting the same model component for different classes are greedily merged when doing so remains SLO-feasible. This design avoids the combinatorial complexity of directly enumerating mixed heterogeneous configurations, where each server configuration 8f1           
+
+> f2
+> f1-max
+> f2-max
+> 0
+> Δf1
+> Δf2
+> f1
+> f2
+> f1-max
+> f2-max
+> 0f1
+> f2
+> f1-max
+> f2-max
+> 0
+> ✓cand. f2
+> ✓new f 2feasible ✗new f 2infeasible
+> ✗cand. f2
+> feasible frequency zone
+> infeasible frequency zone
+> Pick f 2as the candidate dim 1
+> 22
+
+Figure 5: Adaptive frequency search over heterogeneous tasks. would need to specify (1) which task classes it serves, (2) how many robots from each class it serves, and (3) the batching configuration. By letting the ILP reason only about single-class configurations, R OSA keeps configuration enumeration small. Then, the greedy compaction step recovers cross-class sharing opportunities. For each server, the scheduler uses the measured latency profile to estimate its SLO-compatible request-rate capacity and remaining headroom. It tries to iteratively merge low-load servers into high-headroom servers, accepting a merge only if the combined server still satisfies the latency SLOs of all assigned classes. This primitive is applied to each model component in the task pipeline. As in homogeneous scheduling, R OSA first provi-sions the minimum feasible server footprint for obligation mod-els. The remaining servers are then used for the goal-coupled System 1 and System 2 models that determine the action rate. For each candidate rate vector f , R OSA first applies isolated ILP packing to each goal-coupled model. If the resulting placement uses more than the available goal-server budget, R OSA applies greedy compaction to determine whether cross-class sharing can reduce the placement to fit within the server budget. 
+
+3.4.4 Admission Control and Fault Tolerance 
+
+ROSA supports two paths for admitting new robots into the serving system. The first path performs placement-preserving admission . Here, the scheduler keeps the current model place-ment fixed and checks whether the new robot can be routed to existing servers, possibly with updated batching and per-robot action rates, without violating the SLOs of either the new robot or the existing robots sharing those servers. If this check succeeds, R OSA admits the robot and updates only the affected routing and rate assignments, avoiding a full system restart. The second path performs global rescheduling . If placement-preserving admission fails, or if it would lead to poor efficiency, the R OSA scheduler recomputes the full schedule, including model placement, routing, batching, and action rates. This path can achieve better efficiency but may require model migration and coordinated routing updates, causing higher overhead. When failure tolerance is enabled, R OSA uses hot-standby GPU nodes. The scheduler reserves standby GPUs and keeps the corresponding model weights loaded, but excludes these GPUs from the normal serving routes. When an active serving GPU fails, the router simply redirects the affected robot streams to the corresponding warm standby GPU, without searching for a new schedule. An alternative design is active-active redundancy, where backup capacity also serves normal traffic and failures are handled by rerouting requests to the remaining active GPUs. We do not use this design because each failure changes the feasible schedules under a reduced server set. Handling this online would require reinvoking the schedule solver and potentially updating model placement, which is both time-consuming and disruptive to robots that are otherwise unaffected by the failure. 
+
+## 3.5 ROSA Implementation 
+
+ROSA uses Ray Serve [31] to manage distributed serving. Each node hosts a gateway that receives inference requests from robot clients and routes them to the model replicas selected by the scheduler. Ray is also responsible for launching, monitoring, and restarting the per-model serving runtimes on the assigned servers. The runtime backend is model-dependent: autoregressive VLM components, such as System 2, safety, and monitor models, are served with vLLM, while System 1 action models are served with PyTorch or JAX depending on the model family. This design keeps the serving runtime modular: adding a new model backend only requires wrapping it as a Ray-managed service. The scheduler is implemented in Python and uses OR-Tools to solve the ILP subproblems. 
+
+## 3.6 Adaptation to Future Workloads 
+
+RFMs are evolving rapidly, so it is important to distinguish enduring system design principles from implementation choices that may change over time. We expect the three design principles in R OSA — shared server-scale serving, a robotics-aware programming abstraction, and factory-objective-driven scheduling — to remain broadly applicable. However, the exact model composition and scheduling algorithm can evolve. For example, future robot pipelines may not use exactly the four components in our current implementation, but they still need a programming abstraction that specifies model compo-nents, invocation patterns, SLOs, and fallback behaviors, as described in §3.3. Besides, future workloads may have more dynamic request patterns, such as adaptive System 2 invocation or irregular monitor checks, thus R OSA may need a different solver strategy or a more dynamic scheduling mechanism. 9Table 1: Single-task robot fleet configurations used in the homogeneous scheduling experiments. All latency SLOs are p99.                                           
+
+> ID Task Components System 1 System 2 Safety Monitor Robot Freq. / SLO Freq. / SLO Freq. / SLO Freq. / SLO tact
+> P1 Pick-and-place action-only S1 – / 200 ms –––200 ms P2 Pick-and-place simple S1, monitor – / 200 ms ––0.5 Hz / 2000 ms 200 ms P3 Pick-and-place hard S1, safety, monitor – / 200 ms –2 Hz / 500 ms 0.5 Hz / 2000 ms 200 ms P4 Assemble kit S1, S2, safety, monitor – / 200 ms 1 per 10 S1 / 2000 ms 2 Hz / 500 ms 0.5 Hz / 2000 ms 200 ms 816 32 64
+> # robots
+> 0
+> 50
+> 100
+> 150
+> Qualified action rate (Hz)
+
+P1    
+
+> 816 32 64
+> # robots
+> 0
+> 25
+> 50
+> 75
+> 100
+> 125
+
+P2    
+
+> 816 32 64
+> # robots
+> 0
+> 20
+> 40
+> 60
+> 80
+> 100
+
+P3    
+
+> 816 32 64
+> # robots
+> 0
+> 20
+> 40
+> 60
+> 80
+
+P4   
+
+> Equal Partition Weighted Partition ROSA
+
+Figure 6: Single-task end-to-end performance measured as SLO-qualified action throughput. Table 2: Heterogeneous task workload configurations.       
+
+> ID Task Classes Robot Split
+> Mix2 P2, P4 K/2 each Mix4 P1, P2, P3, P4 K/4 each
+
+## 4 Evaluation 
+
+In this section, we show that R OSA significantly improves factory productivity compared to various inference systems, break down the contribution of each scheduling decision, and validate that R OSA can run end-to-end on real robots. 
+
+## 4.1 Experimental Setup 
+
+Baseline systems: We benchmark R OSA against several baselines that use the same system implementation as R OSA 
+
+but run different schedules. For dedicated serving system per robot, Baseline 1 uses one GPU per robot, and Baseline 2 
+
+uses one GPU per model required by the robot. For shared serving architecture, Baseline 3 partitions GPUs equally across models, without an optimized batching policy, using batch size one for System 1 and continuous batching for other autoregressive models. Baseline 4 partitions GPU resources proportional to model sizes, using the same batching policy as Baseline 3 . All baselines issue requests as soon as a robot receives an observation, without controlling the request rate. 
+
+Hardware: We run our experiments on an 8-GPU NVIDIA H200 server. For real robot experiments, we use the Franka Panda robot arm to validate system functionality. 
+
+Workloads: Our evaluation includes both real robot exper-iments and synthetic large-scale workloads. The real robot experiments provide small-scale functional validation of the full system. Due to the limited number of available robots, we use synthetic workloads to mimic large-scale factory deployments with tens to hundreds of robots. These synthetic workloads replay sampled observations from the real robot setup, such as those shown in Figure 15. We evaluate single-task multi-stage workloads (Table 1) and mixed-task workloads (Table 2). The single-task workloads use pipelines of increasing complexity, from action-only System 1 execution to pipelines that include System 2, safety, and monitoring models. The latency and throughput requirements for each model component are specified in Table 1. The mixed-task workloads combine multiple task classes in the same cluster, where different task classes may use different model pipelines and request rates. These workloads use representative models. System 1 uses GR00T N1.6 with PyTorch, with torch.compile , CUDA Graphs, and FlashAttention enabled, and also evaluates π0.5with JAX. Both models run in their original FP16 precision to preserve accuracy. Due to the close inference performance of the two models (Figure 13), we use GR00T N1.6 as the default model unless otherwise specified. System 2 reasoning model and progression monitor use Qwen-VL-7B, while safety model uses Qwen-VL-3B due to its simpler functionality. 
+
+## 4.2 End-to-End Performance 
+
+We first evaluate end-to-end factory productivity, defined as the total SLO-qualified robot action throughput. A robot action is counted only when the latency and invocation requirements introduced in §3.4 are satisfied. We later on break down the individual scheduling factors that contribute to this performance in §4.3. 
+
+Single-task workloads. Figure 6 and Figure 7 compare R OSA 
+
+against shared-server scheduling baselines and dedicated 10 P1 P2 P3 P4   
+
+> Workload
+> 0
+> 50
+> 100
+> 150
+> Qualified action rate (Hz)  GPU/Robot GPU/Model ROSA
+
+Figure 7: R OSA versus dedicated serving baselines. serving baselines on the single-task workloads described in Table 1, respectively. 
+
+Compared to shared-server baselines, ROSA achieves substantially higher factory productivity especially when the workload has more robots (Figure 6). The effect is clearest on P4. With 8 robots, the baselines achieve slightly higher throughput: 29.5 qualified actions/s for equal partitioning compared with 23.9 actions/s for R OSA . This is because the GPUs are not yet saturated, so issuing requests without a rate limit does not lead to enough queueing to violate the SLO, while R OSA conservatively caps the request rate using the scheduler’s P99-safe prediction. As the robot count increases to 32, however, both baselines, without scheduler-predicted rate limiting, produce zero SLO-qualified actions because their System 1 SLO meet rate drops to 0%, whereas R OSA still achieves 89.4 qualified actions/s with a 99.9% SLO meet rate. 
+
+The benefit of ROSA also grows as the pipeline has more model components when static resource allocation becomes insufficient. At 32 robots, R OSA improves qualified throughput by 1.23 × over the best shared-server baseline on P2, from 87.1 to 106.9 qualified actions/s. For the more complex P3 and P4 pipelines at the same robot count, the shared-server baselines collapse to zero qualified throughput, while R OSA 
+
+sustains 106.9 and 89.4 qualified actions/s, respectively. 
+
+Compared to dedicated serving baselines, ROSA achieves up to 12.06 × higher factory productivity than the best dedicated configuration (Figure 7). This is due to the limited number of robots supported by these dedicated serving systems. For example, with 8 GPUs, a one-GPU-per-robot baseline can support at most 8 robots even when multiple model components share the same GPU, while a one-GPU-per-model baseline supports only up to 2 robots for the four-component P4 pipeline. By contrast, R OSA uses the same GPU pool to serve many more robots while still satisfying latency and invocation constraints. As a result, on P4, R OSA reaches 89.4 qualified actions/s with 32 robots, while one-GPU-per-model serving reaches only 7.4 qualified actions/s with 2 robots; the one-GPU-per-robot baseline does not produce an SLO-qualified P4 operating point in our sweep. 
+
+Heterogeneous workloads. Figure 8 evaluates multiple-task workloads where robots working on different task classes share the same serving cluster. 8 16 32 64 
+
+> # robots
+> 0
+> 25
+> 50
+> 75
+> 100
+> Qualified action rate (Hz)
+
+Mix2    
+
+> 816 32 64
+> # robots
+> 0
+> 25
+> 50
+> 75
+> 100
+
+Mix4   
+
+> Equal Partition Weighted Partition ROSA
+
+Figure 8: Heterogeneous-task end-to-end performance. 8 16 32 64       
+
+> # robots
+> 0
+> 1000
+> 2000
+> S1 median latency (ms)  P4 latency
+> 816 32 64
+> # robots
+> 0
+> 25
+> 50
+> 75
+> 100
+> S1 SLA meet (%)
+> P4 SLA meet
+> Equal Partition Weighted Partition ROSA SLA
+
+Figure 9: System 1 latency and SLO qualification on P4. ROSA improves peak qualified throughput by 2.21 × on Mix2 and 2.30 × on Mix4 over the best shared-server baseline. The shared baselines perform well only at the smallest robot count, but their qualified throughput quickly drops as the robot count increases. This drop comes from the same two effects observed in the single-task workloads: uncapped clients continue injecting requests after bottleneck components saturate, causing SLO violations, and static resource allocation fail to allocate enough capacity to the components that limit qualified action throughput. In heterogeneous workloads, these effects are amplified because different task classes stress different model components. By contrast, R OSA sustains high SLO compliance while allocating capacity across task classes and obligation models thanks to calculated scheduling. 
+
+## 4.3 Scheduling Decision Ablation 
+
+We next break down the sources of R OSA ’s performance improvement. We study four factors: (1) whether requests meet latency SLOs and therefore produce qualified action pre-dictions, (2) the importance of controlling each robot’s request send frequency, (3) the role of resource allocation across mod-els, and (4) the effect of batching for System 1 action models. 
+
+SLO-qualified action prediction. Figure 9 compares ROSA against shared-server baselines in terms of System 1 latency and SLO qualification rate on P4. At low load, all systems satisfy the System 1 SLO. However, as the robot 11 8 16 32 64 
+
+# robots 
+
+> 0
+> 50
+> 100
+> 150
+> S1 throughput (Hz)
+
+P4 throughput    
+
+> 816 32 64
+
+# robots 
+
+> 0
+> 25
+> 50
+> 75
+> 100
+> S1 SLA meet (%)
+
+P4 SLA meet 
+
+> Capped raw
+> Capped qualified
+> Uncapped raw
+> Uncapped qualified
+
+Figure 10: Effect of request-rate control on P4. 8 16 32 64    
+
+> # robots
+> P1
+> P2
+> P3
+> P4
+> Task pipeline
+> 8
+> (1.0x)
+> 8
+> (1.0x)
+> 16
+> (2.0x)
+> 22
+> (2.8x)
+> 8
+> (1.0x)
+> 16
+> (2.0x)
+> 32
+> (4.0x)
+> 32
+> (4.0x)
+> 12
+> (1.5x)
+> 24
+> (3.0x)
+> 48
+> (6.0x)
+> 33
+> (4.1x)
+> 16
+> (2.0x)
+> 32
+> (4.0x)
+> 44
+> (5.5x)
+> 40
+> (5.0x)
+> Equal Partition
+> 816 32 64
+> # robots
+> 8
+> (1.0x)
+> 8
+> (1.0x)
+> 16
+> (2.0x)
+> 22
+> (2.8x)
+> 12
+> (1.5x)
+> 25
+> (3.1x)
+> 52
+> (6.5x)
+> 52
+> (6.5x)
+> 15
+> (1.9x)
+> 32
+> (4.0x)
+> 67
+> (8.4x)
+> 45
+> (5.6x)
+> 23
+> (2.9x)
+> 49
+> (6.1x)
+> 69
+> (8.6x)
+> 63
+> (7.9x)
+> Weighted Partition
+> 2
+> 4
+> 6
+> 8
+> #GPUs required compared to ROSA
+
+Figure 11: GPU required for baseline systems to achieve R OSA -level performance even when enabling request rate control. count increases, the shared-server baselines continue issuing requests without controlling the request frequency, leading to significant queueing delay. At 32 robots, equal partitioning has 0% System 1 SLO meet rate, with median System 1 latency of 534.5 ms; weighted partitioning already reaches 0% SLO meet rate at 16 robots, with median System 1 latency of 520.8 ms. In contrast, R OSA maintains a 99.96% System 1 SLO meet rate at 32 robots, with median System 1 latency of 83.8 ms. Even at 64 robots, where R OSA is also under heavy load, it maintains a 97.23% System 1 SLO meet rate instead of collapsing to zero qualified actions. 
+
+Request-rate control. A key part of R OSA scheduling is that robots do not simply send a new System 1 or System 2 request as soon as the previous action finishes, but letting the schedul-ing computes an action rate to avoid overloading the server. Figure 10 shows the qualified performance and SLO meet rate for capped and uncapped request rates. At moderate load, uncapped sending can achieve higher throughput because the serving system has not been saturated yet: at 32 robots, uncapped P4 reaches 107.3 qualified actions/s, compared with 89.4 actions/s under the capped schedule. However, at 64 robots, uncapped sending produces 145.5 raw actions/s but only 24.8 qualified actions/s, because the System 1 SLO meet rate drops to 17.0% under high queueing delay. In contrast, the capped schedule maintains 78.8 qualified actions/s with a 97.2% System 1 SLO meet rate, a 3.18 × improvement in Table 3: Resource-allocation strategies for P4. 
+
+Schedule Robots #GPUs S1:S2:Safe:Monitor 
+
+ROSA 8/16/32 5:1:1:1 ROSA 64 4:1:2:1 Equal partition 8/16/32/64 2:2:2:2 Weighted partition 8/16/32/64 1:3:1:3 8 16 32 64   
+
+> # robots
+> 0
+> 20
+> 40
+> 60
+> 80
+> Qualified action rate (Hz)
+> infeasible
+> Equal Partition Weighted Partition ROSA
+
+Figure 12: Performance of different resource allocations on P4. 1 2 4 8 16     
+
+> S1 max batch size
+> 0
+> 100
+> 200
+> S1 inference latency (ms)
+> GR00T N1.6 p50
+> GR00T N1.6 p99
+> pi0.5 p50
+> pi0.5 p99 124816
+> S1 max batch size
+> 0
+> 20
+> 40
+> 60
+> 80
+> S1 action rate
+> GR00T N1.6
+> pi0.5
+
+Figure 13: System 1 performance under different batch sizes. 1 4 16               
+
+> # robots
+> 0.05
+> 0.2
+> 1
+> Action time (s)  1416
+> 1216
+> 112
+> 5
+> 10
+> 15
+> S1 max batch 1416
+> # robots
+> 0.05
+> 0.2
+> 1
+> Action time (s)  1.00x 1.24x 2.46x
+> 1.00x 1.00x 1.88x
+> 1.00x 1.00x 1.00x
+> 1.0
+> 1.5
+> 2.0
+> Speedup over batch 1
+
+Figure 14: System 1 batching decision: the optimal batch sizes in various configurations and their speedup over batch size one. SLO-qualified throughput. Figure 11 applies R OSA ’s request-rate control to the baseline systems and reports how many GPUs they need to match the SLO-qualified action rate achieved by R OSA on eight GPUs. According to R OSA scheduler, equal and weighted partitioning baselines require up to 5.5 × and 8.6 × more GPUs, respec-tively, to match R OSA , with the gap widening as the number of robots and model components increases. This overhead comes from suboptimal resource allocation and System 1 batching decisions, which we isolate in the following ablations. 
+
+Resource allocation. We next show that resource allocation for multi-model pipelines matters even when batching and request-rate control are carefully scheduled. For this ablation, all sched-ules use the same request-rate control and System 1 batching policy derived by R OSA ; only the allocation of GPU servers across model components changes. Table 3 shows the resulting allocation for the P4 workload on 8 GPU servers, and Figure 12 shows the measured qualified throughput. For 8 robots, R OSA 
+
+and the equal partitioning baseline perform similarly as there are not enough System 1 requests to saturate the GPUs yet. 12 Figure 15: Real-robot execution trace: the action model drives a Franka Panda arm to place tools into a bucket. 
+
+Figure 16: VLM judges for monitoring task completion (left) and detecting nearby humans for safe operation (right). However, as the number of robots increases to 16 and 32, R OSA 
+
+achieved 1.26 × and 2.20 × speedup in qualified throughput over the best static allocation, respectively. At 64 robots, the weighted partitioning baseline even becomes infeasible due to the insufficient capacity to meet the safety model SLO. 
+
+System 1 batching. Finally, we isolate the effect of batching for System 1 action models. Unlike the autoregressive VLM com-ponents, which use continuous batching, System 1 action mod-els use a discrete batch size selected by the scheduler. Figure 13 shows the measured latency-throughput tradeoff. For both GR00T and π0.5 , increasing the batch size to 16 improves in-ference throughput by roughly 3 ∼4× over batch size one, at the cost of higher inference latency and additional queueing delay. Figure 14 shows the resulting optimal batch size across robot counts and robot action periods without latency SLO: larger batches are beneficial only when the throughput gain outweighs the added delay in the robot control loop. Under high request pressure, such as 16 robots with a 50 ms action pe-riod, the scheduler selects batch size 16 and achieves a 2.46 ×
+
+speedup over batch size one. Under lighter load, such as longer action periods or fewer robots, batch size one often remains optimal because larger batches add latency without enough amortization benefit. This motivates R OSA ’s profiling-guided batch-size selection rather than a fixed batching policy. 
+
+## 4.4 Real Robot Experiments 
+
+Finally, we validate that R OSA can run the full robot-serving path on a Franka Panda robot arm. Here, we ask the robot to perform a hard pick and place task similar to P3 in the synthetic workloads, where it needs to place all the tools on the table into a bucket. Figure 15 shows an execution trace in which the action model drives the arm to place tools into a bucket. Figure 16 then exercises the auxiliary VLM components. The task-progression monitor judges whether the task has completed or is still ongoing, while the safety model identifies whether a human has entered the unsafe region near the robot. 
+
+## 5 Conclusion 
+
+Robotics foundation models are making general-purpose robots increasingly plausible for industrial deployments. We introduce R OSA , a model-agnostic RFM serving system built around three design principles: (1) shared server-scale infras-tructure for higher inference performance and efficiency, (2) robotics-aware programming abstractions and system design for multi-model orchestration, and (3) factory-objective-driven scheduling to optimize factory-level productivity. Our evaluation shows that shared GPU-pool serving improves robot-factory productivity over shared and dedicated serving baselines by 2.44 × and 12.06 ×, respectively, while satisfying latency SLOs. While the field is evolving rapidly, we believe these design principles are general enough to accommodate future model changes, thus providing a solid foundation for future RFM serving system designs. 
+
+## References 
+
+[1] Niket Agarwal, Arslan Ali, Jon Allen, Martin Antolini, Adeline Aubame, Alisson Azzolini, Junjie Bai, Maciej Bala, Yogesh Balaji, Josh Bapst, et al. Cosmos 3: Omnimodal world models for physical ai. arXiv preprint arXiv:2606.02800 , 2026. [2] Ameya Agaskar, Sriram Siva, William Pickering, Kyle O’Brien, Charles Kekeh, Alexandre Ormiga Galvao Bar-bosa, Ang Li, Brianna Gallo Sarker, Alicia Chua, Mayur Nemade, et al. Deepfleet: Multi-agent foundation models for mobile robots. arXiv preprint arXiv:2508.08574 ,2025. 13 [3] Ayoub Agouzoul. Understanding asynchronous inference methods for vision-language-action models. 
+
+arXiv preprint arXiv:2605.08168 , 2026. [4] Molham Alsakati, Charlie Pettersson, Sebastian Max, Vishnu Narayanan Moothedath, and James Gross. Performance of 802.11 be wi-fi 7 with multi-link operation on ar applications. In 2023 IEEE Wireless Communications and Networking Conference (WCNC) ,pages 1–6. IEEE, 2023. [5] Ali Amin, Raichelle Aniceto, Ashwin Balakrishna, Kevin Black, Ken Conley, Grace Connors, James Darpinian, Karan Dhabalia, Jared DiCarlo, Danny Driess, et al. π0.6: a vla that learns from experience. 
+
+arXiv preprint arXiv:2511.14759 , 2025. [6] Johan Bjorck, Fernando Castañeda, Nikita Cherniadev, Xingye Da, Runyu Ding, Linxi Fan, Yu Fang, Dieter Fox, Fengyuan Hu, Spencer Huang, et al. Gr00t n1: An open foundation model for generalist humanoid robots. arXiv preprint arXiv:2503.14734 , 2025. [7] Johan Bjorck, Zhiqi Li, Yunze Man, Jing Wang, An-Chieh Cheng, Sifei Liu, Shihao Wang, Zhiding Yu, Abhishek Badki, Stan Birchfield, Valts Blukis, Yevgen Chebotar, Siyi Chen, Sicong Leng, Yu-Cheng Chou, Tianli Ding, Boyi Li, Zhengyi Luo, Hang Su, Jonathan Tremblay, Tingwu Wang, Bowen Wen, Jimmy Wu, Xianghui Xie, Hanrong Ye, Hongxu Yin, K. R. Zentner, Liangyan Gui, Yu-Xiong Wang, Yuke Zhu, Linxi Jim Fan, and Jan Kautz. Vesta: A generalist embodied reasoning model, 2026. [8] Kevin Black, Noah Brown, Danny Driess, Adnan Esmail, Michael Equi, Chelsea Finn, Niccolo Fusai, Lachy Groom, Karol Hausman, Brian Ichter, et al. π0: A visionlanguage-action flow model for general robot control, 2024a. URL https://arxiv. org/abs/2410.24164 ,2024. [9] Kevin Black, Manuel Y Galliker, and Sergey Levine. Real-time execution of action chunking flow policies. 
+
+arXiv preprint arXiv:2506.07339 , 2025. [10] Clemens C Christoph, Maximilian Eberlein, Filippos Katsimalis, Arturo Roberti, Aristotelis Sympetheros, Michel R Vogt, Davide Liconti, Chenyu Yang, Barn-abas Gavin Cangan, Ronan J Hinchet, et al. Orca: An open-source, reliable, cost-effective, anthropomorphic robotic hand for uninterrupted dexterous task learning. 
+
+arXiv preprint arXiv:2504.04259 , 2025. [11] Yinwei Dai, Ganesh Ananthanarayanan, Landon Cox, Xenofon Foukas, Bozidar Radunovic, and Ravi Netravali. Kairos: A scalable serving system for physical ai. arXiv preprint arXiv:2605.11381 , 2026. [12] Jiafei Duan, Wilbert Pumacay, Nishanth Kumar, Yi Ru Wang, Shulin Tian, Wentao Yuan, Ranjay Krishna, Dieter Fox, Ajay Mandlekar, and Yijie Guo. Aha: A vision-language-model for detecting and reasoning over failures in robotic manipulation. arXiv preprint arXiv:2410.00371 , 2024. [13] Ramy ElMallah, Krish Chhajer, and Chi-Guhn Lee. Score the steps, not just the goal: Vlm-based subgoal evaluation for robotic manipulation. arXiv preprint arXiv:2509.19524 , 2025. [14] Figure AI. F.02 contributed to the production of 30,000 cars at bmw. https://www.figure.ai/news/ production-at-bmw , November 2025. [15] Figure AI. Helix: A vision-language-action model for generalist humanoid control. https: //www.figure.ai/news/helix , 2025. [16] Chi-Pin Huang, Yunze Man, Zhiding Yu, Min-Hung Chen, Jan Kautz, Yu-Chiang Frank Wang, and Fu-En Yang. Fast-thinkact: Efficient vision-language-action reasoning via verbalizable latent planning. arXiv preprint arXiv:2601.09708 , 2026. [17] Qijing Huang, Wenqi Jiang, Christos Kozyrakis, and Jason Clemons. Enabling the robotic revolution: Bridging the performance gap between present and future. In 2026 IEEE/JSAP Symposium on VLSI Technology and Circuits (VLSI Technology and Circuits) ,Honolulu, HI, USA, 2026. [18] P Intelligence, K Black, N Brown, J Darpinian, K Dha-balia, D Driess, A Esmail, M Equi, C Finn, N Fusai, et al. π0.5: A vision-language-action model with open-world generalization. arxiv 2025. arXiv preprint arXiv:2504.16054 .[19] Wenqi Jiang, Jason Clemons, Karu Sankaralingam, and Christos Kozyrakis. How fast can i run my vla? demystifying vla inference performance with vla-perf. 
+
+arXiv preprint arXiv:2602.18397 , 2026. [20] Azal Ahmad Khan, Michael Andrev, Muhammad Ali Murtaza, Sergio Aguilera, Rui Zhang, Jie Ding, Seth Hutchinson, and Ali Anwar. Safety aware task planning via large language models in robotics. In 2025 IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS) , pages 21024–21031. IEEE, 2025. [21] Moo Jin Kim, Chelsea Finn, and Percy Liang. Fine-tuning vision-language-action models: Optimizing speed and success. arXiv preprint arXiv:2502.19645 , 2025. [22] Moo Jin Kim, Karl Pertsch, Siddharth Karamcheti, Ted Xiao, Ashwin Balakrishna, Suraj Nair, Rafael Rafailov, Ethan Foster, Grace Lam, Pannag Sanketi, et al. Openvla: 14 An open-source vision-language-action model. arXiv preprint arXiv:2406.09246 , 2024. [23] Woosuk Kwon, Zhuohan Li, Siyuan Zhuang, Ying Sheng, Lianmin Zheng, Cody Hao Yu, Joseph Gonzalez, Hao Zhang, and Ion Stoica. Efficient memory management for large language model serving with pagedattention. In 
+
+Proceedings of the 29th symposium on operating systems principles , pages 611–626, 2023. [24] Jialong Li, Xuxin Cheng, Tianshu Huang, Shiqi Yang, Ri-Zhao Qiu, and Xiaolong Wang. Amo: Adaptive motion optimization for hyper-dexterous humanoid whole-body control. arXiv preprint arXiv:2505.03738 , 2025. [25] Tao Lin, Yilei Zhong, Yuxin Du, Jingjing Zhang, Jiting Liu, Yinxinyu Chen, Encheng Gu, Ziyan Liu, Hongyi Cai, Yanwen Zou, et al. Evo-1: Lightweight vision-language-action model with preserved semantic alignment. arXiv preprint arXiv:2511.04555 , 2025. [26] Jun Liu, Pu Zhao, Zhenglun Kong, Xuan Shen, Peiyan Dong, Fan Yang, Lin Cui, Hao Tang, Geng Yuan, Wei Niu, et al. When should a robot think? resource-aware rea-soning via reinforcement learning for embodied robotic decision-making. arXiv preprint arXiv:2603.16673 ,2026. [27] Ruofeng Liu and Nakjung Choi. A first look at wi-fi 6 in action: Throughput, latency, energy efficiency, and security. Proceedings of the ACM on Measurement and Analysis of Computing Systems , 7(1):1–25, 2023. [28] Fiona Luo. Vision-language models for robot success detection. In Proceedings of the AAAI Conference on Arti-ficial Intelligence , volume 38, pages 23750–23752, 2024. [29] Zhengyi Luo, Ye Yuan, Tingwu Wang, Chenran Li, Sirui Chen, Fernando Castaneda, Zi-Ang Cao, Jiefeng Li, David Minor, Qingwei Ben, et al. Sonic: Supersizing motion tracking for natural humanoid whole-body control. arXiv preprint arXiv:2511.07820 , 2025. [30] Yunchao Ma, Yizhuang Zhou, Yunhuan Yang, Tiancai Wang, and Haoqiang Fan. Running vlas at real-time speed. arXiv preprint arXiv:2510.26742 , 2025. [31] Philipp Moritz, Robert Nishihara, Stephanie Wang, Alexey Tumanov, Richard Liaw, Eric Liang, Melih Elibol, Zongheng Yang, William Paul, Michael I Jordan, et al. Ray: A distributed framework for emerging {AI }
+
+applications. In 13th USENIX symposium on operating systems design and implementation (OSDI 18) , pages 561–577, 2018. [32] Francisco Munguia-Galeano, Zhengxue Zhou, Satheeshkumar Veeramani, Hatem Fakhruldeen, Louis Longley, Rob Clowes, and Andrew I Cooper. Chemist eye: a visual language model-powered system for safety monitoring and robot decision-making in self-driving laboratories. Digital Discovery , 5(5):2209–2220, 2026. [33] Kiru Park, Johannes Kulick, Alexander Melkozerov, Roc Arandes Vilagrasa, Teguh Santoso Lembono, Vanessa Neubauer, Artem Minichev, Kade Turner, Oana Agrigoroaiei, Pascal Klink, et al. Vulcan pick: A robotic system for picking targeted objects from fabric pods. 2025. [34] Kohei Sendai, Maxime Alvarez, Tatsuya Matsushima, Yutaka Matsuo, and Yusuke Iwasawa. Leave no observation behind: Real-time correction for vla action chunks. arXiv preprint arXiv:2509.23224 , 2025. [35] Dhruv Shah, Bła˙ zej Osi´ nski, Sergey Levine, et al. Lm-nav: Robotic navigation with large pre-trained models of language, vision, and action. In Conference on robot learning , pages 492–504. pmlr, 2023. [36] Mustafa Shukor, Dana Aubakirova, Francesco Capuano, Pepijn Kooijmans, Steven Palma, Adil Zouitine, Michel Aractingi, Caroline Pascal, Martino Russi, Andres Marafioti, et al. Smolvla: A vision-language-action model for affordable and efficient robotics. arXiv preprint arXiv:2506.01844 , 2025. [37] Haoming Song, Delin Qu, Yuanqi Yao, Qizhi Chen, Qi Lv, Yiwen Tang, Modi Shi, Guanghui Ren, Maoqing Yao, Bin Zhao, et al. Hume: Introducing system-2 thinking in visual-language-action model. arXiv preprint arXiv:2505.21432 , 2025. [38] Wenhao Sun, Sai Hou, Zixuan Wang, Bo Yu, Shaoshan Liu, Xu Yang, Shuai Liang, Yiming Gan, and Yinhe Han. Dadu-e: Rethinking the role of large language model in robotic computing pipelines. Journal of Field Robotics ,2026. [39] Jiaming Tang, Yufei Sun, Yilong Zhao, Shang Yang, Yujun Lin, Zhuoyang Zhang, James Hou, Yao Lu, Zhijian Liu, and Song Han. Vlash: Real-time vlas via future-state-aware asynchronous inference. arXiv preprint arXiv:2512.01031 , 2025. [40] Gemini Robotics Team, Saminda Abeyruwan, Joshua Ainslie, Jean-Baptiste Alayrac, Montserrat Gonzalez Arenas, Travis Armstrong, Ashwin Balakrishna, Robert Baruch, Maria Bauza, Michiel Blokzijl, et al. Gemini robotics: Bringing ai into the physical world. arXiv preprint arXiv:2503.20020 , 2025. [41] Aidin Vaziri. Tesla to kill off model s and x ve-hicles, convert fremont factory to build robots. 
+
+https://www.sfchronicle.com/tech/article/ tesla-end-model-s-x-21320796.php , January 2026. 15 [42] Hongyu Wang, Chuyan Xiong, Ruiping Wang, and Xilin Chen. Bitvla: 1-bit vision-language-action models for robotics manipulation. arXiv preprint arXiv:2506.07530 ,2025. [43] Jun Wang, Xiaohao Xu, and Xiaonan Huang. Probing collision grounding in vision-language models for safe human-robot collaboration. arXiv preprint arXiv:2605.31196 , 2026. [44] Yan Wang, Wenjie Luo, Junjie Bai, Yulong Cao, Tong Che, Ke Chen, Yuxiao Chen, Jenna Diamond, Yifan Ding, Wenhao Ding, et al. Alpamayo-r1: Bridging reasoning and action prediction for generalizable autonomous driving in the long tail. arXiv preprint arXiv:2511.00088 , 2025. [45] Junjie Wen, Yichen Zhu, Jinming Li, Minjie Zhu, Zhibin Tang, Kun Wu, Zhiyuan Xu, Ning Liu, Ran Cheng, Chaomin Shen, et al. Tinyvla: Towards fast, data-efficient vision-language-action models for robotic manipulation. 
+
+IEEE Robotics and Automation Letters , 2025. [46] Zebin Yang, Yijiahao Qi, Tong Xie, Bo Yu, Shaoshan Liu, and Meng Li. Dysl-vla: Efficient vision-language-action model inference via dynamic-static layer-skipping for robot manipulation. [47] Seonghyeon Ye, Yunhao Ge, Kaiyuan Zheng, Shenyuan Gao, Sihyun Yu, George Kurian, Suneel Indupuru, You Liang Tan, Chuning Zhu, Jiannan Xiang, et al. World action models are zero-shot policies. arXiv preprint arXiv:2602.15922 , 2026. [48] Yang Yue, Yulin Wang, Bingyi Kang, Yizeng Han, Shen-zhi Wang, Shiji Song, Jiashi Feng, and Gao Huang. Deer-vla: Dynamic inference of multimodal large language models for efficient robot execution. Advances in Neural Information Processing Systems , 37:56619–56643, 2024. [49] Jianke Zhang, Yanjiang Guo, Xiaoyu Chen, Yen-Jen Wang, Yucheng Hu, Chengming Shi, and Jianyu Chen. Hirt: Enhancing robotic control with hierarchical robot transformers. arXiv preprint arXiv:2410.05273 , 2024. [50] Jie Zhang, Xiaoyue Chen, Anzhe Chen, Chenxu Lv, Deqing Li, Gengze Zhou, Hang Yin, Haoqi Yuan, Haoyang Li, Jiahao Li, et al. Qwen-robotworld technical report: Unifying embodied world modeling through language-conditioned video generation. arXiv preprint arXiv:2606.17030 , 2026. [51] Tony Z Zhao, Vikash Kumar, Sergey Levine, and Chelsea Finn. Learning fine-grained bimanual manipulation with low-cost hardware. arXiv preprint arXiv:2304.13705 ,2023. [52] Brianna Zitkovich, Tianhe Yu, Sichun Xu, Peng Xu, Ted Xiao, Fei Xia, Jialin Wu, Paul Wohlhart, Stefan Welker, Ayzaan Wahid, et al. Rt-2: Vision-language-action mod-els transfer web knowledge to robotic control. In Confer-ence on Robot Learning , pages 2165–2183. PMLR, 2023. 16

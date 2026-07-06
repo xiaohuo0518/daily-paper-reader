@@ -1,0 +1,39 @@
+{
+  "label": "2026-07-06",
+  "date": "2026-07-06",
+  "generated_at": "2026-07-06T21:47:05",
+  "count": 2,
+  "papers": [
+    {
+      "paper_id": "202607/06/2606.29937v1-repair-bench-a-benchmark-for-robot-error-perception-and-interaction-recovery",
+      "section": "deep",
+      "title_en": "REPAIR-Bench: A Benchmark for Robot Error Perception And Interaction Recovery",
+      "authors": "Giuliano Pioldi, Yashika Batra, Arman Ibrayeva, Yuanchen Bai, Purnjay Maruur, Promise Ekpo, Angelique Taylor",
+      "date": "2026-06-29",
+      "pdf": "https://arxiv.org/pdf/2606.29937v1",
+      "score": "8.0",
+      "evidence": "机器人错误感知与故障检测基准；机器人数据集构建",
+      "tldr": "现有研究常将机器人失败视为独立事件，侧重二元检测和规则恢复。本文提出REPAIR-Bench，基于41名参与者的214次交互试验，覆盖四种失败类型，提供面部动作单元、头部姿势、语音转录等同步数据。设计了跨会话失败检测、失败类型分类、用户中心恢复预测三项任务。基线实验显示分层递归模型改进检测（严格F1=0.80），定位误差2.97秒，Mistral-7B在恢复预测上Hit@5=0.76。该基准为HRI社区提供标准化评估框架。",
+      "tags": "query:ur",
+      "abstract_en": "Understanding how users perceive and respond to robot failures is essential for building robust and trustworthy robot systems. Prior work, however, (i) often treats failures as independent events, (ii) emphasizes binary failure detection, (iii) with rule-based recovery modeling. We present REPAIR-Bench, built on 214 interaction trials from 41 participants, the benchmark spans four induced failure types and provides synchronized facial action units, head pose, speech transcripts, and post-interaction affect and recovery reports. The benchmark spans three novel evaluation tasks that jointly capture the lifecycle of failure in human-robot interaction (HRI): (i) failure detection over inter-dependent interaction sessions, modeling longitudinal user adaptation across repeated failures; (ii) visual failure-type classification beyond binary success/failure formulations; and (iii) user-centered recovery prediction, inferring users' preferred recovery strategies from interaction context rather than relying on manually designed or rule-based strategies. In baseline experiments, hierarchical recurrent modeling improved failure detection over a single-session model (strict F1: 0.80 vs. 0.68), achieved a failure localization mean signed error of -0.51 s, median absolute error of 2.97 s and, for recovery prediction, a QLoRA-tuned Mistral-7B reached Hit@5=0.76 and F1@5=0.32. REPAIR-Bench provides both the HRI and Medical HRI communities with a standardized framework for (1) evaluating robot failures and (2) building transparent, adaptive, and trustworthy recovery systems.",
+      "source": "arxiv",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "paper_id": "202607/06/2607.01088v1-rosa-a-robotics-foundation-model-serving-system-for-robot-factories",
+      "section": "quick",
+      "title_en": "ROSA: A Robotics Foundation Model Serving System for Robot Factories",
+      "authors": "Wenqi Jiang, Jason Clemons, Rowland O'Flaherty, Hugo Hadfield, Alperen Degirmenci, Shuran Song, Yashraj Narang, Christos Kozyrakis",
+      "date": "2026-07-01",
+      "pdf": "https://arxiv.org/pdf/2607.01088v1",
+      "score": "7.0",
+      "evidence": "机器人工厂边缘端部署共享GPU池",
+      "tldr": "机器人基础模型（RFM）在工厂部署中面临单机器人单模型的局限，现有系统将推理视为边缘计算问题，延迟优化目标单一。ROSA提出共享GPU池服务，让机器人集群通过网络访问服务器级GPU，提升推理性能和GPU利用率。系统支持多模型流水线、按任务性能需求和故障处理，采用工厂目标驱动的调度最大化SLO合规的生产率。实验表明，相比传统专用服务系统，ROSA将工厂生产率提升高达12.06倍。",
+      "tags": "query:ur",
+      "abstract_en": "Robotics foundation models (RFMs) are making general-purpose robots increasingly practical for factory deployments. While RFM serving systems are central to this vision, existing systems are largely shaped by a single-robot, single-model assumption: inference is treated as an edge-computing problem handled by an on-robot or dedicated nearby GPU, and the serving objective is to minimize the latency of a single action model. In this paper, we propose ROSA, an RFM serving system for robot factories designed around three key principles. First, ROSA adopts shared GPU-pool serving, allowing a fleet of robots to access powerful server-class GPUs over the network in order to improve inference performance, battery duration, and GPU utilization. Second, ROSA provides a robotics-aware programming abstraction and system design that supports multi-model pipelines, per-task performance requirements, and failure handling. Third, ROSA uses factory-objective-driven scheduling to maximize SLO-qualified factory productivity rather than minimizing individual request latency. We implement ROSA on top of Ray Serve for distributed orchestration, with vLLM, PyTorch, and JAX as model-serving backends, and evaluate it on both real robots and synthetic large-scale workloads. The results show that ROSA improves factory productivity by up to 12.06x over conventional dedicated serving systems.",
+      "source": "arxiv",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "errors": []
+}
