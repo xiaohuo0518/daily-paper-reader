@@ -1,0 +1,506 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-07-07T22:14:26.907994+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 2,
+    "deep_divecandidates": 5,
+    "deep_cap": 7,
+    "deep_selected": 5,
+    "quick_candidates": 6,
+    "quick_skim_target": 12,
+    "quick_selected": 6
+  },
+  "deep_dive": [
+    {
+      "id": "2607.02501v2",
+      "source": "arxiv",
+      "title": "Embodied.cpp: A Portable Inference Runtime of Embodied AI Models on Heterogeneous Robots",
+      "abstract": "Embodied AI models now span vision-language-action (VLA) models and world-action models (WAMs), but practical deployment remains fragmented across model-specific Python stacks, backend assumptions, and robot-side glue code, especially on heterogeneous edge devices. Existing inference runtimes are designed mainly for request-response serving and therefore do not satisfy the runtime contract of embodied deployment: multi-rate execution inside closed-loop control, latency-first batch-1 inference on heterogeneous hardware, and extensible embodied interfaces beyond fixed token I/O. We present Embodied$.$cpp, a portable C++ inference runtime for embodied models. Based on an architectural analysis of representative VLA models and WAMs, Embodied$.$cpp captures a shared execution path and organizes it into five layers: input adapters, sequence builders, backbone execution, head plugins, and deployment adapters. The runtime provides modular multi-rate execution, latency-first fused inference, and extensible operator and I/O support, enabling deployment across heterogeneous devices, robots, and simulators through one backend abstraction. We evaluate Embodied$.$cpp on two VLA models, HY-VLA and pi0.5, and on a preliminary WAM benchmark using a LingBot-VA Transformer block. The VLA deployments achieve successful closed-loop execution with 100.0% and 91.0% task success rates, respectively. The WAM benchmark reduces block memory from 312.2 MiB to 88.1 MiB. These results show that Embodied$.$cpp improves deployment efficiency while preserving high accuracy across diverse embodied model architectures.",
+      "authors": [
+        "Ling Xu",
+        "Chuyu Han",
+        "Borui Li",
+        "Hao Wu",
+        "Shiqi Jiang",
+        "Ting Cao",
+        "Chuanyou Li",
+        "Sheng Zhong",
+        "Shuai Wang"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.CV",
+        "cs.OS"
+      ],
+      "published": "2026-07-02T17:58:28+00:00",
+      "link": "https://arxiv.org/pdf/2607.02501v2",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "portable C++ inference runtime for embodied AI models on heterogeneous edge devices",
+      "llm_evidence_cn": "面向异构边缘设备的可移植C++推理运行时",
+      "llm_evidence": "面向异构边缘设备的可移植C++推理运行时",
+      "canonical_evidence": "面向异构边缘设备的可移植C++推理运行时",
+      "llm_tldr_en": "Embodied.cpp is a portable C++ inference runtime for embodied AI models (VLA, WAM) on heterogeneous edge robots, supporting multi-rate closed-loop control and latency-first inference.",
+      "llm_tldr_cn": "针对具身AI模型在异构边缘机器人上部署碎片化的问题，提出Embodied.cpp，一个可移植的C++推理运行时，支持多速率闭环控制和延迟优先推理，适用于VLA和世界模型等。",
+      "llm_tldr": "针对具身AI模型在异构边缘机器人上部署碎片化的问题，提出Embodied.cpp，一个可移植的C++推理运行时，支持多速率闭环控制和延迟优先推理，适用于VLA和世界模型等。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "edge deployment for humanoid robots",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2606.29940v1",
+      "source": "arxiv",
+      "title": "WARP: Whole-Body Retargeting for Learning from Offline Human Demonstrations",
+      "abstract": "Direct transfer from human demonstration to learnable robot action is a crucial step towards scalable whole-body mobile manipulation. While human data scales better than mobile teleoperation, it requires overcoming significant embodiment gaps. Existing retargeting methods yield imprecise or inconsistent solutions, causing action multi-modality that prevents supervised policies from reliably converging. We present Whole-body-Aware Retargeting from human Pose (WARP), an offline pipeline that explicitly models embodiment differences to extract precise, unique whole-body actions. WARP leverages a closed-form Shoulder-Elbow-Wrist (SEW) geometric solver for exact end-effector tracking while preserving whole-body structural intent. Paired with lazy mobile-base control, it extracts accurate, consistent robot trajectories. Evaluations show WARP provides highly reliable data for open-loop real-world replay. To our knowledge, WARP is the first framework to achieve zero-shot whole-body mobile manipulation directly from offline human demonstrations, eliminating the need for human-in-the-loop teleoperation action data. More details on https://warp-retarget.github.io/",
+      "authors": [
+        "Zhenyang Chen",
+        "Chuizheng Kong",
+        "Chuye Zhang",
+        "Yuanshao Yang",
+        "Lawrence Y. Zhu",
+        "Shreyas Kousik",
+        "Danfei Xu"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-06-29T08:17:31+00:00",
+      "link": "https://arxiv.org/pdf/2606.29940v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "human-to-humanoid action retargeting for dataset construction",
+      "llm_evidence_cn": "从人体姿态到人形机器人动作的重定位方法，用于数据集构建",
+      "llm_evidence": "从人体姿态到人形机器人动作的重定位方法，用于数据集构建",
+      "canonical_evidence": "从人体姿态到人形机器人动作的重定位方法，用于数据集构建",
+      "llm_tldr_en": "Proposes WARP, an offline retargeting pipeline that extracts precise whole-body actions from human poses to generate training data for humanoid robots, addressing embodiment gaps.",
+      "llm_tldr_cn": "针对人形机器人训练数据难以规模化的问题，提出WARP离线重定位流水线，通过显式建模人体与机器人的形态差异，利用闭式SEW几何求解器精确跟踪末端执行器并保留全身结构意图，从人体姿态中提取唯一且精确的全身动作。该方法有效解决了现有重定位方法带来的动作多模态性，使得监督策略能够可靠收敛。WARP为人形机器人利用人类示教数据提供了可扩展的数据集构建方案。",
+      "llm_tldr": "针对人形机器人训练数据难以规模化的问题，提出WARP离线重定位流水线，通过显式建模人体与机器人的形态差异，利用闭式SEW几何求解器精确跟踪末端执行器并保留全身结构意图，从人体姿态中提取唯一且精确的全身动作。该方法有效解决了现有重定位方法带来的动作多模态性，使得监督策略能够可靠收敛。WARP为人形机器人利用人类示教数据提供了可扩展的数据集构建方案。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "humanoid robot dataset construction",
+      "matched_requirement_id": "req-2",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2607.02646v1",
+      "source": "arxiv",
+      "title": "EVA-Client: A Unified Data Collection, Inference, and Deployment Framework for Embodied Policies on Real Robots",
+      "abstract": "We present EVA-Client, an open-source framework for deployment, data collection, and evaluation of trained manipulation policies on real robots. Sitting between a policy server and the physical hardware, EVA-Client unifies the real-robot stages of the policy iteration loop within a single codebase. It makes three contributions. First, a component-decoupled architecture in which robot backends, inference strategies, and transport middlewares form an orthogonal grid: adding a robot or a strategy touches only its own layer. Second, inspectable execution through Debug, Collect, and Eval workflows, with modes ranging from open-loop simulation to continuous real-time control. Third, every evaluation run doubles as a data collection, recording full rollouts in training-ready format alongside exhaustive logs and a side-by-side comparison viewer, so each evaluation feeds the next round of training rather than ending as an unrecorded impression. EVA-Client further consolidates major real-time inference strategies, synchronous and asynchronous execution, ACT-style temporal ensembling, Real-Time Chunking, and a naive-async ablation baseline, behind a single configuration surface.",
+      "authors": [
+        "Heqing Yang",
+        "Yang Yi",
+        "Liyao Wang",
+        "Linqing Zhong",
+        "Donglin Yang",
+        "Ruipu Wu",
+        "Zitong Bai",
+        "Fengjiao Chen",
+        "Manyuan Zhang",
+        "Linjiang Huang",
+        "Si Liu"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.CV"
+      ],
+      "published": "2026-07-02T17:59:52+00:00",
+      "link": "https://arxiv.org/pdf/2607.02646v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "Unified framework for deployment, data collection, and evaluation of policies on real robots",
+      "llm_evidence_cn": "真实机器人上策略部署、数据收集和评估的统一框架",
+      "llm_evidence": "真实机器人上策略部署、数据收集和评估的统一框架",
+      "canonical_evidence": "真实机器人上策略部署、数据收集和评估的统一框架",
+      "llm_tldr_en": "EVA-Client provides an open-source framework that unifies data collection, inference, and deployment for embodied policies on real robots with a decoupled architecture supporting multiple robots and strategies.",
+      "llm_tldr_cn": "EVA-Client是一个开源框架，统一了真实机器人上具身策略的数据收集、推理和部署。其组件解耦架构支持多种机器人后端、推理策略和传输中间件，提供调试、收集和评估三种工作流，每条评估记录自动保存轨迹数据，便于迭代。",
+      "llm_tldr": "EVA-Client是一个开源框架，统一了真实机器人上具身策略的数据收集、推理和部署。其组件解耦架构支持多种机器人后端、推理策略和传输中间件，提供调试、收集和评估三种工作流，每条评估记录自动保存轨迹数据，便于迭代。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "edge deployment for humanoid robots",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2607.04591v1",
+      "source": "arxiv",
+      "title": "Simple-to-Complex Structured Demonstrations for Vision-Language-Action Learning",
+      "abstract": "Vision-Language-Action (VLA) models have demonstrated strong capabilities in robotic manipulation by integrating visual perception, language understanding, and robot action generation. Existing research has primarily focused on improving model architectures, training strategies, and dataset scale, while little attention has been paid to how demonstrations are collected and organized. We identify demonstration organization as a fundamental yet overlooked aspect of imitation learning, as it directly affects policy learning efficiency, training stability, and policy generalization. To address this gap, we propose a simple-to-complex structured demonstration collection strategy for VLA learning using a dual-arm robotic platform. Our approach systematically organizes data through three general principles: (i) decomposing complex manipulation tasks into progressively learnable sub-skills, (ii) standardizing the interaction environment to reduce unnecessary variability, and (iii) organizing demonstrations according to progressively increasing task complexity. This structured design enables VLA models to first acquire fundamental manipulation skills before learning increasingly complex task compositions, facilitating more effective learning of long-horizon manipulation tasks. We evaluate the proposed strategy on two representative robotic manipulation tasks: block grasping and sorting, and towel folding. Experimental results show consistent improvements in task success rate and training stability compared with the baseline method of directly collecting end-to-end complete task trajectories. These findings highlight demonstration organization as a previously underexplored but important factor in VLA learning and provide practical insights into efficient skill acquisition, scalable dataset construction, and long-horizon robotic manipulation.",
+      "authors": [
+        "Xinchuan Qiu",
+        "Yi Yu"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.AI"
+      ],
+      "published": "2026-07-06T01:38:43+00:00",
+      "link": "https://arxiv.org/pdf/2607.04591v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "proposes structured demonstration collection strategy for VLA learning",
+      "llm_evidence_cn": "提出了面向VLA学习的结构化演示采集策略",
+      "llm_evidence": "提出了面向VLA学习的结构化演示采集策略",
+      "canonical_evidence": "提出了面向VLA学习的结构化演示采集策略",
+      "llm_tldr_en": "Proposes a simple-to-complex structured demonstration collection strategy for VLA models, improving policy learning efficiency and generalization.",
+      "llm_tldr_cn": "现有VLA研究忽视演示的组织方式，该文提出从简单到复杂的结构化演示采集策略，使用双臂机器人平台系统收集演示。实验表明该方法提升了策略学习效率、训练稳定性和泛化能力，揭示了演示组织对模仿学习的关键作用。",
+      "llm_tldr": "现有VLA研究忽视演示的组织方式，该文提出从简单到复杂的结构化演示采集策略，使用双臂机器人平台系统收集演示。实验表明该方法提升了策略学习效率、训练稳定性和泛化能力，揭示了演示组织对模仿学习的关键作用。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2607.04880v1",
+      "source": "arxiv",
+      "title": "PRISM: Personalized Robotic Dataset Generation via Image-based Scene and Motion Synthesis",
+      "abstract": "Recent advances in large-scale pretrained vision-language-action models have improved robot policy learning, but directly deploying such policies in user-specific environments remains challenging due to limited generalization, which inevitably requires collecting a dataset tailored to the target environment. Teleoperation yields well-aligned data but is costly and difficult to scale, whereas simulation scales easily but struggles to resemble the target environment and generate task-specific trajectories. To meet both simultaneously, we propose PRISM, an end-to-end pipeline that generates personalized robotic datasets from a single image and a natural-language instruction. PRISM constructs digital cousin scenes that are semantically and geometrically aligned with the user environment yet diverse at the instance level, and synthesizes executable demonstrations without human teleoperation. Extensive experiments show that policies trained on PRISM-generated datasets outperform those trained on baseline-generated datasets on LIBERO and LIBERO-Plus, achieve up to 100\\% success rate on three real-world manipulation tasks, and maintain stronger performance when evaluated in environments that differ from those seen during training.",
+      "authors": [
+        "Dogyu Ko",
+        "Haneul Kim",
+        "Chanyoung Yeo",
+        "Dowoon Lee",
+        "Taeho Park",
+        "Hyoseok Hwang"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-07-06T10:00:47+00:00",
+      "link": "https://arxiv.org/pdf/2607.04880v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "Personalized robotic dataset generation from single image and instruction",
+      "llm_evidence_cn": "从单张图像和指令生成个性化机器人数据集",
+      "llm_evidence": "从单张图像和指令生成个性化机器人数据集",
+      "canonical_evidence": "从单张图像和指令生成个性化机器人数据集",
+      "llm_tldr_en": "PRISM generates personalized robotic datasets from a single image and natural-language instruction by constructing digital cousin scenes and task-specific trajectories, enabling scalable dataset creation for policy learning.",
+      "llm_tldr_cn": "PRISM提出了一种端到端流水线，通过单张图像和自然语言指令生成个性化的机器人数据集。该方法构建与目标环境语义相似的数字表亲场景，并生成任务特定的轨迹，从而解决了遥操作成本高和仿真泛化差的问题。实验表明，该方法能高效生成多样化的数据集，支持策略学习在用户特定环境中的部署。",
+      "llm_tldr": "PRISM提出了一种端到端流水线，通过单张图像和自然语言指令生成个性化的机器人数据集。该方法构建与目标环境语义相似的数字表亲场景，并生成任务特定的轨迹，从而解决了遥操作成本高和仿真泛化差的问题。实验表明，该方法能高效生成多样化的数据集，支持策略学习在用户特定环境中的部署。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "quick_skim": [
+    {
+      "id": "2606.29834v1",
+      "source": "arxiv",
+      "title": "STEAM: Self-Supervised Temporal Ensemble Advantage Modeling for Real-World Robot Learning",
+      "abstract": "Real-world robot learning increasingly relies on heterogeneous data, but demonstrations and rollouts often mix useful progress with stalls, corrections, and suboptimal behavior. Effective policy learning therefore requires frame-level advantages that distinguish reliable local progress from failures and regressions. We propose Self-supervised Temporal Ensemble Advantage Modeling (STEAM), a label-free method that learns such advantages from expert demonstrations. STEAM trains an ensemble of temporal-offset predictors on frame pairs within expert trajectories, using the normalized temporal offset between two frames as a self-supervised signal. Each predictor maps a frame pair to a distribution over temporal offsets, which is converted into a scalar advantage. STEAM then takes the minimum advantage across the ensemble to score mixed-quality rollout data conservatively. Across real-world bimanual towel folding, chip checkout, cola restocking, and single-arm pick-and-place tasks, STEAM identifies stalls, failures, and recoveries. When combined with CFGRL, STEAM further improves policy success rate by 59%, 54.3%, 23% and 16.2% over baselines, respectively.",
+      "authors": [
+        "Zhihao Liu",
+        "Qiuyi Gu",
+        "Yitao Wang",
+        "Dongming Qiao",
+        "Yixian Zhang",
+        "Shuaihang Chen",
+        "Liangzhi Shi",
+        "Tianxing Zhou",
+        "Zefang Huang",
+        "Kang Chen",
+        "Zhen Guo",
+        "Quanlu Zhang",
+        "Jincheng Yu",
+        "Xiaodan Liang",
+        "Guoliang Fan",
+        "Yu Wang",
+        "Feng Gao",
+        "Xinlei Chen",
+        "Chao Yu"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-06-29T06:19:35+00:00",
+      "link": "https://arxiv.org/pdf/2606.29834v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "Self-supervised learning for distinguishing progress from failures in robot trajectories",
+      "llm_evidence_cn": "自监督学习区分机器人轨迹中的进展与故障",
+      "llm_evidence": "自监督学习区分机器人轨迹中的进展与故障",
+      "canonical_evidence": "自监督学习区分机器人轨迹中的进展与故障",
+      "llm_tldr_en": "STEAM learns frame-level advantages from expert demonstrations using temporal offset prediction in a self-supervised manner, enabling detection of failures and regressions in robot trajectories.",
+      "llm_tldr_cn": "STEAM提出了一种无标签的自监督方法，通过训练时间偏移预测器集成，从专家演示中学习帧级优势，从而区分可靠进展与故障、倒退。该方法在多个真实世界机器人数据集上验证，能有效定位失败帧，提升策略学习效率。",
+      "llm_tldr": "STEAM提出了一种无标签的自监督方法，通过训练时间偏移预测器集成，从专家演示中学习帧级优势，从而区分可靠进展与故障、倒退。该方法在多个真实世界机器人数据集上验证，能有效定位失败帧，提升策略学习效率。",
+      "llm_tags": [
+        "query:humanoid-ood"
+      ],
+      "matched_query_tag": "query:humanoid-ood",
+      "matched_query_text": "Self supervised time series anomaly detection for robot fault diagnosis",
+      "matched_requirement_id": "req-16",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2606.29937v1",
+      "source": "arxiv",
+      "title": "REPAIR-Bench: A Benchmark for Robot Error Perception And Interaction Recovery",
+      "abstract": "Understanding how users perceive and respond to robot failures is essential for building robust and trustworthy robot systems. Prior work, however, (i) often treats failures as independent events, (ii) emphasizes binary failure detection, (iii) with rule-based recovery modeling. We present REPAIR-Bench, built on 214 interaction trials from 41 participants, the benchmark spans four induced failure types and provides synchronized facial action units, head pose, speech transcripts, and post-interaction affect and recovery reports. The benchmark spans three novel evaluation tasks that jointly capture the lifecycle of failure in human-robot interaction (HRI): (i) failure detection over inter-dependent interaction sessions, modeling longitudinal user adaptation across repeated failures; (ii) visual failure-type classification beyond binary success/failure formulations; and (iii) user-centered recovery prediction, inferring users' preferred recovery strategies from interaction context rather than relying on manually designed or rule-based strategies. In baseline experiments, hierarchical recurrent modeling improved failure detection over a single-session model (strict F1: 0.80 vs. 0.68), achieved a failure localization mean signed error of -0.51 s, median absolute error of 2.97 s and, for recovery prediction, a QLoRA-tuned Mistral-7B reached Hit@5=0.76 and F1@5=0.32. REPAIR-Bench provides both the HRI and Medical HRI communities with a standardized framework for (1) evaluating robot failures and (2) building transparent, adaptive, and trustworthy recovery systems.",
+      "authors": [
+        "Giuliano Pioldi",
+        "Yashika Batra",
+        "Arman Ibrayeva",
+        "Yuanchen Bai",
+        "Purnjay Maruur",
+        "Promise Ekpo",
+        "Angelique Taylor"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-06-29T08:14:27+00:00",
+      "link": "https://arxiv.org/pdf/2606.29937v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "Benchmark for robot error perception and interaction recovery across failure types",
+      "llm_evidence_cn": "跨故障类型的机器人错误感知与交互恢复基准",
+      "llm_evidence": "跨故障类型的机器人错误感知与交互恢复基准",
+      "canonical_evidence": "跨故障类型的机器人错误感知与交互恢复基准",
+      "llm_tldr_en": "REPAIR-Bench presents a benchmark with 214 trials across four failure types, including synchronized multi-modal data, to evaluate failure detection, affect prediction, and recovery decision in human-robot interaction.",
+      "llm_tldr_cn": "REPAIR-Bench构建了包含214次交互试验的基准，涵盖四种诱导故障类型，并提供同步的面部动作单元、头部姿态、语音转录和情绪报告。该基准定义了三个评价任务：故障检测、情绪预测和恢复决策，为机器人错误感知与交互恢复研究提供了标准化的评估平台。",
+      "llm_tldr": "REPAIR-Bench构建了包含214次交互试验的基准，涵盖四种诱导故障类型，并提供同步的面部动作单元、头部姿态、语音转录和情绪报告。该基准定义了三个评价任务：故障检测、情绪预测和恢复决策，为机器人错误感知与交互恢复研究提供了标准化的评估平台。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "fault diagnosis and error analysis for humanoid robots",
+      "matched_requirement_id": "req-7",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2607.03529v1",
+      "source": "arxiv",
+      "title": "Current as Touch: Proprioceptive Contact Feedback for Compliant Dexterous Manipulation",
+      "abstract": "Compliance is essential for dexterous manipulation, yet existing solutions often rely on external tactile or force sensors that are costly, fragile, and difficult to deploy on low-cost robot hands. We propose a proprioception-driven framework that learns contact-aware compliance cues from motor current and joint states. Since motor current is closely related to actuator torque, it provides an intrinsic signal for perceiving contact force, object resistance, and grasp stability without additional sensing hardware. Rather than estimating external wrenches or commanding torque, our method predicts a compliance reference position: an ideal joint-position target for a standard PD controller whose induced position error generates appropriate grasping force. This position-based formulation is compatible with mainstream teleoperation and policy-learning pipelines, while enabling the robot to adapt interaction forces from real-time proprioceptive feedback. Thus, motor current serves not only as a force proxy but also as a learnable proprioceptive contact signal for compliance reference prediction. Experiments on multiple dexterous hands and contact-rich tasks, including fragile object handling, sustained surface contact, thin-object retrieval, and dynamic load adaptation, show stable compliant grasping, safer and more efficient teleoperation, and improved downstream policy learning without external tactile or force sensors.",
+      "authors": [
+        "Chenyang Ma",
+        "Yunchao Yao",
+        "Zhenyu Wei",
+        "Ruogu Li",
+        "Daniel Szafir",
+        "Mingyu Ding"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-07-03T17:59:50+00:00",
+      "link": "https://arxiv.org/pdf/2607.03529v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "uses motor current and joint states as proprioceptive signals for contact feedback, method transferable to fault diagnosis",
+      "llm_evidence_cn": "利用电机电流和关节状态作为本体感受信号进行接触反馈，方法可迁移至故障诊断",
+      "llm_evidence": "利用电机电流和关节状态作为本体感受信号进行接触反馈，方法可迁移至故障诊断",
+      "canonical_evidence": "利用电机电流和关节状态作为本体感受信号进行接触反馈，方法可迁移至故障诊断",
+      "llm_tldr_en": "Proposes a proprioception-driven framework using motor current and joint states for compliant dexterous manipulation without external sensors. The method is directly transferable to fault diagnosis using similar proprioceptive signals.",
+      "llm_tldr_cn": "本文提出一种纯本体感受驱动的灵巧操作框架，通过学习电机电流和关节状态的接触感知线索来实现柔顺控制，无需外部触觉或力传感器。该框架利用电机电流与力矩的密切关系，内在感知接触力、物体阻力和抓取稳定性。其核心思想从本体感受信号中提取状态信息，与需求9（基于本体感受信号的人形机器人故障诊断）和需求10（从关节位置/速度/力矩/IMU信号进行异常检测）高度契合。尽管本文聚焦操作而非故障检测，但方法论上可直接迁移，为人形机器人故障诊断提供了有效的本体感受信号处理策略。",
+      "llm_tldr": "本文提出一种纯本体感受驱动的灵巧操作框架，通过学习电机电流和关节状态的接触感知线索来实现柔顺控制，无需外部触觉或力传感器。该框架利用电机电流与力矩的密切关系，内在感知接触力、物体阻力和抓取稳定性。其核心思想从本体感受信号中提取状态信息，与需求9（基于本体感受信号的人形机器人故障诊断）和需求10（从关节位置/速度/力矩/IMU信号进行异常检测）高度契合。尽管本文聚焦操作而非故障检测，但方法论上可直接迁移，为人形机器人故障诊断提供了有效的本体感受信号处理策略。",
+      "llm_tags": [
+        "query:humanoid-ood"
+      ],
+      "matched_query_tag": "query:humanoid-ood",
+      "matched_query_text": "humanoid robot fault diagnosis using proprioceptive signals",
+      "matched_requirement_id": "req-9",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2607.02332v1",
+      "source": "arxiv",
+      "title": "HEFT: Heavy-Payload Full-size Humanoid Teleoperation with Privileged Motion Guidance and Windowed Payload Curriculum",
+      "abstract": "General motion tracking and teleoperation offer a promising path to scalable humanoid skill acquisition, yet most existing frameworks are validated on compact platforms or without real payload interaction, leaving full-size humanoids with real payloads largely unexplored. Scaling to full-size humanoids introduces two compounding challenges: their larger inertia and tighter balance margins make tracking highly sensitive to noise, drift, and retargeting errors from commodity VR trackers, while their payload potential remains largely underutilized. We present HEFT, a heavy-payload full-size humanoid teleoperation framework that addresses both challenges. HEFT learns from deployable noisy VR references with physically plausible reconstructed references through Privileged Motion Guidance (PMG), and uses a Windowed Payload Curriculum (WPC) with expert-guided payload caps to acquire robust heavy-payload tracking. We deploy HEFT on L7, a 175cm, 65kg humanoid. The robot tracks motions including turns, forward/backward locomotion, and squats under payloads up to 24kg.",
+      "authors": [
+        "Chenxin Liu",
+        "Qingzhou Lu",
+        "Guangxiao Yang",
+        "Xuanyang Shi",
+        "Chenghan Yang",
+        "Yanjiang Guo",
+        "Jianyu Chen"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-07-02T15:37:37+00:00",
+      "link": "https://arxiv.org/pdf/2607.02332v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "teleoperation framework for full-size humanoid data collection",
+      "llm_evidence_cn": "全尺寸人形机器人遥操作框架，可用于数据集构建",
+      "llm_evidence": "全尺寸人形机器人遥操作框架，可用于数据集构建",
+      "canonical_evidence": "全尺寸人形机器人遥操作框架，可用于数据集构建",
+      "llm_tldr_en": "HEFT enables heavy-payload full-size humanoid teleoperation with noisy VR references, facilitating scalable humanoid skill data acquisition.",
+      "llm_tldr_cn": "针对全尺寸人形机器人遥操作中存在的惯性大、平衡裕度小以及VR追踪噪声等问题，本文提出HEFT框架，利用含噪VR参考信号学习物理可信的运动跟踪策略，并引入窗口化载荷课程。该框架能够收集重型载荷下的人形机器人操作数据，为数据集构建提供基础。",
+      "llm_tldr": "针对全尺寸人形机器人遥操作中存在的惯性大、平衡裕度小以及VR追踪噪声等问题，本文提出HEFT框架，利用含噪VR参考信号学习物理可信的运动跟踪策略，并引入窗口化载荷课程。该框架能够收集重型载荷下的人形机器人操作数据，为数据集构建提供基础。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "humanoid robot dataset construction",
+      "matched_requirement_id": "req-2",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2607.04171v1",
+      "source": "arxiv",
+      "title": "XS-VLA: Coupling Coarse-grained Spatial Distillation with Latent Flow Matching for Lightweight Robotic Control",
+      "abstract": "Large Vision-Language Models (LVLMs) have shown strong multimodal understanding and spatial grounding, but their computational cost limits real-time robotic control. In contrast, lightweight models are suitable for edge deployment but often suffer from \"spatial blindness\", namely weak native spatial prediction ability. Training Vision-Language-Action (VLA) models on mixed human demonstrations can also degrade policy performance due to highly diverse behaviors. To address these limitations, we propose XS-VLA, a two-stage framework for efficient and spatially grounded robotic manipulation. First, we distill spatial semantic knowledge from Qwen3-VL-4B into the SmolVLM2-0.25B backbone by fine-tuning on curated coarse-grained spatial descriptions, turning the lightweight model into a spatially grounded engine. Second, we use this enhanced backbone to condition a Latent Flow Matching policy. Unlike deterministic controllers, our policy combines a Conditional Variational Autoencoder (CVAE) with Flow Matching dynamics to model complex multimodal action distributions. On the LIBERO benchmark, XS-VLA achieves state-of-the-art performance among models with fewer than 0.5B parameters. It improves average success rates by up to 7.2 percent, including a 23 percent gain on LIBERO-Long, over the SmolVLA 0.25B baseline, and outperforms the larger 2.2B vanilla SmolVLA. Ablations show that spatial tuning and generative latent flow control substantially improve lightweight VLA performance, delivering a 3.2 times speedup in mission execution over the previous lightweight flow matching policy.",
+      "authors": [
+        "Lei Iok Tong",
+        "Qingchen Xie",
+        "Wei Huang",
+        "Ying Jie Yap",
+        "Yujie Zhang",
+        "Qianzhi Li",
+        "Xiaolong Liu",
+        "Zhidong Deng"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.LG"
+      ],
+      "published": "2026-07-05T08:34:39+00:00",
+      "link": "https://arxiv.org/pdf/2607.04171v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "lightweight VLA model designed for edge deployment with spatial grounding",
+      "llm_evidence_cn": "为边缘部署设计的轻量级VLA模型，具有空间接地能力",
+      "llm_evidence": "为边缘部署设计的轻量级VLA模型，具有空间接地能力",
+      "canonical_evidence": "为边缘部署设计的轻量级VLA模型，具有空间接地能力",
+      "llm_tldr_en": "XS-VLA distills spatial knowledge from large LVLMs into a tiny backbone for efficient edge-deployable robotic control.",
+      "llm_tldr_cn": "针对大型视觉语言模型计算成本高、无法用于实时控制，而轻量级模型又存在空间盲点的问题，本文提出XS-VLA两阶段框架：先蒸馏大模型的空间语义知识到超小骨干网络SmolVLM2-0.25B，再利用潜在流匹配提升动作预测精度。实验证明该模型在边缘设备上实现了高效且空间准确的操作控制，为边缘部署提供了可行方案。",
+      "llm_tldr": "针对大型视觉语言模型计算成本高、无法用于实时控制，而轻量级模型又存在空间盲点的问题，本文提出XS-VLA两阶段框架：先蒸馏大模型的空间语义知识到超小骨干网络SmolVLM2-0.25B，再利用潜在流匹配提升动作预测精度。实验证明该模型在边缘设备上实现了高效且空间准确的操作控制，为边缘部署提供了可行方案。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "edge deployment for humanoid robots",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2607.03454v1",
+      "source": "arxiv",
+      "title": "ADP: Adversarial Dynamics Priors for Physically Grounded Humanoid Locomotion",
+      "abstract": "In this paper, we propose Adversarial Dynamics Priors (ADP) for perturbation-resilient humanoid locomotion control. Existing motion prior-based methods induce natural motion styles by imitating kinematic motion features, but they do not directly regularize dynamics features, such as CoM motion, centroidal momentum, contact forces, and contact states. To address this limitation, we replace kinematic motion-style feature with selected dynamics features extracted from locomotion trajectories as the target of adversarial regularization.To this end, we use trajectory optimization to construct a reference dataset and train a discriminator to evaluate whether policy-induced temporal windows are consistent with the resulting reference distribution.Without explicit motion tracking, ADP encourages policy rollouts to remain close to the reference support, even after perturbations. Experimental results show that, compared with AMP, the strongest baseline in our evaluation, ADP improves the $80\\%$-success impulse threshold ($J_{80}$) by $16.7\\%$, while reducing direction-averaged recovery time and velocity tracking error by $47.9\\%$ and $35.4\\%$, respectively.",
+      "authors": [
+        "Seokju Lee",
+        "Jeongtae Lee",
+        "Jeonghyeok Lim",
+        "Jeonguk Kang",
+        "Byungwook Lee",
+        "Seungho Han",
+        "Keun Ha Choi",
+        "Dongil Park",
+        "Kyung-Soo Kim"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.LG"
+      ],
+      "published": "2026-07-03T16:12:43+00:00",
+      "link": "https://arxiv.org/pdf/2607.03454v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "trajectory optimization to construct a reference dataset for humanoid locomotion",
+      "llm_evidence_cn": "使用轨迹优化构建人形机器人运动参考数据集",
+      "llm_evidence": "使用轨迹优化构建人形机器人运动参考数据集",
+      "canonical_evidence": "使用轨迹优化构建人形机器人运动参考数据集",
+      "llm_tldr_en": "ADP uses trajectory optimization to build a reference dataset and adversarial regularization for robust humanoid locomotion.",
+      "llm_tldr_cn": "针对现有运动先验方法仅模仿运动学特征而忽视动力学特征的问题，本文提出对抗性动态先验（ADP），通过轨迹优化构建参考数据集，并用判别器评估策略生成的时序窗口是否符合参考分布，从而实现扰动鲁棒的人形机器人运动控制。实验表明该方法有效提升了运动鲁棒性。贡献在于将动力学特征直接纳入对抗正则化。",
+      "llm_tldr": "针对现有运动先验方法仅模仿运动学特征而忽视动力学特征的问题，本文提出对抗性动态先验（ADP），通过轨迹优化构建参考数据集，并用判别器评估策略生成的时序窗口是否符合参考分布，从而实现扰动鲁棒的人形机器人运动控制。实验表明该方法有效提升了运动鲁棒性。贡献在于将动力学特征直接纳入对抗正则化。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    }
+  ]
+}
