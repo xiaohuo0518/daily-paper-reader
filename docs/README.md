@@ -6,55 +6,46 @@
 </div>
 
 ## 每次日报
-- 最新运行日期：2026-07-07
-- 运行时间：2026-07-07 22:21:02 UTC
+- 最新运行日期：2026-07-10
+- 运行时间：2026-07-10 21:50:27 UTC
 - 运行状态：成功
-- 本次总论文数：11
-- 精读区：5
+- 本次总论文数：8
+- 精读区：2
 - 速读区：6
 
 ### 今日简报（AI）
-1) 今日聚焦具身智能与机器人学习，精读便携推理运行时与全身重定向方法。  
-2) 最值得看：Embodied.cpp（9.0分）实现异构机器人高效AI推理；WARP（8.0分）用离线人体演示进行全身重定向。  
-3) 下一步可关注速读中的STEAM（自监督时间集成）和XS-VLA（轻量控制），拓展实用场景。
-- 详情：[/202607/07/README](/202607/07/README)
+今日精读《ThorArena》人形机器人交互基准（9.0分）与《From Foundation to Application》VLA模型实践改进（8.0分），速读覆盖世界模型、故障诊断及模仿学习数据选择。  
+最值得关注方向：人形机器人物理交互的量化基准与VLA模型从理论到落地的关键技巧。  
+建议普通读者优先精读两篇高分解读，后续可结合SIEVE数据选择与GigaWorld-1仿真验证，形成闭环实践。
+- 详情：[/202607/10/README](/202607/10/README)
 
 ### 精读区论文标签
-1. [Embodied.cpp: A Portable Inference Runtime of Embodied AI Models on Heterogeneous Robots](/202607/07/2607.02501v2-embodiedcpp-a-portable-inference-runtime-of-embodied-ai-models-on-heterogeneous-robots)  
+1. [ThorArena: Benchmarking Humanoid Physical Interaction with Human Motion-Force Demonstrations](/202607/10/2607.06052v1-thorarena-benchmarking-humanoid-physical-interaction-with-human-motion-force-demonstrations)  
    标签：评分：9.0/10、query:ur
-   evidence：面向异构边缘设备的可移植C++推理运行时
-2. [WARP: Whole-Body Retargeting for Learning from Offline Human Demonstrations](/202607/07/2606.29940v1-warp-whole-body-retargeting-for-learning-from-offline-human-demonstrations)  
+   evidence：人形机器人物理交互基准数据集，包含运动-力演示
+2. [From Foundation to Application: Improving VLA Models in Practice](/202607/10/2607.06403v1-from-foundation-to-application-improving-vla-models-in-practice)  
    标签：评分：8.0/10、query:ur
-   evidence：从人体姿态到人形机器人动作的重定位方法，用于数据集构建
-3. [EVA-Client: A Unified Data Collection, Inference, and Deployment Framework for Embodied Policies on Real Robots](/202607/07/2607.02646v1-eva-client-a-unified-data-collection-inference-and-deployment-framework-for-embodied-policies-on-real-robots)  
-   标签：评分：8.0/10、query:ur
-   evidence：真实机器人上策略部署、数据收集和评估的统一框架
-4. [Simple-to-Complex Structured Demonstrations for Vision-Language-Action Learning](/202607/07/2607.04591v1-simple-to-complex-structured-demonstrations-for-vision-language-action-learning)  
-   标签：评分：8.0/10、query:ur
-   evidence：提出了面向VLA学习的结构化演示采集策略
-5. [PRISM: Personalized Robotic Dataset Generation via Image-based Scene and Motion Synthesis](/202607/07/2607.04880v1-prism-personalized-robotic-dataset-generation-via-image-based-scene-and-motion-synthesis)  
-   标签：评分：8.0/10、query:ur
-   evidence：从单张图像和指令生成个性化机器人数据集
+   evidence：整理了6万小时机器人数据用于预训练流程
 
 ### 速读区论文标签
-1. [STEAM: Self-Supervised Temporal Ensemble Advantage Modeling for Real-World Robot Learning](/202607/07/2606.29834v1-steam-self-supervised-temporal-ensemble-advantage-modeling-for-real-world-robot-learning)  
-   标签：评分：7.0/10、query:humanoid-ood
-   evidence：自监督学习区分机器人轨迹中的进展与故障
-2. [Current as Touch: Proprioceptive Contact Feedback for Compliant Dexterous Manipulation](/202607/07/2607.03529v1-current-as-touch-proprioceptive-contact-feedback-for-compliant-dexterous-manipulation)  
-   标签：评分：7.0/10、query:humanoid-ood
-   evidence：利用电机电流和关节状态作为本体感受信号进行接触反馈，方法可迁移至故障诊断
-3. [XS-VLA: Coupling Coarse-grained Spatial Distillation with Latent Flow Matching for Lightweight Robotic Control](/202607/07/2607.04171v1-xs-vla-coupling-coarse-grained-spatial-distillation-with-latent-flow-matching-for-lightweight-robotic-control)  
+1. [GigaWorld-1: A Roadmap to Build World Models for Robot Policy Evaluation](/202607/10/2607.02642v1-gigaworld-1-a-roadmap-to-build-world-models-for-robot-policy-evaluation)  
    标签：评分：7.0/10、query:ur
-   evidence：为边缘部署设计的轻量级VLA模型，具有空间接地能力
-4. [REPAIR-Bench: A Benchmark for Robot Error Perception And Interaction Recovery](/202607/07/2606.29937v1-repair-bench-a-benchmark-for-robot-error-perception-and-interaction-recovery)  
+   evidence：构建机器人策略评估基准数据集
+2. [Physics-Informed Graph Learning with Uncertainty Awareness for Open-Set Domain Generalization in Fault Diagnosis](/202607/10/2607.04188v1-physics-informed-graph-learning-with-uncertainty-awareness-for-open-set-domain-generalization-in-fault-diagnosis)  
+   标签：评分：7.0/10、query:humanoid-ood
+   evidence：开放集域泛化故障诊断，兼具不确定性感知
+3. [SIEVE: Structure-Aware Data Selection for Imitation Learning with VLA Models](/202607/10/2607.06442v1-sieve-structure-aware-data-selection-for-imitation-learning-with-vla-models)  
+   标签：评分：7.0/10、query:ur
+   evidence：结构感知数据选择方法，可用于人形机器人数据集构建
+4. [ObjRetarget: An Object-Aware Motion Retargeting Framework with Anthropomorphic Arm Constraints and Polyhedral Hand Modeling](/202607/10/2607.03828v1-objretarget-an-object-aware-motion-retargeting-framework-with-anthropomorphic-arm-constraints-and-polyhedral-hand-modeling)  
    标签：评分：6.0/10、query:ur
-   evidence：跨故障类型的机器人错误感知与交互恢复基准
-5. [HEFT: Heavy-Payload Full-size Humanoid Teleoperation with Privileged Motion Guidance and Windowed Payload Curriculum](/202607/07/2607.02332v1-heft-heavy-payload-full-size-humanoid-teleoperation-with-privileged-motion-guidance-and-windowed-payload-curriculum)  
+   evidence：用于数据集生成的人到机器人运动重定向
+5. [Diagnosing Semantic Handoff Failures in Agent-Orchestrated Vision-Language-Action Skill Composition](/202607/10/2607.06256v1-diagnosing-semantic-handoff-failures-in-agent-orchestrated-vision-language-action-skill-composition)  
    标签：评分：6.0/10、query:ur
-   evidence：全尺寸人形机器人遥操作框架，可用于数据集构建
-6. [ADP: Adversarial Dynamics Priors for Physically Grounded Humanoid Locomotion](/202607/07/2607.03454v1-adp-adversarial-dynamics-priors-for-physically-grounded-humanoid-locomotion)  
-   标签：评分：6.0/10、query:ur
-   evidence：使用轨迹优化构建人形机器人运动参考数据集
+   evidence：诊断技能组合中的语义交接失败
+6. [RoboSnap: One-Shot Real-to-Sim Scene Generation for Generalizable Robot Learning and Evaluation](/202607/10/2607.06699v1-robosnap-one-shot-real-to-sim-scene-generation-for-generalizable-robot-learning-and-evaluation)  
+   标签：评分：6.0/10、query:humanoid-ood
+   evidence：实到仿真场景生成，支持机器人学习的交互式仿真
 
 
 <div class="dpr-home-promo-card">
