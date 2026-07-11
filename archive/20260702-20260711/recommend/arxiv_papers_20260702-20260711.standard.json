@@ -1,56 +1,18 @@
 {
   "mode": "standard",
-  "generated_at": "2026-07-11T15:35:03.849418+00:00",
+  "generated_at": "2026-07-11T15:46:56.701314+00:00",
   "stats": {
     "mode": "standard",
     "tag_count": 2,
-    "deep_divecandidates": 2,
+    "deep_divecandidates": 0,
     "deep_cap": 7,
-    "deep_selected": 2,
-    "quick_candidates": 3,
+    "deep_selected": 0,
+    "quick_candidates": 7,
     "quick_skim_target": 12,
-    "quick_selected": 3
+    "quick_selected": 7
   },
-  "deep_dive": [
-    {
-      "id": "2607.06248v1",
-      "source": "arxiv",
-      "title": "RoboVAST: Automated Scenario-Based Validation of Robots at Scale",
-      "abstract": "Validation of robotic systems critically depends on the operating conditions under which they are assessed. Scenario selection and variation are often manual, experience-driven, and difficult to scale, which harms reproducibility and weakens validation conclusions. We propose a scenario-based methodology that models scenarios compositionally and formalizes how these dimensions are varied, instantiated, executed, and interpreted. Building on this, we introduce RoboVAST, a framework that realizes declarative campaign specifications, plugin-based scenario generation, and scalable containerized execution with integrated result analysis. We demonstrate the approach with a navigation dataset comprising 5480 scenario configurations and over 100000 execution runs across five indoor maps with varied paths, sensor noise, software parameters, and obstacle settings, totaling more than 1800 hours of simulated operation and 1873 km traveled. Twenty repetitions per configuration allow us to distinguish systematic failures from stochastic anomalies.",
-      "authors": [
-        "Frederik Pasch",
-        "Samuel Wiest",
-        "Argentina Ortega",
-        "Nico Hochgeschwender"
-      ],
-      "primary_category": "cs.RO",
-      "categories": [
-        "cs.RO"
-      ],
-      "published": "2026-07-07T13:14:27+00:00",
-      "link": "https://arxiv.org/pdf/2607.06248v1",
-      "tags": [
-        "keyword:humanoid-ood",
-        "keyword:ur",
-        "query:humanoid-ood",
-        "query:ur"
-      ],
-      "llm_score": 8.0,
-      "llm_evidence_en": "Dataset construction for robotics through scenario-based validation",
-      "llm_evidence_cn": "通过基于场景的验证构建机器人数据集",
-      "llm_evidence": "通过基于场景的验证构建机器人数据集",
-      "canonical_evidence": "通过基于场景的验证构建机器人数据集",
-      "llm_tldr_en": "RoboVAST provides a framework for automated scenario-based validation, demonstrated by constructing a navigation dataset of 5480 scenario configurations and over 100000 execution runs, enabling scalable and reproducible validation.",
-      "llm_tldr_cn": "机器人系统验证依赖于操作条件，但场景选择通常手动且难以扩展。本文提出基于场景的验证方法论，并实现RoboVAST框架，通过可组合场景模型、声明性规范、插件生成和容器化执行，自动构建大规模测试数据集。在导航任务上展示了5480个场景配置和超过10万次运行的数据集，验证了方法在可扩展性和可重复性上的优势。",
-      "llm_tldr": "机器人系统验证依赖于操作条件，但场景选择通常手动且难以扩展。本文提出基于场景的验证方法论，并实现RoboVAST框架，通过可组合场景模型、声明性规范、插件生成和容器化执行，自动构建大规模测试数据集。在导航任务上展示了5480个场景配置和超过10万次运行的数据集，验证了方法在可扩展性和可重复性上的优势。",
-      "llm_tags": [
-        "query:ur"
-      ],
-      "matched_query_tag": "query:ur",
-      "matched_query_text": "dataset construction for robotics",
-      "matched_requirement_id": "req-5",
-      "selection_source": "fresh_fetch"
-    },
+  "deep_dive": [],
+  "quick_skim": [
     {
       "id": "2607.06558v1",
       "source": "arxiv",
@@ -79,83 +41,49 @@
         "query:humanoid-ood",
         "query:ur"
       ],
-      "llm_score": 8.0,
-      "llm_evidence_en": "digital teleoperation generates trajectory data for dataset construction",
-      "llm_evidence_cn": "数字遥操作生成轨迹数据用于数据集构建",
-      "llm_evidence": "数字遥操作生成轨迹数据用于数据集构建",
-      "canonical_evidence": "数字遥操作生成轨迹数据用于数据集构建",
-      "llm_tldr_en": "RynnWorld-Teleop proposes a digital teleoperation paradigm using a generative world model to synthesize high-fidelity egocentric videos from a reference image, producing state-action trajectories for imitation learning without physical hardware.",
-      "llm_tldr_cn": "机器人学习依赖大规模轨迹数据，但物理遥操作采集成本高。本文提出数字遥操作范式，用生成式世界模型代替真实机器人，从单张参考图像合成机器人视角视频，记录操作者手部姿态流作为动作标签，经重定向生成完整状态-动作轨迹，实现无物理约束的模仿学习数据收集。实验表明该方法生成的轨迹质量与真实遥操作相当，可有效训练策略。",
-      "llm_tldr": "机器人学习依赖大规模轨迹数据，但物理遥操作采集成本高。本文提出数字遥操作范式，用生成式世界模型代替真实机器人，从单张参考图像合成机器人视角视频，记录操作者手部姿态流作为动作标签，经重定向生成完整状态-动作轨迹，实现无物理约束的模仿学习数据收集。实验表明该方法生成的轨迹质量与真实遥操作相当，可有效训练策略。",
+      "llm_score": 7.0,
+      "llm_evidence_en": "Proposes a generative world model to synthesize trajectory data for robot learning, relevant to dataset construction for robotics",
+      "llm_evidence_cn": "提出生成式世界模型合成轨迹数据，用于机器人数据收集，关联机器人数据集构建",
+      "llm_evidence": "提出生成式世界模型合成轨迹数据，用于机器人数据收集，关联机器人数据集构建",
+      "canonical_evidence": "提出生成式世界模型合成轨迹数据，用于机器人数据收集，关联机器人数据集构建",
+      "llm_tldr_en": "Introduces digital teleoperation using a generative world model to synthesize egocentric video from a single reference image, enabling scalable data collection for robot learning without physical hardware.",
+      "llm_tldr_cn": "机器人学习需要大量轨迹数据，但物理遥操作采集效率低下。本文提出数字遥操作范式，用生成式世界模型合成高保真第一人称视频，从单张参考图像和手部姿态流生成完整状态-动作轨迹。该方法可脱离物理硬件大量收集数据，为机器人数据集构建提供了一种可扩展的新方法，尤其适用于人形机器人等复杂系统。",
+      "llm_tldr": "机器人学习需要大量轨迹数据，但物理遥操作采集效率低下。本文提出数字遥操作范式，用生成式世界模型合成高保真第一人称视频，从单张参考图像和手部姿态流生成完整状态-动作轨迹。该方法可脱离物理硬件大量收集数据，为机器人数据集构建提供了一种可扩展的新方法，尤其适用于人形机器人等复杂系统。",
       "llm_tags": [
         "query:ur"
       ],
       "matched_query_tag": "query:ur",
       "matched_query_text": "dataset construction for robotics",
       "matched_requirement_id": "req-5",
-      "selection_source": "fresh_fetch"
-    }
-  ],
-  "quick_skim": [
-    {
-      "id": "2607.04304v1",
-      "source": "arxiv",
-      "title": "Road-Aware Anomaly Segmentation with Query-Guided Polygons and CLIP in Autonomous Driving",
-      "abstract": "Traditional semantic segmentation models operate under a closed-set assumption and struggle to recognize unknown or unexpected objects-an essential capability for autonomous driving. As a result, such models often misclassify or overlook out-of-distribution (OOD) road anomalies, posing safety risks in open-world environments. We present a lightweight, postprocessing, road-aware anomaly segmentation framework that requires no retraining, no OOD data, and no auxiliary supervision. Our approach builds on a mask transformer-based segmentation network by exploiting query-level mask confidence and deriving a polygonal road prior to detect gap regions that may correspond to anomalies. To further suppress false positives, we introduce a CLIP-based zero-shot semantic filtering module using in-distribution prompts, with optional generalized OOD prompts. By jointly leveraging spatial priors and semantic verification, our framework produces robust and interpretable anomaly predictions. Evaluation on three public benchmarks-Fishyscapes, SMIYC, and RoadAnomaly-shows consistently strong performance. In particular, our method outperforms the training-free baseline Maskomaly on most metrics and achieves the highest AP on Fishyscapes LostAndFound. These results demonstrate the practicality and deployability of our approach for real-world autonomous driving systems.",
-      "authors": [
-        "Zhiran Yan",
-        "Gordon Elger"
-      ],
-      "primary_category": "cs.CV",
-      "categories": [
-        "cs.CV"
-      ],
-      "published": "2026-07-05T13:43:31+00:00",
-      "link": "https://arxiv.org/pdf/2607.04304v1",
-      "tags": [
-        "keyword:humanoid-ood",
-        "keyword:ur",
-        "query:humanoid-ood",
-        "query:ur"
-      ],
-      "llm_score": 7.0,
-      "llm_evidence_en": "OOD anomaly segmentation for autonomous driving; transferable to safe robot operation",
-      "llm_evidence_cn": "面向自动驾驶的OOD异常分割，可迁移至机器人安全操作",
-      "llm_evidence": "面向自动驾驶的OOD异常分割，可迁移至机器人安全操作",
-      "canonical_evidence": "面向自动驾驶的OOD异常分割，可迁移至机器人安全操作",
-      "llm_tldr_en": "A lightweight postprocessing framework for road anomaly segmentation using query-guided polygons and CLIP, requiring no retraining or OOD data, demonstrating OOD detection for safe operation.",
-      "llm_tldr_cn": "针对自动驾驶中传统语义分割模型无法识别未知物体的问题，提出一种轻量级后处理异常分割框架。它基于掩码Transformer的查询级置信度并推导多边形道路先验来检测异常区域，同时引入CLIP抑制误报。该方法无需重新训练、OOD数据或辅助监督，能有效提升开放世界环境下的安全性。其OOD检测思想可推广到机器人安全操作领域。",
-      "llm_tldr": "针对自动驾驶中传统语义分割模型无法识别未知物体的问题，提出一种轻量级后处理异常分割框架。它基于掩码Transformer的查询级置信度并推导多边形道路先验来检测异常区域，同时引入CLIP抑制误报。该方法无需重新训练、OOD数据或辅助监督，能有效提升开放世界环境下的安全性。其OOD检测思想可推广到机器人安全操作领域。",
-      "llm_tags": [
-        "query:humanoid-ood"
-      ],
-      "matched_query_tag": "query:humanoid-ood",
-      "matched_query_text": "out-of-distribution detection for safe robot operation",
-      "matched_requirement_id": "req-11",
       "selection_source": "fresh_fetch",
       "quick_tier": "7"
     },
     {
-      "id": "2607.03817v1",
+      "id": "2607.03283v1",
       "source": "arxiv",
-      "title": "Global Logic and Local Search: Dual-Stream Multimodal In-Context Learning for Verifiable Industrial Anomaly Detection",
-      "abstract": "Large Multimodal Models (LMMs) show strong few-shot generalization, but industrial anomaly detection remains difficult because defects are small, input resolution is limited, and textual standards are not always grounded in visual evidence. Recent optimization-based methods improve alignment through fine-tuning, but they often require many defective samples, which are unavailable in early deployment. We present Global Logic and Local Search (GLLS), a training-free framework for reference-guided multimodal in-context verification. GLLS uses a Part-Aware Visual-Logical Atlas to organize normal references and structured specifications in the inference context. It combines a Global & Logic Stream, where SAM 3 extracts partially checkable visual facts, with a Fine-Grained & Actions Stream, where MCTS selects local evidence crops under a fixed budget. Experiments on MMAD-QA and additional anomaly detection datasets show consistent gains over matched and general-purpose baselines, while keeping the final diagnostic decision traceable to explicit visual evidence throughout the inspection trace.",
+      "title": "Embodied Operators and Benchmarking: Toward Reusable and Deployable Embodied Intelligence Systems",
+      "abstract": "Embodied intelligence systems require not only end-to-end policy models, but also reusable functional modules that transform multimodal observations, robot states, human demonstrations, and task contexts into structured representations, decisions, trajectories, control references, and system services. This work defines these modules as embodied operators and studies them as independent yet composable units in embodied intelligence pipelines. We clarify their definition boundary, emphasizing task semantics, standardized input-output contracts, deployability, reusability, and multi-layer optimizability. We further construct a taxonomy covering five categories: detection and segmentation, spatial localization and 3D understanding, hand motion recovery, embodied foundation models and task-decision operators, and planning, control, and system support operators. For each category, we summarize representative functions, technical paradigms, application roles, and practical limitations. Beyond taxonomy, we propose a multi-dimensional benchmark framework that evaluates embodied operators in terms of correctness, end-to-end efficiency, resource usage, temporal stability, portability, interface compatibility, deployment reliability, and downstream task utility. We also discuss workflow-level operator acceleration and open challenges in operator composition, data standardization, world models, VLA safety, edge deployment, and real-world application value. Overall, this work argues that embodied operators should be optimized and evaluated as holistic deployable components, providing a foundation for reusable, scalable, and verifiable embodied intelligence systems.",
       "authors": [
-        "Runzhi Deng",
-        "Yundi Hu",
-        "Yiming Zhong",
-        "Zhao Wang",
-        "Xixi Liu",
-        "Hongsong Wang",
-        "Caifeng Shan",
-        "Fang Zhao"
+        "Junwu Xiong",
+        "Jiaxuan Gao",
+        "Wei Chai",
+        "Renxing Chen",
+        "Yuzhen Li",
+        "Yu Guo",
+        "Yucheng Guo",
+        "Mingxi Luo",
+        "Wenyang Ma",
+        "Yiyun Mou",
+        "Yifei Zhang",
+        "Chen Zhou",
+        "Yongjian Guo"
       ],
-      "primary_category": "cs.CV",
+      "primary_category": "cs.AI",
       "categories": [
-        "cs.CV"
+        "cs.AI"
       ],
-      "published": "2026-07-04T11:05:57+00:00",
-      "link": "https://arxiv.org/pdf/2607.03817v1",
+      "published": "2026-07-03T12:51:55+00:00",
+      "link": "https://arxiv.org/pdf/2607.03283v1",
       "tags": [
         "keyword:humanoid-ood",
         "keyword:ur",
@@ -163,46 +91,42 @@
         "query:ur"
       ],
       "llm_score": 6.0,
-      "llm_evidence_en": "training-free multimodal in-context learning for industrial anomaly detection, transferable to robot OOD detection",
-      "llm_evidence_cn": "面向工业异常检测的无训练多模态上下文学习方法，可迁移至机器人OOD检测",
-      "llm_evidence": "面向工业异常检测的无训练多模态上下文学习方法，可迁移至机器人OOD检测",
-      "canonical_evidence": "面向工业异常检测的无训练多模态上下文学习方法，可迁移至机器人OOD检测",
-      "llm_tldr_en": "GLLS proposes a training-free framework for industrial anomaly detection using multimodal in-context learning with a Part-Aware Visual-Logical Atlas, achieving strong few-shot performance without defective samples.",
-      "llm_tldr_cn": "GLLS提出了一种无训练的多模态上下文学习框架用于工业异常检测。该方法利用部分感知视觉逻辑图谱组织正常参考和结构化规范，结合全局逻辑和局部搜索双流机制，在无需缺陷样本的情况下实现强零样本或少样本异常检测性能。虽然针对工业场景，但其训练自由的特性使其易于迁移到机器人安全操作中的异常检测和OOD检测任务。",
-      "llm_tldr": "GLLS提出了一种无训练的多模态上下文学习框架用于工业异常检测。该方法利用部分感知视觉逻辑图谱组织正常参考和结构化规范，结合全局逻辑和局部搜索双流机制，在无需缺陷样本的情况下实现强零样本或少样本异常检测性能。虽然针对工业场景，但其训练自由的特性使其易于迁移到机器人安全操作中的异常检测和OOD检测任务。",
+      "llm_evidence_en": "defines embodied operators for deployable embodied intelligence systems",
+      "llm_evidence_cn": "定义了可部署具身智能系统的具身算子",
+      "llm_evidence": "定义了可部署具身智能系统的具身算子",
+      "canonical_evidence": "定义了可部署具身智能系统的具身算子",
+      "llm_tldr_en": "The paper defines embodied operators as reusable modules for embodied intelligence pipelines, emphasizing deployability and standardization for robotic systems.",
+      "llm_tldr_cn": "该论文将具身算子定义为具身智能流水线中可重用、可部署的功能模块，强调任务语义、标准化接口和可优化性。通过构建涵盖检测、定位、规划等五类算子的分类体系，为机器人系统的模块化部署提供了理论框架，但未直接涉及人形机器人的具体故障诊断或数据集构建。",
+      "llm_tldr": "该论文将具身算子定义为具身智能流水线中可重用、可部署的功能模块，强调任务语义、标准化接口和可优化性。通过构建涵盖检测、定位、规划等五类算子的分类体系，为机器人系统的模块化部署提供了理论框架，但未直接涉及人形机器人的具体故障诊断或数据集构建。",
       "llm_tags": [
-        "query:humanoid-ood"
+        "query:ur"
       ],
-      "matched_query_tag": "query:humanoid-ood",
-      "matched_query_text": "out-of-distribution detection for safe robot operation",
-      "matched_requirement_id": "req-11",
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "edge deployment for humanoid robots",
+      "matched_requirement_id": "req-4",
       "selection_source": "fresh_fetch",
       "quick_tier": "6"
     },
     {
-      "id": "2607.04610v1",
+      "id": "2607.08341v1",
       "source": "arxiv",
-      "title": "RoboVista: Evaluating Vision Language Models for Diverse Robot Applications",
-      "abstract": "Diverse applications for robotics, such as industry and agriculture, require robots to operate across various embodiments, changing visual conditions, and complex planning. Vision-Language Models (VLMs) offer a promising foundation for general-purpose and interpretable robotic reasoning. Aligning VLMs with diverse robot applications requires a modular understanding of the individual decision components that underlie robotic behavior. Capturing such structure is challenging for conventional robot benchmarks that are primarily based on teleoperated, end-to-end datasets. We propose Robot Question Answering (RQA), a modular evaluation framework and RoboVista, a benchmark curated from real robotic systems, research papers, and expert annotations. RoboVista contains 474 Visual Question Answering (VQA) instances with human annotated reasoning and covers 39 unique task types in agricultural, industrial, domestic, surgical robotics, autonomous driving, and open robot datasets. Experiments on RoboVista show that state-of-the-art VLMs exhibit substantial gaps. Physical robot experiments suggest strong correlation between RoboVista performance and real-world task execution.",
+      "title": "AnyDexRT: Calibration-Free Dexterous Hand Retargeting with Few-Shot Human Guidance",
+      "abstract": "Teleoperation is a key interface for controlling dexterous robotic hands and collecting demonstrations for imitation learning. Its effectiveness largely depends on kinematic retargeting, which maps operator hand motions to feasible and intuitive robot hand motions. Existing methods often require hand-crafted objectives, precise calibration, or global shape matching between human and robot hand spaces, making them sensitive to hand-specific tuning and less reliable across different dexterous hands. We propose AnyDexRT, a calibration-free retargeting method for intuitive dexterous teleoperation across human-like dexterous hands. AnyDexRT combines self-supervised fingertip correspondence learning with few-shot human guidance to anchor the mapping in task-relevant regions, and further refines pinch-related poses using a contact classifier. Experiments on diverse dexterous hands and real-world teleoperation tasks show that AnyDexRT improves retargeting quality, reduces manual tuning, and provides more intuitive and efficient control than prior retargeting methods. Project website: https://chenxi-wang.github.io/projects/anydexrt",
       "authors": [
-        "Shuangyu Xie",
-        "Kaiyuan Chen",
-        "Ziyang Chen",
-        "Simeon Adebola",
-        "Yixuan Huang",
-        "Zehan Ma",
-        "Tianshuang Qiu",
-        "Wentao Yuan",
-        "Dhruv Shah",
-        "Pannag R. Sanketi",
-        "Ken Goldberg"
+        "Chenxi Wang",
+        "Ying Feng",
+        "Hongjie Fang",
+        "Shangning Xia",
+        "Lixin Yang",
+        "Chuan Wen",
+        "Cewu Lu"
       ],
       "primary_category": "cs.RO",
       "categories": [
         "cs.RO"
       ],
-      "published": "2026-07-06T02:34:56+00:00",
-      "link": "https://arxiv.org/pdf/2607.04610v1",
+      "published": "2026-07-09T10:29:53+00:00",
+      "link": "https://arxiv.org/pdf/2607.08341v1",
       "tags": [
         "keyword:humanoid-ood",
         "keyword:ur",
@@ -210,13 +134,13 @@
         "query:ur"
       ],
       "llm_score": 7.0,
-      "llm_evidence_en": "RoboVista benchmark dataset for diverse robot applications, meets requirement for robotics dataset construction",
-      "llm_evidence_cn": "RoboVista基准数据集，涵盖多种机器人应用，满足机器人数据集构建需求",
-      "llm_evidence": "RoboVista基准数据集，涵盖多种机器人应用，满足机器人数据集构建需求",
-      "canonical_evidence": "RoboVista基准数据集，涵盖多种机器人应用，满足机器人数据集构建需求",
-      "llm_tldr_en": "Proposes RoboVista, a benchmark dataset for evaluating VLMs on diverse robot tasks, curated from real systems and expert annotations, supporting modular evaluation.",
-      "llm_tldr_cn": "该论文提出RoboVista基准，用于评估视觉语言模型在多种机器人应用中的表现。该数据集从真实机器人系统、研究论文和专家注释中精心挑选，支持模块化评估框架RQA。与传统的端到端数据集不同，RoboVista提供细粒度的决策组件评估。实验表明，现有VLM在分布外场景下存在不足，该基准有助于推动更鲁棒的机器人推理。",
-      "llm_tldr": "该论文提出RoboVista基准，用于评估视觉语言模型在多种机器人应用中的表现。该数据集从真实机器人系统、研究论文和专家注释中精心挑选，支持模块化评估框架RQA。与传统的端到端数据集不同，RoboVista提供细粒度的决策组件评估。实验表明，现有VLM在分布外场景下存在不足，该基准有助于推动更鲁棒的机器人推理。",
+      "llm_evidence_en": "teleoperation for data collection in robot learning",
+      "llm_evidence_cn": "遥操作用于机器人学习中的数据收集",
+      "llm_evidence": "遥操作用于机器人学习中的数据收集",
+      "canonical_evidence": "遥操作用于机器人学习中的数据收集",
+      "llm_tldr_en": "Presents AnyDexRT, a calibration-free retargeting method for dexterous teleoperation, enabling efficient collection of robot demonstrations for imitation learning.",
+      "llm_tldr_cn": "针对现有灵巧手遥操作标定复杂、适应性差的问题，提出AnyDexRT，一种无校准的重新定位方法。该方法结合自监督指尖对应学习与少样本人类引导，实现直观的灵巧手遥操作。实验表明，AnyDexRT在多种灵巧手上均能高效收集演示数据，且无需手部特定调参。该工作为机器人数据集构建提供了便捷的遥操作工具。",
+      "llm_tldr": "针对现有灵巧手遥操作标定复杂、适应性差的问题，提出AnyDexRT，一种无校准的重新定位方法。该方法结合自监督指尖对应学习与少样本人类引导，实现直观的灵巧手遥操作。实验表明，AnyDexRT在多种灵巧手上均能高效收集演示数据，且无需手部特定调参。该工作为机器人数据集构建提供了便捷的遥操作工具。",
       "llm_tags": [
         "query:ur"
       ],
@@ -225,6 +149,179 @@
       "matched_requirement_id": "req-5",
       "selection_source": "fresh_fetch",
       "quick_tier": "7"
+    },
+    {
+      "id": "2607.03693v1",
+      "source": "arxiv",
+      "title": "CoRE-VLA: Towards Scalable and Robust Vision-Language-Action Modeling via Conditional Routing of Experts",
+      "abstract": "Vision-language-action (VLA) models have advanced generalist robotic manipulation, yet real-world deployment reveals a fundamental challenge: robots are equipped with diverse and heterogeneous sensor configurations, auxiliary sensors can fail unexpectedly during operation, and different robot embodiments often lack certain sensors by design. A unified policy that can exploit auxiliary perceptual inputs when available while remaining reliable under sensor absence, whether incidental or by design, is therefore essential for practical deployment. However, existing VLA policies couple action generation to a fixed sensor set through shared dense computation, making them brittle when sensors are missing and limiting their ability to specialize across diverse tasks and long-horizon behaviors. We propose CoRE-VLA, a scalable and robust VLA framework that formulates action generation as context-conditioned sparse computation. Sensor availability gates modality-specialized experts, enabling graceful degradation under missing sensors without retraining. Task intent further routes action-side representations to task-relevant experts, improving specialization across diverse tasks and long-horizon subgoals. While the framework is designed to accommodate different auxiliary sensors, we focus on depth as a representative and practically important auxiliary modality in our experiments. Experiments on LIBERO, RoboCasa GR1 Tabletop, and real-world dual-arm manipulation show that CoRE-VLA achieves strong results on long-horizon and multi-task benchmarks, and outperforms both a dense-action-generator ablation and a strong pretrained VLA baseline, including in zero-shot generalization to unseen scenarios. Modality analysis shows that CoRE-VLA can exploit auxiliary depth when available while remaining robust when depth is unavailable during deployment.",
+      "authors": [
+        "Haozhe Zhang",
+        "Sixian Li",
+        "Yifei Zhang",
+        "Zezheng Huai",
+        "Hao Chen",
+        "Chunhua Shen",
+        "Jingjing Gong",
+        "Xipeng Qiu"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-07-04T03:58:09+00:00",
+      "link": "https://arxiv.org/pdf/2607.03693v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "handles sensor failure or absence for robust deployment",
+      "llm_evidence_cn": "处理传感器故障或缺失以实现鲁棒部署",
+      "llm_evidence": "处理传感器故障或缺失以实现鲁棒部署",
+      "canonical_evidence": "处理传感器故障或缺失以实现鲁棒部署",
+      "llm_tldr_en": "CoRE-VLA introduces conditional routing of experts to handle sensor absence or failure, enabling robust fault-tolerant operation in vision-language-action models.",
+      "llm_tldr_cn": "本文针对VLA模型在传感器缺失或故障时的鲁棒性问题，提出条件专家路由方法。通过解耦动作生成与传感器输入，模型能在传感器缺失时仍可靠运行。在多种机器人平台上验证了鲁棒性，为机器人故障检测与容错提供了方法借鉴。",
+      "llm_tldr": "本文针对VLA模型在传感器缺失或故障时的鲁棒性问题，提出条件专家路由方法。通过解耦动作生成与传感器输入，模型能在传感器缺失时仍可靠运行。在多种机器人平台上验证了鲁棒性，为机器人故障检测与容错提供了方法借鉴。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "fault detection in humanoid robots",
+      "matched_requirement_id": "req-6",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2607.04837v2",
+      "source": "arxiv",
+      "title": "Athena-WBC: Capability-Aligned Policy Experts for Long-Tail Humanoid Whole-Body Control",
+      "abstract": "Large-scale humanoid motion-tracking controllers are commonly improved by reallocating training effort: difficult motions are sampled more often, isolated into smaller subsets, or assigned to specialized experts. We show that this view is incomplete. In strong whole-body-control baselines, a residual set of feasible training clips remains unsolved even under targeted training, especially for high-dynamic transitions and balance-critical motions. These failures arise not only from insufficient exposure, but from a mismatch between the motion demands and the effective capability induced by the default training recipe. We propose Athena-WBC, a compact teacher-student pipeline with capability-aligned policy experts for long-tail humanoid whole-body control. Dynamic experts use a tracking-focused, constraint-aware objective that removes conservative effort and temporal-control penalties while preserving physical feasibility constraints; balance experts use a gravity curriculum to improve early-training survivability. The resulting privileged teachers are motion-routed for DAgger distillation and then compressed into a single controller with deployable observations followed by RL fine-tuning. Experiments on a full-size humanoid show improved recovery of training-set long-tail motions and better held-out tracking than a strong SONIC-recipe baseline, using only a small number of experts.",
+      "authors": [
+        "Yuan Jiang",
+        "Ningyuan Zhang",
+        "Xicun Yang",
+        "Yuzhi Jiang",
+        "Jie Chen"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-07-06T09:10:04+00:00",
+      "link": "https://arxiv.org/pdf/2607.04837v2",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "training data reallocation and capability-aligned experts for humanoid whole-body control",
+      "llm_evidence_cn": "训练数据重新分配和能力对齐的专家用于人形机器人全身控制",
+      "llm_evidence": "训练数据重新分配和能力对齐的专家用于人形机器人全身控制",
+      "canonical_evidence": "训练数据重新分配和能力对齐的专家用于人形机器人全身控制",
+      "llm_tldr_en": "Athena-WBC introduces capability-aligned policy experts and a compact teacher-student pipeline for long-tail humanoid whole-body control, relevant to dataset construction and training.",
+      "llm_tldr_cn": "本文针对人形机器人全身控制中长尾困难运动的学习问题，提出能力对齐策略专家和紧凑师生管道。通过重新分配训练努力并匹配运动需求与策略能力，解决了高动态过渡和平衡关键运动的失败问题。对构建人形机器人数据集和训练策略具有指导意义。",
+      "llm_tldr": "本文针对人形机器人全身控制中长尾困难运动的学习问题，提出能力对齐策略专家和紧凑师生管道。通过重新分配训练努力并匹配运动需求与策略能力，解决了高动态过渡和平衡关键运动的失败问题。对构建人形机器人数据集和训练策略具有指导意义。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "humanoid robot dataset construction",
+      "matched_requirement_id": "req-2",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2607.05241v1",
+      "source": "arxiv",
+      "title": "GelNeuro: A Sensing-Computing Integrated Neuromorphic Tactile System for Texture Recognition",
+      "abstract": "Neuromorphic visuo-tactile sensing offers a promising paradigm for low-latency and low-power robotic perception. However, existing systems still rely heavily on a host computer for event readout, preprocessing, or relaying prior to chip inference. This paper presents GelNeuro, a fully integrated sensing-computing visuo-tactile system that directly pairs a GelSight Mini-based optical tactile front end with the Speck2f neuromorphic system-on-chip (SoC). Contact-induced marker motions are captured as dynamic vision sensor (DVS) events and routed through the on-chip network to a spiking convolutional neural network (SCNN) classifier. To mitigate accuracy degradation during 8-bit deployment, a hardware-aware weight clamping strategy is introduced. Evaluated on a 15-class natural texture recognition task, hardware-in-the-loop testing on the physical chip achieves a 96.3% accuracy within an 80 ms inference window. Notably, the system consumes only 19.6 mW of board-level active power-over three orders of magnitude lower than conventional CPU/GPU baselines on the same benchmark. GelNeuro also exhibits robust generalization across unseen contact depths, demonstrating the viability of direct sensor-to-chip tactile recognition on edge neuromorphic hardware.",
+      "authors": [
+        "Luoyang Bian",
+        "Xinpan Meng",
+        "Zhenghua Ma",
+        "Houcheng Li",
+        "Long Cheng"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-07-06T15:52:35+00:00",
+      "link": "https://arxiv.org/pdf/2607.05241v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "neuromorphic tactile system with on-chip deployment and weight clamping for edge",
+      "llm_evidence_cn": "神经形态触觉系统，片上部署和权值裁剪用于边缘端",
+      "llm_evidence": "神经形态触觉系统，片上部署和权值裁剪用于边缘端",
+      "canonical_evidence": "神经形态触觉系统，片上部署和权值裁剪用于边缘端",
+      "llm_tldr_en": "GelNeuro integrates tactile sensing with neuromorphic SoC for on-chip inference, with hardware-aware weight clamping for 8-bit deployment on edge devices.",
+      "llm_tldr_cn": "本文提出GelNeuro，将光学触觉前端与Speck2f神经形态SoC集成，实现完全片上推理。采用硬件感知权值裁剪策略缓解8位部署精度下降。该系统展示了边缘部署的低延迟低功耗感知方案，对人形机器人边缘端感知有参考价值。",
+      "llm_tldr": "本文提出GelNeuro，将光学触觉前端与Speck2f神经形态SoC集成，实现完全片上推理。采用硬件感知权值裁剪策略缓解8位部署精度下降。该系统展示了边缘部署的低延迟低功耗感知方案，对人形机器人边缘端感知有参考价值。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "edge deployment for humanoid robots",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2607.07357v1",
+      "source": "arxiv",
+      "title": "HumAIN: Human-Aware Implicit Social Robot Navigation",
+      "abstract": "Effective social robot navigation requires sensitivity to human behavior, often revealed through subtle skeletal cues like gait and orientation. We present Human-Aware Implicit Social Robot Navigation (HumAIN), a novel framework that fuses implicit social cues directly into the planning loop via knowledge distillation. We first employ a transformer-based teacher model that fuses rich multi-modal inputs, including historic images, skeletal keypoints, robot state, and a robot's target goal, to learn robust, human-aware representations for the robot's future trajectory planning. To enable real-time deployment, we then distill this knowledge into a lightweight student model. By optimizing for both trajectory reconstruction and latent feature alignment with the teacher, the student learns to infer complex social dynamics from minimal inputs. Bridging the prediction-planning gap with an efficient distilled architecture, our method enables robots to reason about human behavior in a manner that is adaptive, robust, and socially compliant. We validate HumAIN through extensive experiments, where it improves trajectory prediction metrics by an average of 29.8% across all metrics compared to state-of-the-art baselines. These results highlight the benefit of using implicit, whole-body cues to achieve human-like navigation awareness on resource-constrained platforms.",
+      "authors": [
+        "Daeun Song",
+        "Nhat Le",
+        "Jeffrey Chen",
+        "Mohammad Nazeri",
+        "Amirreza Payandeh",
+        "Rohan Chandra",
+        "Reuth Mirsky",
+        "Ross Mead",
+        "Ling Xiao",
+        "Xuesu Xiao"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.AI"
+      ],
+      "published": "2026-07-08T12:52:51+00:00",
+      "link": "https://arxiv.org/pdf/2607.07357v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "knowledge distillation for lightweight student model enabling real-time deployment on embedded platform",
+      "llm_evidence_cn": "知识蒸馏得到轻量学生模型，可在嵌入式平台实时部署",
+      "llm_evidence": "知识蒸馏得到轻量学生模型，可在嵌入式平台实时部署",
+      "canonical_evidence": "知识蒸馏得到轻量学生模型，可在嵌入式平台实时部署",
+      "llm_tldr_en": "HumAIN uses knowledge distillation to create a lightweight student model for real-time social robot navigation, relevant to edge deployment of humanoid robots.",
+      "llm_tldr_cn": "本文提出HumAIN，通过知识蒸馏将多模态教师模型压缩为轻量学生模型，用于社交机器人导航。学生模型在保持人类感知能力的同时实现实时部署。该方法对人形机器人边缘端部署具有借鉴意义，特别是在轻量化模型方面。",
+      "llm_tldr": "本文提出HumAIN，通过知识蒸馏将多模态教师模型压缩为轻量学生模型，用于社交机器人导航。学生模型在保持人类感知能力的同时实现实时部署。该方法对人形机器人边缘端部署具有借鉴意义，特别是在轻量化模型方面。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "edge deployment for humanoid robots",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
     }
   ]
 }

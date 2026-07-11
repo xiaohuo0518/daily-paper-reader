@@ -7,36 +7,41 @@
 
 ## 每次日报
 - 最新运行日期：2026-07-02 ~ 2026-07-11
-- 运行时间：2026-07-11 15:38:47 UTC
+- 运行时间：2026-07-11 15:50:44 UTC
 - 运行状态：成功
-- 本次总论文数：5
-- 精读区：2
-- 速读区：3
+- 本次总论文数：7
+- 精读区：0
+- 速读区：7
 
 ### 今日简报（AI）
-1. 本期聚焦机器人规模化场景验证（RoboVAST）与数字遥操作世界模型（RynnWorld-Teleop），同时覆盖自动驾驶异常分割和视觉语言模型评估。  
-2. 最值得关注两个方向：基于自动化场景的大规模机器人验证方法，以及利用动作条件世界模型提升数字遥操作效率。  
-3. 建议普通读者优先精读这两篇高分论文，了解机器人从仿真验证到远程操控的前沿技术融合。
+本期日报涵盖7篇论文，主题聚焦于具身智能与机器人操作，包括数字遥操作世界模型、无标定手部重定向等方向。最值得关注的是RynnWorld-Teleop（动作条件世界模型用于数字遥操作）和AnyDexRT（基于少样本人类引导的无标定灵巧手重定向），均获得7.0/10评分。建议优先阅读这两篇高分论文，探索世界模型与少样本学习在机器人远程操控中的应用。
 - 详情：[/20260702-20260711/README](/20260702-20260711/README)
 
 ### 精读区论文标签
-1. [RoboVAST: Automated Scenario-Based Validation of Robots at Scale](/20260702-20260711/2607.06248v1-robovast-automated-scenario-based-validation-of-robots-at-scale)  
-   标签：评分：8.0/10、query:ur
-   evidence：通过基于场景的验证构建机器人数据集
-2. [RynnWorld-Teleop: An Action-Conditioned World Model for Digital Teleoperation](/20260702-20260711/2607.06558v1-rynnworld-teleop-an-action-conditioned-world-model-for-digital-teleoperation)  
-   标签：评分：8.0/10、query:ur
-   evidence：数字遥操作生成轨迹数据用于数据集构建
+- 本次无精读推荐。
 
 ### 速读区论文标签
-1. [Road-Aware Anomaly Segmentation with Query-Guided Polygons and CLIP in Autonomous Driving](/20260702-20260711/2607.04304v1-road-aware-anomaly-segmentation-with-query-guided-polygons-and-clip-in-autonomous-driving)  
-   标签：评分：7.0/10、query:humanoid-ood
-   evidence：面向自动驾驶的OOD异常分割，可迁移至机器人安全操作
-2. [RoboVista: Evaluating Vision Language Models for Diverse Robot Applications](/20260702-20260711/2607.04610v1-robovista-evaluating-vision-language-models-for-diverse-robot-applications)  
+1. [RynnWorld-Teleop: An Action-Conditioned World Model for Digital Teleoperation](/20260702-20260711/2607.06558v1-rynnworld-teleop-an-action-conditioned-world-model-for-digital-teleoperation)  
    标签：评分：7.0/10、query:ur
-   evidence：RoboVista基准数据集，涵盖多种机器人应用，满足机器人数据集构建需求
-3. [Global Logic and Local Search: Dual-Stream Multimodal In-Context Learning for Verifiable Industrial Anomaly Detection](/20260702-20260711/2607.03817v1-global-logic-and-local-search-dual-stream-multimodal-in-context-learning-for-verifiable-industrial-anomaly-detection)  
-   标签：评分：6.0/10、query:humanoid-ood
-   evidence：面向工业异常检测的无训练多模态上下文学习方法，可迁移至机器人OOD检测
+   evidence：提出生成式世界模型合成轨迹数据，用于机器人数据收集，关联机器人数据集构建
+2. [AnyDexRT: Calibration-Free Dexterous Hand Retargeting with Few-Shot Human Guidance](/20260702-20260711/2607.08341v1-anydexrt-calibration-free-dexterous-hand-retargeting-with-few-shot-human-guidance)  
+   标签：评分：7.0/10、query:ur
+   evidence：遥操作用于机器人学习中的数据收集
+3. [Embodied Operators and Benchmarking: Toward Reusable and Deployable Embodied Intelligence Systems](/20260702-20260711/2607.03283v1-embodied-operators-and-benchmarking-toward-reusable-and-deployable-embodied-intelligence-systems)  
+   标签：评分：6.0/10、query:ur
+   evidence：定义了可部署具身智能系统的具身算子
+4. [CoRE-VLA: Towards Scalable and Robust Vision-Language-Action Modeling via Conditional Routing of Experts](/20260702-20260711/2607.03693v1-core-vla-towards-scalable-and-robust-vision-language-action-modeling-via-conditional-routing-of-experts)  
+   标签：评分：6.0/10、query:ur
+   evidence：处理传感器故障或缺失以实现鲁棒部署
+5. [Athena-WBC: Capability-Aligned Policy Experts for Long-Tail Humanoid Whole-Body Control](/20260702-20260711/2607.04837v2-athena-wbc-capability-aligned-policy-experts-for-long-tail-humanoid-whole-body-control)  
+   标签：评分：6.0/10、query:ur
+   evidence：训练数据重新分配和能力对齐的专家用于人形机器人全身控制
+6. [GelNeuro: A Sensing-Computing Integrated Neuromorphic Tactile System for Texture Recognition](/20260702-20260711/2607.05241v1-gelneuro-a-sensing-computing-integrated-neuromorphic-tactile-system-for-texture-recognition)  
+   标签：评分：6.0/10、query:ur
+   evidence：神经形态触觉系统，片上部署和权值裁剪用于边缘端
+7. [HumAIN: Human-Aware Implicit Social Robot Navigation](/20260702-20260711/2607.07357v1-humain-human-aware-implicit-social-robot-navigation)  
+   标签：评分：6.0/10、query:ur
+   evidence：知识蒸馏得到轻量学生模型，可在嵌入式平台实时部署
 
 
 <div class="dpr-home-promo-card">

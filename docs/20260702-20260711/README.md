@@ -1,23 +1,24 @@
 # 日报 · 2026-07-02 ~ 2026-07-11
 
-- 生成时间：2026-07-11 15:38:47 UTC
-- 当次推荐总数：5
-- 精读区：2
-- 速读区：3
+- 生成时间：2026-07-11 15:50:44 UTC
+- 当次推荐总数：7
+- 精读区：0
+- 速读区：7
 
 ## 今日简报（AI）
-1) 今日5篇论文聚焦机器人规模化验证、数字遥操作、自动驾驶异常分割、视觉语言模型评估及工业异常检测。  
-2) 最值得关注：RoboVAST（8.0）实现机器人场景验证自动化；RynnWorld-Teleop（8.0）提出基于动作条件世界模型的数字遥操作。  
-3) 建议优先精读这两篇高分论文，探索机器人仿真与遥操作协同的技术落地路径。
+今日速读7篇论文，聚焦数字遥操作、灵巧手重定向与具身智能系统。最值得关注的是《RynnWorld-Teleop》的动作条件世界模型和《AnyDexRT》的免标定灵巧手重定向方法。建议优先阅读这两篇高分论文，了解具身智能在远程操控与灵巧操作中的前沿进展。
 
 ## 精读区
-1. [RoboVAST: Automated Scenario-Based Validation of Robots at Scale](/20260702-20260711/2607.06248v1-robovast-automated-scenario-based-validation-of-robots-at-scale) （8.0/10）
-2. [RynnWorld-Teleop: An Action-Conditioned World Model for Digital Teleoperation](/20260702-20260711/2607.06558v1-rynnworld-teleop-an-action-conditioned-world-model-for-digital-teleoperation) （8.0/10）
+- 本次无精读推荐。
 
 ## 速读区
-1. [Road-Aware Anomaly Segmentation with Query-Guided Polygons and CLIP in Autonomous Driving](/20260702-20260711/2607.04304v1-road-aware-anomaly-segmentation-with-query-guided-polygons-and-clip-in-autonomous-driving) （7.0/10）
-2. [RoboVista: Evaluating Vision Language Models for Diverse Robot Applications](/20260702-20260711/2607.04610v1-robovista-evaluating-vision-language-models-for-diverse-robot-applications) （7.0/10）
-3. [Global Logic and Local Search: Dual-Stream Multimodal In-Context Learning for Verifiable Industrial Anomaly Detection](/20260702-20260711/2607.03817v1-global-logic-and-local-search-dual-stream-multimodal-in-context-learning-for-verifiable-industrial-anomaly-detection) （6.0/10）
+1. [RynnWorld-Teleop: An Action-Conditioned World Model for Digital Teleoperation](/20260702-20260711/2607.06558v1-rynnworld-teleop-an-action-conditioned-world-model-for-digital-teleoperation) （7.0/10）
+2. [AnyDexRT: Calibration-Free Dexterous Hand Retargeting with Few-Shot Human Guidance](/20260702-20260711/2607.08341v1-anydexrt-calibration-free-dexterous-hand-retargeting-with-few-shot-human-guidance) （7.0/10）
+3. [Embodied Operators and Benchmarking: Toward Reusable and Deployable Embodied Intelligence Systems](/20260702-20260711/2607.03283v1-embodied-operators-and-benchmarking-toward-reusable-and-deployable-embodied-intelligence-systems) （6.0/10）
+4. [CoRE-VLA: Towards Scalable and Robust Vision-Language-Action Modeling via Conditional Routing of Experts](/20260702-20260711/2607.03693v1-core-vla-towards-scalable-and-robust-vision-language-action-modeling-via-conditional-routing-of-experts) （6.0/10）
+5. [Athena-WBC: Capability-Aligned Policy Experts for Long-Tail Humanoid Whole-Body Control](/20260702-20260711/2607.04837v2-athena-wbc-capability-aligned-policy-experts-for-long-tail-humanoid-whole-body-control) （6.0/10）
+6. [GelNeuro: A Sensing-Computing Integrated Neuromorphic Tactile System for Texture Recognition](/20260702-20260711/2607.05241v1-gelneuro-a-sensing-computing-integrated-neuromorphic-tactile-system-for-texture-recognition) （6.0/10）
+7. [HumAIN: Human-Aware Implicit Social Robot Navigation](/20260702-20260711/2607.07357v1-humain-human-aware-implicit-social-robot-navigation) （6.0/10）
 
 ---
 使用键盘方向键可在日报/论文之间快速切换。
