@@ -1,0 +1,230 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-07-11T15:35:03.849418+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 2,
+    "deep_divecandidates": 2,
+    "deep_cap": 7,
+    "deep_selected": 2,
+    "quick_candidates": 3,
+    "quick_skim_target": 12,
+    "quick_selected": 3
+  },
+  "deep_dive": [
+    {
+      "id": "2607.06248v1",
+      "source": "arxiv",
+      "title": "RoboVAST: Automated Scenario-Based Validation of Robots at Scale",
+      "abstract": "Validation of robotic systems critically depends on the operating conditions under which they are assessed. Scenario selection and variation are often manual, experience-driven, and difficult to scale, which harms reproducibility and weakens validation conclusions. We propose a scenario-based methodology that models scenarios compositionally and formalizes how these dimensions are varied, instantiated, executed, and interpreted. Building on this, we introduce RoboVAST, a framework that realizes declarative campaign specifications, plugin-based scenario generation, and scalable containerized execution with integrated result analysis. We demonstrate the approach with a navigation dataset comprising 5480 scenario configurations and over 100000 execution runs across five indoor maps with varied paths, sensor noise, software parameters, and obstacle settings, totaling more than 1800 hours of simulated operation and 1873 km traveled. Twenty repetitions per configuration allow us to distinguish systematic failures from stochastic anomalies.",
+      "authors": [
+        "Frederik Pasch",
+        "Samuel Wiest",
+        "Argentina Ortega",
+        "Nico Hochgeschwender"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-07-07T13:14:27+00:00",
+      "link": "https://arxiv.org/pdf/2607.06248v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "Dataset construction for robotics through scenario-based validation",
+      "llm_evidence_cn": "通过基于场景的验证构建机器人数据集",
+      "llm_evidence": "通过基于场景的验证构建机器人数据集",
+      "canonical_evidence": "通过基于场景的验证构建机器人数据集",
+      "llm_tldr_en": "RoboVAST provides a framework for automated scenario-based validation, demonstrated by constructing a navigation dataset of 5480 scenario configurations and over 100000 execution runs, enabling scalable and reproducible validation.",
+      "llm_tldr_cn": "机器人系统验证依赖于操作条件，但场景选择通常手动且难以扩展。本文提出基于场景的验证方法论，并实现RoboVAST框架，通过可组合场景模型、声明性规范、插件生成和容器化执行，自动构建大规模测试数据集。在导航任务上展示了5480个场景配置和超过10万次运行的数据集，验证了方法在可扩展性和可重复性上的优势。",
+      "llm_tldr": "机器人系统验证依赖于操作条件，但场景选择通常手动且难以扩展。本文提出基于场景的验证方法论，并实现RoboVAST框架，通过可组合场景模型、声明性规范、插件生成和容器化执行，自动构建大规模测试数据集。在导航任务上展示了5480个场景配置和超过10万次运行的数据集，验证了方法在可扩展性和可重复性上的优势。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2607.06558v1",
+      "source": "arxiv",
+      "title": "RynnWorld-Teleop: An Action-Conditioned World Model for Digital Teleoperation",
+      "abstract": "Scaling robot learning requires massive, diverse trajectory data, yet collection is currently bottlenecked by physical teleoperation, where every demonstration binds operator time to specific hardware and workspaces. We introduce digital teleoperation, a paradigm that decouples data collection from physical constraints by replacing the real robot with a generative world model. In this framework, an operator's hand-pose stream drives a robot-centric generative world model to synthesize high-fidelity egocentric videos from a single reference image. The recorded pose stream serves as an embodiment-agnostic action label transferable to any target robot via standard retargeting, yielding complete state-action trajectories for imitation learning independent of physical hardware. We instantiate this paradigm in RynnWorld-Teleop, a system that integrates depth-aware skeletal conditioning, progressive human-to-robot training on a video Diffusion Transformer, and streaming autoregressive distillation. This pipeline compresses the generative process into a single-pass inference, enabling 40+ FPS, real-time interactive generation on a single H100 GPU. Policies trained exclusively on RynnWorld-Teleop-generated data achieve effective zero-shot Sim2Real transfer across dexterous and diverse bimanual tasks. Moreover, augmenting real-world datasets with our digitally teleoperated data consistently improves success rates, demonstrating that RynnWorld-Teleop serves as a high-fidelity, scalable data engine for the next generation of robotic agents.",
+      "authors": [
+        "Haoyu Zhao",
+        "Xingyue Zhao",
+        "Hangyu Li",
+        "Biao Gong",
+        "Kehan Li",
+        "Siteng Huang",
+        "Xin Li",
+        "Deli Zhao",
+        "Zhongyu Li"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-07-07T17:58:11+00:00",
+      "link": "https://arxiv.org/pdf/2607.06558v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "digital teleoperation generates trajectory data for dataset construction",
+      "llm_evidence_cn": "数字遥操作生成轨迹数据用于数据集构建",
+      "llm_evidence": "数字遥操作生成轨迹数据用于数据集构建",
+      "canonical_evidence": "数字遥操作生成轨迹数据用于数据集构建",
+      "llm_tldr_en": "RynnWorld-Teleop proposes a digital teleoperation paradigm using a generative world model to synthesize high-fidelity egocentric videos from a reference image, producing state-action trajectories for imitation learning without physical hardware.",
+      "llm_tldr_cn": "机器人学习依赖大规模轨迹数据，但物理遥操作采集成本高。本文提出数字遥操作范式，用生成式世界模型代替真实机器人，从单张参考图像合成机器人视角视频，记录操作者手部姿态流作为动作标签，经重定向生成完整状态-动作轨迹，实现无物理约束的模仿学习数据收集。实验表明该方法生成的轨迹质量与真实遥操作相当，可有效训练策略。",
+      "llm_tldr": "机器人学习依赖大规模轨迹数据，但物理遥操作采集成本高。本文提出数字遥操作范式，用生成式世界模型代替真实机器人，从单张参考图像合成机器人视角视频，记录操作者手部姿态流作为动作标签，经重定向生成完整状态-动作轨迹，实现无物理约束的模仿学习数据收集。实验表明该方法生成的轨迹质量与真实遥操作相当，可有效训练策略。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "quick_skim": [
+    {
+      "id": "2607.04304v1",
+      "source": "arxiv",
+      "title": "Road-Aware Anomaly Segmentation with Query-Guided Polygons and CLIP in Autonomous Driving",
+      "abstract": "Traditional semantic segmentation models operate under a closed-set assumption and struggle to recognize unknown or unexpected objects-an essential capability for autonomous driving. As a result, such models often misclassify or overlook out-of-distribution (OOD) road anomalies, posing safety risks in open-world environments. We present a lightweight, postprocessing, road-aware anomaly segmentation framework that requires no retraining, no OOD data, and no auxiliary supervision. Our approach builds on a mask transformer-based segmentation network by exploiting query-level mask confidence and deriving a polygonal road prior to detect gap regions that may correspond to anomalies. To further suppress false positives, we introduce a CLIP-based zero-shot semantic filtering module using in-distribution prompts, with optional generalized OOD prompts. By jointly leveraging spatial priors and semantic verification, our framework produces robust and interpretable anomaly predictions. Evaluation on three public benchmarks-Fishyscapes, SMIYC, and RoadAnomaly-shows consistently strong performance. In particular, our method outperforms the training-free baseline Maskomaly on most metrics and achieves the highest AP on Fishyscapes LostAndFound. These results demonstrate the practicality and deployability of our approach for real-world autonomous driving systems.",
+      "authors": [
+        "Zhiran Yan",
+        "Gordon Elger"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV"
+      ],
+      "published": "2026-07-05T13:43:31+00:00",
+      "link": "https://arxiv.org/pdf/2607.04304v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "OOD anomaly segmentation for autonomous driving; transferable to safe robot operation",
+      "llm_evidence_cn": "面向自动驾驶的OOD异常分割，可迁移至机器人安全操作",
+      "llm_evidence": "面向自动驾驶的OOD异常分割，可迁移至机器人安全操作",
+      "canonical_evidence": "面向自动驾驶的OOD异常分割，可迁移至机器人安全操作",
+      "llm_tldr_en": "A lightweight postprocessing framework for road anomaly segmentation using query-guided polygons and CLIP, requiring no retraining or OOD data, demonstrating OOD detection for safe operation.",
+      "llm_tldr_cn": "针对自动驾驶中传统语义分割模型无法识别未知物体的问题，提出一种轻量级后处理异常分割框架。它基于掩码Transformer的查询级置信度并推导多边形道路先验来检测异常区域，同时引入CLIP抑制误报。该方法无需重新训练、OOD数据或辅助监督，能有效提升开放世界环境下的安全性。其OOD检测思想可推广到机器人安全操作领域。",
+      "llm_tldr": "针对自动驾驶中传统语义分割模型无法识别未知物体的问题，提出一种轻量级后处理异常分割框架。它基于掩码Transformer的查询级置信度并推导多边形道路先验来检测异常区域，同时引入CLIP抑制误报。该方法无需重新训练、OOD数据或辅助监督，能有效提升开放世界环境下的安全性。其OOD检测思想可推广到机器人安全操作领域。",
+      "llm_tags": [
+        "query:humanoid-ood"
+      ],
+      "matched_query_tag": "query:humanoid-ood",
+      "matched_query_text": "out-of-distribution detection for safe robot operation",
+      "matched_requirement_id": "req-11",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2607.03817v1",
+      "source": "arxiv",
+      "title": "Global Logic and Local Search: Dual-Stream Multimodal In-Context Learning for Verifiable Industrial Anomaly Detection",
+      "abstract": "Large Multimodal Models (LMMs) show strong few-shot generalization, but industrial anomaly detection remains difficult because defects are small, input resolution is limited, and textual standards are not always grounded in visual evidence. Recent optimization-based methods improve alignment through fine-tuning, but they often require many defective samples, which are unavailable in early deployment. We present Global Logic and Local Search (GLLS), a training-free framework for reference-guided multimodal in-context verification. GLLS uses a Part-Aware Visual-Logical Atlas to organize normal references and structured specifications in the inference context. It combines a Global & Logic Stream, where SAM 3 extracts partially checkable visual facts, with a Fine-Grained & Actions Stream, where MCTS selects local evidence crops under a fixed budget. Experiments on MMAD-QA and additional anomaly detection datasets show consistent gains over matched and general-purpose baselines, while keeping the final diagnostic decision traceable to explicit visual evidence throughout the inspection trace.",
+      "authors": [
+        "Runzhi Deng",
+        "Yundi Hu",
+        "Yiming Zhong",
+        "Zhao Wang",
+        "Xixi Liu",
+        "Hongsong Wang",
+        "Caifeng Shan",
+        "Fang Zhao"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV"
+      ],
+      "published": "2026-07-04T11:05:57+00:00",
+      "link": "https://arxiv.org/pdf/2607.03817v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "training-free multimodal in-context learning for industrial anomaly detection, transferable to robot OOD detection",
+      "llm_evidence_cn": "面向工业异常检测的无训练多模态上下文学习方法，可迁移至机器人OOD检测",
+      "llm_evidence": "面向工业异常检测的无训练多模态上下文学习方法，可迁移至机器人OOD检测",
+      "canonical_evidence": "面向工业异常检测的无训练多模态上下文学习方法，可迁移至机器人OOD检测",
+      "llm_tldr_en": "GLLS proposes a training-free framework for industrial anomaly detection using multimodal in-context learning with a Part-Aware Visual-Logical Atlas, achieving strong few-shot performance without defective samples.",
+      "llm_tldr_cn": "GLLS提出了一种无训练的多模态上下文学习框架用于工业异常检测。该方法利用部分感知视觉逻辑图谱组织正常参考和结构化规范，结合全局逻辑和局部搜索双流机制，在无需缺陷样本的情况下实现强零样本或少样本异常检测性能。虽然针对工业场景，但其训练自由的特性使其易于迁移到机器人安全操作中的异常检测和OOD检测任务。",
+      "llm_tldr": "GLLS提出了一种无训练的多模态上下文学习框架用于工业异常检测。该方法利用部分感知视觉逻辑图谱组织正常参考和结构化规范，结合全局逻辑和局部搜索双流机制，在无需缺陷样本的情况下实现强零样本或少样本异常检测性能。虽然针对工业场景，但其训练自由的特性使其易于迁移到机器人安全操作中的异常检测和OOD检测任务。",
+      "llm_tags": [
+        "query:humanoid-ood"
+      ],
+      "matched_query_tag": "query:humanoid-ood",
+      "matched_query_text": "out-of-distribution detection for safe robot operation",
+      "matched_requirement_id": "req-11",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2607.04610v1",
+      "source": "arxiv",
+      "title": "RoboVista: Evaluating Vision Language Models for Diverse Robot Applications",
+      "abstract": "Diverse applications for robotics, such as industry and agriculture, require robots to operate across various embodiments, changing visual conditions, and complex planning. Vision-Language Models (VLMs) offer a promising foundation for general-purpose and interpretable robotic reasoning. Aligning VLMs with diverse robot applications requires a modular understanding of the individual decision components that underlie robotic behavior. Capturing such structure is challenging for conventional robot benchmarks that are primarily based on teleoperated, end-to-end datasets. We propose Robot Question Answering (RQA), a modular evaluation framework and RoboVista, a benchmark curated from real robotic systems, research papers, and expert annotations. RoboVista contains 474 Visual Question Answering (VQA) instances with human annotated reasoning and covers 39 unique task types in agricultural, industrial, domestic, surgical robotics, autonomous driving, and open robot datasets. Experiments on RoboVista show that state-of-the-art VLMs exhibit substantial gaps. Physical robot experiments suggest strong correlation between RoboVista performance and real-world task execution.",
+      "authors": [
+        "Shuangyu Xie",
+        "Kaiyuan Chen",
+        "Ziyang Chen",
+        "Simeon Adebola",
+        "Yixuan Huang",
+        "Zehan Ma",
+        "Tianshuang Qiu",
+        "Wentao Yuan",
+        "Dhruv Shah",
+        "Pannag R. Sanketi",
+        "Ken Goldberg"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-07-06T02:34:56+00:00",
+      "link": "https://arxiv.org/pdf/2607.04610v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "RoboVista benchmark dataset for diverse robot applications, meets requirement for robotics dataset construction",
+      "llm_evidence_cn": "RoboVista基准数据集，涵盖多种机器人应用，满足机器人数据集构建需求",
+      "llm_evidence": "RoboVista基准数据集，涵盖多种机器人应用，满足机器人数据集构建需求",
+      "canonical_evidence": "RoboVista基准数据集，涵盖多种机器人应用，满足机器人数据集构建需求",
+      "llm_tldr_en": "Proposes RoboVista, a benchmark dataset for evaluating VLMs on diverse robot tasks, curated from real systems and expert annotations, supporting modular evaluation.",
+      "llm_tldr_cn": "该论文提出RoboVista基准，用于评估视觉语言模型在多种机器人应用中的表现。该数据集从真实机器人系统、研究论文和专家注释中精心挑选，支持模块化评估框架RQA。与传统的端到端数据集不同，RoboVista提供细粒度的决策组件评估。实验表明，现有VLM在分布外场景下存在不足，该基准有助于推动更鲁棒的机器人推理。",
+      "llm_tldr": "该论文提出RoboVista基准，用于评估视觉语言模型在多种机器人应用中的表现。该数据集从真实机器人系统、研究论文和专家注释中精心挑选，支持模块化评估框架RQA。与传统的端到端数据集不同，RoboVista提供细粒度的决策组件评估。实验表明，现有VLM在分布外场景下存在不足，该基准有助于推动更鲁棒的机器人推理。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    }
+  ]
+}

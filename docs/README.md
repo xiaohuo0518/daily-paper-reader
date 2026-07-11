@@ -6,46 +6,37 @@
 </div>
 
 ## 每次日报
-- 最新运行日期：2026-07-10
-- 运行时间：2026-07-10 21:50:27 UTC
+- 最新运行日期：2026-07-02 ~ 2026-07-11
+- 运行时间：2026-07-11 15:38:47 UTC
 - 运行状态：成功
-- 本次总论文数：8
+- 本次总论文数：5
 - 精读区：2
-- 速读区：6
+- 速读区：3
 
 ### 今日简报（AI）
-今日精读《ThorArena》人形机器人交互基准（9.0分）与《From Foundation to Application》VLA模型实践改进（8.0分），速读覆盖世界模型、故障诊断及模仿学习数据选择。  
-最值得关注方向：人形机器人物理交互的量化基准与VLA模型从理论到落地的关键技巧。  
-建议普通读者优先精读两篇高分解读，后续可结合SIEVE数据选择与GigaWorld-1仿真验证，形成闭环实践。
-- 详情：[/202607/10/README](/202607/10/README)
+1. 本期聚焦机器人规模化场景验证（RoboVAST）与数字遥操作世界模型（RynnWorld-Teleop），同时覆盖自动驾驶异常分割和视觉语言模型评估。  
+2. 最值得关注两个方向：基于自动化场景的大规模机器人验证方法，以及利用动作条件世界模型提升数字遥操作效率。  
+3. 建议普通读者优先精读这两篇高分论文，了解机器人从仿真验证到远程操控的前沿技术融合。
+- 详情：[/20260702-20260711/README](/20260702-20260711/README)
 
 ### 精读区论文标签
-1. [ThorArena: Benchmarking Humanoid Physical Interaction with Human Motion-Force Demonstrations](/202607/10/2607.06052v1-thorarena-benchmarking-humanoid-physical-interaction-with-human-motion-force-demonstrations)  
-   标签：评分：9.0/10、query:ur
-   evidence：人形机器人物理交互基准数据集，包含运动-力演示
-2. [From Foundation to Application: Improving VLA Models in Practice](/202607/10/2607.06403v1-from-foundation-to-application-improving-vla-models-in-practice)  
+1. [RoboVAST: Automated Scenario-Based Validation of Robots at Scale](/20260702-20260711/2607.06248v1-robovast-automated-scenario-based-validation-of-robots-at-scale)  
    标签：评分：8.0/10、query:ur
-   evidence：整理了6万小时机器人数据用于预训练流程
+   evidence：通过基于场景的验证构建机器人数据集
+2. [RynnWorld-Teleop: An Action-Conditioned World Model for Digital Teleoperation](/20260702-20260711/2607.06558v1-rynnworld-teleop-an-action-conditioned-world-model-for-digital-teleoperation)  
+   标签：评分：8.0/10、query:ur
+   evidence：数字遥操作生成轨迹数据用于数据集构建
 
 ### 速读区论文标签
-1. [GigaWorld-1: A Roadmap to Build World Models for Robot Policy Evaluation](/202607/10/2607.02642v1-gigaworld-1-a-roadmap-to-build-world-models-for-robot-policy-evaluation)  
-   标签：评分：7.0/10、query:ur
-   evidence：构建机器人策略评估基准数据集
-2. [Physics-Informed Graph Learning with Uncertainty Awareness for Open-Set Domain Generalization in Fault Diagnosis](/202607/10/2607.04188v1-physics-informed-graph-learning-with-uncertainty-awareness-for-open-set-domain-generalization-in-fault-diagnosis)  
+1. [Road-Aware Anomaly Segmentation with Query-Guided Polygons and CLIP in Autonomous Driving](/20260702-20260711/2607.04304v1-road-aware-anomaly-segmentation-with-query-guided-polygons-and-clip-in-autonomous-driving)  
    标签：评分：7.0/10、query:humanoid-ood
-   evidence：开放集域泛化故障诊断，兼具不确定性感知
-3. [SIEVE: Structure-Aware Data Selection for Imitation Learning with VLA Models](/202607/10/2607.06442v1-sieve-structure-aware-data-selection-for-imitation-learning-with-vla-models)  
+   evidence：面向自动驾驶的OOD异常分割，可迁移至机器人安全操作
+2. [RoboVista: Evaluating Vision Language Models for Diverse Robot Applications](/20260702-20260711/2607.04610v1-robovista-evaluating-vision-language-models-for-diverse-robot-applications)  
    标签：评分：7.0/10、query:ur
-   evidence：结构感知数据选择方法，可用于人形机器人数据集构建
-4. [ObjRetarget: An Object-Aware Motion Retargeting Framework with Anthropomorphic Arm Constraints and Polyhedral Hand Modeling](/202607/10/2607.03828v1-objretarget-an-object-aware-motion-retargeting-framework-with-anthropomorphic-arm-constraints-and-polyhedral-hand-modeling)  
-   标签：评分：6.0/10、query:ur
-   evidence：用于数据集生成的人到机器人运动重定向
-5. [Diagnosing Semantic Handoff Failures in Agent-Orchestrated Vision-Language-Action Skill Composition](/202607/10/2607.06256v1-diagnosing-semantic-handoff-failures-in-agent-orchestrated-vision-language-action-skill-composition)  
-   标签：评分：6.0/10、query:ur
-   evidence：诊断技能组合中的语义交接失败
-6. [RoboSnap: One-Shot Real-to-Sim Scene Generation for Generalizable Robot Learning and Evaluation](/202607/10/2607.06699v1-robosnap-one-shot-real-to-sim-scene-generation-for-generalizable-robot-learning-and-evaluation)  
+   evidence：RoboVista基准数据集，涵盖多种机器人应用，满足机器人数据集构建需求
+3. [Global Logic and Local Search: Dual-Stream Multimodal In-Context Learning for Verifiable Industrial Anomaly Detection](/20260702-20260711/2607.03817v1-global-logic-and-local-search-dual-stream-multimodal-in-context-learning-for-verifiable-industrial-anomaly-detection)  
    标签：评分：6.0/10、query:humanoid-ood
-   evidence：实到仿真场景生成，支持机器人学习的交互式仿真
+   evidence：面向工业异常检测的无训练多模态上下文学习方法，可迁移至机器人OOD检测
 
 
 <div class="dpr-home-promo-card">
