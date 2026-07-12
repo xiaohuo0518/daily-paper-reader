@@ -6,52 +6,43 @@
 </div>
 
 ## 每次日报
-- 最新运行日期：2026-07-11
-- 运行时间：2026-07-11 21:26:52 UTC
+- 最新运行日期：2026-07-12
+- 运行时间：2026-07-12 21:23:43 UTC
 - 运行状态：成功
-- 本次总论文数：10
-- 精读区：3
-- 速读区：7
+- 本次总论文数：7
+- 精读区：1
+- 速读区：6
 
 ### 今日简报（AI）
-今日精读3篇、速读7篇，聚焦热视觉地点识别的过自信问题与多尺度异常检测网络。  
-最值得关注：热视觉地点识别的零泄漏OOD审计与绑架机器人恢复（9.0分），以及多尺度相关增强网络的异常检测方法（8.0分）。  
-建议普通读者优先了解机器人通用操纵策略的仿真-实物基准（RoboDojo）或深度强化学习在6G闭环控制中的赋能应用。
-- 详情：[/202607/11/README](/202607/11/README)
+1) 今日7篇新论文中精读《RoboVista》，系统评估视觉语言模型在多样化机器人任务中的表现。  
+2) 最值得关注：RoboVista的评估框架揭示VLM在具身任务中的关键瓶颈；WristMimic提出手腕引导的全身人形控制新思路。  
+3) 建议优先阅读精读论文，了解当前VLM在机器人领域的真实能力边界，再结合速读中的控制技巧扩展应用视野。
+- 详情：[/202607/12/README](/202607/12/README)
 
 ### 精读区论文标签
-1. [Trajectory-Anchor Optimization for Overconfident Thermal Visual Place Recognition: Zero-Leakage OOD Auditing and Kidnapped-Robot Recovery](/202607/11/2607.04745v1-trajectory-anchor-optimization-for-overconfident-thermal-visual-place-recognition-zero-leakage-ood-auditing-and-kidnapped-robot-recovery)  
-   标签：评分：9.0/10、query:humanoid-ood
-   evidence：热视觉地点识别中的OOD检测及被绑架机器人恢复
-2. [MSCENet: A Multi-Scale Correlation Enhanced Network for Anomaly Detection](/202607/11/2607.05864v1-mscenet-a-multi-scale-correlation-enhanced-network-for-anomaly-detection)  
-   标签：评分：8.0/10、query:humanoid-ood
-   evidence：多变量时间序列异常检测方法，可应用于机器人本体感受信号
-3. [Multi-Agent Robotic Control with Onboard Vision-Language Models](/202607/11/2607.07403v1-multi-agent-robotic-control-with-onboard-vision-language-models)  
+1. [RoboVista: Evaluating Vision Language Models for Diverse Robot Applications](/202607/12/2607.04610v1-robovista-evaluating-vision-language-models-for-diverse-robot-applications)  
    标签：评分：8.0/10、query:ur
-   evidence：在机载硬件上部署紧凑型VLM实现多机器人控制
+   evidence：机器人基准与评估框架
 
 ### 速读区论文标签
-1. [RoboDojo: A Unified Sim-and-Real Benchmark for Comprehensive Evaluation of Generalist Robot Manipulation Policies](/202607/11/2607.04434v3-robodojo-a-unified-sim-and-real-benchmark-for-comprehensive-evaluation-of-generalist-robot-manipulation-policies)  
+1. [SoftVTBench: A Safety-Aware Visuo-Tactile Benchmark for Physically Constrained Robotic Manipulation of Deformable Objects](/202607/12/2607.04234v1-softvtbench-a-safety-aware-visuo-tactile-benchmark-for-physically-constrained-robotic-manipulation-of-deformable-objects)  
    标签：评分：7.0/10、query:ur
-   evidence：提供了用于机器人操作策略的统一模拟现实基准，直接贡献于机器人数据集构建
-2. [GeoProp: Grounding Robot State in Vision for Generalist Manipulation](/202607/11/2607.07101v1-geoprop-grounding-robot-state-in-vision-for-generalist-manipulation)  
-   标签：评分：7.0/10、query:humanoid-ood
-   evidence：本体感受对齐方法，可应用于故障诊断
-3. [Deep Reinforcement Learning-Empowered Wireless Sensor Networking for 6G Closed-Loop Controls](/202607/11/2607.08272v1-deep-reinforcement-learning-empowered-wireless-sensor-networking-for-6g-closed-loop-controls)  
+   evidence：一个用于可变形物体操作的安全感知基准，提供包括本体感受在内的多模态数据
+2. [Training-Free Acceleration for Vision-Language-Action Models with Action Caching and Refinement](/202607/12/2607.06370v1-training-free-acceleration-for-vision-language-action-models-with-action-caching-and-refinement)  
    标签：评分：7.0/10、query:ur
-   evidence：用于机器人闭环控制的边缘信息中心
-4. [Road-Aware Anomaly Segmentation with Query-Guided Polygons and CLIP in Autonomous Driving](/202607/11/2607.04304v1-road-aware-anomaly-segmentation-with-query-guided-polygons-and-clip-in-autonomous-driving)  
-   标签：评分：6.0/10、query:humanoid-ood
-   evidence：用于机器人安全操作的异常检测
-5. [RoboDojo: A Unified Sim-and-Real Benchmark for Comprehensive Evaluation of Generalist Robot Manipulation Policies](/202607/11/2607.04434v1-robodojo-a-unified-sim-and-real-benchmark-for-comprehensive-evaluation-of-generalist-robot-manipulation-policies)  
+   evidence：VLA模型实时部署加速
+3. [WristMimic: Full-Body Humanoid Control with Wrist-Guided Manipulation](/202607/12/2607.06438v1-wristmimic-full-body-humanoid-control-with-wrist-guided-manipulation)  
+   标签：评分：7.0/10、query:ur
+   evidence：通过手腕引导控制进行人形机器人数据集构建
+4. [RoboDojo: A Unified Sim-and-Real Benchmark for Comprehensive Evaluation of Generalist Robot Manipulation Policies](/202607/12/2607.04434v2-robodojo-a-unified-sim-and-real-benchmark-for-comprehensive-evaluation-of-generalist-robot-manipulation-policies)  
    标签：评分：6.0/10、query:ur
-   evidence：统一仿真-真实基准，包含42个仿真任务和18个真实任务用于数据集构建
-6. [RoboVAST: Automated Scenario-Based Validation of Robots at Scale](/202607/11/2607.06248v1-robovast-automated-scenario-based-validation-of-robots-at-scale)  
+   evidence：包含仿真和真实任务的机器人操作基准
+5. [Hardware-aware Graph Neural Networks prunning for embedded event-based vision](/202607/12/2607.06739v1-hardware-aware-graph-neural-networks-prunning-for-embedded-event-based-vision)  
    标签：评分：6.0/10、query:ur
-   evidence：大规模机器人验证数据集构建
-7. [EvoPlan: Evolutionary Neuro-Symbolic Robot Planning with Spatio-Temporal Guarantees](/202607/11/2607.06724v1-evoplan-evolutionary-neuro-symbolic-robot-planning-with-spatio-temporal-guarantees)  
+   evidence：针对嵌入式FPGA平台的硬件感知剪枝与量化，与边缘部署相关
+6. [Behavior Foundations for Quadruped Robots: ABot-C0 Technical Report](/202607/12/2607.07370v1-behavior-foundations-for-quadruped-robots-abot-c0-technical-report)  
    标签：评分：6.0/10、query:ur
-   evidence：本地部署无云端依赖，支持机器人边缘部署
+   evidence：可扩展的多源运动数据管道用于数据集构建
 
 
 <div class="dpr-home-promo-card">

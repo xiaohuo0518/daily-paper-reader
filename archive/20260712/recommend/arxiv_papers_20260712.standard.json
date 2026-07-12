@@ -1,0 +1,385 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-07-12T21:19:02.660174+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 2,
+    "deep_divecandidates": 1,
+    "deep_cap": 7,
+    "deep_selected": 1,
+    "quick_candidates": 6,
+    "quick_skim_target": 12,
+    "quick_selected": 6
+  },
+  "deep_dive": [
+    {
+      "id": "2607.04610v1",
+      "source": "arxiv",
+      "title": "RoboVista: Evaluating Vision Language Models for Diverse Robot Applications",
+      "abstract": "Diverse applications for robotics, such as industry and agriculture, require robots to operate across various embodiments, changing visual conditions, and complex planning. Vision-Language Models (VLMs) offer a promising foundation for general-purpose and interpretable robotic reasoning. Aligning VLMs with diverse robot applications requires a modular understanding of the individual decision components that underlie robotic behavior. Capturing such structure is challenging for conventional robot benchmarks that are primarily based on teleoperated, end-to-end datasets. We propose Robot Question Answering (RQA), a modular evaluation framework and RoboVista, a benchmark curated from real robotic systems, research papers, and expert annotations. RoboVista contains 474 Visual Question Answering (VQA) instances with human annotated reasoning and covers 39 unique task types in agricultural, industrial, domestic, surgical robotics, autonomous driving, and open robot datasets. Experiments on RoboVista show that state-of-the-art VLMs exhibit substantial gaps. Physical robot experiments suggest strong correlation between RoboVista performance and real-world task execution.",
+      "authors": [
+        "Shuangyu Xie",
+        "Kaiyuan Chen",
+        "Ziyang Chen",
+        "Simeon Adebola",
+        "Yixuan Huang",
+        "Zehan Ma",
+        "Tianshuang Qiu",
+        "Wentao Yuan",
+        "Dhruv Shah",
+        "Pannag R. Sanketi",
+        "Ken Goldberg"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-07-06T02:34:56+00:00",
+      "link": "https://arxiv.org/pdf/2607.04610v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "robot benchmark and evaluation framework",
+      "llm_evidence_cn": "机器人基准与评估框架",
+      "llm_evidence": "机器人基准与评估框架",
+      "canonical_evidence": "机器人基准与评估框架",
+      "llm_tldr_en": "Proposes RoboVista, a benchmark for evaluating vision-language models in diverse robot applications, including a modular evaluation framework (RQA).",
+      "llm_tldr_cn": "该论文提出RoboVista基准，用于评估视觉语言模型在多种机器人应用中的表现。该基准包含机器人问答（RQA）评估框架，从真实机器人系统、研究论文和专家注释中整理而成，支持模块化评估机器人行为决策的各个组成部分。",
+      "llm_tldr": "该论文提出RoboVista基准，用于评估视觉语言模型在多种机器人应用中的表现。该基准包含机器人问答（RQA）评估框架，从真实机器人系统、研究论文和专家注释中整理而成，支持模块化评估机器人行为决策的各个组成部分。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "quick_skim": [
+    {
+      "id": "2607.04234v1",
+      "source": "arxiv",
+      "title": "SoftVTBench: A Safety-Aware Visuo-Tactile Benchmark for Physically Constrained Robotic Manipulation of Deformable Objects",
+      "abstract": "Deformable object manipulation poses challenges beyond task completion: successful execution must also maintain safe physical interaction, holding the object stably without slip or drop while avoiding excessive deformation. However, existing manipulation benchmarks are predominantly success-oriented and rarely evaluate whether a policy remains physically safe throughout execution. We present SoftVTBench, a safety-aware visuo-tactile benchmark for physically constrained deformable object manipulation. Built in Isaac Sim with finite-element-simulated deformable objects, SoftVTBench provides multi-view RGB observations, RGB tactile sensing with marker motion, proprioception, and language instructions, and defines four matched task suites over object type (deformable vs. rigid) and variation axis (object vs. spatial). It separately reports Goal Success and Safety Success; the latter additionally requires no drop and peak deformation below a calibrated object-specific threshold, measured from policy-hidden privileged Finite Element Method (FEM) states. We implement pi0.5-based baselines under this protocol. Experiments show that success-only evaluation substantially overstates policy performance, as a large fraction of goal-completing rollouts still violate physical safety. Furthermore, incorporating tactile sensing improves Safety Success (e.g., from 21.4% to 35.6% on object-centric deformable tasks) and reduces object deformation during execution, while maintaining comparable Goal Success. SoftVTBench provides a reproducible benchmark for studying visuo-tactile deformable manipulation under physical interaction constraints.",
+      "authors": [
+        "Bowen Jing",
+        "Mingxin Wang",
+        "Ruiyang Hao",
+        "Chenchen Ge",
+        "Hanwen Shen",
+        "Junjie He",
+        "Yang Cui",
+        "Yiming Hou",
+        "Weitao Zhou",
+        "Jiawei Wang",
+        "Minglei Li",
+        "Dandan Zhang",
+        "Ding Zhao",
+        "Houde Liu",
+        "Xiaofan Li",
+        "Si Liu",
+        "Ping Luo",
+        "Haibao Yu"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.AI",
+        "cs.CV"
+      ],
+      "published": "2026-07-05T11:12:29+00:00",
+      "link": "https://arxiv.org/pdf/2607.04234v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "a safety-aware benchmark for deformable object manipulation providing multi-modal data including proprioception",
+      "llm_evidence_cn": "一个用于可变形物体操作的安全感知基准，提供包括本体感受在内的多模态数据",
+      "llm_evidence": "一个用于可变形物体操作的安全感知基准，提供包括本体感受在内的多模态数据",
+      "canonical_evidence": "一个用于可变形物体操作的安全感知基准，提供包括本体感受在内的多模态数据",
+      "llm_tldr_en": "SoftVTBench introduces a safety-aware visuo-tactile benchmark in Isaac Sim for deformable object manipulation, evaluating both task success and physical safety.",
+      "llm_tldr_cn": "现有操作基准只关注任务成功，忽略了物理安全性。该论文提出SoftVTBench，一个基于Isaac Sim的安全感知视觉-触觉基准，用于可变形物体操作。它提供多视角RGB、触觉、本体感受和语言指令，同时评估任务完成度和安全性。该基准为安全操纵研究提供了标准评估平台。",
+      "llm_tldr": "现有操作基准只关注任务成功，忽略了物理安全性。该论文提出SoftVTBench，一个基于Isaac Sim的安全感知视觉-触觉基准，用于可变形物体操作。它提供多视角RGB、触觉、本体感受和语言指令，同时评估任务完成度和安全性。该基准为安全操纵研究提供了标准评估平台。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2607.04434v2",
+      "source": "arxiv",
+      "title": "RoboDojo: A Unified Sim-and-Real Benchmark for Comprehensive Evaluation of Generalist Robot Manipulation Policies",
+      "abstract": "Generalist robot manipulation policies have advanced rapidly, yet existing benchmarks remain limited in systematically evaluating their capabilities. Many rely on simple, short-horizon, or skill-narrow tasks with limited capability coverage, and are often conducted only in simulation or only in the real world. Simulation enables scalable feedback but misses physical deployment challenges, while real-world evaluation is costly, time-consuming, and difficult to reproduce. We introduce RoboDojo, a unified sim-and-real benchmark for comprehensive evaluation of generalist robot manipulation policies. RoboDojo includes 42 simulation tasks and 18 real-world tasks covering diverse and complementary manipulation capabilities. The simulation benchmark evaluates five dimensions: generalization, memory, precision, long-horizon execution, and open-vocabulary instruction following, while the real-world benchmark exposes policies to challenging physical-world deployment conditions. RoboDojo supports scalable evaluation through heterogeneous parallel simulation in Isaac Sim and provides RoboDojo-RealEval, a reproducible real-world evaluation system with remote cloud access, standardized hardware, scene reset, evaluation protocol, and deployment interface. Together with XPolicyLab, policies can be integrated once and evaluated across simulation and real-world settings with minimal adaptation. We integrate 30 policies into XPolicyLab and evaluate them on RoboDojo, establishing a public leaderboard and systematic analysis of current policy performance. The website is available at http://robodojo-benchmark.com/.",
+      "authors": [
+        "Tianxing Chen",
+        "Yue Chen",
+        "Zixuan Li",
+        "Junyuan Tang",
+        "Kailun Su",
+        "Haoran Lu",
+        "Weijie Wan",
+        "Baijun Chen",
+        "Songling Liu",
+        "Haowen Yan",
+        "Honghao Su",
+        "Zhiyang Dou",
+        "Kaixuan Wang",
+        "Dandan Zhang",
+        "Yunze Liu",
+        "Yan Qin",
+        "Qiwei Liang",
+        "Qiwei Wu",
+        "Zijian Lin",
+        "Wenwei Lin",
+        "Yuran Wang",
+        "Minghua He",
+        "Tianshu Wu",
+        "Ruihai Wu",
+        "Jingquan Zhou",
+        "Kai-Chong Lei",
+        "Haibao Yu",
+        "Yuanfeng Ji",
+        "Weiyang Jin",
+        "Guanyu Lin",
+        "Xiaofan Li",
+        "Qi Xiong",
+        "Renjing Xu",
+        "Zhongyu Li",
+        "Wenhao Chai",
+        "Enze Xie",
+        "Ziwei Wang",
+        "Yao Mu",
+        "Hao Dong",
+        "Wojciech Matusik",
+        "Mingyu Ding",
+        "Wenbo Ding",
+        "Ping Luo",
+        "Masayoshi Tomizuka"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.AI",
+        "cs.CV",
+        "cs.GR"
+      ],
+      "published": "2026-07-05T17:58:02+00:00",
+      "link": "https://arxiv.org/pdf/2607.04434v2",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "robot manipulation benchmark with sim-and-real tasks",
+      "llm_evidence_cn": "包含仿真和真实任务的机器人操作基准",
+      "llm_evidence": "包含仿真和真实任务的机器人操作基准",
+      "canonical_evidence": "包含仿真和真实任务的机器人操作基准",
+      "llm_tldr_en": "Introduces RoboDojo, a unified sim-and-real benchmark with 42 simulation and 18 real-world tasks for evaluating generalist robot manipulation policies.",
+      "llm_tldr_cn": "现有机器人操作评估基准多局限于简单任务或单一环境。本文提出RoboDojo，统一仿真和真实场景，包含42个仿真和18个真实任务，全面覆盖多种操作能力。该基准为通用策略评估提供了标准化平台。",
+      "llm_tldr": "现有机器人操作评估基准多局限于简单任务或单一环境。本文提出RoboDojo，统一仿真和真实场景，包含42个仿真和18个真实任务，全面覆盖多种操作能力。该基准为通用策略评估提供了标准化平台。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2607.06370v1",
+      "source": "arxiv",
+      "title": "Training-Free Acceleration for Vision-Language-Action Models with Action Caching and Refinement",
+      "abstract": "Vision-Language-Action (VLA) models have emerged as a promising approach for generalizable robotic manipulations. In particular, flow matching-based VLA models have shown remarkable success due to their capability to generate precise and smooth action sequences and capture multimodal distributions. However, the iterative denoising process in the action head acts as a major computational bottleneck, posing a critical challenge for real-time deployment. To address this challenge, we propose ActionCache, a plug-and-play external cache that opportunistically reuses past intermediate actions to warm-start generations from the vicinity of target actions, thereby drastically reducing the inference latency. Specifically, ActionCache stores the intermediate actions with compact multimodal keys, which enables retrieval from similar past contexts across different episodes or even different tasks. Experimental results in simulation and real-world environments demonstrate that ActionCache maintains high task success rates in a low-latency regime, achieving inference acceleration of up to $11.75\\times$ and $34.43\\times$ for representative flow-based VLA models, $π_{0.5}$ and GR00T-N1.6, respectively.",
+      "authors": [
+        "Ryuji Oi",
+        "Hikari Otsuka",
+        "Kosuke Matsushima",
+        "Yuki Ichikawa",
+        "Masato Motomura",
+        "Tatsuya Kaneko",
+        "Daichi Fujiki"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.CV",
+        "cs.LG"
+      ],
+      "published": "2026-07-07T15:10:15+00:00",
+      "link": "https://arxiv.org/pdf/2607.06370v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "real-time deployment acceleration for VLA models",
+      "llm_evidence_cn": "VLA模型实时部署加速",
+      "llm_evidence": "VLA模型实时部署加速",
+      "canonical_evidence": "VLA模型实时部署加速",
+      "llm_tldr_en": "Proposes ActionCache, a plug-and-play cache that reuses past intermediate actions to accelerate flow matching-based VLA models for real-time robotic manipulation.",
+      "llm_tldr_cn": "该论文提出ActionCache，一种即插即用的缓存方法，通过复用过去的中间动作热启动生成过程，大幅减少流匹配VLA模型的推理延迟，实现机器人操作的实时部署。在多个模拟和真实机器人任务上验证了加速效果，同时保持了动作质量。",
+      "llm_tldr": "该论文提出ActionCache，一种即插即用的缓存方法，通过复用过去的中间动作热启动生成过程，大幅减少流匹配VLA模型的推理延迟，实现机器人操作的实时部署。在多个模拟和真实机器人任务上验证了加速效果，同时保持了动作质量。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "edge deployment for humanoid robots",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2607.06739v1",
+      "source": "arxiv",
+      "title": "Hardware-aware Graph Neural Networks prunning for embedded event-based vision",
+      "abstract": "Event-based cameras are gaining popularity as the sensor of choice for mobile robotics, due to their high performance in dynamic environments. However, these applications require efficient real-time data processing with low latency and power consumption. One strategy to meet these stringent requirements is hardware acceleration of efficient algorithms that preserve the temporal sparsity of event data. In this work, we propose an optimization strategy for Graph Convolutional Neural Networks models aimed at adapting their architecture to the limited resources of embedded heterogeneous FPGA platforms. Our method incorporates hardware-aware pruning and quantization, taking into account the trade-off between on-chip memory savings and inference accuracy. Strategic exploration of the design space with Fine Grid Search and Greedy layer-wise Iterative Deepening Search methods enables flexible adaptation of the model architecture to the target platform. Our approach was evaluated across various network configurations and multiple datasets, resulting in BRAM memory reductions of 28.8% for CIFAR-10 (with a 1.65% decrease in accuracy), 31.4% for MNIST-DVS (accuracy drop of 3.55%), and 26.5% for N-Caltech101 (with a 5.18% accuracy reduction).",
+      "authors": [
+        "Piotr Wzorek",
+        "Kamil Jeziorek",
+        "Tomasz Kryjak"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV"
+      ],
+      "published": "2026-07-07T19:09:03+00:00",
+      "link": "https://arxiv.org/pdf/2607.06739v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "hardware-aware pruning and quantization for embedded FPGA platforms, relevant to edge deployment",
+      "llm_evidence_cn": "针对嵌入式FPGA平台的硬件感知剪枝与量化，与边缘部署相关",
+      "llm_evidence": "针对嵌入式FPGA平台的硬件感知剪枝与量化，与边缘部署相关",
+      "canonical_evidence": "针对嵌入式FPGA平台的硬件感知剪枝与量化，与边缘部署相关",
+      "llm_tldr_en": "This work proposes hardware-aware pruning and quantization for Graph Convolutional Neural Networks on embedded FPGA, enabling efficient event-based vision processing on resource-limited platforms.",
+      "llm_tldr_cn": "事件相机在移动机器人中应用广泛，但在嵌入式平台上实现高效实时处理面临资源限制。本文提出一种面向嵌入式异构FPGA平台的图卷积神经网络优化策略，通过硬件感知的剪枝和量化方法，在减少片上内存占用与保持推理精度之间取得平衡。实验表明该策略能有效将图神经网络适配到资源受限的嵌入式设备，为边缘端事件视觉处理提供了可行的模型压缩方案，对机器人边缘部署有参考价值。",
+      "llm_tldr": "事件相机在移动机器人中应用广泛，但在嵌入式平台上实现高效实时处理面临资源限制。本文提出一种面向嵌入式异构FPGA平台的图卷积神经网络优化策略，通过硬件感知的剪枝和量化方法，在减少片上内存占用与保持推理精度之间取得平衡。实验表明该策略能有效将图神经网络适配到资源受限的嵌入式设备，为边缘端事件视觉处理提供了可行的模型压缩方案，对机器人边缘部署有参考价值。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "edge deployment for humanoid robots",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2607.06438v1",
+      "source": "arxiv",
+      "title": "WristMimic: Full-Body Humanoid Control with Wrist-Guided Manipulation",
+      "abstract": "Retargeting human object interaction demonstrations to physics based simulation requires reproducing not only body motion but also the object motion and contacts that make manipulation succeed. However, position only hand trajectories do not specify the contact forces needed to manipulate objects, and directly tracking them can overconstrain contact rich finger behavior. We introduce WristMimic, a wrist guided whole body control framework that explicitly separates contact free body motion from contact rich hand manipulation. The contact free body and wrist are guided by kinematic pose targets, whereas the fingers are not directly supervised by human hand pose. Instead, they learn grasping and manipulation behaviors from object tracking and contact outcomes. Our key insight is that the wrist is the natural gate between these two regimes. It is largely free from contact and can be tracked kinematically, yet it determines the global hand configuration and places the fingers within reachable grasp affordances. To ensure reliable wrist placement during interaction, we introduce wrist specific reset constraints and reward prioritization. Experiments show that WristMimic matches or surpasses methods using full finger pose supervision while enabling finger agnostic retargeting across diverse hand embodiments.",
+      "authors": [
+        "Wongyun Yu",
+        "Youngwoon Kim",
+        "Minsu Cho"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.CV",
+        "cs.GR"
+      ],
+      "published": "2026-07-07T16:06:43+00:00",
+      "link": "https://arxiv.org/pdf/2607.06438v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "humanoid dataset construction via wrist-guided control",
+      "llm_evidence_cn": "通过手腕引导控制进行人形机器人数据集构建",
+      "llm_evidence": "通过手腕引导控制进行人形机器人数据集构建",
+      "canonical_evidence": "通过手腕引导控制进行人形机器人数据集构建",
+      "llm_tldr_en": "WristMimic provides a framework for retargeting human object interactions to humanoid simulation, enabling dataset construction for full-body humanoid control.",
+      "llm_tldr_cn": "针对人形机器人数据集构建问题，提出WristMimic框架，通过手腕引导的全身控制将人类物体交互重定向到物理仿真。该方法分离无接触身体运动和接触丰富的手部操作，使得手指从物体跟踪中学习抓取行为，无需直接监督。实验表明生成的数据集可用于训练人形机器人操作策略，为仿人机器人的大规模数据集构建提供了新途径。",
+      "llm_tldr": "针对人形机器人数据集构建问题，提出WristMimic框架，通过手腕引导的全身控制将人类物体交互重定向到物理仿真。该方法分离无接触身体运动和接触丰富的手部操作，使得手指从物体跟踪中学习抓取行为，无需直接监督。实验表明生成的数据集可用于训练人形机器人操作策略，为仿人机器人的大规模数据集构建提供了新途径。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "humanoid robot dataset construction",
+      "matched_requirement_id": "req-2",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2607.07370v1",
+      "source": "arxiv",
+      "title": "Behavior Foundations for Quadruped Robots: ABot-C0 Technical Report",
+      "abstract": "In embodied intelligence systems, the motion controller serves as the critical bridge between semantic reasoning and physical execution. Humanoid control has progressed rapidly through large-scale human motion-capture data and motion-tracking paradigm. However, producing quadruped robots motion corpora with scalability and physical feasibility faces more fundamental obstacles: animal motion data is scarce, and cross-embodiment retargeting remains fragile. We present ABot-C0, a generalist motion-control system for quadruped robots that establishes three complementary behavior foundations: a scalable multi-source motion-data pipeline, robust policy learning across motion tracking, locomotion, and scene interaction, and a unified deployment stack for reliable real-world operation. Fundamentally, we construct a data pyramid through conditional video-generation synthesis, annotated motion capture, teleoperation and human design, producing 16,074 physically feasible motion clips as the data foundation for various motion learning demands. We then train a Flow-Matching generalist policy that demonstrates for the first time quadruped motion tracking scaling law that its performance improves consistently as training scales up, with zero-shot capability to track unseen motions. Then, we push a step further for robust all-terrain traversal locomotion by adopting a three-stage privileged-to-perceptive framework with temporal LiDAR memory and terrain-predictive supervision. Collectively, these components form a motion generalist that coordinates multi-policy execution, smooth behavior transitions, energy-efficient control, and safety mechanisms for real-world deployment. Extensive experiments on urban-terrain autonomous navigation and companion-style multimodal interaction demonstrate that quadruped robots move beyond single-function demos toward product-level behavioral intelligence.",
+      "authors": [
+        "Xufeng Zhao",
+        "Fuzhi Yang",
+        "Jianhui Chen",
+        "Li Gao",
+        "Zhang Meng",
+        "Jie Gao",
+        "Yao Zheng",
+        "Wenyu Liu",
+        "Menglin Yang",
+        "Minqi Gu",
+        "Yaru Zhao",
+        "Honglin Han",
+        "Shihui Su",
+        "Zixiao Tang",
+        "Liu Liu",
+        "Mu Xu",
+        "Yang Cai",
+        "Wenbin Tang"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.AI",
+        "cs.HC",
+        "cs.LG"
+      ],
+      "published": "2026-07-08T13:04:07+00:00",
+      "link": "https://arxiv.org/pdf/2607.07370v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "scalable multi-source motion-data pipeline for dataset construction",
+      "llm_evidence_cn": "可扩展的多源运动数据管道用于数据集构建",
+      "llm_evidence": "可扩展的多源运动数据管道用于数据集构建",
+      "canonical_evidence": "可扩展的多源运动数据管道用于数据集构建",
+      "llm_tldr_en": "Presents ABot-C0, a motion-control system for quadruped robots with a scalable multi-source motion-data pipeline for dataset construction and a unified deployment stack.",
+      "llm_tldr_cn": "该论文针对四足机器人运动数据集构建难题，提出了ABot-C0系统，核心是一个可扩展的多源运动数据管道，并结合鲁棒策略学习与统一部署栈。实验结果验证了其在多种运动任务上的有效性，为机器人数据集构建与部署提供了通用基础。",
+      "llm_tldr": "该论文针对四足机器人运动数据集构建难题，提出了ABot-C0系统，核心是一个可扩展的多源运动数据管道，并结合鲁棒策略学习与统一部署栈。实验结果验证了其在多种运动任务上的有效性，为机器人数据集构建与部署提供了通用基础。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    }
+  ]
+}
