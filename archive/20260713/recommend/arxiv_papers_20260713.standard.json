@@ -1,0 +1,286 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-07-13T21:07:13.278106+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 2,
+    "deep_divecandidates": 2,
+    "deep_cap": 7,
+    "deep_selected": 2,
+    "quick_candidates": 4,
+    "quick_skim_target": 12,
+    "quick_selected": 4
+  },
+  "deep_dive": [
+    {
+      "id": "2607.08857v1",
+      "source": "arxiv",
+      "title": "AgenticFocus: Object-Preserving Mixed Reality Synthesis from Human FPV Video for Dexterous Humanoid Learning",
+      "abstract": "Human egocentric video is a scalable supervision source for humanoid policy learning, but current pipelines struggle with hand-object occlusion, oversimplified motion, or specialized capture hardware. We introduce AgenticFocus, a Mixed Reality synthesis pipeline that converts ordinary first-person-view human videos into robot-trainable demonstrations by restoring occluded object geometry, reconstructing full-hand motion, and retargeting it to a humanoid embodiment through camera-relative alignment and layered compositing. The resulting dataset pairs focused visual observations with synchronized robot actions and states. AgenticFocus achieves lower trajectory error and smoother wrist motion than cross-embodiment baselines, with SPARC scores of -5.18 versus -5.56 and -6.05.",
+      "authors": [
+        "Iaroslav Kolomiets",
+        "Miguel Altamirano Cabrera",
+        "Artem Lykov",
+        "Jeffrin Sam",
+        "Dmitrii Iarchuk",
+        "Yara Mahmoud",
+        "Daniia Zinniatullina",
+        "Mikhail Konenkov",
+        "Dzmitry Tsetserukou"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-07-09T18:27:41+00:00",
+      "link": "https://arxiv.org/pdf/2607.08857v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 10.0,
+      "llm_evidence_en": "humanoid robot dataset construction from human video",
+      "llm_evidence_cn": "从人类视频构建人形机器人数据集",
+      "llm_evidence": "从人类视频构建人形机器人数据集",
+      "canonical_evidence": "从人类视频构建人形机器人数据集",
+      "llm_tldr_en": "AgenticFocus converts ordinary first-person-view human videos into robot-trainable demonstrations for humanoid learning, restoring occluded object geometry and full-hand motion, achieving lower trajectory error and smoother wrist motion.",
+      "llm_tldr_cn": "针对人形机器人策略学习数据稀缺问题，本文提出AgenticFocus混合现实合成管线，将普通第一人称人类视频转化为机器人可训练演示。通过恢复被遮挡物体几何、重建全手运动并重定向到人形化身，生成配对视觉观察与机器人动作状态的数据集。实验表明该方法在轨迹误差和手腕平滑度上优于跨本体现有基线，为人形机器人数据集构建提供了可扩展方案。",
+      "llm_tldr": "针对人形机器人策略学习数据稀缺问题，本文提出AgenticFocus混合现实合成管线，将普通第一人称人类视频转化为机器人可训练演示。通过恢复被遮挡物体几何、重建全手运动并重定向到人形化身，生成配对视觉观察与机器人动作状态的数据集。实验表明该方法在轨迹误差和手腕平滑度上优于跨本体现有基线，为人形机器人数据集构建提供了可扩展方案。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "humanoid robot dataset construction",
+      "matched_requirement_id": "req-2",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2607.08978v1",
+      "source": "arxiv",
+      "title": "Federated Low-Rank Koopman Learning for Multivariate Time-Series Anomaly Detection in IoT Systems",
+      "abstract": "Distributed IoT systems generate multivariate time-series streams for monitoring physical assets, servers, and embedded sensing platforms. Detecting abnormal temporal behavior is critical for fault diagnosis, predictive maintenance, and security. However, practical IoT anomaly detection is hindered by decentralized and non-IID data, limited bandwidth, and the constrained computation and memory of edge devices. This paper proposes FedKAD, a resource-efficient federated Koopman anomaly detection framework for distributed IoT multivariate time series. Unlike deep-learning-based anomaly detectors that require training and communicating large neural models, FedKAD learns normal temporal dynamics through lightweight sliding-window Koopman representations. Federated training is formulated as a low-rank consensus problem, where raw sensor streams and local reduced dynamics remain on device while only compact subspace variables are exchanged with the server. To optimize the shared representation under orthonormality constraints, we develop a federated Stiefel-ADMM algorithm and provide convergence and stationarity analysis under partial client participation. During inference, each client detects anomalies locally by measuring the prediction residual between observed future trajectories and the learned Koopman dynamics. Experiments on four widely used multivariate time-series anomaly detection benchmarks show that FedKAD maintains or improves detection performance compared with federated deep-learning baselines. More importantly for IoT deployment, FedKAD provides up to $2.1\\times10^3$ faster training, $80\\times$ lower communication, and $79\\times$ lower inference latency than neural baselines, confirming its suitability for resource-constrained edge devices.",
+      "authors": [
+        "Tung-Anh Nguyen",
+        "Van-Phuc Bui",
+        "Anh Tuyen Le",
+        "Kim Hue Ta",
+        "Minh Thuy Le",
+        "J. Andrew Zhang",
+        "Xiaojing Huang"
+      ],
+      "primary_category": "cs.LG",
+      "categories": [
+        "cs.LG",
+        "eess.SP"
+      ],
+      "published": "2026-07-09T22:48:24+00:00",
+      "link": "https://arxiv.org/pdf/2607.08978v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "time-series anomaly detection with lightweight Koopman model on edge devices",
+      "llm_evidence_cn": "物联网时间序列异常检测，轻量级Koopman模型，边缘部署",
+      "llm_evidence": "物联网时间序列异常检测，轻量级Koopman模型，边缘部署",
+      "canonical_evidence": "物联网时间序列异常检测，轻量级Koopman模型，边缘部署",
+      "llm_tldr_en": "Proposes FedKAD, a federated Koopman anomaly detection framework for IoT time series, using lightweight sliding-window Koopman operator to learn normal dynamics, enabling efficient edge deployment without large neural models.",
+      "llm_tldr_cn": "针对分布式物联网中多变量时间序列异常检测任务，现有深度学习方法需要在资源受限的边缘设备上训练和通信大型神经网络，导致部署困难。本文提出FedKAD框架，利用轻量级滑动窗口Koopman算子学习正常时间动态，实现联邦学习下的高效异常检测。实验表明FedKAD在保持检测精度的同时大幅降低计算和通信开销，为边缘端时序异常检测提供了资源友好的方案。",
+      "llm_tldr": "针对分布式物联网中多变量时间序列异常检测任务，现有深度学习方法需要在资源受限的边缘设备上训练和通信大型神经网络，导致部署困难。本文提出FedKAD框架，利用轻量级滑动窗口Koopman算子学习正常时间动态，实现联邦学习下的高效异常检测。实验表明FedKAD在保持检测精度的同时大幅降低计算和通信开销，为边缘端时序异常检测提供了资源友好的方案。",
+      "llm_tags": [
+        "query:humanoid-ood:composite"
+      ],
+      "matched_query_tag": "query:humanoid-ood:composite",
+      "matched_query_text": "Papers central to 请帮我查找与人形机器人故障诊断、异常检测（OOD / Anomaly Detection）、自监督时序重建（VAE / GRU）、以及边缘部署相关的论文。重点关注：基于本体感受信号（关节位置/速度/力矩/IMU）的故障检测方法；用于时序数据的自监督异常检测（如 OmniAnomaly, USAD）；开放集识别 / OOD 检测在机器人安全中的应用；轻量化模型（LSTM/GRU）在嵌入式平台（RK3588）上的部署；受 RAPT (Munn 等, 2026) 启发的机器人故障诊断框架。另外，请补充一些关于仿人机器人（Unitree G1 等）仿真故障注入、数据集构建的文献。, especially work that connects or combines: humanoid robot fault diagnosis using proprioceptive signals; anomaly detection from joint position velocity torque IMU signals in humanoid robots; out-of-distribution detection for safe robot operation; lightweight LSTM or GRU models deployed on embedded platforms for anomaly detection; RAPT framework for robot fault diagnosis based on proprioception; fault injection simulation for humanoid robots in MuJoCo or similar environments; Anomaly detection in humanoid robot using proprioceptive signals; Self supervised time series anomaly detection for robot fault diagnosis; Open set recognition in robotics for safety and anomaly detection; Deploying lightweight LSTM GRU on RK3588 for time series anomaly detection.",
+      "matched_requirement_id": "req-composite-humanoid-ood",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "quick_skim": [
+    {
+      "id": "2607.06600v1",
+      "source": "arxiv",
+      "title": "MiLSD: A Micro Line-Segment Detector for Resource-Constrained Devices",
+      "abstract": "Line segment detection is a key building block in visual SLAM, 3D reconstruction, and industrial inspection. Recent deep learning methods have greatly improved accuracy, yet even the smallest models require several megabytes of memory, exceeding low-cost MCU capacity. This work investigates the maximum achievable accuracy under a sub-megabyte budget. We propose MiLSD, a detector tailored for MCU-level constraints, and systematically compare three output representations within a compact fully-convolutional backbone. Our study shows that the proposed F-Clip center-with-length-and-angle formulation learns most effectively at small model sizes. We find that 8-bit quantization preserves full-precision performance, while 4-bit quantization causes significant degradation, particularly in angle regression, with quantization-aware training recovering only part of the loss. With a one-megabyte activation budget and inference enhancements including sub-pixel decoding, test-time augmentation, and a lightweight verifier, MiLSD improves sAP10 on ShanghaiTech Wireframe from 10.6 (25k parameters, 0.25 MB) to 24.1 within 1 MB. Rather than competing with GPU-scale parsers, we map the accuracy memory trade-off across representations, bit-widths, capacities, and post-processing strategies for embedded vision systems.",
+      "authors": [
+        "Parsa Hassani Shariat Panahi",
+        "Amir Hossein Jalilvand",
+        "M. Hassan Najafi"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV",
+        "cs.AI",
+        "cs.RO"
+      ],
+      "published": "2026-07-07T00:04:50+00:00",
+      "link": "https://arxiv.org/pdf/2607.06600v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "lightweight detector for resource-constrained devices",
+      "llm_evidence_cn": "用于资源受限设备的轻量级检测器",
+      "llm_evidence": "用于资源受限设备的轻量级检测器",
+      "canonical_evidence": "用于资源受限设备的轻量级检测器",
+      "llm_tldr_en": "MiLSD is a sub-megabyte line segment detector for MCU-level devices, using a compact fully-convolutional backbone and 8-bit quantization.",
+      "llm_tldr_cn": "针对低成本微控制器内存不足无法运行深度学习线检测模型的问题，提出MiLSD，采用紧凑全卷积骨干和F-Clip中心-长度-角度输出表示，并在8比特量化下保持全精度性能。实验表明该模型在亚兆字节内存下达到最佳精度，为机器人边缘部署轻量级感知模型提供可行方案。",
+      "llm_tldr": "针对低成本微控制器内存不足无法运行深度学习线检测模型的问题，提出MiLSD，采用紧凑全卷积骨干和F-Clip中心-长度-角度输出表示，并在8比特量化下保持全精度性能。实验表明该模型在亚兆字节内存下达到最佳精度，为机器人边缘部署轻量级感知模型提供可行方案。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "edge deployment for humanoid robots",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2607.05663v1",
+      "source": "arxiv",
+      "title": "Physics-Regularized Machine Learning for Proprioceptive Vehicle Localization Using Onboard Sensors",
+      "abstract": "Accurate and robust localization is essential for autonomous mobility systems in real-world environments. While fusing Inertial Measurement Unit (IMU) data with satellite-based correction signals provides precise vehicle pose estimates, performance degrades substantially during outages. Recent studies indicate that Machine Learning (ML) can improve IMU-based proprioceptive localization, highlighting untapped potential for onboard sensors readily available in production vehicles. This paper introduces Physics-Regularized Machine Learning for Localization (PRML2), a hybrid framework that combines the complementary strengths of Kalman filtering and data-driven learning to estimate vehicle pose directly from onboard sensors. A key aspect of PRML2 is its physics-regularized learning, enabled by end-to-end training of an ML model through a differentiable Kalman filter. This improves consistency with vehicle motion models, thereby enhancing both localization accuracy and generalization across driving conditions. We evaluate the performance limits of ML-enhanced onboard odometry on a publicly available dataset and show that PRML2 achieves superior localization accuracy and demonstrates real-time capability. This work also introduces a novel dataset to support vehicle localization research under low-friction conditions. The proposed framework provides a robust and cost-effective solution for vehicle localization under degraded sensing conditions by integrating learning with physics-based priors.",
+      "authors": [
+        "Abinav Kalyanasundaram",
+        "Karthikeyan Chandra Sekaran",
+        "Wolfgang Utschick",
+        "Michael Botsch"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.AI",
+        "cs.LG"
+      ],
+      "published": "2026-07-06T22:12:22+00:00",
+      "link": "https://arxiv.org/pdf/2607.05663v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "proprioceptive signal (IMU) based ML for localization, transferable to fault diagnosis",
+      "llm_evidence_cn": "基于本体感受信号（IMU）的机器学习用于定位，可迁移至故障诊断",
+      "llm_evidence": "基于本体感受信号（IMU）的机器学习用于定位，可迁移至故障诊断",
+      "canonical_evidence": "基于本体感受信号（IMU）的机器学习用于定位，可迁移至故障诊断",
+      "llm_tldr_en": "Proposes PRML2, a physics-regularized ML framework for proprioceptive vehicle localization using IMU data, combining Kalman filtering and neural networks for robust pose estimation during GPS outages.",
+      "llm_tldr_cn": "针对自主车辆在GPS信号中断时定位精度下降的问题，现有方法未能充分利用车载本体感受传感器。本文提出PRML2，融合卡尔曼滤波与物理正则化机器学习，仅利用IMU等本体感受信号进行车辆定位。实验证明该方法在中断期间仍能保持较高定位精度，其利用本体感受信号进行状态估计的思路可为人形机器人故障诊断提供方法论借鉴。",
+      "llm_tldr": "针对自主车辆在GPS信号中断时定位精度下降的问题，现有方法未能充分利用车载本体感受传感器。本文提出PRML2，融合卡尔曼滤波与物理正则化机器学习，仅利用IMU等本体感受信号进行车辆定位。实验证明该方法在中断期间仍能保持较高定位精度，其利用本体感受信号进行状态估计的思路可为人形机器人故障诊断提供方法论借鉴。",
+      "llm_tags": [
+        "query:humanoid-ood"
+      ],
+      "matched_query_tag": "query:humanoid-ood",
+      "matched_query_text": "humanoid robot fault diagnosis using proprioceptive signals",
+      "matched_requirement_id": "req-9",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2607.07370v2",
+      "source": "arxiv",
+      "title": "Behavior Foundations for Quadruped Robots: ABot-C0 Technical Report",
+      "abstract": "The motion controller is one of the most fundamental modules in embodied intelligence systems. Driven by large-scale human motion-capture data and the motion-tracking paradigm, humanoid control has achieved remarkable progress in recent years. However, migrating this recipe to the quadrupedal setting is far less straightforward: animal motion data is scarcer and harder to capture at scale than human data, and cross-embodiment retargeting remains fragile. We present ABot-C0, a generalist motion-control system for quadruped robots that establishes three complementary behavior foundations: a scalable multi-source motion-data pipeline, robust policy learning across motion tracking, locomotion, and scene interaction, and a unified deployment stack for reliable real-world operation. Fundamentally, we construct a data pyramid through conditional video-generation synthesis, annotated motion capture, teleoperation, and human design, producing 16,074 physically feasible motion clips as the data foundation for diverse motion-learning demands. With large-scale motion data, a Flow-Matching generalist policy demonstrates, for the first time, a scaling law for quadruped motion tracking: performance improves consistently as training scales up, with zero-shot capability to track unseen motions. We then go a step further toward robust all-terrain locomotion by adopting a three-stage privileged-to-perceptive framework with temporal LiDAR memory and terrain-predictive supervision. Collectively, these components form a motion generalist that coordinates multi-policy execution, smooth behavior transitions, energy-efficient control, and safety mechanisms for real-world deployment. Extensive experiments on urban-terrain autonomous navigation and companion-style multimodal interaction demonstrate that quadruped robots can move beyond functional demos toward product-level behavioral intelligence.",
+      "authors": [
+        "Xufeng Zhao",
+        "Fuzhi Yang",
+        "Jianhui Chen",
+        "Li Gao",
+        "Zhang Meng",
+        "Jie Gao",
+        "Yao Zheng",
+        "Congyang Zhao",
+        "Tianxiong Lv",
+        "Menglin Yang",
+        "Minqi Gu",
+        "Yaru Zhao",
+        "Wenyu Liu",
+        "Honglin Han",
+        "Shihui Su",
+        "Zixiao Tang",
+        "Liu Liu",
+        "Mu Xu",
+        "Yang Cai",
+        "Wenbin Tang"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.AI",
+        "cs.HC",
+        "cs.LG"
+      ],
+      "published": "2026-07-08T13:04:07+00:00",
+      "link": "https://arxiv.org/pdf/2607.07370v2",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "scalable multi-source motion-data pipeline for quadruped robots",
+      "llm_evidence_cn": "四足机器人可扩展多源运动数据流水线",
+      "llm_evidence": "四足机器人可扩展多源运动数据流水线",
+      "canonical_evidence": "四足机器人可扩展多源运动数据流水线",
+      "llm_tldr_en": "Presents ABot-C0, a generalist motion-control system for quadruped robots with a scalable multi-source motion-data pipeline, robust policy learning, and unified deployment stack.",
+      "llm_tldr_cn": "该论文提出了ABot-C0，一个面向四足机器人的通用运动控制系统，建立了三种互补的行为基础：可扩展的多源运动数据流水线、涵盖运动跟踪和场景交互的鲁棒策略学习，以及统一的部署堆栈。尽管针对四足机器人，其数据流水线方法可迁移至人形机器人数据集构建。",
+      "llm_tldr": "该论文提出了ABot-C0，一个面向四足机器人的通用运动控制系统，建立了三种互补的行为基础：可扩展的多源运动数据流水线、涵盖运动跟踪和场景交互的鲁棒策略学习，以及统一的部署堆栈。尽管针对四足机器人，其数据流水线方法可迁移至人形机器人数据集构建。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2607.08948v1",
+      "source": "arxiv",
+      "title": "SplatCtrl: Perception-Action Coupling via Gaussian Scene Representations and Reactive Robot Control",
+      "abstract": "Robotic manipulators excel in structured environments but face substantial challenges in unstructured and dynamic settings. This paper presents SplatCtrl, a unified framework for real-time scene reconstruction and reactive robot motion generation to enable collision-free robotic arm control in previously unseen and continuously changing environments. Building on 3D Gaussian Splatting (3D-GS), we introduce a hybrid voxel-based filtering and dynamic Gaussian relocation strategy that supports efficient scene reconstruction from RGB-D streams while accommodating environmental changes. For safe and reactive control, we further propose a method for deriving continuous signed distance functions from isotropic Gaussians, providing stable and differentiable collision probability estimates that bridge classical distance fields with the modern implicit representation. These continuous distance metrics are incorporated into control barrier functions, resulting in a unified perception-action coupling framework that supports smooth and reliable real-time motion generation in response to scene changes. Experimental validation in simulation, on physical robot, and within shared human-robot workspace demonstrates the framework's effectiveness, achieving integrated scene reconstruction and reactive control in uncertain, and dynamic environments.",
+      "authors": [
+        "Siddarth Jain",
+        "Ho Jin Choi"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.CV"
+      ],
+      "published": "2026-07-09T21:18:39+00:00",
+      "link": "https://arxiv.org/pdf/2607.08948v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "dataset construction for robotics via Gaussian scene representation",
+      "llm_evidence_cn": "通过高斯场景表示进行机器人数据集构建",
+      "llm_evidence": "通过高斯场景表示进行机器人数据集构建",
+      "canonical_evidence": "通过高斯场景表示进行机器人数据集构建",
+      "llm_tldr_en": "SplatCtrl uses 3D Gaussian Splatting for real-time scene reconstruction, enabling collision-free robot control and potentially supporting simulation dataset creation.",
+      "llm_tldr_cn": "针对机器人在非结构化动态环境中操作的挑战，SplatCtrl提出基于3D高斯溅射的统一框架，实现实时场景重建与反应式运动生成。通过混合体素滤波和动态高斯重定位策略，从RGB-D流高效重建场景，并推导连续符号距离函数用于安全控制。该框架可辅助构建机器人交互场景数据集。",
+      "llm_tldr": "针对机器人在非结构化动态环境中操作的挑战，SplatCtrl提出基于3D高斯溅射的统一框架，实现实时场景重建与反应式运动生成。通过混合体素滤波和动态高斯重定位策略，从RGB-D流高效重建场景，并推导连续符号距离函数用于安全控制。该框架可辅助构建机器人交互场景数据集。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    }
+  ]
+}

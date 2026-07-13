@@ -6,43 +6,40 @@
 </div>
 
 ## 每次日报
-- 最新运行日期：2026-07-12
-- 运行时间：2026-07-12 21:23:43 UTC
+- 最新运行日期：2026-07-13
+- 运行时间：2026-07-13 21:10:29 UTC
 - 运行状态：成功
-- 本次总论文数：7
-- 精读区：1
-- 速读区：6
+- 本次总论文数：6
+- 精读区：2
+- 速读区：4
 
 ### 今日简报（AI）
-1) 今日7篇新论文中精读《RoboVista》，系统评估视觉语言模型在多样化机器人任务中的表现。  
-2) 最值得关注：RoboVista的评估框架揭示VLM在具身任务中的关键瓶颈；WristMimic提出手腕引导的全身人形控制新思路。  
-3) 建议优先阅读精读论文，了解当前VLM在机器人领域的真实能力边界，再结合速读中的控制技巧扩展应用视野。
-- 详情：[/202607/12/README](/202607/12/README)
+今日聚焦6篇论文，精读2篇，重点在机器人学习与IoT异常检测。  
+值得关注：基于人眼视角的混合现实合成方法提升人形机器人灵巧操作，以及联邦低秩Koopman学习实现多变量时间序列异常检测。  
+建议普通读者优先了解机器人学习中的现实数据增强思路，以及分布式系统异常检测的低成本方案。
+- 详情：[/202607/13/README](/202607/13/README)
 
 ### 精读区论文标签
-1. [RoboVista: Evaluating Vision Language Models for Diverse Robot Applications](/202607/12/2607.04610v1-robovista-evaluating-vision-language-models-for-diverse-robot-applications)  
-   标签：评分：8.0/10、query:ur
-   evidence：机器人基准与评估框架
+1. [AgenticFocus: Object-Preserving Mixed Reality Synthesis from Human FPV Video for Dexterous Humanoid Learning](/202607/13/2607.08857v1-agenticfocus-object-preserving-mixed-reality-synthesis-from-human-fpv-video-for-dexterous-humanoid-learning)  
+   标签：评分：10.0/10、query:ur
+   evidence：从人类视频构建人形机器人数据集
+2. [Federated Low-Rank Koopman Learning for Multivariate Time-Series Anomaly Detection in IoT Systems](/202607/13/2607.08978v1-federated-low-rank-koopman-learning-for-multivariate-time-series-anomaly-detection-in-iot-systems)  
+   标签：评分：8.0/10、query:humanoid-ood
+   evidence：物联网时间序列异常检测，轻量级Koopman模型，边缘部署
 
 ### 速读区论文标签
-1. [SoftVTBench: A Safety-Aware Visuo-Tactile Benchmark for Physically Constrained Robotic Manipulation of Deformable Objects](/202607/12/2607.04234v1-softvtbench-a-safety-aware-visuo-tactile-benchmark-for-physically-constrained-robotic-manipulation-of-deformable-objects)  
+1. [MiLSD: A Micro Line-Segment Detector for Resource-Constrained Devices](/202607/13/2607.06600v1-milsd-a-micro-line-segment-detector-for-resource-constrained-devices)  
    标签：评分：7.0/10、query:ur
-   evidence：一个用于可变形物体操作的安全感知基准，提供包括本体感受在内的多模态数据
-2. [Training-Free Acceleration for Vision-Language-Action Models with Action Caching and Refinement](/202607/12/2607.06370v1-training-free-acceleration-for-vision-language-action-models-with-action-caching-and-refinement)  
-   标签：评分：7.0/10、query:ur
-   evidence：VLA模型实时部署加速
-3. [WristMimic: Full-Body Humanoid Control with Wrist-Guided Manipulation](/202607/12/2607.06438v1-wristmimic-full-body-humanoid-control-with-wrist-guided-manipulation)  
-   标签：评分：7.0/10、query:ur
-   evidence：通过手腕引导控制进行人形机器人数据集构建
-4. [RoboDojo: A Unified Sim-and-Real Benchmark for Comprehensive Evaluation of Generalist Robot Manipulation Policies](/202607/12/2607.04434v2-robodojo-a-unified-sim-and-real-benchmark-for-comprehensive-evaluation-of-generalist-robot-manipulation-policies)  
+   evidence：用于资源受限设备的轻量级检测器
+2. [Physics-Regularized Machine Learning for Proprioceptive Vehicle Localization Using Onboard Sensors](/202607/13/2607.05663v1-physics-regularized-machine-learning-for-proprioceptive-vehicle-localization-using-onboard-sensors)  
+   标签：评分：6.0/10、query:humanoid-ood
+   evidence：基于本体感受信号（IMU）的机器学习用于定位，可迁移至故障诊断
+3. [Behavior Foundations for Quadruped Robots: ABot-C0 Technical Report](/202607/13/2607.07370v2-behavior-foundations-for-quadruped-robots-abot-c0-technical-report)  
    标签：评分：6.0/10、query:ur
-   evidence：包含仿真和真实任务的机器人操作基准
-5. [Hardware-aware Graph Neural Networks prunning for embedded event-based vision](/202607/12/2607.06739v1-hardware-aware-graph-neural-networks-prunning-for-embedded-event-based-vision)  
+   evidence：四足机器人可扩展多源运动数据流水线
+4. [SplatCtrl: Perception-Action Coupling via Gaussian Scene Representations and Reactive Robot Control](/202607/13/2607.08948v1-splatctrl-perception-action-coupling-via-gaussian-scene-representations-and-reactive-robot-control)  
    标签：评分：6.0/10、query:ur
-   evidence：针对嵌入式FPGA平台的硬件感知剪枝与量化，与边缘部署相关
-6. [Behavior Foundations for Quadruped Robots: ABot-C0 Technical Report](/202607/12/2607.07370v1-behavior-foundations-for-quadruped-robots-abot-c0-technical-report)  
-   标签：评分：6.0/10、query:ur
-   evidence：可扩展的多源运动数据管道用于数据集构建
+   evidence：通过高斯场景表示进行机器人数据集构建
 
 
 <div class="dpr-home-promo-card">
