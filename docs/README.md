@@ -6,40 +6,37 @@
 </div>
 
 ## 每次日报
-- 最新运行日期：2026-07-13
-- 运行时间：2026-07-13 21:10:29 UTC
+- 最新运行日期：2026-07-14
+- 运行时间：2026-07-14 21:45:00 UTC
 - 运行状态：成功
-- 本次总论文数：6
-- 精读区：2
+- 本次总论文数：5
+- 精读区：1
 - 速读区：4
 
 ### 今日简报（AI）
-今日聚焦6篇论文，精读2篇，重点在机器人学习与IoT异常检测。  
-值得关注：基于人眼视角的混合现实合成方法提升人形机器人灵巧操作，以及联邦低秩Koopman学习实现多变量时间序列异常检测。  
-建议普通读者优先了解机器人学习中的现实数据增强思路，以及分布式系统异常检测的低成本方案。
-- 详情：[/202607/13/README](/202607/13/README)
+今日推荐聚焦人形机器人学习、遥操作、人机交互错误检测及机器人系统。  
+最值得关注的是精读论文《AgenticFocus》，提出对象保留的混合现实合成方法，用于灵巧人形学习，评分高达9.0。  
+建议读者优先深入研读该论文，并留意人机交互错误检测挑战赛的最新成果。
+- 详情：[/202607/14/README](/202607/14/README)
 
 ### 精读区论文标签
-1. [AgenticFocus: Object-Preserving Mixed Reality Synthesis from Human FPV Video for Dexterous Humanoid Learning](/202607/13/2607.08857v1-agenticfocus-object-preserving-mixed-reality-synthesis-from-human-fpv-video-for-dexterous-humanoid-learning)  
-   标签：评分：10.0/10、query:ur
-   evidence：从人类视频构建人形机器人数据集
-2. [Federated Low-Rank Koopman Learning for Multivariate Time-Series Anomaly Detection in IoT Systems](/202607/13/2607.08978v1-federated-low-rank-koopman-learning-for-multivariate-time-series-anomaly-detection-in-iot-systems)  
-   标签：评分：8.0/10、query:humanoid-ood
-   evidence：物联网时间序列异常检测，轻量级Koopman模型，边缘部署
+1. [AgenticFocus: Object-Preserving Mixed Reality Synthesis from Human FPV Video for Dexterous Humanoid Learning](/202607/14/2607.08857v2-agenticfocus-object-preserving-mixed-reality-synthesis-from-human-fpv-video-for-dexterous-humanoid-learning)  
+   标签：评分：9.0/10、query:ur
+   evidence：从人类第一视角视频合成混合现实数据集，用于人形机器人学习
 
 ### 速读区论文标签
-1. [MiLSD: A Micro Line-Segment Detector for Resource-Constrained Devices](/202607/13/2607.06600v1-milsd-a-micro-line-segment-detector-for-resource-constrained-devices)  
+1. [RynnWorld-Teleop: An Action-Conditioned World Model for Digital Teleoperation](/202607/14/2607.06558v2-rynnworld-teleop-an-action-conditioned-world-model-for-digital-teleoperation)  
    标签：评分：7.0/10、query:ur
-   evidence：用于资源受限设备的轻量级检测器
-2. [Physics-Regularized Machine Learning for Proprioceptive Vehicle Localization Using Onboard Sensors](/202607/13/2607.05663v1-physics-regularized-machine-learning-for-proprioceptive-vehicle-localization-using-onboard-sensors)  
-   标签：评分：6.0/10、query:humanoid-ood
-   evidence：基于本体感受信号（IMU）的机器学习用于定位，可迁移至故障诊断
-3. [Behavior Foundations for Quadruped Robots: ABot-C0 Technical Report](/202607/13/2607.07370v2-behavior-foundations-for-quadruped-robots-abot-c0-technical-report)  
+   evidence：通过数字遥操作构建机器人数据集
+2. [ERR@HRI 3.0 Challenge: Multimodal Detection of Errors and Anticipation in Human-Robot Interactions](/202607/14/2607.11570v1-errhri-30-challenge-multimodal-detection-of-errors-and-anticipation-in-human-robot-interactions)  
+   标签：评分：7.0/10、query:ur
+   evidence：提供多模态错误检测数据集，可用于人形机器人故障诊断
+3. [ABot-AgentOS: A General Robotic Agent OS with Lifelong Multi-modal Memory](/202607/14/2607.10350v1-abot-agentos-a-general-robotic-agent-os-with-lifelong-multi-modal-memory)  
    标签：评分：6.0/10、query:ur
-   evidence：四足机器人可扩展多源运动数据流水线
-4. [SplatCtrl: Perception-Action Coupling via Gaussian Scene Representations and Reactive Robot Control](/202607/13/2607.08948v1-splatctrl-perception-action-coupling-via-gaussian-scene-representations-and-reactive-robot-control)  
+   evidence：机器人智能体的边缘端部署与边缘-云协作
+4. [Learning Roller-Skating Motions of Humanoid Robots Based on Adversarial Motion Priors](/202607/14/2607.10815v1-learning-roller-skating-motions-of-humanoid-robots-based-on-adversarial-motion-priors)  
    标签：评分：6.0/10、query:ur
-   evidence：通过高斯场景表示进行机器人数据集构建
+   evidence：人形机器人运动数据集构建
 
 
 <div class="dpr-home-promo-card">

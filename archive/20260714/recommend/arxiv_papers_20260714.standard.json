@@ -1,0 +1,256 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-07-14T21:41:18.190235+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 2,
+    "deep_divecandidates": 1,
+    "deep_cap": 7,
+    "deep_selected": 1,
+    "quick_candidates": 4,
+    "quick_skim_target": 12,
+    "quick_selected": 4
+  },
+  "deep_dive": [
+    {
+      "id": "2607.08857v2",
+      "source": "arxiv",
+      "title": "AgenticFocus: Object-Preserving Mixed Reality Synthesis from Human FPV Video for Dexterous Humanoid Learning",
+      "abstract": "Human egocentric video is a scalable supervision source for humanoid policy learning, but current pipelines struggle with hand-object occlusion, oversimplified motion, or specialized capture hardware. We introduce AgenticFocus, a Mixed Reality synthesis pipeline that converts ordinary first-person-view human videos into robot-trainable demonstrations by restoring occluded object geometry, reconstructing full-hand motion, and retargeting it to a humanoid embodiment through camera-relative alignment and layered compositing. The resulting dataset pairs focused visual observations with synchronized robot actions and states. AgenticFocus achieves lower trajectory error and smoother wrist motion than cross-embodiment baselines, with SPARC scores of -5.18 versus -5.56 and -6.05.",
+      "authors": [
+        "Iaroslav Kolomiets",
+        "Miguel Altamirano Cabrera",
+        "Artem Lykov",
+        "Jeffrin Sam",
+        "Dmitrii Iarchuk",
+        "Yara Mahmoud",
+        "Daniia Zinniatullina",
+        "Mikhail Konenkov",
+        "Dzmitry Tsetserukou"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-07-09T18:27:41+00:00",
+      "link": "https://arxiv.org/pdf/2607.08857v2",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "Synthesizes mixed reality dataset from human FPV video for humanoid robot learning",
+      "llm_evidence_cn": "从人类第一视角视频合成混合现实数据集，用于人形机器人学习",
+      "llm_evidence": "从人类第一视角视频合成混合现实数据集，用于人形机器人学习",
+      "canonical_evidence": "从人类第一视角视频合成混合现实数据集，用于人形机器人学习",
+      "llm_tldr_en": "AgenticFocus converts ordinary FPV human videos into robot training demonstrations via mixed reality synthesis, reconstructing occluded object geometry and full-hand motion for humanoid policy learning, achieving smoother trajectory than baselines.",
+      "llm_tldr_cn": "针对人形机器人策略学习缺乏高质量演示的问题，AgenticFocus提出一种混合现实合成流水线，从普通第一人称人类视频中生成机器人可训练的数据集。该方法通过恢复遮挡物体几何和完整手部运动，并重新定位到人形机器人，产生同步的视觉观测和机器人动作状态。实验表明，相比跨形态基准，该方法实现了更低的轨迹误差和更平滑的手腕运动，为人形机器人数据集构建提供了可扩展的解决方案。",
+      "llm_tldr": "针对人形机器人策略学习缺乏高质量演示的问题，AgenticFocus提出一种混合现实合成流水线，从普通第一人称人类视频中生成机器人可训练的数据集。该方法通过恢复遮挡物体几何和完整手部运动，并重新定位到人形机器人，产生同步的视觉观测和机器人动作状态。实验表明，相比跨形态基准，该方法实现了更低的轨迹误差和更平滑的手腕运动，为人形机器人数据集构建提供了可扩展的解决方案。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "humanoid robot dataset construction",
+      "matched_requirement_id": "req-2",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "quick_skim": [
+    {
+      "id": "2607.06558v2",
+      "source": "arxiv",
+      "title": "RynnWorld-Teleop: An Action-Conditioned World Model for Digital Teleoperation",
+      "abstract": "Scaling robot learning requires massive, diverse trajectory data, yet collection is currently bottlenecked by physical teleoperation, where every demonstration binds operator time to specific hardware and workspaces. We introduce digital teleoperation, a paradigm that decouples data collection from physical constraints by replacing the real robot with a generative world model. In this framework, an operator's hand-pose stream drives a robot-centric generative world model to synthesize high-fidelity egocentric videos from a single reference image. The recorded pose stream serves as an embodiment-agnostic action label transferable to any target robot via standard retargeting, yielding complete state-action trajectories for imitation learning independent of physical hardware. We instantiate this paradigm in RynnWorld-Teleop, a system that integrates depth-aware skeletal conditioning, progressive human-to-robot training on a video Diffusion Transformer, and streaming autoregressive distillation. This pipeline compresses the generative process into a single-pass inference, enabling 40+ FPS, real-time interactive generation on a single H100 GPU. Policies trained exclusively on RynnWorld-Teleop-generated data achieve effective zero-shot Sim2Real transfer across dexterous and diverse bimanual tasks. Moreover, augmenting real-world datasets with our digitally teleoperated data consistently improves success rates, demonstrating that RynnWorld-Teleop serves as a high-fidelity, scalable data engine for the next generation of robotic agents.",
+      "authors": [
+        "Haoyu Zhao",
+        "Xingyue Zhao",
+        "Hangyu Li",
+        "Biao Gong",
+        "Kehan Li",
+        "Siteng Huang",
+        "Xin Li",
+        "Deli Zhao",
+        "Zhongyu Li"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-07-07T17:58:11+00:00",
+      "link": "https://arxiv.org/pdf/2607.06558v2",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "dataset construction for robotics via digital teleoperation",
+      "llm_evidence_cn": "通过数字遥操作构建机器人数据集",
+      "llm_evidence": "通过数字遥操作构建机器人数据集",
+      "canonical_evidence": "通过数字遥操作构建机器人数据集",
+      "llm_tldr_en": "RynnWorld-Teleop introduces digital teleoperation using a generative world model to synthesize high-fidelity egocentric videos from a single reference image, enabling data collection decoupled from physical hardware.",
+      "llm_tldr_cn": "该论文提出数字遥操作范式，利用生成世界模型从单张参考图像合成高保真第一人称视频，从而将数据收集与物理硬件解耦。录制的姿态流可作为动作标签迁移至任意目标机器人，生成完整的状态-动作轨迹用于模仿学习。该方法解决了物理遥操作数据收集效率低的问题，为机器人数据集构建提供了可扩展的新途径，但尚未直接用于人形机器人。",
+      "llm_tldr": "该论文提出数字遥操作范式，利用生成世界模型从单张参考图像合成高保真第一人称视频，从而将数据收集与物理硬件解耦。录制的姿态流可作为动作标签迁移至任意目标机器人，生成完整的状态-动作轨迹用于模仿学习。该方法解决了物理遥操作数据收集效率低的问题，为机器人数据集构建提供了可扩展的新途径，但尚未直接用于人形机器人。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2607.10350v1",
+      "source": "arxiv",
+      "title": "ABot-AgentOS: A General Robotic Agent OS with Lifelong Multi-modal Memory",
+      "abstract": "Recent VLM and VLA systems have improved robotic perception and action prediction, yet long-horizon embodied agents still require a general runtime layer for reasoning, memory, tool use, verification, and cross-embodiment execution. We present ABot-AgentOS, a general robotic Agent Operating System that sits above low-level controllers and provides a deliberative agent layer for scene-conditioned planning, context-isolated skill execution, multi-stage verification, multi-modal memory, and edge-cloud collaboration. To evaluate such systems, we introduce EmbodiedWorldBench, an executable benchmark with 16 indoor, outdoor, and hybrid scenes, four difficulty levels, and over 200 tasks involving navigation, object search, NPC dialogue, dynamic events, and trace-grounded scoring. ABot-AgentOS further introduces Universal Multi-modal Graph Memory, a persistent source-grounded substrate that converts dialogue, visual observations, spatial context, temporal relations, and task traces into typed nodes and edges. A failure-driven self-evolution loop converts diagnosed memory failures into gated runtime evo-assets that are promoted only to later evaluation splits, preventing current-split ground-truth leakage while enabling continual improvement. On an initial EmbodiedWorldBench subset, ABot-AgentOS improves over a single-controller baseline in both task success and goal completion. Across memory benchmarks, ABot-AgentOS Static achieves 87.5 on LoCoMo, 59.9 on OpenEQA EM-EQA, 88.6 on Mem-Gallery, and 76.5 Acc@All on NExT-QA; self-evolution further improves LoCoMo to 88.7, OpenEQA to 60.4, and Mem-Gallery to 89.0. These results suggest that a general Agent OS layer can improve long-horizon embodied execution while providing persistent, auditable memory for continual interaction.",
+      "authors": [
+        "Jiayi Tian",
+        "Shiao Liu",
+        "Yuting Xu",
+        "Jia Lu",
+        "Zihao Guan",
+        "Honglin Han",
+        "Di Yang",
+        "Minqi Gu",
+        "Yifei Qian",
+        "Tianlin Zhang",
+        "Yanqing Zhu",
+        "Zeqian Ye",
+        "Menglin Yang",
+        "Fei Wang",
+        "Xu Hu",
+        "Xiuxian Li",
+        "Wei Zhang",
+        "Shihui Su",
+        "Yiyan Ji",
+        "Jingbo Wang",
+        "Ziteng Feng",
+        "Jiaheng Liu",
+        "Zhaoxiang Zhang",
+        "Xiaolong Wu",
+        "Mingyang Yin",
+        "Zedong Chu",
+        "Mu Xu"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI"
+      ],
+      "published": "2026-07-11T15:24:43+00:00",
+      "link": "https://arxiv.org/pdf/2607.10350v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "edge deployment for robotic agents with edge-cloud collaboration",
+      "llm_evidence_cn": "机器人智能体的边缘端部署与边缘-云协作",
+      "llm_evidence": "机器人智能体的边缘端部署与边缘-云协作",
+      "canonical_evidence": "机器人智能体的边缘端部署与边缘-云协作",
+      "llm_tldr_en": "ABot-AgentOS is a general robotic Agent OS with lifelong multi-modal memory and edge-cloud collaboration, providing a runtime layer for long-horizon tasks and including a benchmark EmbodiedWorldBench.",
+      "llm_tldr_cn": "该论文提出ABot-AgentOS，一个通用机器人智能体操作系统，包含终身多模态记忆和边缘-云协作能力。它在底层控制器之上提供推理、记忆、工具使用和验证等运行时层，并引入EmbodiedWorldBench基准（含16个场景、200+任务）。该工作与边缘部署需求相关，因为它强调了边缘-云协作和跨实体执行，但未专门针对人形机器人或Unitree。",
+      "llm_tldr": "该论文提出ABot-AgentOS，一个通用机器人智能体操作系统，包含终身多模态记忆和边缘-云协作能力。它在底层控制器之上提供推理、记忆、工具使用和验证等运行时层，并引入EmbodiedWorldBench基准（含16个场景、200+任务）。该工作与边缘部署需求相关，因为它强调了边缘-云协作和跨实体执行，但未专门针对人形机器人或Unitree。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "edge deployment for humanoid robots",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2607.11570v1",
+      "source": "arxiv",
+      "title": "ERR@HRI 3.0 Challenge: Multimodal Detection of Errors and Anticipation in Human-Robot Interactions",
+      "abstract": "As robots become increasingly integrated into human environments, their ability to detect and respond to errors remains critical for maintaining user trust and interaction quality. While recent advances in machine learning have improved error detection capabilities, most approaches are limited to specific contexts, controlled settings, or pre-extracted features, limiting their generalizability and applicability to real-world conditions. To address this challenge, the third edition of the ERR@HRI Challenge (ERR@HRI 3.0) provided researchers with two complementary datasets that enable end-to-end innovation in methods for both detecting and preventing errors in human-robot interaction. The challenge offered raw, non-anonymized video data from naturalistic settings: (1) the Bystander Affect Detection (BAD) dataset, containing webcam recordings of 45 participants' spontaneous reactions to robot and human failure scenarios; and (2) the Bad Idea dataset, featuring 29 participants' anticipatory facial responses while predicting action outcomes before failures occur. Both datasets were collected via crowdsourcing, capturing the inherent variability of real-world conditions. This naturalistic variability, while challenging, provides an authentic testbed for developing robust error detection systems. Participants developed multimodal machine learning models for bystander reaction detection (Track 1) and anticipatory outcome prediction (Track 2), with an optional cross-dataset generalization track (Track 3). Three teams submitted valid models, all of which surpassed our convolutional neural network baselines. This paper describes the datasets, tasks, baselines, and results of ERR@HRI 3.0, and discusses implications for building generalizable, context-aware, and anticipatory error detection systems for human-robot interaction.",
+      "authors": [
+        "Maria Teresa Parreira",
+        "Micol Spitale",
+        "Maia Stiber",
+        "Shiye Cao",
+        "Amama Mahmood",
+        "Chien-Ming Huang",
+        "Hatice Gunes",
+        "Wendy Ju"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.HC"
+      ],
+      "published": "2026-07-13T13:50:43+00:00",
+      "link": "https://arxiv.org/pdf/2607.11570v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "multimodal error detection dataset for human-robot interaction applicable to humanoid fault diagnosis",
+      "llm_evidence_cn": "提供多模态错误检测数据集，可用于人形机器人故障诊断",
+      "llm_evidence": "提供多模态错误检测数据集，可用于人形机器人故障诊断",
+      "canonical_evidence": "提供多模态错误检测数据集，可用于人形机器人故障诊断",
+      "llm_tldr_en": "ERR@HRI 3.0 challenge provides two multimodal datasets for error detection and anticipation in human-robot interaction, enabling end-to-end method innovation for robot fault diagnosis.",
+      "llm_tldr_cn": "针对人机交互中机器人错误检测问题，ERR@HRI 3.0挑战赛提供了两个多模态原始数据集，涵盖多种错误类型，支持端到端方法创新。该工作直接服务于机器人故障诊断与预测，其数据集和方法可迁移至人形机器人场景，为错误分析提供基准和工具。",
+      "llm_tldr": "针对人机交互中机器人错误检测问题，ERR@HRI 3.0挑战赛提供了两个多模态原始数据集，涵盖多种错误类型，支持端到端方法创新。该工作直接服务于机器人故障诊断与预测，其数据集和方法可迁移至人形机器人场景，为错误分析提供基准和工具。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "fault diagnosis and error analysis for humanoid robots",
+      "matched_requirement_id": "req-7",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2607.10815v1",
+      "source": "arxiv",
+      "title": "Learning Roller-Skating Motions of Humanoid Robots Based on Adversarial Motion Priors",
+      "abstract": "Humanoid roller-skating is difficult because the robot must coordinate whole-body balance, rolling contacts, and velocity-dependent posture regulation. This paper presents an adversarial motion prior based reinforcement learning framework for two humanoid roller-skating gaits: Pump Glide skating and Push Glide skating. The two gait datasets are collected independently through motion capture and retargeted to the humanoid robot separately. The retargeted data are then smoothed and resampled into reference motion states for AMP training. The two gaits are learned by independent AMP training pipelines with separate reference datasets, separate policies, and independent reward architectures. Simulation experiments are designed to evaluate gait quality, velocity tracking, turning, and gait-specific reward ablations.",
+      "authors": [
+        "Yunkang Cheng",
+        "Yutong Wu",
+        "Menghan Li",
+        "Shihe Zhou",
+        "Mingguo Zhao"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-07-12T16:05:56+00:00",
+      "link": "https://arxiv.org/pdf/2607.10815v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "humanoid robot motion dataset construction",
+      "llm_evidence_cn": "人形机器人运动数据集构建",
+      "llm_evidence": "人形机器人运动数据集构建",
+      "canonical_evidence": "人形机器人运动数据集构建",
+      "llm_tldr_en": "Presents a humanoid roller-skating dataset via motion capture and retargeting for AMP-based reinforcement learning, enabling stable whole-body skating motions.",
+      "llm_tldr_cn": "该论文针对人形机器人轮滑运动技能学习困难问题，提出基于对抗运动先验的强化学习框架。通过运动捕捉采集两种轮滑步态数据，重定向到人形机器人并平滑重采样作为参考运动状态。两个步态分别训练独立策略。仿真实验验证了该方法能生成自然稳定的轮滑动作。该工作为人形机器人运动数据集构建提供了完整流程。",
+      "llm_tldr": "该论文针对人形机器人轮滑运动技能学习困难问题，提出基于对抗运动先验的强化学习框架。通过运动捕捉采集两种轮滑步态数据，重定向到人形机器人并平滑重采样作为参考运动状态。两个步态分别训练独立策略。仿真实验验证了该方法能生成自然稳定的轮滑动作。该工作为人形机器人运动数据集构建提供了完整流程。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "humanoid robot dataset construction",
+      "matched_requirement_id": "req-2",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    }
+  ]
+}

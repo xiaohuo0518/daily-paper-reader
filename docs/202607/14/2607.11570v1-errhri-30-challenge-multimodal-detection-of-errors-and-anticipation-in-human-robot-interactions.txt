@@ -1,0 +1,184 @@
+Title: ERR@HRI 3.0 Challenge: Multimodal Detection of Errors and Anticipation in Human-Robot Interactions
+
+URL Source: https://arxiv.org/pdf/2607.11570v1
+
+Published Time: Tue, 14 Jul 2026 02:56:29 GMT
+
+Number of Pages: 5
+
+Markdown Content:
+# ERR@HRI 3.0 Challenge: Multimodal Detection of Errors and Anticipation in Human-Robot Interactions 
+
+## Maria Teresa Parreira 
+
+mb2554@cornell.edu Cornell University Ithaca, NY, USA 
+
+## Micol Spitale 
+
+Politecnico di Milano Milan, Italy 
+
+## Maia Stiber 
+
+Microsoft Research Redmond, WA, USA 
+
+## Shiye Cao 
+
+Johns Hopkins University Baltimore, MD, USA 
+
+## Amama Mahmood 
+
+Johns Hopkins University Baltimore, MD, USA 
+
+## Chien-Ming Huang 
+
+Johns Hopkins University Baltimore, MD, USA 
+
+## Hatice Gunes 
+
+University of Cambridge Cambridge, UK 
+
+## Wendy Ju 
+
+Cornell University Ithaca, NY, USA 
+
+## ABSTRACT 
+
+As robots become increasingly integrated into human environ-ments, their ability to detect and respond to errors remains critical for maintaining user trust and interaction quality. While recent advances in machine learning have improved error detection capa-bilities, most approaches are limited to specific contexts, controlled settings, or pre-extracted features, limiting their generalizability and applicability to real-world conditions. To address this chal-lenge, the third edition of the ERR@HRI Challenge (ERR@HRI 3.0) provided researchers with two complementary datasets that enable end-to-end innovation in methods for both detecting and preventing errors in human-robot interaction. The challenge of-fered raw, non-anonymized video data from naturalistic settings: (1) the Bystander Affect Detection (BAD) dataset, containing webcam recordings of 45 participants’ spontaneous reactions to robot and human failure scenarios; and (2) the Bad Idea dataset, featuring 29 participants’ anticipatory facial responses while predicting ac-tion outcomes before failures occur. Both datasets were collected via crowdsourcing, capturing the inherent variability of real-world conditions—diverse lighting, camera angles, participant position-ing, and environmental contexts. This naturalistic variability, while challenging, provides an authentic testbed for developing robust error detection systems. Participants developed multimodal ma-chine learning models for bystander reaction detection (Track 1) and anticipatory outcome prediction (Track 2), with an optional cross-dataset generalization track (Track 3). Three teams submitted valid models, all of which surpassed our convolutional neural net-work baselines. This paper describes the datasets, tasks, baselines, and results of ERR@HRI 3.0, and discusses implications for build-ing generalizable, context-aware, and anticipatory error detection systems for human-robot interaction.  
+
+> Permission to make digital or hard copies of all or part of this work for personal or classroom use is granted without fee provided that copies are not made or distributed for profit or commercial advantage and that copies bear this notice and the full citation on the first page. Copyrights for third-party components of this work must be honored. For all other uses, contact the owner/author(s).
+> ICMI ’26, 5–9 October 2026, Napoli, Italy
+> ©2026 Copyright held by the owner/author(s). ACM ISBN 978-x-xxxx-xxxx-x/YY/MM https://doi.org/10.1145/nnnnnnn.nnnnnnn
+
+## KEYWORDS 
+
+Robot Failure, Error Detection, Human-Robot Interaction, Multi-modal Interaction, Benchmarking, Anticipation 
+
+ACM Reference Format: 
+
+Maria Teresa Parreira, Micol Spitale, Maia Stiber, Shiye Cao, Amama Mah-mood, Chien-Ming Huang, Hatice Gunes, and Wendy Ju. 2026. ERR@HRI 3.0 Challenge: Multimodal Detection of Errors and Anticipation in Human-Robot Interactions. In Proceedings of 28th ACM International Conference on Multimodal Interaction (ICMI ’26). ACM, New York, NY, USA, 5 pages. https://doi.org/10.1145/nnnnnnn.nnnnnnn 
+
+## 1 INTRODUCTION 
+
+Robot errors – deviations from expected or intended behavior [ 8 ]– are not merely technical malfunctions but social events that can disrupt interaction flow, diminish user trust, and negatively im-pact the overall quality of human-robot collaboration [ 15 ]. Despite recent advances in machine learning and sensing, autonomous systems still struggle to reliably detect their own mistakes, particu-larly in the dynamic and unpredictable contexts that characterize real-world deployment. Error detection in human-robot interaction (HRI) is complicated by the fact that errors manifest in diverse ways, from functional failures such as navigation or manipulation mistakes, to social missteps such as interrupting a user or misreading conversational intent [ 13 , 22 ]. Traditional approaches to error detection often rely on task- or domain-specific knowledge that limits generalizability across robots, tasks, and contexts [ 6 ], and frequently depend on users to explicitly report a problem, introducing delays that can prevent timely recovery. A promising alternative leverages the multimodal behavioral sig-nals that humans naturally exhibit in response to unexpected events. Just as people infer errors from bystanders’ reactions—confusion, concern, or surprise signaling that something went wrong—robots might detect their own mistakes through observable social cues [ 3]. Recent work has demonstrated that user reactions, including facial expressions, speech patterns, and body language, contain information about interaction failures [ 1, 2, 9 , 10 , 13 , 17 , 18 , 20 , 21 ]. However, most existing approaches have been constrained in two important ways: first, they rely on pre-extracted features rather arXiv:2607.11570v1 [cs.RO] 13 Jul 2026 ICMI ’26, 5–9 October 2026, Napoli, Italy Parreira et al. 
+
+than raw sensor data, limiting the space of applicable methods; and second, they focus on controlled laboratory settings that may not reflect the variability of real-world deployments. Additionally, these systems tend to focus on reactive detection: recognizing that an error has already occurred and elicited an observable response. An-ticipating potential errors before they fully manifest could instead enable proactive intervention, with meaningful gains for interaction quality and safety. The third edition of the ERR@HRI Challenge (ERR@HRI 3.0) addressed these two gaps. Building on two prior editions [ 5, 19 ], ERR@HRI 3.0 shifted focus along two axes: (1) it introduced an-ticipatory error prediction alongside reactive detection, and (2) it released raw, non-anonymized webcam video rather than pre-extracted features, enabling end-to-end learning directly on visual data and exposing models to realistic sources of variability such as inconsistent lighting, camera angle, and participant position-ing. This paper reports on the datasets, tasks, evaluation protocol, baselines, and final results of the ERR@HRI 3.0 Challenge. 
+
+## 2 RELATED WORK 2.1 Robot Error Detection Using Social Signals 
+
+Social signals – multimodal behavioral cues that convey emotions, intentions, attitudes, and social dynamics – have long been used to facilitate collaboration in HRI, for example by conveying user preferences, need for help, or engagement breakdowns. Robot errors naturally elicit such signals from users and bystanders [ 13 ], and a growing body of work has shown the feasibility of using these elicited reactions to detect robot errors automatically [ 3, 9, 10 , 17 ,20 , 21 ]. Nearly all of this work, however, treats error detection as a purely reactive problem: the behavioral signal of interest occurs 
+
+during or after the error, rather than in anticipation of it. 
+
+## 2.2 Benchmarking in HRI 
+
+Benchmarking efforts (shared datasets, tasks, and metrics that let the community compare methods under identical conditions) have played a transformative role in other areas of AI research; ImageNet [ 7], for instance, catalyzed rapid, sustained progress in computer vision by giving researchers a common yardstick against which to measure new methods. Sustained, recurring benchmarking efforts of this kind remain comparatively rare in HRI. A few recent efforts have begun to address this gap, though they primarily target the perceptual and reasoning capabilities of large language models (LLMs) and other foundation models in social contexts, rather than error or failure detection specifically. HRIBench [ 16 ] benchmarks vision-language models on real-time human perception tasks relevant to HRI, and the Human-Robot So-cial Interaction (HSRI) dataset [ 11 ] benchmarks foundation models’ social reasoning capabilities in human-robot interaction. The ERR@HRI initiative was established as a platform for bench-marking both HRI datasets and multimodal machine learning mod-els for detecting robot errors from behavioral signals. The inaugural edition, ERR@HRI 2024 [19], held at ICMI’24, used a dataset of 89 sessions across 23 participants interacting with a robotic well-being coach, with three sub-challenges – robot mistakes, user awkward-ness, and interaction ruptures – benchmarked using pre-extracted 
+
+Table 1: Comparison of the two ERR@HRI 3.0 datasets. 
+
+Characteristic BAD Bad Idea 
+
+Participants 45 29 Stimulus scenarios 46 30 Total video clips 1,645 865 Total duration 25,527 s 1,851 s Avg. clip length ∼15.5 s ∼1.95 s Frame rate 30 fps 30 fps Setting Crowdsourced Crowdsourced Data format Raw video Raw video Anonymized No No Temporal focus During failure Before failure Error type Observed failure Anticipated outcome 
+
+facial, speech, and pose features and an LSTM/BiLSTM/GRU base-line. Building on this, ERR@HRI 2.0 [ 5 ], held at ACM MM’25, expanded the dataset to 101 sessions across 42 participants in-teracting with either a social robot [ 4] or a voice assistant [ 12 ]on five collaborative tasks, and separated the detection problem into system-perspective and user-perspective sub-challenges, again benchmarked on pre-extracted multimodal features (581 features spanning facial, audio, and transcribed-speech modalities) with a random-forest baseline. Across both prior editions, submitted models operated exclu-sively on pre-extracted, low-dimensional feature representations rather than raw sensor streams, and none of the challenge tasks addressed anticipatory or pre-failure behavior. ERR@HRI 3.0 was designed to close both gaps, while continuing the initiative’s core mission of benchmarking generalizable, multimodal error detection models in HRI. 
+
+## 3 THE ERR@HRI 3.0 CHALLENGE 
+
+ERR@HRI 3.0 provided two complementary datasets, both origi-nally collected via crowdsourcing on Prolific 1 in prior studies, and released to challenge participants as raw, non-anonymized webcam video. This design choice served two purposes: it enabled partici-pants to apply modern end-to-end computer vision methods (e.g., CNNs trained directly on pixel data) rather than being restricted to hand-crafted features, and it exposed models to naturalistic sources of variability – inconsistent webcam resolution, participant posi-tioning, lighting, and background – that are largely absent from studies conducted in controlled laboratory settings. All the code and instructions can be found on the challenge repository 2.
+
+## 3.1 Datasets 
+
+Table 1 summarizes the two datasets provided in ERR@HRI 3.0. 
+
+3.1.1 BAD (Bystander Affect Detection) Dataset. The BAD dataset [ 3] contains webcam recordings of 45 participants’ spontaneous facial reactions while watching 46 stimulus videos depicting robot and human failure scenarios (40 failure scenarios, 6 control scenar-ios with no failure). Labels are binary and derived directly from the  
+
+> 1https://www.prolific.com/
+> 2https://github.com/IRL-CT/errhri-3-0 ERR@HRI 3.0 ICMI ’26, 5–9 October 2026, Napoli, Italy
+
+Table 2: Dataset splits and label balance.                        
+
+> Dataset Split Part. Videos Label 0 Label 1
+> BAD Trainval 36 1,319 173 (13.1%) 1,146 (86.9%) Test 9326 43 (13.2%) 283 (86.8%) Bad Idea Trainval 23 685 360 (52.6%) 325 (47.4%) Test 6180 103 (57.2%) 77 (42.8%)
+
+stimulus content: Failure (1) versus Control (0). Data format: raw video files (.mp4) of each participant’s face while watching a given stimulus (average clip length ∼15.5 s at 30 fps); the corresponding 46 stimulus videos were also released. 
+
+3.1.2 Bad Idea Dataset. The Bad Idea dataset [ 14 ] captures antic-ipatory human reactions to scenarios before their outcomes are revealed. 29 participants watched 30 action scenario videos (robots or humans performing a task) that were cut off before showing the outcome, and were asked to predict whether the situation would end well or poorly , while their webcam recorded their facial reac-tions. Labels reflect the participant’s predicted outcome – Well (0) or Poorly (1) – rather than the scenario’s actual outcome. Data for-mat: pre-extracted video frames (30 fps) of participants watching and reacting to each scenario (average clip length ∼1.95 s), together with participants’ outcome predictions; the 30 stimulus videos were also released. 
+
+## 3.2 Training and Test Sets 
+
+Both datasets were split subject-independently (no participant ap-pears in both the training/validation and test sets) to evaluate gen-eralization to unseen individuals. Table 2 summarizes the resulting splits. The class distributions of the two datasets differ substantially: BAD is heavily imbalanced toward the Failure class (86.9%), reflect-ing its stimulus design (40 failure vs. 6 control scenarios), whereas the Bad Idea dataset is close to balanced, reflecting the natural variability in participants’ subjective outcome predictions. 
+
+## 3.3 Challenge Tasks 
+
+ERR@HRI 3.0 consisted of three tracks, evaluated and ranked inde-pendently. 
+
+3.3.1 Track 1: Bystander Reaction Detection (BAD dataset). Binary classification of whether a participant is observing a failure versus a control scenario, based solely on their webcam-recorded reaction. 
+
+3.3.2 Track 2: Anticipatory Response Prediction (Bad Idea dataset). 
+
+Binary classification of a participant’s predicted outcome ( well vs. 
+
+poorly ) from their anticipatory facial behavior, recorded before the scenario’s outcome was revealed. 
+
+3.3.3 Track 3: Cross-Dataset Generalization (Optional). Participants were additionally invited to explore transfer learning and general-ization across the two datasets (e.g., training on BAD and testing on Bad Idea), evaluated and awarded separately from Tracks 1 and 2. 
+
+## 3.4 Evaluation Metrics and Protocol 
+
+Both tracks are binary classification tasks in which each (partici-pant, video) pair is an independent observation. Participants submit-ted window-level predictions, i.e. one row per fixed-length sliding window per clip, with predicted class and probability scores, and declared the frame rate, window size, and slide length used to pro-duce them. Two constraints were enforced on these parameters: the slide could not exceed the window size (both tracks), and, because BAD clips depict an unfolding failure, the window size for Track 1 could not exceed 2 seconds of video regardless of extraction frame rate; Track 2 clips, being inherently short ( ∼2 s), were exempt from this cap. 
+
+3.4.1 Aggregation to the Video Level. For Track 1, the video-level prediction was obtained via majority vote across a clip’s windows (ties resolved toward Failure ); for Track 2, the video-level score was the maximum predicted probability for the positive class across a clip’s windows, reflecting the fact that a brief, decisive anticipatory signal is more informative than a sustained one for this task. 
+
+3.4.2 Metrics. Track 1 was ranked primarily by macro F1 (video level), with balanced accuracy as a tiebreaker; both were required to be reported given the dataset’s strong class imbalance. Track 2 was ranked by AUC-ROC (video level, max aggregation), chosen for being threshold-free and for rewarding models that fire con-fidently on the relevant anticipatory signal even when it appears only briefly. Secondary metrics reported at both window and video level included F1 for each class, precision, recall, accuracy, and the complementary primary metric of the other track. We additionally reported two temporal metrics computed over positive-class clips only: Earliest Detection Time , the average percentage of a clip elapsed before the first correct window prediction (lower is better), and false negative rate (FNR) per video , the average fraction of a clip’s expected windows that miss the positive label (lower is better). For the very short Bad Idea clips, these temporal metrics are best interpreted as measures of prediction consistency across windows rather than of a meaningful detection trajectory. 
+
+3.4.3 Submission Protocol. Each team could submit predictions on the held-out test set up to three times per track, to limit overfitting to the test set. Participating teams were additionally required to submit a short paper describing their approach, and were strongly encouraged to release their code. 
+
+## 4 CHALLENGE BASELINE 
+
+We provided a baseline for each track, built around the BadNet 
+
+convolutional architecture family (implemented in PyTorch), to-gether with reference data-loading, training, and evaluation code released through the challenge GitHub repository 2.
+
+Track 1 Baseline: BadNet . For Track 1, we trained a BadNet model [ 3] directly on 5 fps frames extracted from the raw videos. Table 3 (top) lists the selected hyperparameters, chosen via cross-validation on the training/validation split using an inter-participant (subject-independent) protocol. 
+
+Track 2 Baseline: Fine-Tuned ResNet-34 . For Track 2, we fine-tuned a ResNet-34 backbone (pretrained on ImageNet) on the ICMI ’26, 5–9 October 2026, Napoli, Italy Parreira et al. 
+
+Table 3: Baseline model configurations. 
+
+Track 1 — BadNet 
+
+Activation sigmoid Kernel size / base filters 8 / 64 Dropout 0.7 Learning rate 0.0001 Batch size / Epochs 32 / 350 Window size / slide 5 / 2 frames (at 5 fps) 
+
+Track 2 — ResNet-34 (fine-tuned) 
+
+Dropout 0.7 Learning rate 0.001 Batch size / Epochs 64 / 100 Window size / slide 10 / 2 frames (at 30 fps) 
+
+Table 4: Baseline performance on the held-out test set (video level). 
+
+Track Primary F1-macro Bal. Acc. Det. Time FNR 
+
+1 (BAD) F1 0.502 0.502 0.504 8.8% 0.122 2 (Bad Idea) AUC 0.564 0.561 0.572 35.6% 0.384 
+
+30 fps Bad Idea frames. Table 3 (bottom) lists the corresponding hyperparameters. Both baselines used a weighted loss to address class imbalance and were trained with inter-participant cross-validation (holding out a distinct set of participants per fold) before a final model was trained on the full training/validation split and evaluated once on the held-out test set. 
+
+Baseline Results . Table 4 reports video-level baseline perfor-mance on the held-out test set for both tracks, alongside the tem-poral metrics. The Track 1 baseline performed only marginally above chance on macro F1 (0.502), and its per-class F1 scores were highly asym-metric (F1 err = 0.892 , F1 cont = 0.113 ), reflecting the dataset’s strong skew toward the Failure class – the model defaults to predicting the majority class far more often than it correctly identifies control scenarios. The Track 2 baseline showed more balanced per-class performance (F1 pos = 0.559 , F1 neg = 0.563 ), consistent with the near-balanced label distribution of the Bad Idea dataset, but its AUC-ROC of 0.564 indicates only modest discriminative ability from anticipatory facial behavior alone. The much longer Earliest Detection Time and higher FNR for Track 2 (35.6% and 0.384, re-spectively, versus 8.8% and 0.122 for Track 1) reflect the difficulty of extracting a reliable anticipatory signal from very short clips, rather than a genuine difference in detection latency, and should be inter-preted as an index of the baseline’s window-to-window consistency rather than a temporal detection trajectory (see Section 3.4). 
+
+## 5 PARTICIPATION AND CONCLUSION 
+
+This paper introduced the ERR@HRI 3.0 Challenge, which ad-dressed the problem of multimodal error detection across the tem-poral spectrum of error management, from anticipatory responses before failures occur to reactive responses during observed fail-ures. A total of 9 teams from 6 countries signed up to participate. Three teams submitted valid models across the challenge’s tracks, all surpassing our provided baselines in at least one track. We aim for the datasets, baseline code, and results from ERR@HRI 3.0 to serve as durable resources for the community; challenge ma-terials will remain available through our GitHub repository for at least three years. Future editions of ERR@HRI will continue to expand the range of interaction contexts, robot embodiments, and temporal phases of error covered by the initiative, with the goal of developing more adaptive, context-aware error detection systems that can operate reliably across the diverse conditions of real-world human-robot interaction. 
+
+## ACKNOWLEDGMENTS 
+
+Data access: The BAD and Bad Idea datasets contain non-anonymized visual data. Challenge participants were required to sign a Data Use Agreement (DUA) prior to receiving access, agreeing to terms including no redistribution rights, use restricted to the purposes of this challenge, and appropriate data security measures. 
+
+Open access: For the purposes of open access, the authors have applied a Creative Commons Attribution (CC BY) license to any Accepted Manuscript version arising. 
+
+Funding: The work of H. Gunes has been supported by CHANSE & NORFACE through the MICRO project, funded by ESRC/UKRI grant ref. UKRI572. 
+
+## REFERENCES                           
+
+> [1] Minja Axelsson, Micol Spitale, and Hatice Gunes. 2024. " oh, sorry, i think i interrupted you": Designing repair strategies for robotic longitudinal well-being coaching. In Proceedings of the 2024 ACM/IEEE International Conference on Human-Robot Interaction . 13–22. [2] Alexandra Bremers, Alexandria Pabst, Maria Teresa Parreira, and Wendy Ju. 2024. Using Social Cues to Recognize Task Failures for HRI: Overview, State-of-the-Art, and Future Directions. arXiv:2301.11972 [cs.RO] https://arxiv.org/abs/2301.11972 [3] Alexandra Bremers, Maria Teresa Parreira, Xuanyu Fang, Natalie Friedman, Adolfo Ramirez-Aristizabal, Alexandria Pabst, Mirjana Spasojevic, Michael Kuni-avsky, and Wendy Ju. 2023. The Bystander Affect Detection (BAD) Dataset for Fail-ure Detection in HRI. 11443-11450 pages. doi:10.1109/IROS55552.2023.10342442 [4] Shiye Cao, Jiwon Moon, Amama Mahmood, Victor Nikhil Antony, Ziang Xiao, Anqi Liu, and Chien-Ming Huang. 2025. Interruption handling for conversational robots. Robotics: Science and Systems (2025). [5] Shiye Cao, Maia Stiber, Amama Mahmood, Maria Teresa Parreira, Wendy Ju, Micol Spitale, Hatice Gunes, and Chien-Ming Huang. 2025. ERR@HRI 2.0 Challenge: Multimodal Detection of Errors and Failures in Human-Robot Conversations. In Proceedings of the 33rd ACM International Conference on Multimedia (Dublin, Ireland) (MM ’25) . Association for Computing Machinery, New York, NY, USA, 14130–14135. doi:10.1145/3746027.3762073 [6] Jennifer Carlson and Robin R Murphy. 2005. How UGVs physically fail in the field. IEEE Transactions on robotics 21, 3 (2005), 423–437. [7] Jia Deng, Wei Dong, Richard Socher, Li-Jia Li, Kai Li, and Li Fei-Fei. 2009. Ima-geNet: A large-scale hierarchical image database. In 2009 IEEE Conference on Com-puter Vision and Pattern Recognition . 248–255. doi:10.1109/CVPR.2009.5206848 [8] Shanee Honig and Tal Oron-Gilad. 2018. Understanding and resolving failures in human-robot interaction: Literature review and model development. Frontiers in psychology 9 (2018), 861. [9] Dimosthenis Kontogiorgos, Andre Pereira, Boran Sahindal, Sanne van Waveren, and Joakim Gustafson. 2020. Behavioural Responses to Robot Conversational Failures. In Proceedings of the 2020 ACM/IEEE International Conference on Human-Robot Interaction (Cambridge, United Kingdom) (HRI ’20) . Association for Com-puting Machinery, New York, NY, USA, 53–62. doi:10.1145/3319502.3374782 [10] Dimosthenis Kontogiorgos, Minh Tran, Joakim Gustafson, and Mohammad So-leymani. 2021. A systematic cross-corpus analysis of human reactions to robot conversational failures. In Proceedings of the 2021 International Conference on Multimodal Interaction . 112–120. [11] Dong Won Lee, Yubin Kim, Denison Guvenoz, Sooyeon Jeong, Parker Mala-chowsky, Louis-Philippe Morency, Cynthia Breazeal, and Hae Won Park. 2025.
+
+ERR@HRI 3.0 ICMI ’26, 5–9 October 2026, Napoli, Italy 
+
+The Human Robot Social Interaction (HSRI) Dataset: Benchmarking Foundational Models’ Social Reasoning. arXiv preprint arXiv:2504.13898 (2025). [12] Amama Mahmood, Junxiang Wang, Bingsheng Yao, Dakuo Wang, and Chien-Ming Huang. 2025. User interaction patterns and breakdowns in conversing with llm-powered voice assistants. International Journal of Human-Computer Studies 
+
+195 (2025), 103406. [13] Nicole Mirnig, Manuel Giuliani, Gerald Stollnberger, Susanne Stadler, Roland Buchner, and Manfred Tscheligi. 2015. Impact of Robot Actions on Social Signals and Reaction Times in HRI Error Situations. In Social Robotics , Adriana Tapus, Elisabeth André, Jean-Claude Martin, François Ferland, and Mehdi Ammi (Eds.). Springer International Publishing, Cham, 461–471. [14] Maria Teresa Parreira, Sukruth Gowdru Lingaraju, Adolfo Ramirez-Artistizabal, Alexandra Bremers, Manaswi Saha, Michael Kuniavsky, and Wendy Ju. 2024. “Bad Idea, Right?” Exploring Anticipatory Human Reactions for Outcome Prediction in HRI. In 2024 33rd IEEE International Conference on Robot and Human Interactive Communication (ROMAN) . 2072–2078. doi:10.1109/RO-MAN60168.2024.10731310 [15] Maha Salem, Gabriella Lakatos, Farshid Amirabdollahian, and Kerstin Dauten-hahn. 2015. Would You Trust a (Faulty) Robot? Effects of Error, Task Type and Personality on Human-Robot Cooperation and Trust. In Proceedings of the Tenth Annual ACM/IEEE International Conference on Human-Robot Interaction (Portland, Oregon, USA) (HRI ’15) . Association for Computing Machinery, New York, NY, USA, 141–148. doi:10.1145/2696454.2696497 [16] Zhonghao Shi, Enyu Zhao, Nathaniel Dennler, Jingzhen Wang, Xinyang Xu, Kaleen Shrestha, Mengxue Fu, Daniel Seita, and Maja Matarić. 2025. HRIBench: Benchmarking Vision-Language Models for Real-Time Human Perception in Human-Robot Interaction. arXiv:2506.20566 [cs.RO] https://arxiv.org/abs/2506. 20566 [17] Micol Spitale, Minja Axelsson, and Hatice Gunes. 2023. VITA: A Multi-modal LLM-based System for Longitudinal, Autonomous, and Adaptive Robotic Mental Well-being Coaching. arXiv preprint arXiv:2312.09740 (2023). [18] Micol Spitale, Minja Axelsson, Neval Kara, and Hatice Gunes. 2023. Longitudinal evolution of coachees’ behavioural responses to interaction ruptures in robotic positive psychology coaching. In 2023 32nd IEEE International Conference on Robot and Human Interactive Communication (RO-MAN) . IEEE, 315–322. [19] Micol Spitale, Maria Teresa Parreira, Maia Stiber, Minja Axelsson, Neval Kara, Garima Kankariya, Chien-Ming Huang, Malte Jung, Wendy Ju, and Hatice Gunes. 2024. ERR@HRI 2024 challenge: Multimodal detection of errors and failures in human-robot interactions. In Proceedings of the 26th International Conference on Multimodal Interaction . 652–656. [20] Maia Stiber. 2022. Effective Human-Robot Collaboration via Generalized Robot Error Management Using Natural Human Responses. In Proceedings of the 2022 International Conference on Multimodal Interaction (Bengaluru, India) (ICMI ’22) .Association for Computing Machinery, New York, NY, USA, 673–678. doi:10. 1145/3536221.3557028 [21] Maia Stiber, Russell H Taylor, and Chien-Ming Huang. 2023. On using social signals to enable flexible error-aware hri. In Proceedings of the 2023 ACM/IEEE International Conference on Human-Robot Interaction . 222–230. [22] Leimin Tian and Sharon Oviatt. 2021. A Taxonomy of Social Errors in Human-Robot Interaction. J. Hum.-Robot Interact. 10, 2, Article 13 (feb 2021), 32 pages. doi:10.1145/3439720
