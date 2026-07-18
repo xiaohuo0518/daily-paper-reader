@@ -1,0 +1,754 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-07-18T21:16:26.769240+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 2,
+    "deep_divecandidates": 5,
+    "deep_cap": 7,
+    "deep_selected": 5,
+    "quick_candidates": 10,
+    "quick_skim_target": 12,
+    "quick_selected": 10
+  },
+  "deep_dive": [
+    {
+      "id": "2607.13472v1",
+      "source": "arxiv",
+      "title": "EgoHTR: Egocentric 4D Demonstrations of Human Terrain Traversal",
+      "abstract": "Deploying humanoid robots in unstructured terrain remains an open problem. While classic reinforcement learning struggles with the sheer complexity of real-world interactions, more promising methods leveraging human priors remain limited to models lacking contextual awareness. The restricted motion synthesis is a direct consequence of existing dataset pipelines failing to capture human-scene sequences in challenging environments. To bridge this gap between humanoid learning and scene reconstruction, we introduce the Egocentric Human-Terrain Reconstruction (EgoHTR) dataset. We develop and open-source a reconstruction pipeline capturing 55 scene-aligned 4D human motion sequences in diverse, complex environments using a multi-sensor setup of egocentric wearables and a portable 3D scanner. The resulting dataset comprises over 150k frames, which we evaluate against motion-capture ground truth, demonstrating state-of-the-art accuracy and establishing a rigorous benchmark for human motion analysis and synthesis. Further, we leverage this data to train perceptive locomotion policies, demonstrating hardware deployment on a Unitree G1 for reconstructed reference motions. Our pipeline enables community-driven dataset extensions and factors the problem to help researchers build foundational, context-aware robots that reliably traverse uneven terrain.",
+      "authors": [
+        "Alex Brandes",
+        "Haig Conti Georges Sajelian",
+        "Manthan Patel",
+        "Dominik Hollidt",
+        "Chenhao Li",
+        "Matthias Heyrman",
+        "Oliver Hausdoerfer",
+        "Manuel Kaufmann",
+        "Xi Wang",
+        "Jonas Frey",
+        "Angela P. Schoellig",
+        "Christian Holz",
+        "Marc Pollefeys",
+        "Marco Hutter"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.CV"
+      ],
+      "published": "2026-07-15T06:02:41+00:00",
+      "link": "https://arxiv.org/pdf/2607.13472v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 10.0,
+      "llm_evidence_en": "introduces a dataset for humanoid robots in unstructured terrain",
+      "llm_evidence_cn": "提供了一个针对非结构化地形的人形机器人数据集",
+      "llm_evidence": "提供了一个针对非结构化地形的人形机器人数据集",
+      "canonical_evidence": "提供了一个针对非结构化地形的人形机器人数据集",
+      "llm_tldr_en": "EgoHTR provides a 4D human motion dataset with 55 sequences captured via egocentric wearables, enabling humanoid robot learning in unstructured terrains.",
+      "llm_tldr_cn": "针对人形机器人在非结构化地形部署时缺乏上下文感知数据集的问题，本文构建了EgoHTR数据集，包含55个场景对齐的4D人体运动序列，使用多传感器穿戴式设备采集。该数据集弥合了人形学习与场景重建之间的差距，为复杂环境下的人形机器人运动生成提供了关键资源。",
+      "llm_tldr": "针对人形机器人在非结构化地形部署时缺乏上下文感知数据集的问题，本文构建了EgoHTR数据集，包含55个场景对齐的4D人体运动序列，使用多传感器穿戴式设备采集。该数据集弥合了人形学习与场景重建之间的差距，为复杂环境下的人形机器人运动生成提供了关键资源。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "humanoid robot dataset construction",
+      "matched_requirement_id": "req-2",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2607.14183v1",
+      "source": "arxiv",
+      "title": "Open-AoE: An Open Egocentric Manipulation Dataset and Toolchain for Embodied Learning",
+      "abstract": "Egocentric videos of human manipulation provide scalable supervision for embodied intelligence, yet existing resources rarely combine low-cost continuous capture, manipulation-level structured annotations, and reusable tools for robot learning. We present Open-AoE, an open, community-oriented egocentric manipulation dataset and toolchain spanning the full pipeline from smartphone capture to model training. Its first release contains approximately 2,000 hours of manipulation video collected in natural environments by 500+ contributors using 400+ smartphones. The dataset provides text annotations, MANO-based hand poses, camera trajectories, and temporally localized atomic actions. Open-AoE further includes a data processing pipeline that transforms raw recordings into structured samples through temporal action segmentation, semantic annotation, hand reconstruction, and camera trajectory reconstruction. Meanwhile, we provide a separate downstream toolchain supports visualization, cross-embodiment retargeting, model-specific data conversion, and training recipes for VLA policies, WAMs, and World Models. By integrating scalable capture, structured processing, and downstream adaptation, Open-AoE reduces the barriers to both data contribution and reuse, providing practical open infrastructure for embodied model training, human-to-robot transfer, and world modeling.",
+      "authors": [
+        "Zishuo Li",
+        "Bowen Yang",
+        "Changtao Miao",
+        "Kai Zhu",
+        "Hao Chen",
+        "Qingze Guan",
+        "Zhengxing Wu",
+        "Wanke Zhan",
+        "Yang Sun",
+        "Zhiyi Huang",
+        "Zitong Shan",
+        "Zhenchao Jin",
+        "Jiadong Hong",
+        "Taowen Wang",
+        "Yushi Feng",
+        "You Liu",
+        "Yibo Wang",
+        "Yifan Yang",
+        "Zhaowen Zhou",
+        "Man Luo",
+        "Hao Cheng",
+        "Bo Zhang",
+        "Jianshu Li",
+        "Jiansheng Cai",
+        "Guocai Yao",
+        "Jize Zhang",
+        "Chenhao Lin",
+        "Renjing Xu",
+        "Lequan Yu",
+        "Chao Shen",
+        "Chunhua Shen",
+        "Zhe Li"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.CV"
+      ],
+      "published": "2026-07-15T14:49:49+00:00",
+      "link": "https://arxiv.org/pdf/2607.14183v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "open dataset and toolchain for robot learning",
+      "llm_evidence_cn": "开放数据集和工具链用于机器人学习",
+      "llm_evidence": "开放数据集和工具链用于机器人学习",
+      "canonical_evidence": "开放数据集和工具链用于机器人学习",
+      "llm_tldr_en": "Open-AoE provides 2000 hours of egocentric manipulation video with structured annotations and a full pipeline from capture to model training for embodied learning.",
+      "llm_tldr_cn": "本工作针对具身学习中缺乏低成本连续采集、结构化标注和可复用工具的问题，发布了Open-AoE开放数据集。该数据集包含2000小时第一人称操纵视频，由500+贡献者用智能手机采集，提供文本标注、手部姿态、相机轨迹和原子动作标签。同时提供从数据采集到模型训练的全流程工具链。",
+      "llm_tldr": "本工作针对具身学习中缺乏低成本连续采集、结构化标注和可复用工具的问题，发布了Open-AoE开放数据集。该数据集包含2000小时第一人称操纵视频，由500+贡献者用智能手机采集，提供文本标注、手部姿态、相机轨迹和原子动作标签。同时提供从数据采集到模型训练的全流程工具链。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2607.12599v1",
+      "source": "arxiv",
+      "title": "Lightweight Multi-Scale Anomaly Detection for Resource-Constrained Edge Devices",
+      "abstract": "Time-series anomaly detection is increasingly important in IoT systems, sensor networks, and edge monitoring applications, where models must operate under strict constraints on memory, latency, and power consumption. While recent deep-learning approaches have improved detection accuracy, many remain computationally expensive and often fail to capture subtle anomalies due to limited multi-scale sensitivity. Autoencoders are widely used for anomaly detection because they reconstruct normal patterns well, leading to elevated reconstruction errors for anomalous inputs. Their simplicity and efficiency also make them suitable lightweight backbones for handling multi-scale inputs. To address these challenges, we propose a Lightweight MultiScale AutoEncoder (LMSAE) network for univariate time-series anomaly detection, designed to be compact and computationally efficient. LMSAE leverages the Discrete Wavelet Transform (DWT) to extract multi-scale features and employs a multi-scale loss function to improve sensitivity to subtle or hidden anomalies. Experiments on benchmark datasets demonstrate competitive or superior detection performance despite using significantly fewer parameters and a model size of less than 500 KB. LMSAE also achieves low-latency, low-power inference on the NVIDIA Jetson Nano, with 9x reduction in inference latency and 2x reduction in power consumption, making it ideal for edge deployment.",
+      "authors": [
+        "Raheen Junaid Wani",
+        "Smruti R. Sarangi"
+      ],
+      "primary_category": "cs.LG",
+      "categories": [
+        "cs.LG"
+      ],
+      "published": "2026-07-14T10:19:07+00:00",
+      "link": "https://arxiv.org/pdf/2607.12599v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "lightweight multi-scale anomaly detection for edge devices",
+      "llm_evidence_cn": "面向边缘设备的轻量级多尺度异常检测",
+      "llm_evidence": "面向边缘设备的轻量级多尺度异常检测",
+      "canonical_evidence": "面向边缘设备的轻量级多尺度异常检测",
+      "llm_tldr_en": "This paper proposes a lightweight multi-scale autoencoder for time-series anomaly detection on resource-constrained edge devices, matching the requirement for lightweight LSTM/GRU models on embedded platforms.",
+      "llm_tldr_cn": "该论文针对资源受限边缘设备上的时间序列异常检测任务，提出一种轻量级多尺度自编码器（Lightweight MultiScale AutoEncoder）。模型通过多尺度特征提取和高效重构，在保持低计算开销的同时捕捉细微异常，适用于IoT和传感器网络监控。虽然未使用LSTM/GRU，但自编码器架构同样轻量化，且异常检测目标与需求高度一致，可为边缘端人形机器人异常检测提供参考。",
+      "llm_tldr": "该论文针对资源受限边缘设备上的时间序列异常检测任务，提出一种轻量级多尺度自编码器（Lightweight MultiScale AutoEncoder）。模型通过多尺度特征提取和高效重构，在保持低计算开销的同时捕捉细微异常，适用于IoT和传感器网络监控。虽然未使用LSTM/GRU，但自编码器架构同样轻量化，且异常检测目标与需求高度一致，可为边缘端人形机器人异常检测提供参考。",
+      "llm_tags": [
+        "query:humanoid-ood"
+      ],
+      "matched_query_tag": "query:humanoid-ood",
+      "matched_query_text": "lightweight LSTM or GRU models deployed on embedded platforms for anomaly detection",
+      "matched_requirement_id": "req-12",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2607.15163v1",
+      "source": "arxiv",
+      "title": "Scaling Behavior Foundation Model for Humanoid Robots",
+      "abstract": "Humanoid control requires natural whole-body coordination, precise real-time responses to control signals, and robust generalization across diverse environmental contexts, making it a cornerstone for generalist embodied agents. Behavior Foundation Models (BFMs) have recently emerged as a promising solution to address these challenges by leveraging large-scale behavioral data to achieve superior expressiveness, versatility and generalization. However, despite growing interest in scaling BFMs to further improve their capabilities, it remains unclear how key factors, including the learning paradigm, behavioral data and model architecture should be coordinated to enable effective scaling. In this work, we revisit the scaling recipe for BFMs and demonstrate that substantial performance gains can be achieved through the coordination of three core components: 1) the learning paradigm of motion tracking that reformulates diverse humanoid control problems as the reproduction of integrated whole-body behaviors in the global frame; 2) the strategic synergy between on-policy rollout quantity and reference motion diversity; and 3) the expressive and scalable model architecture termed Humanoid Transformer that facilitates the natural emergence of structured behavioral representations. Through extensive experiments in both simulation and real-world deployment, we demonstrate that our approach yields significant improvements in control fidelity and task generalization, reducing Mean Per-Keypoint Position Error (MPKPE) on the test set by over 10% in local mode and 82% in global mode compared with existing humanoid controllers. These results establish BFM as a principled and effective foundation for scalable and general-purpose humanoid control.",
+      "authors": [
+        "Weishuai Zeng",
+        "Kangning Yin",
+        "Xiaojie Niu",
+        "Shunlin Lu",
+        "Weixiang Zhong",
+        "Jiahe Chen",
+        "Feiyu Jia",
+        "Xiao Chen",
+        "Zirui Wang",
+        "Furui Xu",
+        "Ming Zhou",
+        "Kailin Li",
+        "Weinan Zhang",
+        "He Wang",
+        "Li Yi",
+        "Dahua Lin",
+        "Jiangmiao Pang",
+        "Jingbo Wang"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.AI"
+      ],
+      "published": "2026-07-16T16:08:27+00:00",
+      "link": "https://arxiv.org/pdf/2607.15163v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "Scaling behavior foundation model using large-scale humanoid behavioral data",
+      "llm_evidence_cn": "利用大规模人形机器人行为数据扩展基础模型",
+      "llm_evidence": "利用大规模人形机器人行为数据扩展基础模型",
+      "canonical_evidence": "利用大规模人形机器人行为数据扩展基础模型",
+      "llm_tldr_en": "This paper studies scaling behavior foundation models for humanoid robots, emphasizing the need for large-scale behavioral datasets and model architecture coordination.",
+      "llm_tldr_cn": "该文探讨了人形机器人行为基础模型的扩展方法，指出大规模行为数据集和模型架构协同是提升能力的关键。通过分析不同因子对扩展效果的影响，展示了合理数据集设计的重要性，为人形机器人数据集构建提供了有价值的指导。",
+      "llm_tldr": "该文探讨了人形机器人行为基础模型的扩展方法，指出大规模行为数据集和模型架构协同是提升能力的关键。通过分析不同因子对扩展效果的影响，展示了合理数据集设计的重要性，为人形机器人数据集构建提供了有价值的指导。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "humanoid robot dataset construction",
+      "matched_requirement_id": "req-2",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2607.14488v1",
+      "source": "arxiv",
+      "title": "Safe Execution of RL Policies Via Acceleration-Based CBF-QP Constraint Enforcement for Real-World Robotic Deployments",
+      "abstract": "Reinforcement Learning (RL) has demonstrated remarkable capabilities for solving complex robotic control problems, but its lack of safety guarantees severely limits deployment on hardware. In particular, as legged robots and manipulators often operate near safety-critical boundaries, out-of-distribution states can lead to failure upon deployment. To address this, we introduce Acc-CBF-QP, an acceleration-based Quadratic Program (QP) safety filter using Control Barrier Functions (CBFs) that constrains any RL policy onto a safe set at runtime without modifying training. The method applies to unconstrained and Safe-RL policies, and enforces joint position, velocity, torque, and collision constraints within a unified optimization framework. A key contribution is the formulation of RL+QP tasks that regulate deviation from the RL command when constraints would otherwise be violated. We introduce a TorqueTask, minimizing torque deviation, and a Forward Dynamics Task, minimizing induced acceleration deviation, thus providing principled control over safety-performance trade-offs. Experiments on a 7-DoF Kinova Gen3 manipulator and a 19-DoF Unitree H1 humanoid, both in simulation and on hardware, highlight substantial reductions in constraint violations. On the real H1 hardware, a Safe-RL policy alone yielded 10.04 violations/s, which were reduced by 92% to 0.80 violations/s when augmented with Acc-CBF-QP. On the Kinova Gen3, Acc-CBF-QP fully eliminated violations. Nominal task performance of the RL objective is preserved in violation-free regimes. Under aggressive velocity commands on H1, Acc-CBF-QP improves execution by preventing constraint-induced shutdowns, yielding longer survival times. The full pipeline is open-source.",
+      "authors": [
+        "Bastien Muraccioli",
+        "Alice Cariou",
+        "Pierre-Alexandre Leziart",
+        "Mathieu Celerier",
+        "Arnaud Demont",
+        "Gentiane Venture",
+        "Mehdi Benallegue"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-07-16T02:00:11+00:00",
+      "link": "https://arxiv.org/pdf/2607.14488v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "out-of-distribution states safe filter using joint signals",
+      "llm_evidence_cn": "利用关节信号的安全滤波器处理分布外状态",
+      "llm_evidence": "利用关节信号的安全滤波器处理分布外状态",
+      "canonical_evidence": "利用关节信号的安全滤波器处理分布外状态",
+      "llm_tldr_en": "Acc-CBF-QP enforces joint position, velocity, torque constraints via acceleration-based CBF-QP safety filter for RL policies, handling out-of-distribution states in legged robots.",
+      "llm_tldr_cn": "本工作针对强化学习策略部署时因分布外状态导致的硬件安全问题，提出Acc-CBF-QP安全滤波器。该方法基于控制障碍函数和二次规划，在运行时对关节位置、速度、力矩等施加约束，无需修改训练。在腿式机器人上验证了其有效避免碰撞和超出关节限位的能力。",
+      "llm_tldr": "本工作针对强化学习策略部署时因分布外状态导致的硬件安全问题，提出Acc-CBF-QP安全滤波器。该方法基于控制障碍函数和二次规划，在运行时对关节位置、速度、力矩等施加约束，无需修改训练。在腿式机器人上验证了其有效避免碰撞和超出关节限位的能力。",
+      "llm_tags": [
+        "query:humanoid-ood"
+      ],
+      "matched_query_tag": "query:humanoid-ood",
+      "matched_query_text": "out-of-distribution detection for safe robot operation",
+      "matched_requirement_id": "req-11",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "quick_skim": [
+    {
+      "id": "2607.08978v1",
+      "source": "arxiv",
+      "title": "Federated Low-Rank Koopman Learning for Multivariate Time-Series Anomaly Detection in IoT Systems",
+      "abstract": "Distributed IoT systems generate multivariate time-series streams for monitoring physical assets, servers, and embedded sensing platforms. Detecting abnormal temporal behavior is critical for fault diagnosis, predictive maintenance, and security. However, practical IoT anomaly detection is hindered by decentralized and non-IID data, limited bandwidth, and the constrained computation and memory of edge devices. This paper proposes FedKAD, a resource-efficient federated Koopman anomaly detection framework for distributed IoT multivariate time series. Unlike deep-learning-based anomaly detectors that require training and communicating large neural models, FedKAD learns normal temporal dynamics through lightweight sliding-window Koopman representations. Federated training is formulated as a low-rank consensus problem, where raw sensor streams and local reduced dynamics remain on device while only compact subspace variables are exchanged with the server. To optimize the shared representation under orthonormality constraints, we develop a federated Stiefel-ADMM algorithm and provide convergence and stationarity analysis under partial client participation. During inference, each client detects anomalies locally by measuring the prediction residual between observed future trajectories and the learned Koopman dynamics. Experiments on four widely used multivariate time-series anomaly detection benchmarks show that FedKAD maintains or improves detection performance compared with federated deep-learning baselines. More importantly for IoT deployment, FedKAD provides up to $2.1\\times10^3$ faster training, $80\\times$ lower communication, and $79\\times$ lower inference latency than neural baselines, confirming its suitability for resource-constrained edge devices.",
+      "authors": [
+        "Tung-Anh Nguyen",
+        "Van-Phuc Bui",
+        "Anh Tuyen Le",
+        "Kim Hue Ta",
+        "Minh Thuy Le",
+        "J. Andrew Zhang",
+        "Xiaojing Huang"
+      ],
+      "primary_category": "cs.LG",
+      "categories": [
+        "cs.LG",
+        "eess.SP"
+      ],
+      "published": "2026-07-09T22:48:24+00:00",
+      "link": "https://arxiv.org/pdf/2607.08978v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "federated Koopman anomaly detection for time series fault diagnosis",
+      "llm_evidence_cn": "联邦Koopman时间序列异常检测用于故障诊断",
+      "llm_evidence": "联邦Koopman时间序列异常检测用于故障诊断",
+      "canonical_evidence": "联邦Koopman时间序列异常检测用于故障诊断",
+      "llm_tldr_en": "Proposes FedKAD, a lightweight federated Koopman anomaly detection framework for multivariate time series, enabling resource-efficient fault diagnosis on edge devices.",
+      "llm_tldr_cn": "该论文针对分布式IoT系统中多变量时间序列异常检测任务，提出了一种联邦低秩Koopman学习框架FedKAD。该方法利用滑动窗口和低秩Koopman算子学习正常动态模式，避免了深度模型的高通信和计算成本。实验表明，FedKAD在边缘设备上实现了高效且准确的异常检测，适用于资源受限的故障诊断场景。其轻量级特性为在嵌入式平台上部署时序异常检测提供了新思路。",
+      "llm_tldr": "该论文针对分布式IoT系统中多变量时间序列异常检测任务，提出了一种联邦低秩Koopman学习框架FedKAD。该方法利用滑动窗口和低秩Koopman算子学习正常动态模式，避免了深度模型的高通信和计算成本。实验表明，FedKAD在边缘设备上实现了高效且准确的异常检测，适用于资源受限的故障诊断场景。其轻量级特性为在嵌入式平台上部署时序异常检测提供了新思路。",
+      "llm_tags": [
+        "query:humanoid-ood"
+      ],
+      "matched_query_tag": "query:humanoid-ood",
+      "matched_query_text": "Self supervised time series anomaly detection for robot fault diagnosis",
+      "matched_requirement_id": "req-16",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2607.11041v1",
+      "source": "arxiv",
+      "title": "PAKE: Learning Whole-Body Loco-Manipulation with Partial Kinematic Embeddings",
+      "abstract": "Loco-manipulation has recently shown promising capabilities; however, achieving high-precision control, managing the high-dimensional action space induced by many degrees of freedom (DoFs), and fully exploiting the inherent redundancy of whole-body systems remain challenging. In this paper, we propose a novel whole-body control framework that effectively addresses these challenges by decomposing the complex loco-manipulation problem into partial reference motion generation and low-level imitation control. We introduce a new Kinematic Normalizing Flow (KNF) model, trained on a large-scale kinematic dataset, that generates diverse yet feasible partial reference motions. A high-level controller is then trained to navigate the KNF's latent space to exploit redundant solutions, while a low-level controller ensures physically feasible and accurate motion execution. We validate our approach on the quadrupedal robot equipped with a six-DoF robotic arm. In simulation, experimental results show that our approach significantly outperforms state-of-the-art methods in terms of tracking accuracy and feasible workspace coverage. For hardware deployment, we evaluate the system over 24 episodes across 8 different mobile loco-manipulation tasks. The system achieves end-effector pose-tracking errors of 4.5 cm and 0.14 rad, while maintaining accurate locomotion tracking with linear and angular velocity errors of 0.1 m/s and 0.01 rad/s, respectively, outperforming competitive baselines. Our method represents a practical and powerful solution for accurate and generalized whole-body loco-manipulation in high-DoF robotic systems, with promising potential for diverse downstream robotic tasks.",
+      "authors": [
+        "Zhengmao He",
+        "Moonkyu Jung",
+        "Hyeongjun Kim",
+        "Jiseong Lee",
+        "Hui Zhang",
+        "Jemin Hwangbo",
+        "Jie Song"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-07-13T03:12:09+00:00",
+      "link": "https://arxiv.org/pdf/2607.11041v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "large-scale kinematic dataset for whole-body robot motion",
+      "llm_evidence_cn": "全身机器人运动的大规模运动学数据集",
+      "llm_evidence": "全身机器人运动的大规模运动学数据集",
+      "canonical_evidence": "全身机器人运动的大规模运动学数据集",
+      "llm_tldr_en": "Proposes PAKE framework with a Kinematic Normalizing Flow model trained on a large-scale kinematic dataset to generate partial reference motions for whole-body loco-manipulation.",
+      "llm_tldr_cn": "本文提出PAKE框架，通过分解全身控制为局部参考运动生成和低级模仿控制，利用大规模运动学数据集训练运动学归一化流模型，生成多样且可行的局部参考运动。该方法可用于构建机器人运动数据集，支持全身操控任务。",
+      "llm_tldr": "本文提出PAKE框架，通过分解全身控制为局部参考运动生成和低级模仿控制，利用大规模运动学数据集训练运动学归一化流模型，生成多样且可行的局部参考运动。该方法可用于构建机器人运动数据集，支持全身操控任务。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2607.12287v1",
+      "source": "arxiv",
+      "title": "Reducing Temporal Redundancy for Efficient Vision-Language-Action Inference",
+      "abstract": "Vision-Language-Action (VLA) models exhibit strong generalization for robotic manipulation, yet their high inference latency limits real time deployment. We identify two primary sources of temporal redundancy in existing VLA pipelines: repeated visual encoding of highly similar consecutive frames and multi step iterative sampling in diffusion based policies. To address this, we propose a system level acceleration strategy that reduces computation in both perception and action generation. On the perception side, we incrementally update only tokens corresponding to dynamic scene regions instead of re-encoding entire frames. On the policy side, we compress diffusion sampling into a compact 2-step schedule through efficiency oriented training while preserving action precision. Experiments on Libero, RobotWin, and Real Robot Platforms demonstrate over 2 times speedup while maintaining high performance, achieving up to 98% success rate on general manipulation benchmarks. Our codes will be released on Github.",
+      "authors": [
+        "Yuzhou Wu",
+        "Yuxin Zheng",
+        "Muchun Niu",
+        "Yishan Yang",
+        "Tianhao Liu",
+        "hanwen kang",
+        "Jiajian Jing",
+        "Linfeng Zhang",
+        "Chuan Wen"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-07-14T02:48:31+00:00",
+      "link": "https://arxiv.org/pdf/2607.12287v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "efficient inference for real-time robot deployment",
+      "llm_evidence_cn": "机器人实时部署的高效推理",
+      "llm_evidence": "机器人实时部署的高效推理",
+      "canonical_evidence": "机器人实时部署的高效推理",
+      "llm_tldr_en": "Proposes system-level acceleration for VLA models by reducing temporal redundancy in perception and action generation, enabling real-time deployment on edge devices.",
+      "llm_tldr_cn": "本文针对视觉-语言-动作模型推理延迟高的问题，提出系统级加速策略，通过增量更新场景动态区域的token和压缩扩散采样步骤，显著降低计算量，实现机器人实时部署。该方法适用于边缘端部署场景，可提升机器人系统的实时性。",
+      "llm_tldr": "本文针对视觉-语言-动作模型推理延迟高的问题，提出系统级加速策略，通过增量更新场景动态区域的token和压缩扩散采样步骤，显著降低计算量，实现机器人实时部署。该方法适用于边缘端部署场景，可提升机器人系统的实时性。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "edge deployment for humanoid robots",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2607.13579v1",
+      "source": "arxiv",
+      "title": "Agile perceptive multi-skill locomotion for quadrupedal robots in the wild",
+      "abstract": "Enabling quadrupedal robots to traverse complex terrains-from rugged outdoor environments to urban landscapes-requires seamless integration of multiple motor skills, smooth transitions between gaits, and high-speed perceptive locomotion using only onboard sensors. We present APT-RL (Action Pretrained Transformer-based Reinforcement Learning), a unified framework that enables multi-skill locomotion to achieve high-speed traversal in complex environments through autonomous skill transitions utilizing only onboard perception and computation. Our approach generates large-scale, feature-rich 2D motion datasets through trajectory optimization with simplified dynamics. These datasets enable training of diverse, reusable locomotion skills that transfer effectively to a real quadruped robot operating on complex uneven terrains. The resulting high-quality skills serve as strong priors for efficient learning of complex downstream tasks and extend naturally to 3D environments, enabling smooth, high-speed multi-skill locomotion in deployed policy. Real-world experiments demonstrate the framework's capabilities: the robot performs agile maneuvers through complex indoor obstacles and outdoor wild environments, including dynamic drop-down maneuvers that reach instantaneous peak speeds of up to 6 meters per second. A single onboard policy enables robust traversal of diverse obstacles, including stairs, hurdles, stepping stones, gaps, and fallen branches, demonstrating the versatility and effectiveness of our approach.",
+      "authors": [
+        "Jun-Gill Kang",
+        "Jaehyun Park",
+        "Tae-Gyu Song",
+        "Joon-Ha Kim",
+        "Seungwoo Hong",
+        "Hae-Won Park"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.AI",
+        "cs.LG"
+      ],
+      "published": "2026-07-15T08:22:52+00:00",
+      "link": "https://arxiv.org/pdf/2607.13579v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "generates large-scale motion datasets for robot locomotion",
+      "llm_evidence_cn": "为机器人运动生成大规模数据集",
+      "llm_evidence": "为机器人运动生成大规模数据集",
+      "canonical_evidence": "为机器人运动生成大规模数据集",
+      "llm_tldr_en": "APT-RL generates large-scale 2D motion datasets through trajectory optimization to train diverse locomotion skills for quadrupedal robots, relevant to dataset construction for robotics.",
+      "llm_tldr_cn": "该论文提出APT-RL框架，通过轨迹优化生成大规模、特征丰富的2D运动数据集，用于训练四足机器人的多种运动技能。数据集生成方法支持技能迁移和自主切换，适用于复杂地形的高速度感知运动。虽然面向四足机器人，但其数据集构建策略可推广至人形机器人，满足机器人数据集构建需求。",
+      "llm_tldr": "该论文提出APT-RL框架，通过轨迹优化生成大规模、特征丰富的2D运动数据集，用于训练四足机器人的多种运动技能。数据集生成方法支持技能迁移和自主切换，适用于复杂地形的高速度感知运动。虽然面向四足机器人，但其数据集构建策略可推广至人形机器人，满足机器人数据集构建需求。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2607.12659v1",
+      "source": "arxiv",
+      "title": "Jetson-PI: Towards Onboard Real-Time Robot Control via Foresight-Aligned Asynchronous Inference",
+      "abstract": "Vision-Language-Action (VLA) models have achieved impressive performance on diverse embodied tasks. However, deploying VLA models on low-power onboard devices, such as the Jetson Orin, remains challenging due to their high computational complexity, which leads to substantial inference latency and low control frequency. Asynchronous inference can partially mask this latency by parallelizing action execution and subsequent inference, but it introduces two critical issues: perception-execution misalignment and long reaction time. In this paper, we propose Jetson-PI, a method for efficient VLA deployment on onboard devices via Foresight-Aligned Asynchronous Correction. To address misalignment, we train a lightweight future correction module that predicts future environment representation conditioned on committed actions, enabling the action expert to directly predict actions from the future time step. To reduce reaction time, we introduce confidence-based scheduling optimization that adaptively balances VLM and action expert invocations, complemented by system-level accelerations including CUDA graph reuse, GPU-resident intermediate buffering, and flow unrolling. Extensive experiments demonstrate that Jetson-PI achieves 8.66x and 5.41x improvements in control frequency compared with naive PyTorch and vla.cpp on NVIDIA Jetson Orin, while outperforming VLASH by 14.8\\% in average success rate on the LIBERO benchmark. The code of our asynchronous algorithm is available on https://github.com/PKU-SEC-Lab/Jetson-PI, and our efficient llama.cpp-based inference engine is available on https://github.com/PKU-SEC-Lab/Jetson-PI-Edge.",
+      "authors": [
+        "Zebin Yang",
+        "Qi Wang",
+        "Yunhe Wang",
+        "Xiurui Guo",
+        "Bo Yu",
+        "Shaoshan Liu",
+        "Jiafeng Xu",
+        "Hao Dong",
+        "Meng Li"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.AI"
+      ],
+      "published": "2026-07-14T11:38:36+00:00",
+      "link": "https://arxiv.org/pdf/2607.12659v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "onboard deployment of VLA on Jetson, edge computing",
+      "llm_evidence_cn": "在Jetson上部署VLA模型，边缘计算",
+      "llm_evidence": "在Jetson上部署VLA模型，边缘计算",
+      "canonical_evidence": "在Jetson上部署VLA模型，边缘计算",
+      "llm_tldr_en": "Jetson-PI enables efficient onboard deployment of Vision-Language-Action models on low-power devices via foresight-aligned asynchronous correction, addressing latency and misalignment.",
+      "llm_tldr_cn": "本工作针对VLA模型在低功耗边缘设备（如Jetson Orin）上部署时推理延迟高、控制频率低的问题，提出Jetson-PI方法。通过预见对齐异步校正，训练轻量级未来校正模块同时补偿感知-执行错位和反应延迟，在仿真和真实机器人上实现了更高的控制频率和任务成功率。",
+      "llm_tldr": "本工作针对VLA模型在低功耗边缘设备（如Jetson Orin）上部署时推理延迟高、控制频率低的问题，提出Jetson-PI方法。通过预见对齐异步校正，训练轻量级未来校正模块同时补偿感知-执行错位和反应延迟，在仿真和真实机器人上实现了更高的控制频率和任务成功率。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "edge deployment for humanoid robots",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2607.13960v2",
+      "source": "arxiv",
+      "title": "GigaWorld-Policy-0.5: A Faster and Stronger WAM Empowered by AutoResearch",
+      "abstract": "World Action Models (WAMs) improve robot policy learning by jointly modeling actions and future visual observations, using future scene evolution as dense supervision for physically grounded action generation. However, a common design in existing WAMs is to explicitly generate future videos at inference time, incurring substantial computational overhead and hindering real-time closed-loop deployment. GigaWorld-Policy addresses this issue with an action-centered formulation, where future visual dynamics are used during training while action-only decoding is used at inference time. Building upon this framework, we present GigaWorld-Policy-0.5, an enhanced action-centered WAM designed for more efficient robot control. During pretraining, GigaWorld-Policy-0.5 adopts a mixed Action-Conditioned World Modeling (AC-WM) and WAM training strategy. This strengthens the coupling between visual dynamics and robot actions and improves the transferability of action representations for downstream policy learning. For efficient inference, GigaWorld-Policy-0.5 introduces a Mixture-of-Transformers architecture that separates visual dynamics modeling and action generation into specialized experts, reducing active computation during action-only inference and achieving 85 ms inference latency on a local RTX 4090 setup. In addition, we employ an agent-based AutoResearch pipeline to systematically search training configurations, enabling more efficient identification of optimal experimental setups while reducing the time and manual intervention required for hyperparameter tuning. Experiments and ablations show that GigaWorld-Policy-0.5 preserves the training benefits of future visual dynamics while improving inference efficiency for robot control.",
+      "authors": [
+        "GigaWorld Team",
+        "Angen Ye",
+        "Angyuan Ma",
+        "Boyuan Wang",
+        "Chaojun Ni",
+        "Fangzheng Ye",
+        "Guan Huang",
+        "Guo Li",
+        "Guosheng Zhao",
+        "Haodong Yan",
+        "Hengtao Li",
+        "Jiwen Lu",
+        "Kai Wang",
+        "Mingming Yu",
+        "Qitang Hu",
+        "Qiuping Deng",
+        "Songling Liu",
+        "Xiaoyu Tian",
+        "Xiaofeng Wang",
+        "Xinyu Zhou",
+        "Xiuwei Xu",
+        "Xinze Chen",
+        "Yang Wang",
+        "Yejun Zeng",
+        "Yifan Chang",
+        "Yun Ye",
+        "Zhenyu Wu",
+        "Zhanqian Wu",
+        "Zheng Zhu"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-07-15T15:46:42+00:00",
+      "link": "https://arxiv.org/pdf/2607.13960v2",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "real-time closed-loop deployment for robot control",
+      "llm_evidence_cn": "机器人实时闭环部署",
+      "llm_evidence": "机器人实时闭环部署",
+      "canonical_evidence": "机器人实时闭环部署",
+      "llm_tldr_en": "GigaWorld-Policy-0.5 addresses real-time closed-loop deployment by using action-only decoding at inference, improving efficiency for robot control.",
+      "llm_tldr_cn": "该论文提出GigaWorld-Policy-0.5，一种加速的世界动作模型，通过训练时利用未来视觉动态而推理时仅解码动作，显著降低计算开销，实现实时闭环部署。模型在机器人策略学习中达到更快更优的性能，适用于人形机器人的边缘端部署。这为边缘场景下的在线控制提供了高效的轻量化方案。",
+      "llm_tldr": "该论文提出GigaWorld-Policy-0.5，一种加速的世界动作模型，通过训练时利用未来视觉动态而推理时仅解码动作，显著降低计算开销，实现实时闭环部署。模型在机器人策略学习中达到更快更优的性能，适用于人形机器人的边缘端部署。这为边缘场景下的在线控制提供了高效的轻量化方案。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "edge deployment for humanoid robots",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2607.13368v1",
+      "source": "arxiv",
+      "title": "Fine-Grained Open-Set Fault Diagnosis via Metric-Guided Time-Frequency Configuration Selection and Class-Specific Autoencoders",
+      "abstract": "Reliable fault diagnosis of rotating machinery is essential for the safe and stable operation of industrial systems. Although deep learning methods perform well under closed-set conditions, real machinery may encounter previously unseen fault states. Existing open-set fault diagnosis (OSFD) methods remain limited in fine-grained severity diagnosis because they often rely on coarse type levels, heuristically selected Short-Time Fourier Transform (STFT) settings, and global class boundaries. We propose a fine-grained OSFD method that combines metric-guided data-centric (MGDC) STFT configuration selection with class-specific autoencoder (CSAE)-based anomaly rejection. MGDC screens candidate STFT configurations using the Silhouette score computed from spectrogram representations, identifying promising time-frequency representations before network training. The diagnostic model then uses a bank of CSAEs to learn compact class-specific manifolds for known degradation states. During inference, reconstruction-error-based class affinity identifies known classes, while a dual-criteria mechanism based on latent dimension-wise boundaries and class-specific reconstruction error rejects unknown samples. Experiments on the Case Western Reserve University (CWRU) and Paderborn University (PU) bearing datasets show that the proposed method achieves H-scores of 0.9924 and 0.9509 for fine-grained fault severity diagnosis. MGDC also identifies the best-performing configuration found by exhaustive search while evaluating only 9 of 38 candidates on CWRU and 2 of 39 candidates on PU, reducing the selection cost by factors of 5.69 and 29.87, respectively. These results indicate that the proposed method supports accurate open-set severity diagnosis with substantially lower configuration-selection cost.",
+      "authors": [
+        "Youngjae Jeon",
+        "Dongjin Lee"
+      ],
+      "primary_category": "eess.SP",
+      "categories": [
+        "eess.SP"
+      ],
+      "published": "2026-07-15T01:10:25+00:00",
+      "link": "https://arxiv.org/pdf/2607.13368v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "open-set fault diagnosis via autoencoders; transferable to humanoid robot anomaly detection",
+      "llm_evidence_cn": "基于自编码器的开放集故障诊断方法，可迁移至人形机器人异常检测",
+      "llm_evidence": "基于自编码器的开放集故障诊断方法，可迁移至人形机器人异常检测",
+      "canonical_evidence": "基于自编码器的开放集故障诊断方法，可迁移至人形机器人异常检测",
+      "llm_tldr_en": "Proposes a fine-grained open-set fault diagnosis method using metric-guided STFT selection and class-specific autoencoders for anomaly rejection, enabling detection of unseen faults in rotating machinery; transferable to humanoid robots.",
+      "llm_tldr_cn": "该论文针对旋转机械的开放集故障诊断问题，提出了一种结合度量引导时频配置选择与类别特定自编码器（CSAE）的细粒度诊断方法。该方法通过自编码器进行异常拒绝，能够有效识别未见故障。虽然实验在旋转机械上，但其开放集诊断和自编码器异常检测的核心思想可直接迁移至人形机器人基于本体感受信号的故障诊断任务中，满足对OOD检测和异常检测的需求。",
+      "llm_tldr": "该论文针对旋转机械的开放集故障诊断问题，提出了一种结合度量引导时频配置选择与类别特定自编码器（CSAE）的细粒度诊断方法。该方法通过自编码器进行异常拒绝，能够有效识别未见故障。虽然实验在旋转机械上，但其开放集诊断和自编码器异常检测的核心思想可直接迁移至人形机器人基于本体感受信号的故障诊断任务中，满足对OOD检测和异常检测的需求。",
+      "llm_tags": [
+        "query:humanoid-ood:composite"
+      ],
+      "matched_query_tag": "query:humanoid-ood:composite",
+      "matched_query_text": "Papers central to 请帮我查找与人形机器人故障诊断、异常检测（OOD / Anomaly Detection）、自监督时序重建（VAE / GRU）、以及边缘部署相关的论文。重点关注：基于本体感受信号（关节位置/速度/力矩/IMU）的故障检测方法；用于时序数据的自监督异常检测（如 OmniAnomaly, USAD）；开放集识别 / OOD 检测在机器人安全中的应用；轻量化模型（LSTM/GRU）在嵌入式平台（RK3588）上的部署；受 RAPT (Munn 等, 2026) 启发的机器人故障诊断框架。另外，请补充一些关于仿人机器人（Unitree G1 等）仿真故障注入、数据集构建的文献。, especially work that connects or combines: humanoid robot fault diagnosis using proprioceptive signals; anomaly detection from joint position velocity torque IMU signals in humanoid robots; out-of-distribution detection for safe robot operation; lightweight LSTM or GRU models deployed on embedded platforms for anomaly detection; RAPT framework for robot fault diagnosis based on proprioception; fault injection simulation for humanoid robots in MuJoCo or similar environments; Anomaly detection in humanoid robot using proprioceptive signals; Self supervised time series anomaly detection for robot fault diagnosis; Open set recognition in robotics for safety and anomaly detection; Deploying lightweight LSTM GRU on RK3588 for time series anomaly detection.",
+      "matched_requirement_id": "req-composite-humanoid-ood",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2607.14675v1",
+      "source": "arxiv",
+      "title": "An Intelligent-Cloud Edge Multimodal Interaction System for Robots",
+      "abstract": "Robust human-robot interaction in complex environments requires accurate gesture perception, semantic scene understanding, and reliable task planning under limited onboard computing resources. This paper presents a cloud-edge multimodal interaction framework that integrates an enhanced YOLO-based gesture detector with coordinated large language model (LLM) and vision-language model (VLM) agents. The proposed detector, incorporates the Convolutional Block Attention Module (CBAM) into the neck and replaces the baseline bounding-box regression objective with Distance-IoU (DIoU) loss. These modifications improve feature discrimination and localization for small or partially occluded gestures in complex backgrounds. The cloud layer performs gesture detection, scene understanding, multimodal fusion, and action planning, whereas the TonyPi robot locally handles data acquisition, communication, action execution, and feedback. Experiments on a public gesture dataset and a custom dataset show that YOLO-DC achieves precision values of 98.9% and 95.0%, with mAP@0.5 values of 90.7% and 92.7%, respectively. System-level evaluation yields success rates of 95%, 88%, and 82% for single-action, composite-action, and vision-dependent tasks. A 30 participant evaluation yields an overall mean satisfaction score of 3.69 out of 5. These results demonstrate the feasibility of combining refined gesture detection with multimodal agents for resource-constrained robotic interaction.",
+      "authors": [
+        "Zihan Guo",
+        "Xiaoqi Li"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.AI"
+      ],
+      "published": "2026-07-16T07:39:18+00:00",
+      "link": "https://arxiv.org/pdf/2607.14675v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "cloud-edge framework for robot interaction, edge deployment",
+      "llm_evidence_cn": "云边框架用于机器人交互，涉及边缘部署",
+      "llm_evidence": "云边框架用于机器人交互，涉及边缘部署",
+      "canonical_evidence": "云边框架用于机器人交互，涉及边缘部署",
+      "llm_tldr_en": "An intelligent cloud-edge multimodal interaction system for robots integrates enhanced YOLO gesture detector with LLM/VLM agents, deploying detection on cloud and planning on edge.",
+      "llm_tldr_cn": "本工作针对机器人计算资源受限下的人机交互需求，提出了云边多模态交互框架。该框架在云端运行增强型YOLO手势检测器（融合CBAM和DIoU），在边缘端执行任务规划，通过云边协同实现实时交互。在复杂环境下验证了改进后的检测精度和交互效率。",
+      "llm_tldr": "本工作针对机器人计算资源受限下的人机交互需求，提出了云边多模态交互框架。该框架在云端运行增强型YOLO手势检测器（融合CBAM和DIoU），在边缘端执行任务规划，通过云边协同实现实时交互。在复杂环境下验证了改进后的检测精度和交互效率。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "edge deployment for humanoid robots",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2607.13960v1",
+      "source": "arxiv",
+      "title": "GigaWorld-Policy-0.5: A Faster and Stronger WAM Empowered by AutoResearch",
+      "abstract": "World Action Models (WAMs) improve robot policy learning by jointly modeling actions and future visual observations, using future scene evolution as dense supervision for physically grounded action generation. However, a common design in existing WAMs is to explicitly generate future videos at inference time, incurring substantial computational overhead and hindering real-time closed-loop deployment. GigaWorld-Policy addresses this issue with an action-centered formulation, where future visual dynamics are used during training while action-only decoding is used at inference time. Building upon this framework, we present GigaWorld-Policy-0.5, an enhanced action-centered WAM designed for more efficient robot control. During pretraining, GigaWorld-Policy-0.5 adopts a mixed Action-Conditioned World Modeling (AC-WM) and WAM training strategy. This strengthens the coupling between visual dynamics and robot actions and improves the transferability of action representations for downstream policy learning. For efficient inference, GigaWorld-Policy-0.5 introduces a Mixture-of-Transformers architecture that separates visual dynamics modeling and action generation into specialized experts, reducing active computation during action-only inference and achieving 85 ms inference latency on a local RTX 4090 setup. In addition, we employ an agent-based AutoResearch pipeline to systematically search training configurations, enabling more efficient identification of optimal experimental setups while reducing the time and manual intervention required for hyperparameter tuning. Experiments and ablations show that GigaWorld-Policy-0.5 preserves the training benefits of future visual dynamics while improving inference efficiency for robot control.",
+      "authors": [
+        "GigaWorld Team",
+        "Angen Ye",
+        "Angyuan Ma",
+        "Boyuan Wang",
+        "Chaojun Ni",
+        "Fangzheng Ye",
+        "Guan Huang",
+        "Guo Li",
+        "Guosheng Zhao",
+        "Haodong Yan",
+        "Hengtao Li",
+        "Jiwen Lu",
+        "Kai Wang",
+        "Mingming Yu",
+        "Qitang Hu",
+        "Qiuping Deng",
+        "Songling Liu",
+        "Xiaoyu Tian",
+        "Xiaofeng Wang",
+        "Xinyu Zhou",
+        "Xiuwei Xu",
+        "Xinze Chen",
+        "Yang Wang",
+        "Yejun Zeng",
+        "Yifan Chang",
+        "Yun Ye",
+        "Zhenyu Wu",
+        "Zhanqian Wu",
+        "Zheng Zhu"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-07-15T15:46:42+00:00",
+      "link": "https://arxiv.org/pdf/2607.13960v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "addresses real-time closed-loop deployment for robot policies",
+      "llm_evidence_cn": "解决机器人策略的实时闭环部署问题",
+      "llm_evidence": "解决机器人策略的实时闭环部署问题",
+      "canonical_evidence": "解决机器人策略的实时闭环部署问题",
+      "llm_tldr_en": "GigaWorld-Policy-0.5 accelerates action decoding by removing future video generation at inference, enabling real-time robot control.",
+      "llm_tldr_cn": "现有世界动作模型在推理时生成未来视频导致计算开销大，阻碍实时部署。本文提出GigaWorld-Policy-0.5，采用以动作中心的公式，仅在训练中使用未来视觉动态，推理时只解码动作，显著提升速度并保持性能，为机器人边缘端部署提供高效方案。",
+      "llm_tldr": "现有世界动作模型在推理时生成未来视频导致计算开销大，阻碍实时部署。本文提出GigaWorld-Policy-0.5，采用以动作中心的公式，仅在训练中使用未来视觉动态，推理时只解码动作，显著提升速度并保持性能，为机器人边缘端部署提供高效方案。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "edge deployment for humanoid robots",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2607.14047v1",
+      "source": "arxiv",
+      "title": "PhysClaw-0: A Symbiotic Agentic System for Robot Autonomy via Language Corrections",
+      "abstract": "Autonomous data collection governs the volume and quality of real-world trajectories for manipulation policy learning. Existing pipelines reduce human effort via self-resetting, VLM verification, or language-guided correction, yet episode-scoped fixes must be reissued whenever the same failure recurs, so oversight cost grows with session length rather than with the number of distinct problems. We present PhysClaw-0, a human-robot symbiotic agentic system in which corrections are retained and reused across rounds. The collection loop collects, verifies, and resets autonomously, pausing for a remote operator only when a phase exhausts an explicit retry budget. An LLM parser maps each natural-language utterance to a structured adjustment stored in Corrective Memory, so addressed failure modes typically need not be corrected again under the same conditions. On a real-robot desktop-clearing testbed, PhysClaw-0 matches teleoperation episode success while reducing human working time to 16%. Language corrections improve verifier-human agreement in all four evaluated settings and raise average single-attempt success from 12.5% to 47.5% (arm-selection: 20.0% to 50.0%). Policies fine-tuned on PhysClaw-0 data match teleoperation-trained policy success at a fraction of collection human cost.",
+      "authors": [
+        "Boyuan Wang",
+        "Zhenyuan Zhang",
+        "Zhiqin Yang",
+        "Peijun Gu",
+        "Shuya Wang",
+        "Xiaofeng Wang",
+        "Xianghui Ze",
+        "Yifan Chang",
+        "Guosheng Zhao",
+        "Jiangnan Shao",
+        "Guan Huang",
+        "Hengyu Liu",
+        "Yonggang Zhang",
+        "Wei Xue",
+        "Chunyuan Guan",
+        "Chenglin Pu",
+        "Yike Guo",
+        "Xingang Wang",
+        "Zheng Zhu"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.HC",
+        "eess.SY"
+      ],
+      "published": "2026-07-15T17:16:24+00:00",
+      "link": "https://arxiv.org/pdf/2607.14047v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "autonomous data collection pipeline for robot manipulation",
+      "llm_evidence_cn": "机器人操作自主数据采集流程",
+      "llm_evidence": "机器人操作自主数据采集流程",
+      "canonical_evidence": "机器人操作自主数据采集流程",
+      "llm_tldr_en": "PhysClaw-0 presents a human-robot symbiotic system for autonomous data collection, correcting and reusing language feedback to reduce oversight cost for robot dataset construction.",
+      "llm_tldr_cn": "该论文提出PhysClaw-0人机协作自主数据采集系统，通过保留和重用语言纠正，减少人工监督成本，高效构建机器人操作轨迹数据集。系统可自主收集、验证和重置，仅在需要时暂停请求远程操作员。该方法直接服务于机器人数据集构建需求，尤其适用于人形机器人的技能学习数据收集。",
+      "llm_tldr": "该论文提出PhysClaw-0人机协作自主数据采集系统，通过保留和重用语言纠正，减少人工监督成本，高效构建机器人操作轨迹数据集。系统可自主收集、验证和重置，仅在需要时暂停请求远程操作员。该方法直接服务于机器人数据集构建需求，尤其适用于人形机器人的技能学习数据收集。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    }
+  ]
+}
