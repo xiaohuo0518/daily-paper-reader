@@ -1,0 +1,3212 @@
+Title: Self-thresholding hierarchical outlier-detection for animal movement tracks
+
+URL Source: https://www.biorxiv.org/content/10.64898/2026.07.11.737894v2.full.pdf
+
+Number of Pages: 60
+
+Markdown Content:
+# Self-thresholding hierarchical outlier-detection for 1
+
+# animal movement tracks 2
+
+Kamran Safi 1,2,* 
+
+> 3
+> 1
+
+Max Planck Institute of Animal Behavior, Radolfzell, Germany 4
+
+> 2
+
+Department of Biology, University of Konstanz, Konstanz, Germany 5
+
+> *
+
+Corresponding author: ksafi@ab.mpg.de 6
+
+ORCID: https://orcid.org/0000-0002-8418-6759 78
+
+Abstract 910 
+
+1. Erroneous locations are ubiquitous in animal tracking data and prove notori-11 
+
+ously difficult to remove, particularly so in an unsupervised manner. Whether 12 
+
+caused by poor satellite geometry, atmospheric interference, tag malfunction, or 13 
+
+deliberate GNSS spoofing or jamming, such outliers propagate into estimates of 14 
+
+movement rates, home ranges, habitat selection, and behavioural states. Exist-15 
+
+ing screening procedures rely on fixed speed threshold filtering, require regular 16 
+
+sampling, or distance thresholds, or are based on smooth locations through 17 
+
+model-based approaches which can prove difficult to fit to heterogeneous data, 18 
+
+or they stop at producing diagnostic plots that leave the final decision to the 19 
+
+analyst. Additionally, movement-metric outlier tests often share a structural 20 
+
+blind spot: they catch points whose transitions to neighbours are extreme, but 21 
+
+miss spatially-coherent block errors whose interiors look metrically normal. 22 
+
+2. I introduce mt_clean_track() , a function in the open-source R package 23 
+
+move2utils that takes a movement track and returns the same track with 24 
+
+1
+
+> .CC-BY-NC 4.0 International license made available under a (which was not certified by peer review) is the author/funder, who has granted bioRxiv a license to display the preprint in perpetuity. It is The copyright holder for this preprint this version posted July 17, 2026. ;https://doi.org/10.64898/2026.07.11.737894 doi: bioRxiv preprint
+
+outlier flags attached plus a categorical read-out of what kind of evidence 25 
+
+triggered each flag. The method combines a cascade of outlier detection 26 
+
+methods based on four ideas: data-driven thresholds that the user does 27 
+
+not have to specify, four complementary detectors that each catch an error 28 
+
+class the others structurally cannot (a Brownian-bridge geometric residual, 29 
+
+a movement-metric probability test, a scale-invariant path-vs-displacement 30 
+
+detour ratio, and a step-level physiological speed cap), and a graph-based 31 
+
+block-expansion step that recovers coherent error trains that per-fix scoring 32 
+
+cannot reach. Based on the flags raised by each of the underlying methods, 33 
+
+I use an agreement-based heuristic combination rule that builds a consensus 34 
+
+flag for a location based on the number of single method flags and their level 35 
+
+of certainty, as well as other methods of consensus derivation. 36 
+
+3. I evaluate the method on a cohort of synthetic trajectories covering isolated 37 
+
+spikes, drift segments, sustained spoofing blocks, stationary-halo GPS jitter, 38 
+
+and multi-state migration anomalies, and compare against four established al-39 
+
+ternatives (a naïve speed cap, atlastools , trip::sda , SDLfilter ). The cas-40 
+
+cade recovers the injected outliers on every track, achieves the highest cross-41 
+
+cohort mean F1 (0.86 at zero user parameters; nearest competitor 0.80 at a 42 
+
+hand-tuned threshold), and is the only tool that recovers the coherent spoof-43 
+
+ing block with usable precision ( 30 /30 vs 1–3/30 for the per-fix competitors). 44 
+
+On a clean reference track all tools except trip::sda produce low to zero 45 
+
+false positives. A directional decomposition of the bridge residual additionally 46 
+
+reframes outlier detection as error-classification: a flagged fix’s position in a 47 
+
+two-dimensional residual plane reveals whether the error is perpendicular drift, 48 
+
+along-track jump, or magnitude-extreme on both axes. 49 
+
+4. Providing per-location outlier scores, data-driven thresholds, an error-50 
+
+morphology read-out, and a single cleaning-cascade entry point that requires 51 
+
+no parameters in its default form is intended to make outlier screening of 52 
+
+GPS-tracking data a routine and reproducible step in the movement-ecology 53 
+
+analysis pipeline. The outlier removal cascade is part of the move2utils 54 
+
+package and available at https://github.com/move2universe/move2utils .55 
+
+2
+
+> .CC-BY-NC 4.0 International license made available under a (which was not certified by peer review) is the author/funder, who has granted bioRxiv a license to display the preprint in perpetuity. It is The copyright holder for this preprint this version posted July 17, 2026. ;https://doi.org/10.64898/2026.07.11.737894 doi: bioRxiv preprint
+
+Keywords: animal movement, GPS telemetry, location error, outlier detection, proba-56 
+
+bility, Brownian bridge, GPS spoofing, quality control, irregular sampling, move2 57 
+
+# 1 Introduction 58 
+
+Animals’ paths encode information about their physiology, behaviour, and the ways they 59 
+
+interact with the landscapes they inhabit. Tracking technologies record these paths at 60 
+
+unprecedented resolution, generating millions of locations annually across hundreds of 61 
+
+species and thousands of individuals, feeding into analyses of space use, resource selection, 62 
+
+energetics, and social behaviour (Kays et al. , 2022; Joo et al. , 2020). Like any measuring 63 
+
+instrument used to collect data, tracking technology and the accuracy of location estima-64 
+
+tion is associated with errors (Péron et al. , 2020). GPS fixes can be displaced by tens 65 
+
+to hundreds of metres through poor satellite geometry, signal multipath, or obstruction 66 
+
+(Frair et al. , 2010; Lewis et al. , 2007; D’Eon & Delparte, 2005). Argos Doppler positions, 67 
+
+owing to the methodology of location estimation, carry errors from sub-kilometre to be-68 
+
+yond 10 km depending on location class (Costa et al. , 2010; Vincent et al. , 2002; Lopez 69 
+
+et al. , 2014). A more recent and increasingly pervasive source of error is deliberate GNSS 70 
+
+jamming and more elaborately spoofing in conflict zones, where military countermeasures 71 
+
+feed false signals to civilian GPS receivers (Jiguet et al. , 2025; Martín-Vélez et al. , 2026). 72 
+
+Regardless of the source of noise, erroneous locations can severely distort any downstream 73 
+
+use of location data in ecological studies. Estimates of speed, turning angle distributions, 74 
+
+home range size, habitat selection coefficients, and behavioural state assignments can 75 
+
+become severely affected by measurement error (Hurford, 2009; Bjørneraas et al. , 2010; 76 
+
+Gupte et al. , 2022; Frair et al. , 2010). 77 
+
+Screening and removing outliers is therefore one of the first and most consequential 78 
+
+steps in any movement-analysis pipeline, yet the methods in use are largely bespoke to 79 
+
+a given species, device, and sampling schedule, adding manual work and lowering re-80 
+
+producibility. The simplest and most widely used are threshold filters — a maximum 81 
+
+plausible speed (McConnell et al. , 1992), a speed–distance–angle criterion (Freitas et al. ,82 
+
+2008; Austin et al. , 2003), or turning-angle rules (Douglas et al. , 2012; Shimada et al. ,83 
+
+3
+
+> .CC-BY-NC 4.0 International license made available under a (which was not certified by peer review) is the author/funder, who has granted bioRxiv a license to display the preprint in perpetuity. It is The copyright holder for this preprint this version posted July 17, 2026. ;https://doi.org/10.64898/2026.07.11.737894 doi: bioRxiv preprint
+
+2012; Bjørneraas et al. , 2010). While computationally cheap, they demand species-specific 84 
+
+parameters, return binary retain-or-remove decisions with no probabilistic gradation, and 85 
+
+are scale-dependent, yet the same species needs different thresholds at different sampling 86 
+
+intervals, so locations can easily be misclassified whenever intervals vary or behaviour 87 
+
+shifts. State-space and continuous-time movement models instead treat locations as noisy 88 
+
+observations of a latent process and return smoothed estimates (Jonsen et al. , 2005; John-89 
+
+son et al. , 2008; Jonsen et al. , 2023); they are statistically principled but computationally 90 
+
+demanding and assume a specific model structure, often with home-ranging behaviour, 91 
+
+regular sampling, and stationarity that real data rarely meet. Diagnostic tools such as 92 
+
+ctmm::outlie() (Calabrese et al. , 2016; Fleming et al. , 2020) visualise speed and distance 93 
+
+anomalies but leave the removal decision to the analyst, and their estimates depend on 94 
+
+the assumed measurement-error (UERE) calibration. The difficulty compounds on heav-95 
+
+ily error-laden tracks, which accumulate sampling gaps and non-stationary multi-state 96 
+
+behaviour: separating signal from noise is hard for any method, and is amplified because 97 
+
+the errors corrupt the very metrics used to detect them. 98 
+
+Existing deterministic approaches share a deeper limitation that is less often tackled. 99 
+
+Filters and smoothers, whether parametric or empirical, ultimately reduce each fix to a 100 
+
+single scalar judgment (often a binary yes-or-no outcome) about its transition to neigh-101 
+
+bours: is the speed plausible, is the turning angle plausible, is the residual to the smoothed 102 
+
+path plausible? Yet some consequential errors in real tracking data are spatially coherent 103 
+
+blocks : a GPS receiver locks onto a reflected signal and produces a drift cluster of positions 104 
+
+that sit together in the wrong place, or a spoofing/jamming event pins the receiver at a 105 
+
+single falsified coordinate for minutes to hours (Jiguet et al. , 2025; Martín-Vélez et al. ,106 
+
+2026). Block errors have normal interiors and extreme boundaries. A transition-based 107 
+
+test can detect the entry and exit of the block; it is structurally blind to the interior. 108 
+
+Visually it is no problem to see that the cluster is geometrically detached from where 109 
+
+the animal should be, regardless of whether each within-block transition is plausible; a 110 
+
+capability that currently lacks a method that captures this geometric anomaly. 111 
+
+What I am proposing is an intermediate approach combining a set of complementary 112 
+
+4
+
+> .CC-BY-NC 4.0 International license made available under a (which was not certified by peer review) is the author/funder, who has granted bioRxiv a license to display the preprint in perpetuity. It is The copyright holder for this preprint this version posted July 17, 2026. ;https://doi.org/10.64898/2026.07.11.737894 doi: bioRxiv preprint
+
+signals, such that (i) each location receives a score reflecting how unusual its movement 113 
+
+is under the animal’s own empirical distribution of transitions, (ii) each location also 114 
+
+receives a score reflecting how far it deviates from where its temporal neighbours place it 115 
+
+geometrically, (iii) thresholds are determined automatically from the empirical structure 116 
+
+of the score distribution rather than from user-supplied parameters, and (iv) irregular 117 
+
+sampling is handled by construction, pragmatically and as best as possible, rather than 118 
+
+as an afterthought. 119 
+
+Here, I introduce the primitives as the first major components of move2utils , an 120 
+
+R package for working with move2 objects (Kranstauber et al. , 2024); the package as 121 
+
+a whole is described in a companion Application Note (Kranstauber et al. , 2026). The 122 
+
+first primitive, mt_flag_outliers() , is the empirical-probability method: it constructs 123 
+
+distributions of step lengths, turning angles, and their consecutive changes from the data 124 
+
+itself — the empirical step-and-turn distribution architecture introduced for trajectory 125 
+
+simulation by Technitis (2021). The function adds a gap-aware auto-difference normal-126 
+
+isation that absorbs irregular sampling,. at least to a certain degree, without assuming 127 
+
+a movement model, and applies a self-determining threshold (MacArthur, 1957; Silver-128 
+
+man, 1981). A complementary sequential scan ( mt_sequential_outliers() ) resolves 129 
+
+clusters of consecutive outliers that simultaneous scoring may miss. The second primi-130 
+
+tive, mt_flag_outliers_bridge() (Kranstauber et al. , 2012), is the geometric method: 131 
+
+it scores each fix by its residual from the time-weighted Brownian-bridge mean of its 132 
+
+neighbours, normalised by the bridge width, and thresholds via the same density-valley 133 
+
+detector. The bridge score is immune to the leverage problem that afflicts variance-based 134 
+
+geometric tests. The outlier cannot inflate its own denominator, because the denominator 135 
+
+depends only on the temporal geometry of the bridge, not on an estimated variance at 136 
+
+the focal point. In a directional variant (Kranstauber et al. , 2014), the residual is further 137 
+
+decomposed into components parallel and perpendicular to the local travel axis, making 138 
+
+the primitive an error-morphology classifier as well as a detector: perpendicular-drift er-139 
+
+rors and along-track jumps occupy separable regions of the decomposition space and can 140 
+
+be distinguished at a glance. 141 
+
+5
+
+> .CC-BY-NC 4.0 International license made available under a (which was not certified by peer review) is the author/funder, who has granted bioRxiv a license to display the preprint in perpetuity. It is The copyright holder for this preprint this version posted July 17, 2026. ;https://doi.org/10.64898/2026.07.11.737894 doi: bioRxiv preprint
+
+# 2 A cleaning cascade for movement tracks 142 
+
+2.1 What mt_clean_track() does 143 
+
+The function mt_clean_track() takes a movement track (a sequence of timestamped 144 
+
+GPS positions packaged as a move2 object (Kranstauber et al. , 2024)) and returns the 145 
+
+same track with diagnostic columns attached: a logical is_outlier flag, a categorical 146 
+
+error_class naming the kind of evidence that triggered each flag, and the per-detector 147 
+
+firings behind it (Figure 1d). In its default form it takes no parameters beyond the data; 148 
+
+a physiological speed bound or a behavioural-state vector, where available, sharpen the 149 
+
+cleaning but are not required. The output is a drop-in replacement for the input, ready 150 
+
+for home-range estimation, step-selection models, or behavioural segmentation with the 151 
+
+diagnostic columns retained for auditing or dropped. Figure 1 traces the whole flow: input 152 
+
+and options at the top, the four detectors feeding the consensus rule (panel b), the two 153 
+
+structural rescue stages that per-fix scoring cannot reach (panels a, c), and the output 154 
+
+fingerprint that names each flag’s error class (panel d). 155 
+
+2.2 The four ideas behind the method 156 
+
+The cascade combines four ideas, three of which are individually not novel but whose 157 
+
+composition is, and one, the topological block expansion, which has no equivalent in the 158 
+
+existing animal-tracking literature. The mathematical formulations of every detector and 159 
+
+combination rule are in Supplement S1; the four paragraphs that follow describe each idea 160 
+
+and why it earns its place in the cascade. 161 
+
+Data-driven thresholds. The threshold separating outliers should come from the data, 162 
+
+not the user. Existing tools require a maximum plausible speed, a distance limit, a 163 
+
+turn-angle cut-off, or a quality score: choices that depend on species biology, sampling 164 
+
+regime, tag hardware, and study question, and that the user often makes by educated 165 
+
+guess. Each detector instead scores every fix and asks whether the distribution of those 166 
+
+scores contains a real gap between the bulk of normal movement and a tail of suspect 167 
+
+6
+
+> .CC-BY-NC 4.0 International license made available under a (which was not certified by peer review) is the author/funder, who has granted bioRxiv a license to display the preprint in perpetuity. It is The copyright holder for this preprint this version posted July 17, 2026. ;https://doi.org/10.64898/2026.07.11.737894 doi: bioRxiv preprint
+
+points: when a gap exists it places its threshold there, and when none exists it flags 168 
+
+nothing. The few internal constants this relies on are package defaults, never set through 169 
+
+mt_clean_track() ; because each threshold is located in the gap the data themselves 170 
+
+reveal, the cleaning is governed by the structure of each track rather than by the exact 171 
+
+constant values. Supplement S2 catalogues every constant with its classification and 172 
+
+documented plausible range. 173 
+
+Complementary detectors. No single signal catches every kind of error. Real GPS 174 
+
+tracks carry at least four broad classes of contamination, each demanding a different 175 
+
+test: kinematic anomalies (an unusual speed or turn-angle pattern), geometric anomalies 176 
+
+(a position implausibly far from where its temporal neighbours place it), biological-bound 177 
+
+violations (an implied step speed the animal cannot physiologically produce), and symmet-178 
+
+ric out-and-back excursions (ordinary kinematics but pathological path geometry). The 179 
+
+cascade runs four detectors aligned to these classes — a probability detector, a Brownian-180 
+
+bridge detector, a step-level speed cap , and a path-vs-displacement detour ratio , the four 181 
+
+boxes feeding the consensus rule in Figure 1b — each strongest in one regime and struc-182 
+
+turally blind in another, so that one detector’s strength covers another’s blind spot. Their 183 
+
+scope of validity and standalone use are detailed in Section 4; their formulations are in 184 
+
+Supplement S1. 185 
+
+Topological block expansion. The third pillar reaches an error mode per-fix scoring 186 
+
+structurally cannot. When a receiver locks onto a reflected signal, or a spoofing event 187 
+
+pins it at a falsified coordinate for hours, the track carries a coherent block of erroneous 188 
+
+positions whose interior looks locally normal (each step between neighbouring false fixes is 189 
+
+kinematically plausible) so per-fix detectors flag only the block’s entry and exit, never its 190 
+
+interior. After each cleaning pass the cascade therefore re-reads the kept fixes as a graph 191 
+
+whose edges join consecutive fixes that a physiologically possible step could connect (Fig-192 
+
+ure 1c); a coherent block falls out as a small component disconnected from the legitimate 193 
+
+trajectory by the impossible transitions at its boundary, and every fix in a non-largest 194 
+
+component is flagged block (the gating logic is in Supplement S1, Eqs. 18–19). The step 195 
+
+7
+
+> .CC-BY-NC 4.0 International license made available under a (which was not certified by peer review) is the author/funder, who has granted bioRxiv a license to display the preprint in perpetuity. It is The copyright holder for this preprint this version posted July 17, 2026. ;https://doi.org/10.64898/2026.07.11.737894 doi: bioRxiv preprint
+
+engages whenever a speed ceiling is available, which is found automatically from the gap a 196 
+
+coherent spoof opens in the speed distribution, or supplied via mass and mode , and recov-197 
+
+ers sustained spoofing and tag-deployment confusion intact (see Supplement S3). To my 198 
+
+knowledge no other published animal-tracking screening tool implements an equivalent 199 
+
+topological step. 200 
+
+Agreement-based combination. Finally, the four verdicts must become one per-fix 201 
+
+decision. A majority vote would treat the detectors as interchangeable witnesses, 202 
+
+which they are not: a geometric and a kinematic witness test different properties 203 
+
+of the same fix, and one falling silent does not weaken the other. The default rule, 204 
+
+evidence_corroborated , instead accumulates each detector’s calibrated, signed evidence 205 
+
+and flags a fix when the total is positive and either two detectors corroborate it or one is 206 
+
+overwhelming on its own scale (the evidence calculus is in Supplement S1). This rewards 207 
+
+agreement between complementary witnesses, still lets a single extreme witness act, and 208 
+
+keeps false positives low by refusing isolated marginal votes. The same structure labels 209 
+
+every flagged fix with what kind of error it represents — the error_class fingerprint 210 
+
+of Figure 1d (formal predicates in Supplement S1, Table 4) — which an alternative 211 
+
+class_aware rule can also use as the decision itself. 212 
+
+2.3 Performance on synthetic tracks 213 
+
+I evaluate the cascade on a six-track synthetic cohort (CPF_A through CPF_F) bundled 214 
+
+with the package as inst/extdata/synthetic_tracks.csv.gz and reproducible end-to-215 
+
+end via inst/extdata/simulate_synthetic_data.R . The cohort is designed to exercise 216 
+
+the four error morphologies the cascade is built for: CPF_A (isolated spikes across 217 
+
+four severity classes plus a 15-fix burst), CPF_B (clean, 3,537 fixes, the false-positive 218 
+
+sanity check), CPF_C (short-track sparse case with 4 outliers on 185 fixes), CPF_D (a 219 
+
+sustained spoof block, 30 contiguous fixes offset 800 km from the legitimate trajectory), 220 
+
+CPF_E (a colony halo at 1-hour sampling with 80 single-fix radial excursions out to 221 
+
+50–100 km), and CPF_F (a multi-state migrator with rest and flight segments and 4 222 
+
+8
+
+> .CC-BY-NC 4.0 International license made available under a (which was not certified by peer review) is the author/funder, who has granted bioRxiv a license to display the preprint in perpetuity. It is The copyright holder for this preprint this version posted July 17, 2026. ;https://doi.org/10.64898/2026.07.11.737894 doi: bioRxiv preprint
+
+INPUT: move2 object x; optional state ,
+
+(mass, mode) /v_max , location_error 
+
+> (b) Cascade
+
+Bridge  
+
+> η,η⊥
+
+Probability 
+
+> Pjoint
+
+Speed cap  
+
+> vi> c
+
+Detour 
+
+> ρk
+
+Consensus rule (Sec. S1.13); de-fault evidence_corroborated           
+
+> OUTPUT: move2 object with appended columns
+> is_outlier •flag_iteration •block_id flagged_by_{bridge, prob, speed, detour} error_class (panel dbelow)
+> (a) Pre-peel
+> v > v max
+> Both endpoints of an over-cap step are flagged.
+> (c) Block expansion
+> Non-largest compo-nents are flagged.
+> "physiological" "block"
+
+⟲ iterate to convergence 
+
+error_class bridge prob speed detour block_id flag_iter 
+
+physiological — — — — NA 0
+
+block — — — — ≥ 1 ≥ 1
+
+consensus any 3 of 4 fire NA ≥ 1
+
+geometric_spike • ◦ ◦ • NA ≥ 1
+
+state_anomaly •/◦ ◦ • •/◦ NA ≥ 1
+
+kinematic_confluence •/◦ • ◦ •/◦ NA ≥ 1
+
+state_transition_buffered state-dep class fired, demoted (kept) NA ≥ 1
+
+Figure 1: The mt_clean_track() cleaning cascade. (a) Pre-peel (left blow-out): 
+
+when a physiological speed bound is supplied, iterative pre-peeling flags both endpoints of every over-cap step before any per-fix detector runs; flagged fixes carry error_class = "physiological" . (b) Cascade (centre): four self-thresholding detectors (Bridge, Probability, Speed cap, Detour) feed a consensus rule that combines their evidence into a verdict (default evidence_corroborated ; the class-aware conjunction and other rules selectable). The output object inherits the cleaned data plus per-detector firings and an error_class column. The ⟲ symbol indicates iteration to convergence; transition-buffer demotion and the state-conditional / global-rescue pass are operational details not shown. (c) Block expansion (right blow-out): the cascade builds a graph on kept fixes connected by under-cap steps; non-largest connected components are flagged together with error_class = "block" , recovering coherent error trains that per-fix de-tection structurally cannot reach. (d) Output fingerprint by error_class : filled circle (•) means the detector fired, open circle ( ◦) means it was silent, “ •/◦” means either (the rule does not constrain that detector), “—” means the detector is not part of the rule. The 
+
+flagged_by_* columns preserve detector-level firings; error_class reports the highest-priority class that fired (priority order top-to-bottom). Rows below the consensus row are state-dependent and may be demoted to state_transition_buffered (kept, not flagged) within ± transition_buffer of a state change. Cross-track pooling ( pool_by , § 3) adds an error_class = "pool" category not shown here. 9
+
+> .CC-BY-NC 4.0 International license made available under a (which was not certified by peer review) is the author/funder, who has granted bioRxiv a license to display the preprint in perpetuity. It is The copyright holder for this preprint this version posted July 17, 2026. ;https://doi.org/10.64898/2026.07.11.737894 doi: bioRxiv preprint
+
+state-relative anomalies that look kinematically ordinary outside their own state). 223 
+
+Table 1 reports per-track detection metrics for this realisation. The cascade recovers 224 
+
+every injected outlier on every track ( recall = 1 throughout); because the injected errors 225 
+
+are constructed to be separable, recall is the easy axis and precision is the discriminating 226 
+
+one, ranging from 0.48 on the spoof block (CPF_D, 33 false positives) to 0.99 on the 227 
+
+colony halo (CPF_E), with CPF_F’s four state-relative anomalies on a 2,880-fix track 228 
+
+at 0.57 . These are single-realisation values; across replicate realisations of the cohort 229 
+
+(Supplement S5.2) recall stays high but is not invariably 1, and per-track skill carries the 230 
+
+spread reported there. Mean F 1 across the five truth-bearing tracks is 0.86 . The clean 231 
+
+reference CPF_B produces zero flags, confirming that the self-thresholding detectors do 232 
+
+not fire on data that contains no real discontinuities. 233 CPF_A (n=1748, 25 flagged, TP=23 FP=2)               
+
+> 5811 14 17 42 45 48 52 55
+> CPF_B (n=3537, 0 flagged, TP=0 FP=0)
+> 11 12 47 48
+> CPF_C (n=185, 4 flagged, TP=4 FP=0)
+> 11 12 47 48
+> CPF_D (n=1699, 63 flagged, TP=30 FP=33)
+> 11 13 16 18 20 47 48 50 52 53
+> CPF_E (n=1440, 81 flagged, TP=80 FP=1)
+> 10 11 12 13 46 47 48 49
+> CPF_F (n=2880, 7 flagged, TP=4 FP=3)
+> 11 12 47 48
+
+Figure 2: Cleaning-cascade outcomes across the synthetic cohort (CPF_A–F; the six error morphologies are described in Section 2.3). Each panel maps one track’s raw trajectory in steel-blue with the fixes the zero-parameter cascade flags overlaid as red crosses; the axes are longitude and latitude in degrees (WGS84), tick labels rounded to whole degrees. Panel titles give the track ID, fix count ( n), total fixes flagged, and true and false positives (TP, FP) against the bundled ground-truth outlier set. Generated by 
+
+scripts/worked_examples.R .10 
+
+.CC-BY-NC 4.0 International license made available under a (which was not certified by peer review) is the author/funder, who has granted bioRxiv a license to display the preprint in perpetuity. It is The copyright holder for this preprint this version posted July 17, 2026. ;https://doi.org/10.64898/2026.07.11.737894 doi: bioRxiv preprint Table 1: Per-track detection metrics for the zero-parameter cascade across the syn-thetic cohort. n is fix count; truth is the size of the bundled ground-truth out-lier set; flagged /TP /FP /FN are the fixes flagged and the true-positive, false-positive, and false-negative counts against that truth set; recall is the fraction of truth out-liers caught, precision the fraction of flags that are true outliers, and F1 their harmonic mean (1 = perfect). Auto-generated by scripts/worked_examples.R into 
+
+figures/synth_metrics.tex .Track n truth flagged TP FP FN recall precision F1
+
+CPF_A 1748 23 25 23 2 0 1.00 0.92 0.96 
+
+CPF_B 3537 0 0 0 0 0 NA NA NA 
+
+CPF_C 185 4 4 4 0 0 1.00 1.00 1.00 
+
+CPF_D 1699 30 63 30 33 0 1.00 0.48 0.65 
+
+CPF_E 1440 80 81 80 1 0 1.00 0.99 0.99 
+
+CPF_F 2880 4 7 4 3 0 1.00 0.57 0.73 CPF_A CPF_B CPF_C CPF_D CPF_E CPF_F  
+
+> Per−track error_class composition
+> fixes flagged
+> 020 40 60 80 physiological block consensus geometric_spike state_anomaly kinematic_confluence state_transition_buffered
+
+Figure 3: Per-track error_class composition across the synthetic cohort un-der the parameter-free default. Stacked counts of the flag classes that arise on this co-hort: consensus , geometric_spike , state_anomaly , and kinematic_confluence . Two further classes of the taxonomy are not exercised here at default settings: block re-quires the graph-based block-expansion step (demonstrated on the boundary-spoof track of Supplement S3), and physiological requires a user-supplied speed cap. The compo-sition is itself diagnostic: a track dominated by geometric_spike indicates a colony-halo error structure (CPF_E); a spoof block recovered by consensus and state_anomaly 
+
+(CPF_D); isolated spikes by consensus with a few geometric_spike /state_anomaly 
+
+(CPF_A, CPF_C). See scripts/worked_examples.R .The per-class composition of the flags (Figure 3) is itself diagnostic, reading each track 234 
+
+against the error_class fingerprint of Figure 1d. CPF_E, the colony halo, is dominated 235 
+
+by geometric_spike flags — the symmetric out-and-back signature that two independent 236 
+
+11 
+
+> .CC-BY-NC 4.0 International license made available under a (which was not certified by peer review) is the author/funder, who has granted bioRxiv a license to display the preprint in perpetuity. It is The copyright holder for this preprint this version posted July 17, 2026. ;https://doi.org/10.64898/2026.07.11.737894 doi: bioRxiv preprint
+
+geometric detectors recover but no kinematic detector can resolve at hourly sampling. 237 
+
+CPF_D, the sustained spoof, is recovered in full by the consensus and state_anomaly 238 
+
+classes: at this sampling the block is short enough that the complementary detectors 239 
+
+agree across iterations, so the per-fix layer reaches it without recourse to block expansion 240 
+
+(which instead carries the longer boundary-spoof track of Supplement S3). The isolated-241 
+
+spike cases (CPF_A, CPF_C) draw chiefly on consensus , with a few geometric_spike 242 
+
+and state_anomaly on CPF_A, where the contamination is locally anomalous in every 243 
+
+measurable sense. CPF_F’s anomalies fire as consensus and kinematic_confluence ; sup-244 
+
+plying the state vector (Section 3) relabels the state-relative ones as state_anomaly . The 245 
+
+class distribution thus tells the user not only which fixes were flagged but what kind of 246 
+
+error caused each — a diagnostic by-product of the agreement-based combination, at no 247 
+
+extra cost. 248 
+
+2.4 Choosing a decision rule, and what the choice costs 249 
+
+The cohort recovers the morphologies the cascade was built for, but leaves one archi-250 
+
+tectural choice open: the four detectors produce evidence, and the flag-to-verdict step 251 
+
+can turn that evidence into a decision in more than one principled way. The default, 252 
+
+evidence_corroborated , accumulates each detector’s calibrated evidence and flags on 253 
+
+a corroborated positive total (Section S1.13); the alternative, class_aware , applies the 254 
+
+Boolean conjunction of agreement classes (Table 4) directly. The two are equivalent in de-255 
+
+tection skill. They both draw on the same detectors and differ only in how they pool them, 256 
+
+and on the synthetic cohort the gap between them is far smaller than the spread induced 257 
+
+by the random realisation alone (Supplement S5). I default to evidence_corroborated 258 
+
+not because it detects more but because, at equal skill, it is the better-behaved object: un-259 
+
+supervised and self-calibrating, it returns a continuous combined_evidence score rather 260 
+
+than a bare flag, so a user can rank fixes by suspicion or set their own operating point, 261 
+
+and it extends to new detectors without rewriting a logical table. 262 
+
+12 
+
+> .CC-BY-NC 4.0 International license made available under a (which was not certified by peer review) is the author/funder, who has granted bioRxiv a license to display the preprint in perpetuity. It is The copyright holder for this preprint this version posted July 17, 2026. ;https://doi.org/10.64898/2026.07.11.737894 doi: bioRxiv preprint
+
+# 3 Adapting to real data 263 
+
+The default — a single-track, single-state move2 object with no extra arguments — covers 264 
+
+much real-world use, but two situations need more. pool_by fits detector thresholds on a 265 
+
+shared group of tracks (an individual, study, or species) and unions the added flags back 266 
+
+into each track, with a two-level c(outer, inner) form for when the threshold-fitting 267 
+
+and operating units differ; state runs the kinematic detectors within each behavioural 268 
+
+segment while a global rescue pass keeps the state-independent geometric detectors on the 269 
+
+full track, so a per-state threshold can never dilute geometric evidence. Smaller options 270 
+
+supply an observation-error prior ( location_error ), asymmetric pre-peeling, and class-271 
+
+aware persistence filtering. The mechanics and worked examples are in Supplement S1.18 272 
+
+and the package vignettes; every constant is catalogued in Supplement S2. 273 
+
+# 4 The toolbox behind the cascade 274 
+
+Each detector is also exported standalone — mt_flag_outliers_bridge() ,275 
+
+mt_flag_outliers() , mt_flag_outliers_detour() , and mt_flag_speed_cap() 276 
+
+— for users who want to build their own pipeline or inspect a single signal; their 277 
+
+derivations and threshold logic are in Supplement S1. They differ systematically in what 278 
+
+they catch and where they fail (Table 2), and the cascade runs each only where its scope 279 
+
+of validity allows rather than treating them as interchangeable witnesses, such that, 280 
+
+for example, the probability detector’s structural blindness to symmetric out-and-back 281 
+
+excursions never gates the detour ratio, which is built for exactly those. 282 
+
+# 5 Comparison against existing methods 283 
+
+Outlier-screening tools for animal-tracking data form a small but established landscape. 284 
+
+To situate the cascade within it I compared mt_clean_track() against four published 285 
+
+alternatives on the same six-track synthetic cohort. The comparison runs at a single user-286 
+
+supplied threshold, vmax = 1 .5 m s −1, roughly twice the maximum speed observed in the 287 
+
+13 
+
+> .CC-BY-NC 4.0 International license made available under a (which was not certified by peer review) is the author/funder, who has granted bioRxiv a license to display the preprint in perpetuity. It is The copyright holder for this preprint this version posted July 17, 2026. ;https://doi.org/10.64898/2026.07.11.737894 doi: bioRxiv preprint
+
+Table 2: Scope of validity for each per-fix detector. Sensitivity to sampling rate is the primitive’s response to a uniform increase in the time interval between fixes; sensitivity to behavioural state is its response to mixing distinct activity distributions in a single track; symmetric-return blindness is its response to a colony-halo or out-and-back GPS spike at modest displacement; physiological grounding is whether the primitive incorporates an external biological prior (mass, mode). Primitive Sensitivity to sampling rate Sensitivity to behavioural state Symmetric-return blind-ness Physiological grounding Bridge residual scale-aware via σ; de-grades at sparse sam-pling state-independent (geometric) none (sen-sitive to single-fix ex-cursions) none Detour ratio scale-invariant by construc-tion state-independent (geometric) none (sen-sitive to symmetric returns) none Movement-metric probabil-ity scale-aware via gap nor-malisation; well-defined at any rate state-dependent (kinematic) structurally blind to sym-metric returns none (data-driven) Step-level speed cap step-rate dependent; physiological cap fires only on biologically impossible steps state-dependent (kinematic) none if the re-turn step is fast; blind if it is slow Hirt et al. 
+
+(2017) allo-metric vmax 
+
+clean reference track CPF_B ( 0.73 m s −1, rounded up). 288 
+
+5.1 Methods 289 
+
+The four baselines all reduce, at heart, to a step-speed test with different machinery 290 
+
+on top. The naïve speed cap is a one-line dplyr::filter(speed < v_max) , the 291 
+
+floor case. atlastools (Gupte et al. , 2022) wraps this in a pre-processing pipeline 292 
+
+(atl_filter_covariates ); its optional reflection removal adds nothing here, so I run 293 
+
+the documented minimal filter. trip::sda (Freitas et al. , 2008) is the Freitas speed– 294 
+
+distance–angle filter, and SDLfilter::ddfilter (Shimada et al. , 2012) adds angle-aware 295 
+
+14 
+
+> .CC-BY-NC 4.0 International license made available under a (which was not certified by peer review) is the author/funder, who has granted bioRxiv a license to display the preprint in perpetuity. It is The copyright holder for this preprint this version posted July 17, 2026. ;https://doi.org/10.64898/2026.07.11.737894 doi: bioRxiv preprint
+
+loop detection to the speed cap, both at documented defaults. The cascade runs as 296 
+
+mt_clean_track(x) with no arguments beyond the data (and state = on CPF_F, whose 297 
+
+state column is part of the cohort). 298 
+
+5.2 Results 299 
+
+Table 3 reports per-track F1 on the five truth-bearing tracks (CPF_A, C, D, E, F) and 300 
+
+false-positive counts on the clean reference CPF_B. Across the cohort, the cascade at zero 301 
+
+parameters achieves a mean F1 of 0.86 , the highest among the tools tested. SDLfilter ,302 
+
+the strongest competitor, reaches 0.80 even when given a favourable vmax .303 
+
+Table 3: Detection skill per track for the cascade and four published screening tools. Each cell is the per-track F1 score — the harmonic mean of precision (fraction of flagged fixes that are true outliers) and recall (fraction of ground-truth outliers caught) against the track’s bundled truth set — so 1.00 is perfect recovery with no false positives and higher is better. The clean reference CPF_B has no truth outliers, so F1 is undefined there and that row instead reports each tool’s false-positive count (0 FP is ideal). The competitors are a naïve fixed speed cap (flag every fix whose step speed exceeds vmax ), 
+
+atlastools , trip::sda , and SDLfilter , each defined in Section 5.1; all run at one user-supplied ceiling vmax = 1 .5 m s −1 (twice the fastest step in CPF_B). cascade is 
+
+mt_clean_track() at its zero-parameter default; cascade (+state) is the same call with the track’s behavioural-state column supplied ( state = ). Only CPF_F carries such a column, so the +state variant applies to that track alone; elsewhere it is not run and its cell reads “—” (on CPF_F it equals the default, i.e. state adds nothing here). Competitor rows generated by scripts/cohort_competitors.R ; cascade rows recomputed against 
+
+move2utils v0.4.4 by scripts/splice_cohort.R .
+
+Track naive atlastools trip::sda SDLfilter cascade cascade (+state) CPF_A 0.852 0.815 0.026 0.979 0.958 —CPF_B (clean) 0 FP 0 FP 3533 FP 0 FP 0 FP —CPF_C 0.667 0.667 0.043 1.000 1.000 —CPF_D (spoof block) 0.062 0.062 0.035 0.176 0.645 —CPF_E (colony halo) 0.675 0.675 0.107 0.976 0.994 —CPF_F (multi-state) 0.500 0.500 0.003 0.889 0.727 0.727 Mean F 1 (truth tracks) 0.551 0.544 0.043 0.804 0.865 0.727 
+
+5.3 Reading the results 304 
+
+Three things stand out. First, on the track where the cascade’s structural design mat-305 
+
+ters most — CPF_D’s sustained spoof block — it outperforms the strongest competitor 306 
+
+15 
+
+> .CC-BY-NC 4.0 International license made available under a (which was not certified by peer review) is the author/funder, who has granted bioRxiv a license to display the preprint in perpetuity. It is The copyright holder for this preprint this version posted July 17, 2026. ;https://doi.org/10.64898/2026.07.11.737894 doi: bioRxiv preprint
+
+(SDLfilter by roughly 3.7× in F1 (0.65 versus 0.18 ). Its complementary detectors agree 307 
+
+on the block interior across iterations where no single per-fix rule can, recovering all 30 308 
+
+truth fixes while atlastools , SDLfilter , and the naïve cap pick up only 1–3. On the 309 
+
+boundary-spoof track of Supplement S3, where the block lies at the track’s edge, block 310 
+
+expansion recovers it entirely at zero parameters, which the per-fix competitors cannot. 311 
+
+The colony-halo case is the converse: 80 single-fix radial excursions that the detour ratio 312 
+
+recovers at near-perfect precision (1 FP) but the competitors’ kinematic detectors do not 313 
+
+(77 FP each for naïve and atlastools ; 4 FP for SDLfilter ). 314 
+
+Second, on the easier single-mode tracks (CPF_A, C, F), a well-tuned SDLfilter 315 
+
+matches or marginally beats the cascade. The 1.5 m s −1 threshold I drew from CPF_B 316 
+
+happens to be appropriate for CPF_A and C’s slow OUF behaviour, and SDLfilter ’s 317 
+
+angle-aware loop detection catches CPF_F’s 90 ◦-turn flight anomalies that the cascade’s 318 
+
+speed primitive cannot. So when the user can hand-pick a threshold that fits the data, 319 
+
+a single-threshold tool can be competitive on tracks where the threshold suffices. The 320 
+
+cascade’s advantage should show up when the threshold is wrong (real species, real de-321 
+
+ployments) or the contamination requires non-threshold and/or unsupervised machinery. 322 
+
+Third, trip::sda is unsuitable on this data class. On the clean reference CPF_B 323 
+
+(3,537 fixes, zero truth outliers) it flags 3,533 ( 99 .9% of the track), and on every truth-324 
+
+bearing track its precision is below 0.06 . The Freitas et al. (2008) algorithm was designed 325 
+
+for sparse Argos-quality marine data, where it removes implausible speed–distance–angle 326 
+
+spikes; on dense, continuous OUF synthetic tracks its angle–distance–speed combination 327 
+
+over-fires. Extended per-track, per-tool tables are in Supplement S3.2. 328 
+
+5.4 Caveats 329 
+
+The synthetic cohort is built from one stochastic family — Ornstein–Uhlenbeck Foragers 330 
+
+from ctmm::simulate() — with controlled error injection, and so does not exercise three 331 
+
+features of real data: behavioural-regime shifts richer than CPF_F’s two-state concate-332 
+
+nation; multi-source errors (atmospheric drift, multipath, hardware drift, spoofing) co-333 
+
+present in one deployment; and messy sampling (server lag, acquisition gaps) beyond the 334 
+
+16 
+
+> .CC-BY-NC 4.0 International license made available under a (which was not certified by peer review) is the author/funder, who has granted bioRxiv a license to display the preprint in perpetuity. It is The copyright holder for this preprint this version posted July 17, 2026. ;https://doi.org/10.64898/2026.07.11.737894 doi: bioRxiv preprint
+
+simulated duty cycling. The vmax calibration from CPF_B is moreover the most generous 335 
+
+setting the tested tools could receive, since real users have no clean reference to calibrate 336 
+
+against; the cohort therefore tests the floor case for the cascade’s structural innovations 337 
+
+and the ceiling case for the competitors’ threshold tuning. The cascade’s accuracy rests on 338 
+
+structure rather than a fortuitous choice of constants: every threshold is self-determined 339 
+
+from each track’s own score distribution and catalogued in Supplement S2. 340 
+
+# 6 Discussion 341 
+
+mt_clean_track() cleans animal-movement tracks with no user-supplied parameters in 342 
+
+its default form, recovering every injected outlier on every track of the synthetic cohort, 343 
+
+posting the highest cross-track mean F1 of deterministic tools aimed for quick outlier 344 
+
+removal tested, and uniquely handling block-shaped contamination. Two points deserve 345 
+
+more than the results allowed: how the directional decomposition of the bridge residual 346 
+
+turns detection into classification, and where the limits of synthetic evaluation lie. 347 
+
+Decomposition as error-morphology classification 348 
+
+The directional variant of the bridge primitive, built on the dynamic bivariate Gaussian 349 
+
+bridge (Kranstauber et al. , 2014) (Supplement S1), turns outlier detection into outlier 350 
+
+classification . The pair (η∥, η ⊥) defines a two-dimensional diagnostic space in which error 351 
+
+morphologies occupy separable regions: multipath and lateral spoofing fall on the per-352 
+
+pendicular axis, timestamp glitches and forward-axis teleportation on the parallel axis, 353 
+
+extreme events on both. A flagged fix’s position is indicative of the kind of error that 354 
+
+produced it, changing the claims a practitioner can make: rather than “these 240 fixes 355 
+
+are outliers,” one can report that ∼40 are perpendicular-drift events and ∼200 along-356 
+
+axis forward jumps. The framework also works in reverse, persistent perpendicular-drift 357 
+
+flags concentrated at one location are consistent with location-dependent multipath (the 358 
+
+colony-halo case in CPF_E) and could be used to down-weight that location even when 359 
+
+no single fix is an outlier on a scalar test. On the synthetic cohort this morphology map-360 
+
+17 
+
+> .CC-BY-NC 4.0 International license made available under a (which was not certified by peer review) is the author/funder, who has granted bioRxiv a license to display the preprint in perpetuity. It is The copyright holder for this preprint this version posted July 17, 2026. ;https://doi.org/10.64898/2026.07.11.737894 doi: bioRxiv preprint
+
+ping holds by construction; validating it against real tracks of known error provenance 361 
+
+remains future work. What makes the decomposition usable is the bridge’s leverage im-362 
+
+munity (Equation 11): unlike a directional score built on a local variance estimate, its 363 
+
+timestamp-only denominator cannot be inflated by the very outlier it measures, even in 364 
+
+the stretches of track where outliers actually live. 365 
+
+Scalability on large tracking datasets 366 
+
+Each detector scans the track in O(n), so the cascade scales linearly to the 10 5–10 6-fix 367 
+
+tracks that GPS-GSM and Iridium tags now routinely produce (Supplement S4), and stays 368 
+
+tractable on datasets where neither a Kalman-filter smoother nor a full continuous-time 369 
+
+state-space fit (Jonsen et al. , 2023; Johnson et al. , 2008) would be. 370 
+
+Limitations 371 
+
+Five limitations are worth naming explicitly. The first, discussed in Section 5.4, is that 372 
+
+the entire evaluation rests on synthetic data from one stochastic family with controlled 373 
+
+error injection; real tracks add behavioural-regime shifts, multi-source error co-presence, 374 
+
+and sampling irregularity that the cohort does not exercise, and only application to real 375 
+
+deployments will establish how the cascade behaves under them. 376 
+
+The second is that the directional variant of the bridge residual assumes the local travel 377 
+
+axis is well defined by the two temporal neighbours of the focal fix. When a sustained error 378 
+
+block contains the neighbours of an interior fix — they too are spoofed — the inferred 379 
+
+travel axis tilts toward the contaminated trajectory, and the perpendicular residual of an 380 
+
+interior fix underestimates its true sideways displacement. The combined detection mode 381 
+
+(the default, which flags on either the scalar or the directional score) sidesteps this on 382 
+
+synthetic ground truth, but a user relying on the directional decomposition alone for an 383 
+
+error-morphology classification should be aware of the edge case. 384 
+
+The third concerns the cascade’s gap-aware autodifference normalisation, which esti-385 
+
+mates a gap-dependent scale from binned MAD values of consecutive movement-metric 386 
+
+changes. Tracks with highly irregular sampling, in which certain gap lengths are rare, can 387 
+
+18 
+
+> .CC-BY-NC 4.0 International license made available under a (which was not certified by peer review) is the author/funder, who has granted bioRxiv a license to display the preprint in perpetuity. It is The copyright holder for this preprint this version posted July 17, 2026. ;https://doi.org/10.64898/2026.07.11.737894 doi: bioRxiv preprint
+
+produce unreliable interpolated scales at those gaps; the implementation falls back to the 388 
+
+overall MAD when bin estimates are unavailable, which is conservative but may reduce 389 
+
+sensitivity at unusual gap lengths. 390 
+
+The fourth is that the cascade assumes contamination is a minority of the track. Block 391 
+
+expansion requires the legitimate trajectory to retain at least 80% of kept fixes (Eq. 18), 392 
+
+and cleaning halts at max_flag_fraction (20% of the track by default). A sustained 393 
+
+spoofing or jamming episode that contaminates a large fraction of a deployment — the 394 
+
+most extreme form of the conflict-zone scenario in the Introduction — therefore falls 395 
+
+outside this operating envelope and would require splitting the track or relaxing these 396 
+
+bounds, with the attendant risk of over-cleaning. 397 
+
+The fifth is that the detection scales are estimated by pooling a track’s movement-398 
+
+metric distributions, so a single track mixing behaviourally distinct states with very dif-399 
+
+ferent movement characteristics — an obligate soaring scavenger alternating fast gliding 400 
+
+flight with extended perching or carcass attendance, say — presents a multimodal distri-401 
+
+bution that no global scale can fit, and the threshold detectors over-flag the faster mode 402 
+
+until the flagged fraction reaches max_flag_fraction and halts the cascade. Supplying 403 
+
+per-segment labels through the state argument (Section 3) runs the kinematic detectors 404 
+
+within each regime and resolves this, though the segmentation itself remains the user’s 405 
+
+responsibility. 406 
+
+Outlook 407 
+
+The package is designed to grow. The probability framework and move2 integration are a 408 
+
+foundation for further time-aware, non-parametric utilities — gap detection, resampling, 409 
+
+behavioural segmentation — under one interface. The cascade is a screening step, not an 410 
+
+error model: it returns per-fix flags and a continuous combined_evidence score rather 411 
+
+than a smoothed trajectory, so analyses that prefer to retain and down-weight noisy fixes 412 
+
+rather than delete them can pass these outputs to a continuous-time smoother (Johnson 413 
+
+et al. , 2008; Calabrese et al. , 2016; Jonsen et al. , 2023) as an observation-quality input. 414 
+
+The cascade is thus complementary to, not a replacement for, error-process models. The 415 
+
+19 
+
+> .CC-BY-NC 4.0 International license made available under a (which was not certified by peer review) is the author/funder, who has granted bioRxiv a license to display the preprint in perpetuity. It is The copyright holder for this preprint this version posted July 17, 2026. ;https://doi.org/10.64898/2026.07.11.737894 doi: bioRxiv preprint
+
+richer opportunity, though, is in how the detector flags are combined. The default rule al-416 
+
+ready calibrates evidence to a common scale, but still weights the detectors equally, which 417 
+
+is lossy when they carry asymmetric information: an information-theoretic decomposition 418 
+
+on the synthetic cohort shows the bridge contributes the most unique information about 419 
+
+outlier status, the detour a comparable second channel, and the speed cap little beyond 420 
+
+the bridge. Exposing the consensus combiner as an extensible interface — accepting ex-421 
+
+plicit weights, a threshold, or an arbitrary function — would let an analyst up-weight a 422 
+
+missed failure mode, and would let the cascade learn its own weights: the high-confidence 423 
+
+agreement and high-confidence silence of the detectors define endogenous pseudo-label 424 
+
+groups from which a posterior outlier probability for the ambiguous middle can be esti-425 
+
+mated without external labels. Once a combiner does the weighting, additional flaggers 426 
+
+become useful rather than redundant, while mt_clean_track() stays opinionated and 427 
+
+frictionless for users who want a sensible default. 428 
+
+Some problems the per-fix cascade cannot solve in principle and should not pretend to. 429 
+
+Track-start and track-end fixes far from the rest of a trajectory pass every per-step test, 430 
+
+because there is no neighbour against which they look anomalous; the honest response is 431 
+
+not a fifth primitive but a diagnostic that surfaces such cases to the analyst. 432 
+
+# Data availability 433 
+
+All data used in this paper are synthetic and reproducible end-to-end from 434 
+
+move2utils/inst/extdata/synthetic_tracks.csv.gz and move2utils/inst/ 435 
+
+extdata/synthetic_ground_truth.rds , generated by move2utils/inst/extdata/ 436 
+
+simulate_synthetic_data.R (which uses the ctmm package (Calabrese et al. ,437 
+
+2016) for the OUF generative model and records all model parameters and 438 
+
+ground-truth outlier positions). The figures and tables in Section 2.3 are emit-439 
+
+ted by scripts/worked_examples.R ; the multi-tool comparison table (Section 5) 440 
+
+by scripts/cohort_competitors.R , with the cascade rows refreshed against 441 
+
+move2utils v0.4.4 by scripts/splice_cohort.R ; the wall-time scaling figure (Supple-442 
+
+ment S4) by scripts/runtime_scaling.R ; the synthetic block-expansion demonstration 443 
+
+20 
+
+> .CC-BY-NC 4.0 International license made available under a (which was not certified by peer review) is the author/funder, who has granted bioRxiv a license to display the preprint in perpetuity. It is The copyright holder for this preprint this version posted July 17, 2026. ;https://doi.org/10.64898/2026.07.11.737894 doi: bioRxiv preprint
+
+(Supplement S3) by scripts/block_demo.R ; and the decision-rule sensitivity figure 444 
+
+(Supplement S5.1) by scripts/sensitivity_factorial.R . The move2utils package is 445 
+
+openly available at https://github.com/move2universe/move2utils , and all scripts 446 
+
+and synthetic data required to reproduce the analyses are provided in the accompanying 447 
+
+paper repository. An archived snapshot of the package (v0.4.4) and the analysis scripts 448 
+
+will be deposited on Zenodo at acceptance to provide a permanent, citable record. 449 
+
+# Conflict of interest 450 
+
+The author declares no competing interests. 451 
+
+# Funding 452 
+
+No specific funding was received for this work. 453 
+
+# Use of generative AI 454 
+
+I used Claude Code (Anthropic; Claude Opus 4-series models, 2026) during the prepara-455 
+
+tion of this manuscript, where the tool assisted with drafting, editing, and grammatical 456 
+
+correctness, and with cross-checking claims in the text against the move2utils package 457 
+
+source code. Literature search and verification of all cited references were performed by 458 
+
+me without AI assistance. The same tool was used during development of the move2utils 459 
+
+package by its authors (Kranstauber, Safi, Scharf), where it assisted with drafting and 460 
+
+refactoring R code, generating scaffolding for unit tests, and surfacing legacy inconsis-461 
+
+tencies across exported functions; AI-assisted code was reviewed, tested, and integrated 462 
+
+by the package authors and is traceable through the package’s git history. I reviewed 463 
+
+all AI-generated material in this manuscript, take full responsibility for its content, and 464 
+
+confirm that no AI tool is listed as an author. 465 
+
+21 
+
+> .CC-BY-NC 4.0 International license made available under a (which was not certified by peer review) is the author/funder, who has granted bioRxiv a license to display the preprint in perpetuity. It is The copyright holder for this preprint this version posted July 17, 2026. ;https://doi.org/10.64898/2026.07.11.737894 doi: bioRxiv preprint
+
+# References 466 
+
+Austin, D., McMillan, J.I. & Bowen, W.D. (2003) A three-stage algorithm for fil-467 
+
+tering erroneous Argos satellite locations. Marine Mammal Science , 19 , 371–383. 468 
+
+https://dx.doi.org/10.1111/j.1748-7692.2003.tb01115.x. 469 
+
+Bjørneraas, K., Van Moorter, B., Rolandsen, C.M. & Herfindal, I. (2010) Screening Global 470 
+
+Positioning System location data for errors using animal movement characteristics. 471 
+
+Journal of Wildlife Management , 74 , 1361–1366. https://dx.doi.org/10.2193/2009-405. 472 
+
+Calabrese, J.M., Fleming, C.H. & Gurarie, E. (2016) ctmm: an R package for analyzing 473 
+
+animal relocation data as a continuous-time stochastic process. Methods in Ecology and 474 
+
+Evolution , 7, 1124–1132. https://dx.doi.org/10.1111/2041-210X.12559. 475 
+
+Costa, D.P., Robinson, P.W., Arnould, J.P.Y., Harrison, A.L., Simmons, S.E. et al. (2010) 476 
+
+Accuracy of ARGOS locations of pinnipeds at-sea estimated using Fastloc GPS. PLOS 477 
+
+ONE , 5, e8677. https://dx.doi.org/10.1371/journal.pone.0008677. 478 
+
+Cressie, N.A.C. (1993) Statistics for Spatial Data . John Wiley & Sons, New York, revised 479 
+
+edition. 480 
+
+D’Eon, R.G. & Delparte, D. (2005) Effects of radio-collar position and orientation on GPS 481 
+
+radio-collar performance, and the implications of PDOP in data screening. Journal of 482 
+
+Applied Ecology , 42 , 383–388. https://dx.doi.org/10.1111/j.1365-2664.2005.01010.x. 483 
+
+Douglas, D.C., Weinzierl, R., Davidson, S.C., Kays, R., Wikelski, M. & Bohrer, G. (2012) 484 
+
+Moderating Argos location errors in animal tracking data. Methods in Ecology and 485 
+
+Evolution , 3, 999–1007. https://dx.doi.org/10.1111/j.2041-210X.2012.00245.x. 486 
+
+Fleming, C.H., Drescher-Lehman, J., Noonan, M.J., Akre, T.S.B., Brown, D.J., Cochrane, 487 
+
+M.M., Dejid, N., DeNicola, V., DePerno, C.S., Dunlop, J.N., Gould, N.P., Harrison, 488 
+
+A.L., Hollins, J., Ishii, H., Kaneko, Y., Kays, R., Killen, S.S., Koeck, B., Lambertucci, 489 
+
+S.A., LaPoint, S.D., Medici, E.P., Meyburg, B.U., Miller, T.A., Moen, R.A., Mueller, 490 
+
+T., Pfeiffer, T., Pike, K.N., Roulin, A., Safi, K., Séchaud, R., Scharf, A.K., Shephard, 491 
+
+22 
+
+> .CC-BY-NC 4.0 International license made available under a (which was not certified by peer review) is the author/funder, who has granted bioRxiv a license to display the preprint in perpetuity. It is The copyright holder for this preprint this version posted July 17, 2026. ;https://doi.org/10.64898/2026.07.11.737894 doi: bioRxiv preprint
+
+J.M., Stabach, J.A., Stein, K., Tonra, C.M., Yamazaki, K., Fagan, W.F. & Calabrese, 492 
+
+J.M. (2020) A comprehensive framework for handling location error in animal tracking 493 
+
+data. bioRxiv . Preprint, https://dx.doi.org/10.1101/2020.06.12.130195. 494 
+
+Fleming, C.H., Calabrese, J.M., Mueller, T., Olson, K.A., Leimgruber, P. & Fagan, W.F. 495 
+
+(2014) From fine-scale foraging to home ranges: a semivariance approach to identifying 496 
+
+movement modes across spatiotemporal scales. The American Naturalist , 183 , E154– 497 
+
+E167. https://dx.doi.org/10.1086/675504. 498 
+
+Frair, J.L., Fieberg, J., Hebblewhite, M., Cagnacci, F., DeCesare, N.J. & Pedrotti, L. 499 
+
+(2010) Resolving issues of imprecise and habitat-biased locations in ecological analyses 500 
+
+using GPS telemetry data. Philosophical Transactions of the Royal Society B , 365 ,501 
+
+2187–2200. https://dx.doi.org/10.1098/rstb.2010.0084. 502 
+
+Freedman, D. & Diaconis, P. (1981) On the histogram as a density estimator: L2 the-503 
+
+ory. Zeitschrift für Wahrscheinlichkeitstheorie und verwandte Gebiete , 57 , 453–476. 504 
+
+https://dx.doi.org/10.1007/BF01025868. 505 
+
+Freitas, C., Lydersen, C., Fedak, M.A. & Kovacs, K.M. (2008) A simple new algorithm 506 
+
+to filter marine mammal Argos locations. Marine Mammal Science , 24 , 315–325. 507 
+
+https://dx.doi.org/10.1111/j.1748-7692.2007.00180.x. 508 
+
+Gupte, P.R., Beardsworth, C.E., Spiegel, O., Lourie, E., Toledo, S., Nathan, R. & Bi-509 
+
+jleveld, A.I. (2022) A guide to pre-processing high-throughput animal tracking data. 510 
+
+Journal of Animal Ecology , 91 , 287–307. https://dx.doi.org/10.1111/1365-2656.13610. 511 
+
+Gurarie, E., Andrews, R.D. & Laidre, K.L. (2009) A novel method for identify-512 
+
+ing behavioural changes in animal movement data. Ecology Letters , 12 , 395–408. 513 
+
+https://dx.doi.org/10.1111/j.1461-0248.2009.01293.x. 514 
+
+Gurarie, E., Fleming, C.H., Fagan, W.F., Laidre, K.L., Hernández-Pliego, J. 515 
+
+& Ovaskainen, O. (2017) Correlated velocity models as a fundamental unit 516 
+
+of animal movement: synthesis and applications. Movement Ecology , 5, 13. 517 
+
+https://dx.doi.org/10.1186/s40462-017-0103-3. 518 
+
+23 
+
+> .CC-BY-NC 4.0 International license made available under a (which was not certified by peer review) is the author/funder, who has granted bioRxiv a license to display the preprint in perpetuity. It is The copyright holder for this preprint this version posted July 17, 2026. ;https://doi.org/10.64898/2026.07.11.737894 doi: bioRxiv preprint
+
+Hand, D.J. & Yu, K. (2001) Idiot’s Bayes — not so stupid after all? International Sta-519 
+
+tistical Review , 69 , 385–398. https://dx.doi.org/10.1111/j.1751-5823.2001.tb00465.x. 520 
+
+Hartigan, J.A. & Hartigan, P.M. (1985) The dip test of unimodality. The Annals of 521 
+
+Statistics , 13 , 70–84. https://dx.doi.org/10.1214/aos/1176346577. 522 
+
+Hirt, M.R., Jetz, W., Rall, B.C. & Brose, U. (2017) A general scaling law reveals why 523 
+
+the largest animals are not the fastest. Nature Ecology & Evolution , 1, 1116–1122. 524 
+
+https://dx.doi.org/10.1038/s41559-017-0241-4. 525 
+
+Hurford, A. (2009) GPS measurement error gives rise to spurious 180 degree turning 526 
+
+angles and strong directional biases in animal movement data. PLOS ONE , 4, e5632. 527 
+
+https://dx.doi.org/10.1371/journal.pone.0005632. 528 
+
+Jiguet, F., Mayrose, A., Piha, M., Efrat, R., Seimola, T., Sapir, N., Timonen, S., Wasser-529 
+
+lauf, Y., Besnard, A., Bocher, P., Kölzsch, A., Lehikoinen, A., Monnet, A.C., Procházka, 530 
+
+P. & Perlman, Y. (2025) GNSS spoofing in conflict zones disrupts wildlife tracking 531 
+
+and hampers research and conservation efforts. Nature Communications , 16 , 1199. 532 
+
+https://dx.doi.org/10.1038/s41467-025-56630-2. 533 
+
+Johnson, D.S., London, J.M., Lea, M.A. & Durban, J.W. (2008) Continuous-time cor-534 
+
+related random walk model for animal telemetry data. Ecology , 89 , 1208–1215. 535 
+
+https://dx.doi.org/10.1890/07-1032.1. 536 
+
+Jonsen, I.D., Flemming, J.M. & Myers, R.A. (2005) Robust state-space modeling of animal 537 
+
+movement data. Ecology , 86 , 2874–2880. https://dx.doi.org/10.1890/04-1852. 538 
+
+Jonsen, I.D., Grecian, W.J., Phillips, L., Carroll, G., McMahon, C., Harcourt, R.G., 539 
+
+Hindell, M.A. & Patterson, T.A. (2023) aniMotum, an R package for animal movement 540 
+
+data: Rapid quality control, behavioural estimation and simulation. Methods in Ecology 541 
+
+and Evolution , 14 , 806–816. https://dx.doi.org/10.1111/2041-210X.14060. 542 
+
+Joo, R., Boone, M.E., Clay, T.A., Patrick, S.C., Clusella-Trullas, S. & Basille, M. (2020) 543 
+
+Navigating through the R packages for movement. Journal of Animal Ecology , 89 ,544 
+
+248–267. https://dx.doi.org/10.1111/1365-2656.13116. 545 
+
+24 
+
+> .CC-BY-NC 4.0 International license made available under a (which was not certified by peer review) is the author/funder, who has granted bioRxiv a license to display the preprint in perpetuity. It is The copyright holder for this preprint this version posted July 17, 2026. ;https://doi.org/10.64898/2026.07.11.737894 doi: bioRxiv preprint
+
+Kays, R., Davidson, S.C., Berger, M., Bohrer, G., Fiedler, W., Flack, A. et al. (2022) The 546 
+
+Movebank system for studying global animal movement and demography. Methods in 547 
+
+Ecology and Evolution , 13 , 419–431. https://dx.doi.org/10.1111/2041-210X.13767. 548 
+
+Kranstauber, B., Kays, R., LaPoint, S.D., Wikelski, M. & Safi, K. (2012) A549 
+
+dynamic Brownian bridge movement model to estimate utilization distributions 550 
+
+for heterogeneous animal movement. Journal of Animal Ecology , 81 , 738–746. 551 
+
+https://dx.doi.org/10.1111/j.1365-2656.2012.01955.x. 552 
+
+Kranstauber, B., Safi, K. & Bartumeus, F. (2014) Bivariate Gaussian bridges: direc-553 
+
+tional factorization of diffusion in Brownian bridge models. Movement Ecology , 2, 5. 554 
+
+https://dx.doi.org/10.1186/2051-3933-2-5. 555 
+
+Kranstauber, B., Safi, K. & Scharf, A.K. (2024) move2: R package for pro-556 
+
+cessing movement data. Methods in Ecology and Evolution , 15 , 1561–1567. 557 
+
+https://dx.doi.org/10.1111/2041-210X.14383. 558 
+
+Kranstauber, B., Safi, K. & Scharf, A.K. (2026) move2utils: a utility toolkit for the move2 559 
+
+ecosystem. bioRxiv preprint, https://doi.org/10.64898/2026.07.07.736908 .560 
+
+Lewis, J.S., Rachlow, J.L., Garton, E.O. & Vierling, L.A. (2007) Effects of habitat on GPS 561 
+
+collar performance: using data screening to reduce location error. Journal of Applied 562 
+
+Ecology , 44 , 663–671. https://dx.doi.org/10.1111/j.1365-2664.2007.01286.x. 563 
+
+Leys, C., Ley, C., Klein, O., Bernard, P. & Licata, L. (2013) Detecting out-564 
+
+liers: do not use standard deviation around the mean, use absolute deviation 565 
+
+around the median. Journal of Experimental Social Psychology , 49 , 764–766. 566 
+
+https://dx.doi.org/10.1016/j.jesp.2013.03.013. 567 
+
+Lopez, R., Malardé, J.P., Royer, F. & Gaspar, P. (2014) Improving Argos Doppler location 568 
+
+using multiple-model Kalman filtering. IEEE Transactions on Geoscience and Remote 569 
+
+Sensing , 52 , 4744–4755. https://dx.doi.org/10.1109/TGRS.2013.2284293. 570 
+
+MacArthur, R.H. (1957) On the relative abundance of bird species. Proceedings of the 571 
+
+National Academy of Sciences , 43 , 293–295. https://dx.doi.org/10.1073/pnas.43.3.293. 572 
+
+25 
+
+> .CC-BY-NC 4.0 International license made available under a (which was not certified by peer review) is the author/funder, who has granted bioRxiv a license to display the preprint in perpetuity. It is The copyright holder for this preprint this version posted July 17, 2026. ;https://doi.org/10.64898/2026.07.11.737894 doi: bioRxiv preprint
+
+Mardia, K.V. & Jupp, P.E. (1999) Directional Statistics . John Wiley & Sons, Chichester. 573 
+
+Martín-Vélez, V., Navarro, J., Afán, I., Montalvo, T. & Green, A.J. (2026) Conflicts 574 
+
+hinder research into animal movements. Ambio . https://dx.doi.org/10.1007/s13280-575 
+
+026-02395-x. 576 
+
+McClintock, B.T. & Michelot, T. (2018) momentuHMM: R package for generalized hidden 577 
+
+Markov models of animal movement. Methods in Ecology and Evolution , 9, 1518–1530. 578 
+
+https://dx.doi.org/10.1111/2041-210X.12995. 579 
+
+McConnell, B.J., Chambers, C. & Fedak, M.A. (1992) Foraging ecology of southern ele-580 
+
+phant seals in relation to the bathymetry and productivity of the Southern Ocean. 581 
+
+Antarctic Science , 4, 393–398. https://dx.doi.org/10.1017/S0954102092000580. 582 
+
+Michelot, T., Langrock, R. & Patterson, T.A. (2016) moveHMM: an R package for the 583 
+
+statistical modelling of animal movement data using hidden Markov models. Methods 584 
+
+in Ecology and Evolution , 7, 1308–1315. https://dx.doi.org/10.1111/2041-210X.12578. 585 
+
+Morales, J.M., Haydon, D.T., Frair, J., Holsinger, K.E. & Fryxell, J.M. (2004) Extracting 586 
+
+more out of relocation data: building movement models as mixtures of random walks. 587 
+
+Ecology , 85 , 2436–2445. https://dx.doi.org/10.1890/03-0269. 588 
+
+Noonan, M.J., Fleming, C.H., Akre, T.S., Drescher-Lehman, J., Gurarie, E., Har-589 
+
+rison, A.L., Kays, R. & Calabrese, J.M. (2019) Scale-insensitive estimation of 590 
+
+speed and distance traveled from animal tracking data. Movement Ecology , 7, 35. 591 
+
+https://dx.doi.org/10.1186/s40462-019-0177-1. 592 
+
+Péron, G., Calabrese, J.M., Duriez, O., Fleming, C.H., García-Jiménez, R., Johnston, A., 593 
+
+Lambertucci, S.A., Safi, K. & Shepard, E.L. (2020) The challenges of estimating the 594 
+
+distribution of flight heights from telemetry or altimetry data. Animal Biotelemetry , 8,595 
+
+1–13. https://dx.doi.org/10.1186/s40317-020-00194-z. 596 
+
+Rowcliffe, J.M., Carbone, C., Kays, R., Kranstauber, B. & Jansen, P.A. (2012) Bias in 597 
+
+estimating animal travel distance: the effect of sampling frequency. Methods in Ecology 598 
+
+and Evolution , 3, 653–662. https://dx.doi.org/10.1111/j.2041-210X.2012.00197.x. 599 
+
+26 
+
+> .CC-BY-NC 4.0 International license made available under a (which was not certified by peer review) is the author/funder, who has granted bioRxiv a license to display the preprint in perpetuity. It is The copyright holder for this preprint this version posted July 17, 2026. ;https://doi.org/10.64898/2026.07.11.737894 doi: bioRxiv preprint
+
+Shimada, T., Jones, R., Limpus, C. & Hamann, M. (2012) Improving data retention and 600 
+
+home range estimates by data-driven screening. Marine Ecology Progress Series , 457 ,601 
+
+171–180. https://dx.doi.org/10.3354/meps09747. 602 
+
+Silverman, B.W. (1981) Using kernel density estimates to investigate multimodal-603 
+
+ity. Journal of the Royal Statistical Society: Series B (Methodological) , 43 , 97–99. 604 
+
+https://dx.doi.org/10.1111/j.2517-6161.1981.tb01155.x. 605 
+
+Silverman, B.W. (1986) Density Estimation for Statistics and Data Analysis . Chapman 606 
+
+& Hall, London. 607 
+
+Technitis, G.F. (2021) Which route to choose? Generating context-aware and empirically 608 
+
+informed random trajectories to investigate movement . Phd thesis, University of Zurich. 609 
+
+Vincent, C., McConnell, B.J., Ridoux, V. & Fedak, M.A. (2002) Assessment of Argos 610 
+
+location accuracy from satellite tags deployed on captive gray seals. Marine Mammal 611 
+
+Science , 18 , 156–166. https://dx.doi.org/10.1111/j.1748-7692.2002.tb01025.x. 612 
+
+# S1 Methods in detail 613 
+
+S1.1 Probability components 614 
+
+The core idea is to ask, for each location in a track, how probable the observed movement 615 
+
+is under the empirical distribution of the track as a whole. An animal moving normally 616 
+
+produces a characteristic signature in the joint space of speed, angular velocity, and the 617 
+
+persistence of these quantities between consecutive steps. An erroneous location disrupts 618 
+
+this signature: the speed to and from it is anomalously high, the angular velocity implies 619 
+
+an abrupt directional reversal, and the changes in speed and turning rate between con-620 
+
+secutive steps are discontinuous. By quantifying how probable each location’s movement 621 
+
+signature is, the method identifies locations that are inconsistent with the animal’s own 622 
+
+behaviour without requiring any prior specification of what “normal” looks like. 623 
+
+27 
+
+> .CC-BY-NC 4.0 International license made available under a (which was not certified by peer review) is the author/funder, who has granted bioRxiv a license to display the preprint in perpetuity. It is The copyright holder for this preprint this version posted July 17, 2026. ;https://doi.org/10.64898/2026.07.11.737894 doi: bioRxiv preprint
+
+Consider a track of n locations x1, . . . , xn recorded at times t1, . . . , t n. For each location 624 
+
+i (2 ≤ i ≤ n − 1) I compute three probability components. The first component is the 625 
+
+step–turn probability Pst (vi, ω i), which captures how likely the observed combination 626 
+
+of speed vi and angular velocity ωi is under the joint empirical distribution. Speed is 627 
+
+defined as 628 
+
+vi = d(xi, xi+1 )
+
+τi
+
+(1) where d(·, ·) is the geodesic distance and τi = ti+1 − ti is the time lag. Angular velocity is 629 
+
+ωi = θi
+
+τi
+
+(2) where θi is the turning angle between the displacement vectors xi − xi−1 and xi+1 − xi.630 
+
+Dividing by τi is critical: a displacement of 500 m in one hour and 500 m in one minute rep-631 
+
+resent fundamentally different movement states, yet classical step-based approaches treat 632 
+
+them identically. By operating on speed and angular velocity rather than raw step lengths 633 
+
+and turning angles, the method is inherently time-aware and somewhat robust to irregular 634 
+
+sampling. I acknowledge that speed and angular velocity estimated from discrete fixes are 635 
+
+inherently scale-dependent: with increasing time lags, the straight-line distance between 636 
+
+fixes increasingly underestimates the true path length, and derived speeds underestimate 637 
+
+the true velocities (Rowcliffe et al. , 2012; Noonan et al. , 2019). For regularly sampled 638 
+
+data, this normalisation rescales uniformly and does not affect relative probabilities. 639 
+
+The joint density Pst (v, ω ) is estimated as a two-dimensional histogram using the 640 
+
+Freedman–Diaconis rule for bin widths (Freedman & Diaconis, 1981). Because the an-641 
+
+gular axis is circular, the histogram is padded by tiling copies at ±2π before bilinear 642 
+
+interpolation smooths the surface. Each location’s probability is then extracted from this 643 
+
+smoothed 2D density. Alternatively, a parametric variant fits Weibull marginals to speeds 644 
+
+(Morales et al. , 2004) and von Mises marginals to angular velocities (Mardia & Jupp, 1999) 645 
+
+and returns the product of the marginal densities. The parametric approach is faster and 646 
+
+can perform better with small samples, although it assumes unimodal marginals. 647 
+
+The second and third components capture the persistence of movement, typical for 648 
+
+28 
+
+> .CC-BY-NC 4.0 International license made available under a (which was not certified by peer review) is the author/funder, who has granted bioRxiv a license to display the preprint in perpetuity. It is The copyright holder for this preprint this version posted July 17, 2026. ;https://doi.org/10.64898/2026.07.11.737894 doi: bioRxiv preprint
+
+all animal movement (Gurarie et al. , 2017), and represent how much speed and angular 649 
+
+velocity change between consecutive steps. An animal moving steadily produces small 650 
+
+changes between successive measurements; a GPS error inserted into the track produces 651 
+
+a spike in speed followed by an equally abrupt deceleration, creating large consecutive 652 
+
+changes that a real animal would rarely exhibit. 653 
+
+I define the auto-differences 654 
+
+∆vi = vi − vi−1, ∆ωi = ωi − ωi−1 (3) and estimate their marginal densities P (∆ v) and P (∆ ω) via kernel density estimation 655 
+
+(Silverman, 1986). The delta-speed component captures whether the acceleration or de-656 
+
+celeration at a given location is unusual relative to the track’s overall dynamics. The 657 
+
+delta-angular-velocity component captures unusual shifts in turning rate — for instance, 658 
+
+the abrupt directional reversals often produced by GPS measurement error (Hurford, 659 
+
+2009). 660 
+
+The joint probability at location i combines all three components: 661 
+
+Pjoint ,i = Pst (vi, ω i) × P (∆ vi) × P (∆ ωi)α (4) The exponent α controls the relative weight of the auto-difference terms. Its value deter-662 
+
+mines how much the persistence components contribute to the joint probability: α = 0 663 
+
+ignores auto-differences entirely (relying on speed and angular velocity alone), while α = 1 664 
+
+gives them equal weight with the step–turn component. 665 
+
+How informative the auto-differences are depends on the autocorrelation structure of 666 
+
+the movement. When speed is highly autocorrelated — the animal maintains its pace 667 
+
+over consecutive steps — a sudden change in speed is a strong signal of an anomaly, and 668 
+
+the auto-difference should carry weight. When speed has low autocorrelation — because 669 
+
+the animal switches behavioural states frequently, or because the sampling interval is 670 
+
+long relative to the decorrelation time — consecutive speed measurements are nearly 671 
+
+independent, and the delta-speed distribution is broad even for normal movement. In 672 
+
+29 
+
+> .CC-BY-NC 4.0 International license made available under a (which was not certified by peer review) is the author/funder, who has granted bioRxiv a license to display the preprint in perpetuity. It is The copyright holder for this preprint this version posted July 17, 2026. ;https://doi.org/10.64898/2026.07.11.737894 doi: bioRxiv preprint
+
+this case, the auto-difference adds noise rather than signal. Angular velocity exhibits the 673 
+
+same pattern, often with substantially lower autocorrelation than speed. 674 
+
+I set α from the data by computing the lag-1 autocorrelation of speed ( rv) and angular 675 
+
+velocity ( rω) and taking the geometric mean: 676 
+
+α = pmax( rv, 0) max( rω, 0) (5) This ensures that α is high when both components carry persistent, informative signals, 677 
+
+and low when either is dominated by noise. For the synthetic OUF data used in this 678 
+
+study, the lag-1 autocorrelation of speed was rv = 0 .82 (strong persistence) while that of 679 
+
+angular velocity was rω = 0 .06 (essentially no persistence), yielding α = 0 .22 . Testing 680 
+
+across scenarios confirmed that the ACF-derived α matched or exceeded the performance 681 
+
+of the fixed default ( α = 0 .5), and in the high-frequency sampling case ( ∆t = 1 min) 682 
+
+it improved detection from 1 to 13 of 13 outliers by correctly downweighting the noisy 683 
+
+angular velocity auto-difference. 684 
+
+The product formulation in Equation 4 assumes independence among the three com-685 
+
+ponents. Although speed, angular velocity, and their consecutive changes are not strictly 686 
+
+independent in animal movement, the product provides a useful composite score that, in 687 
+
+practice, effectively separates outliers from the bulk of the data (Hand & Yu, 2001). 688 
+
+S1.2 Gap-aware auto-differences 689 
+
+The time normalisation in Equations 1 and 2 makes the step–turn component robust 690 
+
+to irregular sampling. The auto-difference components (Equation 3), however, require a 691 
+
+further correction. The change in speed ∆vi = vi − vi−1 depends not only on the animal’s 692 
+
+behaviour but also on the time gap τ ∆ 
+
+> i
+
+between the two steps being compared. For any 693 
+
+movement process with velocity autocorrelation ρ(τ ), the expected squared auto-difference 694 
+
+is 695 
+
+E[∆ v2] = 2 σ2
+
+> v
+
+ 1 − ρ(τ ∆) (6) 30 
+
+> .CC-BY-NC 4.0 International license made available under a (which was not certified by peer review) is the author/funder, who has granted bioRxiv a license to display the preprint in perpetuity. It is The copyright holder for this preprint this version posted July 17, 2026. ;https://doi.org/10.64898/2026.07.11.737894 doi: bioRxiv preprint
+
+where σ2 
+
+> v
+
+is the stationary variance of speed and τ ∆ 
+
+> i
+
+= ( τi−1 + τi)/2 is the time between 696 
+
+the midpoints of the two steps (Cressie, 1993; Fleming et al. , 2014). At short lags, ρ ≈ 1697 
+
+and speed changes are small: the animal’s velocity is autocorrelated and consecutive 698 
+
+measurements are similar. At lags much longer than the decorrelation time, ρ → 0 and ∆v699 
+
+approaches the difference of two independent draws from the stationary distribution. With 700 
+
+regular sampling this is immaterial — all gaps are equal and the scaling is uniform. With 701 
+
+irregular sampling, the auto-difference distribution conflates measurements at different 702 
+
+temporal scales. A large speed change after an overnight gap is normal (the animal’s 703 
+
+velocity has decorrelated), yet it would be penalised by a density built predominantly 704 
+
+from short-gap deltas. Conversely, a modest speed change after a short gap may be 705 
+
+genuinely anomalous but is diluted by the long-gap portion of the distribution. 706 
+
+I address this by estimating the gap-dependent scale of each auto-difference non-707 
+
+parametrically. The observed pairs (|∆vi|, τ ∆ 
+
+> i
+
+) are binned into equal-count groups by 708 
+
+τ ∆, and the median absolute deviation (MAD) is computed within each bin (Leys et al. ,709 
+
+2013). Interpolation yields a smooth scale function s(τ ∆) mapping any gap to the expected 710 
+
+magnitude of the auto-difference at that gap. Each auto-difference is then normalised: 711 
+
+∆v∗ 
+
+> i
+
+= ∆vi
+
+s(τ ∆ 
+
+> i
+
+) (7) The kernel density estimate is built on the normalised values ∆v∗, and scoring applies the 712 
+
+inverse transformation to recover densities in the original space: 713 
+
+P (∆ vi | τ ∆ 
+
+> i
+
+) = 1
+
+s(τ ∆ 
+
+> i
+
+) f ∗
+
+ ∆vi
+
+s(τ ∆ 
+
+> i
+
+)
+
+
+
+(8) where f ∗ is the KDE of the normalised auto-differences. The same procedure applies 714 
+
+independently to ∆ω. This approach makes no assumption about the functional form of 715 
+
+ρ(τ ): for an Ornstein–Uhlenbeck process, ρ is exponential; for a migrating animal whose 716 
+
+speed regime shifts over days, the autocorrelation structure may be entirely different. The 717 
+
+non-parametric estimation adapts to whatever the data exhibit. For perfectly regular 718 
+
+data, all gaps are equal, s(τ ∆) is constant, and the method reduces identically to the 719 
+
+31 
+
+> .CC-BY-NC 4.0 International license made available under a (which was not certified by peer review) is the author/funder, who has granted bioRxiv a license to display the preprint in perpetuity. It is The copyright holder for this preprint this version posted July 17, 2026. ;https://doi.org/10.64898/2026.07.11.737894 doi: bioRxiv preprint
+
+original formulation. 720 
+
+The gap-dependent scaling has implications beyond outlier detection. Any method 721 
+
+that constructs empirical distributions of consecutive changes in movement metrics from 722 
+
+tracking data — whether for trajectory simulation, behavioural change-point detection 723 
+
+(Gurarie et al. , 2009), or path reconstruction — faces the same conflation of tempo-724 
+
+ral scales when applied to irregularly sampled data. The decomposition into a gap-725 
+
+independent shape ( f ∗) and a gap-dependent scale ( s(τ ∆)) resolves this generally, allow-726 
+
+ing such methods to operate at arbitrary and variable time intervals while preserving the 727 
+
+autocorrelation structure. 728 
+
+S1.3 Separating outliers from the bulk 729 valley at log(eta) = 8.0 no valley −> no outliers       
+
+> CPF_A (23 outliers) CPF_B (clean)
+> 0510 −2 02
+> 0.0 0.2 0.4 0.6
+> 0.0 0.2 0.4 0.6
+> log
+
+( η)
+
+> density
+> A real density dip between bulk and outlier tail is required; without one, no outliers are declared.
+> Entropy−valley thresholding is a no−op on clean data
+
+Figure 4: Entropy-valley thresholding is a no-op on clean data. Left: density of 
+
+log( η) for CPF_A (1,748 locations, 23 injected outliers) shows a clear bimodal shape with a valley separating the bulk of normal movement from the outlier tail. The density-valley detector places the threshold (dashed red line) in the valley. Right: density of log( η)
+
+for CPF_B (3,537 clean locations) is smoothly unimodal with no valley, and the detector correctly returns no outliers. A gap-detection threshold applied to the same distributions, by contrast, fires on the natural tail of CPF_B and produces false positives on clean data. Having assigned each location a joint probability Pjoint ,i , the task is to determine where 730 
+
+the boundary between outliers and legitimate movement lies. This is fundamentally a 731 
+
+separation problem: the distribution of log Pjoint across all locations in a track typically 732 
+
+exhibits a characteristic structure. The bulk of the data — locations where the animal 733 
+
+32 
+
+> .CC-BY-NC 4.0 International license made available under a (which was not certified by peer review) is the author/funder, who has granted bioRxiv a license to display the preprint in perpetuity. It is The copyright holder for this preprint this version posted July 17, 2026. ;https://doi.org/10.64898/2026.07.11.737894 doi: bioRxiv preprint
+
+moved normally — clusters in a relatively narrow, high-probability region. Outliers, by 734 
+
+contrast, fall in the far lower tail: their speed, angular velocity, or persistence is so unusual 735 
+
+that their joint probability is orders of magnitude below the bulk. Between the two lies a 736 
+
+transition zone whose sharpness depends on the severity of the errors and the variability 737 
+
+of normal movement. 738 
+
+The key insight is that this separation is a property of the data, not a parameter to 739 
+
+be specified. Two locations whose log Pjoint values differ by four orders of magnitude are 740 
+
+unlikely to belong to the same distribution. The challenge is to identify this boundary 741 
+
+automatically. I provide two complementary approaches, each suited to different distri-742 
+
+butional shapes. 743 
+
+S1.3.1 Gap-based thresholding 744 
+
+If the sorted log Pjoint values arose from a single continuous distribution, the gap sizes 745 
+
+between consecutive sorted values would follow a predictable pattern determined by the 746 
+
+harmonic series, as in MacArthur’s broken-stick model for species abundance (MacArthur, 747 
+
+1957). I compute the ratio of each observed gap to its expected size under this null model. 748 
+
+Gaps in the lower tail that substantially exceed their expectation signal a discontinuity 749 
+
+between outliers and the bulk. 750 
+
+This initial signal is refined through tail-decay inflection analysis. Starting from the 751 
+
+most extreme sorted value, I sequentially remove candidate outliers and track the resulting 752 
+
+change in tail length — the distance from the current leftmost value to the edge of the 753 
+
+bulk distribution. Removing genuine outliers produces steep drops in tail length; upon 754 
+
+entering the bulk, these drops become small and approximately linear. The inflection 755 
+
+point, where the second derivative of the tail-length curve drops to the noise floor, marks 756 
+
+the natural boundary. 757 
+
+This two-stage approach makes no distributional assumptions about the shape of the 758 
+
+log Pjoint distribution, requires no user-specified threshold in the statistical sense (only 759 
+
+a sensitivity parameter governing the gap ratio, with a robust default), and converges 760 
+
+naturally under iteration because removing outliers eliminates the break that triggered 761 
+
+33 
+
+> .CC-BY-NC 4.0 International license made available under a (which was not certified by peer review) is the author/funder, who has granted bioRxiv a license to display the preprint in perpetuity. It is The copyright holder for this preprint this version posted July 17, 2026. ;https://doi.org/10.64898/2026.07.11.737894 doi: bioRxiv preprint
+
+their detection. The gap method is conservative: it favours specificity over sensitivity and 762 
+
+is appropriate when false positives are costly (e.g. automated pipelines with no manual 763 
+
+review). 764 
+
+S1.3.2 Density-valley thresholding 765 
+
+An alternative approach exploits the density structure of the log Pjoint distribution directly. 766 
+
+I estimate the density of all valid log Pjoint values via kernel density estimation and search 767 
+
+for local minima (valleys) below the main mode. A valley indicates a natural separation 768 
+
+between two regimes — an outlier regime in the lower tail and the bulk distribution 769 
+
+of normal movement (Silverman, 1981). The deepest valley whose density falls below a 770 
+
+fraction δ of the peak density (default δ = 0 .3, unified package-wide across the probability, 771 
+
+bridge, and speed-cap primitives; see Supplement S3) is taken as the threshold: 772 
+
+Pjoint ,i < P valley =⇒ location i is flagged (9) If no valley meets the depth criterion, the distribution is effectively unimodal and no 773 
+
+outliers are declared. This approach is more sensitive than the gap method in practice, 774 
+
+because it identifies the boundary between regimes from the shape of the entire density 775 
+
+rather than from a single gap in the ordered sequence. It is particularly effective when 776 
+
+outliers span a range of severities, producing a broad lower tail rather than a sharply 777 
+
+separated cluster. Two further threshold methods are available for users who prefer con-778 
+
+ventional approaches: a significance method based on robust z-scores (median and MAD; 779 
+
+Leys et al. , 2013) of log-probabilities, and a fixed-percentile method. 780 
+
+S1.4 Geometric detection via Brownian-bridge residuals 781 
+
+The probability-based method of Section S1.1 (see Equations 1–4) scores each location 782 
+
+using quantities — speed, angular velocity, and their consecutive changes — that are in-783 
+
+herently about transitions between fixes. It is at its best for spike-shaped errors, where a 784 
+
+single fix produces extreme transitions on both sides. It is at its weakest for block errors, 785 
+
+34    
+
+> .CC-BY-NC 4.0 International license made available under a (which was not certified by peer review) is the author/funder, who has granted bioRxiv a license to display the preprint in perpetuity. It is The copyright holder for this preprint this version posted July 17, 2026. ;https://doi.org/10.64898/2026.07.11.737894 doi: bioRxiv preprint xi−1xi+1
+> μi
+> xi
+
+(observed )ηparallel (along travel )ηperp (orthogonal )ηi = ri wb , i 
+
+> ∆t1
+> ∆t2
+> Bridge−residual outlier score and directional decomposition
+
+Figure 5: Bridge-residual outlier score and directional decomposition. Three con-secutive fixes xi−1, xi, and xi+1 with timestamps defining gaps ∆t1 and ∆t2. The bridge mean μi (diamond) is the time-weighted midpoint between the neighbours. The residual 
+
+ri = xi−μi (dashed arrow), normalised by the bridge width wb,i = p∆t1∆t2/(∆ t1 + ∆ t2),yields the scalar score ηi = ri/w b,i used by method = "isotropic" . The directional vari-ant ( method = "directional" ) decomposes the residual into components parallel ( η∥)and perpendicular ( η⊥) to the local travel axis, enabling error-morphology classification. The default, method = "combined" , thresholds both η and η⊥ independently and flags any fix caught by either. where multiple consecutive fixes sit together in the wrong place: within the block, the 786 
+
+transitions between neighbours look ordinary, and only the boundaries of the block carry 787 
+
+a detectable metric signal. The result is that a drift cluster of twenty fixes typically pro-788 
+
+duces at most two transition-extreme points (the entry and the exit), while the remaining 789 
+
+eighteen blend into the bulk. 790 
+
+A geometric test can reach these interior points directly. For each fix i with temporal 791 
+
+neighbours i − 1 and i + 1 , the Brownian bridge provides an expected position conditional 792 
+
+on the neighbours and the elapsed times: the time-weighted mean 793 
+
+μi = (1 − w) xi−1 + w xi+1 , w = τi−1
+
+τi−1 + τi
+
+(10) where τi−1 = ti − ti−1 and τi = ti+1 − ti are the gaps to the preceding and following fix 794 
+
+respectively. A standard Brownian motion between xi−1 and xi+1 has variance at the 795 
+
+35 
+
+> .CC-BY-NC 4.0 International license made available under a (which was not certified by peer review) is the author/funder, who has granted bioRxiv a license to display the preprint in perpetuity. It is The copyright holder for this preprint this version posted July 17, 2026. ;https://doi.org/10.64898/2026.07.11.737894 doi: bioRxiv preprint
+
+bridge mean proportional to τi−1τi/(τi−1 + τi), whose square root defines the bridge width 796 
+
+wb,i =
+
+r τi−1 τi
+
+τi−1 + τi
+
+. (11) The gap-aware geometric score is the residual normalised by the bridge width: 797 
+
+ηi = ∥xi − μi∥
+
+wb,i 
+
+. (12) 
+
+ηi has units of m/√s and is, under a Brownian process with any fixed diffusion coefficient, 798 
+
+distributed as that coefficient times a folded bivariate-normal magnitude. Its value does 799 
+
+not depend on any locally estimated variance. This matters: a variance estimate at fix i,800 
+
+whether from a dynamic Brownian-bridge model (Kranstauber et al. , 2012) or from a 801 
+
+simpler local fit, is inflated by the very outlier the score is trying to detect, so any score of 802 
+
+the form residual-over-local-standard-deviation systematically undershoots at the point 803 
+
+where it should overshoot. The bridge-width normalisation (Equation 11) avoids this 804 
+
+leverage by depending only on the timestamps, which cannot be corrupted by the position 805 
+
+outlier. 806 
+
+The outlier score ηi is thresholded with the same self-determining detectors applied 807 
+
+to log Pjoint in Section S1.3. The default is the density-valley detector applied to − log η808 
+
+(equivalently the upper tail of log η plotted in Figure 4): outliers are declared only when 809 
+
+the density of the score distribution contains a real dip between bulk and tail. On clean 810 
+
+tracks the distribution of log η is unimodal with no such dip, and the detector returns no 811 
+
+outliers; the primitive is thus a no-op when applied to data that does not warrant flagging. 812 
+
+Neighbour dedup (a greedy peak-picking step that keeps only the largest η within each 813 
+
+run of consecutively flagged indices) suppresses the smearing artefact by which an outlier 814 
+
+at i distorts the bridges centred on i − 1 and i + 1 .815 
+
+Directional decomposition (dBGB variant) 816 
+
+Decomposing the bridge residual into components parallel and perpendicular to the local 817 
+
+travel axis turns the same primitive into an error-morphology classifier. Let ˆai be the unit 818 
+
+36 
+
+> .CC-BY-NC 4.0 International license made available under a (which was not certified by peer review) is the author/funder, who has granted bioRxiv a license to display the preprint in perpetuity. It is The copyright holder for this preprint this version posted July 17, 2026. ;https://doi.org/10.64898/2026.07.11.737894 doi: bioRxiv preprint
+
+vector from μi towards xi+1 ; the residual ri = xi − μi decomposes into 819 
+
+r∥,i = |ri · ˆai|, r⊥,i =
+
+q
+
+∥ri∥2 − r2
+
+> ∥,i
+
+, (13) and the gap-normalised directional scores are η∥,i = r∥,i /w b,i and η⊥,i = r⊥,i /w b,i . The 820 
+
+naming follows the dynamic bivariate Gaussian bridge model from which it is adapted 821 
+
+(Kranstauber et al. , 2014), though the residual score itself does not require the dBGB 822 
+
+variance estimate; bridge width alone serves as denominator, preserving the leverage-823 
+
+immunity of Equation 12. The directional variant flags on η⊥ specifically. The inter-824 
+
+pretation is that errors which drift perpendicular to legitimate movement — multipath 825 
+
+reflections, GNSS spoofing clusters displaced off the flight path, tag-to-tag handoffs — 826 
+
+show up cleanly on the orthogonal axis, while along-track behavioural variation (bursts 827 
+
+of fast flight, stops and accelerations) falls on the parallel axis and is not flagged. The 828 
+
+full pair (η∥, η ⊥) forms a two-dimensional diagnostic space in which a flagged point’s lo-829 
+
+cation reveals its error morphology: perpendicular-dominant, along-track-dominant, or 830 
+
+magnitude-extreme on both axes. 831 
+
+Combined detection (default) 832 
+
+Because |r⊥| ≤ ∥ r∥, the scalar score η is an upper bound on η⊥, and flagging on η833 
+
+alone includes all points η⊥ would flag plus the along-track extremes. The two scores are 834 
+
+correlated but not redundant: a fix whose residual is dominantly parallel — physiological 835 
+
+speed variation, behavioural transitions, or a short burst of rapid movement — inflates η836 
+
+but leaves η⊥ near baseline. Conversely, a fix whose residual is dominantly perpendicular 837 
+
+— multipath, spoofing drift, tag-to-tag handoff — can sit at a modest η even when its 838 
+
+η⊥ is extreme, because the large parallel component dilutes the scalar magnitude. Each 839 
+
+score therefore has access to a class of outlier the other cannot reach without tuning. 840 
+
+The default software behaviour composes these tests: the self-determining threshold 841 
+
+is applied independently to − log η and to − log η⊥, and a fix is flagged if either test 842 
+
+trips. On synthetic ground truth (Section 2.3) this combined detector Pareto-dominates 843 
+
+both single-score variants: the scalar path recovers strong-omnidirectional outliers 844 
+
+37 
+
+> .CC-BY-NC 4.0 International license made available under a (which was not certified by peer review) is the author/funder, who has granted bioRxiv a license to display the preprint in perpetuity. It is The copyright holder for this preprint this version posted July 17, 2026. ;https://doi.org/10.64898/2026.07.11.737894 doi: bioRxiv preprint
+
+(CPF_D’s sustained spoofing block) and the orthogonal path recovers perpendicular-845 
+
+leverage outliers (CPF_E’s colony halo) that the scalar magnitude dilutes. The 846 
+
+two paths remain exposed as method = "isotropic" and method = "directional" 847 
+
+on mt_flag_outliers_bridge() for studies that deliberately restrict the detection 848 
+
+to one error morphology, or for comparability with work that reports one score in 849 
+
+isolation. State-aware variance-estimating siblings mt_flag_outliers_dbbmm() and 850 
+
+mt_flag_outliers_dbgb() are additionally available for users who want to substitute 851 
+
+the full dBBMM/dBGB variance for the bridge-width normalisation and apply a852 
+
+Bonferroni-controlled multi-channel test on the directional decomposition, at the cost of 853 
+
+relaxing the leverage-immunity guarantee of Equation 11. 854 
+
+S1.5 Path-vs-displacement detour ratio 855 
+
+The bridge residual gains its leverage immunity from temporal geometry, but pays for 856 
+
+that with a σ-scaled threshold whose sensitivity to single-fix excursions degrades as the 857 
+
+sampling interval grows. At hourly GPS sampling, an out-and-back excursion to a colony 858 
+
+halo can leave each bridge residual within the expected diffusion envelope while still being 859 
+
+a clear geometric impossibility. 860 
+
+The detour ratio addresses this regime. For each fix i and a window radius k, define 861 
+
+the path length and the chord displacement on the local window: 862 
+
+Lk(i) = 
+
+> i+k−1
+
+X
+
+> j=i−k
+
+∥xj+1 − xj ∥, Dk(i) = ∥xi+k − xi−k∥, (14) and the dimensionless detour ratio 863 
+
+ρk(i) = Lk(i)
+
+Dk(i). (15) By construction ρk ≥ 1 with equality on a straight line, and on a smooth track ρk remains 864 
+
+close to unity for any reasonable k. A symmetric out-and-back excursion at fix i inflates 865 
+
+Lk without commensurate change in Dk, sending ρk(i) → ∞ . A fix is flagged if ρk(i) > ρ ∗
+
+> 866
+
+for any k in a small set of window radii (default k = 1 ). 867 
+
+38 
+
+> .CC-BY-NC 4.0 International license made available under a (which was not certified by peer review) is the author/funder, who has granted bioRxiv a license to display the preprint in perpetuity. It is The copyright holder for this preprint this version posted July 17, 2026. ;https://doi.org/10.64898/2026.07.11.737894 doi: bioRxiv preprint
+
+Two properties of ρk matter for its scope of validity. It is time-insensitive: the ra-868 
+
+tio depends only on consecutive coordinates, not on the time gaps between them. It is 869 
+
+scale-invariant: as a dimensionless ratio of two lengths, no threshold needs to be cali-870 
+
+brated to the sampling rate or to the animal’s typical step. Where the bridge primitive 871 
+
+is scale-aware via σ and loses sensitivity at sparse sampling, the detour primitive is scale-872 
+
+invariant by construction. The two are therefore independent geometric witnesses of the 873 
+
+same underlying fact: that the position is geometrically incompatible with its temporal 874 
+
+neighbourhood. When both fire, they constitute geometric consensus, sufficient evidence 875 
+
+for outlier status without any kinematic confirmation. 876 
+
+The default threshold differs between the two call sites. Inside the cleaning cascade 877 
+
+of Section 2.2, mt_clean_track() passes ρ∗ = 8 , which the synthetic ground-truth set in 878 
+
+Section 2.3 establishes as the smallest value at which CPF_B (clean) is preserved exactly 879 
+
+under the class-aware conjunction. The standalone mt_flag_outliers_detour() call 880 
+
+defaults to ρ∗ = 5 , the more sensitive setting appropriate when no second detector gates 881 
+
+the flag. Both values are HEURISTIC; the plausible range documented for the detour 882 
+
+detector is ρ∗ ∈ [3 , 10] .883 
+
+S1.6 Step-level speed cap 884 
+
+The three primitives above examine the location’s relationship to its temporal neighbour-885 
+
+hood; they say nothing about whether the step out of, or into, that location lies within 886 
+
+the species’ physiological capacity. A complementary primitive operates at the step level. 887 
+
+Let vi = ∥xi+1 −xi∥/(ti+1 −ti) be the step speed entering fix i+1 . A fix is speed-flagged 888 
+
+if its incoming or outgoing step exceeds a cap c:889 
+
+flag speed (i) = ⊮[vi−1 > c ∨ vi > c ] . (16) The cap c admits four threshold modes (parameter threshold_type ): 890 
+
+1. auto — a data-driven cap recovered from the empirical v distribution by entropy-891 
+
+valley search, validated by Hartigan’s dip test of unimodality (Hartigan & Hartigan, 892 
+
+39 
+
+> .CC-BY-NC 4.0 International license made available under a (which was not certified by peer review) is the author/funder, who has granted bioRxiv a license to display the preprint in perpetuity. It is The copyright holder for this preprint this version posted July 17, 2026. ;https://doi.org/10.64898/2026.07.11.737894 doi: bioRxiv preprint
+
+1985). The candidate cap is accepted only if (a) the dip statistic rejects unimodality 893 
+
+at α = 0 .05 , (b) the implied flag fraction lies below an internal safety guard (5% 894 
+
+of fixes), and (c) the cap does not fall between two substantive activity modes (an 895 
+
+internal mode-position guard). The data-driven cap also fires a warning if it exceeds 896 
+
+55 m/s, a deliberately loose cross-taxon biological-sanity ceiling derived from the 897 
+
+upper 95 % confidence bound of the Hirt et al. allometric maximum flying speed 898 
+
+(Hirt et al. , 2017). 899 
+
+2. entropy — the entropy-valley boundary alone (without the dip-test gate). Less 900 
+
+conservative. 901 
+
+3. gap — the broken-stick gap detector applied to sorted v (MacArthur, 1957). Detects 902 
+
+extreme tails separated from the bulk by an unusually large gap. 903 
+
+4. hard — the user supplies a numerical cap directly. The recommended route to a hard 904 
+
+cap is the allometric maximum-speed scaling law of Hirt et al. (Hirt et al. , 2017), 905 
+
+exposed by the package’s v_phys_estimate(mass, mode) function. For body mass 906 
+
+M in kilograms and mode ∈ {running, swimming, flying}, the maximum theoretical 907 
+
+speed is 908 
+
+vmax (M ) = 13.6 aM b  1 − e−hM q  [m/s ], (17) with mode-specific parameters (a, b, h, q ) taken from (Hirt et al. , 2017, Supplemen-909 
+
+tary Table 4). Hirt et al. report a such that the bracketed expression evaluates 910 
+
+to vmax in km/h; the leading 1/3.6 converts the result to the SI step-speed units 911 
+
+used throughout this paper. The first factor is the theoretical aerobic ceiling (with 912 
+
+exponent b ranging from 0.24 for running to 0.36 for swimming) and the saturating 913 
+
+term captures the finite anaerobic energy budget that limits the largest animals to 914 
+
+a fraction of that ceiling, making the law accurate across many orders of magnitude 915 
+
+in body mass. 916 
+
+The 55 m/s ceiling is a structural sanity bound, not an empirical cutoff: it is the 917 
+
+upper envelope of the Hirt allometry across all masses and modes — the fastest anything 918 
+
+alive could plausibly move — so it removes only physically impossible steps. Supplying 919 
+
+40 
+
+> .CC-BY-NC 4.0 International license made available under a (which was not certified by peer review) is the author/funder, who has granted bioRxiv a license to display the preprint in perpetuity. It is The copyright holder for this preprint this version posted July 17, 2026. ;https://doi.org/10.64898/2026.07.11.737894 doi: bioRxiv preprint
+
+v_phys_estimate(mass, mode) sharpens that universal envelope into a per-species ceil-920 
+
+ing for the cost of two metadata fields, and because it derives from physiology rather than 921 
+
+the track it cannot be inflated by the very outliers it catches. 922 
+
+The speed cap appears in the cascade of Section 2.2 in two distinct scopes. In the 923 
+
+pre-peel stage, an external physiological cap (mode hard , supplied via (mass , mode ) or 924 
+
+a manual value) is iteratively applied to remove biologically impossible steps before any 925 
+
+other detector sees the track. In the conjunction stage, a data-driven cap (mode auto )926 
+
+operates state-relative to the per-segment distribution and contributes one of the four 927 
+
+detectors that the cascade combines. Distinguishing these scopes is necessary because a 928 
+
+physiological cap is a sanity bound that cannot be exceeded, whereas a data-driven cap 929 
+
+is a within-distribution diagnostic that varies with the animal’s behavioural state. 930 
+
+S1.7 Sequential detection 931 
+
+The simultaneous method scores every location independently against the probability 932 
+
+surfaces and then applies a threshold. This works well for isolated outliers, where the 933 
+
+erroneous location is bracketed by good data on both sides. Clusters of consecutive 934 
+
+outliers — such as those produced by GPS spoofing episodes, where the receiver locks 935 
+
+onto a false signal for minutes to hours — present a different challenge. Interior locations 936 
+
+in the cluster are flanked by other displaced positions, making the steps between them 937 
+
+appear unremarkable. Iterative refinement partially addresses this by peeling outliers 938 
+
+from the cluster edges, but it requires multiple passes and can introduce false positives 939 
+
+through cascading threshold shifts. 940 
+
+An alternative approach avoids this problem by construction. Instead of scoring all 941 
+
+locations simultaneously, I walk through the track from confirmed-good anchor locations, 942 
+
+evaluating each candidate step against the same joint probability (Equation 4). Begin-943 
+
+ning at the first location (the initial anchor), the method evaluates the step to the next 944 
+
+candidate. If Pjoint for that step exceeds a threshold Pmin , the candidate is accepted as the 945 
+
+new anchor and the scan advances. If not, the candidate is skipped and the next location 946 
+
+is tried — the scan now evaluates the step from the current anchor to the location after 947 
+
+41 
+
+> .CC-BY-NC 4.0 International license made available under a (which was not certified by peer review) is the author/funder, who has granted bioRxiv a license to display the preprint in perpetuity. It is The copyright holder for this preprint this version posted July 17, 2026. ;https://doi.org/10.64898/2026.07.11.737894 doi: bioRxiv preprint
+
+the skipped one. Skipped locations are flagged as outliers. 948 
+
+Because the scan always evaluates steps from a confirmed-good anchor, it never enters 949 
+
+a spoofing cluster. The step from the last good location before the cluster to any location 950 
+
+within it produces extreme speed, and the scan skips ahead until it finds the first good 951 
+
+location after the cluster. The entire cluster is flagged in a single pass, regardless of 952 
+
+its internal coherence. The gap-aware auto-difference normalisation (Equations 7–8) is 953 
+
+essential here: when the scan skips a cluster, the step from the pre-cluster anchor to the 954 
+
+post-cluster location spans a gap far longer than the typical sampling interval. Without 955 
+
+gap-aware normalisation, this produces an anomalous auto-difference that cascades into 956 
+
+false positives at subsequent locations. With the normalisation, the auto-difference is 957 
+
+scaled by s(τ ∆) at the appropriate gap length, and the cluster is eliminated. 958 
+
+To handle the start and end of the track, I run two scans: forward from the first 959 
+
+location and backward from the last. Each location’s probability is taken as the maximum 960 
+
+of the two scan assessments, and locations whose best probability falls below Pmin are 961 
+
+flagged. The threshold Pmin is set to the 0.5th percentile of the reference distribution’s 962 
+
+own joint probabilities. Two additional scanning strategies are provided: a greedy scan 963 
+
+that starts from the highest-confidence location (as identified by the simultaneous method) 964 
+
+and expands outward, and a random-anchor strategy that launches scans from multiple 965 
+
+starting points and takes the median probability across assessments. 966 
+
+S1.8 Combined detection within the probability primitive 967 
+
+The simultaneous and sequential approaches within the probability primitive have com-968 
+
+plementary strengths, and their relative performance depends on the type of error. The 969 
+
+simultaneous method with density-valley thresholding is more sensitive to isolated outliers 970 
+
+at moderate displacement, where the probability signal is clear but the sequential scan 971 
+
+may pass through without triggering. The sequential method excels at detecting clusters 972 
+
+of consecutive errors, because it never evaluates movement between locations that are 973 
+
+themselves in question. The package therefore provides a combined mode that runs the 974 
+
+simultaneous method with both gap and density-valley thresholds, runs the sequential 975 
+
+42 
+
+> .CC-BY-NC 4.0 International license made available under a (which was not certified by peer review) is the author/funder, who has granted bioRxiv a license to display the preprint in perpetuity. It is The copyright holder for this preprint this version posted July 17, 2026. ;https://doi.org/10.64898/2026.07.11.737894 doi: bioRxiv preprint
+
+scan, and combines the three sets of flags by majority vote: a location is declared an out-976 
+
+lier if at least two of the three methods flag it. This yields the best balance of precision 977 
+
+and recall across the range of outlier types tested when the probability primitive is used 978 
+
+in isolation. 979 
+
+For the unified workflow, the four-primitive cascade in Section 2.2 subsumes this com-980 
+
+bination as one of its detector inputs: the probability primitive contributes the firing pi981 
+
+in Table 4, with the three-mode majority used as its internal definition. 982 
+
+S1.9 Reference distributions 983 
+
+By default, the probability surfaces are built from each individual’s own data, and each 984 
+
+individual in a multi-track dataset is processed separately. This self-referencing is appro-985 
+
+priate when tracks are long enough to produce stable empirical distributions — typically 986 
+
+50–100 locations or more. For shorter tracks, the histograms are sparse and the KDE 987 
+
+bandwidths are poorly estimated, leading to unreliable probability assignments. In such 988 
+
+cases, a reference distribution from a longer track of the same species or population can 989 
+
+be supplied. The reference provides the probability surfaces; the target track’s locations 990 
+
+are then scored against them. This is equivalent to asking: “is this location’s movement 991 
+
+consistent with what we know from the reference animal(s)?” To pool all individuals 992 
+
+into a single reference distribution, the entire dataset can be passed as both input and 993 
+
+reference. 994 
+
+S1.10 Additional capabilities 995 
+
+Iterative refinement. Consecutive erroneous locations (e.g. GPS drift episodes) may 996 
+
+not all be detected in a single pass, because the step between two adjacent outliers can 997 
+
+appear unremarkable. Iterative refinement removes flagged outliers, recomputes move-998 
+
+ment metrics on the cleaned track, and runs detection again. Each iteration reveals a 999 
+
+new layer of outliers hidden by the previous one, and the process stops when no further 1000 
+
+outliers are found. Because the threshold methods are self-determining, it is sufficient to 1001 
+
+set a generous upper bound and let convergence decide. 1002 
+
+43 
+
+> .CC-BY-NC 4.0 International license made available under a (which was not certified by peer review) is the author/funder, who has granted bioRxiv a license to display the preprint in perpetuity. It is The copyright holder for this preprint this version posted July 17, 2026. ;https://doi.org/10.64898/2026.07.11.737894 doi: bioRxiv preprint
+
+Quality weighting. When GPS fix quality metadata are available (e.g. satellite 1003 
+
+count, HDOP), they can be incorporated as prior weights on the movement probability. 1004 
+
+User-supplied functions map raw metadata values to a [0 , 1] quality score, and the product 1005 
+
+of all scores multiplies the joint probability before thresholding. This allows a location 1006 
+
+with borderline movement probability but poor fix quality to be flagged, while a location 1007 
+
+with identical movement probability and excellent fix quality is retained. A companion 1008 
+
+helper, mt_filter_gps_quality() , exposes a hard-threshold alternative for the canonical 1009 
+
+pre-processing case: fixes with fewer than five satellites, DOP above ten, or horizontal-1010 
+
+accuracy estimates above 100 m are dropped before probability scoring. Hard thresholds 1011 
+
+at source eliminate the most pathological fixes without letting them enter the histogram 1012 
+
+range, which matters for tracks with teleport-class GNSS errors whose step-length tail is 1013 
+
+set by the errors themselves. 1014 
+
+Multiscale detection. The track can be thinned to multiple temporal resolutions 1015 
+
+(e.g. every 1st, 2nd, 4th, 8th location), with outlier detection running independently at 1016 
+
+each scale. Locations flagged consistently across scales are more likely genuine outliers, 1017 
+
+providing a consensus vote that is robust to the choice of temporal resolution. 1018 
+
+S1.11 Implementation 1019 
+
+The package is implemented in R and depends on move2 (Kranstauber et al. , 2024) for 1020 
+
+movement data structures, sf for spatial operations, terra for efficient rasterisation of the 1021 
+
+2D histogram, and units for time-lag arithmetic. The copula method optionally requires 1022 
+
+the circular and MASS packages. Input and output are move2 objects, preserving coordi-1023 
+
+nate reference systems, track identifiers, timestamps, and all existing columns. All prob-1024 
+
+ability components, the joint probability, and the outlier flag are returned as columns on 1025 
+
+the original object, making the detection fully transparent and auditable. The package is 1026 
+
+available under the GPL-3 licence at https://github.com/move2universe/move2utils .1027 
+
+44 
+
+> .CC-BY-NC 4.0 International license made available under a (which was not certified by peer review) is the author/funder, who has granted bioRxiv a license to display the preprint in perpetuity. It is The copyright holder for this preprint this version posted July 17, 2026. ;https://doi.org/10.64898/2026.07.11.737894 doi: bioRxiv preprint
+
+S1.12 Complexity and scaling 1028 
+
+Each of the four primitives scans the track in O(n) in the number of fixes n. The proba-1029 
+
+bility primitive is dominated by terra rasterisation of the joint step–turn surface and a 1030 
+
+single sort on log Pjoint for thresholding. The bridge and detour primitives are single-pass 1031 
+
+over temporal neighbours. The speed cap is a one-step difference. The cleaning cascade 1032 
+
+composes them with a small number of iterations (default cap 100 , typically converging 1033 
+
+in ≤5). Multi-individual datasets parallelise trivially across individuals. The Haversine 1034 
+
+fast-path replacing sf::st_distance in the hot loops is described in Supplement S5. 1035 
+
+Empirical wall-time on the synthetic cohort is reported in Section S4 (Table 1, Figure 6). 1036 
+
+S1.13 The conjunction structure 1037 
+
+For each fix i, let bi, δi, pi, si ∈ { 0, 1} denote the firings of the bridge, detour, proba-1038 
+
+bility, and state-relative speed primitives. mt_clean_track() flags i as an outlier if any 1039 
+
+one of the conjunction classes in Table 4 fires; the error_class returned for i is the 1040 
+
+highest-priority class that fired (in decreasing priority: physiological , block , consensus ,1041 
+
+geometric_spike , state_anomaly , kinematic_confluence ). 1042 
+
+Each class is a logical conjunction whose constituent primitives operate within non-1043 
+
+overlapping scopes of validity. Geometric witnesses (bridge, detour) are valid regardless 1044 
+
+of behavioural state; kinematic witnesses (state-relative speed, autodifference probability) 1045 
+
+are valid only relative to the local distribution. Combining a geometric and a kinematic 1046 
+
+witness across these scopes yields a witness pair where neither weakness gates the other’s 1047 
+
+strength. This is the principle that distinguishes the cascade from a majority vote, in 1048 
+
+which the weakest detector at sparse sampling can effectively veto the strongest’s correct 1049 
+
+firing. 1050 
+
+The default rule, evidence_corroborated , generalises this conjunction from a1051 
+
+Boolean test to an accumulation of evidence. Each detector contributes a signed evidence 1052 
+
+score ℓk — its surprisal at fix i minus its own data-driven flag boundary, a per-detector 1053 
+
+standardised score rather than a likelihood ratio under a shared generative model — 1054 
+
+so that ℓk > 0 exactly when detector k fires and grows with how far past its threshold 1055 
+
+45 
+
+> .CC-BY-NC 4.0 International license made available under a (which was not certified by peer review) is the author/funder, who has granted bioRxiv a license to display the preprint in perpetuity. It is The copyright holder for this preprint this version posted July 17, 2026. ;https://doi.org/10.64898/2026.07.11.737894 doi: bioRxiv preprint
+
+Table 4: The cascade’s conjunction classes. Each row defines a sufficient condition for flagging fix i, written over the binary detector firings bi (bridge), δi (detour), pi (autodif-ference probability), and si (state-relative speed), each 1 when that detector fires and 0
+
+otherwise; ∧ and ∨ are logical AND and OR. Single-detector firings never flag in isolation: every class requires either two independent geometric witnesses ( bi, δ i), a geometric wit-ness plus a kinematic witness ( pi or si), three-of-four consensus, or a structural witness from outside the per-fix vote (block expansion, pre-peel). The Methodological reading 
+
+column paraphrases each predicate. Class Predicate Methodological reading 
+
+consensus bi + δi + pi + si ≥ 3 Three of four detectors agree 
+
+geometric_spike bi ∧ δi Two independent geometric wit-nesses 
+
+state_anomaly (bi ∨ δi) ∧ si Geometric witness + state-relative speed 
+
+kinematic_confluence (bi ∨ δi) ∧ pi Geometric witness + autodiffer-ence probability 
+
+block block expansion fired Topologically isolated component (Section S1.14) 
+
+physiological pre-peel fired Step exceeded a hard physiological cap (Section S1.6) the fix lies: the probability detector contributes − log pi, the bridge 12 η2 
+
+> i
+
+, the detour 1056 
+
+log ρi, and the speed cap log vi. These native magnitudes are incommensurable—a bridge 1057 
+
+residual can reach the millions while a log-ratio sits near unity—so each is calibrated to 1058 
+
+a common, bounded scale, C tanh( ℓk/MAD k), with the median absolute deviation taken 1059 
+
+over the track, so that no detector can dominate by units alone. A fix is flagged when the 1060 
+
+summed calibrated evidence Ei = P 
+
+> k
+
+C tanh( ℓk/MAD k) is positive and either at least 1061 
+
+two detectors contribute positively, or the detour detector—the one geometric witness 1062 
+
+an out-and-back cannot fake—is saturated, its calibrated evidence at least two MADs 1063 
+
+beyond its own flag boundary (exceeding C tanh 2 ). The first clause is the unsupervised 1064 
+
+regime boundary between the homogeneous inlier mass and the conspicuous tail; the 1065 
+
+second restores the corroboration discipline of the conjunction while still letting a single 1066 
+
+overwhelming geometric witness carry. The combined evidence Ei is returned as a 1067 
+
+column, giving the user a continuous suspicion score and a single lever on sensitivity, and 1068 
+
+every threshold in the rule is a property of the track rather than a tuned constant. 1069 
+
+The class-aware conjunction remains available as consensus = "class_aware" ,1070 
+
+with which the default coincides on the easy and the clean cases (Section 2.4). Several 1071 
+
+46 
+
+> .CC-BY-NC 4.0 International license made available under a (which was not certified by peer review) is the author/funder, who has granted bioRxiv a license to display the preprint in perpetuity. It is The copyright holder for this preprint this version posted July 17, 2026. ;https://doi.org/10.64898/2026.07.11.737894 doi: bioRxiv preprint
+
+further rules ship for users who want a different precision-vs-recall trade-off with-1072 
+
+out rebuilding the cascade: "strict" ((bridge ∨ detour) ∧ (prob ∨ speed) ), the 1073 
+
+highest-precision rule; "majority" (any 2 of 4 detectors agree); "speed_trusted" (speed 1074 
+
+alone is sufficient, on the grounds that its auto mode is already dip-test-validated); 1075 
+
+"weighted_evidence" (the same evidence accumulation as the default but without 1076 
+
+the corroboration requirement); and "any" (union of all four, maximum recall, lowest 1077 
+
+precision); plus "custom" for a user-supplied function over the four detector firings. 1078 
+
+All are documented in ?mt_flag_consensus and operate on the same per-detector flag 1079 
+
+columns the cascade emits, so users running primitives outside the cascade can apply 1080 
+
+them post-hoc. 1081 
+
+S1.14 Block expansion 1082 
+
+Per-fix detection structurally cannot resolve a coherent train of erroneous fixes whose 1083 
+
+internal geometry is locally smooth. 1084 
+
+After the per-fix conjunction has labelled candidate outliers, the cascade constructs a 1085 
+
+graph G = ( V, E ) on the kept fixes. An edge (i, j ) ∈ E joins two kept fixes if a step from 1086 
+
+i to j would satisfy the physiological cap: that is, ∥xj − xi∥/(tj − ti) ≤ cphys . The graph 1087 
+
+is then decomposed into k connected components {C1, C 2, . . . , C k} ordered by size, with 1088 
+
+|C1| ≥ | C2| ≥ · · · ≥ | Ck|.1089 
+
+Block expansion is gated by two conditions, both of which must hold before any non-1090 
+
+largest component is flagged. First, the largest component must dominate the partition: 1091 
+
+|C1|
+
+Pkj=1 |Cj | ≥ 1 − fmax , (18) where fmax is an internal fraction (bound to max_flag_fraction , default 0.2, so the 1092 
+
+largest component must hold at least 80 % of the kept fixes). This guards against a too-1093 
+
+tight cap: a continuous trajectory carved into many similarly-sized fragments fails this 1094 
+
+test and expansion is declined. Second, when k ≥ 4, a clean log-gap must separate the 1095 
+
+47 
+
+> .CC-BY-NC 4.0 International license made available under a (which was not certified by peer review) is the author/funder, who has granted bioRxiv a license to display the preprint in perpetuity. It is The copyright holder for this preprint this version posted July 17, 2026. ;https://doi.org/10.64898/2026.07.11.737894 doi: bioRxiv preprint
+
+largest component from the bulk: 1096 
+
+ln |C1| − ln |C2|
+
+MAD {ln |Cj | : j ≥ 2} ≥ g, (19) where g is an internal gap factor (default g = 3 ; the value reuses the broken-stick 1097 
+
+three-sigma convention applied elsewhere in the package). The numerator is the log-1098 
+
+gap between the largest and second-largest component; the denominator is the median 1099 
+
+absolute deviation of the log-sizes of all non-largest components, used as a robust dis-1100 
+
+persion baseline. This mirrors the broken-stick / log-gap-above-bulk reasoning that 1101 
+
+.gap_threshold_lower() applies to per-step speeds; here it is applied to the upper tail 1102 
+
+of the log-component-size distribution. When k ∈ { 2, 3}, only Eq. 18 is required because 1103 
+
+there are too few components to estimate a stable bulk dispersion. When the gate passes, 1104 
+
+every fix in a non-largest component is flagged and receives error_class = "block" in 1105 
+
+priority order over the per-fix classes. 1106 
+
+The graph construction depends on a meaningful cphys . When the user supplies 1107 
+
+(mass , mode ), cphys is the Hirt et al. allometric vmax (Eq. 17); otherwise the cascade uses 1108 
+
+the data-driven auto cap as a fallback, with the safety guard documented in Section S1.6. 1109 
+
+S1.15 State-conditional cleaning and the global rescue pass 1110 
+
+Real GPS tracks rarely sample a single behavioural distribution. A migrating bird’s 1111 
+
+velocity at the colony shares no quantile of the velocity distribution with its velocity in 1112 
+
+flight; a terrestrial mammal’s resting jitter shares no quantile with its commuting steps. 1113 
+
+Pooling these into a single distribution dilutes the threshold that any kinematic detector 1114 
+
+tries to recover, and introduces a regime in which the right cap for one state is wrong for 1115 
+
+another. 1116 
+
+The package’s mt_clean_track(state = ·) call accepts either a column name in the 1117 
+
+input move2 object or a per-fix vector of state labels. The cascade partitions each track 1118 
+
+into contiguous runs of constant state and runs the kinematic detectors per segment. Per-1119 
+
+segment thresholds adapt to each state’s distribution, sharpening sensitivity within each 1120 
+
+48 
+
+> .CC-BY-NC 4.0 International license made available under a (which was not certified by peer review) is the author/funder, who has granted bioRxiv a license to display the preprint in perpetuity. It is The copyright holder for this preprint this version posted July 17, 2026. ;https://doi.org/10.64898/2026.07.11.737894 doi: bioRxiv preprint
+
+segment and preventing one state’s bulk from setting the threshold for another’s tail. 1121 
+
+Per-segment dispatch sharpens the kinematic detectors by construction, but it also 1122 
+
+changes what the geometric detectors see — and there it does damage. The bridge 1123 
+
+residual at fix i measures geometric impossibility relative to its temporal neighbourhood; 1124 
+
+the detour ratio is dimensionless. Neither concept depends on which behavioural state the 1125 
+
+animal is in. If the per-segment partition splits a colony halo across two states (typical for 1126 
+
+HMM segmentation, where a brief out-and-back at the colony is mis-assigned to migrate), 1127 
+
+the bridge threshold within the migrate segment is inflated by legitimate flight residuals 1128 
+
+and the geometric impossibility goes undetected. 1129 
+
+To prevent this, the cascade runs a global rescue pass in addition to the per-segment 1130 
+
+passes. Concretely, for each per-fix detector D ∈ {bridge , detour , prob , speed }, let 1131 
+
+Dseg (i) ∈ { 0, 1} be the firing of D when run on the segment containing fix i, and let 1132 
+
+Dglb (i) ∈ { 0, 1} be its firing when run on the full track. The cascade defines the effective 1133 
+
+firing as the union of the two: 1134 
+
+D(i) = Dseg (i) ∨ Dglb (i), D ∈ { bridge , detour , prob , speed }. (20) The geometric witnesses (bridge, detour) benefit most from the global pass, since their 1135 
+
+notion of impossibility is state-independent and a state-segmented threshold can only 1136 
+
+dilute it; the kinematic witnesses (prob, speed) contribute additional flags for steps that 1137 
+
+are anomalous against the full-track distribution even when they sit within their own 1138 
+
+state’s distribution. The conjunction classes of Section S1.13 are then evaluated on the 1139 
+
+combined firings. 1140 
+
+S1.16 Transition handling 1141 
+
+State labels assigned by an HMM, a speed threshold, or any other segmentation proce-1142 
+
+dure are themselves uncertain in the immediate neighbourhood of a state change. Within 1143 
+
+±k fixes of any detected transition (default k = transition_buffer = 1 ), the cas-1144 
+
+cade demotes any flag whose error class is state-dependent: state_anomaly and kine-1145 
+
+49 
+
+> .CC-BY-NC 4.0 International license made available under a (which was not certified by peer review) is the author/funder, who has granted bioRxiv a license to display the preprint in perpetuity. It is The copyright holder for this preprint this version posted July 17, 2026. ;https://doi.org/10.64898/2026.07.11.737894 doi: bioRxiv preprint
+
+matic_confluence are re-labelled state_transition_buffered and the fix is kept. The state-1146 
+
+independent error classes ( geometric_spike , consensus , block , physiological ) continue to 1147 
+
+flag inside the transition buffer, since their predicates do not depend on the state assign-1148 
+
+ment being correct. 1149 
+
+S1.17 Iteration to convergence 1150 
+
+The pseudocode in Algorithm 1 summarises the full cascade. 1151 
+
+Algorithm 1 mt_clean_track cleaning cascade 
+
+Require: track T , optional state vector σ, optional cap cphys , parameters θ
+
+1: Pre-peel: if cphys supplied, iteratively flag and remove every fix whose incoming step exceeds cphys ▷ class physiological 
+
+2: repeat 
+
+3: Partition T into state-runs {Sq} if σ given; else {S1} = {T }.
+
+4: for each detector D ∈ { bridge, detour, prob, speed } do 
+
+5: Dseg (i) ← run D on the segment of i
+
+6: Dglb (i) ← run D on T
+
+7: Compute D(i) via Eq. 20 
+
+8: end for 
+
+9: Evaluate the six conjunction classes (Table 4) 
+
+10: Apply transition buffer (Section S1.16) 
+
+11: Build the kept-fix graph and apply block expansion (Section S1.14) ▷ class block 
+
+12: Remove all flagged fixes from T .
+
+13: until no new fix flagged ∨ cumulative flag fraction ≥ max_flag_fraction ∨
+
+max_iterations reached 
+
+14: return cleaned track and per-fix error_class 
+
+S1.18 Adapting the cascade to real data 1152 
+
+This subsection documents the first-class arguments summarised in Section 3. 1153 
+
+Pooling across deployments and individuals ( pool_by ). When the same animal 1154 
+
+carries successive tags or a study spans a behaviourally homogeneous population, the 1155 
+
+per-track defaults under-use the data: each track’s detector thresholds are fitted to that 1156 
+
+track alone, even when many tracks could share a more precise threshold. Providing a 1157 
+
+single column to pool_by = <column> (typically individual_id , study_id , or species )1158 
+
+runs a post-cascade sweep that refits the bridge, detour, and speed-cap primitives once 1159 
+
+50 
+
+> .CC-BY-NC 4.0 International license made available under a (which was not certified by peer review) is the author/funder, who has granted bioRxiv a license to display the preprint in perpetuity. It is The copyright holder for this preprint this version posted July 17, 2026. ;https://doi.org/10.64898/2026.07.11.737894 doi: bioRxiv preprint
+
+on each pool group and unions the pool-added flags ( error_class = "pool" ) into the 1160 
+
+per-track result. The cascade itself stays per-track and is byte-identical to the default in 1161 
+
+single-individual workflows, so pool_by costs nothing on studies that do not need it. The 1162 
+
+single-column form uses one group for both the threshold-fitting distribution and the flag 1163 
+
+union; when these roles differ — for example, drawing threshold strength from a whole 1164 
+
+cohort while keeping the union scoped to the individual — pool_by accepts c(outer, 1165 
+
+inner) , the outer level supplying the fitting distribution and the inner bounding the 1166 
+
+union, under strict nesting. Each call assumes a single error regime, so tracks interleaving 1167 
+
+sensors of very different precision (e.g. metre-scale GPS and kilometre-scale geolocation) 1168 
+
+should be split by sensor before pooling and re-merged after. 1169 
+
+Behavioural states and the global rescue pass ( state ). Many tracks sample qual-1170 
+
+itatively different behavioural modes — resting versus migrating, perching versus flying 1171 
+
+— whose kinematics share almost no quantile of the speed or turn-angle distribution, 1172 
+
+so pooling them forces the kinematic detectors to over-flag the slow mode or under-flag 1173 
+
+the fast one. A per-fix state vector (from a fitted HMM (McClintock & Michelot, 2018; 1174 
+
+Michelot et al. , 2016), a speed-threshold split, or manual annotation) runs the kinematic 1175 
+
+detectors within each contiguous state run, while the state-independent geometric detec-1176 
+
+tors (bridge, detour) are additionally run on the full track; their union is the global rescue 1177 
+
+pass (Section S1.15). A transition_buffer demotes state-dependent flag classes within 1178 
+
+±k fixes of a transition (default k = 1 ), where the state label itself is uncertain. 1179 
+
+Other options. location_error supplies a per-fix observation-error prior (a numeric 1180 
+
+vector in metres, or "auto" to read Movebank quality columns), by which the bridge in-1181 
+
+flates its width so fixes consistent with reported uncertainty are demoted. pre_peel_aux 1182 
+
+= "primitives" switches the pre-peel stage from flagging both endpoints of an over-1183 
+
+cap step to flagging only the higher-scoring one, useful on tracks dominated by iso-1184 
+
+lated spikes. persistence_filter = "class_aware" demotes low-persistence flags in 1185 
+
+the state_anomaly and consensus classes. Five further NULL -defaulted overrides for-1186 
+
+ward non-default values into the primitive calls for replication or diagnostics; all defaults 1187 
+
+51 
+
+> .CC-BY-NC 4.0 International license made available under a (which was not certified by peer review) is the author/funder, who has granted bioRxiv a license to display the preprint in perpetuity. It is The copyright holder for this preprint this version posted July 17, 2026. ;https://doi.org/10.64898/2026.07.11.737894 doi: bioRxiv preprint
+
+and plausible ranges are catalogued in Supplement S2. 1188 
+
+# S2 HEURISTICS catalogue 1189 
+
+The package maintains an explicit accounting of every non-derived constant in the outlier-1190 
+
+detection pipeline, following the design principle of “no silent magic.” Each constant is 1191 
+
+classified as DERIVED (traces to a published equation, theoretical bound, or measured 1192 
+
+constant), HEURISTIC (a defensible round number with a stated rationale and plausi-1193 
+
+ble range; the choice within that range is convention), or EMPIRICALLY TUNED (se-1194 
+
+lected to fire on a specific benchmark case, and flagged for replacement by a structurally-1195 
+
+grounded alternative). The tables below reproduce the outlier-detection entries of the 1196 
+
+package’s living catalogue ( move2utils/HEURISTICS.md ); utilities outside the scope of 1197 
+
+this paper (e.g. mt_corridor ) are catalogued there but omitted here. None of these con-1198 
+
+stants is set by the user through mt_clean_track() ’s default call; the “plausible range” 1199 
+
+column states the convention band, not a tuned optimum. 1200 
+
+Table 5: DERIVED settings — traceable to theory or measure-ment. Setting Value Basis Allometric vmax 
+
+(v_phys_estimate )Hirt 2017 closed form General allometric maximum-speed scaling law (Hirt 
+
+et al. , 2017). Auto-cap sanity ceiling 55 m s −1 Above the Hirt 2017 95% upper CI of maximum fly-ing speed ( ∼52.6 m s −1 at 1.35 kg). 
+
+Zχ2 null ( dbgb ) Rayleigh(1) Diagonal-Σ Mahalanobis magnitude under the bridge null. 
+
+Z∥, Z ⊥ null ( dbgb ) |N (0 , 1) | Per-axis residual normalised by its own σ; half-normal under the bridge null. Joint FWER target ( dbgb ) α = 0 .05 Standard family-wise error-rate convention. dBGB envelope α alloca-tion 
+
+α/ 2 + α/ 4 + α/ 4 Bonferroni union over the three Z channels (chisq channel gets the larger budget). 
+
+location_error default NULL (no an-chor noise floor) A user-supplied calibration prior, not a device at-tribute; no implicit hardware assumption. 
+
+52 
+
+> .CC-BY-NC 4.0 International license made available under a (which was not certified by peer review) is the author/funder, who has granted bioRxiv a license to display the preprint in perpetuity. It is The copyright holder for this preprint this version posted July 17, 2026. ;https://doi.org/10.64898/2026.07.11.737894 doi: bioRxiv preprint
+
+Table 6: HEURISTIC settings — defensible round numbers with a stated rationale and convention band. Setting Value Range Rationale 
+
+max_flag_fraction 0.20 0.10–0.30 Cleaning >20% of a track signals misuse. 
+
+max_iterations 100 50–500 Covers observed convergence with margin; soft-cap warning on non-convergence. Bridge iterations 3 2–5 Refinement gain plateaus at 2–3 passes. Block-expansion 
+
+gap_factor 
+
+3 2–5 “3-sigma” log-size gap-to-dispersion ratio for a clean graph cut. Block-expansion vmax 
+
+floor 1.0 m s −1 0.5–2 Refuse block expansion when the cap sits in the rest-state distribution. Mode-position 
+
+mode_min_frac 
+
+0.02 0.01–0.05 A mode holding <2% of fixes is not “sub-stantive.” Mode-position 
+
+mode_min_density 
+
+0.05 0.02–0.10 A peak <5% of the global peak is a spike, not an activity mode. Speed-cap fraction guard 0.05 0.02–0.10 A cap flagging >5% of fixes is likely cut-ting between activity modes. Gap-detector threshold 3 2–5 “3-sigma” applied to the broken-stick break-size distribution. Gap-detector 
+
+search_frac 
+
+1/7 1/10–1/5 Search the lowest sextile of sorted values for the outlier-tail break. Auto-difference n_bins 8 5–15 Quantile-bin count for the gap-aware KDE (resolution vs per-bin sample size). Auto-difference per-bin floor 5 3–10 Clamp n_bins to avoid degenerate per-bin MAD estimates. Entropy-valley 
+
+threshold 
+
+0.3 0.3–0.7 Valley density ≤30% of peak to declare a split; unified package-wide. Probability gap thresh-old 3 2–5 Same convention as the gap detector. Probability percentile 0.001 10 −4–10 −2 Bottom 0.1% of joint probability. 
+
+autodiff_alpha fall-back 0.5 0–1 Neutral geometric-mean weight when ACF lag-1 cannot be computed. Log-likelihood trim 0.05 0.01–0.10 5% trim for a robust mean log-likelihood. Dip-test α 0.05 0.01–0.10 Standard significance level. 
+
+53 
+
+> .CC-BY-NC 4.0 International license made available under a (which was not certified by peer review) is the author/funder, who has granted bioRxiv a license to display the preprint in perpetuity. It is The copyright holder for this preprint this version posted July 17, 2026. ;https://doi.org/10.64898/2026.07.11.737894 doi: bioRxiv preprint
+
+Setting Value Range Rationale Block-expansion k ≤ 3
+
+shortcut 3 2–5 With ≤3 components and a dominant one, allow without a dispersion check. dBGB z_gap_threshold 3 2–5 Per-channel “3-sigma” gap multiplier (di-agnostic; prefer Bonferroni/BH for pro-duction). KDE grid n_grid 512 256–1024 Standard density-estimation grid resolu-tion. KDE margin_bw 0.5 0.25–1.0 Half-bandwidth tolerance for valley search. Table 7: EMPIRICALLY TUNED settings — selected against a benchmark case and flagged for replacement by a structural alter-native. Setting Value What it was tuned to / replacement plan 
+
+detour_threshold 8 (cascade) / 5(standalone) Dual default: the cascade conjunction lets detour stay strict (8) without losing recall; the standalone favours solo sensitivity (5). Calibrate the stability range empiri-cally. 
+
+transition_buffer 1 Fixes either side of a state change in which state-dependent classes are demoted to 
+
+state_transition_buffered ; hand-set conservatively. Calibrate across a multistate cohort. 
+
+# S3 Methods comparison and the block-expansion 1201 
+
+# demonstration 1202 
+
+S3.1 Synthetic boundary-spoof demonstration of block expansion 1203 
+
+The graph-based block-expansion step (Section 2.2) engages whenever a physiological 1204 
+
+speed ceiling is available — found automatically from a clear gap that a coherent block 1205 
+
+54 
+
+> .CC-BY-NC 4.0 International license made available under a (which was not certified by peer review) is the author/funder, who has granted bioRxiv a license to display the preprint in perpetuity. It is The copyright holder for this preprint this version posted July 17, 2026. ;https://doi.org/10.64898/2026.07.11.737894 doi: bioRxiv preprint
+
+produces through the impossible transitions at its boundary, or supplied via mass /mode .1206 
+
+The synthetic cohort of Section 2.3 does not exercise it: CPF_D’s injected block sits 1207 
+
+mid-track, so cutting the kept-fix graph at its impossible boundary transitions severs the 1208 
+
+legitimate trajectory into two comparable halves and the dominance gate correctly declines 1209 
+
+(no component holds the required majority of fixes), while the complementary detectors 1210 
+
+and their consensus already recover the block in full. Block expansion is therefore a rescue 1211 
+
+layer for the case the per-fix layer cannot reach: a sustained, boundary-anchored block. 1212 
+
+To demonstrate it on data of known provenance, I constructed a purely synthetic 1213 
+
+track ( scripts/block_demo.R ): the clean reference track CPF_B ( n = 3 ,537 ) with its 1214 
+
+final 150 fixes overwritten by a coherent spoof block, pinned at a false coordinate roughly 1215 
+
+120 km from the legitimate path (a physiologically impossible boundary transition) with 1216 
+
+tight within-block jitter so the interior looks locally normal. The block sits at the track’s 1217 
+
+end, so it disconnects as a single small graph component without splitting the legitimate 1218 
+
+trajectory. 1219 
+
+Table 8: Block-expansion demonstration on the synthetic boundary-spoof track ( 150 -fix block at the track boundary). The cascade recovers the entire block through the graph-based block-expansion step (the block error_class ) whether the connectivity ceiling is found automatically (zero parameters) or supplied via mass /mode ; a per-fix speed cap recovers none of the block interior. Generated by scripts/block_demo.R .Tool flagged TP FP recall precision F1
+
+mt_clean_track (zero parameters) 155 150 5 1.000 0.968 0.984 
+
+mt_clean_track (mass /mode ) 154 150 4 1.000 0.974 0.987 naïve speed cap ( > 50 m s −1) 1 0 1 0.000 0.000 —Of the 155 flags the cascade raises, 146 carry the block error_class (the block-1220 
+
+expansion output), recovering all 150 truth fixes with five false positives at F1 = 0 .984 .1221 
+
+Supplying a physiological cap via mass /mode recovers the block equally well ( 150 /150 ,1222 
+
+F1 = 0 .987 ): block recovery is consistent whether the connectivity ceiling is found auto-1223 
+
+matically or supplied, so the cascade never does worse when given more information. The 1224 
+
+naïve speed cap flags only the single boundary transition and reaches none of the block 1225 
+
+interior, the structural blind spot of per-fix scoring. This is the mechanism that, in the 1226 
+
+main text, distinguishes the cascade on coherent block contamination. 1227 
+
+55 
+
+> .CC-BY-NC 4.0 International license made available under a (which was not certified by peer review) is the author/funder, who has granted bioRxiv a license to display the preprint in perpetuity. It is The copyright holder for this preprint this version posted July 17, 2026. ;https://doi.org/10.64898/2026.07.11.737894 doi: bioRxiv preprint
+
+S3.2 Full per-track, per-tool comparison 1228 
+
+Table 9 expands the headline comparison of Section 5 into per-track precision, recall, and 1229 
+
+F1 for every tool (the cascade rows recomputed against move2utils v0.4.4; competitor 1230 
+
+rows, which do not depend on the package, retained from the original run). It makes 1231 
+
+explicit the per-track structure summarised by the cross-cohort mean: the cascade’s clear 1232 
+
+margin on CPF_D’s spoof block, its near-parity with a favourably tuned SDLfilter on 1233 
+
+the easy single-mode tracks, and trip::sda ’s catastrophic over-firing on dense terrestrial 1234 
+
+GPS (it was designed for sparse Argos data). 1235 
+
+Table 9: Per-track precision (P, fraction of flags that are true outliers), recall (R, fraction of truth outliers caught), and F1 (their harmonic mean) for every tool on the truth-bearing tracks, with false-positive counts on the clean reference CPF_B. The tools are as defined for Table 3 (Section 5.1); competitors run at vmax = 1 .5 m s −1 and the cascade at zero parameters. From figures/cohort_competitors.csv .
+
+Track Tool flagged TP FP P R F1
+
+CPF_A naïve 31 23 8 0.742 1.000 0.852 atlastools 31 22 9 0.710 0.957 0.815 trip::sda 1744 23 1721 0.013 1.000 0.026 SDLfilter 24 23 1 0.958 1.000 0.979 
+
+mt_clean_track 25 23 2 0.920 1.000 0.958 CPF_C naïve 8 4 4 0.500 1.000 0.667 atlastools 8 4 4 0.500 1.000 0.667 trip::sda 181 4 177 0.022 1.000 0.043 SDLfilter 4 4 0 1.000 1.000 1.000 
+
+mt_clean_track 4 4 0 1.000 1.000 1.000 CPF_D naïve 2 1 1 0.500 0.033 0.062 atlastools 2 1 1 0.500 0.033 0.062 trip::sda 1694 30 1664 0.018 1.000 0.035 SDLfilter 4 3 1 0.750 0.100 0.176 
+
+mt_clean_track 63 30 33 0.476 1.000 0.645 CPF_E naïve 157 80 77 0.510 1.000 0.675 atlastools 157 80 77 0.510 1.000 0.675 trip::sda 1412 80 1332 0.057 1.000 0.107 SDLfilter 84 80 4 0.952 1.000 0.976 
+
+mt_clean_track 81 80 1 0.988 1.000 0.994 CPF_F naïve 4 2 2 0.500 0.500 0.500 atlastools 4 2 2 0.500 0.500 0.500 trip::sda 2809 4 2805 0.001 1.000 0.003 SDLfilter 5 4 1 0.800 1.000 0.889 
+
+mt_clean_track 7 4 3 0.571 1.000 0.727 
+
+mt_clean_track +state 7 4 3 0.571 1.000 0.727 CPF_B (clean): false positives naïve 0, atlastools 0, trip::sda 3533, SDLfilter 0, mt_clean_track 0
+
+56 
+
+> .CC-BY-NC 4.0 International license made available under a (which was not certified by peer review) is the author/funder, who has granted bioRxiv a license to display the preprint in perpetuity. It is The copyright holder for this preprint this version posted July 17, 2026. ;https://doi.org/10.64898/2026.07.11.737894 doi: bioRxiv preprint
+
+# S4 Computational performance 1236 
+
+The cascade is single-threaded per track and scans each primitive in O(n) in track length; 1237 
+
+multi-individual datasets parallelise trivially across individuals. Per-track timings on the 1238 
+
+six-CPF cohort are reported in Table 10 (column t(s)); the wall-time scaling on synthetic 1239 
+
+tracks of geometrically increasing length is in Figure 6. 1240 5e+02 2e+03 5e+03 2e+04 5e+04 2e+05 5e+05 0.1  0.2  0.5  1.0  2.0  5.0  10.0 
+
+> track length (fixes, n) wall time (s)
+> mt_clean_track() linear scaling (slope 1)
+
+Figure 6: Wall-time scaling of mt_clean_track() on synthetic OUF tracks of geometri-cally increasing length (two replicates per size). The dashed line marks ideal linear ( O(n))scaling, anchored in the asymptotic regime; fixed per-call overhead dominates below a few thousand fixes. Generated by scripts/runtime_scaling.R .
+
+# S5 Synthetic cohort: per-class flag composition and 1241 
+
+# confusion matrices 1242 
+
+Table 10 reports, for each cohort track under the parameter-free default, the detection 1243 
+
+confusion summary (true and false positives, false negatives, F1, and runtime) alongside 1244 
+
+the composition of the flags across the four error_class values that arise on this cohort 1245 
+
+(the numeric backing of Figure 3). Every track recovers all injected outliers (false negatives 1246 
+
+are zero throughout); the false positives are the conservative over-flagging discussed in 1247 
+
+57 
+
+> .CC-BY-NC 4.0 International license made available under a (which was not certified by peer review) is the author/funder, who has granted bioRxiv a license to display the preprint in perpetuity. It is The copyright holder for this preprint this version posted July 17, 2026. ;https://doi.org/10.64898/2026.07.11.737894 doi: bioRxiv preprint
+
+Section 2.3. The class columns may sum to fewer than the flagged total: a small number 1248 
+
+of flags are raised on cascade paths that do not assign an error_class label, and are not 1249 
+
+tabulated by class here. The block and physiological classes do not appear, as the 1250 
+
+cohort exercises neither block expansion (Supplement S3.1) nor a supplied speed cap at 1251 
+
+default settings. 1252 
+
+Table 10: Per-track detection summary and error_class composition under the zero-parameter cascade. The confusion columns ( TP , FP , FN , F1, runtime) are as in Table 1; the remaining columns count the fixes in each flag class, abbreviated cons. ( consensus ), g.spike ( geometric_spike ), s.anom ( state_anomaly ), k.confl ( kinematic_confluence ). From figures/synth_metrics.csv and scripts/worked_examples.R .
+
+Detection Flag class Track TP FP FN F1 t(s) cons. g.spike s.anom k.confl flagged CPF_A 23 2 0 0.958 1.36 11 4 5 0 25 CPF_B 0 0 0 — 1.03 0 0 0 0 0CPF_C 4 0 0 1.000 0.23 4 0 0 0 4CPF_D 30 33 0 0.645 8.54 41 0 14 0 63 CPF_E 80 1 0 0.994 1.84 7 71 0 3 81 CPF_F 4 3 0 0.727 1.90 2 0 0 3 7
+
+S5.1 Decision-rule equivalence and sensitivity to construction 1253 
+
+The default evidence_corroborated rule and the class_aware conjunction (Section 2.4) 1254 
+
+are equivalent in detection skill, and the equivalence is a ceiling rather than a coincidence: 1255 
+
+both draw on the same four detectors and differ only in how they pool them, so once the 1256 
+
+detectors agree on the easy cases and fall silent on the clean ones — most of any track — 1257 
+
+the pooling rule has little left to decide. 1258 
+
+A sensitivity analysis makes the ceiling explicit (Figure 7). Regenerating the full 1259 
+
+synthetic cohort across a factorial of realisation seed and construction parameters — per-1260 
+
+fix positional error, sampling irregularity, and outlier magnitude — and decomposing the 1261 
+
+variance in detection skill shows that the realisation seed and the construction settings 1262 
+
+each dominate on different track types: the random draw alone accounts for 50 –86% of 1263 
+
+the variance on the spike, short, and spoof tracks, while on the halo, multistate, and 1264 
+
+slow tracks the injected magnitude and the positional-error level take over. On every 1265 
+
+track, however, the gap between the two decision rules is far smaller than the seed-driven 1266 
+
+58 
+
+> .CC-BY-NC 4.0 International license made available under a (which was not certified by peer review) is the author/funder, who has granted bioRxiv a license to display the preprint in perpetuity. It is The copyright holder for this preprint this version posted July 17, 2026. ;https://doi.org/10.64898/2026.07.11.737894 doi: bioRxiv preprint
+
+spread. A single synthetic realisation, of the kind on which method comparisons are often 1267 
+
+reported, is therefore an unreliable guide; the difference one happens to observe is mostly 1268 
+
+noise. 1269 ACDEFG
+
+% of detection−skill variance      
+
+> 020 40 60 80 100
+> seed error magnitude sampling interactions
+
+Figure 7: The two decision rules are equivalent in skill, and the apparent difference is mostly noise. Variance in detection skill ( F1) across a factorial of re-alisation seed and construction settings (positional error, sampling irregularity, outlier magnitude), per synthetic track type. The realisation seed dominates on some track types and the construction settings on others, but on every track the gap between 
+
+evidence_corroborated and class_aware is far smaller than the seed-driven spread. Reproduced by scripts/sensitivity_factorial.R .
+
+S5.2 Replicate-realisation confidence intervals 1270 
+
+The cohort table in Section 2.3 (Table 1) reports a single realisation of each track. 1271 
+
+Because detection skill varies with the realisation seed, I regenerated the cohort across 1272 
+
+twelve seeds at a fixed, representative construction setting ( 15 -min base sampling, 1273 
+
+nominal outlier magnitude, 30 m per-fix positional error) and scored the zero-parameter 1274 
+
+evidence_corroborated default on each track. Table 11 reports the per-track mean and 1275 
+
+95% confidence interval of recall, precision, and F1 over the twelve realisations. Recall 1276 
+
+stays high on every track but is not invariably 1 (CPF_A and CPF_D average 0.97 ), and 1277 
+
+precision — the discriminating axis — is stable on the easy tracks and low on the spoof 1278 
+
+block (CPF_D, ≈ 0.48 ) as in the single realisation. The single-realisation CPF_F value 1279 
+
+59 
+
+> .CC-BY-NC 4.0 International license made available under a (which was not certified by peer review) is the author/funder, who has granted bioRxiv a license to display the preprint in perpetuity. It is The copyright holder for this preprint this version posted July 17, 2026. ;https://doi.org/10.64898/2026.07.11.737894 doi: bioRxiv preprint
+
+in Table 1 ( F1 = 0 .73 ) sits well below its replicate mean ( 0.97 ), a concrete reminder that 1280 
+
+a single synthetic draw is an unreliable point estimate (cf. Supplement S5.1). Generated 1281 
+
+by scripts/replicate_ci.R .1282 
+
+Table 11: Replicate-realisation per-track skill of the zero-parameter cascade: mean and 
+
+95% confidence interval of recall, precision, and F1 over twelve cohort realisations at a fixed construction setting. CPF_B is the clean track (no truth set). CIs are clamped to 
+
+[0 , 1] . From scripts/replicate_ci.R via figures/replicate_ci.csv .Track recall precision F1
+
+mean [95% CI] mean [95% CI] mean [95% CI] 
+
+CPF_A 0.97 [0.95, 0.98] 0.96 [0.96, 0.96] 0.96 [0.96, 0.97] 
+
+CPF_B — — —
+
+CPF_C 1.00 [1.00, 1.00] 0.98 [0.95, 1.00] 0.99 [0.97, 1.00] 
+
+CPF_D 0.97 [0.89, 1.00] 0.48 [0.46, 0.50] 0.64 [0.62, 0.66] 
+
+CPF_E 1.00 [1.00, 1.00] 0.93 [0.91, 0.95] 0.96 [0.95, 0.98] 
+
+CPF_F 1.00 [1.00, 1.00] 0.96 [0.89, 1.00] 0.97 [0.93, 1.00] 60

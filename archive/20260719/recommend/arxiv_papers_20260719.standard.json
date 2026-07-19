@@ -1,0 +1,545 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-07-19T21:12:41.709078+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 2,
+    "deep_divecandidates": 4,
+    "deep_cap": 7,
+    "deep_selected": 4,
+    "quick_candidates": 8,
+    "quick_skim_target": 12,
+    "quick_selected": 8
+  },
+  "deep_dive": [
+    {
+      "id": "2607.14826v1",
+      "source": "arxiv",
+      "title": "Interventional Causal Circuits for Safe Robot Action Testing and Failure Recovery",
+      "abstract": "Safe physical AI for robot actions are required not only likely to succeed but tested to be safe before execution. In practice, however, formal testing of motion parameters is computationally expensive, and the cost scales poorly with the dimensionality of the action space. When a proposed action is rejected by a tester, the naive response is to resample blindly until a passing candidate is found. This is wasteful, uninformative, and offers no convergence. We argue that rejection should instead trigger causal diagnosis: a principled identification of which action parameter caused the failure and what corrective value maximises the probability of passing testing under the interventional probability distribution. We propose a closed-loop framework that couples a Joint Probability Tree (JPT) with a Causal Circuit derived from a Marginal-Deterministic Variable Tree, enabling exact polytime computation without retraining, or additional data collection. The framework validates tractability of all interventional queries before the robot begins operating, and out-of-support candidates are detected and excluded from correction automatically. We perform experiments in a ROS2 simulation environment, and the framework demonstrates complementary roles across quality of distribution: under a high-quality JPT, the Causal Circuit reduces failed attempts by 10.3% and under a degraded JPT, it reduces total failed attempts by 37%. Every rejected plan produces a structured, interpretable causal report naming the primary cause variable, its observed value, and the recommended corrective region, supporting operator oversight and autonomous recovery without a separately trained failure model.",
+      "authors": [
+        "Naren Vasantakumaar",
+        "Tom Schierenbeck",
+        "Michael Beetz"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.AI"
+      ],
+      "published": "2026-07-16T10:41:20+00:00",
+      "link": "https://arxiv.org/pdf/2607.14826v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "safe robot action testing and failure recovery via causal diagnosis",
+      "llm_evidence_cn": "通过因果诊断进行安全机器人动作测试和故障恢复",
+      "llm_evidence": "通过因果诊断进行安全机器人动作测试和故障恢复",
+      "canonical_evidence": "通过因果诊断进行安全机器人动作测试和故障恢复",
+      "llm_tldr_en": "Interventional Causal Circuits proposes causal diagnosis for robot action failures, enabling identification of faulty parameters and corrective actions, directly relevant to fault diagnosis.",
+      "llm_tldr_cn": "本文针对机器人动作测试中计算昂贵、失败后盲目重采样的问题，提出干预因果回路方法。当动作被拒绝时，系统进行因果诊断，识别导致失败的动作参数，并通过干预分布找到纠正值。该方法可闭环测试和恢复，提高了安全性和效率。实验验证其在多种机器人动作上的有效性，为机器人故障诊断和错误分析提供了新思路。",
+      "llm_tldr": "本文针对机器人动作测试中计算昂贵、失败后盲目重采样的问题，提出干预因果回路方法。当动作被拒绝时，系统进行因果诊断，识别导致失败的动作参数，并通过干预分布找到纠正值。该方法可闭环测试和恢复，提高了安全性和效率。实验验证其在多种机器人动作上的有效性，为机器人故障诊断和错误分析提供了新思路。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "fault diagnosis for humanoid robots",
+      "matched_requirement_id": "req-3",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2607.13368v1",
+      "source": "arxiv",
+      "title": "Fine-Grained Open-Set Fault Diagnosis via Metric-Guided Time-Frequency Configuration Selection and Class-Specific Autoencoders",
+      "abstract": "Reliable fault diagnosis of rotating machinery is essential for the safe and stable operation of industrial systems. Although deep learning methods perform well under closed-set conditions, real machinery may encounter previously unseen fault states. Existing open-set fault diagnosis (OSFD) methods remain limited in fine-grained severity diagnosis because they often rely on coarse type levels, heuristically selected Short-Time Fourier Transform (STFT) settings, and global class boundaries. We propose a fine-grained OSFD method that combines metric-guided data-centric (MGDC) STFT configuration selection with class-specific autoencoder (CSAE)-based anomaly rejection. MGDC screens candidate STFT configurations using the Silhouette score computed from spectrogram representations, identifying promising time-frequency representations before network training. The diagnostic model then uses a bank of CSAEs to learn compact class-specific manifolds for known degradation states. During inference, reconstruction-error-based class affinity identifies known classes, while a dual-criteria mechanism based on latent dimension-wise boundaries and class-specific reconstruction error rejects unknown samples. Experiments on the Case Western Reserve University (CWRU) and Paderborn University (PU) bearing datasets show that the proposed method achieves H-scores of 0.9924 and 0.9509 for fine-grained fault severity diagnosis. MGDC also identifies the best-performing configuration found by exhaustive search while evaluating only 9 of 38 candidates on CWRU and 2 of 39 candidates on PU, reducing the selection cost by factors of 5.69 and 29.87, respectively. These results indicate that the proposed method supports accurate open-set severity diagnosis with substantially lower configuration-selection cost.",
+      "authors": [
+        "Youngjae Jeon",
+        "Dongjin Lee"
+      ],
+      "primary_category": "eess.SP",
+      "categories": [
+        "eess.SP"
+      ],
+      "published": "2026-07-15T01:10:25+00:00",
+      "link": "https://arxiv.org/pdf/2607.13368v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "open-set fault diagnosis method using autoencoders for anomaly rejection",
+      "llm_evidence_cn": "使用自编码器进行异常拒绝的开放集故障诊断方法",
+      "llm_evidence": "使用自编码器进行异常拒绝的开放集故障诊断方法",
+      "canonical_evidence": "使用自编码器进行异常拒绝的开放集故障诊断方法",
+      "llm_tldr_en": "Proposes fine-grained open-set fault diagnosis for rotating machinery using metric-guided STFT configuration selection and class-specific autoencoders for anomaly rejection, enabling detection of unseen fault states. The open-set approach is relevant to robot fault diagnosis.",
+      "llm_tldr_cn": "现实旋转机械可能遇到未见故障状态，现有开放集故障诊断方法在细粒度诊断上存在局限。本文提出一种细粒度开放集故障诊断方法，结合度量引导的时频配置选择（MGDC）和类别特定自编码器（CSAE）进行异常拒绝。MGDC自动筛选最优STFT配置，CSAE为每类故障建立专属边界。实验表明该方法在已知和未知故障状态的细粒度诊断上均优于现有方法。其开放集识别思路可迁移至机器人故障诊断。",
+      "llm_tldr": "现实旋转机械可能遇到未见故障状态，现有开放集故障诊断方法在细粒度诊断上存在局限。本文提出一种细粒度开放集故障诊断方法，结合度量引导的时频配置选择（MGDC）和类别特定自编码器（CSAE）进行异常拒绝。MGDC自动筛选最优STFT配置，CSAE为每类故障建立专属边界。实验表明该方法在已知和未知故障状态的细粒度诊断上均优于现有方法。其开放集识别思路可迁移至机器人故障诊断。",
+      "llm_tags": [
+        "query:humanoid-ood"
+      ],
+      "matched_query_tag": "query:humanoid-ood",
+      "matched_query_text": "Open set recognition in robotics for safety and anomaly detection",
+      "matched_requirement_id": "req-17",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2607.14047v2",
+      "source": "arxiv",
+      "title": "Zero2Skill: Bootstrapping Robot Skills through Autonomous Data Collection, Training, and Deployment",
+      "abstract": "Autonomous data collection governs the volume and quality of real-world trajectories for manipulation policy learning. Existing pipelines reduce human effort via self-resetting, VLM verification, or language-guided correction, yet episode-scoped fixes must be reissued whenever the same failure recurs, so oversight cost grows with session length rather than with the number of distinct problems. We present Zero2Skill, a human-robot symbiotic agentic system in which corrections are retained and reused across rounds. The collection loop collects, verifies, and resets autonomously, pausing for a remote operator only when a phase exhausts an explicit retry budget. An LLM parser maps each natural-language utterance to a structured adjustment stored in Corrective Memory, so addressed failure modes typically need not be corrected again under the same conditions. On a real-robot desktop-clearing testbed, Zero2Skill matches teleoperation episode success while reducing human working time to 16%. Language corrections improve verifier-human agreement in all four evaluated settings and raise average single-attempt success from 12.5% to 47.5% (arm-selection: 20.0% to 50.0%). Policies fine-tuned on Zero2Skill data match teleoperation-trained policy success at a fraction of collection human cost.",
+      "authors": [
+        "Boyuan Wang",
+        "Zhenyuan Zhang",
+        "Zhiqin Yang",
+        "Peijun Gu",
+        "Shuya Wang",
+        "Xiaofeng Wang",
+        "Xianghui Ze",
+        "Yifan Chang",
+        "Guosheng Zhao",
+        "Jiangnan Shao",
+        "Guan Huang",
+        "Hengyu Liu",
+        "Yonggang Zhang",
+        "Wei Xue",
+        "Chunyuan Guan",
+        "Chenglin Pu",
+        "Yike Guo",
+        "Xingang Wang",
+        "Zheng Zhu"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.HC",
+        "eess.SY"
+      ],
+      "published": "2026-07-15T17:16:24+00:00",
+      "link": "https://arxiv.org/pdf/2607.14047v2",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "Autonomous data collection and deployment for robot skills; directly relevant to dataset construction",
+      "llm_evidence_cn": "机器人技能的自主数据收集与部署，直接相关于数据集构建",
+      "llm_evidence": "机器人技能的自主数据收集与部署，直接相关于数据集构建",
+      "canonical_evidence": "机器人技能的自主数据收集与部署，直接相关于数据集构建",
+      "llm_tldr_en": "Zero2Skill is an agentic system that autonomously collects robot manipulation data, verifies, and deploys skills, with a human-in-the-loop only for novel failures.",
+      "llm_tldr_cn": "Zero2Skill是一种人机协同的智能体系统，能够自主收集、验证和部署机器人操作技能，仅在遇到新故障时暂停请求人工干预，显著减少人工监督成本，为机器人数据集构建与部署提供了高效方案。",
+      "llm_tldr": "Zero2Skill是一种人机协同的智能体系统，能够自主收集、验证和部署机器人操作技能，仅在遇到新故障时暂停请求人工干预，显著减少人工监督成本，为机器人数据集构建与部署提供了高效方案。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2607.13522v1",
+      "source": "arxiv",
+      "title": "Kepler-Encoder-v0.1: Towards a Multimodal Embedding Model for Robots",
+      "abstract": "A robot must understand the state of its own body, but a camera sees only part of it. Force and contact leave almost no trace in a single frame, and raw vision features read force at $R^2$ at or below $0.10$ on every robot we test. We present Kepler-Encoder-v0.1, a robot-first multimodal encoder that treats robot state as a modality and fuses vision, proprioception, and force/torque into a single shared latent with a learned-query cross-attention layer, trained self-supervised by masked cross-modal prediction under the LeJEPA/SIGReg objective. At evaluation only vision enters, which poses a sharp question. Does fusing state into training make the vision-only latent carry anything the pixels do not already contain? On the RH20T corpus the answer is yes, precisely where the camera is weakest. On held-out scenes, the vision-only latent recovers end-effector state, and force in particular, significantly above both raw frozen-ViT features and a compute-matched vision-only control on every sensored robot, though absolute force recovery at a single timestep is modest; on motor state, which the camera largely sees, it is statistically tied with the strongest vision baselines, and it is the only feature whose latent geometry tracks state. A single embodiment-agnostic encoder covers four robots, and a data-matched control shows this breadth reflects embodiment diversity rather than data volume. The frozen latent is directly useful. Its own cross-modal prediction error is a training-free invalid-state monitor (AUROC $0.90$ on out-of-range states, $0.69$ on scene-swapped states), and a diffusion decoder (PixNerd) reconstructs the camera frame from the latent, confirming the spatial compression preserves world-state. This report validates the single-timestep case; native-rate temporal fusion is the next step.",
+      "authors": [
+        "Ishneet Sukhvinder Singh",
+        "Dhanoosh Pooranakumaran",
+        "Alex Nguyen",
+        "Jia Qi Yip"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.CV"
+      ],
+      "published": "2026-07-15T07:21:00+00:00",
+      "link": "https://arxiv.org/pdf/2607.13522v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "multimodal encoder fusing vision, proprioception, and force/torque with self-supervised masked cross-modal prediction, directly relevant to proprioception-based robot state understanding",
+      "llm_evidence_cn": "融合视觉、本体感受和力/力矩的多模态编码器，自监督跨模态预测，直接与基于本体感受的机器人状态理解相关",
+      "llm_evidence": "融合视觉、本体感受和力/力矩的多模态编码器，自监督跨模态预测，直接与基于本体感受的机器人状态理解相关",
+      "canonical_evidence": "融合视觉、本体感受和力/力矩的多模态编码器，自监督跨模态预测，直接与基于本体感受的机器人状态理解相关",
+      "llm_tldr_en": "Kepler-Encoder-v0.1 is a robot-first multimodal encoder that fuses vision, proprioception, and force/torque via cross-attention and self-supervised masked prediction, enabling the vision-only latent to carry force and contact information, significantly improving embodied reasoning tasks on the RH20T corpus.",
+      "llm_tldr_cn": "针对传统视觉难以感知机器人自身力/接触信息的问题，本文提出Kepler-Encoder-v0.1，一种以机器人状态为模态的多模态编码器。通过可学习查询跨注意力层融合视觉、本体感受和力/力矩，并采用掩码跨模态预测进行自监督训练。在推理时仅需视觉输入，但隐层表示已蕴含力和接触信息。在RH20T语料库上的实验表明，该方法显著提升了机器人具身推理任务的表现，表明融合本体感受信号能有效增强纯视觉特征的语义能力。",
+      "llm_tldr": "针对传统视觉难以感知机器人自身力/接触信息的问题，本文提出Kepler-Encoder-v0.1，一种以机器人状态为模态的多模态编码器。通过可学习查询跨注意力层融合视觉、本体感受和力/力矩，并采用掩码跨模态预测进行自监督训练。在推理时仅需视觉输入，但隐层表示已蕴含力和接触信息。在RH20T语料库上的实验表明，该方法显著提升了机器人具身推理任务的表现，表明融合本体感受信号能有效增强纯视觉特征的语义能力。",
+      "llm_tags": [
+        "query:humanoid-ood"
+      ],
+      "matched_query_tag": "query:humanoid-ood",
+      "matched_query_text": "humanoid robot fault diagnosis using proprioceptive signals",
+      "matched_requirement_id": "req-9",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "quick_skim": [
+    {
+      "id": "2607.10350v2",
+      "source": "arxiv",
+      "title": "ABot-AgentOS: A General Robotic Agent OS with Lifelong Multi-modal Memory",
+      "abstract": "Recent VLM and VLA systems have improved robotic perception and action prediction, yet long-horizon embodied agents still require a general runtime layer for reasoning, memory, tool use, verification, and cross-embodiment execution. We present ABot-AgentOS, a general robotic Agent Operating System that sits above low-level controllers and provides a deliberative agent layer for scene-conditioned planning, context-isolated skill execution, multi-stage verification, multi-modal memory, and edge-cloud collaboration. To evaluate such systems, we introduce EmbodiedWorldBench, an executable benchmark with 16 indoor, outdoor, and hybrid scenes, four difficulty levels, and over 200 tasks involving navigation, object search, NPC dialogue, dynamic events, and trace-grounded scoring. ABot-AgentOS further introduces Universal Multi-modal Graph Memory, a persistent source-grounded substrate that converts dialogue, visual observations, spatial context, temporal relations, and task traces into typed nodes and edges. A failure-driven self-evolution loop converts diagnosed memory failures into gated runtime evo-assets that are promoted only to later evaluation splits, preventing current-split ground-truth leakage while enabling continual improvement. On an initial EmbodiedWorldBench subset, ABot-AgentOS improves over a single-controller baseline in both task success and goal completion. Across memory benchmarks, ABot-AgentOS Static achieves 87.5 on LoCoMo, 59.9 on OpenEQA EM-EQA, 88.6 on Mem-Gallery, and 76.5 Acc@All on NExT-QA; self-evolution further improves LoCoMo to 88.7, OpenEQA to 60.4, and Mem-Gallery to 89.0. These results suggest that a general Agent OS layer can improve long-horizon embodied execution while providing persistent, auditable memory for continual interaction.",
+      "authors": [
+        "Jiayi Tian",
+        "Shiao Liu",
+        "Yuting Xu",
+        "Jia Lu",
+        "Zihao Guan",
+        "Honglin Han",
+        "Di Yang",
+        "Minqi Gu",
+        "Yifei Qian",
+        "Tianlin Zhang",
+        "Yanqing Zhu",
+        "Zeqian Ye",
+        "Menglin Yang",
+        "Fei Wang",
+        "Xu Hu",
+        "Xiuxian Li",
+        "Wei Zhang",
+        "Shihui Su",
+        "Yiyan Ji",
+        "Jingbo Wang",
+        "Ziteng Feng",
+        "Jiaheng Liu",
+        "Zhaoxiang Zhang",
+        "Xiaolong Wu",
+        "Zixiao Tang",
+        "Zhining Gu",
+        "Yang Cai",
+        "Linbo Zheng",
+        "Jingjing Ma",
+        "Mingyang Yin",
+        "Zedong Chu",
+        "Ziqiao Li",
+        "Mu Xu"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI",
+        "cs.RO"
+      ],
+      "published": "2026-07-11T15:24:43+00:00",
+      "link": "https://arxiv.org/pdf/2607.10350v2",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "edge-cloud collaboration in a general robotic agent OS",
+      "llm_evidence_cn": "通用机器人智能体操作系统中的边云协同",
+      "llm_evidence": "通用机器人智能体操作系统中的边云协同",
+      "canonical_evidence": "通用机器人智能体操作系统中的边云协同",
+      "llm_tldr_en": "ABot-AgentOS provides a runtime layer for robotic agents with edge-cloud collaboration, multi-modal memory, and cross-embodiment execution. It supports edge deployment scenarios relevant to humanoid robots, though not specifically designed for them.",
+      "llm_tldr_cn": "现有VLM和VLA系统缺乏长期任务所需的推理、记忆、验证及跨形态执行所需的一般运行时层。本文提出ABot-AgentOS，作为一个位于低级控制器之上的通用机器人智能体操作系统，提供场景规划、隔离技能执行、多阶段验证、多模态记忆和边云协作能力。该系统通过EmbodiedWorldBench基准测评，涵盖多种场景和任务。其边云协作能力为机器人边缘端部署提供了参考架构。",
+      "llm_tldr": "现有VLM和VLA系统缺乏长期任务所需的推理、记忆、验证及跨形态执行所需的一般运行时层。本文提出ABot-AgentOS，作为一个位于低级控制器之上的通用机器人智能体操作系统，提供场景规划、隔离技能执行、多阶段验证、多模态记忆和边云协作能力。该系统通过EmbodiedWorldBench基准测评，涵盖多种场景和任务。其边云协作能力为机器人边缘端部署提供了参考架构。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "edge deployment for humanoid robots",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2607.11690v1",
+      "source": "arxiv",
+      "title": "Requirement-Driven Design of Whole-Body Social Tactile Sensing via Virtual Human-Robot Interaction",
+      "abstract": "Tactile sensing for social-physical human-robot interaction (spHRI) is designed in a hardware-driven manner, where predefined sensor configurations constrain coverage, spatial resolution, and the range of recognizable gestures. We propose a requirement-driven framework that derives sensing requirements, specifically spatial resolution and placement, directly from interaction data. Using a VR-based platform with haptic feedback, we collected high-resolution whole-body contact distributions across multiple social scenarios, from which we identified nine recurring social touch gestures. Eight gestures were selected for controlled data collection with 18 participants, yielding an open-source dataset of 5,520 trials. Analysis of contact distributions and simulated tactile encodings provides quantitative baselines for skin coverage and sensor density on a humanoid robot platform. While demonstrated on a single robot platform, the methodology is designed to be transferable to other robot morphologies, potentially enabling morphology-specific sensing requirements to be derived prior to hardware fabrication.",
+      "authors": [
+        "Dakarai Crowder",
+        "Ruohan Zhang",
+        "Alexis E. Block",
+        "Wenzhen Yuan"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.HC"
+      ],
+      "published": "2026-07-13T15:23:45+00:00",
+      "link": "https://arxiv.org/pdf/2607.11690v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "open-source whole-body touch dataset construction via VR",
+      "llm_evidence_cn": "通过VR构建开源全身触觉数据集",
+      "llm_evidence": "通过VR构建开源全身触觉数据集",
+      "canonical_evidence": "通过VR构建开源全身触觉数据集",
+      "llm_tldr_en": "Collects an open-source whole-body social touch dataset of 5,520 trials via VR-based interaction, deriving sensing requirements from data.",
+      "llm_tldr_cn": "针对社交触觉传感设计中传感器配置依赖预定义的局限，提出一种需求驱动框架。通过VR平台收集高分辨率全身接触分布数据，识别出9种社交触摸手势，并构建了包含5520个样本的开源数据集。该方法直接从交互数据推导传感需求（空间分辨率与放置位置），为机器人触摸感知数据集构建提供了可复现的范例，尤其适用于人形机器人交互场景。",
+      "llm_tldr": "针对社交触觉传感设计中传感器配置依赖预定义的局限，提出一种需求驱动框架。通过VR平台收集高分辨率全身接触分布数据，识别出9种社交触摸手势，并构建了包含5520个样本的开源数据集。该方法直接从交互数据推导传感需求（空间分辨率与放置位置），为机器人触摸感知数据集构建提供了可复现的范例，尤其适用于人形机器人交互场景。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2607.12370v1",
+      "source": "arxiv",
+      "title": "StratMamba: Strategic and Reactive Stream Partitioning for Path-Efficient LiDAR-Based Obstacle Avoidance",
+      "abstract": "This paper proposes StratMamba, a dual-stream Mamba-based temporal modeling architecture, to more efficiently capture long-horizon temporal dependencies required for robot navigation in complex and obstacle-rich environments. StratMamba leverages a combination of fast-decay and slow-decay memory architectures, where the fast-decay component processes high-frequency LiDAR data for reactive obstacle avoidance, while the slow-decay component maintains longer-horizon goal information for strategic planning. We perform extensive evaluations of different obstacle avoidance scenarios in IsaacLab and Gazebo, while also validating successful sim-to-real deployment on a Unitree GO1 quadruped robot navigating in the presence of static/dynamic obstacles. Comparisons with other temporal RL baselines, such as LSTM, Transformer, and Vanilla-Mamba, show that our StratMamba achieves exceptional temporal reasoning efficiency with a lower timeout rate, while maintaining the fastest navigation speed (576 median steps, 5.0% better than Vanilla-Mamba). It also achieves the highest path optimality (0.915 path efficiency) across all baselines. Real-world evaluation reveals that StratMamba maintains more robust performance across extended LiDAR ranges compared to vanilla Mamba and the Transformer, demonstrating that dual-stream partitioning effectively balances reactive safety with strategic navigation under challenging sensing conditions.",
+      "authors": [
+        "Hung-Chieh Wu",
+        "Xiaopan Zhang",
+        "Kasra Sinaei",
+        "Ryan Abnavi",
+        "Kasun Weerakoon",
+        "Christopher Bradley",
+        "Seyed Fakoorian",
+        "Jiachen Li",
+        "Donald Ebeigbe"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-07-14T05:42:28+00:00",
+      "link": "https://arxiv.org/pdf/2607.12370v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "sim-to-real deployment on Unitree GO1 quadruped robot",
+      "llm_evidence_cn": "在宇树GO1四足机器人上成功进行仿真到实物部署",
+      "llm_evidence": "在宇树GO1四足机器人上成功进行仿真到实物部署",
+      "canonical_evidence": "在宇树GO1四足机器人上成功进行仿真到实物部署",
+      "llm_tldr_en": "Proposes StratMamba, a dual-stream Mamba architecture for LiDAR-based obstacle avoidance, validated in simulation and real-world deployment on a Unitree GO1 quadruped robot.",
+      "llm_tldr_cn": "该论文提出StratMamba架构，利用双流Mamba模型处理LiDAR数据以捕获长时序依赖，实现高效避障。在IsaacLab和Gazebo中仿真，并在宇树GO1四足机器人上成功实现仿真到现实部署。虽针对四足而非人形，但展示了宇树机器人边缘部署的可行性，为上述需求提供部署案例。",
+      "llm_tldr": "该论文提出StratMamba架构，利用双流Mamba模型处理LiDAR数据以捕获长时序依赖，实现高效避障。在IsaacLab和Gazebo中仿真，并在宇树GO1四足机器人上成功实现仿真到现实部署。虽针对四足而非人形，但展示了宇树机器人边缘部署的可行性，为上述需求提供部署案例。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "edge deployment of Unitree robots research",
+      "matched_requirement_id": "req-8",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2607.13597v1",
+      "source": "arxiv",
+      "title": "Semantic Anchoring for Robotic Action Representations",
+      "abstract": "Vision-Language-Action (VLA) models inherit rich semantic representations from pretrained Vision-Language Models, yet fine-tuning on limited robot demonstrations degrades this structure and undermines generalization. A fundamental question therefore arises: what constitutes a good action representation? Inspired by the mirror neuron theory's insight that observation and execution share an intention-level encoding, we examine whether a robot's action representations preserve the semantic structure captured by pretrained encoders. Systematic probing confirms that this structure erodes during finetuning, and that its quality synchronizes with both task success and out-of-distribution generalization. We further introduce a plug-and-play method that anchors action representations to a semantic manifold while decomposing representations into a shared semantic channel and a private channel, all discarded at inference, leaving the deployed model unchanged. Validated on different VLA backbones across simulation and real-world benchmarks, our method yields up to +18.7% on real-world in-distribution tasks and +21.5% on out-of-distribution generalization.",
+      "authors": [
+        "Yuan Xu",
+        "Youheng Shi",
+        "Chengyang Li",
+        "Wentao Zhu",
+        "Yizhou Wang"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.AI",
+        "cs.CV"
+      ],
+      "published": "2026-07-15T08:45:15+00:00",
+      "link": "https://arxiv.org/pdf/2607.13597v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "out-of-distribution generalization in robotic action representations",
+      "llm_evidence_cn": "机器人动作表示的分布外泛化",
+      "llm_evidence": "机器人动作表示的分布外泛化",
+      "canonical_evidence": "机器人动作表示的分布外泛化",
+      "llm_tldr_en": "Semantic Anchoring probes and preserves semantic structure in VLA models, showing correlation with OOD generalization and providing a method to improve out-of-distribution detection.",
+      "llm_tldr_cn": "本文研究视觉-语言-动作（VLA）模型中动作表示的结构，发现微调会破坏语义结构并影响分布外（OOD）泛化。通过系统探测，论文提出一种语义锚定方法，保持语义结构，从而提升OOD泛化能力。实验表明该方法与任务成功率和安全性相关，适用于机器人安全的OOD检测场景。",
+      "llm_tldr": "本文研究视觉-语言-动作（VLA）模型中动作表示的结构，发现微调会破坏语义结构并影响分布外（OOD）泛化。通过系统探测，论文提出一种语义锚定方法，保持语义结构，从而提升OOD泛化能力。实验表明该方法与任务成功率和安全性相关，适用于机器人安全的OOD检测场景。",
+      "llm_tags": [
+        "query:humanoid-ood"
+      ],
+      "matched_query_tag": "query:humanoid-ood",
+      "matched_query_text": "out-of-distribution detection for safe robot operation",
+      "matched_requirement_id": "req-11",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2607.12858v1",
+      "source": "arxiv",
+      "title": "LARAD: Layout-Aware Road Anomaly Detection via Spatial-Logic Reasoning",
+      "abstract": "Accurate open-world obstacle detection is critical for autonomous driving. Current anomaly segmentation methods suffer from a fundamental blind spot: they over-rely on texture novelty to identify out-of-distribution (OoD) objects while ignoring contextual spatial logic. Furthermore, mitigating the resulting false positives often requires cascading massive vision models, introducing unacceptable inference latency. To address these issues, we propose Layout-Aware Road Anomaly Detection (LARAD), shifting the paradigm from appearance matching to spatial-logic reasoning. First, we introduce the Spatial-Logic Violation Synthesis (SLVS) pipeline, which generates training samples that are texture-consistent yet spatially invalid, forcing the model to learn contextual violations. Second, we augment a standard closed-set segmentation network with a lightweight, OoD-guided attention branch. Extensive experiments demonstrate that LARAD significantly enhances robustness against logical anomalies and establishes a new state-of-the-art, all while retaining the high efficiency of a single-model architecture.",
+      "authors": [
+        "Shiyi Mu",
+        "Xujie Chen",
+        "Shugong Xu"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV"
+      ],
+      "published": "2026-07-14T15:09:00+00:00",
+      "link": "https://arxiv.org/pdf/2607.12858v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "Layout-aware OoD detection for autonomous driving; method transferable to robot open-set recognition",
+      "llm_evidence_cn": "基于布局的自动驾驶异常检测方法，可迁移至机器人开放集识别",
+      "llm_evidence": "基于布局的自动驾驶异常检测方法，可迁移至机器人开放集识别",
+      "canonical_evidence": "基于布局的自动驾驶异常检测方法，可迁移至机器人开放集识别",
+      "llm_tldr_en": "LARAD uses spatial-logic reasoning instead of texture novelty for road anomaly detection, reducing false positives and inference latency.",
+      "llm_tldr_cn": "LARAD提出基于空间逻辑推理的道路异常检测方法，通过生成纹理正常但空间异常的样本训练模型，解决了仅依靠纹理新颖性的局限，降低了误报率和推理延迟，其开放集识别思想可适用于机器人安全异常检测。",
+      "llm_tldr": "LARAD提出基于空间逻辑推理的道路异常检测方法，通过生成纹理正常但空间异常的样本训练模型，解决了仅依靠纹理新颖性的局限，降低了误报率和推理延迟，其开放集识别思想可适用于机器人安全异常检测。",
+      "llm_tags": [
+        "query:humanoid-ood"
+      ],
+      "matched_query_tag": "query:humanoid-ood",
+      "matched_query_text": "out-of-distribution detection for safe robot operation",
+      "matched_requirement_id": "req-11",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "biorxiv-10-64898-2026-07-11-737894-v2",
+      "source": "biorxiv",
+      "title": "Self-thresholding hierarchical outlier-detection for animal movement tracks",
+      "abstract": "1). Erroneous locations are ubiquitous in animal tracking data and prove notoriously difficult to remove, particularly so in an unsupervised manner. Whether caused by poor satellite geometry, atmospheric interference, tag malfunction, or deliberate GNSS spoofing or jamming, such outliers propagate into estimates of movement rates, home ranges, habitat selection, and behavioural states. Existing screening procedures rely on fixed speed threshold filtering, require regular sampling, or distance thresholds, or are based on smooth locations through model-based approaches which can prove difficult to fit to heterogeneous data, or they stop at producing diagnostic plots that leave the final decision to the analyst. Additionally, movement-metric outlier tests often share a structural blind spot: they catch points whose transitions to neighbours are extreme, but miss spatially-coherent block errors whose interiors look metrically normal. 2). I introduce mt_clean_track(), a function in the open-source R package move2utils that takes a movement track and returns the same track with outlier flags attached plus a categorical read-out of \"what kind of evidence\" triggered each flag. The method combines a cascade of outlier detection methods based on four ideas: data-driven thresholds that the user does not have to specify, four complementary detectors that each catch an error class the others structurally cannot (a Brownian-bridge geometric residual, a movement-metric probability test, a scale-invariant path-vs-displacement detour ratio, and a step-level physiological speed cap), and a graph-based block-expansion step that recovers coherent error trains that per-fix scoring cannot reach. Based on the flags raised by each of the underlying methods, I use an agreement-based heuristic combination rule that builds a consensus flag for a location based on the number of single method flags and their level of certainty, as well as other methods of consensus derivation. 3). I evaluate the method on a cohort of synthetic trajectories covering isolated spikes, drift segments, sustained spoofing blocks, stationary-halo GPS jitter, and multi-state migration anomalies, and compare against four established alternatives (a naive speed cap, atlastools, trip::sda, SDLfilter). The cascade recovers the injected outliers on every track, achieves the highest cross-cohort mean F1 (0.86 at zero user parameters; nearest competitor 0.80 at a hand-tuned threshold), and is the only tool that recovers the coherent spoofing block with usable precision (30/30 vs 1--3/30 for the per-fix competitors). On a clean reference track all tools except trip::sda produce low to zero false positives. A directional decomposition of the bridge residual additionally reframes outlier detection as error-classification: a flagged fix's position in a two-dimensional residual plane reveals whether the error is perpendicular drift, along-track jump, or magnitude-extreme on both axes. 4). Providing per-location outlier scores, data-driven thresholds, an error-morphology read-out, and a single cleaning-cascade entry point that requires no parameters in its default form is intended to make outlier screening of GPS-tracking data a routine and reproducible step in the movement-ecology analysis pipeline. The outlier removal cascade is part of the move2utils package and available at https://github.com/move2universe/move2utils.",
+      "authors": [
+        "Safi, K."
+      ],
+      "primary_category": "ecology",
+      "categories": [
+        "ecology"
+      ],
+      "published": "2026-07-17T00:00:00+00:00",
+      "link": "https://www.biorxiv.org/content/10.64898/2026.07.11.737894v2.full.pdf",
+      "tags": [
+        "keyword:humanoid-ood",
+        "query:humanoid-ood"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "self-thresholding hierarchical outlier detection for time series",
+      "llm_evidence_cn": "时间序列的自阈值层次异常检测方法",
+      "llm_evidence": "时间序列的自阈值层次异常检测方法",
+      "canonical_evidence": "时间序列的自阈值层次异常检测方法",
+      "llm_tldr_en": "Proposes an unsupervised self-thresholding hierarchical outlier-detection method for animal movement tracks, applicable to time series anomaly detection.",
+      "llm_tldr_cn": "针对动物追踪数据中无监督异常值去除的难题，提出了一种自阈值层次化异常检测方法。该方法无需固定速度阈值或正则采样，通过层次分解和自动阈值选择有效识别轨迹中的错误点。虽然应用于生态学领域，其通用的时间序列异常检测框架可直接迁移至机器人故障诊断场景，为利用本体感受信号进行异常检测提供了可借鉴的自监督方法。",
+      "llm_tldr": "针对动物追踪数据中无监督异常值去除的难题，提出了一种自阈值层次化异常检测方法。该方法无需固定速度阈值或正则采样，通过层次分解和自动阈值选择有效识别轨迹中的错误点。虽然应用于生态学领域，其通用的时间序列异常检测框架可直接迁移至机器人故障诊断场景，为利用本体感受信号进行异常检测提供了可借鉴的自监督方法。",
+      "llm_tags": [
+        "query:humanoid-ood"
+      ],
+      "matched_query_tag": "query:humanoid-ood",
+      "matched_query_text": "Self supervised time series anomaly detection for robot fault diagnosis",
+      "matched_requirement_id": "req-16",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2607.13818v1",
+      "source": "arxiv",
+      "title": "Learning Robust Execution in Robotic Manipulation with Agentic Reinforcement Learning",
+      "abstract": "Robotic manipulation poses fundamental challenges due to uncertainty, long-horizon execution, and compounding errors, which can easily destabilize execution and lead to task failure. Although recent vision-language-action (VLA) models exhibit strong generalization, they typically lack explicit mechanisms to assess execution stability and to recover when execution deviates from its nominal behavior. In this paper, we propose: (1) two complementary metrics to assess execution quality at runtime, and (2) an agentic reinforcement learning framework that learns to restore effective execution through high-level decision-making rather than directly learning low-level actions. In this framework, an agentic policy reasons over recent execution history and selects among a small set of execution modes to regulate the execution process. Under execution degradation, it triggers appropriate recovery mechanisms to restore the robot to previously visited nominal states, enabling the task to continue. We evaluate the proposed method on the LIBERO benchmark, achieving up to a 13.7% improvement in success rate under standard settings and up to a 39.2% improvement under disturbance settings, demonstrating substantially enhanced execution robustness.",
+      "authors": [
+        "Xiaopeng Zhang",
+        "Yueyang Weng",
+        "Qi Liu",
+        "Yongjin Mu",
+        "Yanjie Li"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-07-15T13:25:52+00:00",
+      "link": "https://arxiv.org/pdf/2607.13818v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "Agentic RL framework for error detection and recovery in manipulation; relates to fault diagnosis",
+      "llm_evidence_cn": "基于智能体强化学习的操作错误检测与恢复，关联故障诊断",
+      "llm_evidence": "基于智能体强化学习的操作错误检测与恢复，关联故障诊断",
+      "canonical_evidence": "基于智能体强化学习的操作错误检测与恢复，关联故障诊断",
+      "llm_tldr_en": "Proposes runtime execution quality metrics and an agentic RL framework to detect and recover from execution errors in robotic manipulation.",
+      "llm_tldr_cn": "该论文提出两种互补的执行质量度量指标，并构建智能体强化学习框架，通过高层决策而非低层动作来恢复执行稳定性，应对操作中的不确定性和误差累积，提升了机器人故障诊断与恢复能力。",
+      "llm_tldr": "该论文提出两种互补的执行质量度量指标，并构建智能体强化学习框架，通过高层决策而非低层动作来恢复执行稳定性，应对操作中的不确定性和误差累积，提升了机器人故障诊断与恢复能力。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "fault diagnosis and error analysis for humanoid robots",
+      "matched_requirement_id": "req-7",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2607.14534v1",
+      "source": "arxiv",
+      "title": "SwinAD: Multi-stage feature reconstruction for unsupervised industrial anomaly detection",
+      "abstract": "Industrial anomaly detection aims to identify and localize defective regions without relying on exhaustive annotations of all possible defect types. Although recent unsupervised methods have achieved strong performance, most are primarily designed for single-class settings and often struggle in multi-class scenarios, where diverse normal patterns may lead to over-generalization and reduce the discriminative capability between normal and anomalous regions. In this paper, we propose SwinAD, a reconstruction-based framework for multi-class unsupervised anomaly detection that leverages a frozen pretrained Swin Transformer V2 encoder and a feature diversity-preserving reconstruction decoder. The hierarchical encoder provides semantically rich multi-scale features, while stage-wise bottleneck modules with dropout prevent trivial identity mapping and encourage robust reconstruction of normal patterns. To further improve localization, we introduce a feature diversity-preserving reconstruction framework that maintains complementary reconstruction hypotheses instead of relying on a single decoding branch. The discrepancies between encoder features and the two reconstructed features are then aggregated across multiple scales to produce the final anomaly map. Experiments conducted on three industrial anomaly detection benchmarks, including MVTec AD, VisA, and Real-IAD, demonstrate that SwinAD achieves competitive image-level performance and strong pixel-level localization accuracy, with particularly notable improvements in pixel-level AP and 1 on MVTec AD. These results indicate that combining hierarchical Swin features with diverse multi-scale reconstruction substantially improve pixel-level localization in multi-class unsupervised anomaly setting.",
+      "authors": [
+        "Huong Ninh",
+        "Chien Thai",
+        "Mai Xuan Trang",
+        "Vu-Minh Le",
+        "Thanh Ha Le",
+        "Long Tran"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV"
+      ],
+      "published": "2026-07-16T03:39:56+00:00",
+      "link": "https://arxiv.org/pdf/2607.14534v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "unsupervised anomaly detection method transferable to robot OOD detection",
+      "llm_evidence_cn": "无监督异常检测方法可迁移至机器人OOD检测",
+      "llm_evidence": "无监督异常检测方法可迁移至机器人OOD检测",
+      "canonical_evidence": "无监督异常检测方法可迁移至机器人OOD检测",
+      "llm_tldr_en": "Proposes SwinAD, a multi-stage feature reconstruction framework using frozen Swin Transformer V2 encoder for unsupervised industrial anomaly detection, achieving SOTA on multi-class benchmarks.",
+      "llm_tldr_cn": "针对无监督工业异常检测在多类别场景下的过泛化问题，本文提出SwinAD框架，采用冻结的Swin Transformer V2编码器提取分层语义特征，并通过多样性保持重建解码器进行重构，从而避免信息丢失。实验结果表明，该方法在多类别异常检测任务中显著优于现有方法，为工业质检提供了无需标注样本的通用解决方案，其重建范式也可启发机器人本体感受信号的异常检测。",
+      "llm_tldr": "针对无监督工业异常检测在多类别场景下的过泛化问题，本文提出SwinAD框架，采用冻结的Swin Transformer V2编码器提取分层语义特征，并通过多样性保持重建解码器进行重构，从而避免信息丢失。实验结果表明，该方法在多类别异常检测任务中显著优于现有方法，为工业质检提供了无需标注样本的通用解决方案，其重建范式也可启发机器人本体感受信号的异常检测。",
+      "llm_tags": [
+        "query:humanoid-ood"
+      ],
+      "matched_query_tag": "query:humanoid-ood",
+      "matched_query_text": "out-of-distribution detection for safe robot operation",
+      "matched_requirement_id": "req-11",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    }
+  ]
+}
