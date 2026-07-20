@@ -1,0 +1,580 @@
+Title: Knowledge-Assisted Multi-Graph Dependency Learning for Multivariate Time Series Anomaly Detection in Multi-Stage Industrial Processes
+
+URL Source: https://arxiv.org/pdf/2607.15799v1
+
+Published Time: Mon, 20 Jul 2026 00:44:54 GMT
+
+Number of Pages: 13
+
+Markdown Content:
+> IEEE TRANSACTIONS ON AUTOMATION SCIENCE AND ENGINEERING 1
+
+# Knowledge-Assisted Multi-Graph Dependency Learning for Multivariate Time Series Anomaly Detection in Multi-Stage Industrial Processes 
+
+Jaeyeong Lee, Taeseong Yoon, Wonmo Koo, and Heeyoung Kim 
+
+Abstract —Industrial processes often generate complex, interdependent time-series data from multiple sensors across multiple stages, forming complex dependencies among variables and process stages. Effective monitoring and timely anomaly detection of these time series through multivariate time series anomaly detection (MTAD) is crucial for preventing failures and ensuring the reliability of automated systems. Graph neural networks (GNNs) have advanced MTAD by leveraging data-driven graphs to model complex dependencies among variables, effectively capturing relational structures within multivariate time series to enhance anomaly detection performance. However, existing GNN-based approaches often overlook critical process knowledge, and even when this knowledge is considered, seamlessly incorporating it into existing models remains inherently challenging, leading to suboptimal performance. To address this limitation, we propose a knowledge-assisted multi-graph framework for modeling sensor dependencies in multi-stage industrial processes for MTAD, which explicitly incorporates process knowledge into graph learning to enhance dependency modeling and improve anomaly detection performance. Our method constructs three complementary graphs: one purely data-driven and two refined by integrating structural constraints derived from process knowledge. To effectively leverage these graphs for anomaly detection, we employ a multi-graph attention network, enabling a more accurate and robust representation of complex dependencies. Comprehensive experiments on two real-world, multi-stage industrial datasets demonstrate that incorporating process knowledge substantially enhances anomaly detection performance. 
+
+Note to Practitioners— This work tackles anomaly detection in multi-stage industrial processes, where many sensors exhibit dependencies both within and across stages. Methods that learn sensor relations purely from data often overlook critical de-pendencies or infer spurious ones. To address this limitation, the proposed approach incorporates two forms of commonly available process knowledge—sensor group knowledge (sensors associated with each sub-process) and process flow knowledge (adjacent sub-process relationships)—derived from process di-agrams. The method builds three complementary graphs (un-informed, sensor group knowledge-informed, and process flow knowledge-informed) and uses a multi-graph attention network combined with a temporal convolutional network for forecasting-based anomaly detection. Experiments on water treatment and water distribution systems show substantial F1 improvements 
+
+This work was supported by the National Research Foundation of Korea (NRF) grant funded by the Korea government (MSIT) (2023R1A2C2005453, RS-2023-00218913). (Corresponding author: Heeyoung Kim.) Jaeyeong Lee, Taeseong Yoon, Wonmo Koo, and Heeyoung Kim are with the Department of Industrial and Systems Engineering, Korea Ad-vanced Institute of Science and Technology (KAIST), Daejeon, Repub-lic of Korea. (e-mail: dlwodud116@kaist.ac.kr; bigstar0423@kaist.ac.kr; joseph92@kaist.ac.kr; heeyoungkim@kaist.ac.kr). Jaeyeong Lee and Taeseong Yoon contributed equally to this work. 
+
+over data-driven baselines, ablation studies confirming the contri-butions of both knowledge sources. For deployment, practitioners only need to specify sensor groupings and stage adjacencies from existing diagrams; no manual relationship modeling or specialized domain expertise is required. The model is trained on normal-operation data and detects anomalies via prediction er-rors. The approach is most effective when sub-process boundaries and flows are well documented and should be updated if the plant configuration changes. Beyond water systems, this method can be applied to chemical processing, power generation, and automated manufacturing facilities with similar multi-stage structures. 
+
+Index Terms —Anomaly detection, graph structure learning, knowledge-assisted learning, multi-stage process, multivariate time series. 
+
+I. I NTRODUCTION 
+
+# INDUSTRIAL control systems (ICS) are cyber-physical systems designed to enable a small number of operators to efficiently manage industrial processes. These systems rely on numerous sensors and actuators distributed across multiple stages (or sub-processes) to monitor and control operations [1]–[5]. Effective monitoring and timely anomaly detection of the multivariate time series generated by ICS are important for preventing failures and ensuring system reliability, which can be achieved through multivariate time series anomaly detection (MTAD). Recently, methods employing graph neural networks (GNNs) [6], [7], [9]–[17] have shown remarkable performance in MTAD, primarily due to their ability to capture complex inter-sensor dependencies through graphs, where nodes repre-sent sensors and edges represent their relationships. Since the structure of the graph is often unknown in many real-world MTAD scenarios [7], GNN-based MTAD methods typically learn the graph structure from the data. However, accurately learning the graph structure can be challenging for processes with multiple stages or sub-processes, which exhibit complex dependencies both among variables and across process stages. In particular, strong cor-relations can arise not only among variables within the same stage but also between different stages, especially when they are closely linked [8]. To illustrate this challenge, Fig. 1(a) presents the process flow diagram of a water treatment pro-cess comprising six sub-processes (P1–6), each monitored by multiple sensors, while Fig. 1(b) highlights the strong correlations among the measurements from two sensors in P3 (MV301 and DPIT301) and two sensors in P6 (P602 and arXiv:2607.15799v1 [cs.LG] 17 Jul 2026 IEEE TRANSACTIONS ON AUTOMATION SCIENCE AND ENGINEERING 2
+
+(a) (b)   
+
+> Fig. 1. (a) The process flow diagram of the Secure Water Treatment (SWaT) process and (b) a one-hour-long multivariate time series from four sensors in P3 and P6.
+> Fig. 2. Relationships among four sensors captured through graph structure learning in (a) the GDN [7] and (b) the proposed model. Edges are weighted by learned similarities, with dashed lines representing missing relationships.
+
+FIT601). These correlations naturally arise from the underly-ing process dynamics. Specifically, in P3, MV301 regulates the backwashing valve for the ultra-filtration (UF) unit, while DPIT301 measures the resulting pressure difference. Similarly, in P6, P602 indicates the pump’s state, directly influencing the water flow measured by FIT601. Additionally, P3 and P6 are intrinsically linked through the backwashing process, as treated water from P6 is pumped to P3 to clean the UF unit. 
+
+> 1
+
+Thus, accurately modeling these complex interdependen-cies is crucial for effective MTAD. However, existing GNN-based MTAD methods, which infer inter-sensor relationships solely from data, often struggle to accurately capture these complex dependencies. As a result, they may learn spurious connections or fail to identify key relationships in multi-stage processes. This limitation is illustrated in Fig. 2(a), which displays the relationships among the four sensors in Fig. 1(b) (MV301, DPIT 301, P602, FIT601) learned by the graph deviation network (GDN) [7], a representative GNN-based          
+
+> 1Although P3 and P6 are sequentially connected in process flow, their sensor responses may appear nearly simultaneous in Fig. 1(b) because the physical response delay is short relative to sampling resolution. Thus, the figure illustrates coupled responses from sequentially connected sub-processes, rather than simultaneous operation of unrelated sub-processes.
+
+MTAD method. Solid lines indicate detected relationships, while the dashed lines represent missing connections. The numerical values along the edges denote similarity scores, with darker shades indicating stronger inferred connections. Ideally, the model should capture all relationships among four sensors, given their high correlations, as shown in Fig. 1(b). However, GDN misrepresents sensor interactions, leading to an incom-plete depiction of dependencies and ultimately suboptimal anomaly detection. In contrast, our proposed method, shown in Fig. 2(b), effectively captures the true sensor dependencies, leading to more reliable anomaly detection. To address these challenges, sensor group knowledge— which specifies the sub-process associated with each sensor— has been incorporated into a GNN-based MTAD framework [11]. While this approach improved dependency modeling by leveraging sensor group knowledge, it did not account for 
+
+process flow knowledge , which captures relationships between closely related sub-processes. Without explicitly modeling re-lationships between interconnected sub-processes, the learned graph structure may still overlook critical dependencies, ulti-mately limiting the effectiveness of anomaly detection. Thus, a more comprehensive approach that integrates both sensor group knowledge and process flow knowledge is essential for accurately modeling multi-stage industrial processes and IEEE TRANSACTIONS ON AUTOMATION SCIENCE AND ENGINEERING 3
+
+enhancing MTAD performance. In this paper, we propose a knowledge-assisted multi-graph framework for modeling sensor dependencies in multi-stage industrial processes for forecasting-based MTAD. The framework extends GNN-based MTAD approaches to struc-turally incorporate sensor group knowledge and process flow knowledge into graph construction, and exploits the resulting complementary relational representations through multi-graph attention for forecasting. This structured integration helps the model to more effectively capture inter-sensor dependencies, improving over conventional data-driven approaches that often overlook the underlying process dynamics. By coupling this knowledge-guided graph structure construction with tempo-ral modeling via a temporal convolutional network (TCN) [19], the proposed method delivers more robust forecasting and improved anomaly detection performance on real-world industrial datasets. Our method consists of three stages: (1) graph struc-ture learning, (2) graph attention-based forecasting, and (3) anomaly scoring. Our primary contribution lies in the first stage—graph structure learning—where we introduce a prin-cipled method to embed process knowledge into the graph. This is nontrivial due to architectural constraints and the difficulty of embedding structured relationships into graph representations. To address this, we introduce a simple yet effective struc-tural design that integrates process knowledge seamlessly into the GNN framework. Specifically, we represent sensor simi-larities using two learnable embeddings per sensor, capturing bidirectional relationships between sensor pairs. Based on these similarities, we construct three graphs: (1) a purely data-driven graph, (2) a graph that selectively masks similarities using sensor group knowledge, and (3) a graph that masks similarities based on process flow knowledge. Instead of merely treating prior knowledge as auxiliary node attributes, our framework translates it directly into the graph construction mechanism. This introduces structured inductive bias into graph learning itself, guiding the robust discovery of inter-sensor dependencies. Building upon these graphs, we forecast future sensor read-ings and conduct anomaly detection based on forecast errors. A key challenge here is to integrate the learned inter-sensor de-pendencies from graphs with intra-sensor temporal dynamics to enable accurate forecasting and robust anomaly detection. Since each graph encodes distinct inter-sensor relationships, we employ three separate graph attention networks (GATs) [18], one for each graph constructed in the previous stage, each learning an attention mechanism tailored to the corresponding graph and enabling the model to capture complementary relational information for forecasting. These GATs allow for flexible and adaptive relationship modeling by dynamically as-signing varying levels of importance to neighboring sensors. In parallel, to model intra-sensor dependencies over time, we use a TCN, leveraging its ability to effectively capture temporal patterns with relatively low computational cost compared to typical recurrent models. The outputs of the GATs and TCN are combined to form rich spatiotemporal representations, which are used to forecast future sensor readings. Anomaly scores are then derived from the resulting prediction errors. We validate our method on two real-world multi-stage industrial datasets and show that incor-porating process knowledge significantly improves anomaly detection performance. The main contributions of this paper are threefold. (1) a knowledge-assisted multi-graph dependency learning frame-work for MTAD in multistage industrial processes; (2) a principled mechanism for modeling both intra-sub-process and inter-sub-process dependencies using sensor group knowledge and process flow knowledge; and (3) comprehensive empirical validation, including ablation and qualitative analyses, demon-strating the effectiveness and interpretability of the proposed knowledge-guided graph design. The remainder of the paper is organized as follows. Section II reviews related work. Section III provides an overview of the GAT and TCN. Section IV describes the proposed method. In Section V, we validate the proposed method using real-world sensor datasets. Finally, we conclude this paper in Section VI. II. R ELATED WORK 
+
+A. Unsupervised Multivariate Time Series Anomaly Detection 
+
+Following the standard taxonomy of anomaly detection, the present work focuses on point anomaly detection rather than contextual or collective anomaly detection [20], [21], [23], [24]. For MTAD, various deep neural network (DNN)-based methods have been proposed [21], [22], [25], [26], owing to their effectiveness in handling complex, high-dimensional time series data. Due to the unlabeled nature of the data and the rarity of anomalies, MTAD has mainly been treated as an unsupervised learning problem [10]. Unsupervised DNN-based MTAD methods are typically categorized into two classes: forecasting-based approaches [9], [27]–[30] and reconstruction-based approaches [32]–[37]. Forecasting-based MTAD methods typically predict the value at each time stamp by using previously observed val-ues and use forecasting errors to detect anomalies. These methods operate under the assumption that forecasting errors of anomalous data points are higher than those of normal data points. To capture complex intra-sensor dependencies, recurrent neural networks (RNNs) have been used [27], [28]. Furthermore, TCNs and Transformers [45] have also been employed due to their effectiveness in capturing long-range intra-sensor dependencies [9], [29], [30]. Reconstruction-based MTAD methods typically reconstruct observed time series, identifying anomalies when reconstruc-tion errors are significant. Similar to forecasting-based MTAD methods, they employ various DNNs specially designed to capture complex intra-sensor dependencies, such as RNNs [31]–[34], TCNs [36], and Transformers [37], [38]. Beyond such intra-sensor modeling, [39] applied a Transformer to capture inter-sensor spatial associations. [40] performed recon-struction in the frequency domain by patchifying the spectrum into bands, and adaptively discovered channel correlations between channel-independent and channel-dependent strate-gies. More recently, diffusion-based generative models such as IEEE TRANSACTIONS ON AUTOMATION SCIENCE AND ENGINEERING 4
+
+[41] have also been explored for reconstruction-based anomaly detection. Hybrid MTAD methods [6], [10], [11], [14], [42] combine forecasting and reconstruction models. These methods com-monly use both forecasting and reconstruction errors to detect anomalies. More recently, contrastive learning has been ex-plored as an alternative paradigm, learning discriminative rep-resentations through synthetic anomaly injection or causality-aware augmentation [43], [44]. 
+
+B. Graph Neural Network-Based MTAD 
+
+In recent years, several GNN-based MTAD methods [6], [7], [9]–[17] have been introduced, achieving remarkable performance by effectively capturing complex inter-sensor dependencies as well as intra-sensor dependencies. In an initial effort, [6] used a GAT [18], assuming that sensor relation-ships could be represented by a complete graph. However, in many real-world cases, the assumption of a complete graph is unrealistic, and the underlying (sparse) graph is typically unknown [7]. To address this challenge, [7] proposed a GNN-based MTAD method capable of learning the latent graph from the data. They introduced a randomly initialized learnable embedding for each sensor to represent its characteristics, deriving the graph from the similarities across the sensor embeddings. This graph structure learning technique has been employed in various GNN-based MTAD methods in a similar manner [10], [11], [14]–[16]. In addition to sensor embedding-based techniques, various graph structure learning techniques have been employed in GNN-based MTAD methods. For example, [9] learned a graph by edge sampling, employing the Gumbel-softmax sampling trick [46] to make the sampling procedure differentiable. Furthermore, [12] learned a directed acyclic graph (DAG) through gradient-based optimization with a differentiable constraint [47]. Beyond learning the graph in an end-to-end manner, [48] constructed the sensor graph from transfer entropy to explicitly capture causal relationships among sensors. However, most GNN-based MTAD methods may exhibit limitations in performance when applied to multi-stage industrial processes, as they overlook the distinctive characteristics of such processes, which can be encoded as sensor group knowledge and process flow knowledge. Re-cently, [11] extended the method by [7] to better suit multi-stage industrial processes. They incorporated sensor group knowledge into the process of learning sensor embeddings. However, they did not consider process flow knowledge. In contrast, our work incorporates process flow knowledge in addition to sensor-group knowledge within a unified multi-graph construction framework, enabling explicit modeling of both intra-sub-process and inter-sub-process dependencies. III. B ACKGROUND 
+
+A. Temporal Convolutional Network 
+
+TCNs [19] are a class of one-dimensional convolutional neural networks designed to capture long-range temporal de-pendencies in multivariate time series data. TCNs are built from stacked dilated causal convolutional layers. The causality 
+
+constraint ensures that the output at time t depends only on input at time t or earlier, while dilation introduces fixed gaps between filter taps, allowing the receptive field to grow without increasing filter size. Formally, for a one-dimensional input sequence s ∈ Rw and a convolutional filter f : {0, . . . , J − 1} → R, where J is the filter size, the output sequence z ∈ Rw is computed as: 
+
+zt =
+
+> J−1
+
+X
+
+> j=0
+
+f (j) · st−d·j ,
+
+where zt ∈ R and st ∈ R are the value of z and s at time t, and 
+
+d is the dilation factor. By stacking multiple such layers with exponentially increasing dilation rate (e.g., d = 2 i−1 for the 
+
+i-th layer), TCNs effectively expand their receptive field and capture long-range dependencies. Fig. 3 illustrates a TCN with three dilated causal convolutional layers, using d = 1 , 2, 4 and 
+
+J = 3 . 
+
+> Fig. 3. Illustration of a TCN with three dilated causal convolutional layers.
+
+B. Graph Attention Network 
+
+GATs [18] are a class of GNNs that utilize self-attention to assign varying importance to neighboring nodes during feature aggregation, improving upon uniform averaging in graph convolutional networks (GCNs) [49] and effectively capturing complex dependencies between different nodes. Given a graph G with N nodes and input features z ∈
+
+RN ×w, GAT computes an updated feature ai ∈ Rd for node 
+
+i as follows. First, each node feature zi ∈ Rw is linearly transformed using a shared weight matrix W ∈ Rd×w, and attention coefficients πij ∈ R are computed via a function 
+
+f : Rd × Rd → R:
+
+πij = f (Wz i, Wz j ), j ∈
+
+(
+
+N (i) ∪ { i}, if self-loop at i, 
+
+N (i), otherwise ,
+
+where N (i) is the set of neighbors of node i in G. Then, if there is a self-loop at node i, the output node feature ai is calculated as follows: 
+
+ai = σ(αii Wz i + X 
+
+> j∈N (i)
+
+αij Wz j ),αij = exp( πij )
+
+P  
+
+> r∈N (i)∪{ i}
+
+exp (πir ) ,
+
+where σ(·) is a nonlinear activation function. IEEE TRANSACTIONS ON AUTOMATION SCIENCE AND ENGINEERING 5
+
+IV. M ETHODOLOGY 
+
+In this section, we present a proposed method in detail. Our approach comprises three main components: (1) graph structure learning, (2) graph attention-based forecasting, and (3) anomaly scoring. An overview is provided in Fig. 4. Our key contribution lies in enhancing graph structure learning by integrating process knowledge to improve dependency modeling. The remainder of this section is structured as follows. First, we define the problem setting of MTAD and for-mally define process knowledge in Section IV-A. Next, we present a multi-graph structure learning framework, focusing on our core contributions: the innovative strategy for incor-porating process knowledge (Section IV-B). Then, we de-scribe the graph attention-based forecasting framework, which effectively leverages the three constructed graphs (Section IV-C). Finally, we introduce the anomaly scoring scheme, designed to detect anomalies accurately using the proposed framework (Section IV-D). The codes for the proposed method are available at https://anonymous.4open.science/r/ Knowledge-Assisted-Multi-Graph-Structure-Learning-60AE. 
+
+A. Problem Statement 
+
+We consider multivariate time series data generated from a multi-stage industrial process consisting of Np sub-processes. We denote the collection of sensor index sets for the entire process as {Ps}Np
+
+> s=1
+
+, where Ps is the set of sensor indices associated with the s-th sub-process. The total number of sensors is given by N =
+
+> Np
+
+P
+
+> s=1
+
+|Ps|. These sub-processes form a process flow graph, and we denote their adjacency as a symmetric binary relation S ⊆ { Ps}Np 
+
+> s=1
+
+× { Ps}Np
+
+> s=1
+
+, where 
+
+(Ps1 , P s2 ) ∈ S indicates that the s1-th and s2-th sub-processes are directly connected. To formally express the sensor-to-sub-process relationship, we define the mapping 
+
+ϕ : {1, . . . N } → { 1, . . . N p}, (1) where, i ∈ { 1, . . . , N } denotes a sensor index, and ϕ(i) gives the index of the sub-process to which sensor i belongs. Each sensor observation xt ∈ RN at time t is com-posed of Np sub-vectors xt =
+
+h
+
+x(1)  
+
+> t
+
+; x(2)  
+
+> t
+
+; . . . ; x(Np)
+
+> t
+
+i
+
+, where 
+
+x(s) 
+
+> t
+
+∈ R|Ps| denotes the sensor values of the s-th sub-process at time t associated with the sensor indices in Ps. Our training dataset consists of Ttr sensor observations collected under normal operating conditions, without any anomalies. In contrast, the test dataset contains Tte sensor observations, which may include both normal and anomalous data. Our goal is to detect anomalies in the test dataset. The proposed method produces Tte binary labels, each indicating whether the sensor value at a given test timestamp is anoma-lous (e.g., value 1) or normal (e.g., value 0). We focus on point anomalies, where anomalies are defined at the individual timestamp level without explicitly modeling contextual or subsequence-level anomaly patterns. We define two types of prior knowledge commonly found in multi-stage processes: 
+
+Definition 1 (Sensor group knowledge): Sensor group knowledge KG = {Ps}Np 
+
+> s=1
+
+is a collection of sensor index sets, where Ps represents the sensors involved in the s-th sub-process. 
+
+Definition 2 (Process flow knowledge): Process flow knowl-edge KF = {Fs}Np 
+
+> s=1
+
+is a collection of sensor index sets, where Fs = ∪  
+
+> r:( Pr,P s)∈S
+
+Pr represents the sensors involved in sub-processes adjacent to the s-th sub-process. 
+
+B. Multi-Graph Structure Learning 
+
+By incorporating sensor group knowledge and process flow knowledge, we learn three graphs: 1) uninformed graph GU , 2) sensor group knowledge-informed graph GG, and 3) process flow knowledge-informed graph GF .
+
+1) Uninformed Graph: The uninformed graph GU is learned without using any prior knowledge about sensor re-lationships. We adopt the graph structure learning technique of [7], which is a foundational similarity-based method and a strong baseline. To model directional relationships between sensors, we introduce two learnable embeddings for each sen-sor, representing the source and target roles, respectively. The source and target embeddings for each sensor are randomly initialized and jointly learned during training by minimizing the forecasting loss. The embedding dimension d is treated as a hyperparameter. Specifically, for each sensor i ∈ { 1, . . . , N }, we assign two learnable embeddings e1(i), e 2(i) ∈ Rd, representing its latent characteristics when acting as a source and target, respectively. For a directed relation from sensor j to sensor 
+
+i, sensor j is regarded as the source node, i.e., the candidate influencing sensor, and sensor i as the target node, i.e., the sensor whose dependency is modeled. This design enables the model to capture asymmetric relationships between sensors. These embeddings e1(i) and e2(i) are initialized randomly and are learned automatically through backpropagation under the forecasting objective. Thus, they are not externally specified or separately estimated, but are optimized jointly with the rest of the network in an end-to-end manner. The similarity between the j-th sensor (source) and the i-th sensor (target) is computed as follows: 
+
+Cji = ReLU 
+
+ e1(j)⊤e2(i)
+
+|| e1(j)|| 2 · || e2(i)|| 2
+
+
+
+,
+
+where || · || 2 denotes the L2-norm, and ReLU refers to a rectified linear unit [50]. Then, we obtain the adjacency matrix 
+
+AU = ( AUji ) ∈ RN ×N , which represents the uninformed graph 
+
+GU based on the similarities Cji , as follows: 
+
+AUji = 1{j ∈ Top k({Cri |r ∈ { 1, 2, . . . , N }\{ i}} )}, (2) where Top k is an operator that selects the indices of the 
+
+k-highest values among its input and 1{·} is the indicator function, returning 1 if the condition is true and 0 otherwise. The parameter k controls graph sparsity by determining the number of incoming edges per node. The value of k is treated as a hyperparameter and is selected on the validation set together with α and d through a joint grid search. IEEE TRANSACTIONS ON AUTOMATION SCIENCE AND ENGINEERING 6 
+
+> Fig. 4. Overview of the proposed method
+
+2) Sensor Group Knowledge-Informed Graph: To model intra-sub-process relationships, we use sensor group knowl-edge KG = {Ps}Np
+
+> s=1
+
+. The sensor group knowledge-informed graph GG focuses on dependencies among sensors within the same sub-process. We define the masked similarity between the j-th sensor (source) and the i-th sensor (target) as follows: 
+
+CGji =
+
+(
+
+Cji , if j ∈ Pϕ(i),
+
+−∞ , otherwise, where ϕ(·) is the sensor-to-sub-process mapping defined in (1). This mapping is constructed based on the predefined sensor group knowledge KG = {Ps}Np
+
+> s=1
+
+. Then, we obtain the adjacency matrix AG = ( AGji ) ∈ RN ×N , which represents the sensor group knowledge-informed graph GG based on the masked similarities CGji , as follows: 
+
+AGji = 1{j ∈ Top kGi ({CGri |r ∈ { 1, 2, . . . , N }\{ i}} )}, (3) where kGi = α · | Pϕ(i)| and α ∈ (0 , 1) is a hyperparameter controlling the sparsity of GG. This adaptive neighborhood size reflects the variations in the number of sensors across sub-processes, ensuring that each sensor selects a proportionally consistent number of intra-sub-process neighbors. 
+
+3) Process Flow Knowledge-Informed Graph: We further incorporate process flow knowledge KF = {Fs}Np 
+
+> s=1
+
+to model inter-sub-process relationships. The process flow knowledge-informed graph GF focuses on dependencies among sensors across adjacent sub-processes. Following a similar masking strategy used in constructing the sensor knowledge-informed graph (Section IV-B2), we compute the masked similarities as follows: 
+
+CFji =
+
+(
+
+Cji , if j ∈ Fϕ(i),
+
+−∞ , otherwise, where ϕ(·) is the sensor-to-sub-process mapping defined in (1). Here, the condition j ∈ Fϕ(i) indicates that the j-th sensor belongs to one of the sub-processes that are adjacent to the i-th sub-process, as specified by the process flow knowledge KF =
+
+{Fs}Np
+
+> s=1
+
+. Then, the adjacency matrix AF = ( AFji ) ∈ RN ×N ,which represents the process flow knowledge-informed graph 
+
+GF , is obtained by 
+
+AFji = 1{j ∈ Top kFi ({CFri |r ∈ { 1, 2, . . . , N }\{ i}} )}, (4) where kFi = α · | Fϕ(i)|, using the same hyperparameter α as in the construction of GG.This multi-graph approach may offer several advantages. First, maintaining three complementary graph structures can provide alternative pathways for dependency modeling when process knowledge is incomplete or noisy, thereby enhancing robustness against knowledge uncertainties. Furthermore, the distinct contribution of each graph to anomaly detection can be examined, offering insights into the relative importance of different dependency types and thus improving interpretability. 
+
+C. Graph Attention-based Forecasting 
+
+We perform graph attention-based forecasting by using the three graphs GU , GG, and GF . At each time t, we use a sliding window of size w over historical timestamps, 
+
+st := [ xt−w, . . . , xt−1] ∈ RN ×w as an input to the proposed method. Our goal is to predict the next observation xt.
+
+1) Temporal Encoder: The input sequence st is first passed through a TCN to capture intra-sensor dependencies. The TCN consists of multiple dilated causal convolutional layers, each followed by weight normalization [51] and ReLU activation, following [19]. The encoded feature zt ∈ RN ×w is computed via the TCN formulation presented in Section III-A: 
+
+zt = TCN (st).IEEE TRANSACTIONS ON AUTOMATION SCIENCE AND ENGINEERING 7
+
+2) Multi-Graph Attention Network: To capture inter-sensor dependencies, we apply three separate GATs, each operating over one of the learned graphs GU , GG, and GF , respectively. For each graph, we follow the procedure described in Sec-tion III-B to compute the corresponding aggregated feature vectors aUt,i ∈ Rd, aGt,i ∈ Rd, and aFt,i ∈ Rd, respectively. As an example, for the uninformed graph GU , the aggregated feature aUt,i ∈ Rd for the i-th sensor is computed as follows: 
+
+aUt,i = ReLU (βUii WU zt,i + X  
+
+> j∈N U(i)
+
+βUij WU zt,i ),βUij = exp (πUij )
+
+P   
+
+> r∈N U(i)∪{ i}
+
+exp (πUir ) ,
+
+where zt,i ∈ Rw is the i-th row of zt, denoting the feature of the i-th sensor from the temporal encoder, WU ∈ Rd×w
+
+is a weight matrix, and N U (i) = {j|AUji = 1 }, where AUji is defined in (2). Notably, attention-based aggregation is explic-itly dependent on the structure of GU , as both the neighbor set N U (i) and the attention weights βUij are computed based solely on the edges defined in the adjacency matrix AU .The attention score πUij is adapted from the formulation in [7], with a key modification; we explicitly distinguish the source and target roles of a sensor by using separate embeddings e1(·) and e2(·). Specifically, 
+
+( πUij = LeakyReLU (( uU )⊤(rU 
+
+> target ,i
+
+⊕ rU 
+
+> source ,j
+
+)) ,rU 
+
+> target ,i
+
+= e2(i) ⊕ WU zt,i , rU 
+
+> source ,j
+
+= e1(j) ⊕ WU zt,j ,
+
+where W U and uU are randomly initialized trainable param-eters of the attention module and jointly optimized with the rest of the network during end-to-end training. In addition, ⊕
+
+denotes the concatenation operator, and LeakyReLU refers to the leaky rectified linear unit [52]. Here, rU 
+
+> target ,i
+
+is a contextu-alized representation of the i-th sensor as a target node, while 
+
+rU 
+
+> source ,j
+
+corresponds to the representation of the j-th sensor as a source node. Each representation combines structural embeddings ( e2(i) or e1(j)) with temporal features ( zt,i ), enabling the model to capture direction-aware dependencies between sensors. This asymmetric formulation enhances the model’s capacity to represent complex and structured inter-sensor interactions. Aggregated features aGt,i ∈ Rd and aFt,i ∈ Rd are computed analogously using GG and GF , respectively, where the edge structures are constructed based on sensor group knowledge and process flow knowledge. In this way, each attention mod-ule selectively reflects a specific style of process knowledge through its corresponding graph structure. Using these aggregated feature vectors, we integrate all available information to predict the value of the i-th sensor at time t as follows: 
+
+ˆxt,i = F
+
+
+
+aUt,i ⊕ aGt,i ⊕ aFt,i ⊕ e1(i) ⊕ e2(i)
+
+
+
+,
+
+where ˆxt,i ∈ R is the i-th element of the predicted vector 
+
+ˆxt ∈ RN , and F is a multi-layer perceptron (MLP). During the training process, we minimize the mean squared error between 
+
+xt and ˆxt, utilizing it as the loss function: 
+
+L = 1
+
+Ttr − w
+
+> Ttr
+
+X
+
+> t=w+1
+
+|| ˆxt − xt|| 22.
+
+D. Anomaly Scoring 
+
+After training, we evaluate anomaly scores on the test dataset using the graph deviation scoring method [7]. This ap-proach computes forecasting errors for each sensor, normalizes them, and defines the anomaly score as the maximum normal-ized error across sensors at each test timestamp. Formally, at time t, the anomaly score A(t) is computed as: 
+
+A(t) = max 
+
+> i
+
+ Err i(t) − ˜μi
+
+˜σi
+
+
+
+,
+
+where i ∈ { 1, . . . , N } indexes the N sensors, and Err i(t) = 
+
+|ˆxt,i − xt,i | denotes the forecasting error for the i-th sensor at time t. Here, xt,i ∈ R and ˆxt,i ∈ R represent the observed and predicted values, respectively. To ensure robustness against outliers, we normalize the error for each sensor using the median ˜μi and interquartile range (IQR) ˜σi of its forecasting errors, following [7]. The median and interquartile range are computed from the training dataset, which contains only normal operating conditions. Specifically, for each sensor i,
+
+˜μi is computed as the second quartile Q2,i of the training forecasting errors, and ˜σi is computed as Q3,i − Q1,i , where 
+
+Q1,i and Q3,i denote the first and third quartiles, respectively. A test timestamp t is flagged as anomalous if A(t) exceeds a predefined threshold. V. E XPERIMENTS 
+
+A. Datasets 
+
+We used the Secure Water Treatment (SWaT) [2] and Water Distribution (WADI) [53] datasets. The former was obtained from a multi-stage water treatment process, while the latter was obtained from a multi-stage water distribution process. Both datasets were collected by iTrust, a cybersecurity research center at the Singapore University of Technology and Design. The SWAT dataset was collected from a six-stage water treatment process, as described in Section I and shown in Fig. 1. It includes measurements from 51 sensors over 11 consecutive days, including 7 days of normal operation and 4 days during which cyber-attacks of varying time intervals were executed. The WADI dataset was collected from a three-stage water distribution process (P1–P3) [53]. In P1, the raw water is stored in two tanks, and its quality is controlled by a chemical dosing system. In P2, the water initially flows to elevated reservoir tanks and is subsequently distributed to consumer tanks based on a pre-set demand pattern. If the consumer tanks meet their demands, the water is reserved in another tank and sent back to P1, which is referred to as P3. The WADI dataset comprises measurements of 127 sensors over 14 consecutive days of normal operations and 2 subsequent days of operations with several cyber attacks. IEEE TRANSACTIONS ON AUTOMATION SCIENCE AND ENGINEERING 8
+
+We provide the statistics for the SWaT and WADI datasets in Table I. We followed the data preprocessing procedures outlined in [7]. For both datasets, we used the data from normal operations for training and the data corresponding to cyber attack periods for testing. We used 10% of the training data as a validation set for both datasets to tune hyperparameters and perform early stopping.                         
+
+> TABLE I STATISTICS FOR THE SW ATAND WADI DATASETS :NUMBER OF SUB -PROCESSES ,NUMBER OF SENSORS ,NUMBER OF TRAINING DATA POINTS ,NUMBER OF TESTING DATA POINTS ,AND THE RATIO OF ANOMALIES IN THE TEST DATA .
+> Datasets #Sub-Proc. #Sensors #Train #Test %Anomalies
+> SWaT 651 47520 44991 12 WADI 3127 118800 17280 6
+
+B. Baselines 
+
+We evaluate the proposed method against a diverse set of baselines, including recent state-of-the-art approaches, to ensure a fair and comprehensive comparison. These baselines were carefully selected to cover various model architectures (e.g., LSTM, Transformer, GNN), anomaly scoring strategies (e.g., reconstruction-based, forecasting-based, hybrid), repro-ducibility under a common evaluation protocol, and the extent to which domain knowledge is incorporated. The selected baselines are briefly described below:  
+
+> •
+
+MAD-GAN [32]: MAD-GAN is adversarially trained with a generator and a discriminator, both based on a long short-term memory (LSTM) network. The generator reconstructs input data, while the discriminator distin-guishes between the input and reconstructed data. This method utilizes both reconstruction errors and discrimi-nation scores to detect anomalies.  
+
+> •
+
+USAD [35]: USAD consists of two autoencoders that share a common encoder. It is trained within a two-phase adversarial framework and detects anomalies based on reconstruction errors.  
+
+> •
+
+TranAD [37]: TranAD comprises two Transformer-based encoder-decoder networks. It is adversarially trained and utilizes reconstruction errors as anomaly scores, similar to USAD. However, unlike USAD, one of the encoder-decoder networks reconstructs the entire training time series to capture long-term temporal trends.  
+
+> •
+
+MTAD-GAT [6]: MTAD-GAT employs two parallel GATs to capture inter-sensor and intra-sensor depen-dencies separately. The outputs of these GATs are then used as inputs for jointly optimized reconstruction and forecasting models. Both reconstruction errors and fore-casting errors are utilized as anomaly scores.  
+
+> •
+
+GTA [9]: GTA is a Transformer model designed to capture inter-sensor dependencies through graph convo-lution. It learns a graph structure by using the Gumbel-softmax sampling technique and uses forecasting errors as anomaly scores.  
+
+> •
+
+GDN [7]: GDN learns a graph to represent relation-ships between sensors by evaluating their similarities through sensor embeddings. It employs graph attention-based forecasting, using forecasting errors for anomaly detection.  
+
+> •
+
+ECNU-GNN [15]: ECNU-GNN employs an embedding for each sensor and learns a graph of sensors, similar to GDN. During graph convolution, for each sensor, the features of its neighboring sensors are transformed into new features based on the embedding of the central sensor. These transformed features are then aggregated to update the feature of the central sensor. To detect anomalies, forecasting errors are used as anomaly scores.  
+
+> •
+
+FuSAGNet [11]: FuSAGNet enhances GDN’s robustness against noise by integrating a sparse autoencoder capable of extracting sparse latent representations of input data. These representations are used to reconstruct the input data and also serve as input for graph attention-based forecasting. It considers sensor group knowledge during sensor graph learning and uses both reconstruction errors and forecasting errors for anomaly detection.  
+
+> •
+
+CAROTS [43]: CAROTS integrates inter-sensor causality into contrastive learning for anomaly detection. It first extracts a causality matrix via a causal discovery model, and then employs two augmentors to generate causality-preserving and causality-disturbing samples, which serve as positives and negatives, respectively. An encoder is trained with a similarity-filtered one-class contrastive loss so that its latent space separates normal and abnormal samples based on causality. Anomaly scores are com-puted in the learned representation space.  
+
+> •
+
+CGAD [48]: CGAD constructs a weighted causal graph among sensors using transfer entropy. It models the causal graph and temporal patterns with weighted graph con-volutions and causal convolutions, and uses forecasting errors as anomaly scores.  
+
+> •
+
+TopoGDN [16]: TopoGDN extends GDN by incorpo-rating a multi-scale temporal convolution module to capture fine-grained temporal features and augmenting the graph attention mechanism with topological features derived from persistent homology. It learns a sensor graph via sensor embeddings and uses forecasting errors as anomaly scores. 
+
+C. Evaluation Metrics 
+
+We used precision ( Pr ), recall ( Re ), and F1 score ( F1 ) to evaluate the anomaly detection performances of the proposed method and baselines, with F1 serving as the primary evalu-ation metric. Precision measures the proportion of detected anomalies that are truly anomalous; thus, higher precision indicates fewer false alarms. Recall measures the proportion of true anomalies that are correctly detected; thus, higher recall indicates fewer missed anomalies. The F1 score is the harmonic mean of precision and recall and serves as a balanced summary when both false positives and false negatives are important. For all three metrics, higher values indicate better anomaly detection performance. IEEE TRANSACTIONS ON AUTOMATION SCIENCE AND ENGINEERING 9
+
+TABLE II COMPARISON OF ANOMALY DETECTION PERFORMANCE BETWEEN THE PROPOSED METHOD AND VARIOUS BASELINES IN TERMS OF PR, RE, AND F1 .THE VALUES IN BOLD INDICATE THE HIGHEST SCORES . † DENOTES REPRODUCED RESULTS USING OFFICIALLY PROVIDED CODES , WHILE THE REMAINING RESULTS OF THE BASELINES ARE SOURCED FROM [15]. 
+
+SWaT WADI Method Pr Re F1 Pr Re F1 
+
+MAD-GAN 0.9658 (0.0237) 0.5750 (0.0135) 0.7206 (0.0122) 0.8733 (0.0023) 0.1487 (0.0004) 0.2541 (0.0007) USAD 0.9941 (0.0003) 0.5902 (0.0002) 0.7406 (0.0002) 0.8743 (0.0028) 0.1488 (0.0005) 0.2543 (0.0008) TranAD 0.5701 (0.4090) 0.7139 (0.1462) 0.5003 (0.2332) 0.8680 (0.0027) 0.1478 (0.0005) 0.2524 (0.0008) MTAD-GAT 0.9515 (0.0253) 0.6187 (0.0118) 0.7495 (0.0030) 0.6210 (0.2744) 0.1857 (0.0333) 0.2645 (0.0041) GTA 0.9899 (0.0045) 0.6411 (0.0295) 0.7778 (0.0225) 0.6195 (0.2094) 0.3326 (0.0629) 0.4083 (0.0502) GDN 0.8803 (0.1300) 0.6275 (0.0191) 0.7280 (0.0453) 0.6625 (0.0925) 0.3110 (0.0299) 0.4206 (0.0362) ECNU-GNN 0.9845 (0.0051) 0.6891 (0.0628) 0.8089 (0.0434) 0.7652 (0.0684) 0.4610 (0.0478) 0.5730 (0.0455) FuSAGNet 0.9776 (0.0104) † 0.6422 (0.0133) † 0.7750 (0.0100) † 0.6521 (0.0940) † 0.4550 (0.0415) † 0.5301 (0.0313) †
+
+CAROTS 0.9616 (0.0123) † 0.6728 (0.0016) † 0.7916 (0.0036) † 0.5446 (0.0816) † 0.4986 (0.0465) † 0.5150 (0.0216) †
+
+CGAD 0.9662 (0.0300) † 0.6166 (0.0160) † 0.7523 (0.0085) † 0.2639 (0.0243) † 0.5356 (0.1101) † 0.3475 (0.0192) †
+
+TopoGDN 0.9165 (0.0336) † 0.6631 (0.0348) † 0.7683 (0.0207) † 0.6283 (0.1038) † 0.4102 (0.0380) † 0.4899 (0.0166) †
+
+Proposed 0.9658 (0.0236) 0.7188 (0.0387) 0.8233 (0.0227) 0.7576 (0.0173) 0.5676 (0.0357) 0.6485 (0.0260) TABLE III COMPARISON OF ANOMALY DETECTION PERFORMANCE BETWEEN THE PROPOSED METHOD AND ITS VARIANTS IN TERMS OF PR, RE, AND F1 . T HE VALUES IN BOLD INDICATE THE HIGHEST SCORES .
+
+SWaT WADI Method Pr Re F1 Pr Re F1 Proposed 0.9658 (0.0236) 0.7188 (0.0387) 0.8233 (0.0227) 0.7576 (0.0173) 0.5676 (0.0357) 0.6485 (0.0260) 
+
+w/o GU 0.9681 (0.0188) 0.6932 (0.0366) 0.8072 (0.0246) 0.7475 (0.0341) 0.5005 (0.0458) 0.5979 (0.0296) 
+
+w/o GF 0.9730 (0.0217) 0.6807 (0.0456) 0.8000 (0.0315) 0.6962 (0.0599) 0.5494 (0.0509) 0.6111 (0.0360) 
+
+w/o GG 0.9818 (0.0064) 0.6651 (0.0518) 0.7918 (0.0356) 0.7043 (0.0266) 0.5423 (0.0261) 0.6123 (0.0185) 
+
+w/o GF , GG 0.9807 (0.0102) 0.6445 (0.0326) 0.7774 (0.0253) 0.6979 (0.0472) 0.5148 (0.0214) 0.5918 (0.0237) 
+
+w/o e1, e2 concat 0.9524 (0.0337) 0.6963 (0.0397) 0.8032 (0.0209) 0.7369 (0.0451) 0.4672 (0.0365) 0.5703 (0.0273) 
+
+The metrics are defined as follows: 
+
+Pr = TP TP + FP , Re = TP TP + FN ,
+
+F1 = 2 × Pr × Re Pr + Re ,
+
+where TP, FP, and FN denote the number of true positives, false positives, and false negatives, respectively. The threshold for anomaly detection was determined using a grid search method to maximize F1 .
+
+D. Experimental Settings 
+
+The proposed method was trained using the Adam optimizer [54]. For the SWaT dataset, we used a learning rate of 5×10 −4
+
+and a batch size of 32, while for the WADI dataset, we used a learning rate of 1 × 10 −3 and a batch size of 64. Training was conducted for up to 200 epochs, with early stopping applied after 5 epochs of no improvement. The key hyperparameters 
+
+(k, α, d ) were selected through a validation-based joint grid search using validation F1 score as the model-selection cri-terion. Specifically, we considered α ∈ { 0.1, 0.3, 0.6, 0.9},
+
+k ∈ {5, 10 , 15 , 20 , 25 }, and d ∈ {32 , 64 , 128 , 256 }, and evaluated all combinations jointly. The selected settings were 
+
+k = 10 , α = 0 .6, d = 128 for SWaT and k = 10 , α = 0 .3,and d = 128 for WADI. For both datasets, the sliding window size w was set to 15. For the network architecture, including the number of layers and the TCN configuration, we adopted commonly used design choices from the TCN literature [19], [55], and evaluated small variations around them. Deeper variants were not considered because they were unnecessarily over-parameterized for the input dimensionality of the SWaT and WADI benchmarks. The final architecture was selected based on the validation F1 score. We employed a TCN with three dilated causal convolu-tional layers as the temporal encoder, where the dilation factors were set to 1, 2, and 4, respectively, and the filter size was set to 3. We used an MLP consisting of 1 layer and 2 layers with a hidden dimension of 128 for SWaT and WADI, respectively. Sensor group knowledge and process flow knowledge were obtained from the process flow diagrams of the underlying processes for the SWaT and WADI datasets, accessible at the iTrust website (https://itrust.sutd.edu.sg). 
+
+E. Experimental Results 1) Comparison of Performance with Baselines: To demon-strate the effectiveness of the proposed method, we compared its anomaly detection performance against baselines. Table II summarizes the results on the SWaT and WADI datasets. We present the average Pr , Re , and F1 over 10 repeated experiments, with values in parentheses indicating standard deviations. The proposed method achieved the highest average F1 
+
+scores on both SWaT (0.8233) and WADI (0.6485), consis-tently outperforming all baselines. This superior performance can be attributed to the explicit incorporation of two types of process knowledge—sensor group knowledge and process flow knowledge—into the graph structure learning stage. By embedding these domain insights, the model can more effec-tively capture complex dependencies across sensors and sub-processes, which purely data-driven approaches often fail to recover, leading to improved anomaly detection performance. IEEE TRANSACTIONS ON AUTOMATION SCIENCE AND ENGINEERING 10 
+
+We acknowledge that our method leverages additional knowledge not utilized by existing baselines, which may limit the fairness of a direct comparison. However, our goal is not to claim superiority under identical assumptions, but rather to demonstrate the value of incorporating process knowledge— often readily available in real-world settings—for enhancing anomaly detection. Importantly, most baseline models are not structurally designed to incorporate such knowledge, even in simplified forms, making direct adaptation in our experiments non-trivial. As a result, we evaluate the baselines in their original form without process knowledge and instead focus on demonstrating the benefits of our knowledge-guided approach. 
+
+2) Ablation Study: To verify the contribution of each com-ponent in the proposed framework, we conducted an abla-tion study including not only the knowledge-informed graphs but also the uninformed graph and the concatenation of the learnable embeddings. Specifically, we compared the proposed model with five variants: removing the uninformed graph (w/o GU ), removing the process-flow-informed graph (w/o 
+
+GF ), removing the sensor-group-informed graph (w/o GG), removing both knowledge-informed graphs (w/o GF , GG), and removing the concatenation of e1 and e2 (w/o e1, e 2 concat). As shown in Table III, the performance consistently de-clined when each knowledge component was removed. Re-moving either GF or GG led to noticeable drops in average 
+
+F1 , and excluding both further degraded performance on both datasets. These results confirm that sensor group knowledge and process flow knowledge each contribute independently to modeling inter-sensor dependencies, and that their combi-nation yields synergistic improvements in anomaly detection performance. The variants without GU and without the con-catenation of e1 and e2 further show that the uninformed graph provides complementary data-driven relational information beyond the knowledge-informed graphs, while the learnable embeddings contribute useful information to the prediction module in addition to their role in graph construction. 
+
+3) Qualitative Analysis: To gain a deeper understanding of the model’s behavior beyond the experimental results, we present a qualitative analysis of two representative attack scenarios from the SWaT dataset. 
+
+Case 1: Intra-Sub-process Dependency (Attack on MV303) Fig. 5 illustrates an attack scenario in sub-process P3, where MV303 (a valve controller) is prevented from opening during the attack period. The attack creates a mis-match between MV303 and other sensors within the same sub-process, particularly MV301, another valve controller in P3 that regulates the backwashing process for the ultra-filtration unit. Ideally, a robust MTAD model should detect such intra-sub-process inconsistencies by leveraging structural knowledge that sensors within the same sub-process tend to operate in a coordinated manner. In this case, when MV303 behaves abnormally while MV301 continues to follow its normal pattern, the model should flag the resulting deviation through elevated prediction errors. In Fig. 5a, we compare the prediction results of four model variants during the attack period (shaded in red):  
+
+> •
+
+Uninformed Model : Uses only data-driven graph learn-ing without any process knowledge 
+
+(a) 
+
+(b)   
+
+> Fig. 5. (a) Predicted and observed values during the attack on MV303 for the uninformed, SG-informed, PF-informed, and proposed models. The attack period is shaded in red. (b) Multivariate time series of sensors MV303 and MV301 in P3 under normal conditions.
+> •
+
+SG-Informed Model : Incorporates sensor group knowl-edge to capture intra-sub-process relationships  
+
+> •
+
+PF-Informed Model : Incorporates process flow knowl-edge to capture inter-sub-process relationships  
+
+> •
+
+Proposed Model : Combines both types of process knowl-edge The key observation is that both the SG-informed model and the proposed model exhibit significantly larger prediction errors for MV301 during the attack period. This suggests that these models have captured the dependency between MV303 (the attacked sensor) and MV301 (a related sensor within the same sub-process). This behavior is plausible because the SG-informed model explicitly incorporates intra-sub-process relationships through sensor group knowledge, allowing the anomaly at MV303 to influence the prediction of MV301. In contrast, the uninformed model and the PF-informed model do not explicitly encode intra-sub-process relationships and thus fail to reflect the effect of MV303’s anomaly on MV301, resulting in smaller prediction errors and missed anomaly detection. The strong correlation between MV303 and MV301 under normal operating conditions, as shown in Fig. 5b, suggests that these sensors exhibit coordinated behaviors within the same sub-process. This correlation likely reflects an underlying functional dependency, as both valves participate in the backwashing operation of the ultra-filtration unit. 
+
+Case 2: Inter-Sub-process Dependency (Attack on AIT504) Fig. 6 presents another attack scenario targeting AIT504 that measures water quality parameters in sub-process P5. The attack artificially manipulates the sensor value above its actual value, causing inconsistencies with related mea-surements in adjacent sub-processes. Ideally, a robust MTAD model should detect such inconsistencies by leveraging known dependencies—for example, recognizing that AIT504 is typ-IEEE TRANSACTIONS ON AUTOMATION SCIENCE AND ENGINEERING 11 
+
+(a) 
+
+(b)  
+
+> Fig. 6. (a) Predicted and observed values during the attack on AIT504 for the uninformed, SG-informed, PF-informed, and proposed models. The attack period is shaded in red. (b) Multivariate time series of sensors AIT504 in P5 and FIT401 in P4 under normal conditions.
+
+ically aligned with FIT401. If FIT401 remains stable during the attack, the model should continue to predict normal values for AIT504, resulting in a large prediction error when its observation is manipulated. Fig. 6a demonstrates how different models respond to this attack. The PF-informed model and proposed model demon-strate markedly higher forecasting errors for AIT504 during the attack period. As shown in the plots, these models predict values for AIT504 that are much lower than the manipulated readings and are closer to what the true (unmanipulated) values are expected to be. This leads to significant discrepancies between prediction and observation, resulting in large discrep-ancies that enable reliable anomaly detection. This outcome highlights the effectiveness of explicitly incorporating inter-sub-process dependencies through process flow knowledge. In particular, FIT401 is a sensor located in sub-process P4, which directly influences sub-process P5, where AIT504 is located. Process flow knowledge explicitly encodes such inter-sub-process relationships, allowing the PF-informed and the pro-posed models to leverage this dependency during prediction. Since FIT401 remains unaffected by the attack and continues to exhibit normal behavior during the attack period, the PF-informed and the proposed models utilize its stable pattern to infer that AIT504 should also remain within a normal range. As a result, despite the manipulated observations of AIT504, the models predict its normal (unmanipulated) values. This leads to large prediction errors during the attack period, thereby enabling effective anomaly detection. In contrast, the uninformed model and the SG-informed model lack this struc-tural guidance since they do not explicitly encode such inter-sub-process relationships. Consequently, they tend to overfit to the anomalous (manipulated) observations of AIT504 more closely, yielding lower prediction errors and failing to detect                    
+
+> TABLE IV AVERAGE FORECASTING ERRORS ON NORMAL AND ANOMALOUS TIMESTAMPS IN THE TEST SET ,MEASURED BY MAE AND RMSE. V ALUES ARE AVERAGED OVER 10 REPEATED EXPERIMENTS ,WITH STANDARD DEVIATIONS SHOWN IN PARENTHESES .
+> SWaT WADI MAE RMSE MAE RMSE
+> Normal 0.0527 (0.0098) 0.2717 (0.0120) 0.0124 (0.0038) 0.1362 (0.0766) Anomalous 0.2450 (0.0449) 0.4617 (0.0464) 0.3522 (0.3270) 3.7431 (1.5384)
+
+the anomaly effectively. Fig. 6b further supports this interpretation by showing that AIT504 and FIT401 exhibit similar trends under normal conditions—consistent with their connection in the process flow. The PF-informed and the proposed models effectively leverage this knowledge to identify anomalies that break such cross-stage consistency. From this qualitative analysis, we derive the following observations based on two representative attack scenarios. First, different types of process knowledge play complemen-tary roles in anomaly detection. In Case 1, incorporating sensor group knowledge helps the model capture intra-sub-process relationships, enhancing sensitivity to anomalies af-fecting related sensors. In Case 2, leveraging process flow knowledge allows the model to account for inter-sub-process dependencies, which is particularly beneficial when anomalies cause inconsistencies across adjacent process stages. Second, these observations suggest that knowledge-informed structures can guide the model to focus on physically meaningful relationships—dependencies that may not be eas-ily inferred from data alone—thereby improving the discovery of underlying dependency structures. Overall, these findings qualitatively support the design of our proposed model, which integrates both sensor group and process flow knowledge. The results indicate that this approach leads to more robust anomaly detection performance in complex industrial systems. 
+
+4) Hyperparameter Sensitivity Analysis: We conducted a hyperparameter sensitivity analysis using the WADI dataset to investigate the impact of key hyperparameters, including 
+
+k, α, and d, using a one-factor-at-a-time protocol around the selected configuration. Specifically, when varying one hyperparameter, the other two were fixed to the values selected by the validation-based joint grid search. When varying k over 
+
+{5, 10 , 15 , 20 , 25 }, we fixed α = 0 .3 and d = 128 ; when varying α over {0.1, 0.3, 0.5, 0.7, 0.9} we fixed k = 10 and 
+
+d = 128 ; and when varying d over {32 , 64 , 128 , 256 }, we fixed 
+
+k = 10 and α = 0 .3. This analysis is intended to assess local robustness around the selected configuration rather than fully characterize higher-order interactions among hyperparameters. Especially, as shown in Fig. 7(a) and Fig. 7(b), a decrease in performance was observed when k and α were too small, possibly because the learned graphs were too sparse to capture complex inter-sensor dependencies. Conversely, performance also declined when these parameters were excessively large, likely due to redundant edges within the graphs, impeding effective capture of inter-sensor dependencies. 
+
+5) Forecasting Error Analysis: To directly assess the fore-casting accuracy of the proposed model under normal oper-IEEE TRANSACTIONS ON AUTOMATION SCIENCE AND ENGINEERING 12 
+
+(a) (b) (c) 
+
+Fig. 7. Results of the hyperparameter sensitivity analysis: (a) k; (b) α; (c) d. Black solid circles in the boxes indicate the mean values. 
+
+ating conditions, which underpins the prediction-error-based anomaly detection mechanism, we computed the mean ab-solute error (MAE) and root mean squared error (RMSE) separately on normal and anomalous timestamps in the test set. As shown in Table IV, the forecasting errors on normal timestamps are substantially lower than those on anoma-lous timestamps for both datasets. These results indicate that the proposed method maintains low forecasting errors under normal operating conditions, while anomaly timestamps yield markedly larger prediction errors. This clear separation demonstrates that forecasting error serves as an effective discriminative signal for distinguishing anomalous from nor-mal observations, thereby validating the effectiveness of the forecasting error-based anomaly scoring mechanism. VI. C ONCLUSION 
+
+We propose a process knowledge-assisted multi-graph de-pendency learning framework for GNN-based MTAD tailored for multi-stage industrial processes. The core contribution lies in enhancing graph structure learning by explicitly incorporat-ing two forms of domain knowledge: sensor group knowledge and process flow knowledge. This structured integration helps the model to more effectively capture inter-sensor depen-dencies, improving over conventional data-driven approaches that often overlook the underlying process dynamics. By coupling this knowledge-guided graph structure construction with temporal modeling via TCN, the proposed method deliv-ers more robust forecasting and improved anomaly detection performance on real-world industrial datasets. A notable limitation of the current method is that it does not explicitly account for the inherent stochasticity in industrial time series data, which may lead to overconfident predic-tions and reduced anomaly detection robustness. As a future direction, we plan to extend our process knowledge-guided graph learning framework into a probabilistic forecasting-based MTAD model. By modeling forecast uncertainty along-side structured graph-based dependencies, this extension seeks to enhance anomaly detection reliability while retaining the core strengths of our current approach. ACKNOWLEDGMENT 
+
+This research was supported by the National Research Foun-dation of Korea (NRF) grant funded by the Korea government (MSIT) (2023R1A2C2005453, RS-2023-00218913). REFERENCES [1] Y. Ma et al., “Smart actuation for end-edge industrial control systems,” 
+
+IEEE Trans. Autom. Sci. Eng. , vol. 21, no. 1, pp. 269–283, Jan. 2022. [2] A. P. Mathur and N. O. Tippenhauer, “SWaT: A water treatment testbed for research and training on ICS security,” in Proc. Int. Workshop Cyber-Physical Syst. Smart Water Netw. (CySWater) , Vienna, Austria, 2016, pp. 31–36. [3] Park, S., Kim, K. & Kim, H. Prediction of highly imbalanced semi-conductor chip-level defects using uncertainty-based adaptive margin learning. IISE Transactions . 55 , 147-155, 2022 [4] K. Sharma, “Overview of industrial process automation,” Elsevier , 2016. [5] Cho, H., Koo, W. & Kim, H. Prediction of highly imbalanced semi-conductor chip-level defects in module tests using multimodal fusion and logit adjustment. IEEE Transactions on Semiconductor Manufacturing .
+
+36 , 425-433, 2023 [6] H. Zhao et al., “Multivariate time-series anomaly detection via graph attention network,” in Proc. IEEE Int. Conf. Data Mining (ICDM) , 2020, pp. 841–850. [7] A. Deng and B. Hooi, “Graph neural network-based anomaly detection in multivariate time series,” in Proc. AAAI Conf. Artif. Intell. , 2021, pp. 4027–4035. [8] Ma, E., Jung, J. & Kim, H. Order-based Causal Discovery for Multistage Processes. IEEE Transactions on Knowledge And Data Engineering .doi=10.1109/TKDE.2026.3710776. 2026. [9] Z. Chen et al., “Learning graph structures with transformer for multi-variate time-series anomaly detection in IoT,” IEEE Internet Things J. ,vol. 9, no. 12, pp. 9179–9189, 2021. [10] W. Chen et al., “Deep variational graph convolutional recurrent network for multivariate time series anomaly detection,” in Proc. Int. Conf. Mach. Learn. (ICML) , 2022, pp. 3621–3633. [11] S. Han and S. S. Woo, “Learning sparse latent graph representations for anomaly detection in multivariate time series,” in Proc. ACM SIGKDD Int. Conf. Knowl. Discovery Data Mining , 2022, pp. 2977–2986. [12] E. Dai and J. Chen, “Graph-augmented normalizing flows for anomaly detection of multiple time series,” arXiv preprint arXiv:2202.07857 ,2022. [13] Y. Shi et al., “Robust anomaly detection for multivariate time series through temporal GCNs and attention-based VAE,” Knowl.-Based Syst. ,vol. 275, p. 110725, 2023. [14] C. Ding, S. Sun, and J. Zhao, “MST-GAT: A multimodal spatial-temporal graph attention network for time series anomaly detection,” 
+
+Inf. Fusion , vol. 89, pp. 527–536, 2023. [15] H. Jo and S.-W. Lee, “Edge conditional node update graph neural network for multi-variate time series anomaly detection,” Inf. Sci. , p. 121062, 2024. [16] Z. Liu, X. Huang, J. Zhang, Z. Hao, J. Li, and R. Hu, “Multivariate time-series anomaly detection based on enhancing graph attention networks with topological analysis,” in Proc. 33rd ACM Int. Conf. Inf. Knowl. Manag. (CIKM) , 2024, pp. 1480–1490. [17] J. Jeong and H. Yoon, “PGRF-Net: A prototype-guided relational fusion network for diagnostic multivariate time-series anomaly detection,” in 
+
+Proc. Int. Conf. Learn. Represent. (ICLR) , 2026. [18] P. Velickovic et al., “Graph attention networks,” stat , vol. 1050, no. 20, pp. 10–48550, 2017. [19] S. Bai, J. Z. Kolter, and V. Koltun, “An empirical evaluation of generic convolutional and recurrent networks for sequence modeling,” arXiv preprint arXiv:1803.01271 , 2018. [20] V. Chandola, A. Banerjee, and V. Kumar, “Anomaly detection: A survey,” 
+
+ACM Comput. Surv. , vol. 41, no. 3, pp. 1–58, 2009. IEEE TRANSACTIONS ON AUTOMATION SCIENCE AND ENGINEERING 13 
+
+[21] K. Choi et al., “Deep learning for anomaly detection in time-series data: Review, analysis, and guidelines,” IEEE Access , vol. 9, pp. 120043– 120065, 2021. [22] Z. Z. Darban et al., “Deep learning for time series anomaly detection: A survey,” ACM Comput. Surv. , 2022. [23] H. Kim and H. Kim, “Contextual anomaly detection for high-dimensional data using Dirichlet process variational autoencoder,” IISE Transactions , vol. 55, no. 5, pp. 433–444, 2023. [24] H. Kim and H. Kim, “Contextual anomaly detection for multivariate time series data,” Quality Engineering , vol. 35, no. 4, pp. 686–695, 2023. [25] G. Li and J. J. Jung, “Deep learning for anomaly detection in multivariate time series: Approaches, applications, and challenges,” Inf. Fusion , vol. 91, pp. 93–102, 2023. [26] Kim, H. & Kim, H. Deep embedding kernel mixture networks for conditional anomaly detection in high-dimensional data. International Journal of Production Research . 61 , 1101-1113, 2023. [27] K. Hundman et al., “Detecting spacecraft anomalies using LSTMs and nonparametric dynamic thresholding,” in Proc. ACM SIGKDD Int. Conf. Knowl. Discovery Data Mining , 2018, pp. 387–395. [28] W. Wu et al., “Developing an unsupervised real-time anomaly detection scheme for time series with multi-seasonality,” IEEE Trans. Knowl. Data Eng. , vol. 34, no. 9, pp. 4147–4160, 2020. [29] L. Liu et al., “Spacecraft anomaly detection with attention temporal convolution networks,” Neural Comput. Appl. , pp. 1–9, 2023. [30] J. Kim, H. Kang, and P. Kang, “Time-series anomaly detection with stacked transformer representations and 1D convolutional network,” Eng. Appl. Artif. Intell. , vol. 120, p. 105964, 2023. [31] D. Park, Y. Hoshi, and C. C. Kemp, “A multimodal anomaly detector for robot-assisted feeding using an LSTM-based variational autoencoder,” 
+
+IEEE Robot. Autom. Lett. , vol. 3, no. 3, pp. 1544–1551, 2018. [32] D. Li et al., “MAD-GAN: Multivariate anomaly detection for time series data with generative adversarial networks,” in Proc. Int. Conf. Artif. Neural Netw. , 2019, pp. 703–716. [33] Y. Su et al., “Robust anomaly detection for multivariate time series through stochastic recurrent neural network,” in Proc. ACM SIGKDD Int. Conf. Knowl. Discovery Data Mining , 2019, pp. 2828–2837. [34] Z. Zhang et al., “STAD-GAN: Unsupervised anomaly detection on mul-tivariate time series with self-training generative adversarial networks,” 
+
+ACM Trans. Knowl. Discovery Data , vol. 17, no. 5, pp. 1–18, 2023. [35] J. Audibert et al., “USAD: UnSupervised anomaly detection on multi-variate time series,” in Proc. ACM SIGKDD Int. Conf. Knowl. Discovery Data Mining , 2020, pp. 3395–3404. [36] M. Thill, W. Konen, H. Wang, and T. B¨ ack, “Temporal convolutional autoencoder for unsupervised anomaly detection in time series,” Appl. Soft Comput. , vol. 112, p. 107751, 2021. [37] S. Tuli, G. Casale, and N. R. Jennings, “TranAD: Deep transformer networks for anomaly detection in multivariate time series data,” arXiv preprint arXiv:2201.07284 , 2022. [38] X. Wang et al., “Variational transformer-based anomaly detection ap-proach for multivariate time series,” Measurement , vol. 191, p. 110791, 2022. [39] Z. Dai, L. He, S.-H. Yang, and M. Leeke, “SARAD: Spatial association-aware anomaly detection and diagnosis for multivariate time series,” in 
+
+Proc. 38th Conf. Neural Inf. Process. Syst. (NeurIPS) , 2024, pp. 48371– 48410. [40] X. Wu, X. Qiu, Z. Li, Y. Wang, J. Hu, C. Guo, H. Xiong, and B. Yang, “CATCH: Channel-aware multivariate time series anomaly detection via frequency patching,” in Proc. 13th Int. Conf. Learn. Represent. (ICLR) ,2025, pp. 17017–17045.“ [41] G. Zhong, P. Wang, J. Yuan, Z. Li, and L. Chen, “Multi-resolution decomposable diffusion model for non-stationary time series anomaly detection,” in Proc. 13th Int. Conf. Learn. Represent. (ICLR) , 2025. [42] S. Guan et al., “GTAD: Graph and temporal neural network for multi-variate time series anomaly detection,” Entropy , vol. 24, no. 6, p. 759, 2022. [43] H. Kim, J. Mok, D. Lee, J. Lew, S. Kim, and S. Yoon, “Causality-aware contrastive learning for robust multivariate time-series anomaly detection,” in Proc. 42nd Int. Conf. Mach. Learn. (ICML) , 2025, pp. 30591–30608. [44] Z. Z. Darban, G. I. Webb, S. Pan, C. C. Aggarwal, and M. Salehi, “CARLA: Self-supervised contrastive representation learning for time series anomaly detection,” Pattern Recognit. , vol. 157, 2025, Art. no. 110874. [45] A. Vaswani et al., “Attention is all you need,” in Adv. Neural Inf. Process. Syst. , vol. 30, 2017. [46] E. Jang, S. Gu, and B. Poole, “Categorical reparameterization with Gumbel-softmax,” arXiv preprint arXiv:1611.01144 , 2016. [47] X. Zheng et al., “DAGs with NO TEARS: Continuous optimization for structure learning,” in Adv. Neural Inf. Process. Syst. , vol. 31, 2018. [48] F. G. Febrinanto et al., “Entropy causal graphs for multivariate time series anomaly detection,” ACM Trans. Intell. Syst. Technol. , vol. 16, no. 6, pp. 1–25, 2025. [49] T. N. Kipf and M. Welling, “Semi-supervised classification with graph convolutional networks,” arXiv preprint arXiv:1609.02907 , 2016. [50] V. Nair and G. E. Hinton, “Rectified linear units improve restricted Boltzmann machines,” in Proc. Int. Conf. Mach. Learn. (ICML) , 2010, pp. 807–814. [51] T. Salimans and D. P. Kingma, “Weight normalization: A simple reparameterization to accelerate training of deep neural networks,” in 
+
+Adv. Neural Inf. Process. Syst. , vol. 29, 2016. [52] B. Xu et al., “Empirical evaluation of rectified activations in convolu-tional network,” arXiv preprint arXiv:1505.00853 , 2015. [53] C. M. Ahmed, V. R. Palleti, and A. P. Mathur, “WADI: A water distribution testbed for research in the design of secure cyber physical systems,” in Proc. 3rd Int. Workshop Cyber-Physical Syst. Smart Water Netw. , 2017, pp. 25–28. [54] D. P. Kingma and J. Ba, “Adam: A method for stochastic optimization,” 
+
+arXiv preprint arXiv:1412.6980 , 2014. [55] A. van den Oord et al. , “WaveNet: A generative model for raw audio,” 2016, arXiv:1609.03499.
