@@ -1,0 +1,208 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-07-21T21:48:55.474993+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 2,
+    "deep_divecandidates": 1,
+    "deep_cap": 7,
+    "deep_selected": 1,
+    "quick_candidates": 3,
+    "quick_skim_target": 12,
+    "quick_selected": 3
+  },
+  "deep_dive": [
+    {
+      "id": "2607.17977v1",
+      "source": "arxiv",
+      "title": "RynnBrain 1.1: Towards More Capable and Generalizable Embodied Foundation Model",
+      "abstract": "We present RynnBrain 1.1, a family of embodied foundation models spanning 2B, 9B, and 122B-A10B scales. Trained with a unified spatio-temporal and physically grounded framework, RynnBrain 1.1 supports embodied perception, spatial reasoning, localization, and planning. Compared with RynnBrain 1.0, it further introduces contact-point prediction across the model family and native 3D grounding for the 2B and 9B models, yielding representations and outputs that are more directly aligned with robot manipulation. We also develop RynnBrain-VLA with a unified cross-embodiment action space and embodiment-specific masking, and deploy it on Unitree G1, Astribot-S1, and Tianji-Wuji. RynnBrain 1.1 achieves strong results on embodied cognition, localization, and 3D grounding, with the 122B-A10B model outperforming all evaluated proprietary and open-source models on VSI-Bench, MMSI, and RefSpatial-Bench. Real-robot experiments show that RynnBrain-initialized policies outperform Qwen-based and representative generalist VLAs, while joint multi-task and multi-embodiment training improves process scores and success rates over per-task training.",
+      "authors": [
+        "Kehan Li",
+        "Bohan Hou",
+        "Minghao Zhu",
+        "Tianyi Zhang",
+        "Zesen Cheng",
+        "Zhikai Wang",
+        "Sicong Leng",
+        "Xin Li",
+        "Xiao Lin",
+        "Biying Yao",
+        "Minghua Zeng",
+        "Jiangpin Liu",
+        "Ronghao Dang",
+        "Jiayan Guo",
+        "Siteng Huang",
+        "Haoyu Zhao",
+        "Heng Ping",
+        "Yaxi Zhao",
+        "Kexiang Wang",
+        "Tong Lu",
+        "Shengke Xue",
+        "Jiahao Tang",
+        "Yulei Wang",
+        "Zejing Wang",
+        "Jianwei Gao",
+        "Shijian Lu",
+        "Chengju Liu",
+        "Jianfei Yang",
+        "Mingxiu Chen",
+        "Deli Zhao"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-07-20T14:13:27+00:00",
+      "link": "https://arxiv.org/pdf/2607.17977v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "deploys embodied foundation model on Unitree G1, directly addresses Unitree G1 robot edge deployment and dataset construction",
+      "llm_evidence_cn": "在宇树G1上部署具身基础模型，直接涉及宇树G1机器人的边缘部署和数据集构建",
+      "llm_evidence": "在宇树G1上部署具身基础模型，直接涉及宇树G1机器人的边缘部署和数据集构建",
+      "canonical_evidence": "在宇树G1上部署具身基础模型，直接涉及宇树G1机器人的边缘部署和数据集构建",
+      "llm_tldr_en": "RynnBrain 1.1 is a family of embodied foundation models deployed on Unitree G1, supporting perception, reasoning, and planning with a unified framework, directly relevant to Unitree G1 edge deployment and dataset construction.",
+      "llm_tldr_cn": "本论文提出RynnBrain 1.1系列具身基础模型，涵盖2B到122B参数规模，采用统一的时空物理框架支持感知、推理、定位和规划。该模型系列专门在宇树G1、Astribot-S1等机器人上部署验证，并引入了跨本体动作空间。论文展示了在具身认知和操作任务上的优异性能，直接为宇树G1机器人的边缘部署和模型应用提供了解决方案，且涉及数据集构建（训练数据）。",
+      "llm_tldr": "本论文提出RynnBrain 1.1系列具身基础模型，涵盖2B到122B参数规模，采用统一的时空物理框架支持感知、推理、定位和规划。该模型系列专门在宇树G1、Astribot-S1等机器人上部署验证，并引入了跨本体动作空间。论文展示了在具身认知和操作任务上的优异性能，直接为宇树G1机器人的边缘部署和模型应用提供了解决方案，且涉及数据集构建（训练数据）。",
+      "llm_tags": [
+        "query:ur:composite"
+      ],
+      "matched_query_tag": "query:ur:composite",
+      "matched_query_text": "Papers central to 查找宇树G1人形机器人的数据集构建、故障诊断、错误分析以及边缘端部署的相关论文, especially work that connects or combines: Unitree G1 humanoid robot dataset construction; humanoid robot dataset construction; fault diagnosis for humanoid robots; edge deployment for humanoid robots; dataset construction for robotics; fault detection in humanoid robots; fault diagnosis and error analysis for humanoid robots; edge deployment of Unitree robots research.",
+      "matched_requirement_id": "req-composite-ur",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "quick_skim": [
+    {
+      "id": "2607.15582v1",
+      "source": "arxiv",
+      "title": "A Model-Based Decoupling Strategy for Proprioception and Contact Sensing in an Architected Soft Manipulator",
+      "abstract": "Soft continuum robots require embedded sensing for proprioception and contact detection, yet integrating sensors into sparse, highly deformable architected structures remains challenging. We present a model-based strategy that decouples proprioceptive and contact signals from a common set of fluidic pressure sensors embedded in a soft architected segment. Each segment of the Innervated Trimmed Helicoid (ITH) contains six air channels routed in a localized zigzag pattern along the circumference. With only three principal kinematic degrees of freedom (axial compression, bending in x, bending in y), the six pressure readings form an overdetermined system. A piecewise constant curvature model maps pressures to shape, and Huber regression identifies outlier channels whose residuals indicate external contact. On a single ITH segment, this approach achieves proprioceptive shape estimation with a relative bending error of 0.11 +/- 0.02 and a contact detection rate of 97% across 178 trials. We integrate eight ITH segments into Air-Helix, a tendon-driven soft continuum manipulator, and present exploratory whole-arm demonstrations that include tactile teaching by demonstration, admittance-controlled force regulation, and tactile object reconstruction. The results suggest that localized fluidic innervation combined with model-based redundancy resolution is a practical path toward concurrent proprioception and contact sensing in architected soft robots.",
+      "authors": [
+        "Francesco Stella",
+        "Annan Zhang",
+        "Cosimo Della Santina",
+        "Josie Hughes",
+        "Daniela Rus"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-07-17T03:03:19+00:00",
+      "link": "https://arxiv.org/pdf/2607.15582v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "decouples proprioceptive and contact signals using fluidic pressure sensors, relevant to fault diagnosis via proprioception",
+      "llm_evidence_cn": "使用流体压力传感器解耦本体感受与接触信号，与基于本体感受的故障诊断相关",
+      "llm_evidence": "使用流体压力传感器解耦本体感受与接触信号，与基于本体感受的故障诊断相关",
+      "canonical_evidence": "使用流体压力传感器解耦本体感受与接触信号，与基于本体感受的故障诊断相关",
+      "llm_tldr_en": "Proposes a model-based strategy to decouple proprioception and contact signals from pressure sensors in a soft manipulator, enabling shape sensing and contact detection.",
+      "llm_tldr_cn": "针对软体机械臂中本体感受与接触信号耦合的问题，提出一种基于模型的解耦策略。利用嵌入结构的流体压力传感器，通过分段常曲率模型将压力映射为形状，并分离本体感受与接触信息。在螺旋形软体段上验证了形状估计与接触定位能力。该方法可直接用于人形机器人基于本体感受（关节位置、力矩等）的故障诊断，通过解耦信号识别异常接触或结构故障。",
+      "llm_tldr": "针对软体机械臂中本体感受与接触信号耦合的问题，提出一种基于模型的解耦策略。利用嵌入结构的流体压力传感器，通过分段常曲率模型将压力映射为形状，并分离本体感受与接触信息。在螺旋形软体段上验证了形状估计与接触定位能力。该方法可直接用于人形机器人基于本体感受（关节位置、力矩等）的故障诊断，通过解耦信号识别异常接触或结构故障。",
+      "llm_tags": [
+        "query:humanoid-ood"
+      ],
+      "matched_query_tag": "query:humanoid-ood",
+      "matched_query_text": "humanoid robot fault diagnosis using proprioceptive signals",
+      "matched_requirement_id": "req-9",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2607.12659v3",
+      "source": "arxiv",
+      "title": "Jetson-PI: Towards Onboard Real-Time Robot Control via Foresight-Aligned Asynchronous Inference",
+      "abstract": "Vision-Language-Action (VLA) models have achieved impressive performance on diverse embodied tasks. However, deploying VLA models on low-power onboard devices, such as the Jetson Orin, remains challenging due to their high computational complexity, which leads to substantial inference latency and low control frequency. Asynchronous inference can partially mask this latency by parallelizing action execution and subsequent inference, but it introduces two critical issues: perception-execution misalignment and long reaction time. In this paper, we propose Jetson-PI, a method for efficient VLA deployment on onboard devices via Foresight-Aligned Asynchronous Correction. To address misalignment, we train a lightweight future correction module that predicts future environment representation conditioned on committed actions, enabling the action expert to directly predict actions from the future time step. To reduce reaction time, we introduce confidence-based scheduling optimization that adaptively balances VLM and action expert invocations, complemented by system-level accelerations including CUDA graph reuse, GPU-resident intermediate buffering, and flow unrolling. Extensive experiments demonstrate that Jetson-PI achieves 8.66x and 5.41x improvements in control frequency compared with naive PyTorch and vla.cpp on NVIDIA Jetson Orin, while outperforming VLASH by 14.8\\% in average success rate on the LIBERO benchmark. The code of our asynchronous algorithm is available on https://github.com/PKU-SEC-Lab/Jetson-PI, and our efficient llama.cpp-based inference engine is available on https://github.com/PKU-SEC-Lab/Jetson-PI-Edge.",
+      "authors": [
+        "Zebin Yang",
+        "Qi Wang",
+        "Yunhe Wang",
+        "Xiurui Guo",
+        "Bo Yu",
+        "Shaoshan Liu",
+        "Jiafeng Xu",
+        "Hao Dong",
+        "Meng Li"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.AI"
+      ],
+      "published": "2026-07-14T11:38:36+00:00",
+      "link": "https://arxiv.org/pdf/2607.12659v3",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "edge deployment on Jetson Orin, relevant to edge deployment of robots",
+      "llm_evidence_cn": "在Jetson Orin上的边缘部署，与机器人边缘端部署相关",
+      "llm_evidence": "在Jetson Orin上的边缘部署，与机器人边缘端部署相关",
+      "canonical_evidence": "在Jetson Orin上的边缘部署，与机器人边缘端部署相关",
+      "llm_tldr_en": "Proposes Jetson-PI for efficient VLA model deployment on low-power onboard devices like Jetson Orin via foresight-aligned asynchronous correction, addressing latency and misalignment issues.",
+      "llm_tldr_cn": "针对VLA模型在低功耗机载设备（如Jetson Orin）上部署时推理延迟大、控制频率低的问题，本文提出Jetson-PI方法，通过前瞻对齐异步校正来缓解感知-执行错位和反应时间长的问题。实验表明该方法能有效提升实时控制性能，为边缘端机器人部署提供了实用解决方案。",
+      "llm_tldr": "针对VLA模型在低功耗机载设备（如Jetson Orin）上部署时推理延迟大、控制频率低的问题，本文提出Jetson-PI方法，通过前瞻对齐异步校正来缓解感知-执行错位和反应时间长的问题。实验表明该方法能有效提升实时控制性能，为边缘端机器人部署提供了实用解决方案。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "edge deployment of Unitree robots research",
+      "matched_requirement_id": "req-8",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2607.13249v1",
+      "source": "arxiv",
+      "title": "System-Self as a Data Structure: An Architectural Approach to Bounded Adaptation",
+      "abstract": "Safety critical autonomous systems often adapt by adjusting controller parameters while keeping the underlying architecture fixed. This strategy breaks down when shifts in sensing, resource availability, or component health invalidate the original structural assumptions. This work introduces a method in which system maintain an explicit, graph-based representation of their architecture and reason over it during operation. The system is modeled as a directed graph of physical, functional, and model based modules, with edges capturing information and control dependencies. Adaptation is posed as a joint optimization over architectural configurations and module parameters, subject to operational constraints using a Monitor-Analyze-Plan-Execute loop-based finite state machine. Performance degradation is isolated via residual decomposition and dependency weighted influence propagation, and candidate adaptations are filtered using a stability aware mechanism. The approach is demonstrated on a differential drive robot under sensor drift and actuator faults. A fixed architecture accumulates tracking errors of up to 24 m and 13 m, respectively, whereas architecture aware adaptation reduces error under 1.5 m in each case, by selecting fault appropriate configurations. These results show the value of reasoning over system structure, while preserving stability, rather than relying solely on parameter tuning.",
+      "authors": [
+        "Erwin Franz",
+        "Yasin Alhassan"
+      ],
+      "primary_category": "eess.SY",
+      "categories": [
+        "eess.SY"
+      ],
+      "published": "2026-07-14T20:31:12+00:00",
+      "link": "https://arxiv.org/pdf/2607.13249v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "monitors component health for fault diagnosis in safety-critical systems",
+      "llm_evidence_cn": "监控组件健康状况，适用于安全关键系统故障诊断",
+      "llm_evidence": "监控组件健康状况，适用于安全关键系统故障诊断",
+      "canonical_evidence": "监控组件健康状况，适用于安全关键系统故障诊断",
+      "llm_tldr_en": "Proposes a graph-based architectural representation for autonomous systems to reason about component health and adapt beyond parameter tuning, enabling fault detection and adaptation.",
+      "llm_tldr_cn": "安全关键系统在组件失效时仅调整参数难以应对。本文提出将系统架构表示为显式图结构，通过监控-分析-规划-执行循环联合优化架构配置与模块参数。该方法能检测组件健康变化并主动适应，为人形机器人故障诊断提供了可迁移的架构级解决方案。",
+      "llm_tldr": "安全关键系统在组件失效时仅调整参数难以应对。本文提出将系统架构表示为显式图结构，通过监控-分析-规划-执行循环联合优化架构配置与模块参数。该方法能检测组件健康变化并主动适应，为人形机器人故障诊断提供了可迁移的架构级解决方案。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "fault diagnosis for humanoid robots",
+      "matched_requirement_id": "req-3",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    }
+  ]
+}

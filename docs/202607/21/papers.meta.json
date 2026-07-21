@@ -1,0 +1,69 @@
+{
+  "label": "2026-07-21",
+  "date": "2026-07-21",
+  "generated_at": "2026-07-21T21:52:05",
+  "count": 4,
+  "papers": [
+    {
+      "paper_id": "202607/21/2607.17977v1-rynnbrain-11-towards-more-capable-and-generalizable-embodied-foundation-model",
+      "section": "deep",
+      "title_en": "RynnBrain 1.1: Towards More Capable and Generalizable Embodied Foundation Model",
+      "authors": "Kehan Li, Bohan Hou, Minghao Zhu, Tianyi Zhang, Zesen Cheng, Zhikai Wang, Sicong Leng, Xin Li, Xiao Lin, Biying Yao, Minghua Zeng, Jiangpin Liu, Ronghao Dang, Jiayan Guo, Siteng Huang, Haoyu Zhao, Heng Ping, Yaxi Zhao, Kexiang Wang, Tong Lu, Shengke Xue, Jiahao Tang, Yulei Wang, Zejing Wang, Jianwei Gao, Shijian Lu, Chengju Liu, Jianfei Yang, Mingxiu Chen, Deli Zhao",
+      "date": "2026-07-20",
+      "pdf": "https://arxiv.org/pdf/2607.17977v1",
+      "score": "8.0",
+      "evidence": "在宇树G1上部署具身基础模型，直接涉及宇树G1机器人的边缘部署和数据集构建",
+      "tldr": "针对现有具身基础模型能力有限与泛化性不足的问题，提出RynnBrain 1.1系列模型，参数规模从2B到122B-A10B。采用统一时空物理框架，新增接触点预测与原生3D定位，并开发跨体态动作空间的VLA架构。在VSI-Bench、MMSI等基准上，122B-A10B模型超越所有开源与闭源模型；真实机器人实验中，多任务多体态训练提升成功率。贡献在于提供了更强大、更可直接用于机器人操作的具身基础模型。",
+      "tags": "query:ur",
+      "abstract_en": "We present RynnBrain 1.1, a family of embodied foundation models spanning 2B, 9B, and 122B-A10B scales. Trained with a unified spatio-temporal and physically grounded framework, RynnBrain 1.1 supports embodied perception, spatial reasoning, localization, and planning. Compared with RynnBrain 1.0, it further introduces contact-point prediction across the model family and native 3D grounding for the 2B and 9B models, yielding representations and outputs that are more directly aligned with robot manipulation. We also develop RynnBrain-VLA with a unified cross-embodiment action space and embodiment-specific masking, and deploy it on Unitree G1, Astribot-S1, and Tianji-Wuji. RynnBrain 1.1 achieves strong results on embodied cognition, localization, and 3D grounding, with the 122B-A10B model outperforming all evaluated proprietary and open-source models on VSI-Bench, MMSI, and RefSpatial-Bench. Real-robot experiments show that RynnBrain-initialized policies outperform Qwen-based and representative generalist VLAs, while joint multi-task and multi-embodiment training improves process scores and success rates over per-task training.",
+      "source": "arxiv",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "paper_id": "202607/21/2607.15582v1-a-model-based-decoupling-strategy-for-proprioception-and-contact-sensing-in-an-architected-soft-manipulator",
+      "section": "quick",
+      "title_en": "A Model-Based Decoupling Strategy for Proprioception and Contact Sensing in an Architected Soft Manipulator",
+      "authors": "Francesco Stella, Annan Zhang, Cosimo Della Santina, Josie Hughes, Daniela Rus",
+      "date": "2026-07-17",
+      "pdf": "https://arxiv.org/pdf/2607.15582v1",
+      "score": "7.0",
+      "evidence": "使用流体压力传感器解耦本体感受与接触信号，与基于本体感受的故障诊断相关",
+      "tldr": "软体连续机械臂需要嵌入感知以实现本体感知和接触检测，但将传感器集成到稀疏的构型结构中存在挑战。本文提出一种模型驱动策略，利用流体压力传感器解耦本体感知与接触信号：每个构型段包含六个蜿蜒气道，采用分段常曲率模型将压力映射为形状，并通过Huber回归残差识别外部接触。单一段上弯曲误差仅为0.11±0.02，接触检测率达97%。将八个段集成至肌腱驱动的软体机械臂，展示了触觉示教、力调节和物体重建等全身应用，为构型软体的同步感知提供了实用路径。",
+      "tags": "query:humanoid-ood",
+      "abstract_en": "Soft continuum robots require embedded sensing for proprioception and contact detection, yet integrating sensors into sparse, highly deformable architected structures remains challenging. We present a model-based strategy that decouples proprioceptive and contact signals from a common set of fluidic pressure sensors embedded in a soft architected segment. Each segment of the Innervated Trimmed Helicoid (ITH) contains six air channels routed in a localized zigzag pattern along the circumference. With only three principal kinematic degrees of freedom (axial compression, bending in x, bending in y), the six pressure readings form an overdetermined system. A piecewise constant curvature model maps pressures to shape, and Huber regression identifies outlier channels whose residuals indicate external contact. On a single ITH segment, this approach achieves proprioceptive shape estimation with a relative bending error of 0.11 +/- 0.02 and a contact detection rate of 97% across 178 trials. We integrate eight ITH segments into Air-Helix, a tendon-driven soft continuum manipulator, and present exploratory whole-arm demonstrations that include tactile teaching by demonstration, admittance-controlled force regulation, and tactile object reconstruction. The results suggest that localized fluidic innervation combined with model-based redundancy resolution is a practical path toward concurrent proprioception and contact sensing in architected soft robots.",
+      "source": "arxiv",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "paper_id": "202607/21/2607.12659v3-jetson-pi-towards-onboard-real-time-robot-control-via-foresight-aligned-asynchronous-inference",
+      "section": "quick",
+      "title_en": "Jetson-PI: Towards Onboard Real-Time Robot Control via Foresight-Aligned Asynchronous Inference",
+      "authors": "Zebin Yang, Qi Wang, Yunhe Wang, Xiurui Guo, Bo Yu, Shaoshan Liu, Jiafeng Xu, Hao Dong, Meng Li",
+      "date": "2026-07-14",
+      "pdf": "https://arxiv.org/pdf/2607.12659v3",
+      "score": "6.0",
+      "evidence": "在Jetson Orin上的边缘部署，与机器人边缘端部署相关",
+      "tldr": "VLA模型在Jetson等低功耗设备上推理延迟大，导致控制频率过低，异步推理虽能掩盖延迟但引发感知-执行错位和长反应时间。Jetson-PI提出未来对齐异步校正，训练轻量级未来校正模块根据已执行动作预测未来环境状态，使动作专家直接输出未来时刻动作；同时采用基于置信度的调度优化及CUDA图复用等系统加速。在Jetson Orin上控制频率较PyTorch提升8.66倍、较vla.cpp提升5.41倍，在LIBERO基准上平均成功率比VLASH高14.8%。该方法有效解决了边缘设备VLA实时部署的感知-执行对齐及延迟问题，为高频机器人控制提供了实用方案。",
+      "tags": "query:ur",
+      "abstract_en": "Vision-Language-Action (VLA) models have achieved impressive performance on diverse embodied tasks. However, deploying VLA models on low-power onboard devices, such as the Jetson Orin, remains challenging due to their high computational complexity, which leads to substantial inference latency and low control frequency. Asynchronous inference can partially mask this latency by parallelizing action execution and subsequent inference, but it introduces two critical issues: perception-execution misalignment and long reaction time. In this paper, we propose Jetson-PI, a method for efficient VLA deployment on onboard devices via Foresight-Aligned Asynchronous Correction. To address misalignment, we train a lightweight future correction module that predicts future environment representation conditioned on committed actions, enabling the action expert to directly predict actions from the future time step. To reduce reaction time, we introduce confidence-based scheduling optimization that adaptively balances VLM and action expert invocations, complemented by system-level accelerations including CUDA graph reuse, GPU-resident intermediate buffering, and flow unrolling. Extensive experiments demonstrate that Jetson-PI achieves 8.66x and 5.41x improvements in control frequency compared with naive PyTorch and vla.cpp on NVIDIA Jetson Orin, while outperforming VLASH by 14.8\\% in average success rate on the LIBERO benchmark. The code of our asynchronous algorithm is available on https://github.com/PKU-SEC-Lab/Jetson-PI, and our efficient llama.cpp-based inference engine is available on https://github.com/PKU-SEC-Lab/Jetson-PI-Edge.",
+      "source": "arxiv",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "paper_id": "202607/21/2607.13249v1-system-self-as-a-data-structure-an-architectural-approach-to-bounded-adaptation",
+      "section": "quick",
+      "title_en": "System-Self as a Data Structure: An Architectural Approach to Bounded Adaptation",
+      "authors": "Erwin Franz, Yasin Alhassan",
+      "date": "2026-07-14",
+      "pdf": "https://arxiv.org/pdf/2607.13249v1",
+      "score": "6.0",
+      "evidence": "监控组件健康状况，适用于安全关键系统故障诊断",
+      "tldr": "安全关键自主系统在传感器漂移或执行器故障时，固定架构的参数调整会失效。本文提出将系统自身架构作为显式图数据结构，在运行时进行架构级和参数级联合优化。采用残差分解和依赖传播进行性能退化定位，并用稳定性感知机制筛选候选适应。在差动轮机器人实验中，架构感知适应将跟踪误差从固定架构的24米和13米降至1.5米以下。结果表明，显式推理系统结构能在保持稳定性的同时实现有效自适应。",
+      "tags": "query:ur",
+      "abstract_en": "Safety critical autonomous systems often adapt by adjusting controller parameters while keeping the underlying architecture fixed. This strategy breaks down when shifts in sensing, resource availability, or component health invalidate the original structural assumptions. This work introduces a method in which system maintain an explicit, graph-based representation of their architecture and reason over it during operation. The system is modeled as a directed graph of physical, functional, and model based modules, with edges capturing information and control dependencies. Adaptation is posed as a joint optimization over architectural configurations and module parameters, subject to operational constraints using a Monitor-Analyze-Plan-Execute loop-based finite state machine. Performance degradation is isolated via residual decomposition and dependency weighted influence propagation, and candidate adaptations are filtered using a stability aware mechanism. The approach is demonstrated on a differential drive robot under sensor drift and actuator faults. A fixed architecture accumulates tracking errors of up to 24 m and 13 m, respectively, whereas architecture aware adaptation reduces error under 1.5 m in each case, by selecting fault appropriate configurations. These results show the value of reasoning over system structure, while preserving stability, rather than relying solely on parameter tuning.",
+      "source": "arxiv",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "errors": []
+}
