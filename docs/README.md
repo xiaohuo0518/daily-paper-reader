@@ -6,34 +6,37 @@
 </div>
 
 ## 每次日报
-- 最新运行日期：2026-07-21
-- 运行时间：2026-07-21 21:51:58 UTC
+- 最新运行日期：2026-07-22
+- 运行时间：2026-07-22 21:39:43 UTC
 - 运行状态：成功
-- 本次总论文数：4
-- 精读区：1
+- 本次总论文数：5
+- 精读区：2
 - 速读区：3
 
 ### 今日简报（AI）
-今日共推荐4篇论文，精读1篇、速读3篇。  
-最值得关注的是具身基础模型《RynnBrain 1.1》（8.0/10），以及软体机械手感知解耦策略（7.0/10）和实时机器人控制异步推理（6.0/10）。  
-建议优先精读高分的具身模型论文，其余速读可关注软体感知与控制架构方向。
-- 详情：[/202607/21/README](/202607/21/README)
+今日聚焦具身基础模型升级与边缘机器人鲁棒量化感知，精读2篇高分论文。  
+最值得关注《RynnBrain 1.1》提升具身模型泛化能力，以及《Recti-Q》用特征空间修正实现对抗异常的量化感知。  
+建议你后续重点跟踪具身智能与边缘AI的融合技术，尤其是模型泛化性与低精度部署的实用平衡。
+- 详情：[/202607/22/README](/202607/22/README)
 
 ### 精读区论文标签
-1. [RynnBrain 1.1: Towards More Capable and Generalizable Embodied Foundation Model](/202607/21/2607.17977v1-rynnbrain-11-towards-more-capable-and-generalizable-embodied-foundation-model)  
+1. [RynnBrain 1.1: Towards More Capable and Generalizable Embodied Foundation Model](/202607/22/2607.17977v1-rynnbrain-11-towards-more-capable-and-generalizable-embodied-foundation-model)  
    标签：评分：8.0/10、query:ur
-   evidence：在宇树G1上部署具身基础模型，直接涉及宇树G1机器人的边缘部署和数据集构建
+   evidence：将具身基础模型部署于宇树G1机器人
+2. [Recti-Q: Feature-Space Rectification for Out-of-Distribution-Robust Quantized Perception in Edge Robotics](/202607/22/2607.18540v1-recti-q-feature-space-rectification-for-out-of-distribution-robust-quantized-perception-in-edge-robotics)  
+   标签：评分：8.0/10、query:humanoid-ood
+   evidence：Recti-Q通过特征空间修正增强边缘机器人量化感知的分布外鲁棒性，保障安全操作
 
 ### 速读区论文标签
-1. [A Model-Based Decoupling Strategy for Proprioception and Contact Sensing in an Architected Soft Manipulator](/202607/21/2607.15582v1-a-model-based-decoupling-strategy-for-proprioception-and-contact-sensing-in-an-architected-soft-manipulator)  
+1. [M2P-AD: Memory-to-Prototype Learning with Boundary-aware Score Refinement for 3D Anomaly Detection](/202607/22/2607.13499v1-m2p-ad-memory-to-prototype-learning-with-boundary-aware-score-refinement-for-3d-anomaly-detection)  
    标签：评分：7.0/10、query:humanoid-ood
-   evidence：使用流体压力传感器解耦本体感受与接触信号，与基于本体感受的故障诊断相关
-2. [Jetson-PI: Towards Onboard Real-Time Robot Control via Foresight-Aligned Asynchronous Inference](/202607/21/2607.12659v3-jetson-pi-towards-onboard-real-time-robot-control-via-foresight-aligned-asynchronous-inference)  
+   evidence：M2P-AD通过记忆到原型学习实现3D异常检测，抑制正常区域的误报
+2. [Edge-First Ground Reaction Force Estimation with Consumer Smartwatches](/202607/22/biorxiv-10-64898-2026-07-18-739307-v1-edge-first-ground-reaction-force-estimation-with-consumer-smartwatches)  
+   标签：评分：7.0/10、query:humanoid-ood
+   evidence：提出紧凑的时间卷积网络并在智能手表/手机边缘端部署，用于时间序列估计，与轻量模型边缘部署用于异常检测相关
+3. [Robust PnP on a Neuromorphic Processor for Object Pose Estimation](/202607/22/2607.16834v1-robust-pnp-on-a-neuromorphic-processor-for-object-pose-estimation)  
    标签：评分：6.0/10、query:ur
-   evidence：在Jetson Orin上的边缘部署，与机器人边缘端部署相关
-3. [System-Self as a Data Structure: An Architectural Approach to Bounded Adaptation](/202607/21/2607.13249v1-system-self-as-a-data-structure-an-architectural-approach-to-bounded-adaptation)  
-   标签：评分：6.0/10、query:ur
-   evidence：监控组件健康状况，适用于安全关键系统故障诊断
+   evidence：神经形态硬件上的边缘部署
 
 
 <div class="dpr-home-promo-card">

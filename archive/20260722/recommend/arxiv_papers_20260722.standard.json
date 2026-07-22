@@ -1,0 +1,241 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-07-22T21:37:23.783370+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 2,
+    "deep_divecandidates": 2,
+    "deep_cap": 7,
+    "deep_selected": 2,
+    "quick_candidates": 3,
+    "quick_skim_target": 12,
+    "quick_selected": 3
+  },
+  "deep_dive": [
+    {
+      "id": "2607.18540v1",
+      "source": "arxiv",
+      "title": "Recti-Q: Feature-Space Rectification for Out-of-Distribution-Robust Quantized Perception in Edge Robotics",
+      "abstract": "Robotic perception pipelines increasingly rely on large vision backbones deployed on SWaP-constrained edge platforms, making post-training quantization (PTQ) attractive for real-time inference. However, while PTQ often preserves clean in-distribution accuracy, we show that it can substantially degrade reliability under deployment-relevant distribution shifts (e.g., sensor noise, severe weather, and novel operating environments), creating a Quantization-Induced Robustness Gap. Across foundational vision benchmarks (ImageNet-C and PACS), 4-bit PTQ models exhibit pronounced robustness degradation despite negligible ID accuracy loss. To address this, we propose Recti-Q, a lightweight feature-space rectification framework that freezes the quantized backbone and trains a small classifier-head LoRA adapter using only source data. Recti-Q is architecture-agnostic across CNNs and Transformers, supports efficient teacher-free training, and recovers a significant portion of the lost robustness, in some cases matching or exceeding FP32 performance. At less than 1% parameter overhead (as small as 6 KB), Recti-Q preserves over 99% of PTQ memory savings, adds negligible compute, and enables low-bandwidth Over-The-Air (OTA) resilience patching for deployed robotic fleets operating in unpredictable physical environments.",
+      "authors": [
+        "Hamidreza Yaghoubi Araghi",
+        "Parastoo Pilevar",
+        "Ming C. Lin"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV",
+        "cs.LG",
+        "cs.RO"
+      ],
+      "published": "2026-07-20T22:14:04+00:00",
+      "link": "https://arxiv.org/pdf/2607.18540v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "Recti-Q provides feature-space rectification for OOD-robust quantized perception on edge robots",
+      "llm_evidence_cn": "Recti-Q通过特征空间修正增强边缘机器人量化感知的分布外鲁棒性，保障安全操作",
+      "llm_evidence": "Recti-Q通过特征空间修正增强边缘机器人量化感知的分布外鲁棒性，保障安全操作",
+      "canonical_evidence": "Recti-Q通过特征空间修正增强边缘机器人量化感知的分布外鲁棒性，保障安全操作",
+      "llm_tldr_en": "Recti-Q addresses the Quantization-Induced Robustness Gap in edge robotic perception: while quantized models maintain in-distribution accuracy, they degrade under deployment shifts. Recti-Q is a lightweight feature-space rectification framework that restores out-of-distribution robustness without altering the quantized model architecture, demonstrated on ImageNet-C and PACS benchmarks. It directly enhances safety in edge robots under novel operating conditions.",
+      "llm_tldr_cn": "边缘机器人感知常采用量化模型部署，但量化会引入分布外鲁棒性下降问题（量化诱导鲁棒性差距）。本文提出Recti-Q，一种轻量级特征空间修正框架，在不改变量化模型结构的前提下，有效恢复部署时分布偏移（如传感器噪声、恶劣天气）下的鲁棒性。在ImageNet-C和PACS基准上验证了其有效性，为边缘机器人安全操作提供了关键保障。",
+      "llm_tldr": "边缘机器人感知常采用量化模型部署，但量化会引入分布外鲁棒性下降问题（量化诱导鲁棒性差距）。本文提出Recti-Q，一种轻量级特征空间修正框架，在不改变量化模型结构的前提下，有效恢复部署时分布偏移（如传感器噪声、恶劣天气）下的鲁棒性。在ImageNet-C和PACS基准上验证了其有效性，为边缘机器人安全操作提供了关键保障。",
+      "llm_tags": [
+        "query:humanoid-ood"
+      ],
+      "matched_query_tag": "query:humanoid-ood",
+      "matched_query_text": "out-of-distribution detection for safe robot operation",
+      "matched_requirement_id": "req-11",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2607.17977v1",
+      "source": "arxiv",
+      "title": "RynnBrain 1.1: Towards More Capable and Generalizable Embodied Foundation Model",
+      "abstract": "We present RynnBrain 1.1, a family of embodied foundation models spanning 2B, 9B, and 122B-A10B scales. Trained with a unified spatio-temporal and physically grounded framework, RynnBrain 1.1 supports embodied perception, spatial reasoning, localization, and planning. Compared with RynnBrain 1.0, it further introduces contact-point prediction across the model family and native 3D grounding for the 2B and 9B models, yielding representations and outputs that are more directly aligned with robot manipulation. We also develop RynnBrain-VLA with a unified cross-embodiment action space and embodiment-specific masking, and deploy it on Unitree G1, Astribot-S1, and Tianji-Wuji. RynnBrain 1.1 achieves strong results on embodied cognition, localization, and 3D grounding, with the 122B-A10B model outperforming all evaluated proprietary and open-source models on VSI-Bench, MMSI, and RefSpatial-Bench. Real-robot experiments show that RynnBrain-initialized policies outperform Qwen-based and representative generalist VLAs, while joint multi-task and multi-embodiment training improves process scores and success rates over per-task training.",
+      "authors": [
+        "Kehan Li",
+        "Bohan Hou",
+        "Minghao Zhu",
+        "Tianyi Zhang",
+        "Zesen Cheng",
+        "Zhikai Wang",
+        "Sicong Leng",
+        "Xin Li",
+        "Xiao Lin",
+        "Biying Yao",
+        "Minghua Zeng",
+        "Jiangpin Liu",
+        "Ronghao Dang",
+        "Jiayan Guo",
+        "Siteng Huang",
+        "Haoyu Zhao",
+        "Heng Ping",
+        "Yaxi Zhao",
+        "Kexiang Wang",
+        "Tong Lu",
+        "Shengke Xue",
+        "Jiahao Tang",
+        "Yulei Wang",
+        "Zejing Wang",
+        "Jianwei Gao",
+        "Shijian Lu",
+        "Chengju Liu",
+        "Jianfei Yang",
+        "Mingxiu Chen",
+        "Deli Zhao"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-07-20T14:13:27+00:00",
+      "link": "https://arxiv.org/pdf/2607.17977v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "Deploys embodied foundation model on Unitree G1",
+      "llm_evidence_cn": "将具身基础模型部署于宇树G1机器人",
+      "llm_evidence": "将具身基础模型部署于宇树G1机器人",
+      "canonical_evidence": "将具身基础模型部署于宇树G1机器人",
+      "llm_tldr_en": "Presents RynnBrain 1.1 embodied foundation model family, deployed on Unitree G1, Astribot-S1, and Tianji-Wuji, achieving strong results in embodied cognition and localization.",
+      "llm_tldr_cn": "本文提出了RynnBrain 1.1具身基础模型系列，覆盖2B到122B参数规模，支持感知、空间推理和规划。模型成功部署在宇树G1等机器人上，在具身认知和定位任务上取得优异结果。该工作展示了基础模型在人形机器人边缘部署的可行性。",
+      "llm_tldr": "本文提出了RynnBrain 1.1具身基础模型系列，覆盖2B到122B参数规模，支持感知、空间推理和规划。模型成功部署在宇树G1等机器人上，在具身认知和定位任务上取得优异结果。该工作展示了基础模型在人形机器人边缘部署的可行性。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "edge deployment of Unitree robots research",
+      "matched_requirement_id": "req-8",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "quick_skim": [
+    {
+      "id": "2607.13499v1",
+      "source": "arxiv",
+      "title": "M2P-AD: Memory-to-Prototype Learning with Boundary-aware Score Refinement for 3D Anomaly Detection",
+      "abstract": "3D anomaly detection has recently emerged as an important research topic in computer vision. Although existing methods have achieved high performance, excessive anomaly responses in normal regions and false positives near object boundaries remain unresolved challenges. To address these challenges, we propose a novel 3D anomaly detection model, Memory-to-Prototype Anomaly Detection (M2P-AD), which effectively models the distribution of normal features while suppressing excessive anomaly scores in normal regions and false positives near object boundaries. Specifically, we introduce a Memory-to-Prototype (M2P) module that learns representative prototypes from normal feature embeddings to preserve important structural information of objects. In addition, a Boundary extraction (BE) module is integrated to identify object boundaries, and a Boundary-aware score refinement (BSR) strategy is applied to recalibrate anomaly scores by incorporating boundary characteristics. The proposed method is evaluated on Real3D-AD, Anomaly-ShapeNet, and MulSen-AD, achieving state-of-the-art performance. Qualitative results demonstrate that excessive anomaly scores in normal regions are reduced and false positives near object boundaries are suppressed, resulting in more accurate and stable anomaly localization. The results indicate that the proposed approach enables more reliable 3D anomaly detection and provides a robust solution applicable to real-world industrial environments.",
+      "authors": [
+        "Seyoung Jeong",
+        "Jong Pil Yun",
+        "Sang Jun Lee"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV"
+      ],
+      "published": "2026-07-15T06:53:31+00:00",
+      "link": "https://arxiv.org/pdf/2607.13499v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "M2P-AD proposes Memory-to-Prototype learning for 3D anomaly detection, suppressing false positives",
+      "llm_evidence_cn": "M2P-AD通过记忆到原型学习实现3D异常检测，抑制正常区域的误报",
+      "llm_evidence": "M2P-AD通过记忆到原型学习实现3D异常检测，抑制正常区域的误报",
+      "canonical_evidence": "M2P-AD通过记忆到原型学习实现3D异常检测，抑制正常区域的误报",
+      "llm_tldr_en": "M2P-AD tackles excessive anomaly responses in normal regions and boundary false positives in 3D anomaly detection. It introduces a Memory-to-Prototype module to learn representative prototypes from normal embeddings, and a boundary-aware score refinement. The method achieves state-of-the-art performance on benchmark datasets, offering a transferable approach for OOD detection in robot perception.",
+      "llm_tldr_cn": "三维异常检测中现有方法在正常区域产生过多异常响应，并在物体边界附近出现误报。本文提出M2P-AD模型，通过记忆到原型（M2P）模块从正常特征嵌入中学习代表性原型，并设计边界感知分数细化策略抑制误报。在标准基准上取得先进性能，其原型学习思路可迁移至机器人感知中的分布外检测任务。",
+      "llm_tldr": "三维异常检测中现有方法在正常区域产生过多异常响应，并在物体边界附近出现误报。本文提出M2P-AD模型，通过记忆到原型（M2P）模块从正常特征嵌入中学习代表性原型，并设计边界感知分数细化策略抑制误报。在标准基准上取得先进性能，其原型学习思路可迁移至机器人感知中的分布外检测任务。",
+      "llm_tags": [
+        "query:humanoid-ood"
+      ],
+      "matched_query_tag": "query:humanoid-ood",
+      "matched_query_text": "out-of-distribution detection for safe robot operation",
+      "matched_requirement_id": "req-11",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2607.16834v1",
+      "source": "arxiv",
+      "title": "Robust PnP on a Neuromorphic Processor for Object Pose Estimation",
+      "abstract": "Neuromorphic computing is gaining attention in robotic perception due to its higher energy efficiency. While neural network-based methods can more readily exploit the distributed and parallelized structure of neuromorphic computers, crafting neuromorphic solutions for non-learning tasks is less straightforward. This hampers the usage of neuromorphic computing for perception pipelines that depend on both learning and non-learning components, such as object pose estimation (OPE) where state-of-the-art methods use a deep network to predict 2D landmarks and nonlinear optimization to solve perspective-n-point (PnP). In this paper, we propose a novel neuromorphic-deployable formulation for robust PnP, where given outlier-prone 2D-3D correspondences, the object pose with the largest number of inliers is determined. Underpinning our method is a distributed algorithm for robust least squares estimation of rigid body pose that can be executed on a neuromorphic processor. We also design a spiking neural network (SNN) to predict 2D landmarks from event data, where the main layers of the SNN were designed according to the principles of spiking neurons. Overall, our work enables neuromorphic treatment of the major stages of an OPE pipeline, from event sensing and learned landmark prediction, to geometric optimization for robust PnP. Results on neuromophic hardware (Intel Loihi 2) indicate the higher energy efficiency our neuromorphic robust PnP, while achieving competitive accuracy.",
+      "authors": [
+        "Tam Ngoc-Bang Nguyen",
+        "Mohsi Jawaid",
+        "Tat-Jun Chin"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV",
+        "cs.ET"
+      ],
+      "published": "2026-07-18T14:13:29+00:00",
+      "link": "https://arxiv.org/pdf/2607.16834v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "edge deployment on neuromorphic hardware",
+      "llm_evidence_cn": "神经形态硬件上的边缘部署",
+      "llm_evidence": "神经形态硬件上的边缘部署",
+      "canonical_evidence": "神经形态硬件上的边缘部署",
+      "llm_tldr_en": "Proposes a neuromorphic-deployable robust PnP formulation for object pose estimation, enabling full perception pipeline on neuromorphic processors with energy efficiency.",
+      "llm_tldr_cn": "物体姿态估计依赖深度学习预测2D关键点和非线性优化求解PnP，但优化部分难以在神经形态芯片上高效实现。本文提出了一种新型的鲁棒PnP公式，能够在神经形态处理器上部署，处理含异常值的2D-3D对应点。该方案使得完整的物体姿态估计管线在神经形态硬件上运行，兼顾了能效与鲁棒性。",
+      "llm_tldr": "物体姿态估计依赖深度学习预测2D关键点和非线性优化求解PnP，但优化部分难以在神经形态芯片上高效实现。本文提出了一种新型的鲁棒PnP公式，能够在神经形态处理器上部署，处理含异常值的2D-3D对应点。该方案使得完整的物体姿态估计管线在神经形态硬件上运行，兼顾了能效与鲁棒性。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "edge deployment for humanoid robots",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "biorxiv-10-64898-2026-07-18-739307-v1",
+      "source": "biorxiv",
+      "title": "Edge-First Ground Reaction Force Estimation with Consumer Smartwatches",
+      "abstract": "Ground reaction force (GRF) measurement remains largely confined to instrumented laboratories, limiting longitudinal monitoring in daily life. This article presents an edge-first wearable system for estimating vertical GRF from consumer smartwatches. Two Apple Watch Series 6 devices worn at the wrist and waist stream 12-channel inertial data at 100 Hz to an iPhone, where preprocessing, storage, and inference occur locally without cloud dependence. The proposed GRFNet-MultiScale model is a compact temporal convolutional network with four dilated residual blocks and a global context branch. Under leave-one-subject-out evaluation on 539 stance windows from 10 healthy participants, the dual-sensor system achieved a mean Pearson correlation of 0.798 with an RMSE of 257 N, while a wrist-only configuration retained 82.5% of dual-sensor correlation. Temporal attribution remained stable across validation folds and identified early-stance wrist acceleration as the dominant reproducible signal. The system is strongest for cyclic locomotion.",
+      "authors": [
+        "Ghaffarzadeh, P.",
+        "Chakraborty, D.",
+        "Aslansefat, K.",
+        "Dostan, A.",
+        "Papadopoulos, Y."
+      ],
+      "primary_category": "bioengineering",
+      "categories": [
+        "bioengineering"
+      ],
+      "published": "2026-07-21T00:00:00+00:00",
+      "link": "https://www.biorxiv.org/content/10.64898/2026.07.18.739307v1.full.pdf",
+      "tags": [
+        "keyword:humanoid-ood",
+        "query:humanoid-ood"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "proposes a compact temporal convolutional network deployed on smartwatch/phone edge for time-series estimation, relevant to lightweight edge deployment for anomaly detection",
+      "llm_evidence_cn": "提出紧凑的时间卷积网络并在智能手表/手机边缘端部署，用于时间序列估计，与轻量模型边缘部署用于异常检测相关",
+      "llm_evidence": "提出紧凑的时间卷积网络并在智能手表/手机边缘端部署，用于时间序列估计，与轻量模型边缘部署用于异常检测相关",
+      "canonical_evidence": "提出紧凑的时间卷积网络并在智能手表/手机边缘端部署，用于时间序列估计，与轻量模型边缘部署用于异常检测相关",
+      "llm_tldr_en": "Presents an edge-first wearable system for ground reaction force estimation using a compact TCN on consumer smartwatches, achieving high accuracy with local inference.",
+      "llm_tldr_cn": "地面反作用力测量通常依赖实验室设备，难以日常监测。本文提出边缘优先的可穿戴系统，使用Apple Watch采集惯性数据，在iPhone上本地运行紧凑时间卷积网络（GRFNet-MultiScale）进行估计，无需云端。在10名受试者数据集上达到0.798皮尔逊相关系数，展示了轻量模型在边缘端进行时间序列回归的可行性，可迁移至机器人故障检测。",
+      "llm_tldr": "地面反作用力测量通常依赖实验室设备，难以日常监测。本文提出边缘优先的可穿戴系统，使用Apple Watch采集惯性数据，在iPhone上本地运行紧凑时间卷积网络（GRFNet-MultiScale）进行估计，无需云端。在10名受试者数据集上达到0.798皮尔逊相关系数，展示了轻量模型在边缘端进行时间序列回归的可行性，可迁移至机器人故障检测。",
+      "llm_tags": [
+        "query:humanoid-ood"
+      ],
+      "matched_query_tag": "query:humanoid-ood",
+      "matched_query_text": "lightweight LSTM or GRU models deployed on embedded platforms for anomaly detection",
+      "matched_requirement_id": "req-12",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    }
+  ]
+}
