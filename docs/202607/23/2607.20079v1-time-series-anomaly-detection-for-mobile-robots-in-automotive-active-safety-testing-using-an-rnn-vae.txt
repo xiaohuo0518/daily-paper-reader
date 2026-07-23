@@ -1,0 +1,215 @@
+Title: Time-Series Anomaly Detection for Mobile Robots in Automotive Active Safety Testing using an RNN-VAE
+
+URL Source: https://arxiv.org/pdf/2607.20079v1
+
+Published Time: Thu, 23 Jul 2026 00:50:38 GMT
+
+Number of Pages: 7
+
+Markdown Content:
+# IFAC Copyright Notice 
+
+## © 2026 the authors. This work has been accepted to IFAC for publication under a Creative Commons Licence CC-BY-NC-ND. Accepted to be published in: IFAC-PapersOnLine, Proceedings of the 24th IFAC World Congress, Busan, Republic of Korea, August 2026. DOI: to be added upon publication. arXiv:2607.20079v1 [eess.SY] 22 Jul 2026 Time-Series Anomaly Detection for Mobile Robots in Automotive Active Safety Testing using an RNN-VAE 
+
+Henrik Meyer ∗,∗∗ Karsten Raguse ∗∗ 
+
+Armando Walter Colombo ∗∗∗ Thomas Seel ∗
+
+Simon F. G. Ehlers ∗∗ Leibniz University Hannover, Institute of Mechatronic Systems, An der Universit¨ at 1, 30823 Garbsen, Germany  
+
+> ∗∗
+
+Volkswagen AG, Berliner Ring 2, 38436 Wolfsburg, Germany (e-mail: henrik.meyer1@volkswagen.de).  
+
+> ∗∗∗
+
+University of Applied Sciences Emden/Leer, Constantiaplatz 4, 26723 Emden, Germany 
+
+Abstract: Mobile robots, like the ultra-flat overrunable (UFO) robot platform, used in automotive active safety tests, currently lack self-diagnostic capabilities necessary to detect present hardware defects. This circumstance can lead to more severe failures, causing expensive repairs and operational downtime. This work proposes, for the first time, a reconstruction-based time-series anomaly detection model for these mobile robots, considering defect classes such as unevenly worn full-rubber tires or damaged dampers. Unlike prior publications, the proposed approach leverages the vast quantities of unlabeled data generated during routine operation through a simple pre-training step. Furthermore, it optimizes the hyperparameters of the implemented gated recurrent unit-based variational autoencoder (GRU-VAE) and evaluates both a stateless, windowed training approach and one using truncated backpropagation through time (TBPTT). The model’s generalization capabilities are demonstrated by successfully detecting six defect types, with four of them not present in the data used for hyperparameter optimization and threshold selection. This is validated using a test set collected from five system instances at various points over a period of several months, achieving an F1 score of 0 .936, indicating strong practical viability. 
+
+Keywords: Mechatronic system fault detection, anomaly detection, machine learning, mechatronics for mobility systems, time series modeling 1. INTRODUCTION During a car’s development and its subsequent evaluation by authorities, various practice tests are conducted to validate active safety systems, such as the emergency brake assist. In these tests, so-called target carriers, such as the ultra-flat overrunable (UFO) robot platform, are used to mimic other road users, like cars. These systems are subject to high strain while only being inspected irreg-ularly, requiring manual intervention. Undetected initial defects, such as unevenly worn tires, can lead to more se-vere failures, resulting in expensive repairs and significant operational downtime of the equipment. The identification of defects to increase the reliability of technical systems is one of the reasons why condition mon-itoring and anomaly detection have long been a subject of significant interest. One of the domains within this field is mobile robots. In this domain, work has mainly been done on the condition monitoring of individual components. One example is the work of Yu et al. (2012), where defects in the steering system of a mobile robot are identified using a model-based approach. The often-present scarcity of labeled data, however, makes it impractical to implement dedicated condition monitoring models for every possible defect type. Because of this, the focus is shifted towards anomaly detection, where any deviations from normal be-havior are detected without the need for prior knowledge of each specific defect. Model-based anomaly detection methods, like the one from Guo et al. (2018), rely on the correct representa-tion of system dynamics to detect misbehavior. While these approaches can be effective, they are often im-practical to implement for complex systems. Supervised learning approaches, like the one from Zhang et al. (2024), where defects are injected into real data, rely on the prior knowledge of defect characteristics. This lim-its their ability to detect novel anomalies. Because of this, data-driven, unsupervised, or semi-supervised ap-proaches have shifted into focus. While this field of time-series anomaly detection is broad, with performance being highly application-dependent (Zamanzadeh Darban et al. (2025)), reconstruction-based models like recurrent neural network (RNN)-based autoencoders (AEs) have proven suitable in applications related to the present use case. One notable example is the work of Park et al. (2018), where deviations in the behavior of a feeding robot are detected Fig. 1. Architecture of the proposed anomaly detection model, showing the processing of a time step xt from a multivariate time-series X. Elements denote model components (colored), input/output data (white), and calculated metrics (gray rectangles). based on the reconstruction error of a long short-term memory (LSTM)-based variational autoencoder (VAE). Another example is the work of Alizadeh and Ma (2023), where a similar LSTM-AE-based approach is used to detect anomalies within different subsystems of a vehi-cle. Like other reconstruction-based approaches, they of-fer feature-level interpretability, offering insights for root cause analysis, while often being computationally efficient enough for inference on end-devices. While the general approaches have proven suitable, practical challenges like (i) high variability within normal system behavior and (ii) a lack of normal (non-faulty) data are not addressed. Fur-thermore, (iii) hyperparameter optimization (HPO) of the proposed models is rarely considered, and (iv) validation is frequently performed with simulation data, or under idealized laboratory conditions, not taking into account domain shifts, like transfer to a different system instance or changing environmental conditions. In this context, the objective of this paper is to equip the mobile robots used in automotive active safety tests (UFO) with the self-diagnostic capabilities necessary to detect present defects. To address the identified limitations within this application, the contributions of this work are: (i) the implementation of a gated recurrent unit (GRU)-based VAE coupled with a K-nearest-neighbor (KNN) to account for the variability of normal system behavior, (ii) the assessment of a simple two-stage training approach (pre-training on unlabeled data) to mitigate the scarcity of labeled, normal data, (iii) HPO of the models, including the comparison of a stateless and a stateful approach using truncated backpropagation through time (TBPTT), and (iv) the validation of the models using real-world test data with novel defect types and on multiple system instances. 2. RECONSTRUCTION-BASED ANOMALY DETECTION The core of the model is a GRU-VAE that reconstructs multivariate time-series. A KNN, trained on the latent space representations of normal samples, is used to predict the expected reconstruction error during inference. The final anomaly score is then calculated by taking the mean of the features with the highest ratio of reconstruction error to expected error. The proposed architecture can be seen in Fig. 1. 
+
+2.1 Recurrent Neural Network-based Variational Autoencoder (RNN-VAE) 
+
+A VAE (Kingma and Welling (2013)) is a variant of an AE that transforms a high-dimensional input x into a lower-dimensional latent representation z using an encoder 
+
+qϕ(z|x). A decoder pθ (x|z) then uses this latent repre-sentation to reconstruct the original data as x′. In this case, the input, as xt, represents one time step from a full sample (a multivariate time-series) X with F features. A key difference from a standard AE is that the encoder does not directly output a vector z in the latent space. Instead, it outputs the parameters of a probability distribution, oftentimes, as in this paper, a normal distribution with a mean vector μ and a standard deviation vector σ. To enable backpropagation through this stochastic step, the latent vector z is calculated using a reparameterization trick. This is achieved by combining the learned param-eters with a random vector ϵ, as z = μ + σ ⊙ ϵ, where 
+
+ϵ ∼ N (0, I), with I denoting the identity matrix. The VAE optimizes the evidence lower bound (ELBO), which balances reconstruction accuracy and latent space regularization. The loss function, as defined by Kingma and Welling (2013), thus consists of two components 
+
+LVAE (θ, ϕ; x) = − Eqϕ(z|x)[log pθ (x|z)] + DKL (qϕ(z|x)|| p(z)) , (1) with ϕ and θ as the encoder and decoder parameters. The first part of the loss function, −Eqϕ(z|x)[log pθ (x|z)], is the reconstruction loss. It forces the model to accurately reconstruct the input x by maximizing the expected log-likelihood log pθ (x|z). This expectation is computed by first sampling latent vectors z from the encoder’s distri-bution qϕ(z|x) and then using the decoder to evaluate the probability of the original data x given z. Minimizing this term (equivalent to maximizing the log-likelihood) forces the model to generate reconstructions that are as close as possible to the original input. For the sake of simplicity, and to ensure more stable training, this work assumes a fixed decoder standard deviation vector of σx = 1. The reconstruction loss thereby simplifies to the mean squared error (MSE) between the input x and the reconstruction 
+
+x′. The second part, DKL (qϕ(z|x)|| p(z)), is the regular-ization part, in the form of the Kullback-Leibler (KL) divergence. This term acts as a constraint on the encoder, measuring how much the learned posterior distribution 
+
+qϕ(z|x) deviates from a simple prior distribution p(z). In this work, the prior is defined as a standard normal distribution N (0, I). Minimizing the divergence promotes a smooth and continuous latent space, where similar inputs yield similar distributions. As the name suggests, an RNN-VAE consists of the just-described VAE, but with RNNs replacing the standard feed-forward networks. This enables the model to capture temporal dependencies in the sequential data, as the RNNs maintain hidden states across time steps. As traditional RNNs suffer from vanishing and exploding gradients, gated RNNs in the form of LSTMs, introduced by Hochreiter and Schmidhuber (1997), or GRUs, introduced by Cho et al. (2014), are commonly used. In this work, a GRU is used because of the comparable performance but simpler structure compared to LSTMs (Chung et al. (2014)). 2.2 K-Nearest-Neighbor (KNN) 
+
+The KNN algorithm (Cover and Hart (1967)) is utilized as a non-parametric regression model to estimate the ex-pected reconstruction error eexp for any given input xt. It is chosen due to its deterministic behavior, computational efficiency, and minimal need for hyperparameter tuning. The ”training” phase of the KNN consists of building a reference database by passing normal samples through the trained GRU-VAE. The reference dataset consists of N
+
+samples, indexed by i. For each sample xi, the encoder’s latent space representation zi is recorded, and the corre-sponding reconstruction error erec ,i is calculated as the squared error between the input xi and the decoder’s output x′
+
+> i
+
+. The resulting pairs ( zi, erec ,i ), defining the set 
+
+K = {(zi, erec ,i )}Ni=1 , are then stored in the database. During inference, an input xt is encoded into its latent vector zt. The KNN algorithm identifies the set K(zt), which is a subset of K that contains the k latent vectors 
+
+zi that are closest to zt, based on their Euclidean distance. The expected reconstruction error is then calculated as 
+
+eexp ,t = 1
+
+k
+
+> k
+
+X
+
+> i=1
+
+erec ,i . (2) This expected error is intended to improve the robust-ness of the model, as it accounts for the GRU-VAE’s non-uniform reconstruction performance by leveraging the regularized latent space, where similar maneuvers are ex-pected to correspond to similar distributions. 
+
+2.3 Calculation of Anomaly Score 
+
+Since, in this work, entire samples are to be classified as anomalies, it is necessary to compute an overall anomaly score from the reconstruction error erec calculated by the GRU-VAE and the expected error eexp estimated by the KNN, as shown in Fig. 1. First, for each time step t and feature f of the considered sample X, an error ratio is calculated as 
+
+rt,f = erec ,t,f 
+
+eexp ,t,f 
+
+. (3) Then, for each feature, a feature-specific anomaly score is calculated as 
+
+sf = 1
+
+|T top  
+
+> f
+
+|
+
+X 
+
+> t∈Ttop
+> f
+
+rt,f , (4) where T top  
+
+> f
+
+is the set of top 50 % time steps with the highest error ratio rt,f for the feature f . Finally, the anomaly score of the overall sample X is calculated as 
+
+ssample = 1
+
+|F top |
+
+X  
+
+> f∈Ftop
+
+sf , (5) where F top is the set of the three features with the highest feature-specific anomaly scores. The specific values for the ratio of time steps, as 50 %, and the number of features, as three, are based on domain knowledge regarding typical defect characteristics (e.g., how many features a defect usually affects) and confirmed during initial, non-systematic tests with validation data. While these values can be optimized as hyperparameters, they are treated as constants in this work. 
+
+Fig. 2. UFO without cover plate. 0 20 40 60 80 100 
+
+xpos (m) 
+
+> 10
+> 0
+> 10
+> ypos  (m)
+> 0
+> 10
+> 20
+> Velocity (km/h)
+
+Fig. 3. Example of position and velocity within a checkup-run. 3. EXPERIMENTAL SETUP The UFO robot platform (see Fig. 2) consists of a core unit and ramps attached to each side, which enable cars, in the case of crashes, to drive over the platform without sig-nificant damage. With ramps attached, the mobile robot platform is 2 .95 m long, 1 .69 m wide, 0 .098 m high, and weighs 264 kg. It is equipped with a standardized target, in this case a soft-car, that weighs an additional 110 kg. The test-ready setup can be seen in Fig. 1. During daily operation, the UFO is used in different test procedures, following predefined trajectories with veloc-ities of up to 100 km /h. Position and velocity following one of these trajectories, the so-called checkup-run, can be seen in Fig. 3. The checkup-run takes around 25 s and is performed on a regular basis, for example, after any maintenance, to confirm that the system is in proper con-dition. The data recorded following this trajectory forms the data basis for this work. Parts of this dataset originate from tests where defects are manually induced, while other parts come from the regular tests, where the condition of the system is known. To ensure diversity in the dataset, tests are conducted with five different UFO instances, at various positions on the test site, and at different times of the year, under changing weather conditions. In each predefined test run, data is recorded at a rate of 100 Hz. In this work, a subset of F = 34 features is used. Their scope is based on domain knowledge and includes data from the front and rear wheel speed sensors; velocity and acceleration from the GPS module; brake parameters, such as brake pressure and brake servo position; battery parameters, such as voltage and current; and steering parameters, such as steering angle and steering servo position. In addition to these sensor values, the dataset also contains control values, such as the desired velocity, and values derived from the sensors, such as tire slip. 4. MODEL TRAINING AND HYPERPARAMETER OPTIMIZATION Before training and optimizing the models, the datasets used for the different training steps are introduced. All of the data, except the pre-training set, is recorded following the checkup-run trajectory. 
+
+• Pre-training set: Consists of 250 unlabeled samples 
+
+X, randomly drawn from 2 .000 test runs. This set includes various trajectories from all six UFO in-stances, with the system’s condition being unknown. The subset is used here to reduce computation time. 
+
+• Training set: Contains 66 labeled normal (non-faulty) samples, recorded from UFO instances 2 and 4 immediately following extensive annual maintenance, representing an ideal condition. 
+
+• KNN set: Contains 20 labeled normal samples from UFO instances 1 and 3, recorded during normal op-erations, representing a good, but less-than-perfect, state. 
+
+• Validation set: A labeled set of 30 samples (15 nor-mal, 15 anomalous), recorded from UFO instances 1, 2, and 3. This set contains two different defect types, steering (play in steering) and tire (unevenly worn tires), and is used for hyperparameter optimization and threshold selection. 
+
+• Test set: A labeled set of 100 samples (50 normal, 50 anomalous), from five UFO instances (1-5), used for model evaluation. It includes the two defect types from the validation set, plus four additional, novel ones: damper (insufficient pressure), rear wheel speed sensor (sensor drift), front wheel speed sensor (loose mounting), and battery (short circuit in one cell). The anomaly detection model is trained in several config-urations, based on three primary distinctions. First, the models differ in how the GRU’s hidden state is managed. In the stateless approach, the data is split into fixed-length, overlapping windows (hop size of one). The GRU’s hidden states are only passed within these windows and reset afterwards. While the model is trained to reconstruct the entire window, only the reconstruction of the last time step is utilized for evaluation during inference. Conversely, in the stateful approach using TBPTT, the time-series are split into non-overlapping windows (where the hop size equals the window size). Here, the GRU’s hidden state is passed from one window to the next, and is only reset after each full sample. The second point of differentiation is the data used to fit the scaler. The standard scaler that is used for preprocessing is fit either on the train data or the pre-train data. The third distinction is the training strategy. While all approaches optimize the same self-supervised reconstruction loss (Eq. 1), they utilize different datasets. ”Standard training” uses only the training data, ”pre-training” uses exclusively the unlabeled pre-training data, and ”fine-tuning” takes a pre-trained model and continues its training on the training data. A naming convention based on these three distinctions is presented in Table 1. The models are optimized using a tree-structured Parzen estimator (TPE) (Bergstra et al. (2011)). While the goal Table 1. Model naming convention.              
+
+> Category Code Description
+> State management stl Stateless stf Stateful (TBPTT) Scaler ts Fitted on training data ps Fitted on pre-train data Training strategy std Trained on train data pt Pre-trained only ft Pre-trained + fine-tuned Example: stl ps ft .
+
+in each trial is to lower the VAE’s cost function, the overall optimization objective is to maximize the area under the receiver operating characteristic curve (AUROC). It is calculated at the end of each trial on the validation set, using the full model described in Section 2. Four configurations are selected for HPO, two stateless models (stl ts std, stl ps std) and two stateful models us-ing TBPTT (stf ts std, stf ps std). The hyperparameters found for the standard configurations are later used to train their corresponding pre-trained and fine-tuned coun-terparts. This is done to reduce computation time. In each case, the parameters shown in Table 2 are optimized. Table 2. Hyperparameters for optimization.           
+
+> Hyperparameter Value range
+> Window size 20, 50, 100 Hidden size 128, 256, 384, 512 KL divergence weight 0.01 ... 1.0 Learning rate 1×10 −5... 1 ×10 −3
+
+The value ranges for window size and hidden size are limited to reduce the training time. Other parameters are excluded from the HPO after initial trials have shown that they have a comparatively small effect on classification performance. The batch size is set to 128, the latent space dimension to 3, and an L2 regularization is set to zero. Each optimization is conducted for 50 trials. Within each trial, the model is trained for a maximum of 50 epochs, utilizing early stopping with a patience of 5 and a manually set minimum delta to prevent overfitting on the small training set. As an example, the optimized parameters for the stl ps std model are a window size of 100, a hidden size of 512, a KL divergence weight of 0 .372, and a learning rate of 2 .508 × 10 −5.5. RESULTS OF ANOMALY DETECTION To exemplify the model’s behavior, the reconstructions of the steering angle are examined for three different samples 
+
+X, as shown in Fig. 4. Although only the stateless models are assessed here, similar findings can be obtained for their stateful counterparts. While all models are able to reconstruct normal data from the training set reasonably well, as shown in Fig. 4a, differences can be seen when looking at a test set example. Here, the standard model (stl ts std) already deviates significantly from the actual sensor signal, even though the test sample, shown in Fig. 4b, stems from a system without defects. When taking a look at an anomalous test sample, as shown in Fig. 4c, it can be seen that the reconstruction from the standard model deviates significantly from the actual signal. Furthermore, it is evident that the pre-trained model (stl ps pt) reconstructs the steering angle very accurately in most sections. The fine-tuned model, in contrast, deviates further and is closer to a signal as it would look without the present defect. 0 2 4 6 8 10 12 14 16 18 20 22 24                            
+
+> Time (s)
+> 15
+> 12
+> 9
+> 6
+> 3
+> 0
+> 3
+> 6
+> 9
+> 12
+> Steering angle (°)
+> Original stl_ts_std
+> 0.9784
+> stl_ps_pt
+> 0.9897
+> stl_ps_ft
+> 0.9701
+> (a) Normal sample from training set 0246810 12 14 16 18 20 22 24
+> Time (s)
+> 15
+> 12
+> 9
+> 6
+> 3
+> 0
+> 3
+> 6
+> 9
+> 12
+> Steering angle (°)
+> Original stl_ts_std
+> 0.9809
+> stl_ps_pt
+> 1.0269
+> stl_ps_ft
+> 1.0322
+> (b) Normal sample from test set 0246810 12 14 16 18 20 22 24
+> Time (s)
+> 15
+> 12
+> 9
+> 6
+> 3
+> 0
+> 3
+> 6
+> 9
+> 12
+> Steering angle (°)
+> Original stl_ts_std
+> 1.3906
+> stl_ps_pt
+> 1.2532
+> stl_ps_ft
+> 1.5204
+> (c) Anomalous sample with steering defect from test set
+
+Fig. 4. Reconstruction of steering angle with feature-specific anomaly scores sf .This observable difference between the shown models also translates to the feature-specific anomaly scores sf . When calculating the score difference between the normal test sample and the anomalous one, the stl ts std model shows a ratio of 1 .3906 /0.9809 ≈ 1.418 (see legends in Fig. 4 b/c), which translates into a 41 .8 % increase, while the stl ps pt model shows an increase of 22 .0 %, and the stl ps ft model one of 47 .3 %. In this context, a higher increase between normal and anomalous samples can be considered better. This is because the goal is to reconstruct normal data well, but not to reconstruct anomalies, so that differences between anomalous and normal behavior become apparent through the reconstruction error. It should be noted that the values presented are derived from the overall models. This explains the relatively low anomaly scores of the standard model (stl ts std). By using the expected error eexp from the KNN to calculate the feature-specific anomaly score sf , the standard model already “knows” that it cannot reconstruct this feature particularly well, even when looking at normal samples. An overall performance comparison for the optimized models can be seen in Table 3. The fine-tuned, stateless model (stl ps ft) achieves the best performance on both the validation and the test sets. The stateful models perform slightly worse on average, despite their theoretical advantage of having a larger context window, and their observable advantage of producing few to no outliers when looking at their reconstructions. Table 3. Comparison of optimized models, with threshold for test set based on validation set, and model naming according to Table 1.                                                                              
+
+> Model Data AUROC F1 TPR FPR GRU-VAE: Stateless
+> stl ts std Val. 0.791 0.750 0.600 0.000 Test 0.853 0.710 0.560 0.020 stl ps std Val. 0.764 0.636 0.468 0.000 Test 0.944 0.734 0.580 0.000 stl ps pt Val. 0.769 0.833 1.000 0.400 Test 0.902 0.763 0.900 0.460 stl ps ft Val. 0.889 0.875 0.933 0.200 Test 0.961 0.936 0.880 0.000
+> GRU-VAE: Stateful (TBPTT)
+> stf ts std Val. 0.884 0.839 0.867 0.200 Test 0.889 0.832 0.840 0.180 stf ps std Val. 0.809 0.759 0.733 0.200 Test 0.910 0.739 0.680 0.160 stf ps pt Val. 0.676 0.737 0.933 0.600 Test 0.930 0.838 0.880 0.220 stf ps ft Val. 0.809 0.774 0.800 0.267 Test 0.953 0.857 0.780 0.040
+
+The model’s anomaly scores ssample vary significantly, with some defects causing only a minor increase, while others result in scores far above the threshold. It can be observed that tests conducted under similar conditions lead to similar anomaly scores. In Fig. 5, these test groups are visually separated by horizontal lines. Furthermore, the magnitude of the anomaly score correlates with the defect’s severity, considering the same defect type. This is demonstrated by the misclassified steering defect shown, which is correctly detected in a more severe version, where the play in steering was manually increased from 0 .8 mm to 1 .6 mm (see Fig. 5). Fig. 5. Anomaly score distribution of test set with stl ps ft model. Grouped in batches of five samples recorded under similar conditions, steering defect from Fig. 4c marked in yellow. Another characteristic of the model becomes apparent when looking at the feature-specific anomaly scores sf .For the majority of the anomalies examined, the top three features, used to calculate the score ssample , are directly related to the defect type. In the case of the unevenly worn tires, the most noticeable features always include vertical acceleration and the slip of the affected tire. In the case of the damper defect, the slip of the corresponding wheel has a high anomaly score. On target hardware (Intel i5-1145G7 CPU, 8 GB RAM), end-to-end inference for a 25 s checkup-run takes approximately 6 s, enabling on-device evaluation directly after testing. As in most anomaly detection methods, the developed model is subject to limitations. One limitation is that (i) defects in the data must be clearly visible, i.e., they must exceed a deviation that could otherwise be caused by, for example, changing environmental conditions. The sensitivity of the model (ii) also depends heavily on the model’s ability to reconstruct various features well. If the model is unable to produce a good reconstruction, even for normal samples, differences caused by defects cannot be detected. Finally, (iii) disturbances not caused by defects can also be classified as anomalies. In the presented model, normal tests conducted in heavy rain or without a target attached are classified as anomalies. 6. CONCLUSION This work presents an anomaly detection model for mo-bile robots used in automotive active safety testing. The approach combines a GRU-VAE as a reconstruction-based model with a KNN to estimate an expected reconstruc-tion error, enabling the calculation of a dynamic anomaly score. The optimization of four models and comparison of eight model configurations reveal that a stateless ap-proach outperforms the stateful alternative on average. Furthermore, the combination of pre-training on unlabeled data and fine-tuning on labeled, normal data significantly improves performance in this use case. Using this training strategy, an AUROC of 0 .961 is achieved, compared to a score of 0 .853 for the respective non-pre-trained version. The model’s robustness is demonstrated on a test set comprising 100 labeled samples from five system instances, collected over several months, including four novel defect types. In future work, the presented approach could be extended to make use of other trajectories, enabling the detection of anomalies within every possible test scenario. In addition, it should be compared against alternative methods that also make use of unlabeled data, such as generative adver-sarial networks or self-supervised contrastive approaches. ACKNOWLEDGEMENTS This research project is supported by Volkswagen AG. The results, opinions, and conclusions expressed in this publication are those of the authors and do not necessarily represent the views of Volkswagen AG. REFERENCES Alizadeh, M. and Ma, J. (2023). High-dimensional time series analysis and anomaly detection: A case study of vehicle behavior modeling and unhealthy state detection. Adv. Eng. Inform. , 57(C). doi: 10.1016/j.aei.2023.102041. Bergstra, J., Bardenet, R., Bengio, Y., and K´ egl, B. (2011). Algorithms for hyper-parameter optimization. Advances in neural information processing systems , 24. Cho, K., van Merrienboer, B., Bahdanau, D., and Ben-gio, Y. (2014). On the properties of neural ma-chine translation: Encoder-decoder approaches. doi: 10.48550/ARXIV.1409.1259. Chung, J., Gulcehre, C., Cho, K., and Bengio, Y. (2014). Empirical evaluation of gated recurrent neural networks on sequence modeling. doi:10.48550/ARXIV.1412.3555. Cover, T. and Hart, P. (1967). Nearest neighbor pattern classification. IEEE transactions on information theory ,13(1), 21–27. Guo, P., Kim, H., Virani, N., Xu, J., Zhu, M., and Liu, P. (2018). RoboADS: Anomaly detection against sensor and actuator misbehaviors in mobile robots. In 2018 48th Annual IEEE/IFIP International Conference on Dependable Systems and Networks (DSN) , 574–585. doi: 10.1109/DSN.2018.00065. Hochreiter, S. and Schmidhuber, J. (1997). Long short-term memory. Neural computation , 9(8), 1735–1780. Kingma, D.P. and Welling, M. (2013). Auto-encoding variational Bayes. doi:10.48550/ARXIV.1312.6114. Park, D., Hoshi, Y., and Kemp, C.C. (2018). A multi-modal anomaly detector for robot-assisted feeding us-ing an LSTM-based variational autoencoder. URL 
+
+http://arxiv.org/pdf/1711.00614v1 .Yu, M., Wang, D., and Chen, Q. (2012). Prediction of multiple failures for a mobile robot steering system. In 2012 IEEE International Symposium on Industrial Electronics , 1240–1245. doi:10.1109/ISIE.2012.6237267. Zamanzadeh Darban, Z., Webb, G.I., Pan, S., Aggarwal, C., and Salehi, M. (2025). Deep learning for time series anomaly detection: A survey. ACM Computing Surveys ,57(1), 1–42. doi:10.1145/3691338. Zhang, Z., Yao, Y., Hutabarat, W., Farnsworth, M., Tiwari, D., and Tiwari, A. (2024). Time se-ries anomaly detection in vehicle sensors using self-attention mechanisms. IEEE Transactions on Intelli-gent Transportation Systems , 25(11), 15964–15976. doi: 10.1109/TITS.2024.3415435.

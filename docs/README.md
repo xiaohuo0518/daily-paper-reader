@@ -6,37 +6,44 @@
 </div>
 
 ## 每次日报
-- 最新运行日期：2026-07-22
-- 运行时间：2026-07-22 21:39:43 UTC
+- 最新运行日期：2026-07-23
+- 运行时间：2026-07-23 21:44:25 UTC
 - 运行状态：成功
-- 本次总论文数：5
-- 精读区：2
-- 速读区：3
+- 本次总论文数：8
+- 精读区：3
+- 速读区：5
 
 ### 今日简报（AI）
-今日聚焦具身基础模型升级与边缘机器人鲁棒量化感知，精读2篇高分论文。  
-最值得关注《RynnBrain 1.1》提升具身模型泛化能力，以及《Recti-Q》用特征空间修正实现对抗异常的量化感知。  
-建议你后续重点跟踪具身智能与边缘AI的融合技术，尤其是模型泛化性与低精度部署的实用平衡。
-- 详情：[/202607/22/README](/202607/22/README)
+今日日报聚焦机器人技能自主收集与部署、室内外导航基准，以及人形机器人运动跟踪与零售应用。最值得关注《Zero2Skill》的自主数据收集训练闭环和《NavVerse》的连续性室内外导航仿真基准。下一步可重点探索数据高效的零样本技能获取方法，并关注零售场景下的后训练微调工作。
+- 详情：[/202607/23/README](/202607/23/README)
 
 ### 精读区论文标签
-1. [RynnBrain 1.1: Towards More Capable and Generalizable Embodied Foundation Model](/202607/22/2607.17977v1-rynnbrain-11-towards-more-capable-and-generalizable-embodied-foundation-model)  
+1. [Zero2Skill: Bootstrapping Robot Skills through Autonomous Data Collection, Training, and Deployment](/202607/23/2607.14047v3-zero2skill-bootstrapping-robot-skills-through-autonomous-data-collection-training-and-deployment)  
    标签：评分：8.0/10、query:ur
-   evidence：将具身基础模型部署于宇树G1机器人
-2. [Recti-Q: Feature-Space Rectification for Out-of-Distribution-Robust Quantized Perception in Edge Robotics](/202607/22/2607.18540v1-recti-q-feature-space-rectification-for-out-of-distribution-robust-quantized-perception-in-edge-robotics)  
+   evidence：Zero2Skill自主数据采集管道，通过人机协同实现机器人技能数据的高效收集与重用
+2. [NavVerse: Benchmarking Indoor-to-Outdoor Embodied Navigation in Continuous Robot Simulation](/202607/23/2607.19695v1-navverse-benchmarking-indoor-to-outdoor-embodied-navigation-in-continuous-robot-simulation)  
+   标签：评分：8.0/10、query:ur
+   evidence：NavVerse基准数据集，包含100个室内和50个室外场景，用于具身导航任务
+3. [Time-Series Anomaly Detection for Mobile Robots in Automotive Active Safety Testing using an RNN-VAE](/202607/23/2607.20079v1-time-series-anomaly-detection-for-mobile-robots-in-automotive-active-safety-testing-using-an-rnn-vae)  
    标签：评分：8.0/10、query:humanoid-ood
-   evidence：Recti-Q通过特征空间修正增强边缘机器人量化感知的分布外鲁棒性，保障安全操作
+   evidence：基于RNN-VAE的移动机器人时序异常检测方法
 
 ### 速读区论文标签
-1. [M2P-AD: Memory-to-Prototype Learning with Boundary-aware Score Refinement for 3D Anomaly Detection](/202607/22/2607.13499v1-m2p-ad-memory-to-prototype-learning-with-boundary-aware-score-refinement-for-3d-anomaly-detection)  
-   标签：评分：7.0/10、query:humanoid-ood
-   evidence：M2P-AD通过记忆到原型学习实现3D异常检测，抑制正常区域的误报
-2. [Edge-First Ground Reaction Force Estimation with Consumer Smartwatches](/202607/22/biorxiv-10-64898-2026-07-18-739307-v1-edge-first-ground-reaction-force-estimation-with-consumer-smartwatches)  
-   标签：评分：7.0/10、query:humanoid-ood
-   evidence：提出紧凑的时间卷积网络并在智能手表/手机边缘端部署，用于时间序列估计，与轻量模型边缘部署用于异常检测相关
-3. [Robust PnP on a Neuromorphic Processor for Object Pose Estimation](/202607/22/2607.16834v1-robust-pnp-on-a-neuromorphic-processor-for-object-pose-estimation)  
+1. [What Matters in Humanoid General Motion Tracking? An Empirical Study](/202607/23/2607.19903v1-what-matters-in-humanoid-general-motion-tracking-an-empirical-study)  
+   标签：评分：7.0/10、query:ur
+   evidence：提供了宇树G1的运动跟踪框架YAHMP，可实现数据收集与部署
+2. [Closing the Lab-to-Store Gap: A Data-Efficient Post-Training and Experience-Driven Learning VLA Framework for Retail Humanoids](/202607/23/2607.20345v1-closing-the-lab-to-store-gap-a-data-efficient-post-training-and-experience-driven-learning-vla-framework-for-retail-humanoids)  
+   标签：评分：7.0/10、query:ur
+   evidence：使用宇树G1人形机器人，处理执行错误和分布偏移，与复合需求相关
+3. [IMBench: A Benchmark for Intuitive Robotic Manipulation](/202607/23/2607.15641v1-imbench-a-benchmark-for-intuitive-robotic-manipulation)  
    标签：评分：6.0/10、query:ur
-   evidence：神经形态硬件上的边缘部署
+   evidence：提供机器人操作基准，包含数据集构建和评估方法
+4. [Embodied Active Learning under Limited Annotation and Navigation Budget for Object Detection](/202607/23/2607.15974v1-embodied-active-learning-under-limited-annotation-and-navigation-budget-for-object-detection)  
+   标签：评分：6.0/10、query:ur
+   evidence：在有限标注和导航预算下进行具身主动学习，用于物体检测，有助于高效数据集构建
+5. [Unified Prediction and Planning via Conflict-Aware Disjoint Parameter Training](/202607/23/2607.19971v1-unified-prediction-and-planning-via-conflict-aware-disjoint-parameter-training)  
+   标签：评分：6.0/10、query:ur
+   evidence：在边缘设备上部署紧凑的统一预测与规划模型
 
 
 <div class="dpr-home-promo-card">

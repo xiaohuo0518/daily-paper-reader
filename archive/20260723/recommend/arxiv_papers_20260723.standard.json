@@ -1,0 +1,369 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-07-23T21:38:33.471442+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 2,
+    "deep_divecandidates": 3,
+    "deep_cap": 7,
+    "deep_selected": 3,
+    "quick_candidates": 5,
+    "quick_skim_target": 12,
+    "quick_selected": 5
+  },
+  "deep_dive": [
+    {
+      "id": "2607.20079v1",
+      "source": "arxiv",
+      "title": "Time-Series Anomaly Detection for Mobile Robots in Automotive Active Safety Testing using an RNN-VAE",
+      "abstract": "Mobile robots, like the ultra-flat overrunable (UFO) robot platform, used in automotive active safety tests, currently lack self-diagnostic capabilities necessary to detect present hardware defects. This circumstance can lead to more severe failures, causing expensive repairs and operational downtime. This work proposes, for the first time, a reconstructionbased time-series anomaly detection model for these mobile robots, considering defect classes such as unevenly worn full-rubber tires or damaged dampers. Unlike prior publications, the proposed approach leverages the vast quantities of unlabeled data generated during routine operation through a simple pre-training step. Furthermore, it optimizes the hyperparameters of the implemented gated recurrent unit-based variational autoencoder (GRU-VAE) and evaluates both a stateless, windowed training approach and one using truncated backpropagation through time (TBPTT). The model's generalization capabilities are demonstrated by successfully detecting six defect types, with four of them not present in the data used for hyperparameter optimization and threshold selection. This is validated using a test set collected from five system instances at various points over a period of several months, achieving an F1 score of 0.936, indicating strong practical viability.",
+      "authors": [
+        "Henrik Meyer",
+        "Karsten Raguse",
+        "Armando Walter Colombo",
+        "Thomas Seel",
+        "Simon F. G. Ehlers"
+      ],
+      "primary_category": "eess.SY",
+      "categories": [
+        "eess.SY"
+      ],
+      "published": "2026-07-22T12:33:08+00:00",
+      "link": "https://arxiv.org/pdf/2607.20079v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "RNN-VAE based time-series anomaly detection for mobile robots",
+      "llm_evidence_cn": "基于RNN-VAE的移动机器人时序异常检测方法",
+      "llm_evidence": "基于RNN-VAE的移动机器人时序异常检测方法",
+      "canonical_evidence": "基于RNN-VAE的移动机器人时序异常检测方法",
+      "llm_tldr_en": "First reconstruction-based time-series anomaly detection model for mobile robots using RNN-VAE, leveraging unlabeled data for pre-training, detecting hardware defects.",
+      "llm_tldr_cn": "本文首次针对汽车主动安全测试中的移动机器人（UFO平台）提出基于RNN-VAE的重建式时间序列异常检测模型。该方法利用日常运行中产生的大量无标签数据进行预训练，自动检测轮胎不均匀磨损、减震器损坏等硬件故障。在真实数据集上，该方法有效识别了多种故障模式，降低了误报和漏报，为机器人自诊断提供了低成本、高可靠性的方案。",
+      "llm_tldr": "本文首次针对汽车主动安全测试中的移动机器人（UFO平台）提出基于RNN-VAE的重建式时间序列异常检测模型。该方法利用日常运行中产生的大量无标签数据进行预训练，自动检测轮胎不均匀磨损、减震器损坏等硬件故障。在真实数据集上，该方法有效识别了多种故障模式，降低了误报和漏报，为机器人自诊断提供了低成本、高可靠性的方案。",
+      "llm_tags": [
+        "query:humanoid-ood"
+      ],
+      "matched_query_tag": "query:humanoid-ood",
+      "matched_query_text": "Self supervised time series anomaly detection for robot fault diagnosis",
+      "matched_requirement_id": "req-16",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2607.14047v3",
+      "source": "arxiv",
+      "title": "Zero2Skill: Bootstrapping Robot Skills through Autonomous Data Collection, Training, and Deployment",
+      "abstract": "Autonomous data collection governs the volume and quality of real-world trajectories for manipulation policy learning. Existing pipelines reduce human effort via self-resetting, VLM verification, or language-guided correction, yet episode-scoped fixes must be reissued whenever the same failure recurs, so oversight cost grows with session length rather than with the number of distinct problems. We present Zero2Skill, a human-robot symbiotic agentic system in which corrections are retained and reused across rounds. The collection loop collects, verifies, and resets autonomously, pausing for a remote operator only when a phase exhausts an explicit retry budget. An LLM parser maps each natural-language utterance to a structured adjustment stored in Corrective Memory, so addressed failure modes typically need not be corrected again under the same conditions. On a real-robot desktop-clearing testbed, Zero2Skill matches teleoperation episode success while reducing human working time to 16%. Language corrections improve verifier-human agreement in all four evaluated settings and raise average single-attempt success from 12.5% to 47.5% (arm-selection: 20.0% to 50.0%). Policies fine-tuned on Zero2Skill data match teleoperation-trained policy success at a fraction of collection human cost.",
+      "authors": [
+        "Boyuan Wang",
+        "Zhenyuan Zhang",
+        "Zhiqin Yang",
+        "Peijun Gu",
+        "Shuya Wang",
+        "Xiaofeng Wang",
+        "Xianghui Ze",
+        "Yifan Chang",
+        "Guosheng Zhao",
+        "Jiangnan Shao",
+        "Guan Huang",
+        "Hengyu Liu",
+        "Yonggang Zhang",
+        "Wei Xue",
+        "Chunyuan Guan",
+        "Chenglin Pu",
+        "Yike Guo",
+        "Xingang Wang",
+        "Zheng Zhu"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.HC",
+        "eess.SY"
+      ],
+      "published": "2026-07-15T17:16:24+00:00",
+      "link": "https://arxiv.org/pdf/2607.14047v3",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "Zero2Skill autonomous data collection pipeline for robot skill learning with human-in-the-loop correction reuse",
+      "llm_evidence_cn": "Zero2Skill自主数据采集管道，通过人机协同实现机器人技能数据的高效收集与重用",
+      "llm_evidence": "Zero2Skill自主数据采集管道，通过人机协同实现机器人技能数据的高效收集与重用",
+      "canonical_evidence": "Zero2Skill自主数据采集管道，通过人机协同实现机器人技能数据的高效收集与重用",
+      "llm_tldr_en": "Zero2Skill is an agentic system for autonomous data collection, training, and deployment of robot skills, where human corrections are retained and reused to reduce oversight cost.",
+      "llm_tldr_cn": "目标: 减少机器人技能学习中对人工监督的持续依赖，解决数据收集效率低的问题。方法: 提出Zero2Skill系统，自主进行数据采集、验证和复位，仅在重试预算耗尽时暂停请求远程操作员，并通过LLM解析自然语言修正命令。结果: 实现了跨回合的修正复用，有效降低了长会话中的人机开销。贡献: 为机器人技能学习的自主数据采集提供了一种可扩展的人机协同方案。",
+      "llm_tldr": "目标: 减少机器人技能学习中对人工监督的持续依赖，解决数据收集效率低的问题。方法: 提出Zero2Skill系统，自主进行数据采集、验证和复位，仅在重试预算耗尽时暂停请求远程操作员，并通过LLM解析自然语言修正命令。结果: 实现了跨回合的修正复用，有效降低了长会话中的人机开销。贡献: 为机器人技能学习的自主数据采集提供了一种可扩展的人机协同方案。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2607.19695v1",
+      "source": "arxiv",
+      "title": "NavVerse: Benchmarking Indoor-to-Outdoor Embodied Navigation in Continuous Robot Simulation",
+      "abstract": "Robots deployed in delivery, campus, and emergency-response settings often need to navigate from buildings to streets within a single continuous episode. Existing benchmarks usually evaluate indoor and outdoor navigation separately, and many abstract away robot execution, leaving exit finding, boundary traversal, adaptation, and kinodynamic failures underexplored. We introduce NavVerse, a physics-enabled benchmark for indoor-to-outdoor embodied navigation. NavVerse contains 100 indoor scenes, 50 urban outdoor scenes, and 50 indoor-to-outdoor scenes, and 10,000 episodes spanning Object Navigation, Vision-and-Language Navigation, and Place Navigation tasks, where agents search for semantic points of interest such as restaurants or banks. Agents are evaluated through executable robot interfaces using task-success, path-efficiency, and safety metrics. Zero-shot experiments with RL, VLA, and modular baselines show that current agents remain far from solving cross-context navigation: end-to-end VLAs obtain the highest zero-shot success, while the modular method provides the strongest safety profile. PlaceNav further reveals a clear drop from outdoor to indoor-to-outdoor scenes, indicating that adaptation remains major bottleneck.",
+      "authors": [
+        "Junzhe Wu",
+        "Yue Hu",
+        "Zeyu Han",
+        "Po-Hsun Chang",
+        "Yinan Dong",
+        "Behrad Rabiei",
+        "Maani Ghaffari"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.CV"
+      ],
+      "published": "2026-07-22T02:53:46+00:00",
+      "link": "https://arxiv.org/pdf/2607.19695v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "NavVerse benchmark dataset for embodied navigation with 100 indoor and 50 outdoor scenes",
+      "llm_evidence_cn": "NavVerse基准数据集，包含100个室内和50个室外场景，用于具身导航任务",
+      "llm_evidence": "NavVerse基准数据集，包含100个室内和50个室外场景，用于具身导航任务",
+      "canonical_evidence": "NavVerse基准数据集，包含100个室内和50个室外场景，用于具身导航任务",
+      "llm_tldr_en": "NavVerse provides a physics-enabled benchmark for indoor-to-outdoor embodied navigation with 10,000 episodes across three tasks, filling the gap of continuous indoor-to-outdoor evaluation.",
+      "llm_tldr_cn": "目标: 现有导航基准多分开评估室内外场景，忽略连续室内外导航中的出口寻找、边界穿越等挑战。方法: 构建NavVerse基准，包含100个室内、50个室外及50个室内外场景，共10,000个任务实例。结果: 提供了全面的评估平台，揭示了现有方法在室内外过渡中的性能不足。贡献: 为机器人室内外连续导航研究提供了统一基准和数据集。",
+      "llm_tldr": "目标: 现有导航基准多分开评估室内外场景，忽略连续室内外导航中的出口寻找、边界穿越等挑战。方法: 构建NavVerse基准，包含100个室内、50个室外及50个室内外场景，共10,000个任务实例。结果: 提供了全面的评估平台，揭示了现有方法在室内外过渡中的性能不足。贡献: 为机器人室内外连续导航研究提供了统一基准和数据集。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "quick_skim": [
+    {
+      "id": "2607.19903v1",
+      "source": "arxiv",
+      "title": "What Matters in Humanoid General Motion Tracking? An Empirical Study",
+      "abstract": "Humanoid general motion tracking requires policies that can follow diverse whole-body references while maintaining balance. Building such policies involves many practical design choices, and their individual effects are often hard to assess. We address this issue with an empirical study of common modeling and training factors used in recent humanoid motion-imitation pipelines. To make the study controlled and reproducible, we developed YAHMP, an open-source modular framework for training, evaluating, and deploying whole-body motion tracking policies on the Unitree G1. Within YAHMP, we define a nominal configuration and compare variants that differ in motion-command representation, observation history, action representation, actuation profile, hand-force randomization during training, and training approach. We evaluate the resulting policies on a test set of retargeted human motions and compare the nominal policy with TWIST2 as an external baseline trained on the same motion set. The results distinguish choices with clear tracking effects from choices that mainly change actuation effort, training complexity, or physical interaction capability. Finally, we deploy YAHMP policies zero-shot on the real Unitree G1, demonstrating diverse whole-body motion tracking, balance under external perturbations, and forceful interaction.",
+      "authors": [
+        "Fabio Amadio",
+        "Enrico Mingo Hoffman"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-07-22T08:37:19+00:00",
+      "link": "https://arxiv.org/pdf/2607.19903v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "Provides YAHMP framework for Unitree G1 motion tracking, enabling data collection and deployment",
+      "llm_evidence_cn": "提供了宇树G1的运动跟踪框架YAHMP，可实现数据收集与部署",
+      "llm_evidence": "提供了宇树G1的运动跟踪框架YAHMP，可实现数据收集与部署",
+      "canonical_evidence": "提供了宇树G1的运动跟踪框架YAHMP，可实现数据收集与部署",
+      "llm_tldr_en": "Empirical study on humanoid motion tracking factors; introduces open-source YAHMP framework for training and deploying policies on Unitree G1, useful for dataset construction.",
+      "llm_tldr_cn": "针对人形通用运动跟踪中的建模与训练因素进行实证研究，提出了开源模块化框架YAHMP。该框架支持在宇树G1平台上训练、评估和部署全身运动跟踪策略，包含多种变体对比。尽管重点不在数据集构建，但YAHMP提供了标准化的运动数据采集与策略部署流程，为人形机器人数据集构建和边缘部署研究提供了基础工具。",
+      "llm_tldr": "针对人形通用运动跟踪中的建模与训练因素进行实证研究，提出了开源模块化框架YAHMP。该框架支持在宇树G1平台上训练、评估和部署全身运动跟踪策略，包含多种变体对比。尽管重点不在数据集构建，但YAHMP提供了标准化的运动数据采集与策略部署流程，为人形机器人数据集构建和边缘部署研究提供了基础工具。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "Unitree G1 humanoid robot dataset construction",
+      "matched_requirement_id": "req-1",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2607.15641v1",
+      "source": "arxiv",
+      "title": "IMBench: A Benchmark for Intuitive Robotic Manipulation",
+      "abstract": "Humans combine reasoning and motor control to solve complex manipulation tasks under diverse constraints. They build an understanding of the physical world that helps them convert reasoning into actions and quickly adapt to new scenes, tasks, and rules. We refer to this capability as intuitive manipulation. Existing benchmarks fail to capture this integration: they evaluate physical reasoning in isolation from execution, or measure policy performance without requiring explicit reasoning. We introduce IMBENCH, a benchmark designed to evaluate intuitive manipulation as an integrated capability spanning perception, physical reasoning, action generation, and iterative execution. Our tasks require models to infer task-relevant physical structure and generate feasible action sequences under explicit constraints, including contact-rich manipulation, tool use, and multi-stage dependencies. We introduce a benchmark of 35 tasks, 14K filtered trajectories, and scalable tools for generating diverse scenarios. Experiments reveal a consistent gap: vision language models show partial physical reasoning ability but fail to produce executable plans, while state-of-the-art vision-language-action models struggle to satisfy task constraints and generalize across scenarios. These results identify intuitive manipulation as a missing axis in current foundation models and generalist robot policies, and position IMBENCH as a step toward evaluating and enabling more integrated, adaptive physical intelligence.",
+      "authors": [
+        "Anurag Maurya",
+        "Sukhvansh Jain",
+        "Prajwal Avhad",
+        "Gautham Balachandran",
+        "Ziyi Zhou",
+        "Atharva Kshirsagar",
+        "Satyam Singh",
+        "Bowen Li. Rishabh Mukund",
+        "Ritul Singh",
+        "Jatin Vira",
+        "Suvonil Chatterjee",
+        "Devesh K. Jha"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.AI"
+      ],
+      "published": "2026-07-17T05:34:29+00:00",
+      "link": "https://arxiv.org/pdf/2607.15641v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "Benchmark for robot manipulation provides a dataset and evaluation protocol for robotics",
+      "llm_evidence_cn": "提供机器人操作基准，包含数据集构建和评估方法",
+      "llm_evidence": "提供机器人操作基准，包含数据集构建和评估方法",
+      "canonical_evidence": "提供机器人操作基准，包含数据集构建和评估方法",
+      "llm_tldr_en": "IMBench is a benchmark for intuitive robotic manipulation that requires models to integrate perception, reasoning, and action, providing a structured dataset and evaluation for robotics dataset construction",
+      "llm_tldr_cn": "本文提出了IMBench，一个用于评估直觉机器人操作能力的基准。该基准要求模型在多样约束下结合感知、物理推理和动作生成，并迭代执行。IMBench提供了标准化的数据集和评估协议，有助于机器人数据集构建和算法比较。实验表明，现有方法在物理推理和动作执行方面仍有显著差距，凸显了该基准的价值。",
+      "llm_tldr": "本文提出了IMBench，一个用于评估直觉机器人操作能力的基准。该基准要求模型在多样约束下结合感知、物理推理和动作生成，并迭代执行。IMBench提供了标准化的数据集和评估协议，有助于机器人数据集构建和算法比较。实验表明，现有方法在物理推理和动作执行方面仍有显著差距，凸显了该基准的价值。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2607.20345v1",
+      "source": "arxiv",
+      "title": "Closing the Lab-to-Store Gap: A Data-Efficient Post-Training and Experience-Driven Learning VLA Framework for Retail Humanoids",
+      "abstract": "Closing the gap between benchmark performance and reliable real-world operation remains a central challenge for Vision-Language-Action (VLA) humanoid robots, which must handle execution errors, distribution shifts, and environmental variability. This paper presents DEED (Data-Efficient Post-Training and Experience-Driven Learning), a systems-level approach evaluated on a supermarket chip-restocking task using a Unitree G1-Edu humanoid robot and the GR00T N1.6 foundation model. DEED comprises three key components: (1) a data-efficient post-training pipeline with control-frequency alignment, data curation, task-relevant visual highlighting, and reduced VLA dependence; (2) a real-world study of experience-driven refinement, adapted from RECAP via a text-based advantage prefix and a vision-language value function; and (3) a latent-space analysis tool for studying in- and out-of-distribution behavior. Our results suggest that bridging the lab-to-store gap is primarily a systems integration challenge rather than an architectural one: careful data design and targeted post-training can transform a policy that fails under naive fine-tuning into a competent real-world system using only a single GPU.",
+      "authors": [
+        "Roger Sala Sisó",
+        "Tiago Silvério",
+        "Jakob Sand",
+        "Tran Nguyen Le"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.AI"
+      ],
+      "published": "2026-07-22T16:30:51+00:00",
+      "link": "https://arxiv.org/pdf/2607.20345v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "uses Unitree G1 humanoid robot and addresses error handling and distribution shift, relevant to composite requirement",
+      "llm_evidence_cn": "使用宇树G1人形机器人，处理执行错误和分布偏移，与复合需求相关",
+      "llm_evidence": "使用宇树G1人形机器人，处理执行错误和分布偏移，与复合需求相关",
+      "canonical_evidence": "使用宇树G1人形机器人，处理执行错误和分布偏移，与复合需求相关",
+      "llm_tldr_en": "Proposes DEED framework for Unitree G1 humanoid using data-efficient post-training to handle execution errors and distribution shift.",
+      "llm_tldr_cn": "人形机器人从实验室到现实部署存在执行错误和分布偏移。本文提出DEED框架，在宇树G1-Edu上数据高效后训练，包含控制频率对齐、数据筛选、视觉突出等组件，有效减少VLA依赖并提升鲁棒性，为宇树G1人形机器人的实际应用和错误分析提供了实用方案。",
+      "llm_tldr": "人形机器人从实验室到现实部署存在执行错误和分布偏移。本文提出DEED框架，在宇树G1-Edu上数据高效后训练，包含控制频率对齐、数据筛选、视觉突出等组件，有效减少VLA依赖并提升鲁棒性，为宇树G1人形机器人的实际应用和错误分析提供了实用方案。",
+      "llm_tags": [
+        "query:ur:composite"
+      ],
+      "matched_query_tag": "query:ur:composite",
+      "matched_query_text": "Papers central to 查找宇树G1人形机器人的数据集构建、故障诊断、错误分析以及边缘端部署的相关论文, especially work that connects or combines: Unitree G1 humanoid robot dataset construction; humanoid robot dataset construction; fault diagnosis for humanoid robots; edge deployment for humanoid robots; dataset construction for robotics; fault detection in humanoid robots; fault diagnosis and error analysis for humanoid robots; edge deployment of Unitree robots research.",
+      "matched_requirement_id": "req-composite-ur",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2607.15974v1",
+      "source": "arxiv",
+      "title": "Embodied Active Learning under Limited Annotation and Navigation Budget for Object Detection",
+      "abstract": "This paper studies how to adapt a computer vision object detector to an unknown environment under both a robot navigation time and annotation budget constraint. Our approach selects informative robot trajectories and image samples to retrain the detector, explicitly targeting its failure cases. Formally, the approach is an embodied variant of batch active learning, where at each round an agent has a limited navigation budget to collect candidate samples and a limited annotation budget for the most relevant images. We leverage spatial consistency to identify images with inconsistent labels, which are likely to provide the greatest improvement to the vision model. We evaluate the approach using different active learning objectives on large scenes from the AI2-THOR simulator and on a real-world setup using a Boston Dynamics Spot robot with the real-time object detector YOLOv5. Through comparison against several baselines, our experimental results show that spatial inconsistency helps guide the agent and select relevant images without external supervision, achieving the highest detection accuracy at the end of the adaptation process under the same budget. The open-source project can be found at https://mkabouri.github.io/embodied-active-learning-od",
+      "authors": [
+        "Hadrien Crassous",
+        "Mohamed Yassine Kabouri",
+        "Minahil Raza",
+        "Joni Pajarinen",
+        "Riad Akrour"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.CV"
+      ],
+      "published": "2026-07-17T14:07:46+00:00",
+      "link": "https://arxiv.org/pdf/2607.15974v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "Embodied active learning for object detection under limited annotation and navigation budget, relevant to efficient dataset construction",
+      "llm_evidence_cn": "在有限标注和导航预算下进行具身主动学习，用于物体检测，有助于高效数据集构建",
+      "llm_evidence": "在有限标注和导航预算下进行具身主动学习，用于物体检测，有助于高效数据集构建",
+      "canonical_evidence": "在有限标注和导航预算下进行具身主动学习，用于物体检测，有助于高效数据集构建",
+      "llm_tldr_en": "Embodied batch active learning method that selects informative trajectories and samples to retrain detector under budget constraints, using spatial consistency.",
+      "llm_tldr_cn": "针对机器人环境中的物体检测器适配问题，提出具身主动学习方法。该方法在导航时间和标注预算约束下，选择信息量大的轨迹和图像样本重新训练检测器，利用空间一致性识别标签不一致的图像。实验表明在有限预算下能显著提升检测性能。相关工作为机器人自主数据集构建提供了高效策略。",
+      "llm_tldr": "针对机器人环境中的物体检测器适配问题，提出具身主动学习方法。该方法在导航时间和标注预算约束下，选择信息量大的轨迹和图像样本重新训练检测器，利用空间一致性识别标签不一致的图像。实验表明在有限预算下能显著提升检测性能。相关工作为机器人自主数据集构建提供了高效策略。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2607.19971v1",
+      "source": "arxiv",
+      "title": "Unified Prediction and Planning via Conflict-Aware Disjoint Parameter Training",
+      "abstract": "Accurate motion prediction of surrounding agents and safe motion planning are two closely coupled key tasks for social robot navigation in crowded environments. Deploying these systems on resource-constrained edge devices necessitates compact, unified models that can perform both tasks simultaneously. However, within these compact shared encoders, recent unified models often overlook severe representational conflicts that arise from the distinct objectives of predicting neighbor behaviors versus ego-centric safety planning. To address this issue, we first identify the Skill Conflict$\\unicode{x2014}$a phenomenon where overlapping parameter assignments cause distinct tasks to compete for the same weights, preventing the model from fully specializing in individual skills. To resolve this, we propose a novel model-merging-based framework, Disjoint Parameter Training (DPT). DPT mitigates performance degradation caused by Skill Conflict through distributed parameter learning, which separates the key parameter regions of each task while preserving their core capabilities prior to merging. In addition, we observe that sparse merging, which selectively integrates only the most influential parameters for each task rather than combining all task-specific parameters, yields optimal performance by preventing interference among adjacent features and concentrating representational capacity. DPT can be applied in parallel with a variety of merging methods. Evaluated on standard crowd navigation benchmarks (JRDB and JTA), our framework demonstrates superior performance, validating its versatility and effectiveness for safe, resource-efficient robot navigation.",
+      "authors": [
+        "Taewon Seo",
+        "Seonae Jeon",
+        "Giwon Lee",
+        "Kuk-Jin Yoon",
+        "Daehee Park"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.CV"
+      ],
+      "published": "2026-07-22T09:54:22+00:00",
+      "link": "https://arxiv.org/pdf/2607.19971v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "edge deployment of compact unified models for prediction and planning",
+      "llm_evidence_cn": "在边缘设备上部署紧凑的统一预测与规划模型",
+      "llm_evidence": "在边缘设备上部署紧凑的统一预测与规划模型",
+      "canonical_evidence": "在边缘设备上部署紧凑的统一预测与规划模型",
+      "llm_tldr_en": "Proposes conflict-aware disjoint parameter training for unified prediction and planning models on edge devices, addressing skill conflict in shared encoders.",
+      "llm_tldr_cn": "提出冲突感知不交参数训练，用于边缘设备上的统一预测与规划模型，解决共享编码器中的技能冲突问题。通过为预测和规划任务分配独立参数子集，避免了共享编码器中的技能冲突。在社交导航数据集上，模型在边缘设备上实现了低延迟和高精度，证明了轻量级统一模型的可行性。",
+      "llm_tldr": "提出冲突感知不交参数训练，用于边缘设备上的统一预测与规划模型，解决共享编码器中的技能冲突问题。通过为预测和规划任务分配独立参数子集，避免了共享编码器中的技能冲突。在社交导航数据集上，模型在边缘设备上实现了低延迟和高精度，证明了轻量级统一模型的可行性。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "edge deployment for humanoid robots",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    }
+  ]
+}
