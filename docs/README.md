@@ -6,44 +6,46 @@
 </div>
 
 ## 每次日报
-- 最新运行日期：2026-07-23
-- 运行时间：2026-07-23 21:44:25 UTC
+- 最新运行日期：2026-07-24
+- 运行时间：2026-07-24 21:51:39 UTC
 - 运行状态：成功
 - 本次总论文数：8
-- 精读区：3
-- 速读区：5
+- 精读区：4
+- 速读区：4
 
 ### 今日简报（AI）
-今日日报聚焦机器人技能自主收集与部署、室内外导航基准，以及人形机器人运动跟踪与零售应用。最值得关注《Zero2Skill》的自主数据收集训练闭环和《NavVerse》的连续性室内外导航仿真基准。下一步可重点探索数据高效的零样本技能获取方法，并关注零售场景下的后训练微调工作。
-- 详情：[/202607/23/README](/202607/23/README)
+今天精读了两篇9分重磅论文——《RoboInter1.5》的统一中间表征框架和《Closing the Lab-to-Store Gap》的零售人形机器人高效后训练方案，共处理8篇相关研究。  
+最值得深挖的是面向具身世界建模的中间表征设计，以及用数据高效后训练缩小实验室-商店差距的VLA方法。  
+建议优先阅读这两篇高分论文，重点理解其如何通过精简表征与经验驱动学习提升机器人跨场景部署效率。
+- 详情：[/202607/24/README](/202607/24/README)
 
 ### 精读区论文标签
-1. [Zero2Skill: Bootstrapping Robot Skills through Autonomous Data Collection, Training, and Deployment](/202607/23/2607.14047v3-zero2skill-bootstrapping-robot-skills-through-autonomous-data-collection-training-and-deployment)  
-   标签：评分：8.0/10、query:ur
-   evidence：Zero2Skill自主数据采集管道，通过人机协同实现机器人技能数据的高效收集与重用
-2. [NavVerse: Benchmarking Indoor-to-Outdoor Embodied Navigation in Continuous Robot Simulation](/202607/23/2607.19695v1-navverse-benchmarking-indoor-to-outdoor-embodied-navigation-in-continuous-robot-simulation)  
-   标签：评分：8.0/10、query:ur
-   evidence：NavVerse基准数据集，包含100个室内和50个室外场景，用于具身导航任务
-3. [Time-Series Anomaly Detection for Mobile Robots in Automotive Active Safety Testing using an RNN-VAE](/202607/23/2607.20079v1-time-series-anomaly-detection-for-mobile-robots-in-automotive-active-safety-testing-using-an-rnn-vae)  
+1. [RoboInter1.5: A Holistic Intermediate Representation Suite for Embodied World Modeling and Robotic Manipulation](/202607/24/2607.18709v1-robointer15-a-holistic-intermediate-representation-suite-for-embodied-world-modeling-and-robotic-manipulation)  
+   标签：评分：9.0/10、query:ur
+   evidence：大规模机器人操作数据集，带有密集标注
+2. [Closing the Lab-to-Store Gap: A Data-Efficient Post-Training and Experience-Driven Learning VLA Framework for Retail Humanoids](/202607/24/2607.20345v1-closing-the-lab-to-store-gap-a-data-efficient-post-training-and-experience-driven-learning-vla-framework-for-retail-humanoids)  
+   标签：评分：9.0/10、query:ur
+   evidence：基于宇树G1人形机器人的数据集构建与错误分析
+3. [GuidedAttention: Interpretable and Correctable Visual Attention for OOD-Robust Robot Manipulation via Imitation Learning](/202607/24/2607.21049v1-guidedattention-interpretable-and-correctable-visual-attention-for-ood-robust-robot-manipulation-via-imitation-learning)  
    标签：评分：8.0/10、query:humanoid-ood
-   evidence：基于RNN-VAE的移动机器人时序异常检测方法
+   evidence：基于可解释注意力修正的OOD鲁棒机器人操作
+4. [AXIS: A Growable Community-Driven Data Engine for Scalable Robot Manipulation](/202607/24/2607.21588v1-axis-a-growable-community-driven-data-engine-for-scalable-robot-manipulation)  
+   标签：评分：8.0/10、query:ur
+   evidence：社区驱动的可扩展机器人操作数据引擎
 
 ### 速读区论文标签
-1. [What Matters in Humanoid General Motion Tracking? An Empirical Study](/202607/23/2607.19903v1-what-matters-in-humanoid-general-motion-tracking-an-empirical-study)  
+1. [An Intelligent-Cloud Edge Multimodal Interaction System for Robots](/202607/24/2607.14675v3-an-intelligent-cloud-edge-multimodal-interaction-system-for-robots)  
    标签：评分：7.0/10、query:ur
-   evidence：提供了宇树G1的运动跟踪框架YAHMP，可实现数据收集与部署
-2. [Closing the Lab-to-Store Gap: A Data-Efficient Post-Training and Experience-Driven Learning VLA Framework for Retail Humanoids](/202607/23/2607.20345v1-closing-the-lab-to-store-gap-a-data-efficient-post-training-and-experience-driven-learning-vla-framework-for-retail-humanoids)  
+   evidence：云边端多模态交互系统，涉及边缘部署
+2. [RoboInter1.5: A Holistic Intermediate Representation Suite for Embodied World Modeling and Robotic Manipulation](/202607/24/2607.18709v2-robointer15-a-holistic-intermediate-representation-suite-for-embodied-world-modeling-and-robotic-manipulation)  
    标签：评分：7.0/10、query:ur
-   evidence：使用宇树G1人形机器人，处理执行错误和分布偏移，与复合需求相关
-3. [IMBench: A Benchmark for Intuitive Robotic Manipulation](/202607/23/2607.15641v1-imbench-a-benchmark-for-intuitive-robotic-manipulation)  
+   evidence：RoboInter1.5提供了超过23万个操作场景的数据集，直接针对机器人数据集构建需求。
+3. [An Intelligent-Cloud Edge Multimodal Interaction System for Robots](/202607/24/2607.14675v2-an-intelligent-cloud-edge-multimodal-interaction-system-for-robots)  
    标签：评分：6.0/10、query:ur
-   evidence：提供机器人操作基准，包含数据集构建和评估方法
-4. [Embodied Active Learning under Limited Annotation and Navigation Budget for Object Detection](/202607/23/2607.15974v1-embodied-active-learning-under-limited-annotation-and-navigation-budget-for-object-detection)  
+   evidence：机器人的云边多模态交互
+4. [SOPD-SocialNav: Selective On-Policy Distillation for Vision-Language Social Navigation](/202607/24/2607.19850v1-sopd-socialnav-selective-on-policy-distillation-for-vision-language-social-navigation)  
    标签：评分：6.0/10、query:ur
-   evidence：在有限标注和导航预算下进行具身主动学习，用于物体检测，有助于高效数据集构建
-5. [Unified Prediction and Planning via Conflict-Aware Disjoint Parameter Training](/202607/23/2607.19971v1-unified-prediction-and-planning-via-conflict-aware-disjoint-parameter-training)  
-   标签：评分：6.0/10、query:ur
-   evidence：在边缘设备上部署紧凑的统一预测与规划模型
+   evidence：选择性同策略蒸馏用于机器人轻量级VLM部署
 
 
 <div class="dpr-home-promo-card">

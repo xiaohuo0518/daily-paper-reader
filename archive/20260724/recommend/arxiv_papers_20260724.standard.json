@@ -1,0 +1,354 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-07-24T21:46:50.985082+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 2,
+    "deep_divecandidates": 4,
+    "deep_cap": 7,
+    "deep_selected": 4,
+    "quick_candidates": 4,
+    "quick_skim_target": 12,
+    "quick_selected": 4
+  },
+  "deep_dive": [
+    {
+      "id": "2607.18709v1",
+      "source": "arxiv",
+      "title": "RoboInter1.5: A Holistic Intermediate Representation Suite for Embodied World Modeling and Robotic Manipulation",
+      "abstract": "Existing robot datasets remain expensive to curate, embodiment-specific, and insufficiently annotated with the fine-grained structure required for generalizable reasoning, execution, or long-horizon environment dynamics simulation. Building on our prior work, RoboInter1.0, we present RoboInter1.5, an extended and holistic suite of intermediate representations for both robotic manipulation and embodied world modeling. RoboInter1.5 provides a unified resource of data, benchmarks, and models centered on dense manipulation-oriented intermediate representations. Specifically, RoboInter-Data contains over 230k manipulation episodes across 571 scenes with dense per-frame annotations covering more than ten types of intermediate representations, including subtasks, primitive skills, object and gripper grounding, segmentation, affordance, grasp poses, contact points, motion traces, etc. Built upon these annotations, RoboInter-VQA introduces spatial and temporal embodied VQA tasks to benchmark and improve the intermediate-representation reasoning capabilities of our RoboInter-VLM. RoboInter-VLA further studies how such representations benefit action execution through implicit, explicit, and modular plan-then-execute paradigms. To better model the physical world, we further introduce RoboInter-World, which leverages intermediate representations as structured conditioning signals for controllable prediction of future world states. Extensive evaluations demonstrate that RoboInter1.5 provides a unified spatiotemporal scaffolding for intermediate representations. Rather than treating intermediate representations merely as interpretable signals, RoboInter1.5 conceptualizes them as a bidirectional interface that both regularizes low-level action spaces and constrains the latent rollouts of open-world physical simulators.",
+      "authors": [
+        "Ziqin Wang",
+        "Hao Li",
+        "Weijun Wang",
+        "Junhao Cai",
+        "Jia Zeng",
+        "Yilun Chen",
+        "Jiangmiao Pang",
+        "Si Liu"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-07-21T05:05:01+00:00",
+      "link": "https://arxiv.org/pdf/2607.18709v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "large-scale robot manipulation dataset with dense annotations",
+      "llm_evidence_cn": "大规模机器人操作数据集，带有密集标注",
+      "llm_evidence": "大规模机器人操作数据集，带有密集标注",
+      "canonical_evidence": "大规模机器人操作数据集，带有密集标注",
+      "llm_tldr_en": "Presents RoboInter1.5, a holistic intermediate representation suite with over 230k manipulation episodes and dense per-frame annotations for embodied world modeling.",
+      "llm_tldr_cn": "该论文提出了RoboInter1.5，一个全面的中间表示套件，包含超过23万个操作片段、571个场景，并提供每帧的密集标注，用于支持机器人操作和具身世界建模。该数据集覆盖多种中间表示类型，为泛化推理和执行提供了丰富资源。",
+      "llm_tldr": "该论文提出了RoboInter1.5，一个全面的中间表示套件，包含超过23万个操作片段、571个场景，并提供每帧的密集标注，用于支持机器人操作和具身世界建模。该数据集覆盖多种中间表示类型，为泛化推理和执行提供了丰富资源。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2607.20345v1",
+      "source": "arxiv",
+      "title": "Closing the Lab-to-Store Gap: A Data-Efficient Post-Training and Experience-Driven Learning VLA Framework for Retail Humanoids",
+      "abstract": "Closing the gap between benchmark performance and reliable real-world operation remains a central challenge for Vision-Language-Action (VLA) humanoid robots, which must handle execution errors, distribution shifts, and environmental variability. This paper presents DEED (Data-Efficient Post-Training and Experience-Driven Learning), a systems-level approach evaluated on a supermarket chip-restocking task using a Unitree G1-Edu humanoid robot and the GR00T N1.6 foundation model. DEED comprises three key components: (1) a data-efficient post-training pipeline with control-frequency alignment, data curation, task-relevant visual highlighting, and reduced VLA dependence; (2) a real-world study of experience-driven refinement, adapted from RECAP via a text-based advantage prefix and a vision-language value function; and (3) a latent-space analysis tool for studying in- and out-of-distribution behavior. Our results suggest that bridging the lab-to-store gap is primarily a systems integration challenge rather than an architectural one: careful data design and targeted post-training can transform a policy that fails under naive fine-tuning into a competent real-world system using only a single GPU.",
+      "authors": [
+        "Roger Sala Sisó",
+        "Tiago Silvério",
+        "Jakob Sand",
+        "Tran Nguyen Le"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.AI"
+      ],
+      "published": "2026-07-22T16:30:51+00:00",
+      "link": "https://arxiv.org/pdf/2607.20345v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "dataset construction and error analysis on Unitree G1 humanoid robot",
+      "llm_evidence_cn": "基于宇树G1人形机器人的数据集构建与错误分析",
+      "llm_evidence": "基于宇树G1人形机器人的数据集构建与错误分析",
+      "canonical_evidence": "基于宇树G1人形机器人的数据集构建与错误分析",
+      "llm_tldr_en": "Presents DEED framework for data-efficient post-training and experience-driven learning on Unitree G1 humanoid, directly addressing dataset construction and fault/error analysis for retail tasks.",
+      "llm_tldr_cn": "本文提出DEED框架，在宇树G1人形机器人上实现数据高效的后训练和经验驱动学习。框架包含数据构建、执行错误分析和真实世界实验，直接服务于人形机器人数据集构建与故障诊断。",
+      "llm_tldr": "本文提出DEED框架，在宇树G1人形机器人上实现数据高效的后训练和经验驱动学习。框架包含数据构建、执行错误分析和真实世界实验，直接服务于人形机器人数据集构建与故障诊断。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "Unitree G1 humanoid robot dataset construction",
+      "matched_requirement_id": "req-1",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2607.21049v1",
+      "source": "arxiv",
+      "title": "GuidedAttention: Interpretable and Correctable Visual Attention for OOD-Robust Robot Manipulation via Imitation Learning",
+      "abstract": "End-to-end visuomotor policies provide little opportunity for humans to understand or correct the policy's visual attention. We propose GuidedAttention, a visuomotor imitation learning framework that introduces interpretable and correctable visual attention as an explicit intermediate representation. Task-relevant attention keypoints are predicted from camera images and condition a diffusion-based action policy. Users can inspect and optionally correct selected keypoints once at rollout initialization, after which the corrected attention is automatically propagated throughout execution by a tracking module. Experiments in simulation and the real world demonstrate that GuidedAttention consistently improves robot manipulation performance, particularly under positional and appearance out-of-distribution (OOD) conditions.",
+      "authors": [
+        "Masaki Murooka",
+        "Ryoichi Nakajo",
+        "Keisuke Shirai",
+        "Tomohiro Motoda",
+        "Hanbit Oh",
+        "Ryo Hanai",
+        "Yukiyasu Domae"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-07-23T08:33:40+00:00",
+      "link": "https://arxiv.org/pdf/2607.21049v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "OOD-robust robot manipulation with interpretable attention correction",
+      "llm_evidence_cn": "基于可解释注意力修正的OOD鲁棒机器人操作",
+      "llm_evidence": "基于可解释注意力修正的OOD鲁棒机器人操作",
+      "canonical_evidence": "基于可解释注意力修正的OOD鲁棒机器人操作",
+      "llm_tldr_en": "Proposes GuidedAttention, a visuomotor imitation learning framework with interpretable and correctable visual attention that improves OOD robustness by allowing human correction of attention keypoints, which are tracked throughout execution.",
+      "llm_tldr_cn": "针对端到端视觉运动策略缺乏可解释性与OOD鲁棒性的问题，提出GuidedAttention框架，将可解释且可修正的视觉注意力作为显式中间表示。人类可在初始化时修正注意力关键点，之后通过追踪模块传播。仿真与实物实验表明该方法显著提升了对分布外场景的鲁棒性，为人形机器人安全运行中的OOD检测提供了新思路。",
+      "llm_tldr": "针对端到端视觉运动策略缺乏可解释性与OOD鲁棒性的问题，提出GuidedAttention框架，将可解释且可修正的视觉注意力作为显式中间表示。人类可在初始化时修正注意力关键点，之后通过追踪模块传播。仿真与实物实验表明该方法显著提升了对分布外场景的鲁棒性，为人形机器人安全运行中的OOD检测提供了新思路。",
+      "llm_tags": [
+        "query:humanoid-ood"
+      ],
+      "matched_query_tag": "query:humanoid-ood",
+      "matched_query_text": "out-of-distribution detection for safe robot operation",
+      "matched_requirement_id": "req-11",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2607.21588v1",
+      "source": "arxiv",
+      "title": "AXIS: A Growable Community-Driven Data Engine for Scalable Robot Manipulation",
+      "abstract": "Learning effective robot manipulation policies requires diverse, high-quality demonstrations, yet existing data pipelines are often difficult to scale because they rely on specialized hardware, centralized operators, or fixed task suites. We present AXIS, a growable community-driven data engine and benchmark for scalable robot learning, which enables browser-based teleoperation for large-scale demonstration collection, automatically generates and validates new manipulation tasks, and transforms community-collected demonstrations into training-ready data through automated success checking, quality filtering, trajectory smoothing, and visual and physics-based augmentation. The AXIS dataset currently contains 207 diverse tasks and 50K+ trajectories. Meanwhile, AXIS organizes data into task snapshots and evaluates policies with a systematic held-out protocol. We compare vision-language-action (VLA) policies under a unified AXIS evaluation suite and analyze scaling behavior across different data volumes. Continual pretraining on AXIS substantially improves the overall success rate of $π_{0.5}$ by 5.8%, outperforms the model pretrained on RoboCasa365 by 37.3%, and exhibits consistent scaling with increasing data volume, with the largest gains observed under layout, sensor-noise, and camera perturbations.",
+      "authors": [
+        "Mengfei Zhao",
+        "Dihong Huang",
+        "Yikai Tang",
+        "Peihao Li",
+        "Mingxuan Yan",
+        "Ruiqi Zhuang",
+        "Yanjia Huang",
+        "Jie Wang",
+        "Hai Zhai",
+        "Tony Zhou",
+        "Rui Zhang",
+        "Zhexi Luo",
+        "Yuchen Huang",
+        "Jianfei Yang",
+        "Jiachen Li"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-07-23T17:58:08+00:00",
+      "link": "https://arxiv.org/pdf/2607.21588v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "community-driven data engine for scalable robot manipulation",
+      "llm_evidence_cn": "社区驱动的可扩展机器人操作数据引擎",
+      "llm_evidence": "社区驱动的可扩展机器人操作数据引擎",
+      "canonical_evidence": "社区驱动的可扩展机器人操作数据引擎",
+      "llm_tldr_en": "AXIS is a growable data engine and benchmark for robot manipulation, enabling browser-based teleoperation, automated task generation, and quality filtering to produce 207 tasks and 50K+ trajectories.",
+      "llm_tldr_cn": "该论文提出AXIS，一个可增长的社区驱动数据引擎与基准，用于机器人操作学习。通过浏览器遥操作收集大规模演示数据，自动生成和验证新任务，并经过成功检查、质量过滤、轨迹平滑及视觉物理增强转化为训练数据。当前包含207个任务5万条轨迹，为机器人数据集构建提供了可扩展的范例。",
+      "llm_tldr": "该论文提出AXIS，一个可增长的社区驱动数据引擎与基准，用于机器人操作学习。通过浏览器遥操作收集大规模演示数据，自动生成和验证新任务，并经过成功检查、质量过滤、轨迹平滑及视觉物理增强转化为训练数据。当前包含207个任务5万条轨迹，为机器人数据集构建提供了可扩展的范例。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "quick_skim": [
+    {
+      "id": "2607.14675v3",
+      "source": "arxiv",
+      "title": "An Intelligent-Cloud Edge Multimodal Interaction System for Robots",
+      "abstract": "Robust human-robot interaction in complex environments requires accurate gesture perception, semantic scene understanding, and reliable task planning under limited onboard computing resources. This paper presents a cloud-edge multimodal interaction framework that integrates an enhanced YOLO-based gesture detector with coordinated large language model (LLM) and vision-language model (VLM) agents. The proposed detector, incorporates the Convolutional Block Attention Module (CBAM) into the neck and replaces the baseline bounding-box regression objective with Distance-IoU (DIoU) loss. These modifications improve feature discrimination and localization for small or partially occluded gestures in complex backgrounds. The cloud layer performs gesture detection, scene understanding, multimodal fusion, and action planning, whereas the TonyPi robot locally handles data acquisition, communication, action execution, and feedback. Experiments on a public gesture dataset and a custom dataset show that YOLO-DC achieves precision values of 98.9% and 95.0%, with mAP@0.5 values of 90.7% and 92.7%, respectively. System-level evaluation yields success rates of 95%, 88%, and 82% for single-action, composite-action, and vision-dependent tasks. A 30 participant evaluation yields an overall mean satisfaction score of 3.69 out of 5. These results demonstrate the feasibility of combining refined gesture detection with multimodal agents for resource-constrained robotic interaction.",
+      "authors": [
+        "Zihan Guo",
+        "Xiaoqi Li"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.AI"
+      ],
+      "published": "2026-07-16T07:39:18+00:00",
+      "link": "https://arxiv.org/pdf/2607.14675v3",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "cloud-edge multimodal interaction system for robots, relevant to edge deployment",
+      "llm_evidence_cn": "云边端多模态交互系统，涉及边缘部署",
+      "llm_evidence": "云边端多模态交互系统，涉及边缘部署",
+      "canonical_evidence": "云边端多模态交互系统，涉及边缘部署",
+      "llm_tldr_en": "Proposes a cloud-edge multimodal interaction framework for robots with improved gesture detection, relevant to edge deployment for humanoid robots.",
+      "llm_tldr_cn": "本文提出一种云边端多模态交互框架，结合改进的YOLO手势检测器和LLM/VLM代理，在边缘端实现手势感知和任务规划。该框架展示了边缘计算在机器人交互中的应用，为边缘部署提供参考。",
+      "llm_tldr": "本文提出一种云边端多模态交互框架，结合改进的YOLO手势检测器和LLM/VLM代理，在边缘端实现手势感知和任务规划。该框架展示了边缘计算在机器人交互中的应用，为边缘部署提供参考。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "edge deployment for humanoid robots",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2607.14675v2",
+      "source": "arxiv",
+      "title": "An Intelligent-Cloud Edge Multimodal Interaction System for Robots",
+      "abstract": "Robust human-robot interaction in complex environments requires accurate gesture perception, semantic scene understanding, and reliable task planning under limited onboard computing resources. This paper presents a cloud-edge multimodal interaction framework that integrates an enhanced YOLO-based gesture detector with coordinated large language model (LLM) and vision-language model (VLM) agents. The proposed detector, incorporates the Convolutional Block Attention Module (CBAM) into the neck and replaces the baseline bounding-box regression objective with Distance-IoU (DIoU) loss. These modifications improve feature discrimination and localization for small or partially occluded gestures in complex backgrounds. The cloud layer performs gesture detection, scene understanding, multimodal fusion, and action planning, whereas the TonyPi robot locally handles data acquisition, communication, action execution, and feedback. Experiments on a public gesture dataset and a custom dataset show that YOLO-DC achieves precision values of 98.9% and 95.0%, with mAP@0.5 values of 90.7% and 92.7%, respectively. System-level evaluation yields success rates of 95%, 88%, and 82% for single-action, composite-action, and vision-dependent tasks. A 30 participant evaluation yields an overall mean satisfaction score of 3.69 out of 5. These results demonstrate the feasibility of combining refined gesture detection with multimodal agents for resource-constrained robotic interaction.",
+      "authors": [
+        "Zihan Guo",
+        "Xiaoqi Li"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.AI"
+      ],
+      "published": "2026-07-16T07:39:18+00:00",
+      "link": "https://arxiv.org/pdf/2607.14675v2",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "cloud-edge multimodal interaction for robots",
+      "llm_evidence_cn": "机器人的云边多模态交互",
+      "llm_evidence": "机器人的云边多模态交互",
+      "canonical_evidence": "机器人的云边多模态交互",
+      "llm_tldr_en": "Proposes a cloud-edge multimodal interaction framework integrating an enhanced YOLO gesture detector with LLM/VLM agents for robust HRI under limited onboard resources.",
+      "llm_tldr_cn": "该论文提出一个云边端多模态交互框架，在云端运行改进的YOLO手势检测（含CBAM和DIoU）和LLM/VLM智能体，边缘端执行任务。解决了机器人机上计算资源有限的问题。尽管重点是人机交互，但其边缘部署架构可直接应用于人形机器人的故障检测模型部署，实现轻量化推理。",
+      "llm_tldr": "该论文提出一个云边端多模态交互框架，在云端运行改进的YOLO手势检测（含CBAM和DIoU）和LLM/VLM智能体，边缘端执行任务。解决了机器人机上计算资源有限的问题。尽管重点是人机交互，但其边缘部署架构可直接应用于人形机器人的故障检测模型部署，实现轻量化推理。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "edge deployment for humanoid robots",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2607.18709v2",
+      "source": "arxiv",
+      "title": "RoboInter1.5: A Holistic Intermediate Representation Suite for Embodied World Modeling and Robotic Manipulation",
+      "abstract": "Existing robot datasets remain expensive to curate, embodiment-specific, and insufficiently annotated with the fine-grained structure required for generalizable reasoning, execution, or long-horizon environment dynamics simulation. Building on our prior work, RoboInter1.0, we present RoboInter1.5, an extended and holistic suite of intermediate representations for both robotic manipulation and embodied world modeling. RoboInter1.5 provides a unified resource of data, benchmarks, and models centered on dense manipulation-oriented intermediate representations. Specifically, RoboInter-Data contains over 230k manipulation episodes across 571 scenes with dense per-frame annotations covering more than ten types of intermediate representations, including subtasks, primitive skills, object and gripper grounding, segmentation, affordance, grasp poses, contact points, motion traces, etc. Built upon these annotations, RoboInter-VQA introduces spatial and temporal embodied VQA tasks to benchmark and improve the intermediate-representation reasoning capabilities of our RoboInter-VLM. RoboInter-VLA further studies how such representations benefit action execution through implicit, explicit, and modular plan-then-execute paradigms. To better model the physical world, we further introduce RoboInter-World, which leverages intermediate representations as structured conditioning signals for controllable prediction of future world states. Extensive evaluations demonstrate that RoboInter1.5 provides a unified spatiotemporal scaffolding for intermediate representations. Rather than treating intermediate representations merely as interpretable signals, RoboInter1.5 conceptualizes them as a bidirectional interface that both regularizes low-level action spaces and constrains the latent rollouts of open-world physical simulators.",
+      "authors": [
+        "Ziqin Wang",
+        "Hao Li",
+        "Weijun Wang",
+        "Junhao Cai",
+        "Jia Zeng",
+        "Yilun Chen",
+        "Jiangmiao Pang",
+        "Si Liu"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-07-21T05:05:01+00:00",
+      "link": "https://arxiv.org/pdf/2607.18709v2",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "RoboInter1.5 provides a large dataset of over 230k manipulation episodes for robotic manipulation, directly addressing dataset construction for robotics.",
+      "llm_evidence_cn": "RoboInter1.5提供了超过23万个操作场景的数据集，直接针对机器人数据集构建需求。",
+      "llm_evidence": "RoboInter1.5提供了超过23万个操作场景的数据集，直接针对机器人数据集构建需求。",
+      "canonical_evidence": "RoboInter1.5提供了超过23万个操作场景的数据集，直接针对机器人数据集构建需求。",
+      "llm_tldr_en": "RoboInter1.5 introduces a comprehensive dataset of 230k+ manipulation episodes with dense annotations, addressing the need for structured robotic manipulation data for embodied AI.",
+      "llm_tldr_cn": "现有机器人数据集成本高昂且缺乏细粒度标注，难以支持泛化推理和长期环境动力学仿真。本文提出RoboInter1.5，一个包含超过23万个操作场景和571个场景的密集注释数据集，涵盖十多种中间表示类型，为机器人操作和具身世界建模提供统一资源。实验表明该数据集支持多种下游任务，可推动机器人数据集构建标准化。",
+      "llm_tldr": "现有机器人数据集成本高昂且缺乏细粒度标注，难以支持泛化推理和长期环境动力学仿真。本文提出RoboInter1.5，一个包含超过23万个操作场景和571个场景的密集注释数据集，涵盖十多种中间表示类型，为机器人操作和具身世界建模提供统一资源。实验表明该数据集支持多种下游任务，可推动机器人数据集构建标准化。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2607.19850v1",
+      "source": "arxiv",
+      "title": "SOPD-SocialNav: Selective On-Policy Distillation for Vision-Language Social Navigation",
+      "abstract": "Vision-language models have shown strong potential for social robot navigation by leveraging rich semantic understanding of complex environments and human behaviors. However, large scale VLMs are difficult to deploy on resource-constrained robotic platforms, while lightweight VLMs often lack sufficient social reasoning capability. To address this problem, we propose SOPD-SocialNav, a selective on-policy distillation (SOPD) method that transfers social navigation knowledge from a large teacher VLM to a lightweight student VLM. SOPD introduces an entropy-based token selection mechanism that uses teacher uncertainty to identify socially informative decision tokens, while suppressing gradients from low-entropy tokens corresponding to trivial navigation states. A temperature-controlled Jensen-Shannon divergence objective is then used to align the student and teacher distributions on the selected tokens. Experiments on the SNEI and MUSON benchmarks demonstrate that SOPD consistently outperforms supervised fine-tuning, off-policy distillation, and standard on-policy distillation baselines in action prediction, perception consistency, and reasoning consistency. Real-world deployment on a Scout Mini robot further shows that the distilled model can generate more socially appropriate navigation behaviors in conversational and queuing scenarios. These results suggest that SOPD is an effective strategy for building lightweight yet socially aware VLM-based navigation systems.",
+      "authors": [
+        "Xinyu Zhang",
+        "Zishuo Wang",
+        "Ling Xiao"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-07-22T07:35:35+00:00",
+      "link": "https://arxiv.org/pdf/2607.19850v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "selective on-policy distillation for lightweight VLM deployment on robots",
+      "llm_evidence_cn": "选择性同策略蒸馏用于机器人轻量级VLM部署",
+      "llm_evidence": "选择性同策略蒸馏用于机器人轻量级VLM部署",
+      "canonical_evidence": "选择性同策略蒸馏用于机器人轻量级VLM部署",
+      "llm_tldr_en": "SOPD-SocialNav distills social navigation knowledge from a large VLM to a lightweight student VLM via entropy-based token selection, enabling deployment on resource-constrained robots.",
+      "llm_tldr_cn": "该论文针对社交机器人导航中轻量级VLM推理能力不足的问题，提出选择性同策略蒸馏方法（SOPD）。通过熵值标记选择机制，从大教师VLM向学生VLM传递社交相关决策知识，抑制琐碎标记梯度，实现高效的边缘端部署。实验验证了在资源受限平台上的社交推理能力提升。",
+      "llm_tldr": "该论文针对社交机器人导航中轻量级VLM推理能力不足的问题，提出选择性同策略蒸馏方法（SOPD）。通过熵值标记选择机制，从大教师VLM向学生VLM传递社交相关决策知识，抑制琐碎标记梯度，实现高效的边缘端部署。实验验证了在资源受限平台上的社交推理能力提升。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "edge deployment for humanoid robots",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    }
+  ]
+}
