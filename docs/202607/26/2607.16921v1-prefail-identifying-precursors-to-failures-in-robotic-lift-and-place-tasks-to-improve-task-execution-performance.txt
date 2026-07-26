@@ -1,0 +1,553 @@
+Title: PREFAIL: Identifying Precursors to Failures in Robotic Lift-and-Place Tasks to Improve Task Execution Performance
+
+URL Source: https://arxiv.org/pdf/2607.16921v1
+
+Published Time: Tue, 21 Jul 2026 00:45:42 GMT
+
+Number of Pages: 13
+
+Markdown Content:
+# PREFAIL: Identifying Precursors to Failures in Robotic Lift-and-Place Tasks to Improve Task Execution Performance 
+
+Zeyu Shangguan, Rajas Chitale, Rutvik Patel, Satyandra K. Gupta and Daniel Seita 
+
+Abstract — Non-prehensile manipulation enables flexible ma-terial handling with part carriers, but friction-based support makes high-speed motions failure-prone, while slower operation increases cycle time. Proactive failure prediction is therefore essential for efficient and reliable performance, yet existing approaches remain limited by key constraints, including sensi-tivity to dynamic actions and high dependence on known policy structures. Furthermore, existing methods and datasets lack a precise characterization of the latest intervention time, leaving it unclear whether a detected failure can still be prevented through timely intervention. In this paper, we investigate lift-and-place tasks for non-prehensile material handling manip-ulation and propose a more effective approach to predicting precursors to failures (PREFAIL) by analyzing the relative motion of target objects with respect to the carrier. We further introduce a dataset that precisely identifies the latest interven-tion time for risky manipulations, enabling rigorous evaluation of whether a failure prediction is actionable. We validate our approach on both simulation and real-world datasets. Our experimental results demonstrate that PREFAIL substantially improves both the accuracy and timeliness of responses to failure precursors. Our website with supplementary material is available at: https://zshanggu.github.io/zeyu-prefail/ 
+
+I. INTRODUCTION Non-prehensile manipulation in industrial material han-dling application [1], [2], [3], such as pushing, sliding, tilting, or sweeping, unlike grasping, relies solely on contact forces to support objects, where rapid direction changes introduce large inertial forces that can overcome friction, leading to failure, object damage, or costly human intervention. In contrast, operating at uniformly low speeds is impractical due to high cycle times. Therefore, it is highly desirable to have a failure prediction system that enables high-speed operation while continuously monitoring risk to achieve fast cycle times with reduced failure risk. Current failure prediction methods demonstrate success in controlled laboratory settings [4], [5], [6], however, we observe that predicting failures during high-speed non-prehensile robot manipulation remains challenging. First, training data for failure cases during dynamic manipulation are rare. Second, we observe that current out-of-distribution (OOD) detection methods [7] struggle to distinguish between failure and non-failure trajectories in rapid manipulation scenarios. Moreover, many existing approaches hinge on predicting future actions from a learned policy. This de-sign tightly couples failure detection to a specific control strategy, limiting cross-scenario generalization. These limi-tations motivate us to explore a novel approach that is (i) 
+
+Thomas Lord Department of Computer Science, University of South-ern California, USA. Correspondence to: zshanggu@usc.edu and 
+
+seita@usc.edu. 𝐀 fail
+
+𝐀 stop
+
+𝐀 0          
+
+> Low risk Medium risk High risk
+> Risk Value
+> Time Step
+> Predictions
+> Ground Truth
+> Risk Threshold (0.5)
+> GT Failure
+> Predicted Failure
+> 1.0
+> 0.0
+> 0.6
+> 0.4
+> 0.2
+> 0.8
+> 5.0 7.5 10.0 12.5 15.0 17.5 20 .0 22.5 25.0
+> Warm-up Period
+> Object
+> Carrier
+
+Fig. 1: Our lift-and-place task involves a carrier (the pink plate in the image) mounted on a robot arm that handles an object (the cyan box) at the maximum allowable speed. Our method utilizes the visual observation and robot state values during a real-time robotic lift-and-place task, and predicts a continuous risk value (blue solid line) that represents the likelihood of failure. Once the risk is approaching the threshold (medium risk zone), the system must adjust and slow its speed, otherwise, the failure is inevitable after tstop (high risk). Since we will use sliding window during inference, there will be a warm-up period for collecting sufficient history information. 
+
+policy-agnostic and (ii) adapt to fast-moving non-prehensile manipulation scenario. In this paper, we focus on rapid lift-and-place as a representative task, which is widely used in non-prehensile material handling applications. We hypothesize that, under fast manipulation settings, fail-ure prediction systems must react rapidly to scene changes. Drawing an analogy from human driving: at highway speeds, drivers assess risk from surrounding vehicles’ motion and adjust accordingly, but braking too late makes a collision unavoidable. This intuition suggests two key insights for robotic manipulation. First, for non-prehensile lift-and-place, unusual relative motion between objects can serve as an early indicator of impending failure. Second, there exists a critical time threshold beyond which even standard emergency inter-vention on industrial robots, such as emergency stop, cannot prevent failure due to inertia and contact dynamics. Existing benchmarks for failure prediction [8], [9], [10], [11] do not capture this critical temporal boundary, making it difficult to evaluate whether a system predicts failures early enough for effective intervention. To address this gap, we propose a novel data collection pipeline that precisely labels the latest moment at which an emergency stop can still prevent failure (denoted as tstop , see Sec. IV). This labeled threshold enables us to evaluate whether our method predicts failures with arXiv:2607.16921v1 [cs.RO] 18 Jul 2026 sufficient notice for real-time corrective action. Motivated by these insights, we propose PREFAIL, a policy-agnostic failure prediction framework for fast lift-and-place manipulation. PREFAIL monitors geometric changes in the scene and predicts whether failures will occur before the critical deadline tstop , enabling timely intervention. PREFAIL utilizes a two-branch architecture. The observation branch extracts multi-view visual features and relative object-carrier motion, and a state branch encodes proprioceptive signals and past risk estimates. These features are fused to predict a continuous risk value in [0, 1]. Our goal is to correctly predict the boundary risk value before tstop to enable timely interventions to avoid an irrecoverable failure. We evaluate PREFAIL using both simulation and real-world data, comparing against a competitive OOD base-line [7]. PREFAIL achieves superior performance across multiple metrics: precision, accuracy and recall for correct failure identification, and intervention timeliness ratio, a metric we introduce that measures the percentage of ma-nipulation completed before triggering an intervention (see Sec. IV-C). A high intervention timeliness ratio indicates the system avoids overly conservative predictions that unneces-sarily halts manipulation early, while still preventing failures. Our contributions include:  
+
+> •
+
+PREFAIL, a novel framework for proactive failure pre-diction for rapid non-prehensile lift-and-place manipula-tion that analyzes the relative motion between the object and the carrier.  
+
+> •
+
+A dataset with precise temporal labeling that identifies the critical moment beyond which even emergency interventions cannot prevent failure, enabling evaluation of prediction timeliness in addition to accuracy.  
+
+> •
+
+Experiments in simulation and the real world demon-strating that our motion-based approach achieves higher performance compared to baselines. II. RELATED WORKS 
+
+A. Failure Detection 
+
+Current research on failure identification in robotic ma-nipulation can be broadly categorized into two approaches: 
+
+reactive analysis and proactive prediction . Prior methods for reactive analysis include failure explanation using natural language [6], [11], [12], closed set classification [13], [14], or using Large Language Models (LLMs) to aid in failure detection [15], [4], [16], [17], [18], [19]. Despite progress, their post-hoc nature limits use in industrial settings, where proactive prediction and prevention are crucial. Compared to reactive failure detection, proactive failure prediction in robotic manipulation focuses more on real-time failure detection and prevention. Sogi et al. [20] propose a proactive success-or-failure classification framework. En-shen et al. [21] propose using geometric constraints for real-time failure prediction. Ping et al. [22] use machine learning to predict maximum object shift for wafer transferring sce-narios. Parashar et al. [23] propose to combine exhaustive simulation-based falsification with Gaussian process regres-sion to bridge the sim-to-real gap. Lee et al. [24] propose an analytical grasp failure model for multi-suction-cup grippers that solves load distribution via a minimum spring potential energy quadratic program. Sagar et al. [25] generates action probability distributions to assess risk without explicit failure labels in fixed action space. In contrast to these scenario-specific methods, another important technique is to use out-of-distribution (OOD) methods to detect failures. Fail-Detect [7] formulate failure detection as an OOD problem to address the limitations of data collection. While prior works have made meaningful progress in failure detection, existing methods and benchmarks are evaluated on slow-speed manipulation scenarios and lack annotation of the critical intervention boundary[8], [7]; therefore, we introduce a new dataset of fast-moving manipulation. 
+
+B. OOD Methods for Failure Detection 
+
+Out-of-distribution (OOD) detection provides a general framework for robotic failure detection. Distance-based methods such as Principal Component Analysis with K-means clustering (PCA-kmeans) embed observations via PCA, flagging observations far from the in-distribution clus-ters as failures [26]. One-class methods like Random Net-work Distillation (RND) train a predictor to mimic a frozen random target network on successful trajectories, where a large mismatch at inference signals OOD behavior [27]. Consistency Flow Matching (CFM) measures trajectory cur-vature in the observation-to-noise forward flow, where high curvature indicates that the input is OOD [28]. Second-order methods like Natural Posterior Network (NatPN) impose a Dirichlet prior on class probabilities to separate epistemic from aleatoric uncertainty, using high epistemic uncertainty as an indicator of OOD inputs [29]. Building on these foundations, Fail-Detect [7] combines scalar OOD scores with a time-varying conformal prediction band to guarantee runtime false positive rate control, intro-ducing the log-probability in latent noise space (logpZO) score, which maps observations to latent noise via flow matching and uses the squared norm as the OOD signal. More recently, FIPER [30] integrates an RND-based OOD score in the policy’s observation embedding space with an action-chunk entropy score over short sliding windows, triggering a failure alarm only when both exceed their conformal thresholds. As this is concurrent work, we do not include it as a baseline. However, existing OOD-based failure detection methods tend to over-confidently flag roll-outs as failure early in execution, motivating a more reliable failure detection scheme for fast-moving manipulation scenarios. III. PROBLEM FORMULATION We define proactive failure prediction for the lift-and-place task as a end-to-end time series prediction problem, which takes a sequence of visual observations and robot states as raw input. At each time step ti, the system outputs a risk value 
+
+Ri ∈ R, representing the likelihood of a failure precursor. The observation Oi = {It−m+1, . . . , Ii}top,side contains image frames I from two camera ( Ctop ,Cside ) within a temporal Observation ( O)
+
+Rotation & 
+
+Translation ( M)
+
+Encoder 
+
+(𝐀 2)
+
+2-D 
+
+ICP 
+
+𝐀 top
+
+𝐀 side 
+
+Risk value 
+
+(𝐀 𝐀 )
+
+Encoder 
+
+(𝐀 1)
+
+Avg 
+
+Pooling 
+
+Shared State ( S)
+
+> • E nd-Effector Position (3-dim)
+> • Joint Angles (6-dim)
+> • Joint Speeds (6-dim)
+> • Past Risks ({ m-1}-dim)
+
+Encoder 
+
+(𝐀 3)
+
+Encoder 
+
+(𝐀 4)
+
+R
+
+t
+
+𝐀 top
+
+𝐀 side 
+
+> 0.5
+> 1.0
+> 0
+
+m frames 
+
+𝐀 1
+
+𝐀 2
+
+𝐀 3Fig. 2: Overview of PREFAIL (see Sec. IV for details). For each sample with m time steps, the observation branch processes multi-view images to extract visual features P1, then uses the segmented contours of the target object and the carrier to calculate their relative motion to get the motion features P2. The state branch uses E3 to encode robot states and past risk values to produce features P3. We fuse and process features with E4 to output a continuous risk value Ri indicating the likelihood of a failure at each time step ti.
+
+window of length m (here we use m = 5 empirically). The state Si at time ti is: 
+
+Si = {(ei−m+1, θi−m+1, ˙θi−m+1), . . . , (ei, θi, ˙θi)}, (1) which contain the robot end-effector position ( ei ∈ R3), joint angles θi, and joint velocities ˙ θi for the past m time steps. In this paper, we study lift-and-place manipulation in which a 6-DOF robot transports a target object o on a flat carrier 
+
+c at maximum joint velocity. A failure occurs when the target object o falls from the carrier c while the robot is in motion. If the object reorients but remains on the carrier, the manipulation is considered successful. We assume at most one failure per trajectory, as a dropped object terminates the lift-and-place task. IV. METHOD: PREFAIL Our method, PREFAIL, consists of two input branches, as shown in Fig. 2. The observation branch extracts visual features from the multi-view video stream and the computed relative motion between the target object and the carrier. The state branch encodes robot states (from Eq. 1) along with predicted risk values from previous time steps. These features are processed to produce a continuous risk estimate. 
+
+A. Data Labeling: Historical Backtracking 
+
+We design a data collection pipeline that assigns a risk value Ri ∈ [0, 1] to each time step during manipulation, starting from the first time step t0. We propose a historical backtracking method for data collection in simulation, which identifies two key moments within a trajectory: (1) the last time step at which an emergency stop (e-stop) can prevent a failure, denoted as tstop , and (2) the moment when the failure actually occurs, denoted as tfail ; for lift-and-place tasks, tfail 
+
+is the moment when the object drops from the carrier. To determine tstop from historical backtracking, we use counterfactual reasoning [31] and iteratively search backward from tfail using a binary search strategy to find the earliest, safe intervention point. For each trajectory, we first identify 
+
+tfail which is detected in simulation by checking whether the … … …                   
+
+> Iter. 0
+> (Failure)
+> Iter. 1
+> (No failure)
+> Iter. 2
+> (Failure)
+> …
+> Iter. n
+> (No failure)
+> …………
+> …………
+> …………
+> …………Iter. n+1
+> (Failure)
+> �퐟퐚   ���fail
+> 1.0
+> 0.5
+> 0
+> �퐬퐭   �stop+1
+> ��=1.0 ��=0.8
+> ��=0.7
+> ��=0.5
+> ��=0.2
+> �
+> ��
+> 3
+> 4
+> �fail
+> 1
+> 2
+
+Fig. 3: Historical backtracking data collection pipeline. The upper portion illustrates the iterative binary search process (across all iterations: Iter. 0, 1, 2, ..., n, n+1) for historically backtracking from the actual failure moment tfail (the black box drops from the pink panel), namely historical backtracking. In each iteration, we apply an e-stop (indicated by red border) and observe whether failure still occurs in the following time steps (indicated by the translucent color). The binary searching process will eventually converge to a critical time step tstop , defined as the latest point at which applying an emergency stop would still prevent failure, such that the failure would not occur at tstop but would inevitably occur at the subsequent timestep tstop +1 . The curve in the bottom part represents the labeled ground truth value of the risk value, Ri = 0.5 at the moment tstop , Ri = 1.0 at tfail .
+
+object’s center of mass drops below that of the carrier, or manually annotated in the real world. We then iteratively narrow down tstop by: (1) replaying the trajectory and apply-ing an e-stop at the midpoint of the current search interval, (2) observing whether failure still occurs, and (3) updating the interval accordingly (searching the earlier half if failure occurs, and the later half otherwise). As shown in Fig. 3, in Iter. 1 we apply the e-stop at 12 tfail and observe no failure, so we search later; in Iter. 2 we apply it at 34 tfail and observe failure, so we search earlier. This process continues until we find t∗ such that an e-stop at t∗ prevents failure while one at 
+
+t∗ + 1 does not, which we define as tstop . Then, for other time points, we apply Hermite splines [32] to interpolate the risk values, enabling the model to learn the temporal progression toward the boundary (see Sec. V-G). In the real world, historical backtracking requires physical resets of the same trajectory. Human annotators label three key moments: t0 is the start of manipulation; tfail is the moment that the object starts falling off the carrier; and tstop ,which is determined via a physical binary search procedure. The rollout is repeatedly replayed with the emergency stop applied at different times, and tstop is the latest time at which applying the e-stop prevents failure. Because the e-stop is applied to the physical robot and its outcome directly observed, tstop is empirically verified. 
+
+B. Network Design 
+
+As illustrated in Fig. 2, our network adopts a two-branch architecture. The observation branch extracts visual features from multi-view video data and the relative motion computed from consecutive images. The state branch incorporates proprioceptive robot state variables together with predicted risk values from previous time steps. 
+
+Image sequence feature. Faster relative motion often correlates with higher risk. However, such motion may be ambiguous or unobservable from certain viewpoints, such as when the object moves along the camera’s line of sight. To improve robustness, we use two cameras from distinct perspectives to capture complementary motion cues. Since robot manipulation is inherently dynamic, we conduct failure analysis over a temporal window of m steps using RGB image sequences from both cameras. The image sequence 
+
+I is encoded by E1 (here we use a CNN layer) to produce the visual features P1.
+
+Relative motion feature. At each time step ti, we obtain the relative motion values M between the target object o and the carrier c in each camera view ( Ctop and Cside ), represented by Mi 
+
+> top
+
+and Mi
+
+> side
+
+, from the image features. Specifically, 
+
+Mi 
+
+> top ,side
+
+= {Rio−c, T io−c}top, side includes an object-carrier rel-ative rotation value ( Rio−c = θ i ∈ R1) and an object-carrier relative translation value (T io−c = ( X,Y )i ∈ R2). In each camera view C, the object-carrier relative rotation Ri is computed as the difference between the object-object relative rotation ( Rio−o) and the carrier-carrier relative rotation ( Ric−c), where the same decomposition holds for the object-carrier relative translation: 
+
+Rio−c = Rio−o − Ric−c, T io−c = T io−o − T ic−c (2) To obtain the object-object and carrier-carrier relative mo-tions in Eq. 2, we utilize 2D iterative closest point (ICP) [33], [34], which estimates the relative displacement between the object’s (or carrier’s) position at the current time step ti and its position at the initial time step t0:
+
+(R, T )io−o,c−c = ICP (V 0,V i) (3) where V 0 and V i denote the geometric contours of the target object or carrier at the initial and current time steps, respec-tively. Concretely, we extract the contours {V io,V ic }top, side in both camera views at each time step i: in real-world settings, we leverage a pre-trained SAM2 model [35] to segment and obtain these contours, while in simulation we directly use the projected object shape as its contour. We apply 2D ICP to these contours to compute the motion values (R, T )io−o,c−c,and its accuracy is further validated in the supplementary material. The relative motion makes it readily applicable to other non-prehensile manipulation tasks, since SAM2 can be used to segment arbitrary objects, instead of relying on prior knowledge of object geometry. As shown in Fig. 2, the relative motion M passes through an encoder E2 (here we use a MLP layer) to produce the feature embeddings P2.
+
+Robot state feature. In our second branch, we process the robot state S as an additional feature, which includes the end-effector position, joint angles, and joint speeds, as well as the predicted risk values from the past m − 1 steps within the current sampling window. The first three values capture the physical state of the robot and, since they are correlated with the image observations across different camera views, this feature can be shared with the visual observation features. The past risk values encode the temporal trend of the manipulation risk, leading to more robust inference (see Sec. V-D). Although derivable from joint angles via forward kinematics, we provide the end-effector position explicitly to ease training. These states are passed through an encoder E3
+
+(we use a MLP layer) to produce the feature embedding P3.Finally, P1, P2, and P3 are concatenated and passed through an encoder E4 (here we use a ResNet module [36]) to produce the final continuous risk value Ri ∈ [0, 1]. In a training batch, the samples with high risk value and the samples with low risk value are evenly mixed for balanced training. Also, the past risk is disturbed randomly for data augmentation purpose, similar to teacher forcing [37]. Details are in the supplementary website. For a training batch with N samples, the total training loss 
+
+LTotal is defined as a weighted combination of a classification loss LCls and a regression loss LReg :
+
+LTotal = αLCls + ( 1 − α)LReg , (4) where α controls the relative contribution of each term. The regression loss uses mean squared error (MSE) to measure the discrepancy between the predicted risk values Rpred  
+
+> i
+
+and their ground truth counterparts Rgt  
+
+> i
+
+, enabling the model to learn the temporal evolution of risk, 
+
+LReg = 1
+
+N
+
+> N
+
+# ∑
+
+> t=1
+
+(Rpred  
+
+> i
+
+− Rgt  
+
+> i
+
+)2. (5) Since the learning objective is also to identify the safety boundary for triggering an emergency stop, each training sample is assigned a binary label yi indicating whether it corresponds to a high-risk state (after tstop ) or a low-risk state (before tstop ). The classification loss is formulated as binary cross-entropy, 
+
+LCls = − 1
+
+N
+
+> N
+
+# ∑
+
+> i=1
+
+[yi log ( ˆyi) + ( 1 − yi) log (1 − ˆyi)] , (6) which strengthens the model’s ability to discriminate be-tween safe and unsafe conditions, and consequently will Methods / Variants Simulation Real-world Precision ↑ Accuracy ↑ Recall ↑ η ↑ Precision ↑ Accuracy ↑ Recall ↑ η ↑
+
+Fail-Detect [7] (ResNet18) (CFM [28], FM) 0.389 0.389 1.000 0.179 0.478 0.478 1.000 0.297 (CFM [28], DP) 0.386 0.386 1.000 0.202 0.500 0.500 1.000 0.303 (NatPN [29], FM) 0.374 0.374 1.000 0.198 0.493 0.493 1.000 0.275 (NatPN [29], DP) 0.384 0.384 1.000 0.185 0.493 0.493 1.000 0.275 (PCA-kmeans [26], FM) 0.389 0.389 1.000 0.104 0.493 0.493 1.000 0.226 (PCA-kmeans [26], DP) 0.388 0.388 1.000 0.082 0.489 0.489 1.000 0.221 (RND [27], FM) 0.369 0.369 1.000 0.267 0.504 0.504 1.000 0.289 (RND [27], DP) 0.384 0.384 1.000 0.170 0.507 0.507 1.000 0.302 (logpZO [7], FM) 0.389 0.389 1.000 0.118 0.504 0.504 1.000 0.195 (logpZO [7], DP) 0.389 0.389 1.000 0.083 0.496 0.496 1.000 0.219 
+
+PREFAIL (ours) (ResNet18) 0.991 0.995 0.995 0.933 0.944 0.963 0.985 0.932 PREFAIL (ours) (ResNet50) 0.967 0.986 0.995 0.964 0.916 0.948 0.984 0.910 
+
+PREFAIL (ours) (ResNet152) 0.995 0.997 0.995 0.923 0.900 0.933 0.978 0.925 
+
+TABLE I: Performance on simulation and real-world data. For simulation, the model is both trained and tested on simulation data. For real-world, the model is trained and tested on real-world data, with results reported as the average over 10-fold cross-validation across 10 experiments. The baseline method has multiple variants, each evaluated with different policy generation methods (FM for flow-matching [38], DP for diffusion policy [10]). The best results are highlighted in bold. Our PREFAIL consistently and largely outperforms all baseline variants. Although we do not achieve 1.000 recall, our high precision and high recall together indicate a stronger ability to distinguish failures from non-failure modes. In contrast, the baseline’s low precision with high recall suggests a biased output that defaults to predicting failure. For more details, see Sec. V-B. Modules Precision ↑ Accuracy ↑ Recall ↑ η ↑                                    
+
+> Complete 0.995 0.997 0.995 0.923 Classification loss only 0.574 0.850 1.000 0.990
+> Regression loss only 0.980 0.991 0.995 0.855 Without images 0.973 0.988 0.995 0.904 Without relative motion 0.812 0.870 0.816 0.596 Without past risk 0.314 0.315 1.000 0.832 Without end-effector position 0.958 0.983 0.995 0.910 Without joint angles 0.927 0.972 1.000 0.860 Without joint speeds 0.384 0.417 0.995 0.839
+
+TABLE II: Ablation results of PREFAIL trained on simulation data. We first decouple the loss terms by disabling classification or regression, then isolate the relative motion from the observation features, and then partially remove the robot state. The results indicate that the past risk values and the relative motion are the most critical components. Furthermore, both losses contribute to balancing precision, accuracy, recall, and intervention timeliness η.
+
+improve its identification of tstop and leading to a higher intervention timeliness ratio η (see Sec. IV-C and Sec. V-D). 
+
+C. Assessment Metrics 
+
+We evaluate using four metrics, precision, accuracy, recall, and intervention timeliness ratio. We calculate precision, accuracy, and recall by defining 5 cases. A true positive (TP) occurs when the model correctly predicts a failure before the latest intervention point tstop , leaving sufficient time for effective action. A true negative (TN) corresponds to correctly identifying a successful rollout. A false negative (FN) occurs when the model misses a failure. False positives (FP) include two distinct cases: FP-1, where the model incorrectly reports a failure for a successful rollout, and FP-2, where the model detects a real failure only after tstop ,rendering the prediction too late. Examples are in Fig. 5. In addition, to discourage overly conservative predictions, we introduce the intervention timeliness ratio η. This repre-sents the percentage of time steps completed at the moment when the failure is correctly predicted: 
+
+η = tpred stop /tstop , (7) Simulation Real 
+
+> Box-shaped Box-shaped  Distinct object
+
+Fig. 4: Visualization of the objects and carriers used in our dataset. 
+
+where the optimal η is 1.0, indicating that the model predicts the failure at the last possible moment before the intervention deadline, thus maximizing task execution progress before triggering an emergency compensation, as shown in Fig. 5. Given the fast-moving task, a higher η is desirable, as it implies that the intervention minimizes the overall cycle time 
+
+T . For real-world examples, see Sec. V-F. V. EXPERIMENTS 
+
+A. Data and Experiment Setup 
+
+We collect two datasets to evaluate our method: one in simulation using MuJoCo [39] and one in the real world. Both use a UR5 robot arm with a flat tray carrier holding an object placed on top. The carrier is attached via a Robotiq 2F-85 parallel-jaw gripper in the real world, and rigidly fixed to the end effector through a defined joint in simulation. In the real world, two Intel RealSense D435 cameras provide top-down and side views in 30fps. As discussed in Sec. IV-A, collecting real-world data is labor-intensive, so we collect data in simulation to facili-tate large-scale verification. The simulated dataset has two subsets. The first focuses on box-shaped objects to mimic typical industrial handling scenarios [40] and contains 539 simulation trajectories. The second contains 5,236 simula-tion trajectories with diverse daily objects adopted from (c) TN: Correct Safe Report 
+
+(e) FP-2: Late Prediction 
+
+(a) TP: Correct Failure Report 
+
+(d) FP-1: False Alarm (f) FN: Missed Detection 
+
+(b) TP *: Ideal Failure Report                                              
+
+> Risk Value
+> 1.0
+> 0.0
+> 0.6
+> 0.4
+> 0.2
+> 0.8
+> Risk Value
+> 1.0
+> 0.0
+> 0.6
+> 0.4
+> 0.2
+> 0.8
+> Risk Value
+> 1.0
+> 0.0
+> 0.6
+> 0.4
+> 0.2
+> 0.8
+> Risk Value
+> 1.0
+> 0.0
+> 0.6
+> 0.4
+> 0.2
+> 0.8
+> Risk Value
+> 1.0
+> 0.0
+> 0.6
+> 0.4
+> 0.2
+> 0.8
+> Risk Value
+> 0.0
+> 0.6
+> 0.4
+> 0.2
+> 0.8
+> Predictions
+> Ground Truth
+> Risk Threshold (0.5)
+> GT Failure
+> Predicted Failure Predictions
+> Ground Truth
+> Risk Threshold (0.5)
+> GT Failure
+> Predicted Failure
+> Predictions
+> Ground Truth
+> Risk Threshold (0.5)
+> Predicted Failure
+> Predictions
+> Ground Truth
+> Risk Threshold (0.5)
+> GT Failure
+> Predicted Failure
+> Predictions
+> Ground Truth
+> Risk Threshold (0.5)
+> GT Failure
+> Predictions
+> Ground Truth
+> Risk Threshold (0.5)
+> Time Step Time Step Time Step
+> Time Step Time Step Time Step
+> 5.0 7.5 10.0 12 .5 15.0 17.5 20.0 22.5 25.0 510 15 20 2530 1020304050
+> 10 2030405046810 12 14 16 18 46810 12 14 16 18 20
+> Object
+> Carrier
+> Object
+> Carrier
+> Object
+> Carrier
+> Object
+> Carrier
+> Object
+> Carrier
+> Object
+> Carrier
+
+Fig. 5: Visualization of all evaluation results on real-world test cases, with the predicted risk value curve (solid red line) vs the ground truth risk value curve (solid blue line) during evaluation. The dotted red line refers to the moment of tstop , while the dotted blue line is tpred stop . The threshold of risk value (Ri = 0.5) is indicated by dotted green line. TP* is a perfect case that demonstrates η = 1.0. See Sec. IV-C for details. 
+
+Lum et al. [41]; training and test trajectories are drawn from this set to evaluate performance across a wide range of ge-ometries. In addition, we collect 254 real-world trajectories using five types of box-shaped objects. Two boxes include packaged goods with shifting contents, which introduces more variability. Experiments are conducted separately on simulation and real-world data. For each dataset, we split the collected trajectories into training, validation, and test sets with an 8:1:1 ratio (see Fig. 4 for examples). See supplementary website for detailed description of the dataset. Each trajectory corresponds to a rapid lift-and-place task in which the robot dynamically moves the carrier (with an object on it) within the workspace, operating at its 
+
+maximum joint velocity. To simulate challenging industrial conditions and increase trajectory diversity, we randomize object and physics parameters during data collection; details are provided in the supplementary website. 
+
+B. Model Evaluation on Simulated Data 
+
+We train and evaluate both the baseline method [7] and our model on the 5,775 simulated trajectories. All meth-ods are trained for 200 epochs, with results reported in Tab. I. As described in Sec. IV-C, the four metrics assess performance from complementary perspectives. Compared to the OOD baseline, PREFAIL significantly improves overall performance. For example, precision improves by over 155% (from 0.389 to 0.995) and accuracy by over 156% (from 0.389 to 0.997), reducing respective error rates by more than 99%, demonstrating that PREFAIL substantially reduces false positives while correctly identifying true failure cases. Although the baseline achieves a recall of 1.000 on our dataset, this comes with very low precision and accuracy. No-tably, its precision and recall are identical, indicating that the baseline predicts every trajectory as failure. Such behavior is overly conservative and fails to distinguish between true positives (TP) and true negatives (TN). In contrast, PREFAIL achieves both high precision and high recall, showing that it can effectively discriminate between failure and non-failure trajectories. In addition, PREFAIL improves the execution-aware metric η from 0.198 to 0.964, indicating substantially more accurate localization of the critical stopping time tstop .
+
+C. Model Evaluation on Real-world Data 
+
+We train and evaluate our model on 254 real-world trajectories. To ensure robustness given the limited data size, we perform a ten-fold cross-validation by constructing three different splits following the same ratio and report the average performance in Tab. I. 
+
+D. Component Analysis 
+
+To evaluate the contribution of each module in our network design, we perform ablation studies using the ResNet152 backbone on the simulation dataset from three perspectives: (1) loss design, (2) observation inputs, and (3) robot state inputs. The results are summarized in Tab. II. 
+
+Loss design . We analyze the individual effects of the classification and regression losses. As shown in Tab. II, using only classification loss results in lower precision and accuracy but a high intervention timeliness ratio, whereas using only regression loss yields high precision and accuracy but a lower intervention timeliness ratio. These findings are consistent with our analysis in Sec. IV-B, where the classification objective primarily improves failure discrimi-nation and enhances localization of tstop , while the regression objective temporal evolution of the risk value. 
+
+Observation inputs . We evaluate the contributions of image sequences and relative motion features. As reported in Tab. II, using relative motion or image sequences alone does not achieve optimal performance. Combining both modalities improves performance, indicating that visual and motion cues provide complementary information, with relative motion playing a more dominant role. 
+
+Robot state inputs . We train the model by excluding one robot state at a time to analyze the contribution of each input component. Tab. II shows that past risk values and joint speed data contribute significantly to the overall performance. 
+
+E. Visualization 
+
+In Fig. 5, we visualize representative prediction results and simultaneously illustrate the five cases used to calculate pre-cision and recall. These results are obtained under Sim&Real training and evaluation using ResNet-18. In the TN case, our model correctly predicts low risk values throughout the manipulation. In the FP case, the model either incorrectly predicts a high risk value when no failure occurs, or it predicts tpred stop after the ground-truth tstop . In the TP case, the model correctly predicts tpred stop before the ground-truth 
+
+tstop . In the FN case, the model fails to predict any high risk values, even though the ground truth indicates a failure. Additionally, the TP* case represents an optimal prediction, where tpred stop = tstop and η = 1.0. 
+
+F. Real-world Deployment 
+
+To validate real-world applicability, we deployed PRE-FAIL on the lift-and-place task (Sec. III) and used its predicted risk to proactively prevent failures. In a lift-and-place manipulation that potentially fails be-fore a total cycle time of T , our goal is to intervene at an early stage by modulating the joint speed to prevent the failure, incurring an additional cycle time ∆T . For example, the original rollout failed around 0 .86 s, although it was expected to finish in 1 .2 s. With our speed control strategy, the robot instead completes the task successfully in 1 .3 s, incurring only a 0 .1 s increase in cycle time. By contrast, slowing down from the very beginning would require at least 1 .8 s to avoid failure. We use the predicted risk to dynamically modulate joint velocities. At risk 0.0, the robot operates at maximum speed; as risk increases, speed decreases proportionally, reaching the minimum at risk 0.5. Speeds in between are determined by linear interpolation, as shown in Fig. 6. This risk-aware velocity scaling enables the system to respond adaptively to potential failure states, slowing down cycle in higher-risk scenarios to improve task robustness while maintaining efficiency in low-risk conditions. 
+
+G. Discussion 
+
+Limitations. PREFAIL has several limitations that present opportunities for future work. First, we study a single object on a carrier. Extending PREFAIL to multi-object scenarios would require reasoning about inter-object interactions and 
+
+> Fig. 6: Trajectory showing a real-world deployment scenario where joint speed is set based on the predicted risk value which in turn mitigates subsequent risk after time step 20.
+
+determining which relative motions are safety-critical. Sec-ond, while our method predicts when intervention is needed, it does not address a general recovery strategies , which are application-specific and may require domain knowledge or specialized hardware. Third, our relative motion estimation relies on 2D ICP over projected contours, which may degrade under occlusion, poor lighting, or visual ambiguity; depth sensing with 3D ICP could provide more robustness at increased computational cost. Finally, our historical back-tracking data collection is efficient in simulation but is labor-intensive in the real-world due to repeated rollouts and resets. 
+
+Can we model the system dynamics analytically and predict failure from initial conditions and planned trajec-tories? The contact dynamics between objects and carriers involve complex, nonlinear interactions governed by friction, surface geometry, and material properties that are not reliably identifiable online and are difficult to model accurately. This motivates a learning-based approach that infers failure risk directly from observed data. 
+
+Why use interpolated values for the risk curve? Our primary goal is to accurately identify the critical boundary 
+
+tstop . Intermediate risk values act as supervisory signals that help the model learn the temporal progression toward this boundary, approximating the continuous degradation of recoverability as destabilizing factors (momentum, contact instability) accumulate, and the safety margin diminishes smoothly. Smooth continuous labels provide better learning signals than discrete jumps. Although exact intermediate values are not physically measured, they provide a relative ordering of risk that helps the model distinguish early-stage stable conditions from late-stage critical conditions. The classification loss enforces learning of the binary boundary (Ri = 0.5 at tstop ), while the regression loss encourages temporal consistency. In preliminary experiments, spline interpolation outperformed step and exponential labeling in striking best balance in intervention timeliness and precision (see supplementary website for details). 
+
+Why use a fixed threshold? While failure patterns vary across rollouts (e.g., different object dynamics), our model learns to map diverse observable patterns to a calibrated risk scale where 0.5 consistently represents the tstop boundary. The network implicitly learns: “when I observe motion pattern X, how close am I to tstop ?” A fixed threshold enables consistent interpretation: operators know that Ri > 0.5 means past the “point of no return,” simplifying deployment across object types and speeds without per-scenario tuning. VI. CONCLUSION In this paper, we investigate how proactive failure pre-diction can balance cycle time and risk management in non-prehensile lift-and-place material handling tasks. We propose PREFAIL, which extracts relative motion from images to capture scene dynamics and predict risk in advance. We demonstrate that PREFAIL achieves an effective guarantee of cycle time and manipulation reliability by adapting ex-ecution speed based on risk assessment. Our experimental investigation focused on object transport using a part carrier. However, we believe that the methodology presented in this paper will advance proactive robotic failure prediction for a wide variety of high-speed material handling applications. ACKNOWLEDGMENT 
+
+We acknowledge support from the National Artificial Intelligence Research Resource (NAIRR) Pilot program. We thank Jeremy Morgan, Jason Chen, Siheng Zhao, Minjune Hwang, and Zhehui Huang for their helpful technical advice and discussions. 
+
+REFERENCES 
+
+[1] M. T. Mason, “Mechanics and planning of manipulator pushing operations,” The International Journal of Robotics Research , 1986. [2] K. M. Lynch and M. T. Mason, “Stable pushing: Mechanics, controllability, and planning,” The international journal of robotics research , 1996. [3] F. Ruggiero, V. Lippiello, and B. Siciliano, “Nonprehensile dynamic manipula-tion: A survey,” IEEE Robotics and Automation Letters (RA-L) , 2018. [4] J. Duan, W. Pumacay, N. Kumar, Y. R. Wang, S. Tian, W. Yuan, R. Krishna, D. Fox, A. Mandlekar, and Y. Guo, “Aha: A vision-language-model for detecting and reasoning over failures in robotic manipulation,” in International Conference on Learning Representations (ICLR) , 2025. [5] S. Thoduka, N. Hochgeschwender, J. Gall, and P. G. Pl¨ oger, “A multimodal han-dover failure detection dataset and baselines,” in IEEE International Conference on Robotics and Automation (ICRA) , 2024. [6] G. LeMasurier, A. Gautam, Z. Han, J. W. Crandall, and H. A. Yanco, “Reactive or proactive? how robots should explain failures,” in International Conference on Human-Robot Interaction (HRI) , 2024. [7] C. Xu, T. K. Nguyen, E. Dixon, C. Rodriguez, P. Miller, R. Lee, P. Shah, R. A. Ambrus, H. Nishimura, and M. Itkina, “Can We Detect Failures Without Failure Data? Uncertainty-Aware Runtime Failure Detection for Imitation Learning Policies,” in Robotics: Science and Systems (RSS) , 2025. [8] A. Mandlekar, D. Xu, J. Wong, S. Nasiriany, C. Wang, R. Kulkarni, L. Fei-Fei, S. Savarese, Y. Zhu, and R. Mart´ ın-Mart´ ın, “What matters in learning from offline human demonstrations for robot manipulation,” in Conference on Robot Learning (CoRL) , 2022. [9] X. Jia, D. Blessing, X. Jiang, M. Reuss, A. Donat, R. Lioutikov, and G. Neu-mann, “Towards diverse behaviors: A benchmark for imitation learning with human demonstrations,” in International Conference on Learning Representa-tions (ICLR) , 2024. [10] C. Chi, Z. Xu, S. Feng, E. Cousineau, Y. Du, B. Burchfiel, R. Tedrake, and S. Song, “Diffusion policy: Visuomotor policy learning via action diffusion,” 
+
+International Journal of Robotics Research (IJRR) , 2025. [11] C. Agia, R. Sinha, J. Yang, Z. Cao, R. Antonova, M. Pavone, and J. Bohg, “Un-packing failure modes of generative policies: Runtime monitoring of consistency and progress,” in Conference on Robot Learning (CoRL) , 2025. [12] Z. Zheng, Q. Feng, H. Li, A. Knoll, and J. Feng, “Evaluating uncertainty-based failure detection for closed-loop llm planners,” in IEEE International Conference on Robotics and Automation (ICRA) , 2024. [13] A. Inceoglu, E. E. Aksoy, and S. Sariel, “Multimodal detection and classification of robot manipulation failures,” IEEE Robotics and Automation Letters (RA-L) ,2024. [14] Y. Ma, J. Liu, I. Mamaev, and A. Morozov, “Multimodal failure prediction for vision-based manipulation tasks with camera faults,” in IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS) , 2024. [15] Z. Liu, A. Bahety, and S. Song, “Reflect: Summarizing robot experiences for failure explanation and correction,” in Conference on Robot Learning (CoRL) ,2023. [16] J. H. Kang, N. Dhanaraj, S. Wadaskar, and S. K. Gupta, “Using large language models to generate and apply contingency handling procedures in collaborative assembly applications,” in IEEE International Conference on Robotics and Automation (ICRA) , 2024. [17] P. Pramanick and S. Rossi, “Multimodal coherent explanation generation of robot failures,” in IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS) , 2024. [18] Y. Dai, J. Lee, N. Fazeli, and J. Chai, “Racer: Rich language-guided failure recovery policies for imitation learning,” in IEEE International Conference on Robotics and Automation (ICRA) , 2025. [19] R. Sinha, A. Elhafsi, C. Agia, M. Foutter, E. Schmerling, and M. Pavone, “Real-Time Anomaly Detection and Reactive Planning with Large Language Models,” in Robotics: Science and Systems (RSS) , 2024. [20] N. Sogi, H. Oyama, T. Shibata, and M. Terao, “Future predictive success-or-failure classification for long-horizon robotic tasks,” in International Joint Conference on Neural Networks (IJCNN) , 2024. [21] E. Zhou, Q. Su, C. Chi, Z. Zhang, Z. Wang, T. Huang, L. Sheng, and H. Wang, “Code-as-monitor: Constraint-aware visual programming for reactive and proactive robotic failure detection,” in IEEE Conference on Computer Vision and Pattern Recognition (CVPR) , 2025. [22] P. W. Huang and K.-J. Chung, “Task failure prediction for wafer-handling robotic arms by using various machine learning algorithms,” Measurement and Control ,2021. [23] A. Parashar, K. Garg, J. Zhang, and C. Fan, “Failure prediction from limited hardware demonstrations,” in 2025 61st Allerton Conference on Communication, Control, and Computing Proceedings , 2025. [24] J.-e. Lee, R. Sun, A. Bylard, and L. Sentis, “Grasp failure constraints for fast and reliable pick-and-place using multi-suction-cup grippers,” IEEE Transactions on Automation Science and Engineering , 2025. [25] S. Sagar, J. Duan, S. Vasudevan, Y. Zhou, H. B. Amor, D. Fox, and R. Senanayake, “Uncovering robot vulnerabilities through semantic potential fields,” in International Conference on Learning Representations (ICLR) , 2026. [26] H. Liu, Y. Zhang, V. Betala, E. Zhang, J. Liu, C. Ding, and Y. Zhu, “Multi-task interactive robot fleet learning with visual world models,” in Conference on Robot Learning (CoRL) , 2025. [27] N. He, S. Li, Z. Li, Y. Liu, and Y. He, “Rediffuser: reliable decision-making using a diffuser with confidence estimation,” in International Conference on Machine Learning (ICML) , 2024. [28] L. Yang, Z. Zhang, Z. Zhang, X. Liu, M. Xu, W. Zhang, C. Meng, S. Ermon, and B. Cui, “Consistency flow matching: Defining straight flows with velocity consistency,” arXiv preprint arXiv:2407.02398 , 2024. [29] B. Charpentier, O. Borchert, D. Z¨ ugner, S. Geisler, and S. G¨ unnemann, “Natural posterior network: Deep bayesian predictive uncertainty for exponential family distributions,” in International Conference on Learning Representations (ICLR) ,2022. [30] R. R¨ omer, A. Kobras, L. Worbis, and A. P. Schoellig, “Failure prediction at runtime for generative robot policies,” in Neural Information Processing Systems (NeurIPS) , 2025. [31] M. Miller, B. Sch¨ olkopf, and S. Guo, “Counterfactual reasoning: an analysis of in-context emergence,” in Neural Information Processing Systems (NeurIPS) ,2025. [32] K. Erdogan, “Spline interpolation techniques,” Journal of Technical Science and Technologies , 2013. [33] P. J. Besl and N. D. McKay, “Method for registration of 3-d shapes,” in Sensor fusion IV: control paradigms and data structures , 1992. [34] J. Yang, H. Li, and Y. Jia, “Go-icp: Solving 3d registration efficiently and globally optimally,” in IEEE/CVF International Conference on Computer Vision (ICCV) , 2013. [35] N. Ravi, V. Gabeur, Y.-T. Hu, R. Hu, C. Ryali, T. Ma, H. Khedr, R. R¨ adle, C. Rolland, L. Gustafson, E. Mintun, J. Pan, K. V. Alwala, N. Carion, C.-Y. Wu, R. Girshick, P. Dollar, and C. Feichtenhofer, “Sam 2: Segment anything in images and videos,” in International Conference on Learning Representations (ICLR) , 2025. [36] K. He, X. Zhang, S. Ren, and J. Sun, “Deep residual learning for image recognition,” in IEEE Conference on Computer Vision and Pattern Recognition (CVPR) , 2016. [37] A. M. Lamb, A. G. Alias Parth Goyal, Y. Zhang, S. Zhang, A. C. Courville, and Y. Bengio, “Professor forcing: A new algorithm for training recurrent networks,” 
+
+Neural Information Processing Systems (NeurIPS) , 2016. [38] Y. Lipman, R. T. Chen, H. Ben-Hamu, M. Nickel, and M. Le, “Flow matching for generative modeling,” in International Conference on Learning Representations (ICLR) , 2023. [39] E. Todorov, T. Erez, and Y. Tassa, “Mujoco: A physics engine for model-based control,” in IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS) , 2012. [40] N. Sarawgi, O. M. Manyar, F. Wang, T. H. Nguyen, D. Seita, and S. K. Gupta, “Expanding Picking Actions for Time-Efficient Online 3D Bin Packing,” in IEEE International Conference on Robotics and Automation (ICRA) , 2026. [41] T. G. W. Lum, A. H. Li, P. Culbertson, K. Srinivasan, A. Ames, M. Schwager, and J. Bohg, “Get a grip: Multi-finger grasp evaluation at scale enables robust sim-to-real transfer,” in Conference on Robot Learning (CoRL) , 2025. Appendix 
+
+VII. D ATA POST -PROCESSING 
+
+Our data post-processing involves a hard cut-off . We re-move time steps after tfail . This is because the relative motion is minimal or absent both when the robot is moving steadily and after a failure, when the object remains stationary on the ground and the robot stays fixed. In such cases, the model may struggle to distinguish post-failure states from the initial low-risk stage due to similarly negligible relative motion. Furthermore, post-failure data is not informative for proactive failure prediction and is therefore excluded from training. VIII. R ELIABILITY OF 2D ICP We use 2D ICP to calculate the relative motions M
+
+between the object and the carrier based on their contours 
+
+{V io,V ic }top, side in both camera views at each time step i. To verify the correctness and reliability of the calculated rotation and translation values, we visualize the contours and compare the calculated contour at i+1 time step with the ground truth, see Fig. 7. The blue contours indicates {V i−1 
+
+> o
+
+,V i−1 
+
+> c
+
+}top, side ,while the green contours indicates {V io,V ic }top, side , and the cyan contours are {V io,V ic }∗ 
+
+> top, side
+
+transformed by the calcu-lated 2D ICP (rotation and translation). While we calculate the relative motion between the current step and the initial step, the motion values are accumu-lated across all intermediate adjacent steps. The accuracy of 2D ICP depends heavily on the precision of the extracted contours. In simulation, contours are obtained directly from object projections, whereas in the real world they are derived from SAM2-based segmentation. As a result, the relative motion computed from simulated data is naturally more precise than that from real-world data. IX. P AST RISK DATA AUGMENTATION 
+
+In our network design, given a sampling window of size m,the robot state input branch includes the past risk values from the previous m steps. During training, the model uses these ground-truth values for forward prediction, whereas during inference it must rely on the predicted risk values from the previous step. To reduce the discrepancy between training and inference, where ground-truth past risks are unavailable, we inject random noise into the ground-truth risk values during training so the model becomes robust to imperfect previous predictions, similar in spirit to techniques used to mitigate exposure bias in teacher forcing. X. D ATASET 
+
+Our collected dataset is stored in ‘.npy’ files. For training, we split the data into training, validation, and test sets using an 8:1:1 ratio. During this process, we control that failure and ��
+
+> �−1
+
+��
+
+> �
+
+��                        
+
+> �−1∗
+> Fig. 7: Reliability of 2D ICP. The contours from the last step are shown in blue, the contours from the current step are shown in green, and the contours obtained by applying rotation and translation relative to the last step are shown in cyan. Modules Precision ↑Accuracy ↑Recall ↑η↑
+> Hermite (used) 0.995 0.997 0.995 0.923 B´ ezier 0.973 0.988 0.995 0.887
+> Linear 0.958 0.980 1.0000 0.825
+> Step 0.314 0.314 1.0000 0.1373 TABLE III: Comparison of different interpolation techniques.
+
+non-failure roll-outs are evenly distributed across the three splits. XI. S IMULATION 
+
+In simulation, we use a single UR5 robot with a flat panel attached to the end-effector as the carrier. For each roll-out, we randomize multiple aspects of the scene. For the panel, we randomize its color, surface friction, target tilt angle, rotation speed, and whether the panel reverses direction or holds upon reaching the target angle. For the object, we randomize its color (set as the inverse of the panel color to ensure visual contrast), size, mass, inertia, surface friction, and its initial position on the carrier; the object’s initial orientation is sampled from a predefined configuration. For the robot, we randomize the execution trajectory by both shuffling the order of waypoints and applying per-joint angle perturbations, as well as independently randomizing the movement speed and the pause duration between way-points. For the background, we randomize the ground texture (selected from a pool of materials), texture repeat scale, surface reflectance, and apply small RGB noise to the floor color. Finally, we introduce independent perturbations to the 3D positions of both the top-view and front-view cameras. XII. S PLINES 
+
+For the ground truth risk value in each failure roll-out. After defining the t0, tstop , and tfail , we use a Hermite spline to interpolate the risk values for the remaining time steps. We also evaluate alternative interpolation methods, including B´ ezier interpolation, linear interpolation and step interpolation. The comparison results are summarized in Tab. III. With continuous interpolated values such as splines, the overall performance is significantly better than with step interpolation. This is consistent with our discussion in Sec. V-G. XIII. C OMPLETE PERFORMANCE REPORT FOR 
+
+REAL -W ORLD CROSS VALIDATION 
+
+Since we perform 10-fold cross-validation for the real-world experiments, we report the results from all folds (Tables IV–XIII) alongside the average performance across folds (Table XIV) to provide a comprehensive evaluation of the model’s performance. Methods / Variants Encoder Arch Precision ↑ Accuracy ↑ Recall ↑ η ↑
+
+Fail-Detect [7] (CFM [28], FM) ResNet18 0.481 0.481 1.000 0.377 (CFM [28], DP) 0.481 0.481 1.000 0.359 (NatPN [29], FM) 0.481 0.481 1.000 0.311 (NatPN [29], DP) 0.481 0.481 1.000 0.311 (PCA-kmeans [26], FM) 0.481 0.481 1.000 0.172 (PCA-kmeans [26], DP) 0.444 0.444 1.000 0.269 (RND [27], FM) 0.481 0.481 1.000 0.329 (RND [27], DP) 0.481 0.481 1.000 0.367 (logpZO [7], FM) 0.481 0.481 1.000 0.231 (logpZO [7], DP) 0.481 0.481 1.000 0.227 
+
+PREFAIL (ours) ResNet18 0.867 0.926 1.000 0.943 PREFAIL (ours) ResNet50 0.800 0.889 1.000 0.927 
+
+PREFAIL (ours) ResNet152 0.857 0.926 1.000 0.969 TABLE IV: Performance on real-world data cross validation split 1. Methods / Variants Encoder Arch Precision ↑ Accuracy ↑ Recall ↑ η ↑
+
+Fail-Detect [7] (CFM [28], FM) ResNet18 0.519 0.519 1.000 0.270 (CFM [28], DP) 0.519 0.519 1.000 0.205 (NatPN [29], FM) 0.519 0.519 1.000 0.211 (NatPN [29], DP) 0.519 0.519 1.000 0.211 (PCA-kmeans [26], FM) 0.519 0.519 1.000 0.106 (PCA-kmeans [26], DP) 0.519 0.519 1.000 0.110 (RND [27], FM) 0.519 0.519 1.000 0.125 (RND [27], DP) 0.519 0.519 1.000 0.143 (logpZO [7], FM) 0.519 0.519 1.000 0.100 (logpZO [7], DP) 0.519 0.519 1.000 0.100 
+
+PREFAIL (ours) ResNet18 1.000 1.000 1.000 0.943 PREFAIL (ours) ResNet50 1.000 1.000 1.000 0.904 
+
+PREFAIL (ours) ResNet152 0.933 0.963 1.000 0.912 TABLE V: Performance on real-world data cross validation split 2. Methods / Variants Encoder Arch Precision ↑ Accuracy ↑ Recall ↑ η ↑
+
+Fail-Detect [7] (CFM [28], FM) ResNet18 0.519 0.519 1.000 0.184 (CFM [28], DP) 0.519 0.519 1.000 0.346 (NatPN [29], FM) 0.481 0.481 1.000 0.159 (NatPN [29], DP) 0.481 0.481 1.000 0.159 (PCA-kmeans [26], FM) 0.519 0.519 1.000 0.283 (PCA-kmeans [26], DP) 0.519 0.519 1.000 0.097 (RND [27], FM) 0.519 0.519 1.000 0.366 (RND [27], DP) 0.519 0.519 1.000 0.248 (logpZO [7], FM) 0.519 0.519 1.000 0.196 (logpZO [7], DP) 0.519 0.519 1.000 0.241 
+
+PREFAIL (ours) ResNet18 0.929 0.963 1.000 0.891 PREFAIL (ours) ResNet50 0.929 0.963 1.000 0.834 
+
+PREFAIL (ours) ResNet152 0.857 0.926 1.000 0.896 TABLE VI: Performance on real-world data cross validation split 3. Methods / Variants Encoder Arch Precision ↑ Accuracy ↑ Recall ↑ η ↑
+
+Fail-Detect [7] (CFM [28], FM) ResNet18 0.481 0.481 1.000 0.276 (CFM [28], DP) 0.481 0.481 1.000 0.324 (NatPN [29], FM) 0.519 0.519 1.000 0.187 (NatPN [29], DP) 0.519 0.519 1.000 0.187 (PCA-kmeans [26], FM) 0.519 0.519 1.000 0.109 (PCA-kmeans [26], DP) 0.519 0.519 1.000 0.119 (RND [27], FM) 0.481 0.481 1.000 0.225 (RND [27], DP) 0.519 0.519 1.000 0.251 (logpZO [7], FM) 0.519 0.519 1.000 0.131 (logpZO [7], DP) 0.519 0.519 1.000 0.096 
+
+PREFAIL (ours) ResNet18 0.929 0.926 0.929 0.929 PREFAIL (ours) ResNet50 0.867 0.926 1.000 0.908 
+
+PREFAIL (ours) ResNet152 0.929 0.926 0.929 0.910 TABLE VII: Performance on real-world data cross validation split 4. Methods / Variants Encoder Arch Precision ↑ Accuracy ↑ Recall ↑ η ↑
+
+Fail-Detect [7] (CFM [28], FM) ResNet18 0.407 0.407 1.000 0.367 (CFM [28], DP) 0.481 0.481 1.000 0.411 (NatPN [29], FM) 0.407 0.407 1.000 0.290 (NatPN [29], DP) 0.407 0.407 1.000 0.290 (PCA-kmeans [26], FM) 0.444 0.444 1.000 0.249 (PCA-kmeans [26], DP) 0.444 0.444 1.000 0.312 (RND [27], FM) 0.519 0.519 1.000 0.394 (RND [27], DP) 0.519 0.519 1.000 0.348 (logpZO [7], FM) 0.519 0.519 1.000 0.185 (logpZO [7], DP) 0.481 0.481 1.000 0.332 
+
+PREFAIL (ours) ResNet18 1.000 1.000 1.000 0.936 PREFAIL (ours) ResNet50 0.929 0.963 1.000 0.932 
+
+PREFAIL (ours) ResNet152 0.929 0.963 1.000 0.967 TABLE VIII: Performance on real-world data cross validation split 5. Methods / Variants Encoder Arch Precision ↑ Accuracy ↑ Recall ↑ η ↑
+
+Fail-Detect [7] (CFM [28], FM) ResNet18 0.481 0.481 1.000 0.337 (CFM [28], DP) 0.519 0.519 1.000 0.296 (NatPN [29], FM) 0.519 0.519 1.000 0.403 (NatPN [29], DP) 0.519 0.519 1.000 0.403 (PCA-kmeans [26], FM) 0.481 0.481 1.000 0.345 (PCA-kmeans [26], DP) 0.481 0.481 1.000 0.413 (RND [27], FM) 0.519 0.519 1.000 0.300 (RND [27], DP) 0.519 0.519 1.000 0.367 (logpZO [7], FM) 0.519 0.519 1.000 0.273 (logpZO [7], DP) 0.519 0.519 1.000 0.274 
+
+PREFAIL (ours) ResNet18 0.929 0.963 1.000 0.932 PREFAIL (ours) ResNet50 0.846 0.889 0.917 0.938 PREFAIL (ours) ResNet152 0.923 0.926 0.923 0.936 TABLE IX: Performance on real-world data cross validation split 6. Methods / Variants Encoder Arch Precision ↑ Accuracy ↑ Recall ↑ η ↑
+
+Fail-Detect [7] (CFM [28], FM) ResNet18 0.444 0.444 1.000 0.274 (CFM [28], DP) 0.519 0.519 1.000 0.264 (NatPN [29], FM) 0.519 0.519 1.000 0.262 (NatPN [29], DP) 0.519 0.519 1.000 0.262 (PCA-kmeans [26], FM) 0.444 0.444 1.000 0.132 (PCA-kmeans [26], DP) 0.481 0.481 1.000 0.221 (RND [27], FM) 0.481 0.481 1.000 0.303 (RND [27], DP) 0.481 0.481 1.000 0.317 (logpZO [7], FM) 0.444 0.444 1.000 0.252 (logpZO [7], DP) 0.481 0.481 1.000 0.190 
+
+PREFAIL (ours) ResNet18 1.000 1.000 1.000 0.940 PREFAIL (ours) ResNet50 1.000 1.000 1.000 0.828 
+
+PREFAIL (ours) ResNet152 0.933 0.963 1.000 0.880 TABLE X: Performance on real-world data cross validation split 7. Methods / Variants Encoder Arch Precision ↑ Accuracy ↑ Recall ↑ η ↑
+
+Fail-Detect [7] (CFM [28], FM) ResNet18 0.519 0.519 1.000 0.291 (CFM [28], DP) 0.519 0.519 1.000 0.274 (NatPN [29], FM) 0.519 0.519 1.000 0.208 (NatPN [29], DP) 0.519 0.519 1.000 0.208 (PCA-kmeans [26], FM) 0.519 0.519 1.000 0.201 (PCA-kmeans [26], DP) 0.519 0.519 1.000 0.184 (RND [27], FM) 0.519 0.519 1.000 0.208 (RND [27], DP) 0.519 0.519 1.000 0.288 (logpZO [7], FM) 0.519 0.519 1.000 0.148 (logpZO [7], DP) 0.519 0.519 1.000 0.182 
+
+PREFAIL (ours) ResNet18 0.933 0.963 1.000 0.958 PREFAIL (ours) ResNet50 1.000 1.000 1.000 0.946 
+
+PREFAIL (ours) ResNet152 0.778 0.852 1.000 0.949 TABLE XI: Performance on real-world data cross validation split 8. Methods / Variants Encoder Arch Precision ↑ Accuracy ↑ Recall ↑ η ↑
+
+Fail-Detect [7] (CFM [28], FM) ResNet18 0.444 0.444 1.000 0.329 (CFM [28], DP) 0.481 0.481 1.000 0.201 (NatPN [29], FM) 0.519 0.519 1.000 0.366 (NatPN [29], DP) 0.519 0.519 1.000 0.366 (PCA-kmeans [26], FM) 0.481 0.481 1.000 0.169 (PCA-kmeans [26], DP) 0.444 0.444 1.000 0.174 (RND [27], FM) 0.481 0.481 1.000 0.420 (RND [27], DP) 0.519 0.519 1.000 0.377 (logpZO [7], FM) 0.519 0.519 1.000 0.061 (logpZO [7], DP) 0.444 0.444 1.000 0.151 
+
+PREFAIL (ours) ResNet18 0.933 0.963 1.000 0.915 PREFAIL (ours) ResNet50 0.929 0.963 1.000 0.931 PREFAIL (ours) ResNet152 0.933 0.963 1.000 0.908 TABLE XII: Performance on real-world data cross validation split 9. Methods / Variants Encoder Arch Precision ↑ Accuracy ↑ Recall ↑ η ↑
+
+Fail-Detect [7] (CFM [28], FM) ResNet18 0.481 0.481 1.000 0.267 (CFM [28], DP) 0.481 0.481 1.000 0.345 (NatPN [29], FM) 0.444 0.444 1.000 0.355 (NatPN [29], DP) 0.444 0.444 1.000 0.355 (PCA-kmeans [26], FM) 0.519 0.519 1.000 0.495 (PCA-kmeans [26], DP) 0.519 0.519 1.000 0.305 (RND [27], FM) 0.519 0.519 1.000 0.218 (RND [27], DP) 0.481 0.481 1.000 0.314 (logpZO [7], FM) 0.481 0.481 1.000 0.370 (logpZO [7], DP) 0.481 0.481 1.000 0.396 
+
+PREFAIL (ours) ResNet18 0.923 0.926 0.923 0.937 PREFAIL (ours) ResNet50 0.857 0.889 0.923 0.957 PREFAIL (ours) ResNet152 0.923 0.926 0.923 0.922 TABLE XIII: Performance on real-world data cross validation split 10. Methods / Variants Encoder Arch Precision ↑ Accuracy ↑ Recall ↑ η ↑
+
+Fail-Detect [7] (CFM [28], FM) ResNet18 0.478 0.478 1.000 0.297 (CFM [28], DP) 0.500 0.500 1.000 0.303 (NatPN [29], FM) 0.493 0.493 1.000 0.275 (NatPN [29], DP) 0.493 0.493 1.000 0.275 (PCA-kmeans [26], FM) 0.493 0.493 1.000 0.226 (PCA-kmeans [26], DP) 0.489 0.489 1.000 0.220 (RND [27], FM) 0.504 0.504 1.000 0.289 (RND [27], DP) 0.507 0.507 1.000 0.302 (logpZO [7], FM) 0.504 0.504 1.000 0.195 (logpZO [7], DP) 0.496 0.496 1.000 0.219 
+
+PREFAIL (ours) ResNet18 0.944 0.963 0.985 0.932 PREFAIL (ours) ResNet50 0.916 0.948 0.984 0.910 
+
+PREFAIL (ours) ResNet152 0.900 0.933 0.977 0.925 TABLE XIV: Average performance on real-world data across all cross validation splits.

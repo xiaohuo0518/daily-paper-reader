@@ -6,41 +6,31 @@
 </div>
 
 ## 每次日报
-- 最新运行日期：2026-07-25
-- 运行时间：2026-07-25 21:33:14 UTC
+- 最新运行日期：2026-07-26
+- 运行时间：2026-07-26 20:01:31 UTC
 - 运行状态：成功
-- 本次总论文数：7
-- 精读区：2
-- 速读区：5
+- 本次总论文数：3
+- 精读区：1
+- 速读区：2
 
 ### 今日简报（AI）
-今日精读2篇、速读5篇，聚焦机器人动作执行鲁棒性与无标签IMU传感。重点推荐《AC-VLA》的组合学习对抗分布外动作，以及《Physical SSL》的无监督IMU感知。建议深入关注组合泛化和自监督方法在机器人领域的应用。
-- 详情：[/202607/25/README](/202607/25/README)
+1) 今日核心：探索两种前沿方向——超轻量可编辑3D形状表示（Fluid-SDF）与机器人故障预判/恢复（PREFAIL+EgoRecovery）。  
+2) 最值得看：《Fluid-SDF》以可微基元实现极轻量级隐式形状编辑；《PREFAIL》与《EgoRecovery》分别从任务预判和人演示中学习恢复，互补性强。  
+3) 建议：对形状表示感兴趣可关注轻量隐式方案的实际应用；对机器人安全感兴趣的读者可以组合阅读这两篇故障恢复工作。
+- 详情：[/202607/26/README](/202607/26/README)
 
 ### 精读区论文标签
-1. [AC-VLA: Robust Out-of-Distribution Action Execution via Compositional Learning](/202607/25/2607.15714v1-ac-vla-robust-out-of-distribution-action-execution-via-compositional-learning)  
-   标签：评分：8.0/10、query:humanoid-ood
-   evidence：视觉-语言-动作模型中的分布外泛化
-2. [Physical Self-Supervised Learning: IMU Sensing without Manual Labels](/202607/25/2607.18361v1-physical-self-supervised-learning-imu-sensing-without-manual-labels)  
-   标签：评分：8.0/10、query:humanoid-ood
-   evidence：采用自监督IMU感知框架，结合自动编码器和物理解码器实现无标签异常检测
+1. [Fluid-SDF: Ultra-Lightweight and Editable Implicit Shape Representation via Differentiable Primitives](/202607/26/2607.18646v1-fluid-sdf-ultra-lightweight-and-editable-implicit-shape-representation-via-differentiable-primitives)  
+   标签：评分：8.0/10、query:ur
+   evidence：超轻量级形状表示，参数少于100，适合边缘设备部署
 
 ### 速读区论文标签
-1. [EgoRecovery: Acquiring Failure Recovery Ability Through Human Recovery Demonstration](/202607/25/2607.19745v2-egorecovery-acquiring-failure-recovery-ability-through-human-recovery-demonstration)  
+1. [PREFAIL: Identifying Precursors to Failures in Robotic Lift-and-Place Tasks to Improve Task Execution Performance](/202607/26/2607.16921v1-prefail-identifying-precursors-to-failures-in-robotic-lift-and-place-tasks-to-improve-task-execution-performance)  
    标签：评分：7.0/10、query:ur
-   evidence：具身机器人故障恢复，与故障诊断相关
-2. [Scale Up Strategically: Learning Compositional Generalization via Bias-Aware Evaluation and Data Collection for Robotic Manipulation](/202607/25/2607.21582v1-scale-up-strategically-learning-compositional-generalization-via-bias-aware-evaluation-and-data-collection-for-robotic-manipulation)  
+   evidence：机器人操作任务中的主动故障预测方法
+2. [EgoRecovery: Acquiring Failure Recovery Ability Through Human Recovery Demonstration](/202607/26/2607.19745v1-egorecovery-acquiring-failure-recovery-ability-through-human-recovery-demonstration)  
    标签：评分：7.0/10、query:ur
-   evidence：面向机器人操作组合泛化的数据采集与评估
-3. [O-VAD: Industrial Video Anomaly Detection through Object-Centric Tracking and Reasoning](/202607/25/2607.18142v1-o-vad-industrial-video-anomaly-detection-through-object-centric-tracking-and-reasoning)  
-   标签：评分：6.0/10、query:ur
-   evidence：工业视频异常检测框架，方法可迁移至机器人故障诊断
-4. [Motion Primitive Discovery in a Humanoid Robot via Self-Organising Maps for Phase Recognition](/202607/25/2607.18737v1-motion-primitive-discovery-in-a-humanoid-robot-via-self-organising-maps-for-phase-recognition)  
-   标签：评分：6.0/10、query:ur
-   evidence：使用仿真试验进行人形机器人运动基元发现，涉及数据集构建
-5. [Factorized Spatio-Temporal Convolutions for Human Pose Estimation from Planar Lidar](/202607/25/2607.21309v1-factorized-spatio-temporal-convolutions-for-human-pose-estimation-from-planar-lidar)  
-   标签：评分：6.0/10、query:ur
-   evidence：面向边缘机器人的轻量级平面激光雷达网络
+   evidence：通过人类恢复演示学习故障恢复能力
 
 
 <div class="dpr-home-promo-card">
