@@ -1,0 +1,142 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-07-27T21:44:06.672261+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 2,
+    "deep_divecandidates": 2,
+    "deep_cap": 7,
+    "deep_selected": 2,
+    "quick_candidates": 1,
+    "quick_skim_target": 12,
+    "quick_selected": 1
+  },
+  "deep_dive": [
+    {
+      "id": "2607.21648v1",
+      "source": "arxiv",
+      "title": "Learning Diverse Humanoid Tasks via Synthetic Video Scenarios without Real World Data",
+      "abstract": "The human-like morphology of humanoid robots grants them exceptional potential for agile and versatile motor capabilities, but it also introduces significant challenges in acquiring complex skills. Traditional Learning-from-Demonstrations methods are often constrained by the high cost of collecting real-world data, the difficulty of capturing motion-specific behaviors, and the limited diversity of demonstrations across individuals. Moreover, even for the same task, humans may execute the motion in multiple distinct ways. In this paper, we propose a new framework that leverages the power of Generative AI to convert textual prompts into realistic and diverse sequences of human body movements, enabling the robot to observe multiple variations of how a single task can be performed. These synthetic demonstrations are then used as a training resource, allowing the robot to learn a broad range of task-execution styles without requiring direct human intervention. We evaluate the proposed method across four simulation scenarios. Experimental results show that the robot not only completes the tasks successfully but also demonstrates strong adaptability to complex variations in motion.",
+      "authors": [
+        "Yun-Hao Tsai",
+        "Cong-Thanh Vu",
+        "Yen-Chen Liu"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-07-22T05:36:55+00:00",
+      "link": "https://arxiv.org/pdf/2607.21648v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "proposes framework for humanoid robot task learning via synthetic video without real data, directly relevant to dataset construction for humanoid robots",
+      "llm_evidence_cn": "提出使用合成视频学习人形机器人任务，无需真实数据，直接相关于人形机器人数据集构建",
+      "llm_evidence": "提出使用合成视频学习人形机器人任务，无需真实数据，直接相关于人形机器人数据集构建",
+      "canonical_evidence": "提出使用合成视频学习人形机器人任务，无需真实数据，直接相关于人形机器人数据集构建",
+      "llm_tldr_en": "This framework leverages Generative AI to create realistic synthetic human motion videos from text prompts, enabling humanoid robots to learn diverse tasks without real-world data collection.",
+      "llm_tldr_cn": "针对人形机器人技能学习依赖真实世界数据采集成本高、多样性不足的问题，该框架利用生成式AI从文本提示生成逼真且多样化的人体运动视频序列。机器人可以通过观察这些合成视频学习多种任务变体。实验表明该方法能够有效提升机器人学习的泛化性和多样性，显著降低对真实演示数据的依赖。这为人形机器人的数据集构建提供了全新思路。",
+      "llm_tldr": "针对人形机器人技能学习依赖真实世界数据采集成本高、多样性不足的问题，该框架利用生成式AI从文本提示生成逼真且多样化的人体运动视频序列。机器人可以通过观察这些合成视频学习多种任务变体。实验表明该方法能够有效提升机器人学习的泛化性和多样性，显著降低对真实演示数据的依赖。这为人形机器人的数据集构建提供了全新思路。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "humanoid robot dataset construction",
+      "matched_requirement_id": "req-2",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2607.21049v2",
+      "source": "arxiv",
+      "title": "GuidedAttention: Interpretable and Correctable Visual Attention for OOD-Robust Robot Manipulation via Imitation Learning",
+      "abstract": "End-to-end visuomotor policies provide little opportunity for humans to understand or correct the policy's visual attention. We propose GuidedAttention, a visuomotor imitation learning framework that introduces interpretable and correctable visual attention as an explicit intermediate representation. Task-relevant attention keypoints are predicted from camera images and condition a diffusion-based action policy. Users can inspect and optionally correct selected keypoints once at rollout initialization, after which the corrected attention is automatically propagated throughout execution by a tracking module. Experiments in simulation and the real world demonstrate that GuidedAttention consistently improves robot manipulation performance, particularly under positional and appearance out-of-distribution (OOD) conditions. https://mmurooka.github.io/guided-attention-project-page",
+      "authors": [
+        "Masaki Murooka",
+        "Ryoichi Nakajo",
+        "Keisuke Shirai",
+        "Tomohiro Motoda",
+        "Hanbit Oh",
+        "Ryo Hanai",
+        "Yukiyasu Domae"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-07-23T08:33:40+00:00",
+      "link": "https://arxiv.org/pdf/2607.21049v2",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "OOD-robust robot manipulation via interpretable visual attention",
+      "llm_evidence_cn": "通过可解释的视觉注意力实现OOD鲁棒的机器人操作",
+      "llm_evidence": "通过可解释的视觉注意力实现OOD鲁棒的机器人操作",
+      "canonical_evidence": "通过可解释的视觉注意力实现OOD鲁棒的机器人操作",
+      "llm_tldr_en": "Proposes GuidedAttention, a visuomotor imitation learning framework that introduces interpretable and correctable visual attention as explicit intermediate representation to improve OOD robustness, validated in simulation and real world.",
+      "llm_tldr_cn": "现有端到端视觉运动策略难以理解和纠正视觉注意力，导致在面对分布外场景时性能下降。本文提出引导注意力框架，将可解释且可修正的视觉注意力作为显式中间表示，用户可在初始化时检查并修正关键点，然后通过跟踪模块自动传播。实验表明该方法在模拟和真实环境中持续提升分布外鲁棒性。",
+      "llm_tldr": "现有端到端视觉运动策略难以理解和纠正视觉注意力，导致在面对分布外场景时性能下降。本文提出引导注意力框架，将可解释且可修正的视觉注意力作为显式中间表示，用户可在初始化时检查并修正关键点，然后通过跟踪模块自动传播。实验表明该方法在模拟和真实环境中持续提升分布外鲁棒性。",
+      "llm_tags": [
+        "query:humanoid-ood"
+      ],
+      "matched_query_tag": "query:humanoid-ood",
+      "matched_query_text": "out-of-distribution detection for safe robot operation",
+      "matched_requirement_id": "req-11",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "quick_skim": [
+    {
+      "id": "2607.22530v1",
+      "source": "arxiv",
+      "title": "ViTacWorld: Scaling Visuo-Tactile World Models for Contact-Rich Robot Manipulation",
+      "abstract": "Contact-rich robot manipulation requires physical interaction cues that are often invisible to cameras, making tactile sensing essential for robust control. However, scaling visuo-tactile robot learning remains difficult because real tactile interaction data are expensive to collect, hardware-dependent, and limited in task and scene diversity. We present ViTacWorld, an action-conditioned visuo-tactile world model for scalable contact-rich robot manipulation. ViTacWorld leverages public real tactile datasets and a constructed simulation environment to scale visuo-tactile-action data, exploiting the fact that tactile signals are directly grounded in physical contact and can exhibit a smaller simulation-to-real gap than purely visual observations. The model is first pretrained with large-scale real and simulated visuo-tactile trajectories, and then finetuned with real-world policy rollouts to better match downstream manipulation behaviors. Given robot actions, ViTacWorld predicts temporally aligned visual observations and tactile feedback, enabling visuo-tactile-action rollout generation. To the best of our knowledge, ViTacWorld is the first framework that uses a world model for robot visuo-tactile-action trajectory generation and policy evaluation. It serves two roles: synthesizing rollouts to improve downstream tactile policies, and evaluating policies by predicting action-conditioned visuo-tactile outcomes under controlled action sequences. Experiments on contact-rich manipulation tasks show that ViTacWorld generates physically meaningful rollouts, improves policy performance through scalable data augmentation, and enables action-conditioned policy evaluation. Project page: https://vitacworld.github.io/",
+      "authors": [
+        "Yunao Huang",
+        "Shiyu Sang",
+        "Haotao Lu",
+        "Suting Ni",
+        "Shijie Wu",
+        "Ziyang Guo",
+        "Ye Shi",
+        "Jingya Wang"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-07-24T17:59:33+00:00",
+      "link": "https://arxiv.org/pdf/2607.22530v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "scales visuo-tactile data via simulation and public datasets, relevant to dataset construction for robotics",
+      "llm_evidence_cn": "通过仿真和公开数据集扩展视觉触觉数据，与机器人数据集构建相关",
+      "llm_evidence": "通过仿真和公开数据集扩展视觉触觉数据，与机器人数据集构建相关",
+      "canonical_evidence": "通过仿真和公开数据集扩展视觉触觉数据，与机器人数据集构建相关",
+      "llm_tldr_en": "ViTacWorld leverages simulation and real datasets to build a scalable visuo-tactile world model for contact-rich manipulation.",
+      "llm_tldr_cn": "该论文提出ViTacWorld，一种动作条件的视觉触觉世界模型，通过整合公开真实触觉数据集和构建仿真环境来大规模生成视觉-触觉-动作数据，实现可扩展的机器人操作学习。其数据构建策略强调仿真与真实数据的结合，对构建人形机器人数据集具有方法论上的参考价值。实验表明模型在接触丰富的任务中表现良好。",
+      "llm_tldr": "该论文提出ViTacWorld，一种动作条件的视觉触觉世界模型，通过整合公开真实触觉数据集和构建仿真环境来大规模生成视觉-触觉-动作数据，实现可扩展的机器人操作学习。其数据构建策略强调仿真与真实数据的结合，对构建人形机器人数据集具有方法论上的参考价值。实验表明模型在接触丰富的任务中表现良好。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    }
+  ]
+}

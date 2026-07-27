@@ -1,0 +1,54 @@
+{
+  "label": "2026-07-27",
+  "date": "2026-07-27",
+  "generated_at": "2026-07-27T21:46:21",
+  "count": 3,
+  "papers": [
+    {
+      "paper_id": "202607/27/2607.21648v1-learning-diverse-humanoid-tasks-via-synthetic-video-scenarios-without-real-world-data",
+      "section": "deep",
+      "title_en": "Learning Diverse Humanoid Tasks via Synthetic Video Scenarios without Real World Data",
+      "authors": "Yun-Hao Tsai, Cong-Thanh Vu, Yen-Chen Liu",
+      "date": "2026-07-22",
+      "pdf": "https://arxiv.org/pdf/2607.21648v1",
+      "score": "9.0",
+      "evidence": "提出使用合成视频学习人形机器人任务，无需真实数据，直接相关于人形机器人数据集构建",
+      "tldr": "人形机器人技能学习面临真实数据昂贵、动作多样性不足的挑战。提出框架利用生成AI将文本提示转化为多样合成人体动作序列，使机器人无需真实数据即可学习多种任务执行风格。在四个仿真场景中，机器人成功完成任务并展示对复杂变化的强适应性。该方法显著降低数据采集成本，提升动作多样性。",
+      "tags": "query:ur",
+      "abstract_en": "The human-like morphology of humanoid robots grants them exceptional potential for agile and versatile motor capabilities, but it also introduces significant challenges in acquiring complex skills. Traditional Learning-from-Demonstrations methods are often constrained by the high cost of collecting real-world data, the difficulty of capturing motion-specific behaviors, and the limited diversity of demonstrations across individuals. Moreover, even for the same task, humans may execute the motion in multiple distinct ways. In this paper, we propose a new framework that leverages the power of Generative AI to convert textual prompts into realistic and diverse sequences of human body movements, enabling the robot to observe multiple variations of how a single task can be performed. These synthetic demonstrations are then used as a training resource, allowing the robot to learn a broad range of task-execution styles without requiring direct human intervention. We evaluate the proposed method across four simulation scenarios. Experimental results show that the robot not only completes the tasks successfully but also demonstrates strong adaptability to complex variations in motion.",
+      "source": "arxiv",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "paper_id": "202607/27/2607.21049v2-guidedattention-interpretable-and-correctable-visual-attention-for-ood-robust-robot-manipulation-via-imitation-learning",
+      "section": "deep",
+      "title_en": "GuidedAttention: Interpretable and Correctable Visual Attention for OOD-Robust Robot Manipulation via Imitation Learning",
+      "authors": "Masaki Murooka, Ryoichi Nakajo, Keisuke Shirai, Tomohiro Motoda, Hanbit Oh, Ryo Hanai, Yukiyasu Domae",
+      "date": "2026-07-23",
+      "pdf": "https://arxiv.org/pdf/2607.21049v2",
+      "score": "8.0",
+      "evidence": "通过可解释的视觉注意力实现OOD鲁棒的机器人操作",
+      "tldr": "端到端视觉运动策略难以理解和纠正模型的注意力。GuidedAttention框架将可解释的视觉注意力作为中间表示，预测关键点并允许用户修正，通过跟踪模块自动传播。在仿真和真实实验中，该方法在位置和外观分布外条件下显著提升操作性能。该工作增强了机器人操作的鲁棒性和人机交互的可解释性。",
+      "tags": "query:humanoid-ood",
+      "abstract_en": "End-to-end visuomotor policies provide little opportunity for humans to understand or correct the policy's visual attention. We propose GuidedAttention, a visuomotor imitation learning framework that introduces interpretable and correctable visual attention as an explicit intermediate representation. Task-relevant attention keypoints are predicted from camera images and condition a diffusion-based action policy. Users can inspect and optionally correct selected keypoints once at rollout initialization, after which the corrected attention is automatically propagated throughout execution by a tracking module. Experiments in simulation and the real world demonstrate that GuidedAttention consistently improves robot manipulation performance, particularly under positional and appearance out-of-distribution (OOD) conditions. https://mmurooka.github.io/guided-attention-project-page",
+      "source": "arxiv",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "paper_id": "202607/27/2607.22530v1-vitacworld-scaling-visuo-tactile-world-models-for-contact-rich-robot-manipulation",
+      "section": "quick",
+      "title_en": "ViTacWorld: Scaling Visuo-Tactile World Models for Contact-Rich Robot Manipulation",
+      "authors": "Yunao Huang, Shiyu Sang, Haotao Lu, Suting Ni, Shijie Wu, Ziyang Guo, Ye Shi, Jingya Wang",
+      "date": "2026-07-24",
+      "pdf": "https://arxiv.org/pdf/2607.22530v1",
+      "score": "6.0",
+      "evidence": "通过仿真和公开数据集扩展视觉触觉数据，与机器人数据集构建相关",
+      "tldr": "接触丰富的机器人操作依赖触觉感知，但触觉数据获取成本高且硬件依赖。ViTacWorld提出一种可扩展的视触觉世界模型，利用大规模真实与模拟数据预训练，并结合真实策略微调，根据动作预测视觉与触觉反馈。该方法能生成物理合理的轨迹，有效提升下游策略性能，并首次实现动作条件的策略评估。",
+      "tags": "query:ur",
+      "abstract_en": "Contact-rich robot manipulation requires physical interaction cues that are often invisible to cameras, making tactile sensing essential for robust control. However, scaling visuo-tactile robot learning remains difficult because real tactile interaction data are expensive to collect, hardware-dependent, and limited in task and scene diversity. We present ViTacWorld, an action-conditioned visuo-tactile world model for scalable contact-rich robot manipulation. ViTacWorld leverages public real tactile datasets and a constructed simulation environment to scale visuo-tactile-action data, exploiting the fact that tactile signals are directly grounded in physical contact and can exhibit a smaller simulation-to-real gap than purely visual observations. The model is first pretrained with large-scale real and simulated visuo-tactile trajectories, and then finetuned with real-world policy rollouts to better match downstream manipulation behaviors. Given robot actions, ViTacWorld predicts temporally aligned visual observations and tactile feedback, enabling visuo-tactile-action rollout generation. To the best of our knowledge, ViTacWorld is the first framework that uses a world model for robot visuo-tactile-action trajectory generation and policy evaluation. It serves two roles: synthesizing rollouts to improve downstream tactile policies, and evaluating policies by predicting action-conditioned visuo-tactile outcomes under controlled action sequences. Experiments on contact-rich manipulation tasks show that ViTacWorld generates physically meaningful rollouts, improves policy performance through scalable data augmentation, and enables action-conditioned policy evaluation. Project page: https://vitacworld.github.io/",
+      "source": "arxiv",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "errors": []
+}
