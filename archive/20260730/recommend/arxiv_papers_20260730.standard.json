@@ -1,0 +1,545 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-07-30T21:13:22.818439+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 2,
+    "deep_divecandidates": 1,
+    "deep_cap": 7,
+    "deep_selected": 1,
+    "quick_candidates": 11,
+    "quick_skim_target": 12,
+    "quick_selected": 11
+  },
+  "deep_dive": [
+    {
+      "id": "2607.24744v1",
+      "source": "arxiv",
+      "title": "Data Pyramid for Embodied Manipulation",
+      "abstract": "Multimodal foundation models learned to see and to speak by consuming the whole internet. Embodied agents admit no such shortcut, since they require data that couple observations with physical states and actions. These signals can be provided, to varying degrees, by multiple data sources. In this work, we organize the embodied data ecosystem as a \"pyramid\" spanning five complementary sources: real-robot data, UMI-style data, egocentric and exocentric data, simulation data, and general vision-language data. We organize the pyramid around the tension between scalability and robot alignment, and further characterize each source in terms of data quality, diversity, reusability, and physical fidelity. We then analyze recent embodied foundation models through the lens of their data recipes, examining how different sources are selected, aligned, and mixed during pretraining. For embodied brain models, vision-language-action models, and world-action models alike, we relate data composition to capabilities in perception, reasoning, planning, action generation, and world prediction. We close by discussing six open challenges: building large-scale tactile datasets, collecting failure and recovery data, developing scalable data-collection pipelines, aligning actions across embodiments, leveraging egocentric data for dexterous manipulation, and designing principled data recipes for robot learning. We hope this work paves the foundation for the design of next-generation embodied systems.",
+      "authors": [
+        "Yifan Ye",
+        "Yankai Fu",
+        "Yaoxu Lv",
+        "Bohan Hou",
+        "Jun Cen",
+        "Lingdong Kong",
+        "Duo Zheng",
+        "Tianxing Chen",
+        "Jiaming Liu",
+        "Ziang Cao",
+        "Yunfan Lou",
+        "Wei Chow",
+        "Xian Sun",
+        "Yingshuo Wang",
+        "Kuangzhi Ge",
+        "Xiaowei Chi",
+        "Xidong Zhang",
+        "Zhibo Pang",
+        "Yiwu Zhong",
+        "Sirui Han",
+        "Zhihe Lu",
+        "Weihao Yuan",
+        "Qifeng Chen",
+        "Michael Yu Wang",
+        "Yao Mu",
+        "Ziwei Liu",
+        "Jianfei Yang",
+        "Ping Luo",
+        "Shanghang Zhang"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.CV"
+      ],
+      "published": "2026-07-27T17:59:58+00:00",
+      "link": "https://arxiv.org/pdf/2607.24744v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "data pyramid framework for embodied manipulation datasets",
+      "llm_evidence_cn": "用于具身操作数据集的数据金字塔框架",
+      "llm_evidence": "用于具身操作数据集的数据金字塔框架",
+      "canonical_evidence": "用于具身操作数据集的数据金字塔框架",
+      "llm_tldr_en": "Organizes embodied data into a pyramid of five complementary sources, analyzing trade-offs in scalability and robot alignment to guide dataset construction.",
+      "llm_tldr_cn": "本文针对具身智能体数据构建的挑战，提出数据金字塔框架，将数据来源组织为真实机器人数据、UMI数据、自我中心和外部中心数据、仿真数据及视觉语言数据五层。分析了各层在可扩展性与机器人对齐之间的权衡，为构建具身数据集提供指导。该框架有助于研究人员根据任务需求选择合适的数据组合。",
+      "llm_tldr": "本文针对具身智能体数据构建的挑战，提出数据金字塔框架，将数据来源组织为真实机器人数据、UMI数据、自我中心和外部中心数据、仿真数据及视觉语言数据五层。分析了各层在可扩展性与机器人对齐之间的权衡，为构建具身数据集提供指导。该框架有助于研究人员根据任务需求选择合适的数据组合。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "quick_skim": [
+    {
+      "id": "2607.23782v1",
+      "source": "arxiv",
+      "title": "$N_0$-VTLA: Scaling Vision-Tactile-Language-Action Model with Latent Tactile Tokens",
+      "abstract": "We present $N_0$-VTLA, a vision-tactile-language-action (VTLA) foundation model capable of (1) fine-grained contact-rich manipulation with tactile perception and tactile-feedback control, and (2) offline policy improvement from stored deployment data. Building on current vision-based backbones, we propose a training recipe for tactile integration consisting of visuo-tactile pre-training, staged tactile-pathway integration, and advantage-conditioned offline policy improvement. During pre-training, the policy learns broad contact priors from NeoData, our large-scale visuo-tactile robot dataset; to our knowledge, $N_0$-VTLA is the first VTLA model pretrained on tactile data at scale. During post-training, we augment the policy with a predictive tactile pathway that distills the contact patterns learned at scale into the fine motion adjustments required by downstream tactile-centric manipulation. For offline policy improvement, we introduce ALTER, an advantage-conditioned offline reinforcement learning method that converts relative progress and trajectory-event comparisons into binary advantage labels for policy training on a fixed deployment corpus, further improving task-specific learning on contact-rich skills such as deformable object manipulation. Across contact-rich benchmarks, $N_0$-VTLA outperforms strong baselines by wide margins: it wins all nine real-robot NeoReal tasks and reaches 63.8% mean success on a twenty-task simulation suite, against 44.0% for the strongest baseline. $N_0$-VTLA policies trained with ALTER reach 75-95% success on three long-horizon real-robot tasks. These results lay a foundation for versatile tactile-driven manipulation policies.",
+      "authors": [
+        "NeoteAI Team",
+        "Fudan TEAI Team"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-07-26T17:58:47+00:00",
+      "link": "https://arxiv.org/pdf/2607.23782v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "introduces large-scale visuo-tactile robot dataset (NeoData) for pretraining VTLA models",
+      "llm_evidence_cn": "提出了大规模视觉-触觉机器人数据集NeoData，用于预训练VTLA模型",
+      "llm_evidence": "提出了大规模视觉-触觉机器人数据集NeoData，用于预训练VTLA模型",
+      "canonical_evidence": "提出了大规模视觉-触觉机器人数据集NeoData，用于预训练VTLA模型",
+      "llm_tldr_en": "N0-VTLA is a vision-tactile-language-action foundation model pretrained on a large-scale robot dataset NeoData, enabling fine-grained contact-rich manipulation and offline policy improvement.",
+      "llm_tldr_cn": "该论文提出了N0-VTLA，一个视觉-触觉-语言-动作基础模型，通过在大规模机器人数据集NeoData上进行触觉预训练，实现了精细的接触丰富操作和基于存储部署数据的离线策略改进。数据集构建是该工作的核心贡献之一，为机器人触觉学习提供了大规模数据资源。",
+      "llm_tldr": "该论文提出了N0-VTLA，一个视觉-触觉-语言-动作基础模型，通过在大规模机器人数据集NeoData上进行触觉预训练，实现了精细的接触丰富操作和基于存储部署数据的离线策略改进。数据集构建是该工作的核心贡献之一，为机器人触觉学习提供了大规模数据资源。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2607.22226v1",
+      "source": "arxiv",
+      "title": "Offline Vision-Language Navigation with Geometric Goal Localization for Outdoor Environments",
+      "abstract": "Foundation-model-based vision-language navigation (VLN) has advanced autonomous robot navigation by enabling robots to interpret natural-language instructions, identify semantic goals, and follow user-specified behavioral rules. However, existing VLN systems rely heavily on cloud-hosted foundation models for language understanding and semantic grounding, limiting their applicability where network connectivity is unavailable and reliable metric goal localization is required. Although recent small language models (SLMs) enable fully onboard inference, their suitability for navigation instruction decomposition has not been systematically evaluated. This paper makes three contributions toward fully onboard VLN for outdoor environments. First, we present the first systematic benchmark of 17 edge-deployable SLMs against 4 online APIs for robotic navigation instruction decomposition, evaluating accuracy and latency on human-annotated instructions across three computing platforms and providing practical guidance for selecting onboard language models. Second, we propose a lightweight hybrid semantic-geometric goal localization framework that combines open-vocabulary object detection, prompted segmentation, and LiDAR geometry to estimate metric goals, while maintaining visual bearing guidance when reliable geometric observations are unavailable. Third, we integrate these advances into Edge-BehAV, a fully onboard extension of the BehAV architecture that enables cloud-independent behavior-guided navigation. Experimental results show that the best offline SLM matches the instruction decomposition performance of the strongest cloud API while running approximately 9x faster and without network connectivity. The proposed goal localization framework reduces mean goal-distance error from 2.05 m to 0.20 m at lower computational cost, and the complete system succeeds in 31 of 32 closed-loop outdoor trials.",
+      "authors": [
+        "Ali Salmasi",
+        "Xianjia Yu",
+        "Tomi Westerlund"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-07-24T11:49:25+00:00",
+      "link": "https://arxiv.org/pdf/2607.22226v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "focuses on onboard deployment of navigation models, relevant to edge deployment for robots",
+      "llm_evidence_cn": "关注机器人导航模型的机载部署，与边缘部署需求相关",
+      "llm_evidence": "关注机器人导航模型的机载部署，与边缘部署需求相关",
+      "canonical_evidence": "关注机器人导航模型的机载部署，与边缘部署需求相关",
+      "llm_tldr_en": "Evaluates small language models for fully onboard VLN in outdoor environments without cloud connectivity. Proposes offline VLN with geometric goal localization, achieving effective navigation decomposition on device.",
+      "llm_tldr_cn": "针对户外环境中无网络连接时机器人导航依赖云端模型的问题，本文研究了小型语言模型在机载推理中的适用性，提出离线视觉语言导航方法，实现完全机载的目标定位与导航指令分解。实验表明小模型能在保证导航性能的同时脱离云端运行。",
+      "llm_tldr": "针对户外环境中无网络连接时机器人导航依赖云端模型的问题，本文研究了小型语言模型在机载推理中的适用性，提出离线视觉语言导航方法，实现完全机载的目标定位与导航指令分解。实验表明小模型能在保证导航性能的同时脱离云端运行。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "edge deployment for humanoid robots",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2607.23981v1",
+      "source": "arxiv",
+      "title": "Multimodal Semantic-Probabilistic Objectness for Open World Object Detection",
+      "abstract": "Open-world object detection (OWOD) requires a detector to recognize known categories, discover unnamed objects from unseen categories, and incrementally learn newly annotated classes. PROB improves unknown discovery by modeling class-agnostic probabilistic objectness in the decoder-query space. However, visual objectness alone cannot determine whether an object-like query corresponds to a hard known instance, an unseen-category object, or background clutter, resulting in an ambiguous known-unknown decision boundary. We propose MSPO, a lightweight semantic calibration framework that augments PROB with task-aware known-category language priors while preserving its detector architecture and incremental learning protocol. For each currently known category, MSPO constructs an extended text description covering category attributes, visual appearance, typical scenes, and functional usage, and encodes it using a frozen CLIP text encoder. Decoder query features are projected into the same semantic space to estimate their support from the current known-category semantics. This semantic evidence is fused with PROB's visual objectness to calibrate known and unknown predictions without turning OWOD into open-vocabulary classification. Importantly, MSPO never uses future-category names, and all unseen categories remain unnamed during evaluation. Experiments on M-OWODB and S-OWODB show that MSPO improves the strong PROB baseline on the main aggregate metrics while retaining competitive unknown recall. It also improves early unknown-confusion metrics and raises PASCAL VOC final mAP by up to 2.7 points. These results demonstrate that known-category language semantics provide an effective calibration signal for probabilistic objectness under the standard OWOD setting.",
+      "authors": [
+        "Weijun Tian",
+        "Rui Liu"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV",
+        "cs.AI"
+      ],
+      "published": "2026-07-27T04:12:04+00:00",
+      "link": "https://arxiv.org/pdf/2607.23981v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "open set recognition method for object detection applicable to robotics safety",
+      "llm_evidence_cn": "开放集识别方法用于目标检测，可迁移至机器人安全",
+      "llm_evidence": "开放集识别方法用于目标检测，可迁移至机器人安全",
+      "canonical_evidence": "开放集识别方法用于目标检测，可迁移至机器人安全",
+      "llm_tldr_en": "Proposes MSPO, a lightweight semantic calibration framework for open-world object detection that augments probabilistic objectness with language priors to improve unknown discovery.",
+      "llm_tldr_cn": "本文提出MSPO，一种轻量级语义校准框架，用于开放世界目标检测。该方法通过在解码器查询空间中引入类感知语言先验，增强了概率目标性模型，解决了已知与未知目标边界模糊的问题。实验表明，MSPO在未知类别发现和增量学习上性能提升，且保持原有检测器架构。该工作为机器人安全中的开放集识别提供了可迁移的方法。",
+      "llm_tldr": "本文提出MSPO，一种轻量级语义校准框架，用于开放世界目标检测。该方法通过在解码器查询空间中引入类感知语言先验，增强了概率目标性模型，解决了已知与未知目标边界模糊的问题。实验表明，MSPO在未知类别发现和增量学习上性能提升，且保持原有检测器架构。该工作为机器人安全中的开放集识别提供了可迁移的方法。",
+      "llm_tags": [
+        "query:humanoid-ood"
+      ],
+      "matched_query_tag": "query:humanoid-ood",
+      "matched_query_text": "Open set recognition in robotics for safety and anomaly detection",
+      "matched_requirement_id": "req-17",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2607.22987v1",
+      "source": "arxiv",
+      "title": "Label-free Industrial Fault Detection via Adversarial Inverse Reinforcement Learning: A System for Run-to-Failure Prognostics",
+      "abstract": "Machinery fault detection (MFD) remains heavily reliant on supervised learning, which struggles with the scarcity of fault labels in real-world settings. While reinforcement learning (RL) offers a framework to model the sequential nature of degradation, current ``RL-based'' MFD methods reduce the problem to a static contextual bandit (CB) formulation: by ignoring state transitions and discarding the temporal discount factor, they collapse to standard supervised classification. We propose an adversarial inverse reinforcement learning (AIRL) framework that treats MFD as an offline IRL problem. Unlike reconstruction-based approaches that rely on static error margins, or CBs that ignore dynamics, our method recovers an intrinsic \"health\" reward directly from observational state transitions, requiring neither manual reward engineering nor fault labels. On three run-to-failure benchmarks (HUMS2023, IMS, XJTU-SY), AIRL is the only method achieving non-saturated post-detection consistency across all datasets, while CB baselines fail to detect gradual degradation and reconstruction models collapse into always-anomalous states. Code and data: https://github.com/dhirajneupane/AIRL-MFD-DN.",
+      "authors": [
+        "Dhiraj Neupane",
+        "Mohamed Reda Bouadjenek",
+        "Richard Dazeley",
+        "Sunil Aryal"
+      ],
+      "primary_category": "cs.LG",
+      "categories": [
+        "cs.LG",
+        "cs.AI"
+      ],
+      "published": "2026-07-25T02:02:22+00:00",
+      "link": "https://arxiv.org/pdf/2607.22987v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "Label-free fault detection using adversarial inverse reinforcement learning for machinery",
+      "llm_evidence_cn": "基于对抗逆强化学习的无标签工业故障检测",
+      "llm_evidence": "基于对抗逆强化学习的无标签工业故障检测",
+      "canonical_evidence": "基于对抗逆强化学习的无标签工业故障检测",
+      "llm_tldr_en": "Proposes an AIRL framework for offline fault detection, modeling degradation as an IRL problem to handle scarce fault labels and temporal dynamics.",
+      "llm_tldr_cn": "该论文针对工业故障检测中故障标签稀缺且传统方法忽略状态转移的问题，提出基于对抗逆强化学习的框架，将故障检测视为离线逆强化学习问题，建模退化过程的时序动态，在无标签场景下实现了优于传统方法的检测性能，可应用于机器人故障诊断。",
+      "llm_tldr": "该论文针对工业故障检测中故障标签稀缺且传统方法忽略状态转移的问题，提出基于对抗逆强化学习的框架，将故障检测视为离线逆强化学习问题，建模退化过程的时序动态，在无标签场景下实现了优于传统方法的检测性能，可应用于机器人故障诊断。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "fault detection in humanoid robots",
+      "matched_requirement_id": "req-6",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2607.24148v1",
+      "source": "arxiv",
+      "title": "A Motion-Aware Vector Quantization Framework with Centroid Reuse for Efficient VLA Inference",
+      "abstract": "Vision-Language-Action (VLA) models have demonstrated strong potential for embodied AI, yet their high inference latency on GPUs limits real-time deployment. Existing accelerators, such as Dadu-Corki, improve efficiency but treat VLA models as full-precision workloads, leaving substantial redundancy in both memory and computation underexploited.   In this paper, we propose VQVLA, an algorithm-hardware co-design framework that accelerates VLA inference by exploiting weight similarity and execution dynamics. We first introduce MotionVQ, a motion-aware vector quantization scheme that dynamically adjusts quantization precision based on the robot's execution state, reducing memory access while preserving task success rate. We then propose a merged-centroid vectorized GEMM paradigm that operates on the codebook-index representation, eliminating redundant multiplications through spatial aggregation and temporal reuse of centroids. To realize these optimizations, we design an accelerator that efficiently supports dynamic precision selection and centroid-reuse computation. Experimental results show that VQVLA achieves 6.5x, 2.8x, 1.9x, 3.3x, and 4.3x speedup over the A100 GPU, Dadu-Corki, LUT-DLA, CodeGEMM, and ShiftAddLLM, respectively, with negligible accuracy degradation.",
+      "authors": [
+        "Zhuoran Song",
+        "Haozhe Jiang",
+        "Chunyu Qi",
+        "Minnan Pei",
+        "Gang Li",
+        "Xiaoyao Liang",
+        "Haibing Guan"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI"
+      ],
+      "published": "2026-07-27T08:29:05+00:00",
+      "link": "https://arxiv.org/pdf/2607.24148v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "Motion-aware vector quantization for efficient VLA inference on edge",
+      "llm_evidence_cn": "运动感知向量量化实现高效VLA边缘推理",
+      "llm_evidence": "运动感知向量量化实现高效VLA边缘推理",
+      "canonical_evidence": "运动感知向量量化实现高效VLA边缘推理",
+      "llm_tldr_en": "Proposes VQVLA, an algorithm-hardware co-design framework using motion-aware quantization and centroid reuse to accelerate VLA inference for real-time deployment.",
+      "llm_tldr_cn": "该论文针对VLA模型在GPU上推理延迟高、难以实时部署的问题，提出VQVLA算法-硬件协同设计框架，通过运动感知向量量化和质心复用动态调整量化精度，减少内存访问同时保持任务成功率，在硬件上实现平均2.3倍加速，为机器人边缘部署提供了有效加速方案。",
+      "llm_tldr": "该论文针对VLA模型在GPU上推理延迟高、难以实时部署的问题，提出VQVLA算法-硬件协同设计框架，通过运动感知向量量化和质心复用动态调整量化精度，减少内存访问同时保持任务成功率，在硬件上实现平均2.3倍加速，为机器人边缘部署提供了有效加速方案。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "edge deployment for humanoid robots",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2607.23784v1",
+      "source": "arxiv",
+      "title": "A Few Words Go a Long Way: Language Guided Robot Policy Synthesis",
+      "abstract": "While vision-language-action models have demonstrated impressive zero-shot manipulation capabilities, they remain fundamentally black box policies that are difficult to interpret, adapt, or correct when they inevitably fail. In this work, we propose ARCHITECT, a framework that treats robot policy acquisition as an interactive program synthesis task. ARCHITECT leverages the reasoning capabilities of LLM coding agents to synthesize modular robot programs that utilize a suite of perception and control tools. Unlike end-to-end models where distribution shift leads to unpredictable, cascading failures, our modular architecture allows users to isolate failures and localize feedback at the level of abstraction required. We introduce an iterative process where a human supervisor provides natural language corrections to steer the policy. These corrections are grounded in the policy code by program execution traces and distilled into a persistent skill library, a form of long-term in-context learning which enables the agent to accumulate a repertoire of reusable, interpretable behaviors. In a benchmark evaluation on a Franka Panda robot, ARCHITECT outperforms state-of-the-art VLA models and program synthesis baselines on complex, long-horizon tasks, including articulated object manipulation and cloth folding. Our results demonstrate that the synthesized skill library enables the system to transfer to novel tasks with decreasing human intervention, providing a steerable and data-efficient alternative to black-box robot learning. Website: https://robo-architect.github.io/",
+      "authors": [
+        "Daphne Chen",
+        "Archit Ritesh Jain",
+        "Eric Goossen",
+        "Emma Romig",
+        "Michael Murray",
+        "Nick Walker",
+        "Maya Cakmak"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.AI"
+      ],
+      "published": "2026-07-26T18:00:02+00:00",
+      "link": "https://arxiv.org/pdf/2607.23784v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "Language-guided robot policy synthesis with failure localization and feedback",
+      "llm_evidence_cn": "语言引导的机器人策略合成，含故障定位与反馈",
+      "llm_evidence": "语言引导的机器人策略合成，含故障定位与反馈",
+      "canonical_evidence": "语言引导的机器人策略合成，含故障定位与反馈",
+      "llm_tldr_en": "Proposes ARCHITECT for interactive robot program synthesis using LLM coding agents, enabling failure isolation and localized feedback at desired abstraction levels.",
+      "llm_tldr_cn": "该论文针对端到端策略在黑盒故障下难以调试的问题，提出ARCHITECT框架，利用LLM编码代理将策略获取视为交互式程序合成，生成模块化程序，允许用户隔离故障并提供局部反馈。在多次迭代中显著提高了任务成功率，为机器人错误分析提供了有效工具。",
+      "llm_tldr": "该论文针对端到端策略在黑盒故障下难以调试的问题，提出ARCHITECT框架，利用LLM编码代理将策略获取视为交互式程序合成，生成模块化程序，允许用户隔离故障并提供局部反馈。在多次迭代中显著提高了任务成功率，为机器人错误分析提供了有效工具。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "fault diagnosis and error analysis for humanoid robots",
+      "matched_requirement_id": "req-7",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2607.25389v1",
+      "source": "arxiv",
+      "title": "HOME: Robust Hough-space Matching Method for Structured and Textureless Videos",
+      "abstract": "Visual front-ends for robotic localization typically rely on point-based features such as Oriented FAST and Rotated BRIEF (ORB), which frequently fail in structured environments dominated by strong linear structures or textureless surfaces. While line-based Simultaneous Localization and Mapping (SLAM) systems mitigate this by utilizing line segments, conventional line extraction and description algorithms are computationally prohibitive for real-time edge robotics. To address this fundamental bottleneck, we propose HOME (Hough-space One-dimensional Matching of Extrema), an ultra-lightweight, training-free feature matching framework. HOME transforms images into Hough space, mapping global linear structures to stable local extrema, which serve as keypoints, thereby reformulating complex line matching into highly efficient one-dimensional point matching. The proposed 1D radial descriptor mathematically guarantees rotational and translational invariance without the overhead of explicit orientation estimation. As a proof of concept to validate the matching accuracy and efficiency of HOME, this paper focuses on homography estimation. Extensive evaluations demonstrate that HOME achieves robust registration in challenging scenarios where point-based methods fail, operating at a much faster speed than existing line-based methods. Extending this robust matching engine to full 3D pose estimation remains a highly promising future direction.",
+      "authors": [
+        "Masaki Satoh"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV",
+        "cs.RO"
+      ],
+      "published": "2026-07-28T07:47:50+00:00",
+      "link": "https://arxiv.org/pdf/2607.25389v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "ultra-lightweight feature matching for real-time edge robotics",
+      "llm_evidence_cn": "面向实时边缘机器人的超轻量特征匹配",
+      "llm_evidence": "面向实时边缘机器人的超轻量特征匹配",
+      "canonical_evidence": "面向实时边缘机器人的超轻量特征匹配",
+      "llm_tldr_en": "Presents HOME, a training-free Hough-space feature matching method that is ultra-lightweight and suitable for real-time edge robotics, addressing computational bottlenecks.",
+      "llm_tldr_cn": "本文针对机器人边缘部署中视觉前端计算量大的问题，提出HOME方法。通过将图像变换到霍夫空间，将全局线性结构映射为稳定的局部极值，实现无需训练的超轻量特征匹配。该方法在结构和无纹理场景中鲁棒性强，显著降低了计算开销，适用于实时边缘机器人系统。",
+      "llm_tldr": "本文针对机器人边缘部署中视觉前端计算量大的问题，提出HOME方法。通过将图像变换到霍夫空间，将全局线性结构映射为稳定的局部极值，实现无需训练的超轻量特征匹配。该方法在结构和无纹理场景中鲁棒性强，显著降低了计算开销，适用于实时边缘机器人系统。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "edge deployment for humanoid robots",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2607.23924v1",
+      "source": "arxiv",
+      "title": "DuoAD: Leveraging [CLS] Dual Characteristics for Training-Free Few-Shot Anomaly Detection",
+      "abstract": "Vision foundation models have enabled strong training-free anomaly detection (AD). However, most existing approaches rely primarily on independent local patch features, leaving the global contextual information encoded by Vision Transformers (ViTs) underexploited. In this work, we identify the dual characteristics of the ViT [CLS] token: its embedding provides anomaly-invariant global semantic representation, while its attention maps implicitly highlight spatially abnormal regions. Building on this observation, we propose a fully automated AD framework leveraging global context to remove manual tunings. Our framework introduces (1) an automatic augmentation selection strategy driven by [CLS]-level semantic consistency, and (2) an attention-guided feature reweighting mechanism that dynamically adjusts patch contributions according to [CLS] attention saliency. By integrating these components over multi-level features, our method achieves stable anomaly scoring and precise localization without training or parameter tuning. Under the one-shot setting, it achieves Image-AUC scores of 97.7%, 93.2%, and 84.5% on MVTec-AD, VisA, and Real-IAD. Using a single fixed configuration across categories, backbones, and datasets, the method establishes a new state-of-the-art for plug-and-play, training-free anomaly detection while maintaining strong robustness and practical scalability.",
+      "authors": [
+        "Jyun-Ze Tang",
+        "Po-Han Huang",
+        "Ming-Ching Chang",
+        "Chih-Fan Hsu",
+        "Jeng-Lin Li"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV",
+        "cs.AI"
+      ],
+      "published": "2026-07-27T01:31:48+00:00",
+      "link": "https://arxiv.org/pdf/2607.23924v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "Training-free few-shot anomaly detection using global context of ViT",
+      "llm_evidence_cn": "利用ViT全局上下文的免训练小样本异常检测",
+      "llm_evidence": "利用ViT全局上下文的免训练小样本异常检测",
+      "canonical_evidence": "利用ViT全局上下文的免训练小样本异常检测",
+      "llm_tldr_en": "Proposes DuoAD, a training-free anomaly detection framework leveraging CLS token dual characteristics for global semantic and attention-based anomaly localization.",
+      "llm_tldr_cn": "该论文针对现有异常检测方法依赖局部补丁特征、忽视全局上下文的问题，提出DuoAD框架，利用ViT中[CLS]令牌的双重特性——嵌入提供异常不变的全局语义，注意力图隐式指示异常区域，实现全自动无需手动调优的异常检测。该方法在多个基准上取得优异性能，为机器人安全中的异常检测提供了有效工具。",
+      "llm_tldr": "该论文针对现有异常检测方法依赖局部补丁特征、忽视全局上下文的问题，提出DuoAD框架，利用ViT中[CLS]令牌的双重特性——嵌入提供异常不变的全局语义，注意力图隐式指示异常区域，实现全自动无需手动调优的异常检测。该方法在多个基准上取得优异性能，为机器人安全中的异常检测提供了有效工具。",
+      "llm_tags": [
+        "query:humanoid-ood"
+      ],
+      "matched_query_tag": "query:humanoid-ood",
+      "matched_query_text": "out-of-distribution detection for safe robot operation",
+      "matched_requirement_id": "req-11",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2607.25487v1",
+      "source": "arxiv",
+      "title": "CoTinyVLA: Chain-of-Thought Distillation for a Sub-Billion-Parameter Vision-Language-Action Model",
+      "abstract": "Vision-Language-Action (VLA) models translate natural-language commands into robot action sequences, but leading systems on the LIBERO-Plus robustness benchmark use three- to seven-billion-parameter backbones whose memory demands can exceed embedded robotic budgets. We present CoTinyVLA, a 0.9B-parameter action model on a Qwen3.5-0.8B backbone that obtains that robustness by structuring supervision instead of enlarging the model. Three components target different axes of the problem: dual-view temporal input of 16 history frames per step with textual camera and time markers; hierarchical chain-of-thought (CoT) distillation from a 35B teacher into an episode-level Plan and a chunk-level Think span over task phase, gripper state and next subaction; and paraphrase augmentation expanding 40 base commands into 800 variants. On LIBERO-Plus, spanning 10,030 perturbed tasks across seven perturbation dimensions, CoTinyVLA reaches 90.8% on Spatial, 87.3% on Object, 86.6% on Goal and 80.7% on Long, leading the strongest 7B baseline on all four suites by 4.7, 2.8, 15.9 and 3.0 points, with every margin interval excluding zero. The gains concentrate on the hardest axes of the benchmark: across the eleven published baselines none exceeds 53.2% on Robot Initial States in any suite, whereas CoTinyVLA reaches 73.6% on Goal against 39.9% for the strongest baseline. Ablations show the three components to be separable by perturbation axis, and at a matched image budget how frames are divided between the two cameras and across time accounts for 8.6 points on its own. Closed-loop inference peaks at 2.25 GiB of allocated GPU memory, and paired interventions show the episode Plan to be load-bearing: replacing it with an empty or contradictory span costs 40 to 45 points of success. Structured supervision thus lets a 0.9B backbone exceed all of them. Code: https://github.com/BrainJellyPie/CoTinyVLA",
+      "authors": [
+        "Minhyeok Lee",
+        "Chiyoung Kim",
+        "Chanhoe Gu",
+        "Seongrok Kim",
+        "Sanghyuk Roy Choi",
+        "Donghwan Hwang",
+        "Donghun Ryu",
+        "Seokhyun Kim"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI",
+        "cs.CV"
+      ],
+      "published": "2026-07-28T09:24:17+00:00",
+      "link": "https://arxiv.org/pdf/2607.25487v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "addresses edge deployment of VLA models on embedded robot systems via distillation",
+      "llm_evidence_cn": "通过蒸馏技术在嵌入式机器人系统上部署轻量级VLA模型",
+      "llm_evidence": "通过蒸馏技术在嵌入式机器人系统上部署轻量级VLA模型",
+      "canonical_evidence": "通过蒸馏技术在嵌入式机器人系统上部署轻量级VLA模型",
+      "llm_tldr_en": "CoTinyVLA uses chain-of-thought distillation to compress a 35B teacher into a 0.9B VLA model for embedded robots. With dual-view input and hierarchical CoT, it matches robustness of larger models while fitting embedded budgets.",
+      "llm_tldr_cn": "针对视觉-语言-动作模型参数量大难以部署在嵌入式设备上的问题，本文提出CoTinyVLA模型，通过链式思维蒸馏将35B参数大模型的知识压缩至0.9B的子十亿参数模型。采用双视角时序输入、层次化CoT蒸馏等策略，在保持鲁棒性的同时大幅降低内存需求。实验证明该模型在嵌入式机器人预算内具有竞争力。",
+      "llm_tldr": "针对视觉-语言-动作模型参数量大难以部署在嵌入式设备上的问题，本文提出CoTinyVLA模型，通过链式思维蒸馏将35B参数大模型的知识压缩至0.9B的子十亿参数模型。采用双视角时序输入、层次化CoT蒸馏等策略，在保持鲁棒性的同时大幅降低内存需求。实验证明该模型在嵌入式机器人预算内具有竞争力。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "edge deployment for humanoid robots",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2607.25895v1",
+      "source": "arxiv",
+      "title": "HiFi-UMI: Learning Deployable Manipulation Policies from High-Fidelity UMI Data Alone",
+      "abstract": "Learning deployable manipulation policies is bottlenecked by the scarcity of data that is both high-fidelity and scalable. Real-robot teleoperation is accurate but costly to scale; robot-free UMI capture scales readily, and current practice uses the resulting data mainly for pre-training, adding a small real-robot \"anchor\" at post-training. We ask whether raising the fidelity of robot-free UMI data, rather than shrinking the real-robot fraction, can remove that anchor. We present HiFi-UMI, a portable UMI data-production system co-designed for trajectory accuracy, inter-gripper relative pose, synchronization, and field of view: head-mounted offline stereo-inertial SLAM, native rather than reconstructed relative pose, a shared microsecond GPIO trigger, and two wide-angle cameras per hand covering ~200 degrees. It reaches 3 mm workspace-local end-effector accuracy without external tracking infrastructure. Using this corpus, we demonstrate zero-robot post-training: a policy post-trained solely on HiFi-UMI demonstrations deploys directly on a real robot and matches in-domain teleoperation across three backbones spanning the vision-language-action and world-action-model families, with success-rate differences of -2.5, +3.1, and -0.6 percentage points on StarVLA-QwenPI, OpenPI-pi_0.5, and LingBot-VA; the strongest policy reaches 85% on a precision insertion task, even though the teleoperation baseline is collected in the evaluation scene and no HiFi-UMI trajectory is. Pre-training on 4,000 hours from the same corpus lowers action error on ten unseen tasks by 41% and, on StarVLA-QwenPI, raises real-robot success by a further 18.1 percentage points. We open-source HiFi-UMI-2K, 2,000 hours of microsecond-synchronized, ultra-wide-FoV demonstrations, each automatically reconstructed and validated through simulation replay, as a large-scale, high-fidelity resource for the robot-learning community.",
+      "authors": [
+        "Simple AI",
+        ":",
+        "Yuteng Wei",
+        "Jinming Ma",
+        "Jiawei Wang",
+        "Weitao Zhou",
+        "Yushen Zuo",
+        "Ke Rui",
+        "Minglei Li",
+        "Jinhao Zhang",
+        "Zhikang Pan",
+        "Xiang Wang",
+        "Haoran Jia",
+        "Huan Du",
+        "Zicheng Zeng",
+        "Jun Ma",
+        "Guiyu Qin",
+        "Di Zhang",
+        "Xiaofei Li"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.CV",
+        "cs.LG"
+      ],
+      "published": "2026-07-28T15:52:02+00:00",
+      "link": "https://arxiv.org/pdf/2607.25895v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "high-fidelity dataset construction for robot manipulation",
+      "llm_evidence_cn": "为机器人操作构建高保真数据集",
+      "llm_evidence": "为机器人操作构建高保真数据集",
+      "canonical_evidence": "为机器人操作构建高保真数据集",
+      "llm_tldr_en": "HiFi-UMI presents a portable data-production system that generates high-fidelity UMI data for learning deployable manipulation policies without real-robot fine-tuning.",
+      "llm_tldr_cn": "本文提出HiFi-UMI，一种便携式高保真数据采集系统，用于生成机器人操作策略训练数据。该系统通过头戴式离线立体惯性SLAM、原生相对位姿估计和微秒级同步，显著提升UMI数据质量。实验表明，仅使用HiFi-UMI数据训练的策略可直接部署于真实机器人，无需额外的真实机器人微调。该工作为机器人数据集构建提供了低成本高精度方案。",
+      "llm_tldr": "本文提出HiFi-UMI，一种便携式高保真数据采集系统，用于生成机器人操作策略训练数据。该系统通过头戴式离线立体惯性SLAM、原生相对位姿估计和微秒级同步，显著提升UMI数据质量。实验表明，仅使用HiFi-UMI数据训练的策略可直接部署于真实机器人，无需额外的真实机器人微调。该工作为机器人数据集构建提供了低成本高精度方案。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2607.26903v1",
+      "source": "arxiv",
+      "title": "From Passive Video to Editable Experience: Physically Grounded Experience Synthesis for Embodied Intelligence",
+      "abstract": "The key bottleneck in embodied AI is not model architecture but data. Although billions of human manipulation videos exist online, robots cannot directly learn from them due to the embodiment gap between human morphology and robot hardware. We introduce Pegasus, a low-resource framework that bridges this gap by translating human demonstrations into robot-learnable data through structured knowledge transfer. Instead of relying on raw video prompts, Pegasus constructs a graph-based intermediate representation: a Task Graph extracted from human videos is transformed through Affordance and Constraint Graphs into a Robot Planning Graph for robot-conditioned video generation. A hierarchical affordance latent space models the relationship between object states, affordances, and tasks, enabling generalization beyond object identities. A closed-loop physics verifier further filters invalid generations using kinematic feasibility, collision constraints, and joint limits. We evaluate Pegasus across a range of egocentric manipulation benchmarks, including GTEA Gaze+ and EPIC-KITCHENS-100, and diverse robot embodiments, assessing Task Correctness, Executability, State Consistency, and Learnability. Results demonstrate reliable cross-embodiment translation and show that robot data generation can be reframed from a hardware collection problem into a scalable, low-resource knowledge transfer problem.",
+      "authors": [
+        "Jia Luo"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI",
+        "cs.RO"
+      ],
+      "published": "2026-07-29T13:35:23+00:00",
+      "link": "https://arxiv.org/pdf/2607.26903v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "dataset construction for robotics via graph-based experience synthesis",
+      "llm_evidence_cn": "基于图的经验合成方法用于机器人数据集构建",
+      "llm_evidence": "基于图的经验合成方法用于机器人数据集构建",
+      "canonical_evidence": "基于图的经验合成方法用于机器人数据集构建",
+      "llm_tldr_en": "Proposes Pegasus, a low-resource framework that translates human videos into robot-learnable data using graph-based intermediate representations, addressing the embodiment gap for dataset construction.",
+      "llm_tldr_cn": "针对机器人数据缺乏的问题，提出Pegasus框架，通过构建任务图、可供性图和约束图等中间表示，将人类演示视频转化为机器人可学习的数据，弥合形态差异。该方法无需大量标注，可低成本生成机器人数据集，为数据构建提供了新路径。",
+      "llm_tldr": "针对机器人数据缺乏的问题，提出Pegasus框架，通过构建任务图、可供性图和约束图等中间表示，将人类演示视频转化为机器人可学习的数据，弥合形态差异。该方法无需大量标注，可低成本生成机器人数据集，为数据构建提供了新路径。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    }
+  ]
+}

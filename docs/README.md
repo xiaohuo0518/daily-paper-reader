@@ -6,29 +6,58 @@
 </div>
 
 ## 每次日报
-- 最新运行日期：2026-07-27
-- 运行时间：2026-07-27 21:46:14 UTC
+- 最新运行日期：2026-07-30
+- 运行时间：2026-07-30 21:22:39 UTC
 - 运行状态：成功
-- 本次总论文数：3
-- 精读区：2
-- 速读区：1
+- 本次总论文数：12
+- 精读区：1
+- 速读区：11
 
 ### 今日简报（AI）
-今日精选3篇机器人前沿论文，精读两篇高分研究：《Learning Diverse Humanoid Tasks via Synthetic Video Scenarios without Real World Data》（9.0分）和《GuidedAttention: Interpretable and Correctable Visual Attention for OOD-Robust Robot Manipulation via Imitation Learning》（8.0分）。建议优先关注无需真实数据的人形机器人任务学习，以及可解释注意力机制提升模仿学习的鲁棒性。下一步可深入阅读触觉-视觉世界模型论文《ViTacWorld》，了解接触式操作中的多模态融合。
-- 详情：[/202607/27/README](/202607/27/README)
+今日精读具身操作的数据金字塔框架，速读关注触觉语言动作模型与开放世界检测新方法。  
+最值得看《Data Pyramid for Embodied Manipulation》（8.0/10）的结构化数据策略，以及《Multimodal Semantic-Probabilistic Objectness》的开放世界检测思路。  
+建议关注具身操作的数据效率和多模态融合方向，后续可追踪触觉令牌压缩等推理优化工作。
+- 详情：[/202607/30/README](/202607/30/README)
 
 ### 精读区论文标签
-1. [Learning Diverse Humanoid Tasks via Synthetic Video Scenarios without Real World Data](/202607/27/2607.21648v1-learning-diverse-humanoid-tasks-via-synthetic-video-scenarios-without-real-world-data)  
-   标签：评分：9.0/10、query:ur
-   evidence：提出使用合成视频学习人形机器人任务，无需真实数据，直接相关于人形机器人数据集构建
-2. [GuidedAttention: Interpretable and Correctable Visual Attention for OOD-Robust Robot Manipulation via Imitation Learning](/202607/27/2607.21049v2-guidedattention-interpretable-and-correctable-visual-attention-for-ood-robust-robot-manipulation-via-imitation-learning)  
-   标签：评分：8.0/10、query:humanoid-ood
-   evidence：通过可解释的视觉注意力实现OOD鲁棒的机器人操作
+1. [Data Pyramid for Embodied Manipulation](/202607/30/2607.24744v1-data-pyramid-for-embodied-manipulation)  
+   标签：评分：8.0/10、query:ur
+   evidence：用于具身操作数据集的数据金字塔框架
 
 ### 速读区论文标签
-1. [ViTacWorld: Scaling Visuo-Tactile World Models for Contact-Rich Robot Manipulation](/202607/27/2607.22530v1-vitacworld-scaling-visuo-tactile-world-models-for-contact-rich-robot-manipulation)  
+1. [$N_0$-VTLA: Scaling Vision-Tactile-Language-Action Model with Latent Tactile Tokens](/202607/30/2607.23782v1-n0-vtla-scaling-vision-tactile-language-action-model-with-latent-tactile-tokens)  
+   标签：评分：7.0/10、query:ur
+   evidence：提出了大规模视觉-触觉机器人数据集NeoData，用于预训练VTLA模型
+2. [Multimodal Semantic-Probabilistic Objectness for Open World Object Detection](/202607/30/2607.23981v1-multimodal-semantic-probabilistic-objectness-for-open-world-object-detection)  
+   标签：评分：7.0/10、query:humanoid-ood
+   evidence：开放集识别方法用于目标检测，可迁移至机器人安全
+3. [A Motion-Aware Vector Quantization Framework with Centroid Reuse for Efficient VLA Inference](/202607/30/2607.24148v1-a-motion-aware-vector-quantization-framework-with-centroid-reuse-for-efficient-vla-inference)  
+   标签：评分：7.0/10、query:ur
+   evidence：运动感知向量量化实现高效VLA边缘推理
+4. [HOME: Robust Hough-space Matching Method for Structured and Textureless Videos](/202607/30/2607.25389v1-home-robust-hough-space-matching-method-for-structured-and-textureless-videos)  
+   标签：评分：7.0/10、query:ur
+   evidence：面向实时边缘机器人的超轻量特征匹配
+5. [CoTinyVLA: Chain-of-Thought Distillation for a Sub-Billion-Parameter Vision-Language-Action Model](/202607/30/2607.25487v1-cotinyvla-chain-of-thought-distillation-for-a-sub-billion-parameter-vision-language-action-model)  
+   标签：评分：7.0/10、query:ur
+   evidence：通过蒸馏技术在嵌入式机器人系统上部署轻量级VLA模型
+6. [HiFi-UMI: Learning Deployable Manipulation Policies from High-Fidelity UMI Data Alone](/202607/30/2607.25895v1-hifi-umi-learning-deployable-manipulation-policies-from-high-fidelity-umi-data-alone)  
+   标签：评分：7.0/10、query:ur
+   evidence：为机器人操作构建高保真数据集
+7. [From Passive Video to Editable Experience: Physically Grounded Experience Synthesis for Embodied Intelligence](/202607/30/2607.26903v1-from-passive-video-to-editable-experience-physically-grounded-experience-synthesis-for-embodied-intelligence)  
+   标签：评分：7.0/10、query:ur
+   evidence：基于图的经验合成方法用于机器人数据集构建
+8. [Offline Vision-Language Navigation with Geometric Goal Localization for Outdoor Environments](/202607/30/2607.22226v1-offline-vision-language-navigation-with-geometric-goal-localization-for-outdoor-environments)  
    标签：评分：6.0/10、query:ur
-   evidence：通过仿真和公开数据集扩展视觉触觉数据，与机器人数据集构建相关
+   evidence：关注机器人导航模型的机载部署，与边缘部署需求相关
+9. [Label-free Industrial Fault Detection via Adversarial Inverse Reinforcement Learning: A System for Run-to-Failure Prognostics](/202607/30/2607.22987v1-label-free-industrial-fault-detection-via-adversarial-inverse-reinforcement-learning-a-system-for-run-to-failure-prognostics)  
+   标签：评分：6.0/10、query:ur
+   evidence：基于对抗逆强化学习的无标签工业故障检测
+10. [A Few Words Go a Long Way: Language Guided Robot Policy Synthesis](/202607/30/2607.23784v1-a-few-words-go-a-long-way-language-guided-robot-policy-synthesis)  
+   标签：评分：6.0/10、query:ur
+   evidence：语言引导的机器人策略合成，含故障定位与反馈
+11. [DuoAD: Leveraging [CLS] Dual Characteristics for Training-Free Few-Shot Anomaly Detection](/202607/30/2607.23924v1-duoad-leveraging-cls-dual-characteristics-for-training-free-few-shot-anomaly-detection)  
+   标签：评分：6.0/10、query:humanoid-ood
+   evidence：利用ViT全局上下文的免训练小样本异常检测
 
 
 <div class="dpr-home-promo-card">

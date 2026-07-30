@@ -1,0 +1,321 @@
+Title: Label-free Industrial Fault Detection via Adversarial Inverse Reinforcement Learning: A System for Run-to-Failure Prognostics
+
+URL Source: https://arxiv.org/pdf/2607.22987v1
+
+Published Time: Tue, 28 Jul 2026 00:22:15 GMT
+
+Number of Pages: 9
+
+Markdown Content:
+# Label-free Industrial Fault Detection via Adversarial Inverse Reinforcement Learning: A System for Run-to-Failure Prognostics 
+
+# Dhiraj Neupane 
+
+Deakin University Waurn Ponds, Victoria, Australia s222439738@deakin.edu.au 
+
+# Mohamed Reda Bouadjenek 
+
+Deakin University Waurn Ponds, Victoria, Australia reda.bouadjenek@deakin.edu.au 
+
+# Richard Dazeley 
+
+Deakin University Waurn Ponds, Victoria, Australia richard.dazeley@deakin.edu.au 
+
+# Sunil Aryal 
+
+Deakin University Waurn Ponds, Victoria, Australia sunil.aryal@deakin.edu.au 
+
+## Abstract 
+
+Machinery fault detection (MFD) remains heavily reliant on su-pervised learning, which struggles with the scarcity of fault labels in real-world settings. While reinforcement learning (RL) offers a framework to model the sequential nature of degradation, current “RL-based” MFD methods reduce the problem to a static contex-tual bandit (CB) formulation: by ignoring state transitions and discarding the temporal discount factor, they collapse to standard supervised classification. We propose an adversarial inverse rein-forcement learning (AIRL) framework that treats MFD as an of-fline IRL problem. Unlike reconstruction-based approaches that rely on static error margins, or CBs that ignore dynamics, our method recovers an intrinsic “health” reward directly from ob-servational state transitions, requiring neither manual reward en-gineering nor fault labels. On three run-to-failure benchmarks (HUMS2023, IMS, XJTU-SY), AIRL is the only method achieving non-saturated post-detection consistency across all datasets, while CB baselines fail to detect gradual degradation and reconstruc-tion models collapse into always-anomalous states. Code and data: https://github.com/dhirajneupane/AIRL-MFD-DN. 
+
+## 1 Introduction 
+
+Machinery fault detection (MFD) is essential for industrial reliabil-ity, yet acquiring labelled fault data for every fault type, severity, and component remains prohibitively expensive. Supervised learn-ing dominates the field ( ≈81% of studies, vs. just 1% for RL [ 24 ]) but inherits this labelling bottleneck. Semi-supervised and unsu-pervised methods partially mitigate it [ 25 , 28 , 34 , 53 ] but struggle with robustness under variable operating conditions. Reinforce-ment learning (RL) is a promising alternative through interactive, sequential decision-making, yet current applications neglect the temporal structure of fault progression [24]. Existing “RL-based” MFD methods [ 8, 16 , 17 , 33 ] reduce fault de-tection to a static contextual-bandit (CB) trial: each sensor segment is treated as an independent state, the agent issues a one-shot label, the discount factor 𝛾 is effectively zero, and episodes terminate after a single action. The sequential premise of RL therefore col-lapses into supervised classification. Moving beyond this requires multi-step interactions ( 𝛾 > 0) and rewards reflecting long-term outcomes, but designing such rewards is difficult: fault progression is subtle, system dynamics are only partially understood, and most industrial datasets are prerecorded, making online RL infeasible. Even existing offline RL approaches still rely on manual reward design. These challenges highlight the potential of inverse reinforcement learning (IRL) [ 27 ], which bypasses manual reward specification by learning directly from healthy operational trajectories offline. Despite its ability to capture normal machinery behaviour, IRL re-mains unexplored in machinery fault detection (MFD). To address this gap, we introduce adversarial inverse reinforcement learning (AIRL) [ 9 ] for MFD, marking its first application in this domain. AIRL operates fully offline, learning a reward model of normal sequential patterns to detect anomalies as deviations from these dynamics. This approach retains RL’s strengths while providing a robust, practical solution. Extensive experiments across multiple run-to-failure datasets demonstrate that our framework achieves earlier fault detection and more stable anomaly scoring than con-ventional one-class and reconstruction-based methods. 
+
+Applied contributions. A two-page extended abstract of this for-mulation appeared at AAMAS 2026 [ 26 ] with preliminary HUMS2023 results. This full paper substantially extends that prior work into a comprehensive prognostic system. Our specific contributions are: (1) a label-free detection pipeline applying the state-only imitation learning (SOIL) approach [ 41 ] to offline industrial sensor sequences; (2) validated generalization across three distinct real-world run-to-failure datasets (HUMS2023, IMS, XJTU-SY); (3) an extended baseline comparison that demonstrates why AUROC is structurally inapplicable, alongside a novel post-detection consistency (PDC) analysis of saturation failure ; (4) an evaluation of seven automatic thresholding strategies with practical deployment recommenda-tions; (5) a computational cost analysis validating AIRL’s compact architecture for edge deployment; and (6) an ablation study isolating the role of the discount factor in sequential modeling. 
+
+## 2 Background and Related Works 2.1 Machinery Fault Detection Problem 
+
+Industrial machinery often operates under harsh conditions, result-ing in gradual faults—such as wear, cracks, and broken teeth—that vary in type, severity, and the components they affect [ 29 ]. As shown by Neupane et al. [ 25 ], most publicly available datasets reflect this variety, yet are strictly offline and designed for classifi-cation tasks with predefined labels. However, in real-world settings, arXiv:2607.22987v1 [cs.LG] 25 Jul 2026 Neupane et al. 
+
+healthy data is abundant, whereas acquiring and labeling faulty data for every possible failure mode is a significant challenge. Con-sequently, treating MFD as an anomaly detection task, training on abundant normal data to flag deviations at test time, is a convincing and practical approach. While the current research trend remains heavily skewed towards fault classification under supervised learn-ing, robust fault detection remains the foundational necessity in industrial applications. 
+
+## 2.2 Adversarial Inverse Reinforcement Learning 
+
+Reinforcement learning models sequential decision-making via Markov decision processes (MDPs), optimizing policies to maximize cumulative reward [ 40 ]. However, designing reward functions that precisely encode desired behaviors is challenging, particularly for complex tasks like MFD. IRL addresses this by inferring the under-lying reward directly from expert demonstrations [ 7 ]. While tradi-tional IRL struggles with high-dimensional environments, AIRL [ 9 ]scales effectively by employing a generative adversarial framework. AIRL trains a discriminator to differentiate between expert (healthy) and policy-generated trajectories, simultaneously updating a policy to imitate the expert behavior. Importantly, AIRL learns a robust re-ward function that is disentangled from the environment’s specific dynamics, making it highly suitable for anomaly detection where explicit reward formulation is impractical. The discriminator’s out-put is formulated as [9]: 
+
+𝐷 (𝑠, 𝑎, 𝑠 ′) = exp (𝑟 (𝑠, 𝑎 ) + 𝛾 𝑉 (𝑠 ′) − 𝑉 (𝑠 )) 
+
+exp (𝑟 (𝑠, 𝑎 ) + 𝛾 𝑉 (𝑠 ′) − 𝑉 (𝑠 )) + 𝜋 (𝑎 | 𝑠 ) , (1) where (𝑠, 𝑎, 𝑠 ′) is the transition tuple consisting of the current state 
+
+𝑠 , action 𝑎 , and next state 𝑠 ′, 𝑟 (𝑠, 𝑎 ) is the learned reward, 𝑉 (𝑠 )
+
+the state-value function, 𝜋 (𝑎 | 𝑠 ) the stochastic policy, and 𝛾 the discount factor. This architecture ensures the recovered reward remains invariant to dynamic shifts, providing a stable basis for evaluating operational health. 
+
+## 2.3 RL vs. Contextual-Bandit Practice in MFD 
+
+The application of RL to rotating machinery fault detection has gained popularity since 2019, as summarized in Table 1. However, a consistent pattern emerges: despite the variety of agents and reported episode lengths, these studies formulate the problem as a single-step classification task rather than a true MDP. Specifically: 
+
+• Datasets are typically pre-shuffled, treating each sensor signal segment as an iid (independent and identically dis-tributed) context. The agent predicts a single label, and the episode immediately terminates. 
+
+• Because transitions (𝑠, 𝑎, 𝑠 ′) are ignored, the discount factor 
+
+𝛾 (even if nonzero) plays no mathematical role in credit assignment. Formally, these setups are single-step contextual bandits (CBs) . Even when studies report episode lengths of several hundred steps (Ta-ble 1), each step remains an independent sample with no depen-dency on previous actions. The Bellman equation collapses into a supervised classifier optimized via a reward-based loss. While this approach is valuable for static labelling, using RL terminology mis-represents the methodological novelty. More importantly, it fails to exploit RL’s core strength: modelling sequential system evolution for fault progression and early-warning objectives. 
+
+Table 1: RL formulations in recent MFD research. Ref/Year State Action 𝜸 Ep. Len. Agent 
+
+[8]/19 Random Label 0 1 SAE [14]/21 Random Label - 1 CapNet [33]/22 Random Label 0 1 CNN-GRU [50]/23 Random Label 0.1* 500 † ConvResAE [48]/24 Random Label 0.1* 504 † 1D-CNN [17]/25 Random Label 0.99* 1 Eq. DQN [16]/25 Random Label 0.99* 1 ConvTrans [37]/25 Random Label 0.1* 1 Duel-DQN      
+
+> Note: *𝛾 not used for credit assignment. †Samples pre-shuffled.
+
+## 3 AIRL Framework for MFD 
+
+Building on the problem formulation and related work discussed earlier, this section presents the proposed adversarial inverse rein-forcement learning framework for machinery fault detection. The framework uses preprocessed vibration sequences to autonomously learn reward dynamics that characterize normal operational behav-ior and deviations from it. It consists of three main components: (i) transition construction from vibration signals, (ii) neural architec-tures for reward, value, and policy estimation, and (iii) adversarial training and threshold-based anomaly scoring. 
+
+## 3.1 Transition Construction for AIRL 
+
+Let 𝑋 = {𝑥 1, 𝑥 2, . . . , 𝑥 𝐿 } denote a vibration record of length 𝐿 sam-ples, and let ˜𝑥 𝑡 denote the 𝑧 -normalized version of 𝑥 𝑡 using statistics computed solely from the healthy training partition (to prevent test-train leakage). Records are sorted chronologically and split into a healthy expert set Dexp used for training and a held-out test set 
+
+Dtest containing the degradation phase. Dataset-specific partitions, record lengths, and acquisition details are reported in Section 4. To construct the AIRL input, state-action-next-state tuples are generated from each normalized sequence: 
+
+𝑠 𝑡 = ˜𝑥 𝑡 , 𝑎 𝑡 = ˜𝑥 𝑡 +1, 𝑠 𝑡 +1 = ˜𝑥 𝑡 +1. (2) Since the data is offline and purely observational, no recorded con-trol actions are available. We adopt the SOIL approach [ 41 ] and treat the next observation ˜𝑥 𝑡 +1 as a proxy action, effectively learn-ing an inverse-dynamics model that scores the plausibility of state transitions (𝑠 𝑡 , 𝑠 𝑡 +1) rather than maximizing a static classification reward. This aligns with state-only imitation and inverse-RL meth-ods such as GAIfO [ 42 ], Diffusion-IfO [ 10 ], and OPOLO [ 55 ], which optimize a discriminator over state transitions rather than explicit control actions. The construction enables AIRL to model the tempo-ral evolution of healthy and faulty sequences without introducing artificial control variables. 
+
+## 3.2 Model Architecture 
+
+The proposed AIRL framework comprises three neural components: a reward network 𝑟 (𝑠, 𝑎 ), a value network 𝑉 (𝑠 ), and a stochastic policy 𝜋 (𝑎 |𝑠 ). Note that while we denote the input as 𝑎 to maintain Label-free Industrial Fault Detection via Adversarial Inverse Reinforcement Learning: A System for Run-to-Failure Prognostics 
+
+standard RL notation, 𝑎 corresponds to the next state ˜𝑥 𝑡 +1. Each network is a two-layer MLP of the form 𝑓 (𝑥 ) = 𝑊 2 𝜙 (𝑊 1𝑥 +𝑏 1) + 𝑏 2,where 𝜙 (·) is the ReLU activation, the hidden layer has 64 units, and 𝑏 1, 𝑏 2 are learnable biases. The networks differ only in their input dimension and output role: 
+
+• Reward network ( 𝑟 ): Maps the concatenated state-action vector [𝑠 ; 𝑎 ] ∈ R2 to a scalar reward distinguishing healthy (expert) from faulty (policy-generated) transitions. 
+
+• Value network ( 𝑉 ): Takes scalar state 𝑠 ∈ R and out-puts the expected cumulative reward, providing a potential-based shaping term for reward generalization. 
+
+• Policy network ( 𝜋 ): Takes scalar state 𝑠 ∈ R and outputs the mean 𝜇 (𝑠 ) of a Gaussian policy 𝜋 (𝑎 |𝑠 ) = N ( 𝜇 (𝑠 ), 𝜎 2);the state-independent log-standard-deviation log 𝜎 is learned separately. This stochasticity encourages exploration dur-ing roll-outs and mitigates overfitting to logged demonstra-tions. The total parameter count is 644 (reward: 257, value: 193, policy: 194). 
+
+## 3.3 Training Procedure 
+
+Each AIRL training epoch consists of two phases: (i) discriminator learning and (ii) policy improvement. During discriminator learning, mini-batches of 128 expert and policy-generated transitions are drawn, and the reward and value networks are jointly updated by minimizing the standard AIRL cross-entropy loss: 
+
+Ldisc = −
+
+
+
+log 𝜎  𝑟 𝜙 (𝑠, 𝑎 ) + 𝛾𝑉 𝜓 (𝑠 ′) − 𝑉 𝜓 (𝑠 )
+
++ log 
+
+
+
+1 − 𝜎  𝑟 𝜙 (𝑠, 𝑎 𝜋 ) + 𝛾𝑉 𝜓 (𝑠 ′ 
+
+> 𝜋
+
+) − 𝑉 𝜓 (𝑠 𝜋 )
+
+(3) where 𝜎 (·) is the logistic function and 𝛾 = 0.99 .During policy improvement, 𝜋 is rolled out in the learned reward landscape to estimate the REINFORCE gradient: 
+
+∇ E𝜋 [𝑟 (𝑠, 𝑎 )] = E𝜋 [∇ log 𝜋 (𝑎 |𝑠 ) 𝐺 𝑡 ], (4) using 50-step returns 𝐺 𝑡 , alongside an entropy bonus 𝛽 = 0.01 
+
+to encourage exploration. All networks are optimized with Adam (𝛼 = 10 −3) for 𝑁 epochs = 300 with 50 policy episodes per epoch. 
+
+## 3.4 Anomaly Scoring and Thresholding 
+
+Within AIRL, the discriminator assigns each transition (𝑠, 𝑎, 𝑠 ′) aconfidence 𝐷 𝜙 (𝑠, 𝑎, 𝑠 ′), which we convert to an anomaly score: 
+
+𝛼 (𝑠, 𝑎, 𝑠 ′) = 1 − 𝐷 𝜙 (𝑠, 𝑎, 𝑠 ′), (5) where higher values indicate greater deviation from expert behavior. Let {𝛼 𝑖 }𝑁 𝑖 =1 denote scores computed on healthy training transitions. We construct data-driven thresholds 𝜏 from these healthy scores and flag a test sample as anomalous when 𝛼 > 𝜏 (upper-tail rule). Seven strategy families are evaluated: (1) mean+ 𝑘𝜎 (𝑘 ∈ { 2, 3})[23 ]; (2) median+3MAD [ 35 ]; (3) max-based variants (max, max −SE, max −2SE) [ 51 ]; (4) percentile 𝑝 99 [43 ]; (5) Otsu’s method [ 30 ]; (6) 𝑘 -means midpoint [ 22 ]; (7) GPD tail fit (top 5% of {𝛼 𝑖 }) [ 32 ]. All thresholds are computed once from healthy training scores and fixed at test time. 
+
+Figure 1: Cracked planet gear: crack path indicated by red arrow (left), and full crack viewed from the inner bore of the planet gear’s bearing raceway (right) [46]. 
+
+## 4 Experimental Section 4.1 Datasets and Preprocessing 
+
+We evaluate the proposed framework on three real-world run-to-failure datasets encompassing distinct machinery types, operating conditions, and fault modes. All methods use healthy-only training partitions and mixed (healthy + faulty) test partitions, as detailed in Table 2. 
+
+HUMS2023 [46 ]: This dataset captures the progressive degra-dation of a full-scale helicopter gearbox under authentic load con-ditions. Fatigue cracks were initiated via EDM notches and propa-gated under 125% torque (see Figure 1. Hunting Tooth Synchronous Averaging (H-SSA) was utilized to align the vibration patterns with gear-meshing cycles [ 38 ]. The ground truth degradation onset is verified by the challenge committee as Day 24 (sample #264). 
+
+IMS Test 1 [36 ]: This is a widely used bearing dataset recorded at 20 kHz across 8 channels, from which Channel 1 is utilized for our evaluation. The ground truth degradation onset is established in the literature as mid-November [ 4, 36 ], which eventually culminates in catastrophic failure on Nov 25. 
+
+XJTU-SY [45]: This dataset features accelerated bearing degra-dation under heavy operational loads (Bearing 3_1; 40 kHz, 10 kN). The ground truth degradation onset is formally defined at ≈500 min [20]. 
+
+Table 2: Training and testing splits.         
+
+> Dataset Training (healthy) Testing (mixed) HUMS Day 17–20; Total: 282 Day 21–27; Total: 526 IMS Oct 1–31; Total: 1,840 Nov 1–25; Total: 8,940 XJTU–SY First 2,000 ( ∼250 min) Remaining 18,295
+
+To maintain consistent temporal resolution and input dimension-ality across the entire framework, all raw vibration sequences are 
+
+𝑧 -normalized and segmented into uniform observation windows (4095 points for HUMS H-SSA samples, and 4096-point segments for IMS and XJTU-SY, yielding 5 segments per IMS sample and 8 per XJTU-SY sample). 
+
+## 4.2 Baseline Methods 
+
+For comparison with AIRL, we trained a set of widely used unsuper-vised and one-class methods using only healthy data and evaluated Neupane et al. 
+
+them on both healthy and faulty segments. These baselines encom-pass a range of approaches, from traditional machine learning to deep learning models designed to capture temporal dependencies. 
+
+4.2.1 Unsupervised and One-Class Baselines All baselines are trained on healthy data only and scored with the same thresholding rules as AIRL. 
+
+• IF (Isolation Forest) [ 18 ] and OCSVM (One-Class Support Vector Machine) [ 39 ]: classical one-class methods. IF: 400 estimators, max_samples=256; OCSVM: RBF kernel, 𝜈 =
+
+0.05 .
+
+• AE (Autoencoder) [ 54 ] and VAE (Variational Autoencoder) [ 12 ]: reconstruction-error anomaly scorers (hidden dims {1024,256,64}, latent 64). ( ∼8.95M / ∼8.97M params) 
+
+• LSTM-AE and LSTM-VAE [ 6, 19 ]: Long Short-Term Mem-ory (LSTM) recurrent variants of AE/VAE for sequence modeling. (LSTM hidden=128, latent=64; ∼167K / ∼184K params) 
+
+• TCAE (Temporal Convolutional Autoencoder) [ 2 ]: 1D con-volutional AE with strided convolutions (spatial 4096 →
+
+64 via three stride-4 Conv1d layers, kernel 9, channels 1→16 →32 →8). ( ∼14K params) 
+
+• CTCAE (Contrastive TCAE) [ 5]: TCAE + SimCLR con-trastive loss on noise-augmented views. (wider bottleneck: channels 1 →16 →32 →64, ∼47K backbone params) 
+
+• USAD (Unsupervised Anomaly Detection) [ 1 ]: dual-decoder adversarial AE; anomaly score combines both decoders’ out-puts ( ∼13.4M params). 
+
+• ATF (Anomaly Transformer) [ 49 ]: uses association-discrepancy between a Gaussian prior and learned softmax attention; ConvStem tokenizes inputs into 91 tokens for HUMS (4095 pts) and 92 tokens for IMS/XJTU-SY (4096 pts) (2 blocks, 64 dim, 4 heads, ∼146K params). 
+
+4.2.2 Contextual-Bandit Baseline We reproduce the LiteDPER– CTQN agent [ 16 ] (reimplemented in PyTorch) as a representative of the common RL-as-classifier pattern in MFD. It trains on balanced Normal/Faulty splits (HUMS: Days 19–20 vs. 26–27; IMS: 1370 Oct segments vs. last 1370 Nov segments; XJTU-SY: first 2000 vs. last 2000 segments) and is tested on the remaining unlabeled files. 
+
+## 4.3 Evaluation Criteria 
+
+Our primary objective is evaluating earliest detection , i.e., how soon a model reliably signals anomalies within the incipient degradation window. Because early warnings are operationally useless alongside continuous false positives, we also assess the pre-onset False Alarm Rate (FAR) and post-detection consistency to ensure the stability of valid alerts. 
+
+Why AUROC is inapplicable: Run-to-failure data lacks per-sample binary labels, and retrospective fault onsets are inherently uncertain (e.g., the HUMS2023 onset spans Days 22–24). Conse-quently, AUROC computed against a rigid boundary is fragile and indifferent to detection earliness. Following standard prac-tices [ 13 , 15 ], we instead evaluate reliability via timeliness , FAR ,and PDC , explicitly flagging saturation failure (achieving high PDC merely through persistent, indiscriminate alerting). 15    
+
+> 50
+> 125
+> 127
+> 143
+> 150
+> 163
+> 175
+> 264
+> File Number
+> Ours
+> Day 22
+> Winner
+> Day 23
+> HUMS2023
+> Day 24
+> FRESH filter
+> Day 22
+> SS-AD
+> Day 21 Day 21 Day 22 Day 22 Day 22
+> Comparison of Earliest Fault Detection for HUMS2023 Dataset
+
+Figure 2: Comparison of Earliest Fault Detection for HUMS2023 Dataset 
+
+## 4.4 Experimental Setup 
+
+All models use the splits in Table 2, trained over ten random seeds (scores averaged). AIRL uses the hyperparameters in Section 3.3. AE-family baselines use symmetric encoder–decoders with hidden dims {1024,256,64}, latent 64. IF uses 400 estimators; OCSVM uses an RBF kernel. All methods share the same thresholding rules (Section 3.4). 
+
+## 5 Evaluation 5.1 Earliest Fault Detection 
+
+Table 3: Earliest fault detection across datasets (max −2SE threshold). Model HUMS IMS XJTU-SY 
+
+GT Day 24 #264 mid-Nov ∼500 min IF Day 21 #9 2003-11-08 11:41:44 279 OCSVM Day 21 #1 2003-11-01 00:41:44 264 AE Day 21 #1 2003-11-01 05:31:44 309 VAE Day 21 #37 2003-11-22 17:36:56 † 332 LSTM-AE Day 21 #36 2003-11-22 17:36:56 † 332 LSTM-VAE Day 21 #37 2003-11-22 17:36:56 † 332 TCAE Day 21 #49 2003-11-03 11:51:44 265 CTCAE No Fault No Fault No Fault USAD Day 21 #9 2003-11-01 11:11:44 264 ATF Day 21 #37 2003-11-14 11:12:17 310 CTQN (CB) Day 21 #1 ‡ 2003-11-01 01:21:44 455 AIRL ( 𝛾 = 0) Day 22 #163 2003-11-09 01:01:44 277 AIRL (Ours) Day 22 #163 2003-11-17 12:22:30 459           
+
+> GT: Provided Ground Truth. AIRL ( 𝛾 =0): Ablation results (Sec 6). †Post-GT: Misses onset window under strict threshold. ‡CTQN: Binary classification collapse (all-Faulty constant score ≈0.546).
+
+Table 3 summarizes the earliest anomaly detections across the three datasets. On HUMS, nearly every baseline triggered on Day 21 (the first day of the test partition, which contains 89 files indexed #1–#89; baseline detections clustered in the early portion of this range, between #1 and #49), well before the committee-verified onset of Day 24 #264, indicating premature false alarms. CTQN ex-hibited mode collapse: all 416 HUMS test files (Days 21–25) flagged faulty with a near-constant score ≈0.546, while CTCAE failed in the opposite direction, producing no detections at all. AIRL detected at Day 22 #163, late enough to clear the false-alarm zone, early enough to precede committee ground truth. Figure 2 illustrates this against prior HUMS2023 work: AIRL falls between FRESH filter [ 44 ](Day 22 #127) and the official challenge winner [ 31 ] (Day 23 #175), aligning with the committee-verified onset. Label-free Industrial Fault Detection via Adversarial Inverse Reinforcement Learning: A System for Run-to-Failure Prognostics 
+
+On IMS, evaluated against the mid-November onset [ 4, 36 ] (cat-astrophic failure Nov 25), baselines split into three failure modes. OCSVM, AE, USAD, and CTQN triggered Nov 1, with TCAE on Nov 3, indicating pre-GT false alarms days before any physical degradation. IF and ATF (Nov 8 and Nov 14) fall earlier than the established window. Conversely, VAE, LSTM-AE, and LSTM-VAE first flag only on Nov 22, missing the prognostic window entirely. AIRL alone triggered on Nov 17 , precisely within the mid-November onset. The ablated AIRL ( 𝛾 = 0) flagged on Nov 9, behaving like the statistical baselines and confirming that the discount factor is what separates genuine degradation from operational noise. On XJTU-SY (healthy window ends at ≈500 min [ 21 ]), every baseline except CTQN triggered between Files 264–332, more than 150 min before the onset boundary and well within the established healthy range; these are clear pre-onset false alarms. CTCAE failed to register any deviation. Two methods produced detections close to the onset boundary: CTQN at File 455 and AIRL at File 459. Given that the ∼500-min reference is itself an approximate onset annotation rather than a hard cutoff, both detections fall within a 45-min precursor window of the verified degradation transition, and are best interpreted as operationally reasonable early warnings rather than false alarms. On this dataset alone, CTQN’s bandit formulation produced a comparably reasonable detection point; however, its performance on HUMS (mode collapse) and IMS (false alarm Nov 1) shows this is not a stable property of the formulation. AIRL achieves comparable near-onset detection on XJTU-SY and 
+
+stable behaviour on the other two datasets, which is the broader claim the bandit baseline cannot match. No single method dominates every individual benchmark, e.g., ATF achieves the lowest FAR on IMS under Otsu (Section 5.2). What AIRL alone achieves is cross-dataset reliability: across all three datasets, AIRL avoids both failure modes the baselines exhibit: the oversensitivity of reconstruction and one-class methods (premature false alarms, or onset-missing as VAE and LSTM variants do on IMS), and the instability of static binary classifiers and contrastive methods (mode collapse, saturation, or total detection failure). This is exactly what the contextual-bandit analysis in Section 2.3 pre-dicted: without state transitions or temporal credit assignment, an agent cannot stabilize on a meaningful decision boundary. AIRL’s combination of sequential reasoning and adversarial reward learn-ing is what delivers timely, trustworthy early warnings consistently across gearbox and bearing fault types. 
+
+## 5.2 Post-Detection Consistency 
+
+Beyond detection timing, a practical prognostic system must remain stable throughout the degradation period. Post-detection consistency 
+
+measures the proportion of files correctly flagged as anomalous af-ter the confirmed ground-truth onset [ 13 , 15 ]; a high PDC indicates that the model tracks fault progression steadily without frequent dropouts. Critically, PDC must always be interpreted alongside de-tection timing: a method that triggers prematurely and never stops alarming will accumulate a near-perfect PDC through false-alarm persistence, not genuine discrimination. We term this saturation failure , and it renders the PDC score functionally meaningless for that method. 
+
+Table 4: Pre-GT FAR and PDC after Ground Truth (Otsu). Method HUMS IMS XJTU-SY FAR% PDC% FAR% PDC% FAR% PDC% 
+
+IF [95.1] [99.62] 57.2 59.70 50.3 50.52 OCSVM [99.2] [100.0] 60.3 61.86 58.9 59.18 AE [100.0] [100.0] 82.6 90.73 [97.8] [98.55] VAE 89.1 99.86 50.0 49.91 46.8 46.85 LSTM-AE [93.2] [99.24] 50.2 50.18 46.5 46.58 LSTM-VAE [91.6] [99.24] 50.2 50.12 46.5 46.58 TCAE 41.8 68.06 88.3 92.68 86.3 87.62 CTCAE 0.0 0.00 0.0 0.00 0.0 0.00 CTQN (CB) [100.0] [100.0] 52.7 90.0 63.0 100.0 USAD [99.8] [99.8] 70.1 70.9 81.4 81.5 ATF [94.9] [96.32] 11.6 94.3 [100.0] [81.79] AIRL (Ours) 42.2 79.09 88.1 90.15 68.4 68.38    
+
+> [ ] denotes saturation failure (FAR >90%); high PDC reflects false-alarm persistence, not genuine discrimination.
+
+Two-threshold evaluation framework. Table 3 (earliest detection) uses the max −2SE threshold, which is calibrated from the maxi-mum healthy training score and is one of the max-based strate-gies producing earliest within-window detection across all three datasets in Table 5; it answers “ when does the method first alarm under strict, max-based calibration?” Table 4 PDC uses Otsu’s adap-tive threshold, which partitions test scores globally to maximize between-class variance; it answers “ how reliably does the method track fault progression after onset?” 
+
+HUMS2023 Gearbox: All reconstruction-based baselines achieve 
+
+>99% PDC on HUMS under the Otsu threshold, but only because they trigger prematurely on Day 21 and flag virtually every sub-sequent file, collapsing to an “always-anomalous” state. USAD ex-hibits the same pattern across all three datasets. ATF saturates on HUMS (FAR=95%). CTCAE scores 0% PDC on HUMS, indicating total detection failure. CTQN scores 100% PDC on HUMS but with 100% FAR (all files flagged Faulty from Day 21 #1), confirming sat-uration failure rather than genuine detection; its high PDC is as meaningless as any other saturated method. TCAE achieves 68.06% PDC on HUMS, with its bearing-dataset numbers similarly inflated by pre-GT false-alarm persistence (Table 4). 
+
+IMS Bearings: On IMS, AIRL achieves PDC of 90.15% with a FAR of 88%. ATF achieves a low FAR (12%) on IMS but collapses to zero post-GT detections under strict thresholds, confirming its IMS score range is inadequately spread for conservative calibration. TCAE and IF achieve competitive PDC (92.68%, 59.70%) but at the cost of high pre-GT FAR (88%, 57% respectively), confirming that their IMS performance is inflated by persistent flagging begun well before degradation onset. CTQN achieves PDC of 90.0% with a FAR of 52.7% on IMS, with detection from Nov 1 (01:21:44), well before the mid-November onset, indicating its IMS PDC is partially inflated by early false-alarm persistence beginning from the first test day. 
+
+XJTU-SY Bearings: On XJTU-SY, ATF completely saturates (FAR=100%) while AIRL maintains a FAR of 68% with a PDC of 68.38%. The compressed score range of this bearing dataset makes Otsu partitioning less precise for all methods; nonetheless, AIRL Neupane et al. 
+
+is the only method achieving consistent non-saturated behavior across this dataset as well. CTQN achieves PDC of 100% with FAR of 63.0% on XJTU-SY, with first detection at minute 455 (pre-GT), suggesting competitive post-fault tracking, but this is evaluated on a 16,295-file subset (the last 2,000 test files are withheld as training data), so the post-GT window differs from other methods. AIRL (Ours) is the only method achieving meaningful, non-saturated PDC across all three datasets: 79.09% (HUMS), 90.15% (IMS), and 68.38% (XJTU-SY). On HUMS, AIRL significantly outper-forms every non-saturated baseline. IMS is AIRL’s weakest dataset: the pre-GT FAR of 88% reflects that gradual bearing degradation produces a compressed AIRL score range, where Otsu’s adaptive split places the decision boundary close to the healthy distribution. ATF achieves a lower IMS FAR (12%) under Otsu but saturates on HUMS (FAR=94.9%) and XJTU-SY (FAR=100%), and collapses to zero post-GT detections under strict thresholds (Table 3); its IMS success is dataset-specific, not a general property. TCAE matches AIRL’s IMS FAR (88%) but is itself saturated on HUMS and XJTU-SY. AIRL is the only method whose FAR stays below the 90% saturation ceiling on every dataset, demonstrating that the temporal reward signal generalises across distinct fault types where reconstruction and attention-based baselines do not. High reconstruction capacity does not prevent saturation-or-collapse; temporal reward modeling does. 
+
+## 5.3 Threshold Sensitivity Analysis 
+
+Threshold choice is a practical deployment concern. Table 5 com-pares the earliest AIRL detection under all threshold strategy fami-lies described in Section 3.4. On HUMS, five independent strategies converge to the same de-tection point (Day 22, #163): mean+3 𝜎 , all three max-based variants, and GPD tail ( 𝑝 99 ). Percentile 𝑝 99 is also within the onset window (Day 22 #100). This cross-strategy consistency confirms that the AIRL reward signal produces a clean, threshold-invariant separa-tion on gearbox data. Loose strategies (Otsu, 𝑘 -means) trigger on Day 21 #2. On IMS, the threshold landscape is sharply polarised. All loose and moderate strategies (mean+ 𝑘𝜎 , median+3MAD, percentile, Otsu, 
+
+𝑘 -means) trigger false alarms from Nov 1, well before the mid-November degradation window, while GPD tail ( 𝑝 99 ) triggers on Nov 8. In contrast, all three max-based strategies (Max, Max −SE, Max −2SE) converge to exactly one anomalous file across the en-tire 8,940-file test set: Nov 17 12:22:30, precisely within the mid-November onset window. This binary behaviour, either saturation or single-point detection, reflects the compressed AIRL score range on IMS, where the Nov 17 file is the sole test sample that marginally exceeds the healthy training maximum. On XJTU-SY, the usable strategy space is narrower due to the compressed score range: mean+2 𝜎 , mean+3 𝜎 , median+3MAD, and Max yield no detection because no test file exceeds the corre-sponding threshold. The reported onset is approximately 500 min-utes (end of the healthy window); the precise transition is sub-tle. Both Max −2SE (minute 459) and Max −SE (minute 533) detect within a 75-minute window of this boundary, with Max −2SE flag-ging the earliest pre-onset deviation and Max −SE confirming de-tection just after. For prognostic deployments where early warn-ing matters, Max −2SE is preferable; for confirmed-fault detection, Max −SE is more conservative. GPD tail ( 𝑝 99 ) is excessively delayed (minute 1748), and Otsu and 𝑘 -means saturate from minute 251. Across all three datasets, the max-based family (Max −SE and Max −2SE) provides the most reliable detection. Both variants pro-duce identical detections on HUMS (Day 22 #163) and IMS (Nov 17), and bracket the XJTU-SY onset by under 75 minutes. We recom-mend Max −2SE as the default for prognostic early warning (earliest detection within the onset window across all three datasets), and Max −SE as the conservative alternative when post-onset confir-mation is preferred. Both are self-calibrating from healthy training scores and require no held-out validation set or manual tuning. 
+
+Table 5: Earliest AIRL detection per threshold strategy Threshold HUMS (Day #) IMS (date) XJTU-SY (min)                                        
+
+> Mean+2 𝜎 Day 21 #88 ‡Nov 1 ‡—Mean+3 𝜎 Day 22 #163 †Nov 1 ‡—Median+3MAD Day 21 #80 ‡Nov 1 ‡—Max Day 22 #163 †Nov 17 †—Max −SE Day 22 #163 †Nov 17 †533 †
+> Max −2SE Day 22 #163 †Nov 17 †459 †
+> Percentile ( 𝑝 99 )Day 22 #100 †Nov 1 ‡267 ‡
+> Otsu Day 21 #2 §Nov 1 §251 §
+> 𝑘 -means midpoint Day 21 #2 §Nov 1 §251 §
+> GPD tail ( 𝑝 99 )Day 22 #163 †Nov 8 ‡1748 †
+> Ground truth onset Day 24 #264 mid-Nov. ∼500 min
+> †Valid: Within-window / post-GT. ‡False Alarm: Pre-GT.
+> §Saturation: Flags first test file. —No Detection: Threshold not met.
+
+## 5.4 Computational Cost and Deployment 
+
+Adversarial training is commonly cited as expensive; in practice, AIRL’s overhead is modest due to two structural properties. First, its three networks (reward, value, policy) contain only 644 param-eters, one to four orders of magnitude fewer than the deep base-lines (TCAE ∼14K, LSTM-AE ∼167K, ATF ∼146K, AE ∼9.0M, USAD 
+
+∼13.4M). Second, at inference time AIRL operates on consecutive scalar pairs (𝑥 𝑡 , 𝑥 𝑡 +1): each full-length file is reduced to a single transition pair before scoring, requiring no matrix multiplication over high-dimensional vectors. All reconstruction-based methods (AE, TCAE, USAD, ATF) must forward-pass the full sequence vector per file. This makes AIRL’s per-file inference constant, minimal, and compatible with edge controllers that cannot buffer complete sample windows. For deployment: (i) collect ≥250 healthy files; (ii) train AIRL offline once on healthy transitions; (iii) at runtime, score each new acquisition file using the frozen reward and value networks; (iv) apply a Max −2SE threshold (or Max −SE for more conservative post-onset detection) calibrated on training scores for automated alarming. 
+
+## 6 Discussion and Conclusion 
+
+This paper presented a label-free, offline-trainable fault detection system based on adversarial inverse reinforcement learning, eval-uated on three industrial run-to-failure benchmarks. While our primary objective remains achieving the earliest possible detection ,AIRL was the only method to validate these early warnings by achieving non-saturated, consistent PDC (68–90%) across all three Label-free Industrial Fault Detection via Adversarial Inverse Reinforcement Learning: A System for Run-to-Failure Prognostics 
+
+datasets while respecting onset ground-truth timelines. Reconstruction-based baselines (AE, VAE, LSTM variants, USAD) saturate indis-criminately; TCAE and CTCAE suffer mode collapse on HUMS; ATF saturates on HUMS and XJTU-SY, and collapses on IMS under strict thresholds despite low FAR under Otsu. These results confirm that higher reconstruction capacity does not prevent the saturation-or-collapse failure inherent to run-to-failure prognostics. AIRL’s temporal reward modeling is the key differentiator. 
+
+Scope of the RL claim: Our argument is precise and deliberate: we are not claiming reinforcement learning is universally superior to supervised or signal-processing methods for fault detection. Sim-ple machine-learning and signal-processing baselines frequently match or outperform deep models in this domain [ 23 , 38 , 47 ], and supervised methods remain the right tool for fault classification 
+
+once detection has flagged an anomaly [ 11 , 52 ]. Our claim is the more specific one: if RL is to be applied to MFD, the prevailing contextual-bandit formulation defeats its purpose. Genuine RL, whether online or offline, is distinguished by reasoning over state transitions and credit-assignment through delayed reward [3]; an episode that terminates after a single observation reduces to su-pervised learning. To operationalize sequential reasoning without physical control actions, we adopted a state-only imitation learning perspective [ 41 ], framing the next observation as a proxy action. This recovers a reward function that measures the plausibility of the transition itself , shifting focus from “what does the signal look like?” to “how is the signal evolving?” The contextual-bandit baseline (CTQN), which lacks this temporal reasoning, exhibited mode col-lapse on HUMS (all files flagged Faulty, FAR=100%) and pre-GT false alarms on IMS, empirically confirming the theoretical argument; its near-onset detection on XJTU-SY (File 455) does not generalize. 
+
+Contribution: To our knowledge this is the first principled application of inverse RL to machinery fault detection, demonstrat-ing that offline RL can be applied to industrial prognostic data without collapsing into supervised classification. The contribution is methodological: a transferable blueprint for using sequential RL on offline industrial sensor data, with an associated evaluation framework (timeliness, FAR, PDC, saturation flagging) that surfaces failure modes which standard metrics like AUROC hide. 
+
+Limitations and future work: Three limitations are worth naming explicitly. First, AIRL operates on single-channel scalar transitions (𝑥 𝑡 , 𝑥 𝑡 +1) ∈ R2, which keeps the network compact and edge-deployable but discards cross-channel correlations that multi-sensor industrial systems routinely provide; multi-sensor fusion with shared discriminator architectures is a logical extension. Sec-ond, AIRL’s performance is dataset-dependent: on IMS, the grad-ual nature of bearing degradation produces a compressed AIRL score range, which translates to a higher pre-GT FAR (88%) than on HUMS (42%) or XJTU-SY (68%). While AIRL remains the only method maintaining non-saturated FAR across all three datasets, the IMS result indicates that gradual bearing degradation is the harder setting for transition-based reward learning, and motivates non-stationary or distribution-shift-aware threshold adaptation. Third, validation is currently limited to three public run-to-failure datasets; larger industrial corpora, online deployment trials, and uncertainty quantification on the learned reward function remain future work. 
+
+## A Ablation Study: Impact of Sequential Reasoning 
+
+To validate the role of sequential modeling, we ablated the discount factor ( 𝛾 ), comparing AIRL ( 𝛾 = 0.99 ) against a myopic variant (𝛾 = 0) that reduces the agent to a contextual bandit. The sequential formulation offers three measurable advantages, each targeting a distinct failure mode of the bandit formulation: 
+
+(i) Tighter healthy-manifold representation: On HUMS2023, the sequential discriminator loss stabilized at ≈ 0.75 versus ≈ 0.83 
+
+for the myopic baseline, and the 𝑝 99 anomaly threshold was lower (𝜏 ≈ 0.319 vs. 0.347 ). Despite the stricter threshold, the sequential model flagged a higher total anomaly volume, indicating that the value function characterizes healthy behavior precisely enough that subtle fault indicators register with high confidence rather than requiring large deviations. 
+
+(ii) Noise filtering via temporal credit: On XJTU-SY, the myopic model triggered false alarms within the known healthy window (< 500 min): File 277 under max-SE and File 261 under max-2SE. The sequential model filtered these fluctuations and delayed detection to File 533 (max-SE) and File 459 (max-2SE). Without temporal credit assignment, the bandit formulation cannot distinguish transient instability from genuine degradation. 
+
+(iii) Stability across thresholds: On IMS, the myopic baseline produced zero detections under strict thresholds (max, max-SE); its earliest detection (Nov 9) required loose adaptive thresholds (GPD) and collapsed under stricter calibration. The sequential model trig-gered on Nov 17, within the mid-November degradation window [ 4 ], and maintained dense, stable detection across the full threshold hierarchy. Their cumulative effect explains why AIRL’s full 𝛾 = 0.99 con-figuration consistently outperforms the myopic ablation across all three datasets reported in the main results. 
+
+## Usage of Generative AI 
+
+The GenAI models (and Copilot) were used only to fix the LaTeX equations and formatting issues, refine sentences or words, fixing minor bugs in code. All the generated suggestions were thoroughly verified, edited, and rewritten by the authors, and no AI text, fig-ures, or code appears in the manuscript. The authors maintain full responsibility and accountability for all concepts & methodology, data, analysis, and results & conclusions, and this limited use of GenAI complies with ACM’s authorship and transparency policies. 
+
+## References            
+
+> [1] Julien Audibert, Pietro Michiardi, Frédéric Guyard, Sébastien Marti, and Maria A Zuluaga. 2020. USAD: Unsupervised anomaly detection on multivariate time series. In Proceedings of the 26th ACM SIGKDD International Conference on Knowl-edge Discovery & Data Mining . 3395–3404. [2] Shaojie Bai, J Zico Kolter, and Vladlen Koltun. 2018. An empirical evaluation of generic convolutional and recurrent networks for sequence modeling. arXiv preprint arXiv:1803.01271 (2018). [3] Andrew G Barto and Thomas G Dietterich. 2004. Reinforcement learning and its relationship to supervised learning. Handbook of learning and approximate dynamic programming 10 (2004), 9780470544785. [4] Tarek Berghout, Mohamed Benbouzid, and Leïla-Hayet Mouss. 2021. Leveraging label information in a knowledge-driven approach for rolling-element bearings remaining useful life prediction. Energies 14, 8 (2021), 2163.
+
+Neupane et al. 
+
+[5] Ting Chen, Simon Kornblith, Mohammad Norouzi, and Geoffrey Hinton. 2020. A simple framework for contrastive learning of visual representations. In Inter-national conference on machine learning . PmLR, 1597–1607. [6] Junyoung Chung, Kyle Kastner, Laurent Dinh, Kratarth Goel, Aaron C Courville, and Yoshua Bengio. 2015. A recurrent latent variable model for sequential data. 
+
+Advances in neural information processing systems 28 (2015). [7] Saurabh Deshpande, Rahee Walambe, Ketan Kotecha, Ganeshsree Selvachandran, and Ajith Abraham. 2025. Advances and applications in inverse reinforcement learning: a comprehensive review. Neural Computing and Applications (2025), 1–53. [8] Yu Ding, Liang Ma, Jian Ma, Mingliang Suo, Laifa Tao, Yujie Cheng, and Chen Lu. 2019. Intelligent fault diagnosis for rotating machinery using deep Q-network based health state classification: A deep reinforcement learning approach. Ad-vanced Engineering Informatics 42 (2019), 100977. [9] Justin Fu, Katie Luo, and Sergey Levine. 2018. Learning Robust Rewards with Ad-versarial Inverse Reinforcement Learning. In International Conference on Learning Representations (ICLR) . https://openreview.net/forum?id=rkHywl-A-[10] Bo-Ruei Huang, Chun-Kai Yang, Chun-Mao Lai, Dai-Jie Wu, and Shao-Hua Sun. 2024. Diffusion Imitation from Observation. In Advances in Neural In-formation Processing Systems , A. Globerson, L. Mackey, D. Belgrave, A. Fan, U. Paquet, J. Tomczak, and C. Zhang (Eds.), Vol. 37. Curran Associates, Inc., 137190–137217. https://proceedings.neurips.cc/paper_files/paper/2024/file/ f7faa46b563c2e5343a728c85bace833-Paper-Conference.pdf [11] Fasikaw Kibrete, Dereje Engida Woldemichael, and Hailu Shimels Gebremedhen. 2024. Multi-Sensor data fusion in intelligent fault diagnosis of rotating machines: A comprehensive review. Measurement (2024), 114658. [12] Diederik P Kingma and Max Welling. 2013. Auto-encoding variational Bayes. 
+
+arXiv preprint arXiv:1312.6114 (2013). [13] Yaguo Lei, Naipeng Li, Liang Guo, Ningbo Li, Tao Yan, and Jing Lin. 2018. Ma-chinery health prognostics: A systematic review from data acquisition to RUL prediction. Mechanical systems and signal processing 104 (2018), 799–834. [14] Guoqiang Li, Jun Wu, Chao Deng, Xuebing Xu, and Xinyu Shao. 2021. Deep reinforcement learning-based online domain adaptation method for fault diagno-sis of rotating machinery. IEEE/ASME Transactions on Mechatronics 27, 5 (2021), 2796–2805. [15] Xiang Li, Qian Ding, and Jian-Qiao Sun. 2018. Remaining useful life estimation in prognostics using deep convolution neural networks. Reliability Engineering & System Safety 172 (2018), 1–11. [16] Zhenning Li, Hongkai Jiang, and Yutong Dong. 2025. A convolutional-transformer reinforcement learning agent for rotating machinery fault diagnosis. 
+
+Expert Systems with Applications 271 (2025), 126669. [17] Zhenning Li, Hongkai Jiang, and Xin Wang. 2025. A novel reinforcement learning agent for rotating machinery fault diagnosis with data augmentation. Reliability Engineering & System Safety 253 (2025), 110570. [18] Fei Tony Liu, Kai Ming Ting, and Zhi-Hua Zhou. 2008. Isolation Forest. In 2008 Eighth IEEE International Conference on Data Mining . IEEE, 413–422. [19] Pankaj Malhotra, Anusha Ramakrishnan, Gaurangi Anand, Lovekesh Vig, Puneet Agarwal, and Gautam Shroff. 2016. LSTM-based encoder-decoder for multi-sensor anomaly detection. arXiv preprint arXiv:1607.00148 (2016). [20] Wentao Mao, Zongtao Chen, Yanna Zhang, and Zhidan Zhong. 2024. Harmony better than uniformity: A new pre-training anomaly detection method with tensor domain adaptation for early fault evaluation. Engineering Applications of Artificial Intelligence 127 (2024), 107427. [21] Wentao Mao, Di Zhang, Siyu Tian, and Jiamei Tang. 2020. Robust detection of bearing early fault based on deep transfer learning. Electronics 9, 2 (2020), 323. [22] James B McQueen. 1967. Some methods of classification and analysis of multi-variate observations. In Proc. of 5th Berkeley Symposium on Math. Stat. and Prob. 
+
+281–297. [23] Dhiraj Neupane, Mohamed Reda Bouadjenek, Richard Dazeley, and Sunil Aryal. 2024. A Comparative Study of Semi-Supervised Anomaly Detection Methods for Machine Fault Detection. In PHM Society European Conference , Vol. 8. 10–10. [24] Dhiraj Neupane, Mohamed Reda Bouadjenek, Richard Dazeley, and Sunil Aryal. 2024. Machinery Fault Detection using Advanced Machine Learning Techniques. In PHM Society European Conference , Vol. 8. 4–4. [25] Dhiraj Neupane, Mohamed Reda Bouadjenek, Richard Dazeley, and Sunil Aryal. 2025. Data-driven machinery fault diagnosis: A comprehensive review. Neuro-computing (2025), 129588. [26] Dhiraj Neupane, Richard Dazeley, Mohamed Reda Bouadjenek, and Sunil Aryal. 2026. Learning Rewards, Not Labels: Adversarial Inverse Reinforce-ment Learning for Machinery Fault Detection. In Proceedings of the 25th In-ternational Conference on Autonomous Agents and Multiagent Systems (AAMAS) .doi:10.65109/AXYX4522 [27] Andrew Y Ng, Stuart Russell, et al . 2000. Algorithms for inverse reinforcement learning.. In Icml , Vol. 1. 2. [28] Rui Nian, Jinfeng Liu, and Biao Huang. 2020. A review on reinforcement learn-ing: Introduction and applications in industrial process control. Computers & Chemical Engineering 139 (2020), 106886. [29] P Nunes, J Santos, and E Rocha. 2023. Challenges in predictive maintenance–A review. CIRP Journal of Manufacturing Science and Technology 40 (2023), 53–67. [30] Nobuyuki Otsu et al . 1975. A threshold selection method from gray-level his-tograms. Automatica 11, 285-296 (1975), 23–27. [31] Cédric Peeters, Wenyi Wang, David Blunt, Timothy Verstraeten, and Jan Helsen. 2024. Fatigue crack detection in planetary gears: Insights from the HUMS2023 data challenge. Mechanical Systems and Signal Processing 212 (2024), 111292. [32] James Pickands III. 1975. Statistical inference using extreme order statistics. the Annals of Statistics (1975), 119–131. [33] Gensheng Qian and Jingquan Liu. 2022. Development of deep reinforcement learning-based fault diagnosis method for rotating machinery in nuclear power plants. Progress in Nuclear Energy 152 (2022), 104401. [34] José Miguel Ramírez-Sanz, Jose-Alberto Maestro-Prieto, Álvar Arnaiz-González, and Andrés Bustillo. 2023. Semi-supervised learning for industrial fault detection and diagnosis: A systemic review. ISA Transactions (2023). [35] Maria Andrea Romo-Chavero, Jose Antonio Cantoral-Ceballos, Jesus Arturo Pérez-Díaz, and Carlos Martinez-Cagnazzo. 2024. Median absolute deviation for BGP anomaly detection. Future Internet 16, 5 (2024), 146. [36] Diletta Sacerdoti, Matteo Strozzi, and Cristian Secchi. 2023. A comparison of signal analysis techniques for the diagnostics of the IMS rolling element bearing dataset. Applied Sciences 13, 10 (2023), 5977. [37] M Saied, N Tahan, K Chreif, C Francis, and Z Noun. 2025. Development of deep reinforcement learning-based fault diagnosis method for actuator faults in unmanned aerial vehicles. The Aeronautical Journal (2025), 1–17. [38] Nader Sawalhi, Wenyi Wang, and David Blunt. 2024. Helicopter planet gear rim crack diagnosis and trending using cepstrum editing enhanced with deconvolu-tion. Sensors 24, 8 (2024), 2593. [39] Bernhard Schölkopf, Robert C Williamson, Alex Smola, John Shawe-Taylor, and John Platt. 1999. Support vector method for novelty detection. Advances in neural information processing systems 12 (1999). [40] Richard S. Sutton and Andrew G. Barto. 2020. Reinforcement Learning: An Intro-duction (second ed.). MIT Press, Cambridge, Massachusetts London, England. [41] Faraz Torabi, Garrett Warnell, and Peter Stone. 2018. Generative adversarial imitation from observation. arXiv preprint arXiv:1807.06158 (2018). [42] Faraz Torabi, Garrett Warnell, and Peter Stone. 2019. Adversarial imitation learning from state-only demonstrations. In Proceedings of the 18th International Conference on Autonomous Agents and MultiAgent Systems . 2229–2231. [43] David Umsonst, Justin Ruths, and Henrik Sandberg. 2022. Finite sample guaran-tees for quantile estimation: An application to detector threshold tuning. IEEE Transactions on Control Systems Technology 31, 2 (2022), 921–928. [44] Rik Vaerenberg, Alex Ricardo Mauricio, and Konstantinos Gryllias. 2025. Detect-ing planet gear crack propagation using FRESH filters. In 14th Defence Science & Technology (DST) International Conference on Health and Usage Monitoring HUMS2025 Proceedings .[45] Biao Wang, Yaguo Lei, Naipeng Li, and Ningbo Li. 2020. A Hybrid Prognostics Approach for Estimating Remaining Useful Life of Rolling Element Bearings. IEEE Transactions on Reliability 69, 1 (2020), 401–412. doi:10.1109/TR.2018.2882682 [46] Wenyi Wang, David Blunt, and J Kappas. 2023. Helicopter main gearbox planet gear crack propagation test dataset. [47] W Wang, K Vos, J Taylor, C Jenkins, B Bala, L Whitehead, and Z Peng. 2023. Is deep learning superior to traditional techniques in machine health monitoring applications. The Aeronautical Journal 127, 1318 (2023), 2105–2117. [48] Shuai Xiao, Qingsheng Feng, Xue Li, and Hong Li. 2024. Research on intelligent fault diagnosis for railway point machines using deep reinforcement learning. 
+
+Transportation Safety and Environment 6, 4 (2024), tdae007. [49] Jiehui Xu, Haixu Wu, Jianmin Wang, and Mingsheng Long. 2022. Anomaly Transformer: Time series anomaly detection with association discrepancy. In 
+
+International Conference on Learning Representations (ICLR) .[50] Daoguang Yang, Hamid Reza Karimi, and Marek Pawelczyk. 2023. A new intelli-gent fault diagnosis framework for rotating machinery based on deep transfer reinforcement learning. Control Engineering Practice 134 (2023), 105475. [51] Xue Yang, Enda Howley, and Michael Schukat. 2025. Agent-based dynamic thresholding for adaptive anomaly detection using reinforcement learning. Neu-ral Computing and Applications 37, 23 (2025), 18775–18791. [52] Shen Zhang, Shibo Zhang, Bingnan Wang, and Thomas G Habetler. 2020. Deep learning algorithms for bearing fault diagnostics—A comprehensive review. IEEE access 8 (2020), 29857–29881. [53] Zhibin Zhao, Qiyang Zhang, Xiaolei Yu, Chuang Sun, Shibin Wang, Ruqiang Yan, and Xuefeng Chen. 2021. Applications of Unsupervised Deep Transfer Learning to Intelligent Fault Diagnosis: A Survey and Comparative Study. IEEE Transactions on Instrumentation and Measurement 70 (2021), 1–28. doi:10.1109/ TIM.2021.3116309 [54] Chong Zhou and Randy C Paffenroth. 2017. Anomaly detection with robust deep autoencoders. In Proceedings of the 23rd ACM SIGKDD International Conference on Knowledge Discovery and Data Mining . 665–674. [55] Zhuangdi Zhu, Kaixiang Lin, Bo Dai, and Jiayu Zhou. 2020. Off-policy imitation learning from observations. Advances in neural information processing systems Label-free Industrial Fault Detection via Adversarial Inverse Reinforcement Learning: A System for Run-to-Failure Prognostics 
+
+33 (2020), 12402–12413.
