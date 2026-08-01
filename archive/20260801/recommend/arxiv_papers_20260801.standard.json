@@ -1,0 +1,689 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-08-01T21:25:53.008214+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 2,
+    "deep_divecandidates": 4,
+    "deep_cap": 7,
+    "deep_selected": 4,
+    "quick_candidates": 14,
+    "quick_skim_target": 12,
+    "quick_selected": 12
+  },
+  "deep_dive": [
+    {
+      "id": "2607.23197v1",
+      "source": "arxiv",
+      "title": "Domain-Prior-Regularized Graph Modeling for Anomaly Detection in Cyber-Physical Systems",
+      "abstract": "Anomaly detection on multivariate sensor time series is critical for industrial monitoring of cyber-physical systems (CPS), where even subtle deviations from normal behavior can indicate process disruption. Recent graph-based approaches have made significant progress, but they often struggle in small-scale physical systems with scarce labeled anomalies and limited normal data. In such settings, graph-based models tend to capture spurious correlations and produce unstable sensor topologies. We propose DPR-GM (Domain-Prior-Regularized Graph Modeling), a forecasting-based framework that incorporates system design knowledge into graph construction. DPR-GM leverages a large language model (LLM) to extract directed physical couplings between sensor pairs from system documentation, which are encoded as a binary domain adjacency matrix serving as a structural gate over sensor relations. This gate is then modulated by Pearson correlations estimated from normal training data. The anomaly score is further weighted by sensor-level reliability derived from the coefficient of variation. All graph and weighting components are fixed prior to training and add no learnable parameters. On the SKAB benchmark, DPR-GM outperforms graph-based, statistical, and deep learning baselines across F1, AUROC, and AUPRC, showing that domain-structured graph priors are a practical alternative to fully learned topologies in data-scarce CPS.",
+      "authors": [
+        "Youngseok Hwang",
+        "Joonsung Kwon",
+        "Geonwoo Lee",
+        "Hyunwoo Park"
+      ],
+      "primary_category": "cs.LG",
+      "categories": [
+        "cs.LG",
+        "cs.AI"
+      ],
+      "published": "2026-07-25T13:21:56+00:00",
+      "link": "https://arxiv.org/pdf/2607.23197v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "multivariate sensor time-series anomaly detection, transferable to proprioceptive fault diagnosis",
+      "llm_evidence_cn": "多变量传感器时间序列异常检测，可迁移至本体感受故障诊断",
+      "llm_evidence": "多变量传感器时间序列异常检测，可迁移至本体感受故障诊断",
+      "canonical_evidence": "多变量传感器时间序列异常检测，可迁移至本体感受故障诊断",
+      "llm_tldr_en": "Proposes DPR-GM, a forecasting-based graph anomaly detection framework for multivariate sensor time series that injects domain priors via LLM-extracted physical couplings, improving detection when labeled anomalies and normal data are scarce.",
+      "llm_tldr_cn": "针对小规模物理系统中标注异常稀少、正常数据有限导致图模型易产生虚假关联的问题，提出DPR-GM框架。该方法利用大语言模型抽取物理耦合关系作为领域先验，构建稳定的图结构，以预测误差做异常检测。实验表明该方法能提升多变量时序异常检测的准确性和拓扑稳定性。该思路可直接迁移到人形机器人本体感受信号的故障诊断。",
+      "llm_tldr": "针对小规模物理系统中标注异常稀少、正常数据有限导致图模型易产生虚假关联的问题，提出DPR-GM框架。该方法利用大语言模型抽取物理耦合关系作为领域先验，构建稳定的图结构，以预测误差做异常检测。实验表明该方法能提升多变量时序异常检测的准确性和拓扑稳定性。该思路可直接迁移到人形机器人本体感受信号的故障诊断。",
+      "llm_tags": [
+        "query:humanoid-ood"
+      ],
+      "matched_query_tag": "query:humanoid-ood",
+      "matched_query_text": "Self supervised time series anomaly detection for robot fault diagnosis",
+      "matched_requirement_id": "req-16",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2607.27261v1",
+      "source": "arxiv",
+      "title": "It's Not Just More Demos: Counterfactual Action Sensitivity Coverage for Data-Efficient Robust Robot Imitation",
+      "abstract": "Visuomotor imitation learning has demonstrated success for manipulation tasks. However, the trained policies remain brittle to visual `nuisances', with even minor task-preserving variations such as lighting, distractions or changes in colour result in heavy degradation of the trained policy's performance. While increasing data diversity can improve robustness, it is unclear which additional demonstrations are informative for a particular trained policy. We propose Counterfactual Nuisance Behaviour Cloning (CFNBC), an offline data-selection framework for targeted robustness repair. Starting from a nominal policy trained on `clean' demonstrations, CFNBC generates paired clean and nuisance observations that preserve the expert action, then measures \\emph{action drift}: the change in the policy's predicted action under a nuisance that should not alter the desired behaviour. This provides a policy-specific sensitivity signal for selecting a compact, response-diverse repair set from a larger candidate pool, without requiring rollout success labels or online policy execution. We show in MuJoCo bimanual cube transfer and SimplerEnv cube stacking that action drift correlates with nuisance-induced failure, and that response-guided repair with only $20$--$30$ selected candidates substantially outperforms matched-budget random selection while approaching the performance of much larger random repair budgets. These results support a data-centric view of robustness repair: the most useful data are not necessarily the most numerous, visually diverse, or obviously difficult, but the examples that cover fragile response modes of the current policy.",
+      "authors": [
+        "Giovanni D'urso",
+        "Kaushik Roy",
+        "Nicholas Lawrance",
+        "Brendan Tidd"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-07-29T05:55:57+00:00",
+      "link": "https://arxiv.org/pdf/2607.27261v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "offline data-selection framework for targeted robustness repair; directly informs robot dataset construction",
+      "llm_evidence_cn": "面向针对性鲁棒性修复的离线数据选择框架，直接为机器人数据集构建提供依据",
+      "llm_evidence": "面向针对性鲁棒性修复的离线数据选择框架，直接为机器人数据集构建提供依据",
+      "canonical_evidence": "面向针对性鲁棒性修复的离线数据选择框架，直接为机器人数据集构建提供依据",
+      "llm_tldr_en": "CFNBC is an offline data-selection framework that generates paired clean and nuisance observations to select informative demonstrations for robust robot imitation, making dataset construction more data-efficient.",
+      "llm_tldr_cn": "模仿学习策略对光照、干扰、颜色等视觉干扰脆弱，单纯增加数据并不高效。本文提出CFNBC离线数据选择框架，从原始演示生成成对的干净与干扰观测，依据动作敏感性覆盖度挑选对当前策略最具修复价值的样本。在多个视觉扰动任务中，该方法以更少数据显著提升策略鲁棒性，为机器人数据集构建提供了实用策略。",
+      "llm_tldr": "模仿学习策略对光照、干扰、颜色等视觉干扰脆弱，单纯增加数据并不高效。本文提出CFNBC离线数据选择框架，从原始演示生成成对的干净与干扰观测，依据动作敏感性覆盖度挑选对当前策略最具修复价值的样本。在多个视觉扰动任务中，该方法以更少数据显著提升策略鲁棒性，为机器人数据集构建提供了实用策略。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2607.28483v1",
+      "source": "arxiv",
+      "title": "Towards Real-Time PixOOD: Efficient Anomaly Segmentation for Autonomous Vehicles",
+      "abstract": "Real-time anomaly segmentation is essential for the safety of autonomous systems. Although recent approaches offer high accuracy, their computational cost limits their deployment on embedded hardware. This work presents an efficient and accelerated pipeline designed for both embedded and desktop platforms, targeting the autonomous driving and railway domains. The proposed approach reformulates the Neyman-Pearson scoring stage of PixOOD, a state-of-the-art out-of-distribution detection method, and deploys the full pipeline through hardware-optimized TensorRT compilation, reaching up to 182 FPS on a desktop NVIDIA RTX 4060 GPU and 75 FPS on the NVIDIA Jetson AGX Orin embedded platform, respectively 20x and 18x faster than the original baseline. The achieved results demonstrate that advanced anomaly segmentation can be efficiently deployed for onboard processing in autonomous driving and railway applications.",
+      "authors": [
+        "Luca de Martino",
+        "Federico Aromolo",
+        "Federico Nesti",
+        "Giorgio Buttazzo"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV"
+      ],
+      "published": "2026-07-30T16:36:42+00:00",
+      "link": "https://arxiv.org/pdf/2607.28483v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "real-time OOD detection for safety; optimized for embedded Jetson deployment",
+      "llm_evidence_cn": "面向安全的实时OOD检测，并在Jetson嵌入式平台优化部署",
+      "llm_evidence": "面向安全的实时OOD检测，并在Jetson嵌入式平台优化部署",
+      "canonical_evidence": "面向安全的实时OOD检测，并在Jetson嵌入式平台优化部署",
+      "llm_tldr_en": "This work accelerates PixOOD, a state-of-the-art OOD detection method, by reformulating its Neyman-Pearson scoring and compiling via TensorRT. It achieves 182 FPS on desktop and 75 FPS on embedded Jetson AGX Orin, enabling real-time anomaly segmentation for safe autonomous driving and railway systems.",
+      "llm_tldr_cn": "高风险自动驾驶系统需要实时异常分割，但现有OOD检测方法计算开销大，难以部署在嵌入式设备上。本文针对PixOOD方法的Neyman-Pearson评分阶段进行重构，并将完整流程通过TensorRT硬件优化编译。在桌面RTX 4060上达到182 FPS，在嵌入式Jetson AGX Orin上达到75 FPS，分别较基线提速20倍和18倍。工作实现了实时、资源高效的OOD异常检测，可支持机器人/车辆的安全运行。",
+      "llm_tldr": "高风险自动驾驶系统需要实时异常分割，但现有OOD检测方法计算开销大，难以部署在嵌入式设备上。本文针对PixOOD方法的Neyman-Pearson评分阶段进行重构，并将完整流程通过TensorRT硬件优化编译。在桌面RTX 4060上达到182 FPS，在嵌入式Jetson AGX Orin上达到75 FPS，分别较基线提速20倍和18倍。工作实现了实时、资源高效的OOD异常检测，可支持机器人/车辆的安全运行。",
+      "llm_tags": [
+        "query:humanoid-ood"
+      ],
+      "matched_query_tag": "query:humanoid-ood",
+      "matched_query_text": "out-of-distribution detection for safe robot operation",
+      "matched_requirement_id": "req-11",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2607.28243v1",
+      "source": "arxiv",
+      "title": "EgoGenesis: Egocentric World-Action Modeling with Online Anchored Projective Memory and Action-3D RoPE",
+      "abstract": "Egocentric video offers rich manipulation experience for embodied AI, yet collecting diverse egocentric data across scenes, objects, motions, and embodiments remains costly. We present \\method, an egocentric world-action simulator that synthesizes controllable, high-quality manipulation videos to expand scarce real-world training data. \\method{} builds on a pretrained video generation prior and introduces two geometry-aware conditioning mechanisms. Online Anchored Projective Memory (OAPM) preserves a first-frame 3D scene anchor while periodically refreshing a recent state during autoregressive generation. Action-3D Rotary Position Embedding (A3D-RoPE) encodes end-effector motion with camera-aware 3D rotary coordinates, injecting action geometry into skeleton-to-video cross-attention for precise control. Together, these components improve visual fidelity, geometric stability, and action alignment in long egocentric rollouts. Moreover, augmenting 400 real trajectories with 400 \\method-generated trajectories improves out-of-distribution real-robot success from 77\\% to 84\\% on single-arm tasks and from 53\\% to 70\\% on dual-arm tasks, demonstrating that the synthesized data substantially improve downstream WAM generalization.",
+      "authors": [
+        "Zexuan Yan",
+        "Yuzhou Wu",
+        "Yue Ma",
+        "Zonghang He",
+        "Kaibo Yin",
+        "Xiaobing Tu",
+        "Yinggui Wang",
+        "Jinkui Ren",
+        "Xiantao Zhang",
+        "Shijian Wang",
+        "Jinghong Liu",
+        "Linfeng Zhang"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV",
+        "cs.AI"
+      ],
+      "published": "2026-07-30T14:06:26+00:00",
+      "link": "https://arxiv.org/pdf/2607.28243v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "synthetic egocentric video generation to expand scarce training data for robotics",
+      "llm_evidence_cn": "合成自我中心操控视频以扩充稀缺的机器人训练数据",
+      "llm_evidence": "合成自我中心操控视频以扩充稀缺的机器人训练数据",
+      "canonical_evidence": "合成自我中心操控视频以扩充稀缺的机器人训练数据",
+      "llm_tldr_en": "Introduces EgoGenesis, an egocentric world-action simulator that synthesizes controllable manipulation videos with geometry-aware conditioning to expand scarce real-world training data.",
+      "llm_tldr_cn": "自我中心视频蕴含丰富的操控经验，但跨场景、物体、动作和具身形态收集多样数据成本高昂。EgoGenesis提出一种自我中心世界-动作模拟器，基于预训练视频生成先验，引入在线锚定投影记忆和动作3D旋转位置编码两种几何感知条件机制，用于合成可控、高质量的操控视频。实验表明，生成的视频能有效扩充稀缺的真实世界训练数据，缓解具身智能数据收集瓶颈，为机器人数据集构建提供了低成本方案。",
+      "llm_tldr": "自我中心视频蕴含丰富的操控经验，但跨场景、物体、动作和具身形态收集多样数据成本高昂。EgoGenesis提出一种自我中心世界-动作模拟器，基于预训练视频生成先验，引入在线锚定投影记忆和动作3D旋转位置编码两种几何感知条件机制，用于合成可控、高质量的操控视频。实验表明，生成的视频能有效扩充稀缺的真实世界训练数据，缓解具身智能数据收集瓶颈，为机器人数据集构建提供了低成本方案。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "quick_skim": [
+    {
+      "id": "2607.22212v1",
+      "source": "arxiv",
+      "title": "Deep Convolutional Large-Margin $\\ell_p$-SVDD for Visual Anomaly Detection",
+      "abstract": "Visual anomaly detection requires adaptive representations and reliable decision boundaries, particularly when anomalous training samples are scarce and class distributions are highly imbalanced. Classical kernel-based methods yield principled geometric decision regions but typically operate on fixed features, while deep detectors learn task-specific representations but often fail to provide an explicit margin-aware kernel boundary. In this study, we propose DLM-SVDD, a deep large-margin novelty-detection framework that jointly learns convolutional features and an explicit kernel-based decision boundary. By drawing on the large-margin $\\ell_p$-Support Vector Data Description ($\\ell_p$-SVDD) approach, the proposed method performs explicit margin maximization and nonlinear slack penalization while adapting the representation to the target task. To train the proposed model, we present an optimization scheme that alternates between a Frank--Wolfe--based update of the convex dual boundary and a CNN update step operating on a smooth margin-violation loss induced by the recovered boundary. To improve scalability, we analyze the efficiency--accuracy trade-offs for different kernel approximation strategies, deriving practical propositions for large-scale anomaly detection.   Extensive experiments on multiple standard benchmarks show consistent performance improvements over the baseline and strong overall performance compared with state-of-the-art methods while illustrating that the proposed joint representation--boundary learning scheme remains effective under severe imbalanced class distributions.",
+      "authors": [
+        "Alireza Dastmalchi Saei",
+        "Shervin Rahimzadeh Arashloo"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV",
+        "cs.LG"
+      ],
+      "published": "2026-07-24T11:30:03+00:00",
+      "link": "https://arxiv.org/pdf/2607.22212v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "deep novelty detection framework for anomaly and open-set recognition",
+      "llm_evidence_cn": "深度新奇检测框架，用于异常与开放集识别",
+      "llm_evidence": "深度新奇检测框架，用于异常与开放集识别",
+      "canonical_evidence": "深度新奇检测框架，用于异常与开放集识别",
+      "llm_tldr_en": "DLM-SVDD jointly learns convolutional features and an explicit kernel-based decision boundary via large-margin l_p-SVDD, delivering a margin-aware novelty detector for anomaly detection and open-set problems.",
+      "llm_tldr_cn": "视觉异常检测通常面临异常样本稀缺和类别分布高度不平衡的挑战。现有深度检测器虽能学习任务相关特征，但往往缺乏可解释的决策边界。为此提出DLM-SVDD，一种深度大间隔新奇检测框架，它联合学习卷积特征与显式核边界，通过大间隔l_p-SVDD实现明确的边缘最大化。实验结果表明该方法在多个异常检测基准上优于现有方法，提供了既具有深层表征能力又具备几何决策区域的可靠检测器，适用于开放集识别与安全异常检测。",
+      "llm_tldr": "视觉异常检测通常面临异常样本稀缺和类别分布高度不平衡的挑战。现有深度检测器虽能学习任务相关特征，但往往缺乏可解释的决策边界。为此提出DLM-SVDD，一种深度大间隔新奇检测框架，它联合学习卷积特征与显式核边界，通过大间隔l_p-SVDD实现明确的边缘最大化。实验结果表明该方法在多个异常检测基准上优于现有方法，提供了既具有深层表征能力又具备几何决策区域的可靠检测器，适用于开放集识别与安全异常检测。",
+      "llm_tags": [
+        "query:humanoid-ood"
+      ],
+      "matched_query_tag": "query:humanoid-ood",
+      "matched_query_text": "Open set recognition in robotics for safety and anomaly detection",
+      "matched_requirement_id": "req-17",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2607.23658v1",
+      "source": "arxiv",
+      "title": "XMatchAD: A Cross-Modal Matching Perspective on Reconstruction-based Anomaly Detection",
+      "abstract": "The remarkable success of reconstruction-based methods in Unsupervised Anomaly Detection (UAD) lies in their ability to identify and localize anomalies by modeling discrepancies between input images and their reconstructed counterparts. However, these approaches often struggle to capture subtle anomalies and tend to produce blurred anomaly boundaries, which significantly limits their effectiveness, particularly in complex multi-class scenarios. To address these issues, we present XMatchAD, a novel UAD framework that reinterprets the task from a pseudo cross-modal matching perspective. Specifically, the input and reconstructed images are treated as two complementary modalities and their matching relationships are precisely exploited for anomaly detection. First, a pre-trained feature extractor is employed to encode discriminative representations. Second, an attention-guided cross-modal matching mechanism is introduced to match local inter-modal anomaly-related patterns while mutually refining the features. This enhances the sensitivity to anomalies with diverse shapes and subtle deviations and significantly improves the precision of anomaly detection and localization. Third, we design an adaptive frequency-aware fusion module that further delineates sharp anomaly boundaries through the coupling of high-frequency components from cross-modal multi-scale representations. Comprehensive evaluations on MVTec-AD, VisA, and MPDD benchmarks demonstrate that our method consistently achieves superior performance, outperforming state-of-the-art methods in multi-class anomaly detection and localization. The code will be released at https://github.com/Mingxiu-Cai/XMatchAD.",
+      "authors": [
+        "Mingxiu Cai",
+        "Zhe Zhang",
+        "Gaochang Wu",
+        "Tianyou Chai"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV"
+      ],
+      "published": "2026-07-26T13:47:10+00:00",
+      "link": "https://arxiv.org/pdf/2607.23658v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "Reconstruction-based unsupervised anomaly detection framework; method can be adapted to time-series robot fault diagnosis.",
+      "llm_evidence_cn": "基于重建的无监督异常检测框架，方法可迁移到时序机器人故障诊断。",
+      "llm_evidence": "基于重建的无监督异常检测框架，方法可迁移到时序机器人故障诊断。",
+      "canonical_evidence": "基于重建的无监督异常检测框架，方法可迁移到时序机器人故障诊断。",
+      "llm_tldr_en": "XMatchAD reinterprets reconstruction-based anomaly detection as cross-modal matching between input and reconstructed images, improving subtle anomaly localization. Though image-focused, this reconstruction-matching idea can transfer to time-series anomaly detection for robot fault diagnosis.",
+      "llm_tldr_cn": "重建式无监督异常检测通过比较输入与重建结果来定位异常，但在多类复杂场景下难以捕捉细微异常且边界模糊。本文提出XMatchAD，从伪跨模态匹配的角度将输入图像与重建图像视为互补模态，并精确挖掘二者的匹配关系以改进异常定位。实验表明该方法能更好处理细微异常和边界模糊。虽然针对图像，但重建-匹配原理可推广到机器人本体感受信号的时间序列异常检测。",
+      "llm_tldr": "重建式无监督异常检测通过比较输入与重建结果来定位异常，但在多类复杂场景下难以捕捉细微异常且边界模糊。本文提出XMatchAD，从伪跨模态匹配的角度将输入图像与重建图像视为互补模态，并精确挖掘二者的匹配关系以改进异常定位。实验表明该方法能更好处理细微异常和边界模糊。虽然针对图像，但重建-匹配原理可推广到机器人本体感受信号的时间序列异常检测。",
+      "llm_tags": [
+        "query:humanoid-ood"
+      ],
+      "matched_query_tag": "query:humanoid-ood",
+      "matched_query_text": "Self supervised time series anomaly detection for robot fault diagnosis",
+      "matched_requirement_id": "req-16",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2607.23134v1",
+      "source": "arxiv",
+      "title": "Diffusion-Guided Search via Exponential Tilting (DiffTilt): An Application to Falsification of Safety-Critical Systems",
+      "abstract": "Discovering rare safety-critical failures in autonomous and cyber-physical systems is a fundamental challenge in verification and validation. Existing falsification approaches rely on conditional sampling strategies that factor the joint distribution over environments and system executions, and therefore suffer from multiplicative rarity effects: the simultaneous scarcity of failure-inducing inputs and failure-inducing traces makes exhaustive search prohibitively expensive.   This paper develops DiffTilt, a distributional framework that exponentially tilts a diffusion model-induced joint distribution over environments and executions. We show that diffusion-guided sampling admits an exact interpretation as importance sampling in the joint space, where guidance scores induce a KL-optimal reallocation of probability mass towards failure-relevant behaviors. We further show that tilting provably amplifies failure probability and strictly outperforms conditional sampling, which is limited by multiplicative rarity. In this framework, the joint generative model serves as a reusable prior over scenarios and need not faithfully represent the system under test. Expensive system simulations are instead limited to learning a scoring function that characterizes scenario quality, enabling their selective and adaptive use.   We study DiffTilt on ARCH-COMP benchmarks, and we propose an additional tractor-trailer benchmark showing the behavior of several approaches when scenario generation is guided by a well-defined specification rather than a reward. The proposed method achieves competitive or improved falsification performance compared to state-of-the-art approaches, with larger gains when specification definition is not limited to STL formulas.",
+      "authors": [
+        "Tanmay Khandait",
+        "Preetom Biswas",
+        "Hideki Okamoto",
+        "Bardh Hoxha",
+        "Georgios Fainekos",
+        "Giulia Pedrielli"
+      ],
+      "primary_category": "cs.LG",
+      "categories": [
+        "cs.LG",
+        "eess.SY"
+      ],
+      "published": "2026-07-25T10:28:47+00:00",
+      "link": "https://arxiv.org/pdf/2607.23134v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "Discovers rare safety-critical failures via diffusion-guided exponential tilting, directly targeting safe operation",
+      "llm_evidence_cn": "通过扩散引导的指数倾斜发现罕见的安全关键故障，直接服务于安全运行",
+      "llm_evidence": "通过扩散引导的指数倾斜发现罕见的安全关键故障，直接服务于安全运行",
+      "canonical_evidence": "通过扩散引导的指数倾斜发现罕见的安全关键故障，直接服务于安全运行",
+      "llm_tldr_en": "Presents DiffTilt, a distributional framework that exponentially tilts a diffusion model joint distribution over environments and executions to discover rare safety-critical failures in autonomous systems, overcoming multiplicative rarity effects.",
+      "llm_tldr_cn": "该工作关注自主与信息物理系统中罕见安全关键故障难以发现的问题，指出传统条件采样会遭受多重稀有性效应。为此提出DiffTilt框架，通过指数倾斜扩散模型诱发的环境与系统执行联合分布，实现高效的失败诱导场景搜索。理论分析和实验表明，扩散引导采样具有精确的分布解释，能够显著提升罕见故障的发现效率。该方法为机器人和自动驾驶等安全关键系统的故障诊断与安全验证提供了新的工具。",
+      "llm_tldr": "该工作关注自主与信息物理系统中罕见安全关键故障难以发现的问题，指出传统条件采样会遭受多重稀有性效应。为此提出DiffTilt框架，通过指数倾斜扩散模型诱发的环境与系统执行联合分布，实现高效的失败诱导场景搜索。理论分析和实验表明，扩散引导采样具有精确的分布解释，能够显著提升罕见故障的发现效率。该方法为机器人和自动驾驶等安全关键系统的故障诊断与安全验证提供了新的工具。",
+      "llm_tags": [
+        "query:humanoid-ood"
+      ],
+      "matched_query_tag": "query:humanoid-ood",
+      "matched_query_text": "out-of-distribution detection for safe robot operation",
+      "matched_requirement_id": "req-11",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2607.24008v1",
+      "source": "arxiv",
+      "title": "FutureRTC: Real-Time Robot Execution with Anticipatory-Conditioned Action Chunking",
+      "abstract": "Real-time deployment of Vision-Language-Action (VLA) policies necessitates asynchronous execution, wherein subsequent action chunks are computed concurrently with the execution of the current chunk, leading to prediction-execution misalignment and manifesting as inter-chunk discontinuities. Existing methods either superficially smooth chunk boundaries, require costly policy optimization, or exclusively forward-predict proprioceptive states yet neglect critical visual observations. In this paper, we propose \\textbf{FutureRTC}, a plug-and-play adaptation framework that predicts execution-time observations and states for asynchronous VLA control without modifying the underlying policy. Specifically, FutureRTC features a state correction module to compensate for the discrepancy between rolled-forward and actual execution-time proprioceptive states and an observation prediction module that forecasts execution-time visual representations by leveraging robot motion as an explicit physical prior through motion-aware feature transport and reconstruction. Furthermore, we introduce a policy consistency loss to align the action chunks generated from predicted contexts with those produced under the expected execution-time inputs of the VLA policy. Extensive experiments across simulated and real-world environments demonstrate that FutureRTC achieves superior robustness to inference delays, resulting in smoother trajectories, faster execution, and consistently higher task success rates.",
+      "authors": [
+        "Hai Jiang",
+        "Yixian Zou",
+        "Binbin Liang",
+        "Boqian Liu",
+        "Fanman Meng",
+        "Shuaicheng Liu"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-07-27T05:10:16+00:00",
+      "link": "https://arxiv.org/pdf/2607.24008v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "plug-and-play real-time deployment adaptation for robot policies; improves asynchronous execution",
+      "llm_evidence_cn": "面向机器人策略的即插即用实时部署适配，改善异步执行一致性",
+      "llm_evidence": "面向机器人策略的即插即用实时部署适配，改善异步执行一致性",
+      "canonical_evidence": "面向机器人策略的即插即用实时部署适配，改善异步执行一致性",
+      "llm_tldr_en": "FutureRTC addresses prediction-execution misalignment in asynchronous VLA deployment. It predicts execution-time observations and states via a plug-and-play framework with a state correction module, without policy modification, improving inter-chunk continuity.",
+      "llm_tldr_cn": "实时部署VLA策略时，异步执行会导致预测与执行错位及动作块间不连续。现有方法或仅平滑块边界，或需要高昂的策略优化，且常忽略视觉观测。本文提出FutureRTC，一种即插即用适配框架，在不修改底层策略的情况下预测执行时刻的观测与状态，并设置状态修正模块。该方法显著改善异步执行的一致性与平稳性，适用于实际机器人实时控制。",
+      "llm_tldr": "实时部署VLA策略时，异步执行会导致预测与执行错位及动作块间不连续。现有方法或仅平滑块边界，或需要高昂的策略优化，且常忽略视觉观测。本文提出FutureRTC，一种即插即用适配框架，在不修改底层策略的情况下预测执行时刻的观测与状态，并设置状态修正模块。该方法显著改善异步执行的一致性与平稳性，适用于实际机器人实时控制。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "edge deployment for humanoid robots",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2607.25593v1",
+      "source": "arxiv",
+      "title": "When Does Legacy Data Start to Help? Emergent Transfer in Cross-Configuration Robot Learning",
+      "abstract": "Robotic hardware evolves over time, but demonstration data is often tied to a specific sensor and actuator configuration. This raises a practical and underexplored question: when does legacy data begin to benefit an upgraded robot? We study this question on a wheeled humanoid platform across two hardware generations, where both the camera and gripper are changed while the overall morphology remains fixed. Contrary to the common assumption that more cross-configuration data is always helpful, we observe a grokking-like transition: legacy data remains ineffective until the upgraded configuration acquires a minimum level of task competence, after which co-training gains rise sharply before diminishing near saturation. We hypothesize that this task-dependent transition is governed by a transfer threshold and characterize the resulting three-phase pattern. Across real-robot manipulation tasks, we observe all three phases: no measurable benefit at low competence ($10.0\\% \\rightarrow 10.0\\%$), a sharp gain after crossing the threshold ($23.3\\% \\rightarrow 86.7\\%$ on flower insertion), and diminishing returns at high competence ($85.0\\% \\rightarrow 93.3\\%$ on pen insertion). We provide a theoretical account based on gradient alignment and residual policy uncertainty, and derive a phase-aware rule for deciding when to collect more new-hardware data and when to reuse legacy demonstrations. We further validate this three-phase pattern on a mobile dual-arm watering task, with results consistent with our predictions.",
+      "authors": [
+        "Tao Wang",
+        "Hudson Hou",
+        "Yingdong Hu",
+        "Yufeng Liu",
+        "Qinghai Li",
+        "Yingjie Jiang",
+        "Yingzhi Wang",
+        "Cheng Ma",
+        "Richard Wang",
+        "Yang Gao"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-07-28T11:24:52+00:00",
+      "link": "https://arxiv.org/pdf/2607.25593v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "examines when legacy data helps upgraded wheeled humanoid; informs humanoid dataset construction",
+      "llm_evidence_cn": "研究旧数据何时有助于升级后的轮式人形机器人，为人形数据集构建提供指导",
+      "llm_evidence": "研究旧数据何时有助于升级后的轮式人形机器人，为人形数据集构建提供指导",
+      "canonical_evidence": "研究旧数据何时有助于升级后的轮式人形机器人，为人形数据集构建提供指导",
+      "llm_tldr_en": "On a wheeled humanoid platform with changed camera and gripper, legacy data only helps after the upgraded configuration gains basic competence, showing a grokking-like transfer for dataset construction.",
+      "llm_tldr_cn": "机器人硬件升级后往往保留大量旧配置演示数据，但何时这些数据能帮助新配置并不明确。本文在轮式人形平台上替换相机与夹爪，观察跨配置协同训练中出现类似grokking的转变：旧数据在新配置达到一定任务能力后才产生收益，随后收益先升后降。该发现揭示了跨代硬件数据构建与迁移学习的时机效应，对构建人形机器人数据集具有重要指导意义。",
+      "llm_tldr": "机器人硬件升级后往往保留大量旧配置演示数据，但何时这些数据能帮助新配置并不明确。本文在轮式人形平台上替换相机与夹爪，观察跨配置协同训练中出现类似grokking的转变：旧数据在新配置达到一定任务能力后才产生收益，随后收益先升后降。该发现揭示了跨代硬件数据构建与迁移学习的时机效应，对构建人形机器人数据集具有重要指导意义。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "humanoid robot dataset construction",
+      "matched_requirement_id": "req-2",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2607.25037v1",
+      "source": "arxiv",
+      "title": "Ultra-Low-Energy Open-Circuit Fault Diagnosis for Three-Phase Inverters",
+      "abstract": "Embedded fault diagnosis in three-phase inverters must satisfy the sub-watt power budget of converter control hardware, but conventional convolutional neural network (CNN)-based methods require dense multiply-accumulate operations and impose substantial inference energy. This work proposes an event-driven neuromorphic framework for energy-efficient open-circuit (OC) fault diagnosis. A CNN trained on current-vector trajectory matrices is converted into a spiking neural network (SNN) and evaluated using the NengoLoihi framework with Loihi-based neuromorphic energy estimation. By exploiting the sparse structure of trajectory matrices, the SNN activates computation only in informative regions instead of processing the full feature map densely. Experiments on a three-phase inverter platform show that the proposed method achieves 11 microjoules per diagnosis, corresponding to a 382 times inference-energy reduction compared with a GPU-based CNN, while maintaining 100% diagnostic accuracy. Robustness is further validated under unbalanced loading, current amplitude step changes, and injected measurement noise.",
+      "authors": [
+        "Xiaoyi Lei",
+        "Fanfu Wu",
+        "Yunting Liu"
+      ],
+      "primary_category": "eess.SY",
+      "categories": [
+        "eess.SY"
+      ],
+      "published": "2026-07-27T19:56:15+00:00",
+      "link": "https://arxiv.org/pdf/2607.25037v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "embedded fault diagnosis with ultra-low energy consumption",
+      "llm_evidence_cn": "嵌入式故障诊断，极低能耗",
+      "llm_evidence": "嵌入式故障诊断，极低能耗",
+      "canonical_evidence": "嵌入式故障诊断，极低能耗",
+      "llm_tldr_en": "Proposes an event-driven neuromorphic framework that converts CNN to SNN for open-circuit fault diagnosis in three-phase inverters, activating computation only on informative regions for sub-watt embedded inference.",
+      "llm_tldr_cn": "针对三相逆变器嵌入式故障诊断的亚瓦功耗约束，提出事件驱动的类脑框架。将基于电流矢量轨迹矩阵的CNN转换为脉冲神经网络，在NengoLoihi上进行能耗估计。通过只在信息密集区域激活计算，显著降低推理能耗。实验表明该SNN方法在保证诊断性能的同时满足超低功耗要求。为边缘侧机器人驱动故障诊断提供了低能耗方案。",
+      "llm_tldr": "针对三相逆变器嵌入式故障诊断的亚瓦功耗约束，提出事件驱动的类脑框架。将基于电流矢量轨迹矩阵的CNN转换为脉冲神经网络，在NengoLoihi上进行能耗估计。通过只在信息密集区域激活计算，显著降低推理能耗。实验表明该SNN方法在保证诊断性能的同时满足超低功耗要求。为边缘侧机器人驱动故障诊断提供了低能耗方案。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "fault detection in humanoid robots",
+      "matched_requirement_id": "req-6",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2607.27511v1",
+      "source": "arxiv",
+      "title": "Failure Detection for Surgical Robot Imitation Policies via Flow-Matching World Modeling",
+      "abstract": "Imitation learning has shown increasing promise for autonomous robotic surgery, yet safe deployment remains challenging due to the safety-critical nature of surgical tasks and the complexity and variability of surgical environments. Failure detection is therefore an essential safeguard, but its development remains difficult due to the challenges of scarce failure data, highly variable manipulation dynamics, and the need to balance missed detections against disruptive false alarms. To address these challenges, we introduce FoMo-FD (Flow-Matching World Model for Failure Detection), a failure detection method that learns nominal short-horizon visual dynamics with an action-conditioned flow-matching world model. FoMo-FD scores the inverse-transport nonconformity of observed endpoint latents, enabling window-level detection of visual-action inconsistencies without requiring failure demonstrations. Detection thresholds are obtained by conformal calibration on successful executions, yielding task-specific alarms without assuming future failure types. We evaluate FoMo-FD on four surgically relevant manipulation tasks with twenty failure modes across simulation and real-world experiments using the da Vinci Research Kit (dVRK). Results show that FoMo-FD outperforms observation-level anomaly baselines and a prediction-error variant of the same world model, with the wrist-camera view achieving the strongest performance, including a 96.6% failure detection rate (FDR) at a 1.3% false alarm rate (FAR).",
+      "authors": [
+        "Zhefeng Huang",
+        "Yilin Cai",
+        "Ankit Patel",
+        "Mohammad Hajiha",
+        "Brendan Browne",
+        "Yue Chen"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-07-29T22:55:54+00:00",
+      "link": "https://arxiv.org/pdf/2607.27511v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "Failure detection for robot policies via flow-matching world model; transferable method for humanoid robot fault detection",
+      "llm_evidence_cn": "基于流匹配世界模型的机器人策略故障检测，可迁移到人形机器人故障检测",
+      "llm_evidence": "基于流匹配世界模型的机器人策略故障检测，可迁移到人形机器人故障检测",
+      "canonical_evidence": "基于流匹配世界模型的机器人策略故障检测，可迁移到人形机器人故障检测",
+      "llm_tldr_en": "FoMo-FD detects failures in surgical robot imitation policies by learning nominal visual dynamics with an action-conditioned flow-matching world model and scoring inverse dynamics, serving as a safeguard for safe robot deployment.",
+      "llm_tldr_cn": "安全部署机器人策略需要有效的故障检测，但失败数据稀缺且操作动态多变。论文提出FoMo-FD，用动作条件流匹配世界模型学习正常短期视觉动态，并对逆动态打分来判断失败。方法在手术机器人任务上展现了可靠的失败检测能力，为机器人策略安全运行提供了通用防护思路。",
+      "llm_tldr": "安全部署机器人策略需要有效的故障检测，但失败数据稀缺且操作动态多变。论文提出FoMo-FD，用动作条件流匹配世界模型学习正常短期视觉动态，并对逆动态打分来判断失败。方法在手术机器人任务上展现了可靠的失败检测能力，为机器人策略安全运行提供了通用防护思路。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "fault detection in humanoid robots",
+      "matched_requirement_id": "req-6",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2607.27205v1",
+      "source": "arxiv",
+      "title": "TurboVLA: Real-Time Vision-Language-Action Model at 32 Hz on an RTX 4090 with <1 GB VRAM",
+      "abstract": "Vision-language-action (VLA) models commonly adopt an LLM-centric $V \\to L \\to A$ pathway, where visual observations are projected into the representation space of a large language model before being decoded into robot actions. Although effective, this design incurs substantial computation and memory overhead at every policy invocation. In this work, we introduce TurboVLA, a new VLA paradigm that reformulates the conventional $V \\to L \\to A$ pathway as a direct $V + L \\to A$ mapping. Instead of using a large language model as the central interface between perception and action, TurboVLA independently encodes visual observations and language instructions, directly exchanges information between them through lightweight bidirectional vision-language interaction, and predicts continuous action chunks with a compact decoder. This simple design constructs task-conditioned representations directly from visual and linguistic features, significantly reducing the computational and memory costs of VLA inference. On LIBERO, TurboVLA achieves 97.7% average success with only 0.2B parameters, 31.2 ms inference latency, and 0.9 GB inference VRAM on a consumer-grade RTX 4090, matching or outperforming substantially larger VLA policies. These results establish TurboVLA as a simple and effective alternative to the prevailing LLM-centric VLA paradigm, offering a new perspective on how vision, language, and action can be connected for efficient robotic manipulation. Code is available at https://github.com/H-EmbodVis/TurboVLA.",
+      "authors": [
+        "Hengyi Xie",
+        "Chenfei Yao",
+        "Xianjin Wu",
+        "Xuanyang Xi",
+        "Yiping Tang",
+        "Di Xu",
+        "Yingying Zhu",
+        "Dingkang Liang",
+        "Xiang Bai",
+        "Han Ding"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV",
+        "cs.RO"
+      ],
+      "published": "2026-07-29T17:59:58+00:00",
+      "link": "https://arxiv.org/pdf/2607.27205v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "Real-time VLA with low memory footprint; relevant to efficient robot deployment at the edge",
+      "llm_evidence_cn": "低内存实时VLA模型，与机器人边缘高效部署相关",
+      "llm_evidence": "低内存实时VLA模型，与机器人边缘高效部署相关",
+      "canonical_evidence": "低内存实时VLA模型，与机器人边缘高效部署相关",
+      "llm_tldr_en": "TurboVLA reformulates VLA as a direct V+L to A mapping with lightweight bidirectional visual-language exchange, achieving 32 Hz real-time control on an RTX 4090 under 1GB VRAM for efficient robot deployment.",
+      "llm_tldr_cn": "现有VLA模型以LLM为中心，每次推理都带来大量计算和内存开销，难以实时控制机器人。论文提出TurboVLA，将V到L到A路径改为V+L到A直接映射，独立编码视觉和语言指令，并通过轻量双向视觉-语言交互交换信息。在RTX 4090上实现32Hz实时推理且显存小于1GB，为机器人高效部署提供了新范式。",
+      "llm_tldr": "现有VLA模型以LLM为中心，每次推理都带来大量计算和内存开销，难以实时控制机器人。论文提出TurboVLA，将V到L到A路径改为V+L到A直接映射，独立编码视觉和语言指令，并通过轻量双向视觉-语言交互交换信息。在RTX 4090上实现32Hz实时推理且显存小于1GB，为机器人高效部署提供了新范式。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "edge deployment for humanoid robots",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2607.28251v1",
+      "source": "arxiv",
+      "title": "Self-Evolving Learning for Embodied AI with Criticality Model",
+      "abstract": "Despite rapid advances in policy pretraining, embodied AI systems routinely plateau during task-specific finetuning. The root cause lies in how finetuning data are collected: the default pipeline gathers data randomly, treating every sample as informative. Datasets become dominated by nominal scenarios, while rare failure cases--the most valuable for improvement--are missed. We propose a self-evolving method that breaks this plateau. Our core insight is that a state-wise criticality model, learned from the policy's own execution outcomes to predict the probability of future failure, can guide importance sampling toward failure-prone scenarios. After replacing redundant nominal scenarios with diverse failure-prone ones, importance weights are used to resample the data during training. This effectively preserves an unbiased learning objective while fundamentally increasing the information density of the training pool. Across quadrupedal locomotion, multi-task manipulation, vision-language-action benchmarks, and a real-robot task, our method reduces failure rates by 51--67% relative to trained baselines and by 8-25% relative to state-of-the-art vision-language-action models.",
+      "authors": [
+        "Linxuan He",
+        "Yuying Tian",
+        "Lingxiang Fan",
+        "Jiaqi Pi",
+        "Yinqiao Lu",
+        "Shang Su",
+        "Mengkai Shi",
+        "Shuo Feng"
+      ],
+      "primary_category": "eess.SY",
+      "categories": [
+        "eess.SY"
+      ],
+      "published": "2026-07-30T14:13:18+00:00",
+      "link": "https://arxiv.org/pdf/2607.28251v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "criticality model selects failure-prone data to improve embodied AI finetuning; supports dataset construction",
+      "llm_evidence_cn": "关键性模型挑选易失败数据以改进具身AI微调，支持数据集构建",
+      "llm_evidence": "关键性模型挑选易失败数据以改进具身AI微调，支持数据集构建",
+      "canonical_evidence": "关键性模型挑选易失败数据以改进具身AI微调，支持数据集构建",
+      "llm_tldr_en": "This self-evolving method learns a state-wise criticality model to predict future failure and resamples finetuning data toward failure-prone scenarios, breaking plateaus in embodied AI finetuning.",
+      "llm_tldr_cn": "具身AI在任务微调时经常由于数据收集随机、名义场景过多而陷入性能平台期。本文提出自进化学习方法，利用从策略执行结果学习的关键性模型预测未来失败概率，并以此引导重要性采样，用多样的易失败场景替换冗余的名义场景。实验表明该方法能大幅提升微调效果，并为机器人的安全数据采集与故障敏感数据构建提供了有效途径。",
+      "llm_tldr": "具身AI在任务微调时经常由于数据收集随机、名义场景过多而陷入性能平台期。本文提出自进化学习方法，利用从策略执行结果学习的关键性模型预测未来失败概率，并以此引导重要性采样，用多样的易失败场景替换冗余的名义场景。实验表明该方法能大幅提升微调效果，并为机器人的安全数据采集与故障敏感数据构建提供了有效途径。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2607.27549v1",
+      "source": "arxiv",
+      "title": "Cross-Embodiment Transfer via Behavior-Aligned Representations",
+      "abstract": "Recent progress in large-scale imitation learning for robot manipulation has been driven by leveraging datasets across a wide range of robot embodiments. However, achieving significant cross-embodiment transfer is often still challenging. In this work, we study the role of using behavior-aligned representations (e.g., object bounding boxes, language motions, end-effector traces of robot motion) in vision-language-action (VLA) models to promote cross-embodiment transfer. We hypothesize that by possessing invariances across embodiments while being predictive of robot actions, these representations can help unify large-scale cross-embodiment data to enhance transfer. To assess our hypothesis, we develop a simulation-based benchmark designed to assess transfer with diverse cross-embodiment data to new embodiments. Using this benchmark, we compare different representations and ways of incorporating them. We identify that end-effector traces can be particularly beneficial for transfer, representations are generally more useful with larger prior datasets, and can be used to benefit from action-free data. We also demonstrate that they can enhance sim-to-real cross-embodiment transfer, improving task completion progress of real robot policies pre-trained on simulation data by 28%. We provide videos of our evaluations at our website: https://ajaysridhar.com/barx/.",
+      "authors": [
+        "Ajay Sridhar",
+        "Jensen Gao",
+        "Jonathan Yang",
+        "Jean Mercat",
+        "Suneel Belkhale",
+        "Dorsa Sadigh"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.AI",
+        "cs.CV",
+        "cs.LG"
+      ],
+      "published": "2026-07-30T00:49:53+00:00",
+      "link": "https://arxiv.org/pdf/2607.27549v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "Simulation benchmark built from cross-embodiment robot datasets; relevant to robotics dataset construction",
+      "llm_evidence_cn": "基于跨本体机器人数据集构建仿真基准，与机器人数据集构建相关",
+      "llm_evidence": "基于跨本体机器人数据集构建仿真基准，与机器人数据集构建相关",
+      "canonical_evidence": "基于跨本体机器人数据集构建仿真基准，与机器人数据集构建相关",
+      "llm_tldr_en": "The paper studies how behavior-aligned representations improve cross-embodiment transfer in vision-language-action models and introduces a simulation-based benchmark assembled from large-scale robot datasets, relevant to robotics dataset construction.",
+      "llm_tldr_cn": "大规模跨本体模仿学习依赖机器人数据集，但跨本体迁移仍具挑战。论文提出利用行为对齐表示（如物体框、语言动作、末端轨迹）来统一跨本体数据以促进VLA模型迁移，并构建仿真基准进行评估。结果显示这类表示有助于提升跨本体迁移效果，为机器人数据集构建与基准设计提供了参考。",
+      "llm_tldr": "大规模跨本体模仿学习依赖机器人数据集，但跨本体迁移仍具挑战。论文提出利用行为对齐表示（如物体框、语言动作、末端轨迹）来统一跨本体数据以促进VLA模型迁移，并构建仿真基准进行评估。结果显示这类表示有助于提升跨本体迁移效果，为机器人数据集构建与基准设计提供了参考。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2607.27865v1",
+      "source": "arxiv",
+      "title": "Learning to Understand Body Language from Flight through Robust 3D Avatar Placing",
+      "abstract": "Perceiving human motion and intent at long range is a prerequisite for socially intelligent aerial robots, yet the data to learn it barely exists. We introduce Drones2BodyLanguage, a dataset grounding human motion in real UAV footage: avatars manifesting ten communicative intents are placed into unmodified 4K drone scenes with metrically correct position, scale and orientation, maintained over hundreds of frames of camera motion. Enabling it is a lightweight geometric world model of the local scene - semantically selected anchors lifted to 3D through streaming monocular depth - in which a placement point is predicted as an affine anchor combination with provably rigid-invariant weights, and re-rendered under an SVD-fitted ground rotation. Across twelve architectures on scene- and motion-disjoint splits, training on placed data lifts mean intent accuracy by a wide margin for real, retargeted and generated motion alike, with gains confirmed on two in-the-wild scenes.",
+      "authors": [
+        "Dragos Costea",
+        "Alina Marcu",
+        "Cristina Lazar",
+        "Marius Leordeanu"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV"
+      ],
+      "published": "2026-07-30T08:40:32+00:00",
+      "link": "https://arxiv.org/pdf/2607.27865v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "Introduces Drones2BodyLanguage dataset grounding human motion in real UAV footage for robot perception",
+      "llm_evidence_cn": "提出Drones2BodyLanguage数据集，将人类动作置于真实无人机航拍影像中，用于机器人感知",
+      "llm_evidence": "提出Drones2BodyLanguage数据集，将人类动作置于真实无人机航拍影像中，用于机器人感知",
+      "canonical_evidence": "提出Drones2BodyLanguage数据集，将人类动作置于真实无人机航拍影像中，用于机器人感知",
+      "llm_tldr_en": "Introduces Drones2BodyLanguage, a dataset that places 3D avatars with ten communicative intents into real 4K drone scenes with metric accuracy, enabling long-range human motion and intent perception for socially intelligent aerial robots.",
+      "llm_tldr_cn": "该文针对空中机器人难以获取远处人类动作与意图数据的问题，构建了Drones2BodyLanguage数据集。数据集中十种交流意图的三维虚拟人物被以米制精确的位置、尺度和朝向放置到未修改的4K无人机画面中，并跨越数百帧保持一致性。作者用轻量级几何世界模型和仿射锚点组合实现放置点预测，并利用SVD拟合地面旋转实现重渲染。该数据集为机器人在远距离理解人体姿态和意图提供了新的训练资源，对仿人机器人数据集构建也有参考价值。",
+      "llm_tldr": "该文针对空中机器人难以获取远处人类动作与意图数据的问题，构建了Drones2BodyLanguage数据集。数据集中十种交流意图的三维虚拟人物被以米制精确的位置、尺度和朝向放置到未修改的4K无人机画面中，并跨越数百帧保持一致性。作者用轻量级几何世界模型和仿射锚点组合实现放置点预测，并利用SVD拟合地面旋转实现重渲染。该数据集为机器人在远距离理解人体姿态和意图提供了新的训练资源，对仿人机器人数据集构建也有参考价值。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2607.28256v1",
+      "source": "arxiv",
+      "title": "When Robots Exchange Meaning: A Demo of Goal-Oriented Semantic Communications for Collaborative Robotics",
+      "abstract": "Collaborative robotics is a representative task-oriented 6G use-case, where communication quality should be reflected in mission execution, environment understanding, and closed-loop operation rather than packet delivery alone. This demo paper presents a robot-edge semantic communication (SemCom) testbed integrating robot-side visual compression, edge-side semantic mapping, and dashboard-based mission interaction. A mobile robot equipped with RGB-D sensing and LiDAR runs ROS 2, while a Jetson Orin edge node performs reconstruction, RTAB-Map mapping, semantic object handling, and browserbased visualization. As an initial proof of concept, RGB frames are encoded on the robot into VQ-VAE tokens using an ONNX Runtime encoder and reconstructed on the edge using a PyTorch decoder. A 320 X 240 image is represented by an 80 X 60 token grid with a packed payload of 5400 bytes, corresponding to a 42.67X reduction relative to model-input RGB bytes. The reconstructed visual stream is further associated with depth, pose, and 3D mapping information to generate a semantic map for downstream robotic applications. The demo exposes the full path from semantic visual transport to object-level map interaction, and provides a practical platform for future task-aware 6G networking studies at the intersection of SemCom, embodied AI, and physical AI-enabled robotics. A video of the demo is available at https://tinyurl.com/Tos09",
+      "authors": [
+        "Peizheng Li",
+        "Xinyi Lin",
+        "Sajida Gufran",
+        "Adnan Aijaz"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-07-30T14:16:23+00:00",
+      "link": "https://arxiv.org/pdf/2607.28256v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "robot-edge semantic communication testbed with Jetson Orin edge node",
+      "llm_evidence_cn": "包含Jetson Orin边缘节点的机器人-边缘语义通信测试平台",
+      "llm_evidence": "包含Jetson Orin边缘节点的机器人-边缘语义通信测试平台",
+      "canonical_evidence": "包含Jetson Orin边缘节点的机器人-边缘语义通信测试平台",
+      "llm_tldr_en": "Demonstrates a goal-oriented semantic communication testbed integrating robot-side VQ-VAE compression and edge-side RTAB-Map mapping on Jetson Orin for collaborative robotics, reducing reliance on packet-level QoS.",
+      "llm_tldr_cn": "该论文针对协作机器人对通信质量的新需求，展示了一套机器人-边缘语义通信测试平台。文中在机器人端用VQ-VAE压缩RGB图像，并在Jetson Orin边缘节点上进行语义建图与任务交互。初步验证表明，该平台能够在真实ROS 2机器人上实现目标导向的语义传输与边缘端处理，为机器人边缘部署提供了可复用的系统范式。",
+      "llm_tldr": "该论文针对协作机器人对通信质量的新需求，展示了一套机器人-边缘语义通信测试平台。文中在机器人端用VQ-VAE压缩RGB图像，并在Jetson Orin边缘节点上进行语义建图与任务交互。初步验证表明，该平台能够在真实ROS 2机器人上实现目标导向的语义传输与边缘端处理，为机器人边缘部署提供了可复用的系统范式。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "edge deployment for humanoid robots",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    }
+  ]
+}

@@ -1,0 +1,1620 @@
+Title: Diffusion-Guided Search via Exponential Tilting (DiffTilt): An Application to Falsification of Safety-Critical Systems
+
+URL Source: https://arxiv.org/pdf/2607.23134v1
+
+Published Time: Tue, 28 Jul 2026 00:39:39 GMT
+
+Number of Pages: 15
+
+Markdown Content:
+> 1
+
+# Diffusion-Guided Search via Exponential Tilting (D IFF TILT ): An Application to Falsification of Safety-Critical Systems 
+
+Tanmay Khandait, Preetom Biswas, Hideki Okamoto, Bardh Hoxha, Georgios Fainekos, and Giulia Pedrielli 
+
+Abstract —Discovering rare safety-critical failures in au-tonomous and cyber-physical systems is a fundamental challenge in verification and validation. Existing falsification approaches rely on conditional sampling strategies that factor the joint distribution over environments and system executions, and there-fore suffer from multiplicative rarity effects: the simultaneous scarcity of failure-inducing inputs and failure-inducing traces makes exhaustive search prohibitively expensive. This paper develops D IFF TILT , a distributional framework that addresses this challenge by exponentially tilting a diffusion model-induced joint distribution over environments and exe-cutions. We show that such diffusion-guided sampling admits an exact interpretation as importance sampling in the joint space, where guidance scores induce a KL-optimal reallocation of probability mass towards failure-relevant behaviors. In addition, we show that tilting provably amplifies the probability of failure and strictly outperforms conditional sampling strategies, which are limited by multiplicative rarity effects. In this framework, the joint generative model serves as a reusable prior over scenarios and need not faithfully represent the system under test. Instead, true system evaluations, by means of expensive simulations, are limited to the learning of a scoring function responsible for characterizing the quality of the produced scenario, thus enabling selective and adaptive use of expensive simulations. Additionally, while we focus on falsification, the framework is general and applies to other scenario-generation problems such as planning, synthesis. In this work, we study D IFF TILT performance against bench-marks from the ARCH-COMP, and we propose an additional tractor-trailer benchmark for falsification to show the behavior of several approaches when scenario generation is guided by a well-defined specification as opposed to a reward. Across all cases, the proposed method achieves competitive or improved falsification performance compared to state-of-the-art approaches, with larger gains when specification definition is not limited to STL formulas. 
+
+Index Terms —Joint scenario modeling, Rare Event Analysis, Simulation-based verification. 
+
+I. I NTRODUCTION AND RELATED LITERATURE 
+
+The discovery of rare but safety-critical failures in complex cyber-physical and autonomous systems remains a fundamen-tal challenge due to the high dimensionality, structured con-straints, and strong dependencies between environments and system executions. Existing approaches to scenario testing and falsification typically rely on conditional sampling strategies or heuristic search over inputs, which implicitly factor the joint distribution over environments and trajectories, and therefore suffer from multiplicative rarity effects [8], [15], [9]. From a                    
+
+> T. Khandait, P. Biswas, and G. Pedrielli are with the School of Computing and Augmented Intelligence, Arizona State University, Tempe, AZ, USA (e-mail: tkhandai@asu.edu, pbiswa11@asu.edu, giulia.pedrielli@asu.edu). H. Okamoto, B. Hoxha, and G. Fainekos are with Toyota Mo-tor North America, Research &Development, Ann Arbor, MI 48105, USA (e-mail: hideki.okamoto@toyota.com, bardh.hoxha@toyota.com, geor-gios.fainekos@toyota.com).
+
+probabilistic perspective, such methods sample at the density of rare events rather than actively reshaping it, leading to pro-hibitive sample complexity even when conditional generative models are accurate. Importance sampling provides a principled framework for rare-event estimation by reweighting probability mass toward critical regions, with exponential tilting emerging as the KL-optimal mechanism for enforcing moment constraints and vari-ance reduction [4], [3], [2]. These ideas are deeply connected to large deviations theory and Gibbs measures, where expo-nential reweighting concentrates mass on extremal events [7], [5]. However, classical importance sampling requires access to an ideal reference distribution or an explicit likelihood model, assumptions that are rarely satisfied in realistic autonomous-system testing pipelines. Recent advances in score-based generative modeling and diffusion processes enable the learning of expressive joint distributions over high-dimensional, structured data, providing a new opportunity to revisit rare-event discovery from a distri-butional perspective [13], [10], [14]. In parallel, classifier- and score-guided diffusion methods have demonstrated that gener-ative processes can be steered toward semantically meaningful regions of the data space via learned guidance signals [6]. In this work, we unify these developments by interpreting diffusion-guided falsification as exponential tilting of a learned joint generative model over environments and executions. We show that diffusion guidance induces an exact importance sampling scheme on the joint space, where surrogate robust-ness scores act as likelihood-ratio tilts that provably amplify failure probability under mild ranking assumptions. Finally, we demonstrate that for deterministic dynamical systems, joint diffusion-guided tilting reduces to optimal importance sampling over inputs along the dynamics manifold, yielding a unified theoretical framework for distribution-guided rare-event discovery. While the analysis is motivated by falsification and coun-terexample generation, the proposed framework is general. Exponential tilting of a joint scenario distribution provides a mechanism for steering sampling toward behaviors of in-terest beyond safety violations, including synthesis, certificate estimation. From a verification perspective, diffusion-guided tilting enables distribution-aware exploration of complex sce-nario spaces, rather than being restricted to falsification. Another aspect of our approach is the separation between the generative model and the system under test (SUT) . The generative model defines a prior over environments and exe-cutions and serves solely as a base density. Hence, it need not faithfully represent the “true” system dynamics. Our theoret-ical results rely on the properties of the score and the tilting arXiv:2607.23134v1 [cs.LG] 25 Jul 2026 2
+
+mechanism, rather than the accuracy of the learned model. In fact, the interaction with the SUT occurs through the score function (e.g., a robustness monitor or runtime oracle), so simulations are invoked selectively while most sampling is performed within the generative model. This decoupling enables efficient exploration, maintains compatibility with black-box verification pipelines, and allows D IFF TILT to use any score defined on trajectories, including robustness, reward, or expert-defined costs. 
+
+a) Contributions: This paper provides a formal founda-tion for diffusion-guided falsification as a principled coun-terexample generation mechanism. The contributions are as follows: 1) We introduce a joint distributional formulation of fal-sification, in which failure discovery is interpreted as probability mass reallocation, and show that exponential tilting yields the KL-optimal biased distribution. 2) We establish sufficient and necessary conditions un-der which exponential tilting provably amplifies failure probability, showing via first-order stochastic dominance (FOSD) that tilting is effective precisely when the score ranks failing behaviors ahead of non-failing ones in distribution. 3) We characterize a fundamental limitation of conditional sampling, showing that even with perfect conditionals, failure probability remains bottlenecked by multiplicative rarity, whereas joint tilting overcomes this by reallocating mass in the joint space. 4) For deterministic dynamical systems, we show that joint tilting reduces to optimal importance sampling over in-puts along the dynamics manifold, bridging the frame-work with black-box simulators and existing simulation-based verification workflows. 5) We propose the TT2D tractor-trailer benchmark adapted from [12] as a controlled falsification benchmark, provid-ing an expressive setting in which falsification difficulty can be systematically tuned. These results make the proposed diffusion-guided falsifi-cation D IFF TILT a sound, distribution aware enhancement to counterexample generation, grounded in importance sampling theory and stochastic order analysis, and directly relevant to the verification and validation of complex CPS. II. D IFFUSION GUIDED SEARCH AS IMPORTANCE 
+
+SAMPLING (IS) We begin by formalizing the class of scenario samplers considered in this work. Rather than committing to a specific algorithm or implementation, we adopt an abstract view in which a generative model defines a base distribution over envi-ronments and executions, and guidance is introduced through a scoring function that biases sampling toward behaviors of interest. This abstraction allows us to reason about guided sampling independently of how the underlying generative model is obtained, and to isolate the probabilistic mechanisms that drive failure discovery. In particular, we consider samplers that operate over a joint space of environment parameters and system executions, and that can be guided using likelihood-based reweighting. Diffusion models provide a convenient and expressive instantiation of this class, but the formulation in this section applies more broadly to any generative mechanism that supports sampling from a joint density and evaluation of likelihood ratios. The remainder of this section introduces the notation, assumptions, and sampling primitives that will be used throughout the paper, setting the stage for the formal analysis in Section III. 
+
+a) Preliminaries: Let z0 = ( x, y ) ∈ Rd be a vectorized representation of the inputs and the corresponding outputs. A diffusion model learns to generate samples from p(z0) by defining two coupled Markov chains: a fixed forward process 
+
+that gradually corrupts z0 into Gaussian noise, and a learned 
+
+reverse process that denoises noisy samples and transforms them back into samples from the data distribution [10], [14]. 
+
+Forward process. A diffusion model corrupts a data sample 
+
+z0 into Gaussian noise via a fixed Markov chain [10]: 
+
+q(zt | zt−1) = N (√αt zt−1, (1 − αt)I) , (1) with marginal q(zt | z0) = N (√¯αt z0, (1 − ¯αt)I), where 
+
+¯αt = Qts=1 αs .
+
+Reverse process and sampler. The reverse process is a learned Markov chain pθ (zt−1 | zt) = N (μθ (zt, t ), σ 2 
+
+> t
+
+I).A neural network εθ (zt, t ) is trained to predict the noise ε
+
+injected at level t [10], recovering the posterior mean: 
+
+μθ (zt, t ) = 1
+
+√αt
+
+
+
+zt − 1 − αt
+
+√1 − ¯αt
+
+εθ (zt, t )
+
+
+
+. (2) Sampling proceeds as 
+
+zT ∼ N (0 , I ), zt−1 = μθ (zt, t ) + σtη, η ∼ N (0 , I ). (3) 
+
+Score interpretation and the VP-SDE connection. 
+
+Song et al. [14] show that the discrete forward chain above is a discretization of the Variance Preserving SDE (VP-SDE): 
+
+dz = − 12 β(t) z dt + pβ(t) dW t. (4) Under this continuous view, the reverse of any such diffusion is governed by the Stein score ∇zt log pt(zt) via the reverse-time SDE [14]: 
+
+dz = [ f (z, t ) − g(t)2 ∇z log pt(z)] dt + g(t) d ¯Wt. (5) The noise prediction εθ is related to the score by 
+
+∇zt log pt(zt) ≈ − εθ (zt, t )
+
+√1 − ¯αt
+
+, (6) and the reverse diffusion process used in DDPMs can be viewed as a discrete approximation of Eq. (5) under this identi-fication [14]. This interpretation makes guidance natural, since modifying the score steers samples toward desired regions of 
+
+pt.
+
+b) Target Sampling Density.: The sampler above draws from the base joint distribution pθ (x, y ) with no preference for any region. In many applications one instead wants samples that score highly under a scalar objective R : Z → R, whether 
+
+R encodes task reward, constraint violation, or adversarial cost. The question is how to tilt the sampler toward high-scoring regions without discarding the prior encoded in pθ .3
+
+Without loss of generality we consider minimizing the ob-jective. Let R(x, y ) be the target function and Sk(x, y ) its surrogate, giving the tilted sampling distribution 
+
+p (x, y ) := pθ (x, y ) exp ( βS (x, y )) 
+
+Z ,Z = E(X,Y )∼pθ [exp ( βS (X, Y ))] . (7) III. A NALYSIS 
+
+This section develops a distributional analysis of diffusion-guided falsification. We model the generative environment as a joint distribution over environments and executions, and study the effect of exponential tilting on failure probability. Our goal is to characterize when tilting amplifies failures, how this depends on the score function, and why it overcomes the multiplicative rarity barrier of conditional sampling. The analysis isolates the probabilistic mechanisms underly-ing guided sampling and establishes guarantees independent of a particular diffusion implementation. These results for-malize diffusion-guided falsification as principled importance sampling (IS) and clarify its advantage over conditional ap-proaches. 
+
+Summary of results: We cast the efficient discovery of rare failures as IS. A failure requires both a rare input (w.p. 
+
+δ ≪ 1) and a corresponding rare trace (w.p. ε ≪ 1), so its probability is the product δε of these two small probabilities, and the expected number of samples required to observe one is of order 1/(δε ), even under an exact conditional model (Proposition 1). Rather than draw from the model at this cost, we reweight the joint distribution over inputs and traces so that failures are sampled more often. The reweighting we adopt is exponential tilting by a score S, a surrogate that is larger on more failure-like samples, which shifts the joint distribution toward regions where failures are more likely. Proposition 2 and Lemma 1 show that this reweighting is well defined and is the least-distorting one that raises the expected score, remaining closest to the model in KL divergence. Proposition 3 shows that the probability of sampling a failure under the tilted distribution is an exact importance-sampling reweighting of the original model, and that tilting raises this probability precisely when failures receive higher scores than non-failures. Theorem 1 weakens this requirement to an FOSD assumption, under which tilting still provably increases the failure probability, at the cost of a weaker guarantee: it raises the probability but no longer drives it to one. Corollary 1 recovers that stronger conclusion under strict score separation, and Corollary 2 establishes the advantage over conditional sampling, which is capped by the failure rate within a single input because it cannot reweight traces, a limit the joint tilt overcomes. Notation is summarized in Table I. 
+
+Problem Setup: Let (X, Y ) ∈ X × Y denote a scenario, where X is some representation of the input, and Y is a system execution trace consistent with X. Let p⋆ (x, y ) denote the true (unknown) distribution of plausible inputs. We assume access to a learned joint diffusion model pθ (x, y ) that approximates 
+
+p⋆ and provides a support to the sampler. We also define a failure event as the set satisfying: 
+
+F := {(x, y ) ∈ X × Y : R (x, y ) ≤ 0} , (8) TABLE I: Notation used in Section III.                                                 
+
+> Symbol Meaning
+> z= ( x, y )∈ X × Y Joint state; input and execution trace
+> p⋆(x, y )True joint distribution over scenarios
+> pθ(x, y )Learned joint diffusion prior
+> R:X × Y → RCost / robustness function
+> F:= {(x, y ) : R(x, y )≤0}Failure set
+> 1F(x, y )Indicator of FS:X × Y → RScore function (surrogate for failure)
+> A⊂ X Input region where failures concentrate
+> δ=p⋆(A× Y )Outer rarity parameter
+> ε=p⋆(F|X∈A)Within-region rarity parameter
+> β≥0Tilting parameter
+> Z(β) = Epθ[eβS ]Normalization Constant
+> pθ,β ∝pθeβS Tilted distribution
+
+where R : X × Y → R is a cost function, a score, associated with the (input, trace) pair. The goal of sampling is to efficiently discover locations from F , or equivalently, to estimate or amplify the probability mass in regions where 
+
+R (x, y ) is small. In order to formalize the desired properties for our sampler, we define the concept of rare failure as failure event of interest in this work. 
+
+Definition 1. (Rare Failure) A failure event F is rare if there exists a measurable set A ⊂ X such that:  
+
+> •
+
+p⋆ (A × Y ) = δ << 1, 
+
+> •
+
+Failures are negligible outside of the set A:
+
+p⋆ (F |X / ∈ A) = p⋆ (F ∩ (( X \ A) × Y )) 
+
+p⋆ (( X \ A) × Y ) ≈ 0. 
+
+> •
+
+Failure is rare but possible within A:
+
+p⋆ (F |X ∈ A) = p⋆ (F ∩ (A × Y )) 
+
+p⋆ (A × Y ) = ε << 1.
+
+Hence, the overall failure probability is p⋆ (F ) = δε , which we refer to as the multiplicative rarity of F .
+
+Example 1 (Multiplicative Rarity Effect) . Consider a tractor-trailer maneuvering task, in which a vehicle composed of a tractor and an attached trailer must drive from an initial configuration to a goal configuration in a bounded planar environment using bounded velocity and steering inputs. The property used for evaluation is the negation of goal reacha-bility: the system is specified to never reach the goal region. Thus, a falsifying event F corresponds to a successful goal-reaching maneuver. Reaching the goal requires (i) that the input trajectory brings the vehicle into the neighborhood of the goal at all, which only a narrow corridor of steering and velocity sequences achieves, so the admissible inputs form a small set A with δ = p⋆(A × Y ) ≪ 1; and (ii) that the final configuration simultaneously satisfies the position tolerance and both the tractor and trailer orientation tolerances, which only a fraction of near-goal trajectories meet, giving the within-region rate ε ≪ 1. Thus, falsification requires both rare conditions to coincide, so p⋆(F ) = δε .Tightening the tolerances (smaller ε) or narrowing the feasible 4
+
+corridor (smaller δ) shrinks the failure region multiplicatively. Proposition 1 formalizes this bottleneck. 
+
+Assumption 1 (Score Function Characterization) . The score function is positively correlated with the failure, namely: 
+
+sup 
+
+> (x,y )∈X ×Y\ F
+
+S (x, y ) > sup 
+
+> (x,y )∈F
+
+S (x, y ) . (9) 
+
+Conditional Sampling and the Rare-event bottleneck. Aconditional sampling approach generates scenarios via X ∼
+
+q (x) , Y ∼ pθ (y|X), where q is a proposal distribution over scenes. Under this scheme, the probability to observe a failure is: 
+
+P (F ) = 
+
+Z
+
+q (x) pθ (F |x) dx. 
+
+Proposition 1. (Conditional sampling expected efficiency) Suppose pθ (y|x) = p⋆ (y|x), and q (x) ≈ p⋆ (x). Then it holds, for the rare failure F that P (F ) = δε, and the expected number of samples required to observe a failure is 
+
+Ω
+
+
+
+(δε )−1
+
+.Proof. See Appendix VIII-A. Proposition 1 tells us that even with a perfect conditional model, a conditional sampling distribution must first draw a rare input X ∈ A and then a rare trace Y ∈ BX , which implies a multiplicative effect. Importantly, improving pθ (y|x)
+
+does not mitigate this effect, unless the proposal q (x) already concentrates on the unknown failure inducing region A. An-other intuitive characterization of the conditional sampling is that such method wants to identify failure prone inputs x and then sample y ∼ pθ (y|x) and evaluate R (x, y ) to achieve an estimate for p (F |X = x) = PY ∼pθ (·| x) (R (x, y ) ≤ 0) .Under the base distribution p⋆ (X, Y ), the probability of a failure event is: 
+
+p⋆ (F ) = Ep⋆ [1F (X, Y )] . (10) An intuitive IS distribution for the estimation of p⋆ (F ) would then be: 
+
+p⋆ (x, y | F ) ∝ p⋆ (x, y ) 1F (x, y ) .
+
+This distribution places all mass on the failure set and min-imizes the variance associated with the estimator. However, it is infeasible to sample from this IS proposal because F
+
+is unknown a priori. A standard relaxation is to replace the indicator 1F (x, y ) with a smooth score S (x, y ) correlated with failure. Now let our score function S : X × Y → R
+
+be interpreted as a surrogate for failure (as an example, this would be the learned robustness predictor), then the following holds for the tilted distribution defined in equation (7). 
+
+Proposition 2 (Variational optimality for the tilted distribu-tion) . Define the tilted distribution 
+
+pθ,β (x, y ) := pθ (x, y ) exp ( βS (x, y )) 
+
+Z (β) ,
+
+where Z (β) = E(X,Y )∼pθ [exp ( βS (X, Y ))] , then pθ,β is the solution to 
+
+min  
+
+> q
+
+KL (q || pθ ) s.t. E(X,Y )∼q [S (X, Y )] ≥ c
+
+for some c function of β.Proof. Fix β ∈ B so that Z(β) < ∞ and pθ,β is well-defined. Let Q := {q : q ≪ pθ , R q(z) dz = 1 }. For q ∈ Q , define the likelihood ratio r(z) := q(z)  
+
+> pθ(z)
+
+so that q(z) = r(z)pθ (z),
+
+r ≥ 0, and Epθ [r] = 1 .We first express KL as a convex functional of r. Specifically, we have 
+
+KL( q∥pθ ) = 
+
+Z
+
+q(z) log q(z)
+
+pθ (z) dz 
+
+=
+
+Z
+
+pθ (z) r(z) log r(z) dz = Epθ [r log r].
+
+Moreover, Eq [S] = R q(z)S(z) dz = Epθ [rS ]. Now consider the constrained problem 
+
+min  
+
+> r≥0
+
+Epθ [r log r] s.t. Epθ [r] = 1 , Epθ [rS ] ≥ c, 
+
+for some scalar c. Then the Lagrangian with multipliers λ ∈
+
+R, β ′ ≥ 0 (normalization, and moment constraint respectively) can be written as: 
+
+L(r, λ, β ′) = Epθ [r log r] + λ(Epθ [r] − 1) − β′(Epθ [rS ] − c).
+
+A first-order optimality condition (calculus of variations) yields, for pθ -a.e. z,
+
+δL
+
+δr (z) = log r(z) + 1 + λ − β′S(z) = 0 ,
+
+hence 
+
+r⋆(z) = exp( β′S(z) − 1 − λ) = C e β′S(z)
+
+for some constant C > 0.We can see that setting Epθ [r⋆] = 1 gives 
+
+1 = Epθ [r⋆] = C Epθ [eβ′S(Z)] = C Z (β′),
+
+so C = 1 /Z (β′) and therefore 
+
+q⋆β′ (z) = r⋆(z)pθ (z) = pθ (z)eβ′S(z)
+
+Z(β′) .
+
+Set β′ = β and define c(β) := Epθ,β [S]. Then q⋆β = pθ,β is feasible with equality: Epθ,β [S] = c(β). By convexity of r 7 →
+
+r log r and linearity of the constraints, the problem is convex; hence the KKT conditions are sufficient and the optimizer is unique. Therefore pθ,β is the unique solution of 
+
+min  
+
+> q
+
+KL( q∥pθ ) s.t. Eq [S] ≥ c(β).
+
+This completes the proof. Proposition 2 shows how tilting produces the closest distri-bution to the data (in KL divergence) that amplifies failure-relevant regions. 
+
+Lemma 1. Let p be a density defined over Z = X × Y , and let S : Z → R be a measurable score. Let Z (β) be defined as Z (β) := R p (z) exp ( βS (z)) , then an admissible tilt set is 
+
+B = {β : Z (β) < ∞} . (11) 
+
+The following properties hold for B:1) 0 ∈ B , Z (0) = 1 ;5
+
+2) B = ( β−, β +), with −∞ ≤ β− ≤ 0 ≤ β+ ≤ +∞;3) For any β ∈ B the tilted density pβ (z) := p(z) exp( βS (z)) 
+
+> Z(β)
+
+is a valid density function over Z.Moreover, with β ∈ int (B), assume that R p (z) exp (( β + δ) S (z)) < ∞ for some δ > 0, then the following holds: 1) ψ (β) = log Z (β) is finite and differentiable, and 
+
+ψ′ (β) = Epβ [S (Z)] .2) If R p (z) exp (( β + δ) |S (z) |) < ∞ for some δ > 0, then 
+
+ψ is twice differentiable and ψ′′ (β) = Var (S (Z)) ≥ 0.Proof. See Appendix VIII-B. After characterizing the tilt we analyze its effect on the failure probability. 
+
+Proposition 3 (Effect of tilting on Failure Probability) . Let 
+
+p ≡ pθ (x, y ) be the base joint density on support Z =
+
+X × Y , and let F ⊂ Z be the failure set defined as 
+
+F = {(x, y ) : R (x, y ) ≤ 0}. Let S : Z → R be a measurable score, and assume Z (β) := R p (z) exp ( βS (z)) < ∞ for admissible β (Lemma 1). For the tilted density pβ (z) :=  
+
+> p(z) exp( βS (z))
+> Z(β)
+
+, the following properties hold: (A) R 
+
+> F
+
+pβ (z) dz =   
+
+> R
+> Fp(z) exp( βS (z)) dz
+> Rp(z) exp( βS (z)) dz
+
+.(B) Let MF (β) := Ep
+
+eβS (z) | Z ∈ F , M ¯F (β) := 
+
+Ep
+
+eβS (z) | Z / ∈ F , then the following must hold: 
+
+Z
+
+> F
+
+pβ >
+
+Z
+
+> F
+
+p ⇐⇒ MF (β) > M ¯F (β) (12) 
+
+(C) If there exists m > 0 such that inf z∈F S (z) ≥
+
+sup z / ∈F S (z)+ m, then for all β ≥ 0, the following bound over Pβ (F ) can be derived: 
+
+Z
+
+> F
+
+pβ (z) dz ≥ 11 + 1−R   
+
+> Fp
+> R
+> Fp
+
+e−βm 
+
+, (13) 
+
+and as a result, R 
+
+> F
+
+pβ (z) → 1 as β → ∞ .Proof. (A) By definition of pβ ,
+
+Z
+
+> F
+
+pβ (z) dz =
+
+Z
+
+> F
+
+p(z)eβS (z)
+
+Z(β) dz =
+
+R 
+
+> F
+
+p(z)eβS (z) dz 
+
+R 
+
+> Z
+
+p(z)eβS (z) dz .
+
+(B) Let p(F ) := R 
+
+> F
+
+p(z) dz ∈ (0 , 1) . Using the law of total expectation, 
+
+Z
+
+> F
+
+p(z)eβS (z) dz = p(F ) Ep[eβS (Z) | Z ∈ F ] = p(F ) MF (β),
+
+and similarly, 
+
+Z
+
+> ¯F
+
+p(z)eβS (z) dz = (1 − p(F )) M ¯F (β).
+
+Substituting into (A) yields 
+
+Z
+
+> F
+
+pβ = p(F )MF (β)
+
+p(F )MF (β) + (1 − p(F )) M ¯F (β) .
+
+A direct comparison with p(F ) gives 
+
+Z
+
+> F
+
+pβ > p (F ) ⇐⇒ p(F )MF (β)
+
+> p (F )( p(F )MF (β) + (1 − p(F )) M ¯F (β)) ,
+
+and 
+
+p(F )MF (β) > p (F )( p(F )MF (β) + (1 − p(F )) M ¯F (β)) 
+
+⇐⇒ MF (β) > M ¯F (β).
+
+(C) Let a := inf z∈F S(z) and b := sup z / ∈F S(z), so a ≥
+
+b + m. Then 
+
+Z
+
+> F
+
+p(z)eβS (z) dz ≥ eβa 
+
+Z
+
+> F
+
+p(z) dz = p(F )eβa ,
+
+and Z
+
+> ¯F
+
+p(z)eβS (z) dz ≤ eβb 
+
+Z
+
+> ¯F
+
+p(z) dz = (1 − p(F )) eβb .
+
+Using (A) and these bounds, 
+
+Z
+
+> F
+
+pβ =
+
+R 
+
+> F
+
+pe βS 
+
+R 
+
+> F
+
+pe βS + R ¯F pe βS 
+
+≥ p(F )eβa 
+
+p(F )eβa + (1 − p(F )) eβb = 11 + 1−p(F )  
+
+> p(F)
+
+e−β(a−b) .
+
+Since a − b ≥ m, the stated bound follows. The limit as 
+
+β → ∞ follows. Result (A) expresses the failure probability under tilting as an exact likelihood-ratio reweighting of the base distribution, making explicit the connection to IS. Result (B) shows that tilting improves failure discovery if and only if the surrogate score assigns larger exponential weight to failure samples than to non-failures, which is in fact a way to express the notion of score alignment. Result (C) characterizes an idealized regime in which the score perfectly separates failures, in which case increasing the tilt parameter concentrates probability mass arbitrarily close to the failure set. Together, these results clarify both the mechanism and the limits of diffusion-guided falsification. What we want to show now is that the tilted distribution moves mass towards the failure region. In order to show this we (i) write the tilted failure probability in a form that exposes a likelihood ratio; (ii) state sufficient conditions under which it is provably larger than the baseline pθ (F ) = δε . As shown in Proposition 3, we cannot prove this in general, but we need an assumption on the alignment between S and failure. Let the base distribution be p ≡ pθ (x, y ), and let the tilted distribution be: 
+
+pβ (z) = p (z) eβS (z)
+
+Z (β) , z = ( x, y ) , Z (β) = Ep
+
+h
+
+eβS (Z)i
+
+.
+
+Let F = {z : R (z) ≤ 0}. Then: 
+
+pβ (F ) = Ep
+
+1F eβS (Z)
+
+Ep
+
+eβS (Z)
+
+= p (F ) MF (β)
+
+p (F ) MF (β) + (1 − p (F )) M ¯F (β) ,
+
+where 
+
+MF (β) = Ep
+
+h
+
+eβS (Z) | F
+
+i
+
+, M ¯F (β) = Ep
+
+h
+
+eβS (Z) | ¯F
+
+i
+
+.
+
+We want to show that pβ (F ) > p (F ) = δε .6
+
+Theorem 1 (Failure Amplification Under Exponential Tilting) .
+
+Let p be a probability density on Z = X × Y . Let F ⊂ Z be a measurable failure set, and let S : Z → R be a measurable score function. Define, for any β ∈ B (see Lemma 1), with 
+
+Z (β) := R 
+
+> Z
+
+p (z) eβS (z) dz , the tilted density 
+
+pβ (z) = p (z) eβS (z)
+
+Z (β) .
+
+Assume that the conditional distribution of S (Z) given z ∈ F
+
+first-order stochastically dominates the conditional distribu-tion of S (Z) given Z / ∈ F , namely 
+
+Ep [ϕ (S (Z)) | Z ∈ F ] ≥ Ep [ϕ (S (Z)) | Z / ∈ F ] ,
+
+for all bounded increasing ϕ (·). Then, for all β ∈ B ,
+
+Z
+
+> F
+
+pβ (z) dz ≥
+
+Z
+
+> F
+
+p (z) dz, 
+
+with strict inequality holding for any β > 0 unless the conditional distributions of S(Z) given Z ∈ F and given 
+
+Z / ∈ F coincide. Proof. Fix any β ∈ B so that Z(β) < ∞ and pβ is well-defined. Let p(F ) := R 
+
+> F
+
+p(z) dz . If p(F ) ∈ { 0, 1}, the claim is trivial, so assume p(F ) ∈ (0 , 1) .By Proposition 3(A) and the law of total expectation, 
+
+Z
+
+> F
+
+pβ (z) dz =
+
+R 
+
+> F
+
+p(z)eβS (z) dz 
+
+R 
+
+> Z
+
+p(z)eβS (z) dz 
+
+= p(F ) Ep
+
+eβS (Z) | Z ∈ F 
+
+p(F ) Ep
+
+eβS (Z) | Z ∈ F  +(1 − p(F )) Ep
+
+eβS (Z) | Z / ∈ F ! .
+
+Define the moment generating function 
+
+MF (β) := Ep
+
+h
+
+eβS (Z) | Z ∈ F
+
+i
+
+,M ¯F (β) := Ep
+
+h
+
+eβS (Z) | Z / ∈ F
+
+i
+
+.
+
+Then 
+
+Z
+
+> F
+
+pβ (z) dz = p(F ) MF (β)
+
+p(F ) MF (β) + (1 − p(F )) M ¯F (β) . (14) By assumption, the conditional distribution of S(Z) given 
+
+Z ∈ F first-order stochastically dominates that given Z / ∈ F ,equivalently, for every bounded non-decreasing function ϕ,
+
+Ep[ϕ(S(Z)) | Z ∈ F ] ≥ Ep[ϕ(S(Z)) | Z / ∈ F ].
+
+Given a value of β > 0, the function ϕβ (s) := min {eβs , K }
+
+is bounded and increasing in K > 0, hence 
+
+Ep[ϕβ (S(Z)) | Z ∈ F ] ≥ Ep[ϕβ (S(Z)) | Z / ∈ F ].
+
+Letting K → ∞ and applying monotone convergence yields 
+
+Ep[eβS (Z) | Z ∈ F ] ≥ Ep[eβS (Z) | Z / ∈ F ],
+
+i.e., MF (β) ≥ M ¯F (β) for all β > 0. For β = 0 the two are equal to 1.Substituting MF (β) ≥ M ¯F (β) into (14) and comparing with p(F ) gives 
+
+Z
+
+> F
+
+pβ (z) dz ≥ p(F ) = 
+
+Z
+
+> F
+
+p(z) dz. 
+
+Indeed, the mapping a 7 → p(F )ap(F )a+(1 −p(F )) b is nondecreasing in a for fixed b > 0. Assume β > 0 and p(F ) ∈ (0 , 1) . From (14), Z
+
+> F
+
+pβ (z) dz > p (F ) ⇐⇒ MF (β) > M ¯F (β).
+
+Under FOSD, equality of expectations for all bounded increas-ing ϕ can occur only if the two conditional distributions of 
+
+S(Z) (given F and given ¯F ) are identical. In that case, for 
+
+β > 0 we have MF (β) = M ¯F (β) and no strict amplification occurs. Conversely, if the conditional distributions differ (i.e., S(Z)
+
+is not p-a.s. equal on F ∪ ¯F ), then by the defining property of first-order dominance there exists a bounded increasing ϕ
+
+such that 
+
+Ep[ϕ(S(Z)) | Z ∈ F ] > Ep[ϕ(S(Z)) | Z / ∈ F ],
+
+which in particular implies strict inequality for the increasing function s 7 → eβs (via the truncation argument above), hence 
+
+MF (β) > M ¯F (β) and therefore R 
+
+> F
+
+pβ > R 
+
+> F
+
+p.This proves the stated strictness condition. Theorem 1 formalizes when diffusion-guided tilting helps. Tilting improves failure probability if and only if failures tend to receive higher scores than non-failures. The FOSD assumption is purely ranking-based: it does not require perfect separation or calibration of S (as Proposition 3 does). Algo-rithmically, this means that if the surrogate score S orders failing scenarios ahead of non-failing ones in distribution, exponential tilting is guaranteed to increase the rate at which failures are sampled. 
+
+Corollary 1 (Asymptotic concentration under score separa-tion) . In addition to the assumptions underlying Theorem 1, suppose additionally that: (i) The set B is bounded from above, i.e., B ⊂ [0 , ∞);(ii) There exists a strict separation margin, i.e., 
+
+inf z∈F S (z) > inf z / ∈F S (z).Then 
+
+lim 
+
+> β→∞
+
+Z
+
+> F
+
+pβ (z) dz = 1 .
+
+Moreover, letting m := inf z∈F S (z) − inf z / ∈F S (z) > 0:
+
+Z
+
+> F
+
+pβ (z) dz ≥ 11 + 1−R   
+
+> Fp
+> R
+> Fp
+
+e−βm 
+
+.
+
+Corollary 1 characterizes an idealized limit. If the score perfectly separates failures from non-failures, tilting eventually samples only failures. The explicit bound shows how fast concentration occurs as a function of the margin m, the tilt parameter β, and the baseline failure probability R 
+
+> F
+
+.Conceptually, the algorithm itself imposes no barrier to failure discovery; only the quality of the score S limits performance. 
+
+Remark 1. The margin condition in Corollary 1 is not required in practice and serves only to characterize the limiting behavior of exponential tilting. Theorem 1 applies under substantially weaker ranking assumptions and explains the empirical gains observed at moderate values of β.7
+
+Corollary 2 (Strict advantage over conditional proposals) . Let 
+
+p be a base joint density on Z = X × Y . Let F ⊂ Z be a measurable failure set and define the conditional family of proposals: 
+
+Qcond := {q (x, y ) = r (x) p (y | x) : r any density on X } ,
+
+such family is composed of densities that may change the marginal over x but keep the sample conditional as the base distribution. Define the conditional failure rate as: 
+
+f (x) := 
+
+Z
+
+> Y
+
+1F (x, y ) p (y | x) dy. 
+
+Assume there exists a measurable set B ⊂ X such that: (i) p (B) > 0, i.e., the base distribution places positive mass on B, and (ii) f (x) ≤ 1 − η for all x ∈ B, for some η > 0.Then the following holds: (R1) For every q ∈ Qcond with supp (r) ⊆ B,R 
+
+> F
+
+q (x, y ) dxdy ≤ 1 − η. Equivalently, even the best conditional sampler supported on B cannot make failure probability exceed 1 − η.(R2) Suppose there exists a measurable score S : Z → R
+
+such that inf z∈F S (z) > inf z / ∈F S (z) , and suppose the exponential tilt is admissible for all β ≥ 0 (i.e., Z (β) = R p (z) eβS (z)dz < ∞ for all β ≥ 0, the tilted distribution 
+
+pβ (z) = p(z)eβS (z) 
+
+> Z(β)
+
+satisfies: lim β→∞ 
+
+R 
+
+> F
+
+pβ (z) dz = 1 .
+
+R1 is the core limitation: if failure is not guaranteed given 
+
+x (i.e., f (x) < 1), then any conditional proposal that keeps 
+
+p (y | x) fixed cannot force failure probability to 1. Instead, it is capped by the within-x failure rate. R2 shows the contrasting capability: a joint proposal (realized by tilting / guided diffusion) can re-weight within the fiber over each x
+
+and concentrate on failing (x, y ) pairs. 
+
+Proof. We prove each result individually. (R1) For q (x, y ) = r (x) p (y | x) (definition of reward and conditional density): 
+
+Z
+
+> F
+
+q =
+
+Z
+
+> X
+
+r (x)
+
+Z 
+
+1F (x, y ) p (y | x) dy 
+
+
+
+dx 
+
+=
+
+Z
+
+r (x) f (x) dx. 
+
+(R2) This is exactly Corollary 1 from before (score separation implies concentration) applied to the joint space. Together, these results show that diffusion-guided tilting overcomes the multiplicative rarity barrier faced by conditional sampling. In the next section, we discuss how this viewpoint motivates the design of our guided sampling procedure. 
+
+Remark 2 (On model mismatch) . While our results establish failure amplification under the learned model pθ , mismatch with the true distribution p⋆ remains. Exponential tilting reweights samples by eβS (z), so discrepancies in high-score regions are amplified as β increases. This induces a trade-off: larger β improves failure discovery but may also magnify model error. A precise characterization of this effect is left for future work. 
+
+IV. I MPLICATIONS FOR FALSIFICATION AND 
+
+VERIFICATION 
+
+The analysis developed in the previous section establishes diffusion-guided sampling as a form of distributional impor-tance sampling with provable failure amplification properties. In this section, we interpret exponential tilting as a principled mechanism for counterexample generation, and clarify how it overcomes fundamental limitations of conditional sampling strategies commonly used in simulation-based testing. Our goal is to ground the proposed framework in es-tablished verification practice, showing how diffusion-guided tilting complements existing falsification pipelines by pro-viding distribution-aware guidance that remains compatible with black-box simulators, runtime monitors, and determin-istic system dynamics. This perspective positions diffusion-guided falsification not as a replacement for formal verification techniques, but as a theoretically justified enhancement to simulation-based counterexample search in complex, high-dimensional systems. To connect this formulation to practical falsification pipelines, it is important to clarify the role of the deterministic simulator. In many falsification pipelines, the execution trace y
+
+is not generated by a learned model of the dynamics (such as a diffusion model), but rather by a simulator. In this setting, the method generates a scenario specification x ∈ X , with 
+
+x ∼ q(x), and the corresponding system execution is given by 
+
+y = Φ( x), where Φ denotes the (possibly deterministic) sys-tem dynamics. In this case, the failure set can be equivalently defined in the input space as 
+
+F = {x ∈ X : R (x, Φ ( x)) ≤ 0} .
+
+Thus, failure becomes an event in X , and the rarity is now: 
+
+p (F ) = PX∼q (X ∈ F ) ,
+
+with an associated sample complexity Θ (1 /p (F )) regardless of whether the simulator is deterministic or stochastic. Given these considerations, we can interpret the role of joint model-ing through the following remark. 
+
+Remark 3 (Deterministic Dynamics) . If y = Φ ( x), then the true data lives on a manifold: 
+
+M = {(x, y ) : y = Φ ( x)} ⊂ X × Y ,
+
+and a joint diffusion is learning a density concentrated near 
+
+M. Tilting the joint density by a score S (x, y ) is then equivalent to tilting along the manifold, namely: 
+
+pk (x) ∝ pθ (x) exp ( βS (x, Φ ( x))) .
+
+Equivalently, joint tilting reduces to optimal importance sam-pling over x.
+
+We now adapt the key result from Theorem 1 to the case where the physical system is deterministic (unique rollout), while the diffusion model may still be stochastic as a generator. We start by assuming that there exists a measurable function (simulator/dynamics) Φ : X → Y , y = Φ ( x) , and define the failure set in input space as 
+
+FX := {x ∈ X : ( x, Φ ( x)) ∈ F } = {x : R (x, Φ ( x)) ≤ 0} .8
+
+Proposition 4 (Joint tilting reduces to input-space tilting on the dynamics manifold) . Assume the base joint distribution is supported on (or concentrates on) the dynamics manifold 
+
+M := {(x, y ) : y = Φ ( x)}. Then the joint density can be rewritten as: 
+
+p (x, y ) = pX δ (y − Φ ( x)) ,
+
+where pX is the induced marginal over inputs. Define the joint tilt with score S (x, y ), and the tilted density 
+
+pβ (x, y ) ∝ p (x, y ) eβS (x,y ). (15) 
+
+Then, the induced marginal over inputs under the tilted joint satisfies: 
+
+pβ,X (x) := 
+
+Z
+
+> Y
+
+pβ (x, y ) dy ∝ pX (x) exp ( βS (x, Φ ( x))) .
+
+Proof. See Appendix VIII-C. In the deterministic case, the “joint” method reduces to an importance sampler over inputs where the weights are evalu-ated along the realized trajectory y = Φ ( x). In other words, the proposed mechanism composed of the joint diffusion and tilting provides a principled way to learn a proposal over x
+
+that respects feasibility ( y = Φ ( x)) automatically. 
+
+Corollary 3 (Deterministic comparison: diffusion-guided tilt-ing vs input-only search) . Let FX = {x : R (x, Φ ( x)) ≤ 0}
+
+and suppose there exists an input score T (x) := S (x, Φ ( x)) 
+
+that separates failures and non-failures in input space: 
+
+inf 
+
+> x∈FX
+
+T (x) > sup 
+
+> x / ∈FX
+
+T (x) ,
+
+and the input space partition function is finite for all β ≥ 0:
+
+ZX (β) := 
+
+Z
+
+pX (x) eβT (x)dx < ∞.
+
+Define the tilted input proposal pβ,X (x) = pX (x)eβT (x)  
+
+> ZX(β)
+
+.
+
+Then the tilted input distribution satisfies: 
+
+lim β→∞ 
+
+R 
+
+> FX
+
+pβ,X (x) dx = 1 .
+
+Hence, even when the underlying system is deterministic, tilting yields an optimal “distributional” way to push prob-ability mass onto failing inputs (subject to staying close to 
+
+pX , i.e., realism). This is the deterministic analogue of failure concentration in joint space. Proposition 4 and Corollary 3 show that under determin-istic dynamics, joint and input-space tilting target the same distribution. They still differ in how the prior is learned, how the search is guided, and how validity is ensured, and each favors the joint model. First, fitting the joint pθ (x, y ) to inputs and traces together lets the traces constrain the input marginal 
+
+pθ (x), reducing its epistemic uncertainty. Second, the search is guided without involving the simulator. For an input-space score, the gradient with respect to the input must be propagated through Φ and is unavailable when Φ is a black box, whereas the joint model exposes it directly in joint space from its own predicted trace. This joint-space gradient is approximate, but it never differentiates through Φ. Third, validity holds regardless of model accuracy. Only the candidate input x is sent to the simulator, which returns the true execution Φ( x), so every counterexample is valid by construction even if the predicted trace ˆy is wrong. Their gap measures the model’s error on that sample and can refine pθ online (Section VII). 
+
+Illustrative Example. To illustrate the deterministic interpreta-tion, consider a low-dimensional setting with a nonlinear map 
+
+y = Φ( x) for x, y ∈ R2. We define the robustness as the Him-melblau’s function and define the score as S(x, y ) = −R(y),inducing the input-space score S(Φ( x)) .Fig. 1 shows the map x 7 → y = Φ( x) together with the induced robustness landscape R(Φ( x)) over the input space, which defines the failure-relevant regions. Fig. 2 illustrates the effect of exponential tilting for increasing β. As β increases, probability mass is progressively reallocated toward high-score (failure-prone) regions, leading to concentration near failures, consistent with Corollary 3. V. A LGORITHMIC DETAILS 
+
+Fig. 3 provides an overview of the D IFF TILT pipeline. DIFF TILT operates in two phases. In the offline phase, a diffusion model learns the joint prior pθ (x, y ) over plausible input trajectory pairs (x, y ), which is then frozen and reused across objectives without retraining. In the online phase, at each iteration k, candidates are drawn from the tilted density 
+
+pk(z) ∝ pθ (x, y ) exp( βkSk(x, y )) via gradient-guided reverse diffusion, where ∇Sk biases each denoising step toward higher-score regions of the joint space. Only the selected candidate is then executed through the black-box simulator to evaluate the true R, with the observation used to refine 
+
+Sk if falsification is not achieved. We next describe each stage of the pipeline and then state the complete procedure in Algorithm 1. 
+
+a) Joint Diffusion: The joint prior pθ (z) is trained using DDPM [10] on paired samples (x0, y 0), with z = ( x, y ),using a coupled architecture adapted from JointNet [16]. Two interacting branches, one for x and one for y, each predict their corresponding noise component while conditioning on the other, capturing dependencies between inputs and trajectories. Given paired samples (x0, y 0), we train with a joint denoising objective 
+
+E∥ϵx − ˆϵx(xt, y t, t )∥22+∥ϵy − ˆϵy (yt, x t, t )∥22
+
+ ,
+
+where (xt, y t) are obtained via the forward diffusion process. To improve learning stability, the input branch is first pre-4 2 0 2 4                
+
+> x1
+> 4
+> 2
+> 0
+> 2
+> 4
+> x2
+> (a) Nonlinear map
+> x7→y= Φ( x).42024
+> x1
+> 4
+> 2
+> 0
+> 2
+> 4
+> x2
+> global minima x*
+> (b) Induced robust-ness R(Φ( x)) in in-put space.
+
+Fig. 1: Deterministic embedding and induced score landscape. Left: nonlinear map x 7 → y = Φ( x). Right: robustness evalu-ated on outputs, visualized over the input space as R(Φ( x)) .94 2 0 2 4      
+
+> x1
+> 4
+> 2
+> 0
+> 2
+> 4
+> x2
+> global minima x*
+> pkpexp( Sk), = 0.0
+> ESS = 10000 / 10000
+
+(a) β = 0 4 2 0 2 4       
+
+> x1
+> 4
+> 2
+> 0
+> 2
+> 4
+> x2
+> global minima x*
+> pkpexp( Sk), = 2.0
+> ESS = 49 / 10000
+
+(b) β = 2 4 2 0 2 4       
+
+> x1
+> 4
+> 2
+> 0
+> 2
+> 4
+> x2
+> global minima x*
+> pkpexp( Sk), = 10.0
+> ESS = 11 / 10000
+
+(c) β = 10 4 2 0 2 4      
+
+> x1
+> 4
+> 2
+> 0
+> 2
+> 4
+> x2
+> global minima x*
+> resampled xipk(M= 64)
+
+(d) β = 0 4 2 0 2 4       
+
+> x1
+> 4
+> 2
+> 0
+> 2
+> 4
+> x2
+> global minima x*
+> resampled xipk(M= 64)
+
+(e) β = 2 4 2 0 2 4       
+
+> x1
+> 4
+> 2
+> 0
+> 2
+> 4
+> x2
+> global minima x*
+> resampled xipk(M= 64)
+
+(f) β = 10 
+
+Fig. 2: Effect of exponential tilting on the input dis-tribution. Top row: reweighted densities proportional to 
+
+pθ (x) exp( βS (x)) . Bottom row: samples obtained by impor-tance sampling from the weighted distribution. trained, followed by joint training with cross-conditioning, and finally end-to-end fine-tuning of the full model. 
+
+b) Base Sampling: Sampling from the learned joint prior 
+
+pθ (x, y ) follows the standard DDPM reverse process [10]. Starting from zT ∼ N (0 , I ), samples are generated via 
+
+zt−1 = μθ (zt, t ) + σtη, η ∼ N (0 , I ), (16) where μθ (zt, t ) is defined in Eq. (2). This defines the unguided sampler used to initialize the dataset with B samples (Algo-rithm 1, Lines 4–9). 
+
+c) Scoring Function: The surrogate Sk : X × Y → R
+
+is a neural network trained on the accumulated dataset H
+
+to approximate −R(x, y ), normalized against the empirical standard deviation of robustness values in H to stabilize gradient magnitudes across iterations. Consistent with the joint formulation in Section III, the surrogate takes the full pair 
+
+(x, y ) as input, capturing dependencies between the scenario and the induced trace. 
+
+d) Gradient-Guided Sampling: For a differentiable sur-rogate, the log-gradient of the tilted target decomposes as 
+
+∇z log pk(z) = ∇z log pθ (z)
+
+| {z }
+
+prior score 
+
++ βk ∇z Sk(z)
+
+| {z }
+
+surrogate guidance 
+
+, (17) where the diffusion model provides implicit access to 
+
+∇z log pθ (·) via Eq. (6), and the surrogate provides ∇z Sk(·).Since Sk is defined on clean samples, guidance is applied at each reverse step t by first computing the Tweedie denoised estimate 
+
+ˆz0(zt, t ) = 1
+
+√¯αt
+
+ zt − √1 − ¯αt εθ (zt, t ) ,
+
+and modifying the reverse mean as μ(k)(zt, t ) = μθ (zt, t ) + 
+
+γtβk ∇z Sk(ˆ z0(zt, t )) , with βk and Sk fixed across all t within iteration k. Expressed in the noise-prediction parameterisation: 
+
+Algorithm 1: DIFF TILT 
+
+Input: Learned prior pθ (x, y ), robustness R(x, y ), batch size B,candidates M , simulation budget, diffusion steps T , guidance weight {βk } 
+
+> 1
+
+Initialize dataset H ← ∅ ; 
+
+> 2
+
+for iteration k = 1 , 2, . . . do  
+
+> 3
+
+if k = 1 then  
+
+> 4
+
+for i = 1 , . . . , B do  
+
+> 5
+
+Sample (xi, y i) ∼ pθ (x, y ); 
+
+> 6
+
+Compute robustness Ri ← R(xi, y i); 
+
+> 7
+
+Add (( xi, y i), −Ri) to dataset H; 
+
+> 8
+
+if Ri < 0 then  
+
+> 9
+
+return (xi, y i); 
+
+> 10
+
+Train surrogate model Sk,θ on H; 
+
+> 11
+
+if simulation budget exhausted then  
+
+> 12
+
+break;  
+
+> 13
+
+for i = 1 , . . . , M do  
+
+> 14
+
+zT ∼ N (0 , I ); 
+
+> 15
+
+for t = T, . . . , 1 do  
+
+> 16
+
+Compute guided noise prediction by Eq. (18);  
+
+> 17
+
+Apply the guided DDPM reverse update using Eq. (16);  
+
+> 18
+
+Obtain candidate (xi, y i) from z0; 
+
+> 19
+
+Define selection distribution pi ∝ exp( βk Sk,θ (xi, y i)) ; 
+
+> 20
+
+Sample scenario index ˆi ∼ pi and simulate Φ( xˆi); 
+
+> 21
+
+Compute robustness R(xˆi, Φ( xˆi)) ; 
+
+> 22
+
+if R(xˆi, Φ( xˆi)) < 0 then  
+
+> 23
+
+return (xˆi, Φ( xˆi)) ; 
+
+> 24
+
+Add (( xˆi, y ˆi), −R(xˆi, y ˆi)) to H; 
+
+> 25
+
+Retrain surrogate model Sk+1 ,θ on updated H; 
+
+> 26
+
+return No falsification found within simulation budget; 
+
+ε(k)(zt, t ) = εθ (zt, t ) −√αt
+
+√1 − ¯αt
+
+1 − αt
+
+γtβk ∇z Sk(ˆ z0(zt, t )) .
+
+(18) The guided reverse step is then 
+
+zt−1 = μ(k)(zt, t ) + σtη, η ∼ N (0 , I ), (19) keeping the diffusion variance unchanged. From M indepen-dent noise samples this produces M candidate scenarios. 
+
+e) Selection and Evaluation: Guided diffusion pro-duces M candidate scenarios reweighted as pi ∝
+
+exp( βkSk,θ (xi, y i)) . A candidate is sampled, simulated using 
+
+Φ( x), and evaluated (Algorithm 1, Lines 20–25), with the resulting data used to update the surrogate. This process repeats until falsification or budget exhaustion. VI. N UMERICAL RESULTS 
+
+This section evaluates the proposed D IFF TILT framework in the context of falsification. We describe the benchmark systems and evaluation protocol, and compare against a state-of-the-art falsification method, FReaK [1], across multiple specifications per system. 
+
+A. Benchmark Algorithm and Systems 
+
+We introduce the baseline method and benchmarks, fol-lowed by the experimental procedure and scoring definitions. 10 
+
+Fig. 3: D IFF TILT system architecture. Offline , a joint diffusion prior pθ (x, y ) is trained once on randomly sampled (x, y ) pairs and frozen. Online , tilted reverse diffusion guided by ∇Sk proposes candidates; the black-box simulator returns R(x, y ), which tests the failure condition R(x, y ) ≤ 0 and refines the surrogate Sk. Red ( ⋆ ) steps invoke the true system or train the prior (expensive) ; blue steps run entirely within the learned model (cheap); grey denotes data; green denotes the falsifying output. 
+
+a) Baseline: FReaK [1] is a falsification method based on Koopman operator linearization, which lifts nonlinear dy-namics into a higher-dimensional space where they evolve lin-early. It constructs a data-driven surrogate model and searches for inputs that maximize the robustness of the negated STL specification using a weighted robustness encoding, reducing the optimization to a linear program. The weights are itera-tively refined based on critical points identified through sim-ulations of the true system. FReaK consistently achieves high falsification rates with low simulation budgets across ARCH-COMP benchmarks [1], [11]. While other approaches exist, no single method uniformly dominates across all problems [11]. Thus, comparing against FReaK provides a meaningful and rigorous evaluation of our approach. 
+
+b) Benchmark Systems: We consider the Automatic Transmission (AT) and Chasing Cars (CC) benchmarks from ARCH-COMP [11], along with a tractor-trailer (TT2D) sce-nario [12], additionally introduced here as a falsification benchmark with instances of varying difficulty. We compare against FReaK under a fixed simulation budget and briefly summarize each benchmark next. 
+
+Automatic Transmission (AT) The AT system is a deter-ministic hybrid system modeling an automatic transmission controller with both continuous and discrete dynamics [11]. The system has two input time-varying signals: throttle ut ∈
+
+[0 , 100] [%] and brake ub ∈ [0 , 325] [ft-lb]. Given an input trajectory, the system produces output trajectories consisting of vehicle speed v[mph], engine speed ω[RPM], and gear indicators g1, . . . , g 4. The simulation horizon is 50 [s] with a sampling interval of 0.01 [s]. The STL specifications are listed in Table II. AT has multiple STL specifications over fixed system dynamics, allowing us to evaluate the generalization capability of a single learned prior across diverse specifica-tions without retraining. Additionally, specifications like AT 5g
+
+(Table II) also allows us to test the method under discrete dynamics, where gradient-based guidance is predicted to be ineffective due to flat robustness surfaces. 
+
+Chasing Cars (CC) The CC is a dynamical system modeling a platoon of five vehicles [11]. It has two input signals, throttle ut ∈ [0 , 1] and brake ub ∈ [0 , 1] , applied to the lead vehicle. The remaining vehicles follow a fixed control law based on the state of the preceding vehicle. Given an input trajectory, the system produces output trajectories consisting of the longitudinal positions y1, . . . , y 5 of the five vehicles. The simulation horizon is 100 [s] with a sampling interval of 
+
+0.05 [s]. The STL specifications are listed in Table II. CC also aids in testing the reusability of a single learned prior across long-horizon and nested specifications without retraining. 
+
+Tractor-Trailer (TT2D:) The TT2D system is a deterministic nonlinear model of a tractor–trailer operating in a bounded 2D environment with obstacles. We adopt the model from [12] and reformulate it as a falsification problem. The system has two control inputs: longitudinal velocity v ∈ [−3, 3] [m/s] and steering angle δ ∈ [−0.95 , 0.95] [rad]. Given an input trajectory, the system produces state trajectories consisting of position (x, y ), tractor heading θ1, and trailer heading θ2,within spatial limits X, Y ∈ (−32 , 32) [m]. The objective is to generate a feasible trajectory from an initial state Ss = [ xs, y s, θ s
+
+> 1
+
+, θ s
+
+> 2
+
+] to a goal state Sg =[xg , y g , θ g 
+
+> 1
+
+, θ g 
+
+> 2
+
+] within a horizon of 500 [s] sampled at time interval 0.25 [s]. Feasibility, including collision avoidance and control constraints, is enforced via projection, restricting the search to admissible trajectories. The goal region is defined by position and orientation tolerances: ∥(x, y ) − (xg , y g )∥2≤ ϵp,
+
+|θ1 − θg 
+
+> 1
+
+|≤ ϵθ , and |θ2 − θg 
+
+> 2
+
+|≤ ϵθ , with angles wrapped to 
+
+[−π, π ]. Smaller tolerances correspond to harder instances. For TT2D, unlike AT and CC, DIFF TILT 
+
+defines a trajectory-level objective R(x, y ) =
+
+−
+
+
+
+lT (yT ) + PTt=0 lt(yt, x t)
+
+
+
+, where lT penalizes deviation from the goal and lt accumulates stage costs over the horizon. This highlights a limitation of the current FReaK framework: it cannot directly represent such trajectory-level objectives, as it requires STL-based formulations [1]. Therefore, we approximate it using the negation of goal reachability defined over the goal region (Table II). For consistency, all trajectories generated by D IFF TILT are evaluated against the same TT2D STL specification as FReaK, so both methods are compared on identical criteria, with the trajectory-level cost serving only as the guidance signal within D IFF TILT .We consider six scenarios: (S1) no obstacles (easy) with relaxed tolerances (ϵp, ϵ θ ) = (1 .25 , 0.5) , (S2) no obstacles (hard) with tighter tolerances (0 .2, 0.2) , (S3) one obstacle :a single rectangular obstacle placed between the start and goal regions, (S4) wide parking : a constrained parking con-figuration with boundaries on the sides and one end, (S5) 
+
+narrow parking : a parking configuration similar to S4 but with 11 
+
+TABLE II: STL specifications with informal descriptions for the Automatic Transmission (AT), Chasing Cars (CC), and Tractor-Trailer (TT2D) benchmarks. □ denotes “always”, ♢ denotes “eventually”, and ◦ϕ denotes ♢[0 .001 ,0.1] ϕ.                                                                                                        
+
+> Key STL Formula Informal Description
+> AT1 □[0 ,20] v < 120 Speed remains below 120 mph for the first 20 seconds. AT2 □[0 ,10] ω < 4750 Engine RPM remains below 4750 for the first 10 seconds. AT5 g□[0 ,30] (( ¬g∧ ◦ g)→ ◦ □[0 ,2.5] g)Whenever gear g∈ { 1,2,3,4}is engaged, it remains engaged for at least 2.5 seconds. AT6a (□[0 ,30] ω < 3000) →(□[0 ,4] v < 35) If RPM stays below 3000 over the horizon, then speed stays below 35 mph for 4 seconds. AT6b (□[0 ,30] ω < 3000) →(□[0 ,8] v < 50) If RPM stays below 3000 over the horizon, then speed stays below 50 mph for 8 seconds. AT6c (□[0 ,30] ω < 3000) →(□[0 ,20] v < 65) If RPM stays below 3000 over the horizon, then speed stays below 65 mph for 20 seconds. AT6abc AT6a ∧AT6b ∧AT6c All three conditional speed constraints must hold simultaneously. CC1 □[0 ,100] (y5−y4≤40) The distance between car 5 and car 4 is always at most 40 units. CC2 □[0 ,70] ♢[0 ,30] (y5−y4≥15) At all times up to 70 s, within the next 30 s the distance becomes at least 15. CC3 □[0 ,80] (( □[0 ,20] (y2−y1≤
+> 20)) ∨(♢[0 ,20] (y5−y4≥40)))
+> At all times, either cars 1–2 stay within 20 units for 20 s, or cars 4–5 become separated by at least 40 within 20 s. CC4 □[0 ,65] ♢[0 ,30] □[0 ,5] (y5−y4≥8) At all times, within 30 s there exists a 5 s interval where the distance stays above 8. CC5 □[0 ,72] ♢[0 ,8] (( □[0 ,5] (y2−y1≥9)) →
+> (□[5 ,20] (y5−y4≥9)))
+> At all times, within 8 s: if cars 1–2 stay at least 9 apart for 5 s, then cars 4–5 must stay at least 9 apart during the following 5–20 s. CCx V4
+> i=1 □[0 ,50] (yi+1 −yi>7.5) All adjacent cars maintain a separation greater than 7.5 units at all times. TT2D ¬♢[0 ,T ](∥(x, y )−(xg, y g)∥2≤
+> ϵp∧ | θ1−θg
+> 1|≤ ϵθ∧ | θ2−θg
+> 2|≤ ϵθ)
+> The system never reaches the goal region within the horizon (i.e., position and orientations do not satisfy tolerance bounds simultaneously).
+
+reduced available space, (S6) random obstacles : multiple small obstacles randomly distributed in the environment. TT2D additionally tests whether D IFF TILT can exploit a richer guidance signal than the STL specification alone. 
+
+c) Experimental Procedure: For AT and CC, we follow the ARCH-COMP evaluation protocol [11], reporting simula-tions required for falsification within a budget of B + 30 , with initial batch sizes B ∈ { 4, 8, 16 }; FReaK results are taken from [11]. For TT2D, both methods start from identical initial states with a budget of B + 200 (B = 16 ). All results are averaged over 10 independent runs. Allinput signals are normalized to [−1, 1] before training and sampling, and denormalized to their physical range before simulation. From the generated pair z0 = ( x, y ), only x is passed to the simulator. For AT and CC, R(x, y ) is the STL robustness of the specification under test. For TT2D, R(x, y )
+
+is a trajectory-level goal-reaching cost, with falsification con-firmed against the TT2D STL specification, so both methods are evaluated on identical criteria. Robustness targets are standardized against the empirical standard deviation of values in H at each retraining step, stabilizing gradient magnitudes as the dataset grows. The tilting strength βk was selected via a coarse pilot search over {1, 10 , 20 , 50 , 100 }; values below 1 had negligible effect and values above 100 consistently degraded performance. The values used are β = 10 for TT2D, β = 20 for AT, and β = 100 
+
+for CC. A systematic sensitivity analysis was not conducted, and adaptive tuning of β is identified as a future direction. 
+
+B. Results and Discussion 
+
+In the offline phase, the joint prior is implemented as two coupled UNet branches 1, one for input signals x and one for output trajectories y, connected via zero-initialized skip adapters following the JointNet architecture [16]. The model is trained once for 300 epochs with a DDPM scheduler ( T =1000 ), requiring under 4 hours on a single NVIDIA A100 GPU. This offline cost is amortized across all downstream 
+
+> 1
+
+https://huggingface.co/docs/diffusers/api/models/unet 
+
+specifications, since the same weights are reused without retraining . In the online phase, we measure performance according to the falsification rate (FR) and mean number of simulations required (S), reported in Tables III and IV. In addition to FR and S, we also report the mean runtime ( ¯Tf ) and standard error (SE f ) of falsifying runs for TT2D. We now present the discussion of the results on the indi-vidual benchmarks followed by a summary. 
+
+a) Automatic Transmission (AT): On the AT benchmarks (Table III), D IFF TILT is not competitive with FReaK. FReaK falsifies every specification at low simulation counts, helped by a Koopman surrogate that captures the dynamics accurately and AT specifications that need only a few time indices for robustness encoding [1]. DIFF TILT fails outright on three specifications, each for an identifiable reason. AT1 follows a broader ARCH-COMP pattern [11] in which most tools fail under smooth input interpolation. AT51 and AT54 have discrete gear signals that flatten the robustness landscape, since many distinct input signals map to the same robustness value and the guidance gradient becomes uninformative. This is exactly the regime our analysis flags as unfavorable, since Theorem 1 guarantees that tilting raises the failure probability only when the surrogate tends to score failing scenarios above non-failing ones, an ordering that a flattened landscape erases. This effect, however, is specification-specific rather than systematic, as the remaining gear specifications AT52 and AT53 are still falsified at 4000 points. We did not run experiments targeting these flat-gradient cases and note them as future work. 
+
+b) Chasing Cars (CC): On CC1-CC3, shown in Ta-ble III, both methods achieve high falsification rates at 4000 points, though FReaK requires fewer simulations. The pic-ture changes on CC4, CC5, and CCx, which involve longer horizons and nested specifications. These require a large number of time indices for accurate robustness encoding [1], making FReaK’s optimization increasingly expensive and forc-ing a coarser discretization that reduces surrogate accuracy. DIFF TILT avoids this cost, since it is guided by the surro-gate score of the STL robustness evaluated on the realized 12 
+
+TABLE III: Falsification performance on ARCH benchmarks (AT and CC). FR denotes falsification rate (out of 10 runs) and S denotes the mean number of simulations required for successful runs.                                                                                                                                                                                                                                                        
+
+> Benchmark FReaK DIFF TILT (500 Points) DIFF TILT (4000 Points) B=4 B=8 B=16 B=4 B=8 B=16 FR SFR SFR SFR SFR SFR SFR SAT1 10 4.8 0–0–0–0–0–0–
+> AT2 10 2.1 10 6.3 10 9.2 10 9.0 10 8.1 10 11.2 10 10.6
+> AT51 10 8.7 0–0–0–0–0–0–
+> AT52 10 1.3 10 4.9 10 6.9 10 6.7 10 2.7 10 3.0 10 3.5
+> AT53 10 1.1 0–0–0–716.4 813.0 10 12.1
+> AT54 10 2.4 0–0–0–0–0–0–
+> AT6a 10 7.4 621.0 611.17 631.5 919.6 920.9 920.6
+> AT6b 10 6.2 0–0–220.0 924.2 10 24.7 10 25.5
+> AT6c 10 5.9 420.8 325.3 720.2 10 28.3 825.5 10 23.5
+> AT6abc 10 6.4 526.4 719.1 827.6 10 18.2 921.2 10 22.8
+> CC1 10 3.6 611.2 712.6 717.1 99.6 10 9.6 10 12.6
+> CC2 10 3510.4 613.9 716.8 88.5 911.9 10 9.3
+> CC3 10 5.7 617.9 613.8 624.2 915.6 910.4 918.3
+> CC4 10 176.7 116.8 216.5 227.4 314.7 215.0 325.3
+> CC5 10 48.2 610.3 619.6 723.2 88.6 817.3 919.7
+> CCx 10 110.5 511.6 614.4 622.1 10 10.3 10 13.0 10 18.1
+
+trace rather than by a logical encoding of the formula, so the nesting and horizon length that drive up the baseline’s optimization do not enter D IFF TILT ’s per-iteration cost. On CCx, D IFF TILT achieves full falsification in 10-18 simulations compared to 110.5 for FReaK. On CC5, D IFF TILT reaches comparable falsification rates with far fewer simulations. On CC4, D IFF TILT does not match FReaK’s falsification rate but requires far fewer simulations in successful runs. 
+
+c) Tractor-Trailer (TT2D): On TT2D, D IFF TILT at 4000 points achieves falsification success rate of 1.0 across all six scenarios. In S1, S2, S3, and S6, FReaK succeeds in only a fraction of runs requiring significantly more simulations and runtime, often by an order of magnitude. In contrast, DIFF TILT maintains success rate of 1.0 on all four scenarios with far fewer simulations and substantially lower runtime. This holds for two reasons. The first is that the score-based robustness is better able to guide search in environments where the admissible search space is large but the falsifying region constitutes only a small subset, a case where optimization-based approaches tend to struggle. A second reason is the guidance signal itself. Our analysis requires only that the score rank failing scenarios above non-failing ones, so D IFF TILT 
+
+can be driven by the richer trajectory-level goal-reaching cost while still being confirmed against the same goal-reachability specification as FReaK, and these results show that this richer signal succeeds where an objective tied to the specification alone stalls. The advantage does not extend to Wide (S4) and Narrow Parking (S5), where model-enforced feasibility projections tightly restrict admissible trajectories and both methods perform comparably. This suggests difficulty in these scenarios is driven more by the geometry of the feasible set than by the search procedure. On these two scenarios, FReaK exhibits lower runtime than D IFF TILT , highlighting its advantage in such scenarios. The 500-point results reflect the outcome of insufficient trajectory coverage during training. When training data does not cover the trajectory space well, the learned prior cannot provide reliable guidance, and falsification rates drop. This represents an upfront investment, but one that is amortized as the number of specifications increase since the prior is reusable across tasks without retraining. Whereas FReaK requires op-timization from scratch per specification. Notably, even with 500 points, D IFF TILT exceeds FReaK on S1 and S3, despite using a naive implementation of the JointNet [16]. 
+
+d) Summary: Overall, D IFF TILT provides two key ad-vantages for the benchmarks considered. First, instead of formulating and solving a new optimization problem for each specification, it learns a joint prior over inputs and trajectories that captures system behavior and can be reused across spec-ifications. Second, falsification is performed by guiding this prior using any function that evaluates the resulting execution (e.g., a robustness measure, reward, objective function, or expert-defined score) without requiring STL encodings or decomposition into logical primitives, making the method applicable across a wide range of tasks. VII. C ONCLUSION 
+
+DIFF TILT casts falsification as the exponential tilting of a diffusion-induced joint distribution over environments and executions toward failures. This tilting is the KL-optimal reweighting of the prior, and it admits an exact importance-sampling interpretation in the joint space. It provably amplifies failure probability under mild score-ranking assumptions, and strictly overcomes the multiplicative rarity bottleneck that caps conditional sampling. For deterministic systems, it reduces to optimal importance sampling over inputs along the dynamics manifold, so every proposed counterexample is validated by the true simulator while the prior need never match the system under test. Empirically, a single joint prior trained once and reused without retraining remains competitive with state-of-the-art falsification on the standard ARCH-COMP specifications and outperforms it on long-horizon, nested, and non-STL objec-tives. The simulator is called only on selected candidates, and those evaluations train the surrogate whose gradients guide denoising. Expensive system calls therefore stay confined to scoring, keeping the procedure sample-efficient and compati-ble with black-box pipelines. 13 
+
+TABLE IV: Falsification performance on TT2D scenarios. FR denotes falsification rate (out of 10 runs), S the mean number of simulations for successful runs, ¯Tf the mean runtime (seconds), and SE f its standard error over falsifying runs. 
+
+Benchmark FReaK DIFF TILT (500 Points, B=16) DIFF TILT (4000 Points, B=16) FR S ¯Tf SE f FR S ¯Tf SE f FR S ¯Tf SE f
+
+(S1) No Obs (Easy) 8 98.125 3131.35 627.1 10 46.7 1641.26 534.46 10 19.8 238.15 55.9 
+
+(S2) No Obs (Hard) 1 133 3982.7 - 0 - - - 10 30.9 1562.87 738.64 
+
+(S3) Single Obs 3 120.67 4280.3 1072.42 5 69.8 2345.69 964.52 10 37.7 1174.02 685.76 
+
+(S4) Wide Parking 10 26.8 1205.88 350.93 2 110 6993.06 6912.36 10 56.3 2146.61 512.92 
+
+(S5) Narrow Parking 10 50.8 2141.02 827.19 1 129 3805.55 - 10 46.6 2507.91 800.44 
+
+(S6) Random Obs 1 110 5382.2 - 0 - - - 10 44.9 1856.38 790.54 
+
+Several aspects require further investigation. The tilting strength β is presently fixed per benchmark from a coarse pilot search, leaving a principled adaptive schedule as a clear next step. Large β drives mass into high-score regions where the prior is least accurate and can push denoised samples off the data manifold. Because only x is simulated, the gap between the generated trace and the true rollout Φ( x) is observable at no extra cost, and feeding it back as a mismatch-correction term during denoising would keep samples on-manifold and refine the prior online. Similarly, guided diffusion shifts the proposal rather than reweighting a fixed sample set, so ESS degradation does not affect our results, though a formal account of this interaction remains open. The surrogate is a second lever. In discrete or hybrid dy-namics, such as the AT5 gear signals, the surrogate gradient is uninformative and sampling reverts to the unguided prior, pre-serving coverage but not driving failures, motivating surrogates that exploit hybrid structure and samplers that retain diversity where gradients vanish. On the systems side, DDPM inference and the coupled architecture limit scaling, motivating faster samplers such as DDIM and more efficient joint architectures. Finally, the extension of the analysis to stochastic systems, alongside applications to planning, synthesis, and robotics, are natural directions for D IFF TILT .REFERENCES [1] Bak, S., Hekal, A., Kochdumper, N., Lew, E., Mata, A., Rahmati, A.: Fast koopman surrogate falsification using linear relaxations and weights. In: Akshay, S., Niemetz, A., Sankaranarayanan, S. (eds.) Automated Technology for Verification and Analysis. pp. 234–255. Springer Nature Switzerland, Cham (2025) [2] Bucklew, J.A., Bucklew, J.: Introduction to rare event simulation, vol. 5. Springer (2004) [3] Cover, T.M., Thomas, J.A.: Elements of Information Theory. Wiley (2006). https://doi.org/10.1002/047174882X [4] Csisz´ ar, I.: I-divergence geometry of probability distributions and min-imization problems. The Annals of Probability 3(1), 146–158 (1975). https://doi.org/10.1214/aop/1176996454 [5] Dembo, A., Zeitouni, O.: Large Deviations Techniques and Applications. Springer (1998). https://doi.org/10.1007/978-1-4612-5320-4 [6] Dhariwal, P., Nichol, A.: Diffusion models beat gans on image syn-thesis. In: Advances in Neural Information Processing Systems (2021). https://doi.org/10.48550/arXiv.2105.05233 [7] Donsker, M.D., Varadhan, S.R.S.: Asymptotic evaluation of certain markov process expectations. Communications on Pure and Applied Mathematics 28 (1), 1–47 (1975). https://doi.org/10.1002/cpa.3160280102 [8] Dreossi, T., Jha, S., Seshia, S.A.: Semantic adversarial deep learning. In: International Conference on Computer Aided Verification. pp. 3–26. Springer (2018) [9] Fremont, D.J., Chiu, J., Margineantu, D.D., Osipychev, D., Seshia, S.A.: Formal analysis and redesign of a neural network-based aircraft taxiing system with verifai. In: International Conference on Computer Aided Verification. pp. 122–134. Springer (2020) [10] Ho, J., Jain, A., Abbeel, P.: Denoising diffusion probabilistic mod-els. In: Advances in Neural Information Processing Systems (2020). https://doi.org/10.48550/arXiv.2006.11239 [11] Khandait, T., Lyu, D., Arcaini, P., Fainekos, G., Formica, F., Gon, S., Hekal, A., Kundu, A., Menghi, C., Pedrielli, G., Ray, R., Thibeault, Q., Waga, M., Zhang, Z.: Arch-comp25 category report: Falsification. In: Frehse, G., Althoff, M. (eds.) Proceedings of 12th Int. Work-shop on Applied Verification for Continuous and Hybrid Systems. EPiC Series in Computing, vol. 108, pp. 169–189. EasyChair (2025). https://doi.org/10.29007/dgnn, /publications/paper/xX5W [12] Kim, T., Majd, K., Okamoto, H., Hoxha, B., Panagou, D., Fainekos, G.: Safe model predictive diffusion with shielding. In: IEEE International Conference on Robotics and Automation (ICRA) (2026) [13] Song, Y., Ermon, S.: Generative modeling by estimating gradients of the data distribution. In: Advances in Neural Information Processing Systems (2019). https://doi.org/10.48550/arXiv.1907.05600 [14] Song, Y., Sohl-Dickstein, J., Kingma, D.P., Kumar, A., Ermon, S., Poole, B.: Score-based generative modeling through stochastic differential equations. In: International Conference on Learning Representations (2021). https://doi.org/10.48550/arXiv.2011.13456 [15] Vin, E., Kashiwa, S., Rhea, M., Fremont, D.J., Kim, E., Dreossi, T., Ghosh, S., Yue, X., Sangiovanni-Vincentelli, A.L., Seshia, S.A.: 3d environment modeling for falsification and beyond with scenic 3.0. In: International Conference on Computer Aided Verification. pp. 253–265. Springer (2023) [16] Zhang, J., Li, S., Lu, Y., Fang, T., McKinnon, D., Tsin, Y., Quan, L., Yao, Y.: Jointnet: Extending text-to-image diffusion for dense distribution modeling. In: ICLR (2024), https://arxiv.org/abs/2310.06347 
+
+VIII. A PPENDIX 
+
+In this appendix we provide the detailed proofs of the results not shown in the main manuscript. 
+
+A. Proof of Proposition 1 Proof. Let (X, Y ) denote one draw from the conditional sampling procedure: X ∼ q, and Y ∼ pθ (· | X). By assumption pθ (y | x) = p⋆(y | x) for all x, so for any measurable B ⊂ Y ,
+
+P(Y ∈ B | X = x) = 
+
+Z
+
+> B
+
+pθ (y | x) dy =
+
+Z
+
+> B
+
+p⋆(y | x) dy. 
+
+Define the conditional failure probability under the true dy-namics as 
+
+f ⋆(x) := 
+
+Z
+
+> Y
+
+1F (x, y ) p⋆(y | x) dy = P(( x, Y ) ∈ F | X = x).
+
+By assumptions (ii)–(iii), f ⋆(x) = ε for x ∈ A and f ⋆(x) = 0 
+
+for x / ∈ A.14 
+
+First, we show how, under p⋆ we have 
+
+p⋆(F ) = 
+
+Z
+
+> X
+
+p⋆(x) f ⋆(x) dx =
+
+Z
+
+> A
+
+p⋆(x) ε dx = ε p ⋆(X ∈ A)
+
+which proves p⋆(F ) = δε since p⋆(X ∈ A) = δ.We now derive the failure probability induced by the con-ditional sampler. Under the sampler distribution induced by q
+
+and pθ (· | x) = p⋆(· | x),
+
+P(F ) = 
+
+Z
+
+> X
+
+q(x) f ⋆(x) dx =
+
+Z
+
+> A
+
+q(x) ε dx = ε q (A).
+
+If q(A) ≤ c δ , then P(F ) ≤ c δε. 
+
+Finally, let T be the number of i.i.d. draws until the first failure event occurs. Each draw can be modeled as an independent Bernoulli trial with success probability P(F ), we have T ∼ Geom( P(F )) (counting trials until first success), and therefore: 
+
+E[T ] = 1  
+
+> P(F)
+
+≥ 1 
+
+> c δε
+
+= Ω(( δε )−1).
+
+B. Proof of Lemma 1 Proof. Let Z(β) := R 
+
+> Z
+
+p(z) exp( βS (z)) dz and define B := 
+
+{β ∈ R : Z(β) < ∞} .
+
+a) Non-emptiness.: Since p is a probability density, R p(z) dz = 1 . Hence 
+
+Z(0) = 
+
+Z
+
+p(z) exp(0) dz =
+
+Z
+
+p(z) dz = 1 < ∞, (20) so 0 ∈ B .
+
+b) Interval property.: We show that B is an interval (i.e., convex). Let β1, β 2 ∈ B and α ∈ [0 , 1] . By H¨ older’s inequality, 
+
+Z(αβ 1 + (1 − α)β2) = ... 
+
+=
+
+Z
+
+p(z) exp(( αβ 1 + (1 − α)β2)S(z)) dz 
+
+=
+
+Z
+
+p(z) exp( αβ 1S(z)) exp((1 − α)β2S(z)) dz 
+
+≤
+
+ Z
+
+p(z) exp( β1S(z)) dz 
+
+α Z
+
+p(z) exp( β2S(z)) dz 
+
+1−α
+
+= Z(β1)αZ(β2)1−α < ∞.
+
+so αβ 1 + (1 − α)β2 ∈ B . Thus B is convex, hence an interval (possibly unbounded). Because 0 ∈ B , there exist extended reals −∞ ≤ β− ≤ 0 ≤ β+ ≤ +∞ such that B = ( β−, β +)
+
+or possibly with closed endpoints if finiteness holds at an endpoint. For simplicity we denote B = ( β−, β +) as in the statement (the open-interval form always holds for int( B)). 
+
+c) Validity of the tilted density.: Fix any β ∈ B . Since 
+
+exp( βS (z)) ≥ 0 and p(z) ≥ 0, we have pβ (z) ≥ 0. Moreover 
+
+Z
+
+> Z
+
+pβ (z) dz = 1
+
+Z(β)
+
+Z
+
+> Z
+
+p(z) exp( βS (z)) dz = Z(β)
+
+Z(β) = 1 ,
+
+so pβ is a valid probability density on Z.
+
+d) Differentiability of ψ(β) = log Z(β) on int( B).: Fix 
+
+β ∈ int( B) and assume there exists δ > 0 such that Z(β+δ) <
+
+∞. For h ∈ (0 , δ ) define 
+
+fh(z) := exp(( β + h)S(z)) − exp( βS (z)) 
+
+h .
+
+For each fixed z, fh(z) → S(z) exp( βS (z)) as h → 0+ by the mean value theorem. Moreover, for 0 < h < δ , the mean value theorem yields 
+
+|fh(z)| = |S(z)|exp(( β + ξ)S(z)) 
+
+≤ | S(z)|( exp(( β + δ)S(z)) + exp( βS (z))) 
+
+for some ξ ∈ (0 , h ). Under the stated assumption Z(β + δ) <
+
+∞ and β ∈ B , the function p(z) exp(( β + δ)S(z)) is inte-grable, and the above bound provides an integrable dominating function whenever the right-hand side is integrable (standard sufficient condition; see below). Hence, by differentiation under the integral sign justified via dominated convergence, 
+
+Z′(β) = 
+
+Z
+
+p(z)S(z) exp( βS (z)) dz. 
+
+Since Z(β) ∈ (0 , ∞) for β ∈ B , ψ(β) = log Z(β) is finite and 
+
+ψ′(β) = Z′(β)
+
+Z(β) =
+
+R p(z)S(z) exp( βS (z)) dz 
+
+R p(z) exp( βS (z)) dz 
+
+=
+
+Z
+
+S(z) pβ (z) dz = Epβ [S(Z)] .
+
+e) Second derivative and variance identity.: Assume additionally that for some δ > 0, R p(z) exp(( β +
+
+δ)|S(z)|) dz < ∞. This exponential integrability implies R p(z)S(z)2 exp( βS (z)) dz < ∞, allowing a second differ-entiation under the integral sign: 
+
+Z′′ (β) = 
+
+Z
+
+p(z)S(z)2 exp( βS (z)) dz. 
+
+Therefore, 
+
+ψ′′ (β) = Z′′ (β)
+
+Z(β) −
+
+ Z′(β)
+
+Z(β)
+
+2
+
+= Epβ [S(Z)2] − (Epβ [S(Z)]) 2 = Var pβ (S(Z)) ≥ 0,
+
+which completes the proof. 
+
+C. Proof of Proposition 4 Proof. Assume the base joint distribution p is supported on the manifold M := {(x, y ) ∈ X × Y : y = Φ( x)}. Equivalently, the conditional law of Y given X = x is degenerate at 
+
+Φ( x), i.e., p(dy | x) = δΦ( x)(dy ), and the joint factorizes as 
+
+p(dx, dy ) = pX (dx ) δΦ( x)(dy ). In density notation (with re-spect to dx dy ) this is written as p(x, y ) = pX (x) δ(y −Φ( x)) .Fix β ∈ B so the tilt is well-defined and define the tilted joint 
+
+pβ (dx, dy ) = eβS (x,y )
+
+Z(β) p(dx, dy ),Z(β) = 
+
+Z Z 
+
+eβS (x,y ) p(dx, dy ).15 
+
+To compute the induced marginal over inputs, integrate out y:
+
+pβ,X (dx ) := 
+
+Z
+
+> Y
+
+pβ (dx, dy )= 1
+
+Z(β)
+
+Z
+
+> Y
+
+eβS (x,y ) pX (dx ) δΦ( x)(dy )= 1
+
+Z(β) pX (dx ) eβS (x, Φ( x)) .
+
+Hence, in density form, 
+
+pβ,X (x) ∝ pX (x) exp( βS (x, Φ( x))) ,
+
+which is exactly input-space exponential tilting with the score restricted to the dynamics manifold.
