@@ -1,0 +1,480 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-08-03T21:52:43.921885+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 2,
+    "deep_divecandidates": 2,
+    "deep_cap": 7,
+    "deep_selected": 2,
+    "quick_candidates": 9,
+    "quick_skim_target": 12,
+    "quick_selected": 9
+  },
+  "deep_dive": [
+    {
+      "id": "2607.29169v1",
+      "source": "arxiv",
+      "title": "ActFovea: Runtime Safeguarding for VLA Policies via Spatiotemporal Visual-Action Consistency",
+      "abstract": "Vision-language-action (VLA) policies achieve strong performance in robotic manipulation but remain vulnerable to runtime disturbances that break the temporal alignment among visual observations, robot states, and executed actions. We introduce ActFovea, a plug-and-play safeguarding framework that detects and mitigates such failures without retraining or modifying the underlying VLA policy. ActFovea uses robot kinematics, proprioceptive states, and recent actions to construct action-conditioned foveated regions that retain contact-relevant areas and predicted motion corridors while suppressing task-irrelevant visual content. It detects runtime risks by evaluating whether visual motion and observation freshness remain consistent with geometric, proprioceptive, and action transitions. For recoverable disturbances, ActFovea constructs disturbance-specific candidate observations and accepts a recovery only after verifying the resulting action chunk. When stale or replayed observations make reliable recovery impossible, it invokes a bounded safe-failure procedure. In closed-loop evaluations of $π_0$ across multiple LIBERO suites, ActFovea increases success under localized visual overlays from 49.3\\% to 90.3\\%, closing 93.7\\% of the gap to clean performance. It further improves success under action drift and visual delay by 7.0 and 9.8 percentage points, respectively, while preserving clean-task performance. Under frozen-observation replay, ActFovea triggers timely safe failure in all trials, with no unprotected failures. These results demonstrate that spatiotemporal visual-action consistency provides an effective basis for runtime safeguarding of VLA policies.",
+      "authors": [
+        "Wenda Yu",
+        "Tianshi Wang",
+        "Fengling Li",
+        "Xin Li",
+        "Jingjing Li",
+        "Lei Zhu"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.AI"
+      ],
+      "published": "2026-07-31T08:47:57+00:00",
+      "link": "https://arxiv.org/pdf/2607.29169v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "Runtime safeguarding for VLA policies using proprioceptive states and kinematics",
+      "llm_evidence_cn": "利用本体感受状态和运动学对VLA策略进行运行时防护",
+      "llm_evidence": "利用本体感受状态和运动学对VLA策略进行运行时防护",
+      "canonical_evidence": "利用本体感受状态和运动学对VLA策略进行运行时防护",
+      "llm_tldr_en": "ActFovea is a plug-and-play safeguarding framework that detects VLA policy failures at runtime by leveraging robot kinematics, proprioceptive states, and actions to build action-conditioned foveated regions and check visual-action consistency.",
+      "llm_tldr_cn": "面向VLA策略在运行时受扰导致视觉、状态与动作时间对齐被破坏的问题，ActFovea提出即插即用的防护框架：利用机器人运动学、本体感受状态与最近动作构造动作条件化注视区域，抑制无关视觉内容，并通过评估视觉运动与观测新鲜度的一致性检测运行时风险。该方法无需重训练或修改策略即可缓解扰动，提升策略部署安全性与可靠性，适用于故障检测与错误分析场景。",
+      "llm_tldr": "面向VLA策略在运行时受扰导致视觉、状态与动作时间对齐被破坏的问题，ActFovea提出即插即用的防护框架：利用机器人运动学、本体感受状态与最近动作构造动作条件化注视区域，抑制无关视觉内容，并通过评估视觉运动与观测新鲜度的一致性检测运行时风险。该方法无需重训练或修改策略即可缓解扰动，提升策略部署安全性与可靠性，适用于故障检测与错误分析场景。",
+      "llm_tags": [
+        "query:humanoid-ood"
+      ],
+      "matched_query_tag": "query:humanoid-ood",
+      "matched_query_text": "humanoid robot fault diagnosis using proprioceptive signals",
+      "matched_requirement_id": "req-9",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2607.29172v1",
+      "source": "arxiv",
+      "title": "CLIFT: Turning Gemini Robotics On-Device into Humanoid Specialists via Non-Invasive Closed-Loop Iterative Fine-Tuning",
+      "abstract": "While robot foundation models are growing increasingly capable, the strongest models are typically trained on proprietary data and remain closed-source, limiting downstream users' ability to adapt them to new tasks, embodiments, and deployment settings. Following the LLM community, an emerging access paradigm for closed-weight robot foundation models is the managed supervised fine-tuning (SFT) API, where users submit training data and receive a tuned policy without access to model weights, gradients, or training internals. While such APIs let downstream users leverage powerful proprietary foundation models, they restrict policy improvement to pure imitation, ruling out reinforcement learning and other closed-loop methods that rely on internal training signals. This limitation is particularly acute for agile, contact-rich humanoid manipulation, where the gap between policy outputs and deployed behavior is large due to novel states, action tracking dynamics, latency, and controller-specific failure modes. We study how effective this managed-API regime is for humanoid adaptation, and how closed-loop improvement can be realized within it to push policies toward task mastery. We conduct one of the first empirical studies of managed-API adaptation on a real humanoid, instantiated on Gemini Robotics On-Device (GROD). We find that direct SFT through the API substantially outperforms a leading open-weight VLA trained on the same demonstrations, yet still falls short of deployment-level mastery on agile, contact-rich tasks. To close this gap, we introduce CLIFT: Closed-Loop Iterative Fine-Tuning, which turns deployment-time reward feedback into API-compatible supervised data and enables closed-loop policy improvement without accessing weights, gradients, likelihoods, or losses-pushing GROD to near-perfect success after two flywheel cycles, all without \"opening the model box.\"",
+      "authors": [
+        "Yuxin Chen",
+        "Hari Srikanth",
+        "Nathan Jew",
+        "Menglin Wu",
+        "Pengcheng Wang",
+        "Junli Ren",
+        "Masayoshi Tomizuka",
+        "Peng Xu",
+        "Jinyu Xie",
+        "Thomas Tian"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.AI"
+      ],
+      "published": "2026-07-31T08:50:25+00:00",
+      "link": "https://arxiv.org/pdf/2607.29172v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "On-device adaptation of humanoid robot policies via iterative fine-tuning",
+      "llm_evidence_cn": "通过非侵入式闭环迭代微调在端侧将基础模型变成人形专家",
+      "llm_evidence": "通过非侵入式闭环迭代微调在端侧将基础模型变成人形专家",
+      "canonical_evidence": "通过非侵入式闭环迭代微调在端侧将基础模型变成人形专家",
+      "llm_tldr_en": "CLIFT uses closed-loop iterative fine-tuning to adapt closed-weight robot foundation models into on-device humanoid specialists without accessing weights.",
+      "llm_tldr_cn": "该论文提出CLIFT方法，通过非侵入式闭环迭代微调，将Gemini Robotics这类封闭权重机器人基础模型适配为端侧人形专家。由于用户无法访问模型权重和梯度，只能通过托管监督微调API提交数据并获得策略，CLIFT突破了纯模仿限制，在不访问权重的情况下实现闭环优化。该方法使下游用户能利用强大专有基础模型来适应新任务、新本体和部署环境，与人形机器人的边缘端部署需求高度契合。",
+      "llm_tldr": "该论文提出CLIFT方法，通过非侵入式闭环迭代微调，将Gemini Robotics这类封闭权重机器人基础模型适配为端侧人形专家。由于用户无法访问模型权重和梯度，只能通过托管监督微调API提交数据并获得策略，CLIFT突破了纯模仿限制，在不访问权重的情况下实现闭环优化。该方法使下游用户能利用强大专有基础模型来适应新任务、新本体和部署环境，与人形机器人的边缘端部署需求高度契合。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "edge deployment for humanoid robots",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "quick_skim": [
+    {
+      "id": "2607.29302v1",
+      "source": "arxiv",
+      "title": "BWM: A Low-Cost High-Fidelity World Simulator for Robot Learning",
+      "abstract": "Reliable robot learning requires a world simulator that can predict action consequences before execution on physical hardware, including risky and failure-prone outcomes. Existing physics simulators require substantial asset construction and calibration and still face a sim-to-real gap, while video generators often lack precise control over their responses to fine-grained robot actions. In this paper, we present the Boundless World Model (BWM), an open-source, low-cost, high-fidelity world simulator for robot manipulation. BWM is an action-conditioned world model that combines initial-environment guidance, dynamic visual history, and temporally aligned robot-action conditioning for stateful autoregressive prediction of future observations. We construct action-aligned training clips through trajectory replay, overlapping clip sampling, and initial-observation enhancement. BWM serves as a data engine that augments imitation-learning data with action-aligned rollouts, and as a policy evaluator for closed-loop assessment, risk anticipation, and policy ranking. Experiments on the WorldArena benchmark and physical robots demonstrate improved simulator fidelity and functional utility across the data-engine and policy-evaluator settings. BWM ranks first overall in the WorldArena Challenge across Track 1 and its two Track 2 applications. We release the BWM open-source ecosystem, including model checkpoints, training and inference code, and interfaces for data generation and policy evaluation.",
+      "authors": [
+        "BWM Team"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.CV"
+      ],
+      "published": "2026-07-31T11:18:17+00:00",
+      "link": "https://arxiv.org/pdf/2607.29302v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "world simulator predicting action consequences including failure-prone outcomes",
+      "llm_evidence_cn": "世界模拟器可预测动作后果并包含易失败结果",
+      "llm_evidence": "世界模拟器可预测动作后果并包含易失败结果",
+      "canonical_evidence": "世界模拟器可预测动作后果并包含易失败结果",
+      "llm_tldr_en": "Presents Boundless World Model (BWM), an open-source low-cost high-fidelity world simulator that predicts future observations conditioned on robot actions, including risky and failure-prone outcomes.",
+      "llm_tldr_cn": "针对现有物理仿真器资产构建成本高和视频生成器难以精准控制动作响应的问题，提出Boundless World Model (BWM)，一种开放源码、低成本、高保真的机器人操作世界模拟器。BWM结合初始环境引导、动态视觉历史和时序对齐的机器人动作条件，进行状态化自回归预测未来观测。它能够预测包含风险和失败倾向的动作后果，有助于机器人在真实硬件前验证和学习。该模拟器对机器人数据构建和故障注入仿真具有参考价值。",
+      "llm_tldr": "针对现有物理仿真器资产构建成本高和视频生成器难以精准控制动作响应的问题，提出Boundless World Model (BWM)，一种开放源码、低成本、高保真的机器人操作世界模拟器。BWM结合初始环境引导、动态视觉历史和时序对齐的机器人动作条件，进行状态化自回归预测未来观测。它能够预测包含风险和失败倾向的动作后果，有助于机器人在真实硬件前验证和学习。该模拟器对机器人数据构建和故障注入仿真具有参考价值。",
+      "llm_tags": [
+        "query:humanoid-ood"
+      ],
+      "matched_query_tag": "query:humanoid-ood",
+      "matched_query_text": "fault injection simulation for humanoid robots in MuJoCo or similar environments",
+      "matched_requirement_id": "req-14",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2607.26345v1",
+      "source": "arxiv",
+      "title": "MetaKoopman: Bayesian Meta-Learning of Koopman Operators for Modeling Structured Dynamics under Distribution Shifts",
+      "abstract": "Modeling and forecasting nonlinear dynamics under distribution shifts is essential for robust decision-making in real-world systems. In this work, we propose MetaKoopman, a Bayesian meta-learning framework for modeling nonlinear dynamics through linear latent representations. MetaKoopman learns a Matrix Normal-Inverse Wishart (MNIW) prior over the Koopman operator, enabling closed-form Bayesian updates conditioned on recent trajectory segments. Moreover, it provides a closed-form posterior predictive distribution over future state trajectories, capturing both epistemic and aleatoric uncertainty in the learned dynamics. We evaluate MetaKoopman on a full-scale autonomous truck and trailer system across a wide range of adverse winter scenarios, including snow, ice, and mixed-friction conditions, as well as in simulated control tasks with diverse distribution shifts. MetaKoopman consistently outperforms prior approaches in multi-step prediction accuracy, uncertainty calibration, and robustness to distributional shifts. Field experiments further demonstrate its effectiveness in dynamically feasible motion planning, particularly during evasive maneuvers and operation at the limits of traction. Project website: https://mahmoud-selim.github.io/MetaKoopman/",
+      "authors": [
+        "Mahmoud Selim",
+        "Sriharsha Bhat",
+        "Karl H. Johansson"
+      ],
+      "primary_category": "cs.LG",
+      "categories": [
+        "cs.LG",
+        "cs.RO",
+        "eess.SY"
+      ],
+      "published": "2026-07-28T23:37:55+00:00",
+      "link": "https://arxiv.org/pdf/2607.26345v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "Bayesian meta-learning of Koopman operators for modeling dynamics under distribution shifts, offering uncertainty-aware OOD-relevant method for robot operation.",
+      "llm_evidence_cn": "通过贝叶斯元学习Koopman算子来建模分布漂移下的动力学，为安全机器人操作提供考虑不确定性的分布外检测方法。",
+      "llm_evidence": "通过贝叶斯元学习Koopman算子来建模分布漂移下的动力学，为安全机器人操作提供考虑不确定性的分布外检测方法。",
+      "canonical_evidence": "通过贝叶斯元学习Koopman算子来建模分布漂移下的动力学，为安全机器人操作提供考虑不确定性的分布外检测方法。",
+      "llm_tldr_en": "MetaKoopman proposes Bayesian meta-learning of Koopman operators to model nonlinear dynamics under distribution shifts, with closed-form uncertainty estimates, evaluated on autonomous truck and trailer systems.",
+      "llm_tldr_cn": "该论文提出MetaKoopman框架，通过贝叶斯元学习在Koopman算子上学习先验分布，从而在线性潜在空间建模非线性动力学。它利用矩阵正态逆威沙特先验进行闭式贝叶斯更新，并提供对未来状态的闭式预测分布，量化认知与偶然不确定性。在自动驾驶卡车与拖车系统上的实验验证了其在分布漂移下的鲁棒性，为机器人安全运行中的分布外检测提供了可迁移的方法。",
+      "llm_tldr": "该论文提出MetaKoopman框架，通过贝叶斯元学习在Koopman算子上学习先验分布，从而在线性潜在空间建模非线性动力学。它利用矩阵正态逆威沙特先验进行闭式贝叶斯更新，并提供对未来状态的闭式预测分布，量化认知与偶然不确定性。在自动驾驶卡车与拖车系统上的实验验证了其在分布漂移下的鲁棒性，为机器人安全运行中的分布外检测提供了可迁移的方法。",
+      "llm_tags": [
+        "query:humanoid-ood"
+      ],
+      "matched_query_tag": "query:humanoid-ood",
+      "matched_query_text": "out-of-distribution detection for safe robot operation",
+      "matched_requirement_id": "req-11",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2607.26434v1",
+      "source": "arxiv",
+      "title": "Reinforcement Learning on Cost-Constrained Quadrupedal Hardware",
+      "abstract": "Deploying learned control policies on low-cost robotic platforms introduces transport latencies and noisy motor feedback that systematically widens the sim-to-real gap. The chasm of simulation to deployment in hardware lies in the delay of the actuator reaching the commanded position. On platforms such as the Mini Pupper 2, a measured > $50 ms transport delay transforms the locomotion task from a standard Markov decision process into a partially observable one. In this paper, we take a biologically inspired approach of handling noisy and delayed feedback to close the sim-to-real gap, thereby expanding the capability of reinforcement learning on cost-constrained hardware. Using a low-cost quadrupedal hardware platform, we find that using a forward model of the average actuator delay, paired with a time-aware neural network results in robust locomotion. Additionally, our time-aware neural network learned a central pattern generator (CPG): a self-sustaining rhythmic gait that is robust to +320 ms latency perturbations, mirroring the CPGs found in the spinal cords of vertebrates. We posit that temporal self-organization may be a general strategy for cost-constrained locomotion.",
+      "authors": [
+        "Javier C. Weddington",
+        "Bence P. Ölveczky",
+        "Stephen A. Baccus"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.AI"
+      ],
+      "published": "2026-07-29T03:22:12+00:00",
+      "link": "https://arxiv.org/pdf/2607.26434v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "addresses sim-to-real deployment on cost-constrained robot hardware with transport latency and noisy feedback",
+      "llm_evidence_cn": "处理低成本机器人硬件上的仿真到现实部署，涉及传输延迟与噪声反馈",
+      "llm_evidence": "处理低成本机器人硬件上的仿真到现实部署，涉及传输延迟与噪声反馈",
+      "canonical_evidence": "处理低成本机器人硬件上的仿真到现实部署，涉及传输延迟与噪声反馈",
+      "llm_tldr_en": "This paper handles noisy and delayed feedback in low-cost quadrupedal hardware by using a forward model of the actuator delay to close the sim-to-real gap, enabling RL deployment on cost-constrained robots.",
+      "llm_tldr_cn": "针对低成本机器人硬件上传输延迟和电机反馈噪声导致的仿真到现实差距，论文提出使用执行器前向模型来显式建模并补偿延迟，将标准马尔可夫决策过程转化为可处理的部分可观测问题。在 Mini Pupper 2 等低成本四足平台上验证了该方法能够提升强化学习策略的硬件部署效果。该方法对边缘端机器人部署具有直接指导意义。",
+      "llm_tldr": "针对低成本机器人硬件上传输延迟和电机反馈噪声导致的仿真到现实差距，论文提出使用执行器前向模型来显式建模并补偿延迟，将标准马尔可夫决策过程转化为可处理的部分可观测问题。在 Mini Pupper 2 等低成本四足平台上验证了该方法能够提升强化学习策略的硬件部署效果。该方法对边缘端机器人部署具有直接指导意义。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "edge deployment for humanoid robots",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2607.26631v1",
+      "source": "arxiv",
+      "title": "RAG-HAR+: Towards Cost-Efficient LLM-Based Human Activity Recognition for Edge Deployment",
+      "abstract": "Human Activity Recognition (HAR) from wearable sensors supports applications in healthcare, rehabilitation, fitness tracking, and smart environments. Yet, existing deep learning approaches require dataset-specific training, large labeled corpora, and repeated adaptation to new sensor settings or activity taxonomies. Retrieval-Augmented Generation for Human Activity Recognition (RAG-HAR) addresses this by framing HAR as a training-free, retrieval-augmented task, in which statistical descriptions of sensor windows are used to retrieve similar labeled examples that guide LLM-based classification. We introduce RAG-HAR+, a retrieval-first and cost-optimized extension that strengthens retrieval while reducing dependence on LLM-based inference. RAG-HAR+ uses an offline Retrieval Designer Agent to design dataset-specific feature groups from a diverse pool of motion descriptors, enabling sensor windows to be compared using features better aligned with dataset-specific activity patterns. During inference, RAG-HAR+ uses majority voting over retrieved neighbors for samples with strong retrieval evidence and defers only uncertain cases to an LLM-based Ambiguity Resolver Agent. Across six HAR benchmarks, RAG-HAR+ maintains competitive or improved performance while reducing LLM usage, token consumption, and inference time. We further extend the RAG-HAR mobile prototype to demonstrate the practical feasibility of retrieval-first, LLM-assisted HAR in mobile sensing scenarios.",
+      "authors": [
+        "Hansi Karunarathna",
+        "Nirhoshan Sivaroopan",
+        "Chamara Madarasingha",
+        "Anura Jayasumana",
+        "Kanchana Thilakarathna"
+      ],
+      "primary_category": "cs.LG",
+      "categories": [
+        "cs.LG",
+        "cs.IR"
+      ],
+      "published": "2026-07-29T08:57:03+00:00",
+      "link": "https://arxiv.org/pdf/2607.26631v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "cost-efficient edge deployment for sensor-based activity recognition",
+      "llm_evidence_cn": "面向传感器活动识别的低成本边缘部署",
+      "llm_evidence": "面向传感器活动识别的低成本边缘部署",
+      "canonical_evidence": "面向传感器活动识别的低成本边缘部署",
+      "llm_tldr_en": "Deep HAR models require dataset-specific training and adaptation. RAG-HAR+ frames HAR as training-free retrieval-augmented LLM classification using statistical descriptions of sensor windows, then reduces LLM dependence for cost-efficient edge deployment.",
+      "llm_tldr_cn": "基于可穿戴传感器的人体活动识别通常需要针对数据集训练并重复适配，成本高。RAG-HAR+将HAR构造成免训练的检索增强任务，用传感器窗口的统计描述检索相似样本以引导LLM分类，并进一步优化检索、减少LLM推理依赖。该方法在边缘部署场景下降低了计算和适应成本，为传感器时间序列的边缘识别提供了新思路。",
+      "llm_tldr": "基于可穿戴传感器的人体活动识别通常需要针对数据集训练并重复适配，成本高。RAG-HAR+将HAR构造成免训练的检索增强任务，用传感器窗口的统计描述检索相似样本以引导LLM分类，并进一步优化检索、减少LLM推理依赖。该方法在边缘部署场景下降低了计算和适应成本，为传感器时间序列的边缘识别提供了新思路。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "edge deployment for humanoid robots",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2607.28293v1",
+      "source": "arxiv",
+      "title": "Filling the Pareto-Optimal Front for Affordance Segmentation on Embedded Devices Using RGB-D Cameras",
+      "abstract": "While depth sensors have the potential to complement RGB data for affordance segmentation in wearable robots, their usage seems to remain underexplored. The paper proposes two approaches: a reformulated version of hardware-aware neural architecture search, endowed with a newly designed search space to integrate depth (D) information into small-sized deep networks, and a dedicated fine-tuning approach, including a preprocessing layer to merge depth information with RGB data and make it compatible with conventional architectures. In both cases, those methods aim to generate solutions that benefit from modern (portable) hardware accelerators and overcome existing tiny-like approaches, which often fail to tackle critical scenarios due to the severe constraints set by the supporting hardware. Extensive experiments on a pair of real-world datasets demonstrate the effectiveness of the proposed method as compared with existing solutions. The approach presented in the paper generates, in most cases, solutions that identify the Pareto optimal front to balance generalization performance and hardware requirements. The paper also describes the supporting prototype, including a Jetson Nano board and a RealSense RGB-D camera. When considering the energy profile of the device, the overall system can attain real-time performances within an energy budget that is compatible with standard batteries, such as those used in smartphones.",
+      "authors": [
+        "Edoardo Ragusa",
+        "Giovanni Paolo Canuti",
+        "Simone Lugani",
+        "Rodolfo Zunino",
+        "Paolo Gastaldo"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV",
+        "cs.LG",
+        "cs.RO"
+      ],
+      "published": "2026-07-30T14:37:30+00:00",
+      "link": "https://arxiv.org/pdf/2607.28293v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "hardware-aware neural architecture search on embedded devices, directly supports edge deployment for humanoid robots",
+      "llm_evidence_cn": "嵌入式设备上的硬件感知神经架构搜索，直接支持人形机器人边缘部署",
+      "llm_evidence": "嵌入式设备上的硬件感知神经架构搜索，直接支持人形机器人边缘部署",
+      "canonical_evidence": "嵌入式设备上的硬件感知神经架构搜索，直接支持人形机器人边缘部署",
+      "llm_tldr_en": "Presents hardware-aware neural architecture search and fine-tuning to embed depth information into tiny networks for affordance segmentation on embedded devices, directly relevant to edge deployment for humanoid robots.",
+      "llm_tldr_cn": "嵌入式可穿戴机器人的可通行性分割通常忽略深度信息，且小型网络难以充分利用现代便携硬件加速器。论文提出改进的硬件感知神经架构搜索：设计融合深度(D)信息的搜索空间，并提出含预处理层的专用微调方案，使常规架构也能兼容RGB-D输入。所生成的模型在嵌入式设备上填充帕累托最优前沿，兼顾精度与硬件效率，为边缘端高效感知模型的设计提供了可迁移方法，并可用于人形机器人的边缘部署场景。",
+      "llm_tldr": "嵌入式可穿戴机器人的可通行性分割通常忽略深度信息，且小型网络难以充分利用现代便携硬件加速器。论文提出改进的硬件感知神经架构搜索：设计融合深度(D)信息的搜索空间，并提出含预处理层的专用微调方案，使常规架构也能兼容RGB-D输入。所生成的模型在嵌入式设备上填充帕累托最优前沿，兼顾精度与硬件效率，为边缘端高效感知模型的设计提供了可迁移方法，并可用于人形机器人的边缘部署场景。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "edge deployment for humanoid robots",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2607.29231v1",
+      "source": "arxiv",
+      "title": "TacPrint: A Wearable Fingertip Tactile Sensor for Human-to-Robot Contact Reproduction",
+      "abstract": "Human-centric data collection is emerging as a significant paradigm for robot skill acquisition, but seamlessly integrating low-cost, scalable tactile sensing systems that capture fine-grained fingertip interactions without compromising natural operation remains a key challenge. This reduces the reliability of human-to-robot transfer in contact-rich tasks. In this work, we present TacPrint, a wearable fingertip tactile sensor, where protrusions on the inner surface of the silicone skin are aligned one-to-one with 24 capacitive taxels to enable localized capacitive responses. A real-to-sim-to-real pipeline estimates a 35 $\\times$ 26 contact-depth map from 24-channel capacitive signals. Against simulation-generated labels, the model achieved a contact-region RMSE of 0.223 $\\pm$ 0.161 mm, a weighted-centroid error of 1.213 $\\pm$ 2.379 pixels, and an IoU of 0.829 $\\pm$ 0.169. With measured capacitive inputs, the network-predicted depth evaluated at the guide-calibrated contact center showed a mean absolute error of 0.085 $\\pm$ 0.057 mm across all 40 controlled trials, while the mean contact-position error was 0.250 $\\pm$ 0.208 mm across the 37 trials whose reference contact regions were not truncated by the sensing boundary. In human-to-robot replay, tactile-guided compensation increased grasping and wiping success rates from 0% to 91.67% and 90%, respectively. In closed-loop grasping, dense-depth feedback achieved success rates of 87.5% over all tested positions and 85% under edge-contact conditions, compared with 67.5% and 45% for raw-taxel feedback.",
+      "authors": [
+        "Yongxi Liu",
+        "Chaofan Zhang",
+        "Xingyu Zhang",
+        "Xiangyin Bao",
+        "Boyue Zhang",
+        "Shaowei Cui",
+        "Shuo Wang"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-07-31T10:04:10+00:00",
+      "link": "https://arxiv.org/pdf/2607.29231v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "wearable fingertip tactile sensor for human-centric robot data collection",
+      "llm_evidence_cn": "可穿戴指尖触觉传感器，支持以人为中心的机器人数据采集",
+      "llm_evidence": "可穿戴指尖触觉传感器，支持以人为中心的机器人数据采集",
+      "canonical_evidence": "可穿戴指尖触觉传感器，支持以人为中心的机器人数据采集",
+      "llm_tldr_en": "TacPrint is a wearable fingertip tactile sensor with 24 capacitive taxels and a real-to-sim-to-real pipeline that estimates contact depth maps, enabling scalable human-centric data collection for contact-rich robot skill acquisition.",
+      "llm_tldr_cn": "为在接触丰富任务中实现低成本、可扩展的人到机器人数据采集，提出可穿戴指尖触觉传感器TacPrint，通过硅胶皮肤内凸起与24个电容感应单元一一对应，结合真实-仿真-真实流程从电容信号估计接触深度图。该方法支持自然操作下的数据采集，为机器人数据构建提供新的触觉传感入口，有利于接触技能的迁移学习。",
+      "llm_tldr": "为在接触丰富任务中实现低成本、可扩展的人到机器人数据采集，提出可穿戴指尖触觉传感器TacPrint，通过硅胶皮肤内凸起与24个电容感应单元一一对应，结合真实-仿真-真实流程从电容信号估计接触深度图。该方法支持自然操作下的数据采集，为机器人数据构建提供新的触觉传感入口，有利于接触技能的迁移学习。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2607.29473v1",
+      "source": "arxiv",
+      "title": "Lightweight Neural Networks for Affordance Segmentation: Enhancement of the Decoder Module",
+      "abstract": "The deployment of deep neural networks for visual affordance segmentation on wearable robots poses may prove critical, due to some conflicting aspects of the problem. On one hand, affordance segmentation requires high-level abstraction capabilities, that typically involve large-size models. On the other hand, computing resources hosted on wearable robots prevent to run large-size models in real-time. The paper presents an analysis of the role of the segmentation head in the trade-off between generalization performance and compute cost. The obtained models outperform modern baseline solutions in well-known, real-world datasets while meeting low computing requirements.",
+      "authors": [
+        "Simone Lugani",
+        "Edoardo Ragusa",
+        "Rodolfo Zunino",
+        "Paolo Gastaldo"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV",
+        "cs.LG",
+        "cs.PF"
+      ],
+      "published": "2026-07-31T14:36:59+00:00",
+      "link": "https://arxiv.org/pdf/2607.29473v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "lightweight neural network design for real-time deployment on wearable robots",
+      "llm_evidence_cn": "面向可穿戴机器人实时部署的轻量级神经网络设计",
+      "llm_evidence": "面向可穿戴机器人实时部署的轻量级神经网络设计",
+      "canonical_evidence": "面向可穿戴机器人实时部署的轻量级神经网络设计",
+      "llm_tldr_en": "Visual affordance segmentation needs large models, but wearable robots cannot run them in real time. This paper enhances the decoder module to improve the accuracy-cost trade-off, outperforming baselines on real-world datasets while meeting low computing requirements.",
+      "llm_tldr_cn": "可供性分割需要较强的抽象能力，通常依赖大模型，而可穿戴机器人计算资源有限，难以实时运行大模型。本文分析分割头在泛化性能与计算成本之间的权衡，对解码模块进行增强，得到在真实数据集上优于主流方法且满足低算力约束的轻量模型。这为机器人端实时视觉感知提供了实用的模型设计思路。",
+      "llm_tldr": "可供性分割需要较强的抽象能力，通常依赖大模型，而可穿戴机器人计算资源有限，难以实时运行大模型。本文分析分割头在泛化性能与计算成本之间的权衡，对解码模块进行增强，得到在真实数据集上优于主流方法且满足低算力约束的轻量模型。这为机器人端实时视觉感知提供了实用的模型设计思路。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "edge deployment for humanoid robots",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2607.29640v1",
+      "source": "arxiv",
+      "title": "Bootstrapping Self-Supervised Learning of Binary Classification Using Error Bounds: A Case Study on a Robotic Insertion Task",
+      "abstract": "Flexible manufacturing requires rapid deployment of solutions and minimal setup time to remain competitive. An essential attribute is the ability to control error levels, as failures can range from minor performance degradation to severe equipment damage. However, conventional deployment often involves extensive setup, data collection, model training or parameter tuning, and system testing, resulting in significant delays that hinder commercial feasibility. We propose a data engine which gathers data and improves its performance while executing the task. The data engine consists of two classifiers, a fast model prediction and expensive verification. First, a model prediction is performed and based on the confidence level of the prediction, the expensive verification can be used. By adjusting the confidence level, users can control the level of tolerable error.   Our method is implemented on a real-world robotic insertion task, which uses force data for the model prediction. The system applies UMAP dimensionality reduction and uses Wilson-Score to compute the confidence bounds of the prediction. Results demonstrate the ability to learn and reduce the need for expensive verifications over time, while staying within the set error-rate. The results highlight the potential of confidence bounds in self-improving models to enhance reliability in robotic classification task.",
+      "authors": [
+        "Zebin Duan",
+        "Norbert Krüger",
+        "Juan Heredia",
+        "Thorbjørn Mosekjær Iversen",
+        "Frederik Hagelskjær"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-07-31T17:18:05+00:00",
+      "link": "https://arxiv.org/pdf/2607.29640v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "self-supervised error detection and data self-improvement for robotic insertion tasks",
+      "llm_evidence_cn": "面向机器人装配的自监督错检与数据自举方法",
+      "llm_evidence": "面向机器人装配的自监督错检与数据自举方法",
+      "canonical_evidence": "面向机器人装配的自监督错检与数据自举方法",
+      "llm_tldr_en": "This paper presents a self-supervised data engine with two classifiers that collects data and improves a robotic insertion policy online, using error bounds to control failure levels and enabling rapid deployment in flexible manufacturing.",
+      "llm_tldr_cn": "针对柔性制造中快速部署和错误控制的难题，本文提出一种自监督数据引擎，通过快速预测与昂贵验证两个分类器的配合，在任务执行中不断收集数据并改进模型。利用误差界约束自监督学习过程，使模型在几乎没有人工干预的情况下逐步提高插入任务的成功率并控制错误水平。实验表明该方法能有效平衡部署速度和错误控制，为机器人装配领域的少数据部署提供了一条可行的自监督路径。",
+      "llm_tldr": "针对柔性制造中快速部署和错误控制的难题，本文提出一种自监督数据引擎，通过快速预测与昂贵验证两个分类器的配合，在任务执行中不断收集数据并改进模型。利用误差界约束自监督学习过程，使模型在几乎没有人工干预的情况下逐步提高插入任务的成功率并控制错误水平。实验表明该方法能有效平衡部署速度和错误控制，为机器人装配领域的少数据部署提供了一条可行的自监督路径。",
+      "llm_tags": [
+        "query:humanoid-ood"
+      ],
+      "matched_query_tag": "query:humanoid-ood",
+      "matched_query_text": "Self supervised time series anomaly detection for robot fault diagnosis",
+      "matched_requirement_id": "req-16",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2607.29687v1",
+      "source": "arxiv",
+      "title": "Diagnosing Compositional Generalization in Sequential Robot Tasks",
+      "abstract": "Sequential robot manipulation requires policies to execute novel combinations of familiar instruction components. However, collecting demonstrations for all possible instruction tuples is combinatorially expensive, while sparsely covered datasets often fail under out-of-distribution recombination. This paper studies compositional generalization through the lens of instruction-space coverage. We decompose the generalization gap into three sources: \\textit{marginal instruction shift}, \\textit{instruction-compositional shift}, and \\textit{context--action shift}. This decomposition allows us to diagnose when sparse training coverage is sufficient, and what structure the training set must preserve for reliable action prediction. Our results show that exhaustive tuple enumeration is unnecessary: a structured subset, as small as one quarter of the full task space, can recover strong out-of-distribution performance when it covers action-relevant dependencies. We further find that sparse training often fails due to instruction steering rather than missing low-level skills; finetuning only one demonstration per task improves OOD success from \\(0.4\\%\\) to \\(54.7\\%\\). For semantically dependent tasks, effective coverage must capture relational structure rather than only factor diversity. These findings suggest that efficient robot data collection should prioritize dependency coverage in instruction space over exhaustive task expansion. More results are available in the supplementary material. Project website: https://yixiaowang7.github.io/Diagnosing_Compositional_Generalization_Robot_Page/.",
+      "authors": [
+        "Yixiao Wang",
+        "Cheng-En Wu",
+        "Lingfeng Sun",
+        "Pengcheng Wang",
+        "Xiang Ji",
+        "Boyuan Liang",
+        "Guojian Zhan",
+        "Masayoshi Tomizuka"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-07-31T17:59:59+00:00",
+      "link": "https://arxiv.org/pdf/2607.29687v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "Diagnosing compositional generalization to guide training set structure",
+      "llm_evidence_cn": "通过诊断组合泛化指导训练集结构设计",
+      "llm_evidence": "通过诊断组合泛化指导训练集结构设计",
+      "canonical_evidence": "通过诊断组合泛化指导训练集结构设计",
+      "llm_tldr_en": "Studies compositional generalization in sequential robot tasks by decomposing the generalization gap into instruction shift, compositional shift, and context-action shift, showing what training set structure is needed for reliable action prediction.",
+      "llm_tldr_cn": "针对顺序操作任务中指令组合组合爆炸导致演示数据收集困难的问题，本文从指令空间覆盖角度研究组合泛化。通过把关口分解为边缘指令偏移、指令组合偏移与上下文-动作偏移三类，诊断了稀疏训练覆盖何时足够以及训练集应保留什么结构才能可靠预测动作。实验表明通过结构化覆盖而非穷举指令组合，可显著提升泛化，为机器人任务数据集构建提供了原则。",
+      "llm_tldr": "针对顺序操作任务中指令组合组合爆炸导致演示数据收集困难的问题，本文从指令空间覆盖角度研究组合泛化。通过把关口分解为边缘指令偏移、指令组合偏移与上下文-动作偏移三类，诊断了稀疏训练覆盖何时足够以及训练集应保留什么结构才能可靠预测动作。实验表明通过结构化覆盖而非穷举指令组合，可显著提升泛化，为机器人任务数据集构建提供了原则。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    }
+  ]
+}

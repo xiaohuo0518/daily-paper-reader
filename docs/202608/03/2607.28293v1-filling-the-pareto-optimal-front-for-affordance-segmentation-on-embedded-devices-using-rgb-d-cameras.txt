@@ -1,0 +1,498 @@
+Title: Filling the Pareto-Optimal Front for Affordance Segmentation on Embedded Devices Using RGB-D Cameras
+
+URL Source: https://arxiv.org/pdf/2607.28293v1
+
+Published Time: Fri, 31 Jul 2026 01:09:42 GMT
+
+Number of Pages: 11
+
+Markdown Content:
+> IEEE SENSORS JOURNAL, VOL. XX, NO. XX, XXXX 2017 1
+
+# Filling the Pareto optimal front for affordance segmentation on embedded devices using RGB-D cameras 
+
+Edoardo Ragusa (Member, IEEE), Giovanni Paolo Canuti, Simone Lugani, Rodolfo Zunino, and Paolo Gastaldo 
+
+Abstract — While depth sensors have the potential to complement RGB data for affordance segmentation in wearable robots, their usage seems to remain underexplored. The paper proposes two approaches: a reformulated version of hardware-aware neural ar-chitecture search, endowed with a newly designed search space to integrate depth (D) information into small-sized deep networks, and a dedicated fine-tuning approach, including a preprocessing layer to merge depth information with RGB data and make it compatible with conventional architectures. In both cases, those methods aim to generate solutions that benefit from modern (portable) hardware accelerators and overcome existing tiny-like approaches, which often fail to tackle critical scenarios due to the severe constraints set by the supporting hardware. Extensive experiments on a pair of real-world datasets demonstrate the effectiveness of the proposed method as compared with exist-ing solutions. The approach presented in the paper generates, in most cases, solutions that identify the Pareto optimal front to bal-ance generalization performance and hardware requirements. The paper also describes the supporting prototype, including a Jetson Nano board and a RealSense RGB-D camera. When considering the energy profile of the device, the overall system can attain real-time performances within an energy budget that is compatible with standard batteries, such as those used in smartphones. 
+
+Index Terms — Embedded Systems, Tiny CNNs, Microcontrollers, Wearable robots, Affordance segmentation, Grasping 
+
+I. I NTRODUCTION 
+
+Wearable robots are essential in a variety of applications, ranging from prosthetics to those industrial settings in which robotic arms can take over strenuous or hazardous tasks for humans [1]. Semi-autonomous control is a critical feature for these robots, as it enables the automation of certain aspects of the control process, and relieves the user of those chores when facing complex tasks [2]. For instance, a user can aim a robotic hand at an object and activate the device; the system 
+
+Project funded under the National Recovery and Resilience Plan (NRRP), Mission 4 Component 2 Investment 1.1 - Call for tender No. 1049 published on Sept 14, 2022 by the Italian Ministry of University and Research (MUR) funded by the European Union – NextGenerationEU. Project Title ”LEARN - muLtimodal Edge computing-bAsed weaRable exoskeletoNs for assistance in daily life” – CUP D53D23016190001 -Grant Assignment Decree No. 1181 adopted on July 27, 2023 by MUR. 
+
+E. Ragusa, G.P. Canuti, S. Lugani, R. Zunino, and P. Gastaldo are with DITEN, University of Genoa, Genova, Italy e-mail: edoardo.ragusa@unige.it 
+
+will autonomously perform the grasping action and reduce user effort, thus enhancing the overall user’s experience [1], [3]. At the same time, wearable robots need advanced sens-ing capabilities to implement semi-autonomous features [4]: for instance, non-contact sensing is essential to the semi-autonomous control of grasping actions [5]; cameras and depth sensors typically serve as primary input devices, though radars have also been successfully adopted [6]. Processing the captured signals on-site allows to extract the high-level information that is crucial in control pipelines. Affordance Segmentation (AS) is a well-known input method for such control pipelines. It splits an object into its functional parts, and enables to apply fine-grained control strategies even when handling objects with complex geome-tries [7], [8]. Deep Neural Networks (DNNs) seem to be the only viable approach to support the complexity of AS [9]–[11]; the deployment of DNNs on portable devices, however, poses a major challenge, as weight, size, and energy consumption of the embedded electronic system must be minimized [12]. This paper focuses on a design strategy for efficient near-sensor inference when using state-of-the-art sensor technol-arXiv:2607.28293v1 [cs.CV] 30 Jul 2026 2 IEEE SENSORS JOURNAL, VOL. XX, NO. XX, XXXX 2017 
+
+ogy; in particular, the paper proposes a design strategy yielding DNNs for AS using RGB-D data. Depth sensors provide a bulky, yet essential tool for an effective control pipeline [7], since the geometry information provided by depth data can provide insights about the shape of an observed object [13]. Preliminary studies about the use of depth information for AS [14] showed that the contribution of raw depth sensing could result marginal, if one mixed depth and RGB data in a straightforward manner. That research, at the same time, hinted at the fact that depth information could indeed improve AS in the presence of specific treatment. Depth information processing calls for a dedicated pro-cessing chain thus increasing computational complexity. To cope with that issue, hardware accelerators for DNNs are continuously improving at a fast rate. DNNs can now run in the presence of strict constraints on a system’s size and overall power budget [15], [16]. Current solutions mainly rely on either the tinyML paradigm or high-performance accelerators. The design of mid-range, application-specific DNN architec-tures seems to be left rather unexplored, in spite of the fact that those architectures can indeed address real-life scenarios effectively. Basic advantages consist in resilience to variations in framing, background, and illumination, while maintaining acceptable hardware requirements for portable devices [12]. The approach proposed in this paper aims to benefit from depth sensors while balancing hardware requirements and robustness. The main contribution is a hardware-aware neural architecture search (HW-NAS) strategy, featuring a new search space optimized for RGB-D inputs. The paper also presents an additional solution, based on a fine-tuning process to extend pre-trained networks on RGB data to handle RGB-D inputs. Experimental results validated the approach on well-known benchmarks, namely, UMD [17] and IIT [18]. The resulting architecture lay consistently on the Pareto optimal front, when considering its generalization performances versus both model size and FLOPs. The method always outperformed existing hardware-efficient approaches, and the resulting models were successfully deployed on a Jetson Nano board, interfaced with a RealSense RGB-D camera, to verify real-time inference. The main contributions of the presented research consist in:  
+
+> •
+
+A smart device for extracting high-level semantic in-formation directly from RGB-D cameras. Tuning the DNN architecture to the available sensing and computing resources supported AS capabilities on the test prototype, featuring a limited power consumption and real-time performances.  
+
+> •
+
+A novel HW-NAS framework for the design of lightweight DNNs with RGB-D input. The involved search space covers RGB-D data and scales better than existing HW-NAS solutions when hardware constraints are relaxed. The approach enables multi-resolution fea-ture extraction and supports multi-branch neural network architectures; as a result, it allows to merge different input sources while learning optimal structures directly from training data.  
+
+> •
+
+A fast, effective solution for reusing networks (pre-trained on RGB data) to cover depth information. The integrated approach enhances generalization ability with a negligible impact on FLOPs and network parameters.  
+
+> •
+
+A set of DNNs that are Pareto-optimal in the generaliza-tion performance versus hardware requirements, as con-firmed by results on established real-world benchmarks. 
+
+II. R ELATED WORKS 
+
+A. Affordance Segmentation for Wearable Robots 
+
+The literature includes various prototypes and approaches using teleceptive sensing devices [19], [20], such as RGB cameras [21], stereo pairs [22], radars [6], and depth sensors [7]. The information from sensors enters autonomous control pipelines to enhance user performance [7], [23]. When using DNNs to extract relevant information, hardware accelerators equip modern robotic arms to allow on-board data processing. The resulting computing performances [4], [19], [20] open new vistas on semi-autonomous control applications [1], [24]. Affordance segmentation requires teleceptive sensing, to support grasping and manipulation capabilities [25]. Affor-dances define the possible interactions with various parts of an object, and can serve as valuable inputs for control pipelines [10], [11], [26], [27]. Existing literature provides several approaches to AS [10], [11], [17], [28]–[30]. Hardware constraints and the presence of a user in the control loop of wearable robots call for ad-hoc solutions. The approach presented in [8] introduced a simplified, portable version of the basic AS, designed to benefit from human interaction. The integration of DNN modules [31], [32] and the inclusion of additional sensory inputs [14] further enhanced that solution. The research described in [12] proved that networks could run in real-time on high-end MCUs and support semi-autonomous control pipelines. Depth sensors are essential for contactless sensing [4], [5]. Their integration in deep learning pipelines has been studied extensively [14], [33], [34]. Conventional approaches to han-dling RGB-D data typically involve a two-tier architecture, in which sensor processing proceeds in separate branches and merge eventually [35]. This schema significantly increases the computational cost as compared with RGB-only pipelines. In addition, RGB-D cameras require essential calibration steps for aligning sensed data. Hardware requirements characterize three main groups of implementation approaches to AS: unconstrained mod-els, hardware-efficient models, and tiny models. Categories roughly identify three corresponding families of HW plat-forms: GPUs, application processors (embedded accelera-tors), and microcontrollers. Most literature focused on un-constrained models and tiny models; at the same time, mid-range, hardware-efficient solutions remain quite unexplored. To the best of the authors’ knowledge, the research presented in [8] only developed an AS architecture that was suitable for embedded accelerators. This paper shows that using embedded accelerators in the design of DNNs for RGB-D inputs can prove especially interesting for AS in wearable robots, since one can suitably trade off accuracy and hardware requirements. 
+
+B. Hardware-aware Neural Architecture Search 
+
+HW-NAS [16] typically drives the design of tiny, hardware-efficient DNN models, since it allows to tailor the network AUTHOR et al. : PREPARATION OF PAPERS FOR IEEE TRANSACTIONS AND JOURNALS 3
+
+architectures to the target hardware platforms. When adopting HW-NAS [36], one should define a search space, a selection criteria, and a research strategy. The search space covers the set of admissible candidate networks. Several studies showed that the design of the search space is crucial to the eventual performance [37]; Popular general-purpose search spaces have been established [38]. Defining the selection criteria poses a critical challenge in practical implementations, due to the limitations of em-bedded devices [39], [40]. Aligning the optimization process with available hardware resources requires careful attention to prevent performance degradation [41]. The MCUnet features a comprehensive procedure to select the architecture and configure the computing layer, yielding excellent performances [42]. However, the presence of a custom software layer can complicate the use and adjustment of the model [43]. The main issues in adopting a research strategy lie in its computational cost and the diversity of target platforms. Ef-fective design approaches for tiny networks are often tailored to specific devices [44]. Significant efforts have been made to accelerate the search procedure while maintaining useful constraints [45], [46], but the generalization of these methods remains a topic of debate [47], [48]. 
+
+III. D ESIGNING EFFICIENT PORTABLE SENSING SYSTEMS BASED ON DNN S FOR RGB-D DATA 
+
+This work considers two different approaches to the design of an end-to-end pipeline, to process RGB-D inputs and feed a control logic with an affordance map. This task is supported by a small-size circuitry interfaced with a sensor, encapsulated within a portable framework. Figure 1(a) outlines the first approach, which applies HW-NAS for the architecture design. Two branches process the sensor inputs (RGB abd D) separately, and merge into a CNN-backbone module that combines their results. An Aggregator network yields a unified tensor; it combines the output of the backbone with intermediate representations extracted by multiple layers of the architecture. A Segmentation head generates the final affordance mask that feeds the control logic. Figure 1(b) illustrates the second approach. In this case, the goal is to exploit fine-tuning to include depth information on a pre-trained optimized architecture for RGB inputs. In both cases, the main challenge is to develop an end-to-end pipeline that a) meets accuracy requirements and b) runs on an embedded device that satisfies the constraints on en-ergy consumption and real-time performances. The following sections will describe both approaches in detail. 
+
+A. HW-NAS for embedded AS 
+
+HW-NAS provides a viable solution to the design of the DNNs as per Fig. 1(a). An HW-NAS aims to find the best architecture, a*, given a search space A under a set of constraints. Two key factors drive the selection of a*, limiting the set of admissible networks: (1) the amount of flash and RAM available on the target device, and (2) the inference time. Empirical evidence shows that the latter factor has a crucial role because it affects the choice of admissible networks [12]. 
+
+> (a) Proposal based on NAS
+> (b) Proposal based on finetuning
+
+Fig. 1 : Target sensing system per la segmentazione di affor-dance near-sensor usando camere RGB-D. Moreover, a* depends on the network inputs, as different data types require specific configurations, thus complicating the selection process. The optimization problem is formalized as: 
+
+min 
+
+a ∈ A Lval (w∗(a), a )s.t. w∗(a) = argmin wLtrain (w, a ),ϕ(a) < T h 
+
+(1) where ϕ(a) is an estimate of the inference time on the target device and T h sets the real-time constraint. The definition of A impacts on the overall performance. In the AS application (Figure 1), the RGB-D input data comprise two tensor streams that, while highly correlated, convey distinct information. In practice, depth can be viewed as a grayscale image where each pixel represents a measured distance. Due to technological limitations, depth data often convey a significant amount of noise. The RGB, D, and RGB-D backbones therefore include stacks of CNN-based encoders. CNNs are the most common choice for processing images. The literature presents increas-ingly efficient implementations of vision transformers, partic-ularly those based on custom implementations of the multi-head attention layers, which make these models well-suited for deployment on constrained devices, such as smartphone chipsets and embedded accelerators [49]. In this paper, the implementation relies on convolutional layers, but the overall architecture could be adapted to transformer blocks. The base block involves a refined version of that used in MobileNetV3, without the Squeeze-and-Excite layers. Table I summarizes the architecture of an encoder block: each row corresponds to a layer; the first and last column represent the input and output of a layer, respectively, whereas the center column reports on the implemented operation and the associate parameters for the optimization algorithm. The search space allows to stack as many blocks as needed (Fig. 1a). This 4 IEEE SENSORS JOURNAL, VOL. XX, NO. XX, XXXX 2017 
+
+TABLE I : The Encoder block                       
+
+> Input Operation Output Block In Conv2D(exp f, ks = (1, 1), strides) o1 o1 BatchNormalization o2 o2 Activation o3 o3 DepthwiseConv2D(ks) o4 o4 BatchNormalization o5 o5 Activation 06 o6 Conv2D(squeeze, Ks = (1, 1)) o7 o7 BatchNormalization o8 o8 Conv2D(squeeze, ks = (1, 1), stride) o9 Block In, o9 Add Block out
+
+allows to optimize the RGB and the D Backbone structures independently, as highlighted in yellow and light blue in Figure 1a. The backbone (purple block) also includes a stack of decoder blocks, with an initial concatenation layer. The Aggregator block, shown in green, operates as a stack of decoder blocks, which consist of a single Conv2DTranspose layer followed by a non-linearity. The number of kernels and the shape of the activation function are the free parameters adjusted by the optimization algorithm. In the decoder, a stride value ensures that the actual size of the output mask matches its expected value. The search space allows connections from any encoder block to the Aggregator, thus enabling multires-olution feature sets (green arrows). Admissible network com-binations should always include a connection to the topmost block of the RGB-D backbone. A conventional evolutionary approach rules the optimization problem [12]. The iterative algorithm generates candidate architectures (’children’) by applying random mutations to a ’parent’ architecture. Children are then trained separately, and the most promising candidate is selected based on a predefined metric. This selection identifies a new parent architecture, and the process iterates until a stopping criterion is met. This straightforward approach has been adopted for its flexibility, as it avoids formal constraints on the optimization problem and the definition of the search space. 
+
+B. Fine tuning-based approach 
+
+HW-NAS may exhibit some drawbacks. Firstly, it may involve remarkable computational costs for training. Secondly, it requires large labeled datasets; this can limit its applicability, since obtaining labeled masks for AS can be very time-consuming. Finally, the definition of affordance can vary depending on the context, and potentially require network retraining. Therefore, the research presented in this paper also envisions an alternative design strategy that does not involve HW-NAS. The main goal is to apply a fine-tuning process for including depth information in a pre-trained, highly optimized architecture for RGB inputs. As shown in Fig. 1(b), the RGB and D channels join to form a tensor, X ∈ RW ×H×4. That tensor enters a convolutional layer that includes 3 filters and a stride of 1, yielding an output tensor, X′ ∈ RW ×H×3. Thus the original architecture (optimized for RGB data) can process the latter result ’as is’. The associate fine-tuning approach brings about minimal additional costs, especially as compared with other methods. The additional layer integrates in the architecture, and its filter values are learned by conventional backpropagation. This allows to optimize the input mapping while preserving the pre-existing weight configuration. One might argue that altering the base layer of a deep network compromises fine-tuning (retraining typically affect the topmost layers). In fact, depth maps share many structural similarities with RGB data; as a consequence, features optimized for RGB images are likely to work well for depth data, as well. This allows the optimization process to adjust low-level features and incorporate depth in-formation, without significantly affecting the original network configuration. 
+
+IV. E XPERIMENTS 
+
+This section is organized as follows. First, Sec. IV-A de-scribes the experimental setup. Then, Sec. IV-B assesses the impact of depth sensors on AS. Sec. IV-C details the structure of optimized network architectures generated by the HW-NAS to provide insights on the effective use of depth sources. Sec. IV-D compares the proposed solutions with state-of-the-art methods and empirically proves that the approach adopted in this work can improve the trade-off between computational requirements and generalization performance. Sec. IV-E an-alyzes the impact of the input size on the computation cost and accuracy. Sec. IV-F offers a visual analysis of the actual impact of depth sensors on affordance segmentation. Finally, Sec. IV-G deals with the deployment of the proposed models on a prototype consisting of a Jetson Nano interfaced with a RealSense RGB-D camera. 
+
+A. Setup 
+
+The code was developed in Python using TensorFlow and Keras libraries. Two well-known datasets, UMD [17] and IIT [18], provided the benchmarks. The University of Mary-land (UMD) dataset includes 28,843 RGB-D images across 7 object categories, with multiple framing angles for each object, allowing an assessment of the models’ ability to handle framing variations. The Italian Institute of Technology (IIT) dataset includes 8,835 images under varying framing, lighting conditions, occlusion levels, and resolutions. Each dataset features distinct object sets, serving as separate benchmarks. Validation sets were created from the training set using a standard holdout method, and the test patterns were never used for parameter or hyperparameter tuning. Following the setup adopted by state-of-the-art works, the learning task became a three-class, pixel-wise classification problem, where the model must distinguish between ’grasp,’ ’do not grasp,’ and ’background’. All grasping affordances were grouped into a single class labeled ’grasp,’ while all other affordances were assigned to the ’do not grasp’ class [8]. Foreground images of the objects were extracted using the corresponding segmentation masks, isolating the bounding boxes around the objects. Due to the different shapes of ob-jects, the height-to-width ratios of these boxes varied. We then extracted the smallest square bounding box that fully contained each object using the AS masks. After this processing, the training and test datasets contained, respectively, 23,708 and AUTHOR et al. : PREPARATION OF PAPERS FOR IEEE TRANSACTIONS AND JOURNALS 5
+
+5,135 samples for UMD, and 9,186 and 1,969 samples for IIT. The code was executed on two workstations equipped with RTX 4080 Ti GPUs. All parameter values were set to their default values in Keras when not specified. The NAS ran for 100 generations; the threshold for the number of FLOPS was set to the FLOPS required by MobileNetV3 in Keras to perform inference on a single image with a resolution of 128x128, i.e., 528 KFLOPS. All networks were trained for 10 epochs following the early stopping strategy described in [38]. The architecture selected by NAS was re-trained for 100 epochs, with an initial learning rate of 10 −3, a learning rate reduction on plateau, and early stopping based on validation loss. Generalization performance was assessed using the test set. In the approach based on fine tuning (Sec. III-B), Mo-bileNetV3 was adopted as backbone. MobileNetV3 has rel-atively low computational requirements while maintaining satisfactory performance on standard computer vision tasks, such as ImageNet classification. The model checkpoint, pre-trained on the ImageNet dataset, was downloaded from the Keras application repository. The same segmentation head described in [32] was incorporated into the architecture. The settings used for the final architecture selected by NAS were also applied in the fine-tuning. Network hardware requirements have been estimated using parameters and FLOPS. These measures provide an estimation independent of the target deployment devices. However, target-specific measurements, based on hardware in the loop, may exhibit different trends depending on the specific SDK. 
+
+B. Efficient usage of depth information 
+
+This section evaluates the capability of the proposed ap-proach to efficiently utilize depth information by analyzing both generalization performance and hardware requirements. Figure 2 shows the generalization performance achieved with the two approaches on the UMD dataset based on the use of depth data. In both cases, the radar plot gives the accuracy obtained for the three classes and the average classification score; the end-to-end pipeline fed with RGB-D data is com-pared with the pipeline fed with RGB data. Figure 2b refers to the approach involving the HW-NAS. In the experiments without depth, the search space was simplified by removing the D Backbone. The availability of depth infor-mation led to an increase in accuracy across all classes. The improvements were most pronounced for the ’Grasp’ (2.8%) and ’Don’t Grasp’ (2.8%) classes, which are generally more challenging. Figure 2a refers to fine-tuning-based approach. Again, the network using depth data outperforms the baseline for the ’Grasp’ and ’Don’t Grasp’ classes by 2.6% and 3.6%, respec-tively. For the ’Background’ class, a negligible deterioration of 0.3% is observed, which could be attributed to statistical fluctuations in the optimization process. Eventually, both tests confirmed the benefit of depth information in improving the model’s generalization performance. Table II clarifies the impact of depth processing by com-paring the computational requirements of the four networks B      
+
+> 
+>   
+> 
+> 
+>  
+>  
+> 
+>   B
+>   B
+
+(a) B     
+
+> 
+>   
+> 
+> 
+> 
+> 
+> 
+>   B
+>   B
+
+(b) 
+
+Fig. 2 : Comparison of MobileNetV3 (a) and HW-NAS (b) performance with depth inputs for UMD. 
+
+TABLE II : Summary of the computing requirements           
+
+> model Flops Params NAS RGB 257.1M 21.6K NAS RGB-D 393.2M 53.9K Mob3 RGB 528,5M 918K Mob3 RGB-D 529,3M 918K
+
+analyzed above, showing FLOPs and parameter counts for both versions. The NAS-generated networks differ both in FLOPs and parameters, as HW-NAS adjusts the architecture to maximize the impact of each layer. The number of parameters more than doubles when depth information is included, and the FLOPs increase from 257.1M to 393.2M. Nonetheless, the network requirements remain below the threshold set by the optimization procedure. Therefore, these increments should not be viewed as drawbacks of the designed architecture, which meets all specified requirements. Instead, they demon-strate that the proposed procedure can scale effectively to design larger networks when needed. The fine-tuned RGB-D model closely matches the requirements of the RGB version. The difference in the number of parameters is negligible, and the increase in FLOPs is 0.8M, i.e., the 0.1%. This analysis confirmed that depth has a minor impact on the computing cost of the processing pipeline. 
+
+C. A detailed analysis of the generated architectures 
+
+An in-depth inspection of the architecture generated by the HW-NAS highlights the network’s computational require-ments. Tables III and IV provide a synopsis of, respectively, the architecture selected by the NAS for the RGB input and the architecture selected for the RGB-D input. Table III is divided into two parts: the first half gives details on the stack of encoders that corresponded to the backbone ; the second half details the stack of decoders that corresponded to the Aggregator. The ’Input’ column identifies the name of the input fed to each block, while the ’Output’ column identifies the name of the generated output. For example, in Table III, ’d0’ is the output tensor generated by the first block, which then becomes the input to the second encoder and to two decoders. The remaining columns display the values assigned to the parameters characterizing the specific block. Skip connections play a crucial role by linking two of the three decoders to the first input block. This is consistent with some segmentation architectures, where connections to the early layers help preserve geometrical information. The proposed 6 IEEE SENSORS JOURNAL, VOL. XX, NO. XX, XXXX 2017 
+
+TABLE III : Generated RGB architecture                                                                             
+
+> backbone
+> output input act. ks exp f. squ. stride d0 input hd sig. 610 22 1d1 d0 relu 416 24 1d2 d1 silu 2520 1d3 d2 relu 826 21 2d4 d3 relu 728 21 1d5 d4 relu6 216 71d6 d5 relu 421 25 1d7 d6 relu 613 19 2d8 d7 silu 9261
+> aggregator
+> output input act. n filt ks h1 d8 relu6 28 5h2 d0 hd sig. 19 2h3 d0 hd sig. 16 1
+
+TABLE IV : Generated RGB-D architecture                                                                                         
+
+> backbone
+> output input act. ks exp f. squ. stride
+> RGB branch
+> rgb0 in rgb relu 526 28 1grb1 rgb0 silu 521 25 1
+> D branch
+> d0 in d hd sgm 223 30 1
+> backbone
+> b0 [rgb1,d0] relu6 611 30 2b1 b0 relu 7621b2 b1 silu 5221 1b3 b2 relu 6414 2b4 b3 hd sgm 7510 2b5 b4 hd sgm 923 16 1b5 b4 relu6 220 91b6 b5 hd sgm 6113 1
+> aggregator
+> Output input act. n filt ks h1 b7 hd sig. 24 9h2 b2 hd sig. 30 4h3 rgb1 relu6 26 2
+
+procedure automatically tunes these connections, advancing beyond the previous HW-NAS for AS [12], which focused on the backbone structure while relying on hand-crafted solutions for the decoder. The procedure also selected relatively large kernel sizes, up to 99 , which is an uncommon choice in manually designed architectures. Finally, a stride of 1 was used in most blocks, maintaining high spatial resolution, likely due to the relatively small input resolution. Table IV refers to the architecture fed with RGB-D data. Thus, it includes the RGB backbone and the D backbone. Two blocks handle the RGB input alone, while only one block processes the depth input independently. The input sources are then merged early in the computational graph, followed by a relatively long branch composed of eight blocks that process the aggregated information. This structure aligns with the fine-tuning-based approach, where RGB-D inputs are concatenated immediately. Additionally, a connection to the earliest layers is present in the architecture, underscoring the importance of skip connections for preserving geometrical information. 
+
+D. Comparison with State-of-the-Art 
+
+Seven deep networks from the literature set the baseline for the comparison. The custom version of MobileNetV3 (CustomMobV3), proposed in [8], is an architecture designed for AS in wearable robotics. This backbone, a refined version of the standard MobileNetV3, is similar to the model adopted in this study for the fine-tuning approach, suggesting a likely overlap in results with the proposed ’Mob3 RGB’ architecture. Three lightweight models cover the area of ”tiny” ap-proaches, i.e., models optimized for the hardware constraints of microcontrollers; these architectures set a reference for computational cost, albeit with reduced generalization perfor-mance. The first model, TinySeg, is an architecture for object segmentation intended for implementation on a prosthetic hand [19]. The other two tiny networks, HW-0.5 and HW-1s, were derived using the approach proposed in [12] with inference time constraints of 0.5 and 1 second, respectively, on an H7 processor. Among the existing transformer-based architecture, Seg-Former MiT-B0 [49] has been selected as a representative example of small-size transformer that could fit constrained scenario with a reduced number of parameters and a relatively small FLOPs requirement. Finally, two large convolutional models serve as reference for accuracy: two networks based on EfficientNetB0 (EFF) and VGG16 (VGG16), each paired with a U-Net segmentation head [50]. Figure 3 compares the generalization performance on the UMD dataset of NAS-RGB, NAS-RGBD, Mob3-RGB, and Mob3-RGBD with those of the seven baselines. The plot provides the accuracy for the ’Grasp’ class and for the ’Don’t Grasp’ class, and the weighted average class accuracy. The models are organized into five subgroups. The first subgroup includes the proposed approaches: the model using RGB-D data is marked in blue, while the RGB-only counterpart is marked in red. Tiny models are shown in green. The portable model based on the custom MobileNetV3 (CustomMobV3) is represented in yellow. Small-scale transformer models are represented by SegFormer MiT-B0 in orange while large con-volutional models are shown in light blue. Figure 4 compares the generalization performance on the IIT dataset, which introduces greater variability in background, illumination, and occlusions. This figure and Fig. 3 share the same format. Note that both plots do not give the performance of TinySeg, one of the tiny models included in the comparison. In fact, the accuracy of TinySeg was below 77.5% in the case of Fig. 3 and below 30% in the case of Fig. 4. The proposed models with RGB-D input always outper-formed tiny models (green bars in the plots). Although large models and transformers (light blue and orange bars in the plots) most of the time achieved the highest accuracy, the use of depth information significantly improved the performance of the proposed models in the case of experiments involving the UMD dataset. A slightly different trend characterizes experiments involving the more challenging IIT benchmark: the fine-tuning approach is always better than the NAS-based approach, and depth information seems to not boost accuracy. One possible explanation is that the IIT dataset needs a more robust feature set because it involves large variations in fram-ing quality, illumination, and background, which makes the problem more challenging. The large-size CNNs, transformer, and fine-tuned models were trained starting from checkpoints AUTHOR et al. : PREPARATION OF PAPERS FOR IEEE TRANSACTIONS AND JOURNALS 7G   G    
+
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+>    
+> N  N  N  N    N    N                                             
+
+Fig. 3 : Comparison of the generalization performance with existing models G  G  
+
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+>  
+> N  N  N  N    N    N                                             
+
+Fig. 4 : Comparison of the generalization performance with existing models for IIT dataset pre-trained on the ImageNet dataset. As a result, these net-works leverage robust feature sets optimized on millions of images. The larger number of parameters also helps to explain the gap between the NAS-generated network and fine-tuned models. Indeed, the transformer model (represented in orange) and the large-size CNNs outperform all the other solutions on the IIT dataset. The role of fine-tuning can be further highlighted by comparing the performance of Mob3RGB and C.Mob3 across the two datasets. In the case of the IIT dataset, the fine-tuned Mob3RGB always scored a better accuracy. The custom MobileNetV3 (yellow bar in the plots) actually topped all the proposed models only once, i.e., in the ’don’t grasp’ class on the UMD dataset. In general, models with RGB-D input can achieve at least the same accuracy as the custom MobileNetV3. Figures 5 and 6 further inspect the outcomes of the com-parison taking into account the footprint of the models in terms of FLOPs and the number of parameters. Figure 5 displays six scatter plots arranged in a grid. The three columns correspond, respectively, to the comparison on the ’Grasp’ class, the comparison on the ’Don’t Grasp’ class, and the comparison on the ’Average’ performance. In each scatter plot, the y-axis gives the pixel-wise accuracy for the corresponding column. For instance, in the scatter plots in the central column, the y-axis shows the pixel-wise accuracy for the ’Don’t Grasp’ class. In the first row of the grid, number of parameters is on the x-axis; while in the second row FLOPs is on the x-axis. The color scheme replicates the one adopted above; thus, for 0 00000   
+
+> 
+
+0 
+
+0 
+
+0 
+
+0 
+
+> %&$
+
+0 00000   
+
+> 
+
+0 
+
+0 
+
+0 0
+
+0 
+
+> #"' %&$
+
+0 00000   
+
+> 
+
+0 
+
+0 0
+
+0 
+
+0 
+
+> )%  
+
+0  
+
+>  
+
+ 
+
+0 
+
+0 
+
+0 
+
+0 
+
+> %&$
+
+0  
+
+>  
+
+ 
+
+0 
+
+0 
+
+0 0
+
+0 
+
+> #"' %&$
+
+0  
+
+>  
+
+ 
+
+0 
+
+0 0
+
+0 
+
+0    
+
+> )%  
+>  
+>   
+> # 
+> # 
+>  &
+>  0 &
+> (&'#!#
+
+Fig. 5 : Analysis of the trade-off between generalization per-formance and resources’ requirements. 0 00000   
+
+> 
+
+0 
+
+0 
+
+0 
+
+> 
+
+0 00000   
+
+> 
+
+0 
+
+0 
+
+0 
+
+>  
+
+0 00000   
+
+> 
+
+0 
+
+0 
+
+> 
+
+0  
+
+>  
+
+ 
+
+0 
+
+0 
+
+0 
+
+> 
+
+0  
+
+>  
+
+ 
+
+0 
+
+0 
+
+0 
+
+>  
+
+0  
+
+>  
+
+ 
+
+0 
+
+0 
+
+> 
+
+Fig. 6 : Analysis of the trade-off between generalization per-formance and resources requirements for IIT dataset. example, the blue markers refer to the proposed models with RGB-D input and the red markers refer to the proposed models with RGB input. Furthermore, the diamond marker identifies, among the proposed models, those obtained from NAS, while the star marker identifies the models obtained with fine-tuning. Large models (i.e., the large-size CNNs and the transformer) were excluded from these plots due to their high hardware requirements, as the goal was to compare small-size models. In every plot, a Pareto optimal front highlights models that best balance accuracy and computational requirements. The same format has been adopted for Fig. 6. In the experiments involving the UMD dataset, both the proposed models with RGB-D inputs (blue markers) remain on the Pareto optimal in the final column, which refers to the average classwise accuracy. For the ’Grasp’ class, only the NAS-generated models (diamond markers) are on the Pareto front. In fact, without the NAS-based approach, the Mob3 RGB-D architecture would have been on the optimal front. The only case where the proposed models do not lie on the Pareto front is for the ’Don’t Grasp’ class, where the Custom-MobileNetV3 (yellow marker) achieves superior performance. The proposed models with RGB-D input consistently lie on the Pareto optimal front -or very close to- in the experiments involving the IIT dataset (Fig. 6). This in turn proves the 8 IEEE SENSORS JOURNAL, VOL. XX, NO. XX, XXXX 2017 1   
+
+> 
+
+
+
+1 
+
+ 
+
+ 
+
+ 
+
+> 
+
+  
+
+ 
+
+ 
+
+   
+
+> 
+
+ 
+
+ 
+
+ 1
+
+ 
+
+> 
+
+  
+
+ 
+
+ 
+
+Fig. 7 : Left: Analysis of Flops for various Input sizes; Right: Analysis of average accuracy and Flops requirements for variable input resolutions capability of the proposed approach to a) fully exploit RGB-D input and b) balance hardware requirements and generalization performance in complex benchmarks as well. 
+
+E. Impact of input size on performance 
+
+FLOPS remain the best device-agnostic estimator for in-ference time. The reliability of this estimator increases as the number of cores in the computing unit decreases. For example, in microcontrollers, the correlation between FLOPS and inference time approaches 1 [12]. The most straightforward but effective method of lowering FLOPS is to reduce input resolution [12], even if this intro-duces practical downsides in the framing. Figure 7 reports the results of an experiment in which three resolutions were considered: 128 x128 pixels, 64 x64 pixels, and 48 x48 pixels. A resolution of 128 x128 is the standard setup adopted in previous works, while 48 x48 is the resolution used in [12] to meet the hard constraints of microcontrollers. On the left side of Fig. 7, the plot gives the number of MFLOPS for a single inference as a function of the input resolution for NAS RGB-D (in blue) and NAS RGB (in red). The black dashed line is the reference set by the 12.46 MFLOPS required by HW-1S for 48 × 48 inputs [12]. As the input resolution decreases, both proposed architectures approach the FLOPS of the reference. On the right side of Fig. 7, a scatter plot displays the three NAS RGB-D models and the three NAS RGB models in a chart with MFLOPS on the 
+
+x-axis and average accuracy on the y-axis. This plot shows that with NAS RGB-D one can obtain an average accuracy above 0.9 even with tight constraints on the MFLOPS. Indeed, an higher average accuracy can be reached when one is allowed to increase the MFLOPS. Conversely, with NAS RGB the average accuracy seems almost independent of the FLOPS. Thus, the approach based on NAS fully exploits the information conveyed by the depth channel. 
+
+F. Output analysis 
+
+The actual impact of depth sensors on affordance segmen-tation may vary significantly across different objects. Figure 8 shows -for each object included the UMD test set- the dif-ference in average classification accuracy obtained by adding depth information. A positive value indicates that the model S 
+
+> 
+> !
+> S  
+> 
+> "
+> S
+> 
+> 
+> S
+> S!
+> 
+> 
+> 
+> S
+> 
+
+ 
+
+ 
+
+ 
+
+     
+
+Fig. 8 : Gain for images of single testing objects. 
+
+Fig. 9 : Examples of the impact of depth in the final prediction. with RGB-D input achieved a greater accuracy than the model with RGB input. In 12 cases out of 16, the availability depth information led to greater accuracy, with a difference exceeding 3% in 7 cases. The improvement was substantial for the scoop; in this case the difference was 31.6%. Figure 9 shows examples of images taken from the dataset for ’scoop’,’turner’, and ’hammer.’ For each object, four different input images are provided along with the corresponding RGB-D segmentation mask and RGB segmentation mask. Depth information can be crucial when lighting and color conditions are suboptimal. The scoop is blue, a color very similar to the foreground used in the experimental setup. Thus, the availability of a depth sensor is very important. Even in the least favorable config-urations, the decrease in accuracy was limited, highlighting the overall beneficial impact of including depth sensors in the sensing pipeline. Notably, when object color closely matched the background or when metallic surfaces caused reflection issues, depth information significantly enhanced the models’ segmentation capabilities. Interestingly, even for some flat objects, depth proved beneficial, challenging the assumption of a direct relationship between object shape and the effectiveness of depth sensors. A further analysis was conducted on a test set generated with Unreal Engine 5. This setup enabled the creation of many heterogeneous images through a cost-effective proce-dure, where test patterns composed of RGB-D images and affordance masks were generated using the simulator. A test set of 2,000 images was created, with objects belonging to the same classes available in the UMD dataset. Models trained on UMD were then tested on this test set, showing an improvement of 11.5% in the average accuracy when AUTHOR et al. : PREPARATION OF PAPERS FOR IEEE TRANSACTIONS AND JOURNALS 9
+
+TABLE V : Measured frame rate                      
+
+> Model 5W 10W Sec. per frame FPS Sec. per frame FPS MOB3 0.55 s 20.39 s 2 - 3 MOB3 opt 0.12 s 8 - 9 0.07 s 14 - 15 NAS 0.36 s 30.24 s 4NAS opt 0.11 s 90.06 s 15- 16
+
+the D information was used. This gap was reduced to 4.6% when data augmentation was applied to mitigate cross-domain issues commonly associated with simulator-generated images. The results confirmed the advantage of using depth data to generalize to unseen test objects, thanks to the geometric information it provides. 
+
+G. Deployment on embedded accelerators 
+
+The two proposed models using RGB-D data have been deployed on a prototype consisting of a Jetson Nano interfaced with a RealSense RGB-D camera, i.e., one of the most widely used RGB-D cameras. The Jetson Nano was chosen among the available embedded accelerators because of its excellent balance between performance and power consumption. The market indeed offers newer embedded accelerators that provide an excellent trade-off between energy and performance; how-ever, these devices are typically designed for larger models, making them less effective in this specific scenario. The comparison involved four models: the plain Tensor-Flow implementation of NAS RGBD and Mob3 RGBD; the optimized versions ( opt) of NAS RGBD and Mob3 RGBD obtained using the TRT optimizer with float16 quantization. All the data on latency and memory usage provided in the following have been obtained by completing 100 inferences on RGB-D images captured by the camera. Unless explicitly stated otherwise, the reported metrics represent average values. Memory usage was monitored by relying on the operat-ing system’s utilities. Power consumption was measured by recording the current drawn at the board’s power input using a wattmeter. Framing conditions were not particularly relevant to the hardware requirements, as they are independent of the input image.  
+
+> 1) Frame rate:
+
+The first analysis evaluates the inference time of the models for two power configurations of the Jetson Nano: 5W and 10W. In both cases, the value corresponds to the estimated maximum peak power consumption. Table V gives, for each tested model, the time needed to process a frame and the frame rate (expressed in frames per second). The table shows that optimization had a significant impact on the inference time for both models. Both optimized versions enable inference under 120 ms, supporting relatively fast pro-cessing suitable for real-time operations intended for human users.  
+
+> 2) Memory analysis:
+
+The Jetson Nano employs a shared memory architecture, where both processor and GPU uti-lize the same memory, making data transfers more efficient. Memory profiling is a non-trivial task due to the interaction between Python and the operating system. We propose three sets of measurements to analyze memory usage. As empirical evidence suggests that RAM usage is not affected by the power 
+
+TABLE VI : Memory Measurements                            
+
+> Full Python Model Overall Model Avg. Peak Avg. Peak Avg. MOB3 408 MB 925 MB 283 MB 800 MB 3.5 GB MOB3 opt 436 MB 1030 MB 311 MB 905 MB 4.8 GB NAS 289 MB 587 MB 164 MB 462 MB 2.6 GB NAS opt 292 MB 602 MB 167 MB 477 MB 3.2 GB
+
+configuration, this parameter will be omitted in the following tables. Table VI reports on the memory profiling performed in the experiments. The table is divided into three sections. Each section features two columns: the average memory usage and the peak value, which refers to the maximum memory allocated during the entire process. The red section presents the total memory usage reported by Tracemalloc for each model, including library imports and utilities. The Tracemalloc software was adopted to track memory allocated directly by Python. However, this software may not track external allocations. The measurements confirmed the impact of the architecture on memory requirements. On average, the NAS architecture uses about 300 MB of memory, while MOB3 requires 30% more memory. It is worth noting that the optimized versions use a slightly larger amount of memory because of the use of the TRT engine. Peak memory usage can reach up to twice the average memory requirement. The green section of table VI shows the amount of RAM required to load the model parameters and perform the infer-ence. In this case, the trends are similar to those assessed with Tracemalloc, with changes in the absolute values. A third measurement was performed using the system monitor utility available on the Nano’s operating system. In this case, only average values are reported in the blue section of Table VI. As expected, the total RAM usage is significantly higher. In fact, in all cases, more than 2.5 GB were used by the combination of the operating system and other processes, confirming the large number of background processes running on the OS. Nevertheless, again the architecture generated with NAS is the one that uses fewer memory.  
+
+> 3) Power consumption:
+
+A power meter with a relative error of 2% was connected to the development board’s power supply. The measurements were taken with the RealSense camera connected and powered directly by the Jetson during the acquisition and inference procedures. Table VII reports the average power consumption of the system for each model. The values have been rounded to the nearest integer to take into account the measurement uncertainty. In both configurations, the average power require-ment exceeded the threshold value because the power meter measures the consumption of both the Jetson and the sensor. However, in all cases, the power consumption remains below 11 W, making the system suitable for use with portable lithium batteries. As a simple estimation, considering an average smartphone battery with a capacity of 5000 mAh, configurations with a power consumption of 7 Watts would provide approximately 3.5 hours of operation. This is a sufficiently long lifespan, especially considering that inferences are not expected to run 10 IEEE SENSORS JOURNAL, VOL. XX, NO. XX, XXXX 2017 
+
+TABLE VII : Average power consumption during acquisition and inference procedure. 
+
+Model 5W Mode (opt) 10W Mode (opt) MOB3 7W (7W) 8W (9W) NAS 7 W (8W) 8 W(11W) 
+
+continuously but only upon user request. 
+
+V. C ONCLUSION 
+
+The paper analyzed two different design strategies for the deployment of affordance segmentation in wearable sensing systems. The results showed that by including RGB-D sensors in the sensing pipeline one can improve the generalization performance with respect to the setup involving only RGB cameras. In addition, extensive experimental analysis on two well-known real-world benchmarks proved that the proposed strategies can generate architectures lying on the Pareto-optimal front for generalization performance and hardware requirements. The architecture generated with the proposed strategies can process images in real-time with acceptable power consumption when running on a prototype based on a Jetson Nano and a Real Sense RGB-D camera. The current version of the system has been evaluated using foreground images, leaving the correct framing to the end users. This could indeed prove challenging. Future versions will incorporate object localization capabilities, enabling a simpler framing setup. Additionally, in future experiments, we plan to apply the same techniques to transformer models by designing dedicated search spaces or adapting the fine-tuning approach for models with positional encoding. Eventually, clinical trials will also be required to confirm the user’s perceived benefits in the semi-autonomous pipeline. In this setup, the proposed system will be included in the full control pipeline, allowing an in-depth analysis of how an efficient AS can improve user interaction. 
+
+REFERENCES 
+
+[1] Z. Tang, L. Zhang, X. Chen, J. Ying, X. Wang, and H. Wang, “Wearable supernumerary robotic limb system using a hybrid control approach based on motor imagery and object detection,” IEEE Transactions on Neural Systems and Rehabilitation Engineering , vol. 30, pp. 1298–1309, 2022. [2] S. Salminger, H. Stino, L. H. Pichler, C. Gstoettner, A. Sturma, J. A. Mayer, M. Szivak, and O. C. Aszmann, “Current rates of prosthetic usage in upper-limb amputees–have innovations had an impact on device acceptance?” Disability and Rehabilitation , vol. 44, no. 14, pp. 3708– 3713, 2022. [3] Y. Sun, T. Fei, X. Li, A. Warnecke, E. Warsitz, and N. Pohl, “Real-time radar-based gesture detection and recognition built in an edge-computing platform,” IEEE Sensors Journal , vol. 20, no. 18, pp. 10 706–10 716, 2020. [4] F. Chiariotti, P. Mamidanna, S. Suman, ˇC. Stefanovi´ c, D. Farina, P. Popovski, and S. Doˇ sen, “The future of bionic limbs: The untapped synergy of signal processing, control, and wireless connectivity,” IEEE Signal Processing Magazine , vol. 41, no. 4, pp. 58–75, 2024. [5] N. E. Krausz and L. J. Hargrove, “A survey of teleceptive sensing for wearable assistive robotic devices,” Sensors , vol. 19, no. 23, p. 5238, 2019. [6] E. Mastinu, A. Coletti, J. van den Berg, and C. Cipriani, “Explorations of autonomous prosthetic grasping via proximity vision and deep learning,” 
+
+IEEE Transactions on Medical Robotics and Bionics , 2024. [7] M. N. Castro and S. Dosen, “Continuous semi-autonomous prosthesis control using a depth sensor on the hand,” Frontiers in Neurorobotics ,vol. 16, 2022. [8] E. Ragusa, C. Gianoglio, S. Dosen, and P. Gastaldo, “Hardware-aware affordance detection for application in portable embedded systems,” 
+
+IEEE Access , vol. 9, pp. 123 178–123 193, 2021. [9] F.-J. Chu, R. Xu, and P. A. Vela, “Learning affordance segmentation for real-world robotic manipulation via synthetic images,” IEEE Robotics and Automation Letters , vol. 4, no. 2, pp. 1140–1147, 2019. [10] Z. Jiang, Y. Zhu, M. Svetlik, K. Fang, and Y. Zhu, “Synergies between affordance and geometry: 6-dof grasp detection via implicit representa-tions,” arXiv preprint arXiv:2104.01542 , 2021. [11] Z. O. Khalifa and S. A. A. Shah, “Towards visual affordance learning: A benchmark for affordance segmentation and recognition,” arXiv preprint arXiv:2203.14092 , 2022. [12] E. Ragusa, S. Dosen, R. Zunino, and P. Gastaldo, “Affordance seg-mentation using tiny networks for sensing systems in wearable robotic devices,” IEEE Sensors Journal , 2023. [13] A. Lopes, R. Souza, and H. Pedrini, “A survey on rgb-d datasets,” 
+
+Computer Vision and Image Understanding , vol. 222, p. 103489, 2022. [14] E. Ragusa, M. P. Ghezzi, R. Zunino, and P. Gastaldo, “Affordance segmentation using rgb-d sensors for application in portable embedded systems,” in Applications in Electronics Pervading Industry, Environ-ment and Society: APPLEPIES 2022 . Springer, 2023, pp. 109–116. [15] G. Akkad, A. Mansour, and E. Inaty, “Embedded deep learning accel-erators: A survey on recent advances,” IEEE Transactions on Artificial Intelligence , 2023. [16] S. S. Saha, S. S. Sandha, and M. Srivastava, “Machine learning for microcontroller-class hardware-a review,” IEEE Sensors Journal , 2022. [17] A. Myers, C. L. Teo, C. Ferm¨ uller, and Y. Aloimonos, “Affordance detection of tool parts from geometric features,” in 2015 IEEE Interna-tional Conference on Robotics and Automation (ICRA) . IEEE, 2015, pp. 1374–1381. [18] A. Nguyen, D. Kanoulas, D. G. Caldwell, and N. G. Tsagarakis, “Detecting object affordances with convolutional neural networks,” in 
+
+2016 IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS) . IEEE, 2016, pp. 2765–2770. [19] F. Hundhausen, D. Megerle, and T. Asfour, “Resource-aware object classification and segmentation for semi-autonomous grasping with prosthetic hands,” in 2019 IEEE-RAS 19th International Conference on Humanoid Robots (Humanoids) . IEEE, 2019, pp. 215–221. [20] J. Starke, P. Weiner, M. Crell, and T. Asfour, “Semi-autonomous control of prosthetic hands based on multimodal sensing, human grasp demonstration and user intention,” Robotics and Autonomous Systems ,vol. 154, p. 104123, 2022. [21] P. Weiner, J. Starke, S. Rader, F. Hundhausen, and T. Asfour, “Designing prosthetic hands with embodied intelligence: The kit prosthetic hands,” 
+
+Frontiers in Neurorobotics , vol. 16, 2022. [22] M. Markovic, S. Dosen, D. Popovic, B. Graimann, and D. Farina, “Sensor fusion and computer vision for context-aware control of a multi degree-of-freedom prosthesis,” Journal of neural engineering , vol. 12, no. 6, p. 066022, 2015. [23] K. Rana, J. Abou-Chakra, S. Garg, R. Lee, I. Reid, and N. Suenderhauf, “Affordance-centric policy learning: Sample efficient and generalis-able robot policy learning using affordance-centric task frames,” arXiv preprint arXiv:2410.12124 , 2024. [24] J. W. Sensinger and S. Dosen, “A review of sensory feedback in upper-limb prostheses from the perspective of human motor control,” Frontiers in Neuroscience , vol. 14, 2020. [25] F.-J. Chu, R. Xu, L. Seguin, and P. A. Vela, “Toward affordance detection and ranking on novel objects for real-world robotic manipulation,” IEEE Robotics and Automation Letters , vol. 4, no. 4, pp. 4070–4077, 2019. [26] R. Xu, F.-J. Chu, C. Tang, W. Liu, and P. A. Vela, “An affordance keypoint detection network for robot manipulation,” IEEE Robotics and Automation Letters , vol. 6, no. 2, pp. 2870–2877, 2021. [27] W. Wang, H. Zhu, and M. H. Ang Jr, “Sgsin: Simultaneous grasp and suction inference network via attention-based affordance learning,” IEEE Transactions on Industrial Electronics , 2024. [28] M. Hassanin, S. Khan, and M. Tahtali, “Visual affordance and function understanding: A survey,” ACM Computing Surveys (CSUR) , vol. 54, no. 3, pp. 1–35, 2021. [29] E. Corona, A. Pumarola, G. Alenya, F. Moreno-Noguer, and G. Rogez, “Ganhand: Predicting human grasp affordances in multi-object scenes,” in Proceedings of the IEEE/CVF conference on computer vision and pattern recognition , 2020, pp. 5031–5041. [30] ˙I. ¨Ozc ¸il and A. B. Koku, “Affordance labeling and exploration: A manifold-based approach,” arXiv preprint arXiv:2407.15479 , 2024. [31] T. Apicella, A. Cavallaro, R. Berta, P. Gastaldo, F. Bellotti, and E. Ragusa, “An affordance detection pipeline for resource-constrained AUTHOR et al. : PREPARATION OF PAPERS FOR IEEE TRANSACTIONS AND JOURNALS 11 
+
+devices,” in 2021 28th IEEE International Conference on Electronics, Circuits, and Systems (ICECS) . IEEE, pp. 1–6. [32] S. Lugani, E. Ragusa, R. Zunino, and P. Gastaldo, “Lightweight neural networks for affordance segmentation: Enhancement of the decoder module,” in International Conference on Applications in Electronics Pervading Industry, Environment and Society . Springer, 2023, pp. 437– 443. [33] S. Deng, X. Xu, C. Wu, K. Chen, and K. Jia, “3d affordancenet: A benchmark for visual object affordance understanding,” in proceedings of the IEEE/CVF conference on computer vision and pattern recognition ,2021, pp. 1778–1787. [34] C. Gao, C. Liu, J. Shu, F. Liu, J. Liu, L. Yang, X. Gao, and D. Meng, “Are dense labels always necessary for 3d object detection from point cloud?” arXiv preprint arXiv:2403.02818 , 2024. [35] W. Zhou, B. Jian, M. Fang, X. Dong, Y. Liu, and Q. Jiang, “Dgpinet-kd: Deep guided and progressive integration network with knowledge distillation for rgb-d indoor scene analysis,” IEEE Transactions on Circuits and Systems for Video Technology , 2024. [36] H. Benmeziane, K. E. Maghraoui, H. Ouarnoughi, S. Niar, M. Wistuba, and N. Wang, “A comprehensive survey on hardware-aware neural architecture search,” arXiv preprint arXiv:2101.09336 , 2021. [37] I. Salehin, M. S. Islam, P. Saha, S. Noman, A. Tuni, M. M. Hasan, and M. A. Baten, “Automl: A systematic review on automated machine learning with neural architecture search,” Journal of Information and Intelligence , vol. 2, no. 1, pp. 52–81, 2024. [38] M. Tan, B. Chen, R. Pang, V. Vasudevan, M. Sandler, A. Howard, and Q. V. Le, “Mnasnet: Platform-aware neural architecture search for mobile,” in Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition , 2019, pp. 2820–2828. [39] L. L. Zhang, Y. Yang, Y. Jiang, W. Zhu, and Y. Liu, “Fast hardware-aware neural architecture search,” in Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition Workshops ,2020, pp. 692–693. [40] M. Li, Y. Liu, X. Liu, Q. Sun, X. You, H. Yang, Z. Luan, L. Gan, G. Yang, and D. Qian, “The deep learning compiler: A comprehensive survey,” IEEE Transactions on Parallel and Distributed Systems , vol. 32, no. 3, pp. 708–727, 2020. [41] C. Li, Z. Yu, Y. Fu, Y. Zhang, Y. Zhao, H. You, Q. Yu, Y. Wang, and Y. Lin, “Hw-nas-bench: Hardware-aware neural architecture search benchmark,” arXiv preprint arXiv:2103.10584 , 2021. [42] J. Lin, L. Zhu, W.-M. Chen, W.-C. Wang, C. Gan, and S. Han, “On-device training under 256kb memory,” in Annual Conference on Neural Information Processing Systems (NeurIPS) , 2022. [43] C. Banbury, C. Zhou, I. Fedorov, R. Matas, U. Thakker, D. Gope, V. Janapa Reddi, M. Mattina, and P. Whatmough, “Micronets: Neural network architectures for deploying tinyml applications on commodity microcontrollers,” Proceedings of Machine Learning and Systems , vol. 3, pp. 517–532, 2021. [44] L. Capogrosso, F. Cunico, D. S. Cheng, F. Fummi et al. , “A machine learning-oriented survey on tiny machine learning,” arXiv preprint arXiv:2309.11932 , 2023. [45] Z. Guo, X. Zhang, H. Mu, W. Heng, Z. Liu, Y. Wei, and J. Sun, “Single path one-shot neural architecture search with uniform sampling,” in 
+
+European conference on computer vision . Springer, 2020, pp. 544– 560. [46] A. Burrello, M. Risso, B. A. Motetti, E. Macii, L. Benini, and D. J. Pagliari, “Enhancing neural architecture search with multiple hardware constraints for deep learning model deployment on tiny iot devices,” 
+
+IEEE Transactions on Emerging Topics in Computing , 2023. [47] X. Song, X. Xie, Z. Lv, G. G. Yen, W. Ding, J. Lv, and Y. Sun, “Efficient evaluation methods for neural architecture search: A survey,” 
+
+IEEE Transactions on Artificial Intelligence , 2024. [48] G. Li, D. Hoang, K. Bhardwaj, M. Lin, Z. Wang, and R. Mar-culescu, “Zero-shot neural architecture search: Challenges, solutions, and opportunities,” IEEE Transactions on Pattern Analysis and Machine Intelligence , 2024. [49] E. Xie, W. Wang, Z. Yu, A. Anandkumar, J. M. Alvarez, and P. Luo, “Segformer: Simple and efficient design for semantic segmentation with transformers,” Advances in Neural Information Processing Systems ,vol. 34, pp. 12 077–12 090, 2021. [50] Y. Li, P. Wang, R. Li, M. Tao, Z. Liu, and H. Qiao, “A survey of multi-fingered robotic manipulation: Biological results, structural evolvements and learning methods,” Frontiers in Neurorobotics , p. 53, 2022.
