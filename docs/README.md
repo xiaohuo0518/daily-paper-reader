@@ -6,55 +6,60 @@
 </div>
 
 ## 每次日报
-- 最新运行日期：2026-08-03
-- 运行时间：2026-08-03 21:59:17 UTC
+- 最新运行日期：2026-08-04
+- 运行时间：2026-08-04 21:39:45 UTC
 - 运行状态：成功
-- 本次总论文数：11
-- 精读区：2
-- 速读区：9
+- 本次总论文数：12
+- 精读区：6
+- 速读区：6
 
 ### 今日简报（AI）
-今日精读2篇、速读9篇，聚焦VLA安全防护与仿人机器人微调。  
-最值得看《ActFovea》的视觉-动作一致性运行时保障，及《CLIFT》的闭环迭代微调，均获8.0分。  
-建议优先精读这两篇，速读可关注世界模拟器BWM（7.0分）。
-- 详情：[/202608/03/README](/202608/03/README)
+今日聚焦机器人学习与多模态模型，精读两篇高分论文并速读三篇相关应用。
+
+最值得关注Ego2Robot利用人类第一视角数据高效合成机器人训练数据，以及云边协同VLA模型通过表征分工降低延迟。
+
+建议优先阅读精读论文，理解其数据扩展思路；对实时系统与异常检测感兴趣的读者可再浏览速读列表。
+- 详情：[/202608/04/README](/202608/04/README)
 
 ### 精读区论文标签
-1. [ActFovea: Runtime Safeguarding for VLA Policies via Spatiotemporal Visual-Action Consistency](/202608/03/2607.29169v1-actfovea-runtime-safeguarding-for-vla-policies-via-spatiotemporal-visual-action-consistency)  
-   标签：评分：8.0/10、query:humanoid-ood
-   evidence：利用本体感受状态和运动学对VLA策略进行运行时防护
-2. [CLIFT: Turning Gemini Robotics On-Device into Humanoid Specialists via Non-Invasive Closed-Loop Iterative Fine-Tuning](/202608/03/2607.29172v1-clift-turning-gemini-robotics-on-device-into-humanoid-specialists-via-non-invasive-closed-loop-iterative-fine-tuning)  
+1. [Ego2Robot: Scalable Robot Data Synthesis from Egocentric Human Data](/202608/04/2608.02580v1-ego2robot-scalable-robot-data-synthesis-from-egocentric-human-data)  
+   标签：评分：9.0/10、query:ur
+   evidence：从第一视角人类数据可扩展合成机器人数据
+2. [Latency-Tolerant Cloud-Edge Collaborative Vision-Language-Action Models via Emergent Representational Specialization](/202608/04/2608.00569v1-latency-tolerant-cloud-edge-collaborative-vision-language-action-models-via-emergent-representational-specialization)  
    标签：评分：8.0/10、query:ur
-   evidence：通过非侵入式闭环迭代微调在端侧将基础模型变成人形专家
+   evidence：通过云边协同实现机器人边缘部署
+3. [Diffusion-Based Body Schema Learning Enabling Abnormal-State Adaptation in Musculoskeletal Robots](/202608/04/2608.01029v1-diffusion-based-body-schema-learning-enabling-abnormal-state-adaptation-in-musculoskeletal-robots)  
+   标签：评分：8.0/10、query:humanoid-ood
+   evidence：利用本体感觉与执行器信号应对执行器卡滞等异常状态
+4. [Rapid Embodiment Adaptation for Quadrupedal Locomotion](/202608/04/2608.01506v1-rapid-embodiment-adaptation-for-quadrupedal-locomotion)  
+   标签：评分：8.0/10、query:humanoid-ood
+   evidence：从交互历史推断具身参数并识别物理变化（关节约束、质量），基于本体感受信号
+5. [Perception-and-action system for humanoid robot task execution in construction](/202608/04/2608.01600v1-perception-and-action-system-for-humanoid-robot-task-execution-in-construction)  
+   标签：评分：8.0/10、query:ur
+   evidence：面向类人机器人的感知-行动系统利用人工演示学习建筑任务，实际上构建了类人机器人演示数据集。
+6. [Teleopit: A Full-Embodiment Humanoid Teleoperation System](/202608/04/2608.01834v1-teleopit-a-full-embodiment-humanoid-teleoperation-system)  
+   标签：评分：8.0/10、query:ur
+   evidence：面向人形机器人示范数据采集的遥操作系统
 
 ### 速读区论文标签
-1. [BWM: A Low-Cost High-Fidelity World Simulator for Robot Learning](/202608/03/2607.29302v1-bwm-a-low-cost-high-fidelity-world-simulator-for-robot-learning)  
+1. [Belief-Space Perception Routing under Coupled Sensor Faults and Compute Contention](/202608/04/2608.00322v1-belief-space-perception-routing-under-coupled-sensor-faults-and-compute-contention)  
+   标签：评分：7.0/10、query:ur
+   evidence：耦合传感器故障状态与计算争用进行感知路由，同时应对机器人的故障检测与计算约束。
+2. [CARE: A Cascaded Framework for Efficient and Reliable Time Series Anomaly Detection](/202608/04/2608.01885v1-care-a-cascaded-framework-for-efficient-and-reliable-time-series-anomaly-detection)  
    标签：评分：7.0/10、query:humanoid-ood
-   evidence：世界模拟器可预测动作后果并包含易失败结果
-2. [MetaKoopman: Bayesian Meta-Learning of Koopman Operators for Modeling Structured Dynamics under Distribution Shifts](/202608/03/2607.26345v1-metakoopman-bayesian-meta-learning-of-koopman-operators-for-modeling-structured-dynamics-under-distribution-shifts)  
+   evidence：面向时间序列异常检测的级联框架，含轻量预过滤自编码器，可直接迁移至机器人故障诊断。
+3. [Learning Panorama-Aware VLA for Mobile Manipulation with Whole-Body Teleoperation](/202608/04/2608.02257v1-learning-panorama-aware-vla-for-mobile-manipulation-with-whole-body-teleoperation)  
+   标签：评分：7.0/10、query:ur
+   evidence：关注全身示范数据的高效采集，支撑机器人数据集构建
+4. [GenTrack: Physical Alignment for Robot-Native Motion Generation and Zero-Shot Humanoid Tracking](/202608/04/2608.01410v1-gentrack-physical-alignment-for-robot-native-motion-generation-and-zero-shot-humanoid-tracking)  
+   标签：评分：6.0/10、query:ur
+   evidence：宇树G1人形机器人，生成新的运动参考用于跟踪器训练，与数据集构建相关
+5. [ReFP-AD: Rectified Flow Preconditioning for Energy-Based Anomaly Detection](/202608/04/2608.01793v1-refp-ad-rectified-flow-preconditioning-for-energy-based-anomaly-detection)  
    标签：评分：6.0/10、query:humanoid-ood
-   evidence：通过贝叶斯元学习Koopman算子来建模分布漂移下的动力学，为安全机器人操作提供考虑不确定性的分布外检测方法。
-3. [Reinforcement Learning on Cost-Constrained Quadrupedal Hardware](/202608/03/2607.26434v1-reinforcement-learning-on-cost-constrained-quadrupedal-hardware)  
+   evidence：基于能量的通用异常检测方法，可服务于机器人安全运行
+6. [World Action Models in Real Time: An Empirical Study of Smooth Execution via Asynchronous Deployment](/202608/04/2608.01880v1-world-action-models-in-real-time-an-empirical-study-of-smooth-execution-via-asynchronous-deployment)  
    标签：评分：6.0/10、query:ur
-   evidence：处理低成本机器人硬件上的仿真到现实部署，涉及传输延迟与噪声反馈
-4. [RAG-HAR+: Towards Cost-Efficient LLM-Based Human Activity Recognition for Edge Deployment](/202608/03/2607.26631v1-rag-har-towards-cost-efficient-llm-based-human-activity-recognition-for-edge-deployment)  
-   标签：评分：6.0/10、query:ur
-   evidence：面向传感器活动识别的低成本边缘部署
-5. [Filling the Pareto-Optimal Front for Affordance Segmentation on Embedded Devices Using RGB-D Cameras](/202608/03/2607.28293v1-filling-the-pareto-optimal-front-for-affordance-segmentation-on-embedded-devices-using-rgb-d-cameras)  
-   标签：评分：6.0/10、query:ur
-   evidence：嵌入式设备上的硬件感知神经架构搜索，直接支持人形机器人边缘部署
-6. [TacPrint: A Wearable Fingertip Tactile Sensor for Human-to-Robot Contact Reproduction](/202608/03/2607.29231v1-tacprint-a-wearable-fingertip-tactile-sensor-for-human-to-robot-contact-reproduction)  
-   标签：评分：6.0/10、query:ur
-   evidence：可穿戴指尖触觉传感器，支持以人为中心的机器人数据采集
-7. [Lightweight Neural Networks for Affordance Segmentation: Enhancement of the Decoder Module](/202608/03/2607.29473v1-lightweight-neural-networks-for-affordance-segmentation-enhancement-of-the-decoder-module)  
-   标签：评分：6.0/10、query:ur
-   evidence：面向可穿戴机器人实时部署的轻量级神经网络设计
-8. [Bootstrapping Self-Supervised Learning of Binary Classification Using Error Bounds: A Case Study on a Robotic Insertion Task](/202608/03/2607.29640v1-bootstrapping-self-supervised-learning-of-binary-classification-using-error-bounds-a-case-study-on-a-robotic-insertion-task)  
-   标签：评分：6.0/10、query:humanoid-ood
-   evidence：面向机器人装配的自监督错检与数据自举方法
-9. [Diagnosing Compositional Generalization in Sequential Robot Tasks](/202608/03/2607.29687v1-diagnosing-compositional-generalization-in-sequential-robot-tasks)  
-   标签：评分：6.0/10、query:ur
-   evidence：通过诊断组合泛化指导训练集结构设计
+   evidence：异步部署策略将模型推理与动作执行重叠，实现机器人实时平滑控制。
 
 
 <div class="dpr-home-promo-card">
