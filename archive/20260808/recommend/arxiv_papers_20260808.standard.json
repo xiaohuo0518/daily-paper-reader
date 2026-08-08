@@ -1,0 +1,485 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-08-08T20:57:38.416453+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 2,
+    "deep_divecandidates": 5,
+    "deep_cap": 7,
+    "deep_selected": 5,
+    "quick_candidates": 6,
+    "quick_skim_target": 12,
+    "quick_selected": 6
+  },
+  "deep_dive": [
+    {
+      "id": "2608.04196v1",
+      "source": "arxiv",
+      "title": "SiMDex: Mining Similar Egocentric Videos for Cross-Embodiment Dexterous Manipulation",
+      "abstract": "Recent years have witnessed an explosive trend of scaling ego-centric human videos for robot manipulation, yet it remains unclear which data actually benefits dexterous manipulation. We present SiMDex, a similarity-based data mining framework that casts human data selection for VLA post-training in dexterous manipulation as a recommendation problem. For each robot demonstration, SiMDex employs a three-layer recall-ranking-re-ranking pipeline to extract task-relevant subsets from a pool of ~32M egocentric human samples, operating in a morphology-agnostic action space that requires no changes to VLA architecture or training. Against a strong baseline trained with an equal amount of randomly sampled human data, SiMDex uses only ~1.49M mined samples (<5% of the pool) yet improves the overall success rate from 47.7% to 61.1%, showing that selective curation outperforms indiscriminate data mixing.",
+      "authors": [
+        "Nie Lin",
+        "Takehiko Ohkawa",
+        "Sijin Chen",
+        "Ruoshi Wen",
+        "Zhuohang Li",
+        "Liqun Huang",
+        "Zhengming Zhu",
+        "Yiming Bao",
+        "Yunfei Li",
+        "Minjie Cai",
+        "Xiao Ma",
+        "Wei Xu",
+        "Yoichi Sato"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.CV",
+        "cs.LG"
+      ],
+      "published": "2026-08-04T19:55:12+00:00",
+      "link": "https://arxiv.org/pdf/2608.04196v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "Mining task-relevant subsets from egocentric videos for robot manipulation, directly relevant to dataset construction.",
+      "llm_evidence_cn": "从第一视角视频挖掘任务相关子集用于机器人操作，直接关联数据集构建。",
+      "llm_evidence": "从第一视角视频挖掘任务相关子集用于机器人操作，直接关联数据集构建。",
+      "canonical_evidence": "从第一视角视频挖掘任务相关子集用于机器人操作，直接关联数据集构建。",
+      "llm_tldr_en": "SiMDex mines task-relevant subsets from 32M egocentric human videos for dexterous manipulation using a recall-ranking-re-ranking pipeline. With only 1.49M mined samples, it beats random-selection baselines without changing VLA architecture, providing an efficient dataset construction method.",
+      "llm_tldr_cn": "针对人类视频数据中哪些样本对灵巧操作真正有效难以判断的问题，SiMDex提出相似性挖掘框架，通过三层召回-排序-重排序流水线从约3200万第一视角人类样本中筛选任务相关子集。仅用约149万样本即超越等量随机采样的强基线，且无需修改VLA架构，为跨具身操作数据集构建提供了高效范式。",
+      "llm_tldr": "针对人类视频数据中哪些样本对灵巧操作真正有效难以判断的问题，SiMDex提出相似性挖掘框架，通过三层召回-排序-重排序流水线从约3200万第一视角人类样本中筛选任务相关子集。仅用约149万样本即超越等量随机采样的强基线，且无需修改VLA架构，为跨具身操作数据集构建提供了高效范式。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2608.05705v1",
+      "source": "arxiv",
+      "title": "Spectral Aliasing Pretext: A novel task for Self-Supervised fault diagnosis in rotating machinery",
+      "abstract": "Deep learning is a new way for machinery fault diagnosis but requires extensive labeled data, a scarce resource in industrial settings. We propose Spectral Aliasing Pretext (SAP), a self-supervised learning method that pretrains models on unlabeled vibration data by exploiting spectral aliasing. We deliberately undersample signals to create folded spectrum, then train a Transformer to reconstruct the original unfolded spectrum. This pretext task forces the model to learn frequency-domain invariants characteristic of mechanical faults, without potentially destructive augmentations. Experiments on the CWRU dataset show that SAP learns stable and highly discriminative representations. In a linear probing setting, SAP quickly achieves very high classification performance with only a small fraction of labeled data and low variance. In contrast, full fine-tuning, including fully supervised training, does not lead to more stable or better results. Overall, these findings suggest that SAP combined with linear probing can be more effective and reliable than fully supervised training for fault diagnosis with limited labeled data.",
+      "authors": [
+        "Victor Gialis",
+        "Maxime Metz",
+        "David Esteve",
+        "Abdenour Soualhi"
+      ],
+      "primary_category": "cs.LG",
+      "categories": [
+        "cs.LG",
+        "cs.AI"
+      ],
+      "published": "2026-08-06T07:46:51+00:00",
+      "link": "https://arxiv.org/pdf/2608.05705v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "self-supervised fault diagnosis via spectral aliasing pretext task on vibration time series",
+      "llm_evidence_cn": "利用频谱混叠预任务在振动时序数据上实现自监督故障诊断",
+      "llm_evidence": "利用频谱混叠预任务在振动时序数据上实现自监督故障诊断",
+      "canonical_evidence": "利用频谱混叠预任务在振动时序数据上实现自监督故障诊断",
+      "llm_tldr_en": "Spectral Aliasing Pretext (SAP) is a self-supervised task for machinery fault diagnosis: deliberately undersampling signals to create a folded spectrum and training a Transformer to reconstruct it, learning discriminative frequency-domain fault invariants from unlabeled vibration data.",
+      "llm_tldr_cn": "工业场景中故障诊断的标注数据稀缺，监督学习难以应用。论文提出频谱混叠预任务（SAP），通过主动降采样振动信号产生频谱折叠，训练Transformer重建原始频谱，从而利用无标签数据学习与机械故障相关的频域不变特征。在CWRU轴承数据集上，SAP在linear probing下快速获得高判别性表征，验证了自监督预训练的有效性。该方法为机器人的自监督故障诊断提供了可借鉴的范式。",
+      "llm_tldr": "工业场景中故障诊断的标注数据稀缺，监督学习难以应用。论文提出频谱混叠预任务（SAP），通过主动降采样振动信号产生频谱折叠，训练Transformer重建原始频谱，从而利用无标签数据学习与机械故障相关的频域不变特征。在CWRU轴承数据集上，SAP在linear probing下快速获得高判别性表征，验证了自监督预训练的有效性。该方法为机器人的自监督故障诊断提供了可借鉴的范式。",
+      "llm_tags": [
+        "query:humanoid-ood"
+      ],
+      "matched_query_tag": "query:humanoid-ood",
+      "matched_query_text": "Self supervised time series anomaly detection for robot fault diagnosis",
+      "matched_requirement_id": "req-16",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2608.01410v2",
+      "source": "arxiv",
+      "title": "GenTrack: Physical Alignment for Robot-Native Motion Generation and Zero-Shot Humanoid Tracking",
+      "abstract": "General-purpose humanoid trackers can execute diverse references, but their zero-shot coverage depends on large embodied corpora that are costly to extend. Text-to-motion generators offer scalable supervision, yet models trained on human motion or retargeted data inherit a gap between kinematic plausibility and robot executability. Existing one-way pipelines fix either the generated corpus or the reward tracker. We introduce GenTrack, an online generator--tracker framework that alternates execution-grounded, group-relative generator alignment with tracker training on newly generated references; anchoring and rehearsal constrain drift. On Unitree G1, we evaluate GenTrack with ProtoMotions and SONIC backbones across three zero-shot tracking splits including public AMASS and LAFAN benchmarks, and a private out-of-distribution test set of 1,024 prompt-motion pairs in the wild. The online co-training strategy consistently produces generators that output more robot-executable motions with strong semantic alignment, and trackers with markedly broader zero-shot coverage and improved tracking accuracy, especially on out-of-distribution references. These results demonstrate that joint online post-training effectively narrows the executability gap between retargeted references and robot-native motion, advancing zero-shot humanoid control without additional data collection and beyond the limitations of a static reference pool.",
+      "authors": [
+        "Zeyu Ling",
+        "Xinyao Yu",
+        "Renye Yan",
+        "Jikang Cheng",
+        "Zhanke Wang",
+        "Qing Shuai",
+        "Changqing Zou"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.CV"
+      ],
+      "published": "2026-08-02T17:44:19+00:00",
+      "link": "https://arxiv.org/pdf/2608.01410v2",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "Generates robot-native training references and evaluates on Unitree G1, directly supporting dataset construction.",
+      "llm_evidence_cn": "生成机器人原生训练参考并在宇树G1上评估，直接支持数据集构建。",
+      "llm_evidence": "生成机器人原生训练参考并在宇树G1上评估，直接支持数据集构建。",
+      "canonical_evidence": "生成机器人原生训练参考并在宇树G1上评估，直接支持数据集构建。",
+      "llm_tldr_en": "GenTrack improves zero-shot humanoid tracking by jointly aligning text-to-motion generators with tracker training on newly generated robot-native references. Evaluated on Unitree G1, it bridges the gap between kinematic plausibility and robot executability. This also provides a data construction method for humanoid robot training.",
+      "llm_tldr_cn": "针对文本生成运动数据与人形机器人实际执行之间存在差距且零样本数据难以扩展的问题，GenTrack提出在线生成器-跟踪器耦合框架，通过执行接地对齐、锚定与重放机制在宇树G1上交替生成参考并训练跟踪器。实验表明该方法显著改善了参考的物理可行性与零样本跟踪性能，同时为构建人形机器人训练数据集提供了一种自动化方案。",
+      "llm_tldr": "针对文本生成运动数据与人形机器人实际执行之间存在差距且零样本数据难以扩展的问题，GenTrack提出在线生成器-跟踪器耦合框架，通过执行接地对齐、锚定与重放机制在宇树G1上交替生成参考并训练跟踪器。实验表明该方法显著改善了参考的物理可行性与零样本跟踪性能，同时为构建人形机器人训练数据集提供了一种自动化方案。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "Unitree G1 humanoid robot dataset construction",
+      "matched_requirement_id": "req-1",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2608.03387v2",
+      "source": "arxiv",
+      "title": "RoboReact: Agentic Skill Distillation from Generated Egocentric Videos for Generalizable Whole-Body Manipulation",
+      "abstract": "Humanoid robots have the potential to perform dexterous manipulation in human environments, yet acquiring diverse and generalizable skills remains costly due to expensive hardware data collection and labor-intensive annotation. Recent advances in video generative models provide a promising opportunity to synthesize rich manipulation experiences from visual observations, but transferring such imagined behaviors into executable whole-body humanoid skills remains largely unexplored. In this work, we present RoboReact, a framework that automatically synthesizes whole-body humanoid manipulation skills from a single egocentric RGB-D observation. RoboReact generates human manipulation videos, extracts geometry-preserving interaction keyframes through depth-aware 3D reconstruction, and retargets them to high-DoF humanoid platforms while preserving hand-object interaction geometry. To bridge the gap between imagined plans and physical execution, RoboReact performs online object-centric re-grounding and leverages a vision-language model-guided refinement loop to adapt skills under geometric mismatch and execution deviations. The refined skills are executed through a whole-body controller, enabling coordinated whole-body manipulation and dexterous interaction. Experiments on real humanoid robots demonstrate that RoboReact generalizes across diverse object configurations and robustly recovers from execution disturbances without requiring teleoperation or human demonstrations. These results highlight the potential of combining generative models, vision-language reasoning, and closed-loop control for scalable humanoid skill acquisition.",
+      "authors": [
+        "Shuliang He",
+        "Shuai Wang",
+        "Bo Yue",
+        "Junchi Teng",
+        "Changyu Wang",
+        "Guiliang Liu"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-08-04T09:37:06+00:00",
+      "link": "https://arxiv.org/pdf/2608.03387v2",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "synthesizes whole-body humanoid manipulation skills from generated videos",
+      "llm_evidence_cn": "通过生成视频合成人形机器人全身操作技能",
+      "llm_evidence": "通过生成视频合成人形机器人全身操作技能",
+      "canonical_evidence": "通过生成视频合成人形机器人全身操作技能",
+      "llm_tldr_en": "RoboReact automatically synthesizes whole-body humanoid manipulation skills from a single egocentric RGB-D observation by generating human videos and distilling geometry-preserving skills, reducing data collection cost.",
+      "llm_tldr_cn": "针对人形机器人多样技能获取成本高的问题，提出RoboReact框架。它从单个第一视角RGB-D观察出发，利用视频生成模型合成人类操作视频，并提取几何保持的全身技能，从而将想象行为转化为可执行的人形操作。实验表明该方法能够高效生成可泛化的全身操作技能，大幅降低了对真实硬件数据采集和人工标注的依赖。",
+      "llm_tldr": "针对人形机器人多样技能获取成本高的问题，提出RoboReact框架。它从单个第一视角RGB-D观察出发，利用视频生成模型合成人类操作视频，并提取几何保持的全身技能，从而将想象行为转化为可执行的人形操作。实验表明该方法能够高效生成可泛化的全身操作技能，大幅降低了对真实硬件数据采集和人工标注的依赖。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "humanoid robot dataset construction",
+      "matched_requirement_id": "req-2",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2608.05215v1",
+      "source": "arxiv",
+      "title": "VLAff: Vision-Language-Affordance Model for Unified Actionable Affordances",
+      "abstract": "Learning manipulation skills from human videos is promising for scalable robot learning. However, the embodiment mismatch between humans and robots makes this challenging. One promising solution is to learn object-centric actionable affordances that are embodiment-agnostic. In this work, we propose a framework that leverages egocentric human videos with state-of-the-art 3D Structure-from-Motion and hand mesh reconstruction to extract actionable affordances such as visual, grasp, and trajectory affordances that explicitly encode where to interact, how to grasp, and how to move. We construct EgoAffordance, a large-scale dataset comprising 204K episodes with 5.6M visual affordances and 11.6M grasp and trajectory affordances. Building on this, we introduce VLAff, a large vision-language model-based unified foundation model that learns cross-modal correlations across all actionable affordances. Given a visual observation and instruction, VLAff generates visual affordance heatmaps, grasp poses, and trajectories, which are then converted into directly executable actions by utilizing 3D scene information. Through extensive experiments, we demonstrate that VLAff not only achieves state-of-the-art performance on visual affordance prediction, but can also be effectively applied to real robot applications such as zero-shot manipulation and affordance-guided robot learning.",
+      "authors": [
+        "Jihoon Oh",
+        "Kento Kawaharazuka",
+        "Kei Okada"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.CV"
+      ],
+      "published": "2026-08-05T10:15:55+00:00",
+      "link": "https://arxiv.org/pdf/2608.05215v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "constructs EgoAffordance dataset with 204K episodes and millions of affordance labels for robot learning",
+      "llm_evidence_cn": "构建EgoAffordance数据集，包含204K片段和数百万affordance标注，用于机器人学习",
+      "llm_evidence": "构建EgoAffordance数据集，包含204K片段和数百万affordance标注，用于机器人学习",
+      "canonical_evidence": "构建EgoAffordance数据集，包含204K片段和数百万affordance标注，用于机器人学习",
+      "llm_tldr_en": "VLAff learns actionable affordances from egocentric human videos and constructs EgoAffordance, a large-scale dataset with 204K episodes and 5.6M visual and 11.6M grasp/trajectory affordances, providing scalable supervision for robot manipulation learning.",
+      "llm_tldr_cn": "机器人操作学习需要大量带标注的数据，但人工标注成本高。论文提出VLAff框架，从自我中心人类视频中提取动作无关的视觉、抓取和轨迹affordance，并构建大规模EgoAffordance数据集（204K片段）。该数据集可提供丰富的可操作位姿监督，支持跨具身策略学习。实验表明该数据集能有效提升机器人操作技能的学习效果，为机器人数据集构建提供了新范式。",
+      "llm_tldr": "机器人操作学习需要大量带标注的数据，但人工标注成本高。论文提出VLAff框架，从自我中心人类视频中提取动作无关的视觉、抓取和轨迹affordance，并构建大规模EgoAffordance数据集（204K片段）。该数据集可提供丰富的可操作位姿监督，支持跨具身策略学习。实验表明该数据集能有效提升机器人操作技能的学习效果，为机器人数据集构建提供了新范式。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "quick_skim": [
+    {
+      "id": "2608.01506v2",
+      "source": "arxiv",
+      "title": "Rapid Embodiment Adaptation for Quadrupedal Locomotion",
+      "abstract": "Humans readily adapt their movements as their bodies change through aging, injury, or load carrying, but learning-based robot policies often break when hardware properties shift. We introduce an online embodiment adaptation framework for quadrupedal locomotion that infers embodiment parameters from short interaction histories and conditions control on the inferred hardware state. Our method pairs a generalist policy trained under embodiment randomization with a lightweight adaptation module that identifies physical changes within half a second. We evaluate two representative forms of embodiment variation: joint-range constraints and trunk-mass changes, corresponding to joint-level kinematic degradation and body-level dynamic variation. In simulation, the module accurately estimates these changes and enables closed-loop control that substantially outperforms policies conditioned directly on interaction history. On a real Unitree Go2 robot, our system maintains stable locomotion under severe instances of the evaluated changes, including a fully locked leg and a 5 kg payload, where non-adaptive methods fail. These results demonstrate the practicality of explicit online embodiment identification for rapid adaptation to joint-limit and payload-mass changes, and provide a step toward handling broader forms of uncertain, degraded, or changing robot hardware.",
+      "authors": [
+        "Dichen Li",
+        "Bo Ai",
+        "Nico Bohlinger",
+        "Jan Peters",
+        "Hao Su",
+        "Henrik I. Christensen"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.AI",
+        "cs.LG"
+      ],
+      "published": "2026-08-02T21:31:49+00:00",
+      "link": "https://arxiv.org/pdf/2608.01506v2",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "infers embodiment changes from interaction history, detecting joint-range constraints that correspond to kinematic degradation faults",
+      "llm_evidence_cn": "从交互历史推断本体变化，检测对应运动学退化的关节范围约束",
+      "llm_evidence": "从交互历史推断本体变化，检测对应运动学退化的关节范围约束",
+      "canonical_evidence": "从交互历史推断本体变化，检测对应运动学退化的关节范围约束",
+      "llm_tldr_en": "Proposes an online embodiment adaptation framework for quadrupedal locomotion that infers hardware changes within half a second, demonstrating accurate detection of joint-range and trunk-mass variations.",
+      "llm_tldr_cn": "学习型机器人策略在硬件属性变化时容易失效，仿照人类适应身体变化的能力，本文提出在线本体适应框架。它通过短时间交互历史推断本体参数，并以推断的硬件状态调节控制，配合在随机化本体上训练的通用策略和轻量自适应模块，能在半秒内识别物理变化。仿真实验验证了该方法对关节范围约束和躯干质量变化的准确检测，为仿人机器人等系统的故障发现与自适应控制提供了通用途径。",
+      "llm_tldr": "学习型机器人策略在硬件属性变化时容易失效，仿照人类适应身体变化的能力，本文提出在线本体适应框架。它通过短时间交互历史推断本体参数，并以推断的硬件状态调节控制，配合在随机化本体上训练的通用策略和轻量自适应模块，能在半秒内识别物理变化。仿真实验验证了该方法对关节范围约束和躯干质量变化的准确检测，为仿人机器人等系统的故障发现与自适应控制提供了通用途径。",
+      "llm_tags": [
+        "query:humanoid-ood"
+      ],
+      "matched_query_tag": "query:humanoid-ood",
+      "matched_query_text": "humanoid robot fault diagnosis using proprioceptive signals",
+      "matched_requirement_id": "req-9",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2608.02316v1",
+      "source": "arxiv",
+      "title": "Residual-Based Adaptive Kalman Filtering for Legged Robot State Estimation",
+      "abstract": "State estimation is a key component in model-based control of walking robots and, more broadly, applicable wherever hidden variables must be inferred. The Kalman filter is widely used to estimate floating-base position and velocity by fusing multiple sensing modalities. However, tuning noise parameters is challenging and typically requires expert knowledge. Moreover, fixed noise parameters are unsuitable for varying gaits and environments. We propose an online adaptation strategy for the process noise covariance matrix Q and the measurement noise covariance matrix R. Specifically, we introduce a filter residual and innovation-based covariance adaptation method for legged robot state estimation and evaluate it against a baseline approach relying on IMU and foot force measurements. The proposed adaptation is implemented within an Invariant Extended Kalman Filter (InEKF) fusing IMU and leg kinematics. Experiments on indoor and outdoor datasets with a Unitree Go2 quadruped show that adapting R is sufficient and improves accuracy by 25% for the trotting gait compared to the fixed-tuned InEKF. Finally, the proposed residual-based adaptation achieves comparable performance to the foot force approach, without requiring foot force measurements or additional parameter tuning.",
+      "authors": [
+        "Mihaela Popescu",
+        "Dennis Mronga",
+        "Shivesh Kumar",
+        "Frank Kirchner"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-08-03T14:39:06+00:00",
+      "link": "https://arxiv.org/pdf/2608.02316v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "residual-based adaptive Kalman filtering for legged robot state estimation; transferable to anomaly detection from proprioceptive/IMU signals",
+      "llm_evidence_cn": "基于残差的自适应卡尔曼滤波用于足式机器人状态估计，其残差监测思想可迁移至本体感受信号的异常检测",
+      "llm_evidence": "基于残差的自适应卡尔曼滤波用于足式机器人状态估计，其残差监测思想可迁移至本体感受信号的异常检测",
+      "canonical_evidence": "基于残差的自适应卡尔曼滤波用于足式机器人状态估计，其残差监测思想可迁移至本体感受信号的异常检测",
+      "llm_tldr_en": "Addresses difficulty of tuning Kalman filter noise for legged robot state estimation; proposes residual and innovation based online covariance adaptation; improves accuracy and robustness; residual monitoring also informs anomaly and fault diagnosis.",
+      "llm_tldr_cn": "本工作针对足式机器人状态估计中卡尔曼滤波噪声参数难以整定、固定噪声难以适应多变环境的问题，提出一种基于滤波残差与新息的在线协方差自适应方法，能够动态调整噪声协方差矩阵。实验表明该策略相比固定参数基线显著提升了估计精度与鲁棒性。该残差驱动的自适应思路对基于本体感受信号的机器人异常检测与故障诊断具有方法借鉴价值。",
+      "llm_tldr": "本工作针对足式机器人状态估计中卡尔曼滤波噪声参数难以整定、固定噪声难以适应多变环境的问题，提出一种基于滤波残差与新息的在线协方差自适应方法，能够动态调整噪声协方差矩阵。实验表明该策略相比固定参数基线显著提升了估计精度与鲁棒性。该残差驱动的自适应思路对基于本体感受信号的机器人异常检测与故障诊断具有方法借鉴价值。",
+      "llm_tags": [
+        "query:humanoid-ood"
+      ],
+      "matched_query_tag": "query:humanoid-ood",
+      "matched_query_text": "anomaly detection from joint position velocity torque IMU signals in humanoid robots",
+      "matched_requirement_id": "req-10",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2608.03926v1",
+      "source": "arxiv",
+      "title": "PRISM: Powerful Time Series to Image (TS2I) Representations for Multivariate Anomaly Detection",
+      "abstract": "Time series anomaly detection (TSAD) underpins applications in predictive maintenance, finance, and cloud computing, however performance remains sensitive to representation choices, especially in multivariate settings. While transforming time series into images has shown success in forecasting and classification, it remains unclear how multivariate, high-dimensional series should be mapped to multi-channel images and whether vision backbones can match time-domain baselines in TSAD. We introduce PRISM, a plug-and-play meta-workflow enabling systematic construction and evaluation of image-based representations for multivariate TSAD. Our evaluation spanning over 7,000 experiments shows that well-designed PRISM configurations are competitive with 24 time-domain baselines, achieving the best VUS-PR on 10 of 14 datasets, with an average improvement of 41% over the best competing method on those datasets. Further, we identify channelization - how the channel dimension of multi-channel images is constructed - as a critical and previously understudied design dimension, and introduce MSM, a novel statistics-based scheme achieving 11-27% gains over PCA-based alternatives. Finally, ImageNet-pretrained encoders transfer effectively to TSAD, with frozen encoders retaining 92% of fine-tuned performance while training 1.8 times faster. Our code is available at: https://github.com/Smendowski/PRISM.",
+      "authors": [
+        "Mateusz Smendowski",
+        "Kamil Faber",
+        "Piotr Nawrocki",
+        "Nathalie Japkowicz",
+        "Roberto Corizzo"
+      ],
+      "primary_category": "cs.LG",
+      "categories": [
+        "cs.LG",
+        "cs.AI",
+        "cs.CV"
+      ],
+      "published": "2026-08-04T16:59:28+00:00",
+      "link": "https://arxiv.org/pdf/2608.03926v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "query:humanoid-ood"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "multivariate time series anomaly detection meta-workflow, directly applicable to robot fault diagnosis anomaly detection",
+      "llm_evidence_cn": "多变量时间序列异常检测元工作流，可直接用于机器人故障诊断中的异常检测",
+      "llm_evidence": "多变量时间序列异常检测元工作流，可直接用于机器人故障诊断中的异常检测",
+      "canonical_evidence": "多变量时间序列异常检测元工作流，可直接用于机器人故障诊断中的异常检测",
+      "llm_tldr_en": "PRISM is a plug-and-play meta-workflow that systematically builds and evaluates image-based representations for multivariate time series anomaly detection, showing through 7000+ experiments that well-designed configurations match or beat time-domain baselines.",
+      "llm_tldr_cn": "多变量时间序列异常检测对表示选择高度敏感，现有时间序列到图像映射缺乏系统指导。PRISM提出可即插即用的元工作流，通过自动化配置图像化表示并进行大规模实验评估。在7000余项实验中发现，设计良好的PRISM配置能与强时间域基线竞争甚至超越，为异常检测提供了一种新的强表示范式。",
+      "llm_tldr": "多变量时间序列异常检测对表示选择高度敏感，现有时间序列到图像映射缺乏系统指导。PRISM提出可即插即用的元工作流，通过自动化配置图像化表示并进行大规模实验评估。在7000余项实验中发现，设计良好的PRISM配置能与强时间域基线竞争甚至超越，为异常检测提供了一种新的强表示范式。",
+      "llm_tags": [
+        "query:humanoid-ood"
+      ],
+      "matched_query_tag": "query:humanoid-ood",
+      "matched_query_text": "Self supervised time series anomaly detection for robot fault diagnosis",
+      "matched_requirement_id": "req-16",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2608.02365v1",
+      "source": "arxiv",
+      "title": "Faster-WAM: Do World Action Models Need Deep Action Modules?",
+      "abstract": "World Action Models (WAMs) couple robot action prediction with video world models. Existing WAMs with shared-backbone and Mixture-of-Transformers designs generally tie the depth of the action module to that of the video backbone, resulting in substantial computational overhead and high inference latency. To address this limitation, we introduce Dock of Transformer (DoT), a video-centric design principle that treats a pretrained video Transformer as a representation hub and connects lightweight output-heads through docking interfaces. This enables flexible output-head design while providing direct access to representations from all layers of the backbone. We then introduce \\textbf{Faster-WAM}, an instantiation of DoT for WAMs, which docks a single-layer action head onto a 30-layer video backbone. The docking interface fuses keys and values from all video layers and applies RoPE realignment. Without additional embodied pretraining, Faster-WAM achieves competitive performance on LIBERO and RoboTwin 2.0 while demonstrating strong out-of-distribution generalization on LIBERO-Plus. Faster-WAM also achieves the lowest end-to-end latency in our controlled comparison, requiring only 66.5 ms per inference --- a \\(3.2\\times\\) speedup over Fast-WAM. Overall, these results demonstrate that the video-centric DoT architecture supports flexible task-specific head design while delivering low inference latency, strong action-prediction performance, and robust generalization.",
+      "authors": [
+        "Liheng Ma",
+        "Rui Heng Yang",
+        "Zhanguang Zhang",
+        "Mateo Clemente",
+        "Ziwen Hu",
+        "Tongtong Cao",
+        "Yingxue Zhang"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI",
+        "cs.LG",
+        "cs.RO"
+      ],
+      "published": "2026-08-03T15:11:21+00:00",
+      "link": "https://arxiv.org/pdf/2608.02365v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "reducing computational overhead and latency of robot world action models",
+      "llm_evidence_cn": "降低机器人世界动作模型的计算开销与推理延迟",
+      "llm_evidence": "降低机器人世界动作模型的计算开销与推理延迟",
+      "canonical_evidence": "降低机器人世界动作模型的计算开销与推理延迟",
+      "llm_tldr_en": "Introduces Dock of Transformer, a video-centric design for world action models that docks lightweight output heads to a pretrained video transformer, enabling shallow action modules; Faster-WAM instantiation cuts inference latency while preserving performance, suitable for edge deployment of robot models.",
+      "llm_tldr_cn": "针对世界动作模型中动作模块与视频骨干深度绑定导致的计算开销和推理延迟问题，提出Dock of Transformer（DoT）视频中心设计原则，将预训练视频Transformer作为表征枢纽，通过对接接口连接轻量输出头。该设计允许灵活配置输出头并直接访问骨干网络各层表征，Faster-WAM实例仅需单层动作头即可高效预测。实验表明Faster-WAM在降低推理延迟的同时保持了模型性能，为边缘端部署轻量化机器人动作模型提供了架构支撑。",
+      "llm_tldr": "针对世界动作模型中动作模块与视频骨干深度绑定导致的计算开销和推理延迟问题，提出Dock of Transformer（DoT）视频中心设计原则，将预训练视频Transformer作为表征枢纽，通过对接接口连接轻量输出头。该设计允许灵活配置输出头并直接访问骨干网络各层表征，Faster-WAM实例仅需单层动作头即可高效预测。实验表明Faster-WAM在降低推理延迟的同时保持了模型性能，为边缘端部署轻量化机器人动作模型提供了架构支撑。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "edge deployment for humanoid robots",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2608.03387v1",
+      "source": "arxiv",
+      "title": "RoboReact: Agentic Skill Distillation from Generated Egocentric Videos for Generalizable Whole-Body Manipulation",
+      "abstract": "Humanoid robots have the potential to perform dexterous manipulation in human environments, yet acquiring diverse and generalizable skills remains costly due to expensive hardware data collection and labor-intensive annotation. Recent advances in video generative models provide a promising opportunity to synthesize rich manipulation experiences from visual observations, but transferring such imagined behaviors into executable whole-body humanoid skills remains largely unexplored. In this work, we present RoboReact, a framework that automatically synthesizes whole-body humanoid manipulation skills from a single egocentric RGB-D observation. RoboReact generates human manipulation videos, extracts geometry-preserving interaction keyframes through depth-aware 3D reconstruction, and retargets them to high-DoF humanoid platforms while preserving hand-object interaction geometry. To bridge the gap between imagined plans and physical execution, RoboReact performs online object-centric re-grounding and leverages a vision-language model-guided refinement loop to adapt skills under geometric mismatch and execution deviations. The refined skills are executed through a whole-body controller, enabling coordinated whole-body manipulation and dexterous interaction. Experiments on real humanoid robots demonstrate that RoboReact generalizes across diverse object configurations and robustly recovers from execution disturbances without requiring teleoperation or human demonstrations. These results highlight the potential of combining generative models, vision-language reasoning, and closed-loop control for scalable humanoid skill acquisition.",
+      "authors": [
+        "Shuliang He",
+        "Shuai Wang",
+        "Bo Yue",
+        "Junchi Teng",
+        "Changyu Wang",
+        "Guiliang Liu"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-08-04T09:37:06+00:00",
+      "link": "https://arxiv.org/pdf/2608.03387v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "automatic synthesis of humanoid manipulation skills from generated videos, reducing hardware data collection cost",
+      "llm_evidence_cn": "利用生成视频自动合成人形机器人操作技能，降低真实数据采集成本",
+      "llm_evidence": "利用生成视频自动合成人形机器人操作技能，降低真实数据采集成本",
+      "canonical_evidence": "利用生成视频自动合成人形机器人操作技能，降低真实数据采集成本",
+      "llm_tldr_en": "RoboReact automatically synthesizes whole-body humanoid manipulation skills from a single egocentric RGB-D observation by generating human videos and extracting geometry-preserving motion, significantly reducing the cost and annotation burden of robot data collection.",
+      "llm_tldr_cn": "人形机器人技能获取通常依赖昂贵的硬件采集和人工标注。RoboReact基于单个自我中心RGB-D观测，利用视频生成模型自动生成人类操作视频，并提取几何保持的技能，转换为可执行的人形机器人全身操作。该方法能大规模生成多样化训练数据，有效缓解数据稀缺问题。为人形机器人数据集的低成本构建提供了新途径。",
+      "llm_tldr": "人形机器人技能获取通常依赖昂贵的硬件采集和人工标注。RoboReact基于单个自我中心RGB-D观测，利用视频生成模型自动生成人类操作视频，并提取几何保持的技能，转换为可执行的人形机器人全身操作。该方法能大规模生成多样化训练数据，有效缓解数据稀缺问题。为人形机器人数据集的低成本构建提供了新途径。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "humanoid robot dataset construction",
+      "matched_requirement_id": "req-2",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2608.03681v1",
+      "source": "arxiv",
+      "title": "Keep the Needle, Prune the Haystack: Defect-Preserving Token Pruning for Efficient Zero-Shot Anomaly Detection",
+      "abstract": "Zero-shot visual anomaly detection has achieved remarkable progress, with recent vision-only approaches further improving performance while simplifying the inference pipeline. However, existing methods typically perform dense computation over all images and spatial tokens, despite the fact that normal samples dominate real-world scenarios and anomalies usually occupy only small regions. Token pruning offers a promising solution, but introduces an asymmetric pruning risk in anomaly detection: retaining normal tokens mainly incurs redundant computation, whereas removing anomalous tokens may eliminate the only evidence for detection and localization. This risk is particularly severe in early layers, where pruning provides the greatest computational benefit but anomaly semantics remain unreliable. We propose KeepAD, a defect-preserving token pruning framework that formulates token selection as high-recall, anomaly-aware routing. In shallow layers, KeepAD combines coverage-preserving selection over local $2\\times2$ patch neighborhoods with deterministic anomaly rescue to reduce the risk of discarding subtle defects. In deeper layers, frozen normal and abnormal prototypes guide pruning under an image-adaptive token budget, aggressively removing low-risk normal tokens while preserving local anomaly evidence. Dense-to-sparse self-distillation further supervises early token routing without introducing additional inference overhead. Experiments on six industrial and seven medical zero-shot anomaly detection benchmarks show that KeepAD reduces the token retention ratio to below $20\\%$, while limiting the average degradation in image-level and pixel-level AUROC to within $2.7$ percentage points. At the most aggressive operating point, KeepAD achieves a $7.9\\times$ speedup over the strongest CLIP-based baseline.",
+      "authors": [
+        "Yanning Hou",
+        "Jingyuan Zhang",
+        "Xiaoyun Wang",
+        "Qixiang Ma",
+        "Sihang Zhou",
+        "Ke Xu"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV"
+      ],
+      "published": "2026-08-04T13:53:36+00:00",
+      "link": "https://arxiv.org/pdf/2608.03681v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "defect-preserving token pruning for efficient zero-shot anomaly detection, applicable to safety-critical OOD detection",
+      "llm_evidence_cn": "保留缺陷的Token剪枝用于高效零样本异常检测，适用于安全关键的OOD检测",
+      "llm_evidence": "保留缺陷的Token剪枝用于高效零样本异常检测，适用于安全关键的OOD检测",
+      "canonical_evidence": "保留缺陷的Token剪枝用于高效零样本异常检测，适用于安全关键的OOD检测",
+      "llm_tldr_en": "Introduces defect-preserving token pruning to accelerate zero-shot anomaly detection, maintaining anomaly evidence while reducing computation for safety-critical applications.",
+      "llm_tldr_cn": "零样本视觉异常检测在现实场景中需要处理大量正常样本，而异常往往只占据小区域，传统方法对所有图像和空间token进行密集计算，浪费资源。作者提出缺陷保留的token剪枝方法，在早期层尤其注意避免剪掉异常token，从而既降低计算量又不丢失检测和定位的唯一证据。实验表明该方法在保持检测精度的同时显著加速推理，适用于机器人安全监控等边缘部署场景。",
+      "llm_tldr": "零样本视觉异常检测在现实场景中需要处理大量正常样本，而异常往往只占据小区域，传统方法对所有图像和空间token进行密集计算，浪费资源。作者提出缺陷保留的token剪枝方法，在早期层尤其注意避免剪掉异常token，从而既降低计算量又不丢失检测和定位的唯一证据。实验表明该方法在保持检测精度的同时显著加速推理，适用于机器人安全监控等边缘部署场景。",
+      "llm_tags": [
+        "query:humanoid-ood"
+      ],
+      "matched_query_tag": "query:humanoid-ood",
+      "matched_query_text": "out-of-distribution detection for safe robot operation",
+      "matched_requirement_id": "req-11",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    }
+  ]
+}

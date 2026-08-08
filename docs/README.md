@@ -6,60 +6,55 @@
 </div>
 
 ## 每次日报
-- 最新运行日期：2026-08-04
-- 运行时间：2026-08-04 21:39:45 UTC
+- 最新运行日期：2026-08-08
+- 运行时间：2026-08-08 21:02:32 UTC
 - 运行状态：成功
-- 本次总论文数：12
-- 精读区：6
+- 本次总论文数：11
+- 精读区：5
 - 速读区：6
 
 ### 今日简报（AI）
-今日聚焦机器人学习与多模态模型，精读两篇高分论文并速读三篇相关应用。
-
-最值得关注Ego2Robot利用人类第一视角数据高效合成机器人训练数据，以及云边协同VLA模型通过表征分工降低延迟。
-
-建议优先阅读精读论文，理解其数据扩展思路；对实时系统与异常检测感兴趣的读者可再浏览速读列表。
-- 详情：[/202608/04/README](/202608/04/README)
+1) 今日精读聚焦灵巧操作与运动生成，高分论文揭示跨具身迁移新方法。  
+2) 最值得关注：SiMDex以9.0分领跑，挖掘相似第一视角视频实现跨具身灵巧操作；GenTrack则用物理对齐实现机器人运动生成与零样本人体追踪。  
+3) 建议普通读者优先跟踪这两项研究，后续可关注其在四足机器人适应及状态估计中的扩展应用。
+- 详情：[/202608/08/README](/202608/08/README)
 
 ### 精读区论文标签
-1. [Ego2Robot: Scalable Robot Data Synthesis from Egocentric Human Data](/202608/04/2608.02580v1-ego2robot-scalable-robot-data-synthesis-from-egocentric-human-data)  
+1. [SiMDex: Mining Similar Egocentric Videos for Cross-Embodiment Dexterous Manipulation](/202608/08/2608.04196v1-simdex-mining-similar-egocentric-videos-for-cross-embodiment-dexterous-manipulation)  
    标签：评分：9.0/10、query:ur
-   evidence：从第一视角人类数据可扩展合成机器人数据
-2. [Latency-Tolerant Cloud-Edge Collaborative Vision-Language-Action Models via Emergent Representational Specialization](/202608/04/2608.00569v1-latency-tolerant-cloud-edge-collaborative-vision-language-action-models-via-emergent-representational-specialization)  
+   evidence：从第一视角视频挖掘任务相关子集用于机器人操作，直接关联数据集构建。
+2. [GenTrack: Physical Alignment for Robot-Native Motion Generation and Zero-Shot Humanoid Tracking](/202608/08/2608.01410v2-gentrack-physical-alignment-for-robot-native-motion-generation-and-zero-shot-humanoid-tracking)  
    标签：评分：8.0/10、query:ur
-   evidence：通过云边协同实现机器人边缘部署
-3. [Diffusion-Based Body Schema Learning Enabling Abnormal-State Adaptation in Musculoskeletal Robots](/202608/04/2608.01029v1-diffusion-based-body-schema-learning-enabling-abnormal-state-adaptation-in-musculoskeletal-robots)  
+   evidence：生成机器人原生训练参考并在宇树G1上评估，直接支持数据集构建。
+3. [RoboReact: Agentic Skill Distillation from Generated Egocentric Videos for Generalizable Whole-Body Manipulation](/202608/08/2608.03387v2-roboreact-agentic-skill-distillation-from-generated-egocentric-videos-for-generalizable-whole-body-manipulation)  
+   标签：评分：8.0/10、query:ur
+   evidence：通过生成视频合成人形机器人全身操作技能
+4. [VLAff: Vision-Language-Affordance Model for Unified Actionable Affordances](/202608/08/2608.05215v1-vlaff-vision-language-affordance-model-for-unified-actionable-affordances)  
+   标签：评分：8.0/10、query:ur
+   evidence：构建EgoAffordance数据集，包含204K片段和数百万affordance标注，用于机器人学习
+5. [Spectral Aliasing Pretext: A novel task for Self-Supervised fault diagnosis in rotating machinery](/202608/08/2608.05705v1-spectral-aliasing-pretext-a-novel-task-for-self-supervised-fault-diagnosis-in-rotating-machinery)  
    标签：评分：8.0/10、query:humanoid-ood
-   evidence：利用本体感觉与执行器信号应对执行器卡滞等异常状态
-4. [Rapid Embodiment Adaptation for Quadrupedal Locomotion](/202608/04/2608.01506v1-rapid-embodiment-adaptation-for-quadrupedal-locomotion)  
-   标签：评分：8.0/10、query:humanoid-ood
-   evidence：从交互历史推断具身参数并识别物理变化（关节约束、质量），基于本体感受信号
-5. [Perception-and-action system for humanoid robot task execution in construction](/202608/04/2608.01600v1-perception-and-action-system-for-humanoid-robot-task-execution-in-construction)  
-   标签：评分：8.0/10、query:ur
-   evidence：面向类人机器人的感知-行动系统利用人工演示学习建筑任务，实际上构建了类人机器人演示数据集。
-6. [Teleopit: A Full-Embodiment Humanoid Teleoperation System](/202608/04/2608.01834v1-teleopit-a-full-embodiment-humanoid-teleoperation-system)  
-   标签：评分：8.0/10、query:ur
-   evidence：面向人形机器人示范数据采集的遥操作系统
+   evidence：利用频谱混叠预任务在振动时序数据上实现自监督故障诊断
 
 ### 速读区论文标签
-1. [Belief-Space Perception Routing under Coupled Sensor Faults and Compute Contention](/202608/04/2608.00322v1-belief-space-perception-routing-under-coupled-sensor-faults-and-compute-contention)  
-   标签：评分：7.0/10、query:ur
-   evidence：耦合传感器故障状态与计算争用进行感知路由，同时应对机器人的故障检测与计算约束。
-2. [CARE: A Cascaded Framework for Efficient and Reliable Time Series Anomaly Detection](/202608/04/2608.01885v1-care-a-cascaded-framework-for-efficient-and-reliable-time-series-anomaly-detection)  
+1. [Rapid Embodiment Adaptation for Quadrupedal Locomotion](/202608/08/2608.01506v2-rapid-embodiment-adaptation-for-quadrupedal-locomotion)  
    标签：评分：7.0/10、query:humanoid-ood
-   evidence：面向时间序列异常检测的级联框架，含轻量预过滤自编码器，可直接迁移至机器人故障诊断。
-3. [Learning Panorama-Aware VLA for Mobile Manipulation with Whole-Body Teleoperation](/202608/04/2608.02257v1-learning-panorama-aware-vla-for-mobile-manipulation-with-whole-body-teleoperation)  
-   标签：评分：7.0/10、query:ur
-   evidence：关注全身示范数据的高效采集，支撑机器人数据集构建
-4. [GenTrack: Physical Alignment for Robot-Native Motion Generation and Zero-Shot Humanoid Tracking](/202608/04/2608.01410v1-gentrack-physical-alignment-for-robot-native-motion-generation-and-zero-shot-humanoid-tracking)  
-   标签：评分：6.0/10、query:ur
-   evidence：宇树G1人形机器人，生成新的运动参考用于跟踪器训练，与数据集构建相关
-5. [ReFP-AD: Rectified Flow Preconditioning for Energy-Based Anomaly Detection](/202608/04/2608.01793v1-refp-ad-rectified-flow-preconditioning-for-energy-based-anomaly-detection)  
+   evidence：从交互历史推断本体变化，检测对应运动学退化的关节范围约束
+2. [PRISM: Powerful Time Series to Image (TS2I) Representations for Multivariate Anomaly Detection](/202608/08/2608.03926v1-prism-powerful-time-series-to-image-ts2i-representations-for-multivariate-anomaly-detection)  
+   标签：评分：7.0/10、query:humanoid-ood
+   evidence：多变量时间序列异常检测元工作流，可直接用于机器人故障诊断中的异常检测
+3. [Residual-Based Adaptive Kalman Filtering for Legged Robot State Estimation](/202608/08/2608.02316v1-residual-based-adaptive-kalman-filtering-for-legged-robot-state-estimation)  
    标签：评分：6.0/10、query:humanoid-ood
-   evidence：基于能量的通用异常检测方法，可服务于机器人安全运行
-6. [World Action Models in Real Time: An Empirical Study of Smooth Execution via Asynchronous Deployment](/202608/04/2608.01880v1-world-action-models-in-real-time-an-empirical-study-of-smooth-execution-via-asynchronous-deployment)  
+   evidence：基于残差的自适应卡尔曼滤波用于足式机器人状态估计，其残差监测思想可迁移至本体感受信号的异常检测
+4. [Faster-WAM: Do World Action Models Need Deep Action Modules?](/202608/08/2608.02365v1-faster-wam-do-world-action-models-need-deep-action-modules)  
    标签：评分：6.0/10、query:ur
-   evidence：异步部署策略将模型推理与动作执行重叠，实现机器人实时平滑控制。
+   evidence：降低机器人世界动作模型的计算开销与推理延迟
+5. [RoboReact: Agentic Skill Distillation from Generated Egocentric Videos for Generalizable Whole-Body Manipulation](/202608/08/2608.03387v1-roboreact-agentic-skill-distillation-from-generated-egocentric-videos-for-generalizable-whole-body-manipulation)  
+   标签：评分：6.0/10、query:ur
+   evidence：利用生成视频自动合成人形机器人操作技能，降低真实数据采集成本
+6. [Keep the Needle, Prune the Haystack: Defect-Preserving Token Pruning for Efficient Zero-Shot Anomaly Detection](/202608/08/2608.03681v1-keep-the-needle-prune-the-haystack-defect-preserving-token-pruning-for-efficient-zero-shot-anomaly-detection)  
+   标签：评分：6.0/10、query:humanoid-ood
+   evidence：保留缺陷的Token剪枝用于高效零样本异常检测，适用于安全关键的OOD检测
 
 
 <div class="dpr-home-promo-card">
