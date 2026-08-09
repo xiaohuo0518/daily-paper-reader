@@ -1,0 +1,215 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-08-09T20:56:51.866682+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 2,
+    "deep_divecandidates": 1,
+    "deep_cap": 7,
+    "deep_selected": 1,
+    "quick_candidates": 4,
+    "quick_skim_target": 12,
+    "quick_selected": 4
+  },
+  "deep_dive": [
+    {
+      "id": "2608.05674v1",
+      "source": "arxiv",
+      "title": "JoyAI-RA 0.5: Scaling Robot Manipulation Learning via Dual Action Alignment",
+      "abstract": "Robot data is scarce, so generalist policies need to learn from heterogeneous sources, including human egocentric video, simulation, and real robots, which differ in supervision and embodiment, with action labels missing or mutually incompatible. Human egocentric data scale best but sit farthest from robot data, and naive pooling causes negative transfer rather than knowledge sharing. We propose JoyAI-RA 0.5, a generalist Vision-Language-World-Action (VLWA) framework that couples physical world-dynamics priors with visual semantics and scales manipulation learning across such data via dual action alignment. Implicit action alignment infers latent actions from visual transitions, enabling action-free human, simulation, and robot data to guide a latent-action-conditioned world model in learning physical dynamics. Explicit alignment grounds reliable human and robot trajectories in a unified physical action space through a canonical action representation and camera-frame chunk-relative end-effector actions. An inner-outer-loop reinforcement stage then pairs efficient task adaptation with foundation-policy improvement. On a real-world AgiBot benchmark, JoyAI-RA performs strongly on both seen tasks and unseen variations. The task score improves consistently as the volume of human egocentric pretraining data increases and shows no sign of plateauing at our largest scale. This suggests that abundant but weakly labeled human experience can be converted into a transferable training signal, making human video not merely a weak auxiliary source but a primary axis along which manipulation capability can be scaled. Project page can be found at https://joyai-ra-05.github.io/.",
+      "authors": [
+        "JoyAI-RA Team"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-08-06T07:14:55+00:00",
+      "link": "https://arxiv.org/pdf/2608.05674v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "Scaling robot manipulation learning from heterogeneous data via dual action alignment",
+      "llm_evidence_cn": "通过双动作对齐利用异构数据扩展机器人操作学习",
+      "llm_evidence": "通过双动作对齐利用异构数据扩展机器人操作学习",
+      "canonical_evidence": "通过双动作对齐利用异构数据扩展机器人操作学习",
+      "llm_tldr_en": "JoyAI-RA 0.5 is a generalist Vision-Language-World-Action framework that aligns heterogeneous robot data via dual action alignment, enabling learning from human, simulation, and robot data.",
+      "llm_tldr_cn": "针对机器人数据稀缺且异构、难以统一利用的问题，提出通用视觉-语言-世界-动作框架JoyAI-RA 0.5。它通过隐式动作对齐从视觉转换中推断潜在动作，使无动作标签的人类、仿真与机器人数据共同引导策略学习，避免负迁移。该方法为机器人数据集扩展与多源学习提供了有效路径。",
+      "llm_tldr": "针对机器人数据稀缺且异构、难以统一利用的问题，提出通用视觉-语言-世界-动作框架JoyAI-RA 0.5。它通过隐式动作对齐从视觉转换中推断潜在动作，使无动作标签的人类、仿真与机器人数据共同引导策略学习，避免负迁移。该方法为机器人数据集扩展与多源学习提供了有效路径。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "quick_skim": [
+    {
+      "id": "2608.05684v1",
+      "source": "arxiv",
+      "title": "Nonvisual Classification of Ground-Condition by Artificial Proprioception in an Amoeba-Inspired Autonomous Walking Robot",
+      "abstract": "Nonvisual classification of ground condition based on a multimodal sensing approach was investigated for an amoeba-inspired autonomous walking robot. To classify ground condition without image sensing and processing, we implemented artificial proprioception by integrating a three-axis accelerometer, eight foot pressure sensors, and reservoir computing (RC). Even when large fluctuations in the sensor outputs are caused by dynamic motions of a four-legged robot in walking, our system can classify the ground condition, flat or rough, with high accuracy. We demonstrate on-site switching of walking gait depending on ground condition in the robot. We also discuss the contribution of each sensor to ground condition classification.",
+      "authors": [
+        "Hyoto Yamaguchi",
+        "Zenji Yatabe",
+        "Seiya Kasai"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.AI",
+        "cs.LG",
+        "eess.SY"
+      ],
+      "published": "2026-08-06T07:19:02+00:00",
+      "link": "https://arxiv.org/pdf/2608.05684v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "artificial proprioception with accelerometer and pressure sensors for classification",
+      "llm_evidence_cn": "使用加速度计与足底压力传感器的人工本体感觉分类方法",
+      "llm_evidence": "使用加速度计与足底压力传感器的人工本体感觉分类方法",
+      "canonical_evidence": "使用加速度计与足底压力传感器的人工本体感觉分类方法",
+      "llm_tldr_en": "This paper implements artificial proprioception using accelerometer, foot pressure sensors, and reservoir computing for nonvisual ground-condition classification in a walking robot. Despite large sensor fluctuations during motion, it accurately distinguishes flat and rough ground and enables on-site gait switching.",
+      "llm_tldr_cn": "针对无视觉环境下腿足机器人地面状态识别问题，本文提出基于人工本体感觉的多模态感知方案，融合三轴加速度计、八路足底压力传感器与储备池计算。实验表明，即使在行走动态造成的传感器大幅波动下，该系统仍能高精度区分平坦与粗糙地面，并据此在线切换步态。该工作展示了本体感觉信号在机器人状态感知中的价值，其方法可迁移至故障诊断等需要本体感受输入的任务。",
+      "llm_tldr": "针对无视觉环境下腿足机器人地面状态识别问题，本文提出基于人工本体感觉的多模态感知方案，融合三轴加速度计、八路足底压力传感器与储备池计算。实验表明，即使在行走动态造成的传感器大幅波动下，该系统仍能高精度区分平坦与粗糙地面，并据此在线切换步态。该工作展示了本体感觉信号在机器人状态感知中的价值，其方法可迁移至故障诊断等需要本体感受输入的任务。",
+      "llm_tags": [
+        "query:humanoid-ood"
+      ],
+      "matched_query_tag": "query:humanoid-ood",
+      "matched_query_text": "humanoid robot fault diagnosis using proprioceptive signals",
+      "matched_requirement_id": "req-9",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2608.03159v1",
+      "source": "arxiv",
+      "title": "Accelerating Human-Aware Robot Trajectory Generation via Diffusion and Consistency Distillation",
+      "abstract": "This research proposes a constrained motion planning framework for robot manipulators in human-robot interaction (HRI). For a non-redundant manipulator with a fully specified end-effector pose, additional requirements such as collision avoidance and self-collision avoidance are difficult to handle as simple null-space secondary tasks. This limitation makes it challenging to generate feasible joint-space trajectories in HRI environments where safety and kinematic constraints must be considered simultaneously. To address this limitation, collision- and self-collision-aware trajectories are generated using Rapidly-exploring Random Tree (RRT) and RRT* algorithms, and the resulting dataset is used to train a diffusion model that generates constraint-satisfying trajectories through guided sampling. To reduce the inference time required for iterative diffusion sampling, consistency distillation is applied, and a joint-weighted jerk regularization term is incorporated into the loss function to promote smoother trajectories by penalizing abrupt changes in joint acceleration. Simulation results show that the consistency model generates 150 trajectory candidates in less than 100 ms, maintains a high episode success rate, and substantially reduces joint and end-effector jerk when jerk regularization is applied.",
+      "authors": [
+        "Byeong-Il Ham",
+        "Hyun-Bin Kim",
+        "Kyung-Soo Kim"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-08-04T05:47:25+00:00",
+      "link": "https://arxiv.org/pdf/2608.03159v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "constructs a trajectory dataset to train a diffusion model for robot motion planning",
+      "llm_evidence_cn": "构建轨迹数据集并训练扩散模型，用于机器人运动规划",
+      "llm_evidence": "构建轨迹数据集并训练扩散模型，用于机器人运动规划",
+      "canonical_evidence": "构建轨迹数据集并训练扩散模型，用于机器人运动规划",
+      "llm_tldr_en": "Proposes a constrained motion planning framework using RRT/RRT* to generate a collision-aware dataset and train a diffusion model, accelerated via consistency distillation for fast human-aware robot trajectories.",
+      "llm_tldr_cn": "针对人类环境中机器人轨迹生成需同时满足安全与运动学约束的问题，利用RRT/RRT*生成避碰与自避碰轨迹数据集，训练扩散模型生成可行关节空间轨迹，并引入一致性蒸馏加速推理。实验表明该框架能快速生成符合约束的轨迹，为人机交互安全规划提供了高效方案。",
+      "llm_tldr": "针对人类环境中机器人轨迹生成需同时满足安全与运动学约束的问题，利用RRT/RRT*生成避碰与自避碰轨迹数据集，训练扩散模型生成可行关节空间轨迹，并引入一致性蒸馏加速推理。实验表明该框架能快速生成符合约束的轨迹，为人机交互安全规划提供了高效方案。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2608.05975v1",
+      "source": "arxiv",
+      "title": "TRACE: Learned Proprioceptive Odometry for Legged Robots under Unreliable Contact Conditions",
+      "abstract": "In this paper, we present TRACE (Tokenized Robust Attention for Contact-Aware Estimation), an end-to-end learned proprioceptive odometry estimator for legged robots under unreliable contact conditions. The proposed estimator directly predicts relative displacement, relative rotation, and body-frame velocity from a recent history of onboard inertial and joint measurements. To improve robustness under unreliable contact conditions, we introduce a foot-aware cross-attention module that adaptively weights IMU and leg-wise kinematic tokens without relying on manually defined contact or slip thresholds. The estimator is trained with direct supervision and two physics-inspired auxiliary losses that promote kinematic consistency and reliable use of leg information. To reduce policy-specific overfitting and consequently improve sim-to-real transfer, simulation training incorporates policy randomization, followed by partial real-world fine-tuning of the temporal encoder and prediction head. Experiments across diverse indoor and outdoor terrains demonstrate consistent reductions in position drift compared with classical filtering-based, hybrid, and purely learning-based baselines. Ablation studies further validate the contributions of the proposed training objectives, policy randomization, and real-world fine-tuning, particularly under unreliable contacts and sim-to-real mismatch.",
+      "authors": [
+        "Taehyeon Kong",
+        "Woojin Kim",
+        "Jemin Hwangbo"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.AI"
+      ],
+      "published": "2026-08-06T12:53:33+00:00",
+      "link": "https://arxiv.org/pdf/2608.05975v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "Learned proprioceptive odometry from IMU and joint measurements for legged robots",
+      "llm_evidence_cn": "基于IMU与关节测量数据的腿足机器人本体感受里程计",
+      "llm_evidence": "基于IMU与关节测量数据的腿足机器人本体感受里程计",
+      "canonical_evidence": "基于IMU与关节测量数据的腿足机器人本体感受里程计",
+      "llm_tldr_en": "This paper presents TRACE, an end-to-end learned proprioceptive odometry estimator for legged robots, which uses foot-aware cross-attention to fuse IMU and joint measurements and shows robustness under unreliable contact conditions.",
+      "llm_tldr_cn": "针对腿足机器人在接触不可靠条件下状态估计易失效的问题，提出TRACE，它直接由IMU与关节测量序列预测相对位移、旋转与速度，并通过足部感知交叉注意力自适应融合多源信息。实验表明其在不可靠接触下仍保持可靠里程计结果，为基于本体感受信号的机器人鲁棒感知提供了范例。",
+      "llm_tldr": "针对腿足机器人在接触不可靠条件下状态估计易失效的问题，提出TRACE，它直接由IMU与关节测量序列预测相对位移、旋转与速度，并通过足部感知交叉注意力自适应融合多源信息。实验表明其在不可靠接触下仍保持可靠里程计结果，为基于本体感受信号的机器人鲁棒感知提供了范例。",
+      "llm_tags": [
+        "query:humanoid-ood"
+      ],
+      "matched_query_tag": "query:humanoid-ood",
+      "matched_query_text": "humanoid robot fault diagnosis using proprioceptive signals",
+      "matched_requirement_id": "req-9",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2608.04753v1",
+      "source": "arxiv",
+      "title": "Attention, Anomalies! Handling Attention Layers in Unsupervised Federated Outlier Detection",
+      "abstract": "Attention layers are the backbone of today's most powerful and impactful models. Models with multi-million and billion parameters rely on contextual knowledge provided by attention layers. However, their use goes well beyond just being the core component of large language models. One particularly interesting application is in Memory Augmented Autoencoders (MemAE), specifically for unsupervised representation learning in outlier detection tasks. It was shown that attention helps these models be more effective in centralized learning scenarios. Our work aims to address the lack of specialized aggregation techniques in Federated Learning (FL) when it comes to MemAE models. In this paper we analyze the intricacies of the architecture behind Memory Augmented Autoencoders, and propose novel, guided approaches to effectively aggregate these models in federated scenarios. We demonstrate our approach on non-IID datasets and show that these novel aggregation schemes are more robust when dealing with numerous edge nodes in environments with unbalanced datasets, specifically for unsupervised anomaly detection scenarios. This approach improves the performance of even very shallow autoencoders, allowing them to be used in resource constrained environments.",
+      "authors": [
+        "Mihailo Ilić",
+        "Miloš Savić",
+        "Vladimir Kurbalija",
+        "Mirjana Ivanović",
+        "Giancarlo Fortino",
+        "Dušan Jakovetić"
+      ],
+      "primary_category": "cs.LG",
+      "categories": [
+        "cs.LG"
+      ],
+      "published": "2026-08-05T12:23:13+00:00",
+      "link": "https://arxiv.org/pdf/2608.04753v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "query:humanoid-ood"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "Unsupervised outlier detection with memory-augmented autoencoders and attention, relevant to OOD/anomaly detection",
+      "llm_evidence_cn": "基于记忆增强自编码器和注意力的无监督异常检测，与OOD/异常检测相关",
+      "llm_evidence": "基于记忆增强自编码器和注意力的无监督异常检测，与OOD/异常检测相关",
+      "canonical_evidence": "基于记忆增强自编码器和注意力的无监督异常检测，与OOD/异常检测相关",
+      "llm_tldr_en": "Addresses attention layer handling in federated unsupervised outlier detection with memory-augmented autoencoders, improving collaborative anomaly detection without sharing raw data.",
+      "llm_tldr_cn": "针对联邦学习中记忆增强自编码器（MemAE）应用于无监督异常检测时缺乏注意力层专用聚合方法的问题，本文分析了注意力对MemAE异常检测的重要性，并提出相应的联邦聚合策略。该方法可在不共享原始数据的情况下协作学习统一的异常检测模型，为机器人等边缘场景下的分布式异常检测提供了思路。",
+      "llm_tldr": "针对联邦学习中记忆增强自编码器（MemAE）应用于无监督异常检测时缺乏注意力层专用聚合方法的问题，本文分析了注意力对MemAE异常检测的重要性，并提出相应的联邦聚合策略。该方法可在不共享原始数据的情况下协作学习统一的异常检测模型，为机器人等边缘场景下的分布式异常检测提供了思路。",
+      "llm_tags": [
+        "query:humanoid-ood"
+      ],
+      "matched_query_tag": "query:humanoid-ood",
+      "matched_query_text": "out-of-distribution detection for safe robot operation",
+      "matched_requirement_id": "req-11",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    }
+  ]
+}
