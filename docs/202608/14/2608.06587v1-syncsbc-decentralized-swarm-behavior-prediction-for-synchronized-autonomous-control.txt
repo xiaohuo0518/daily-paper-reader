@@ -1,0 +1,315 @@
+Title: SyncSBC: Decentralized Swarm Behavior Prediction for Synchronized Autonomous Control
+
+URL Source: https://arxiv.org/pdf/2608.06587v1
+
+Published Time: Mon, 10 Aug 2026 00:17:24 GMT
+
+Number of Pages: 8
+
+Markdown Content:
+# SyncSBC: Decentralized Swarm Behavior Prediction for Synchronized Autonomous Control 
+
+Varun Raveendra 1, Connor Mattson 1, Daniel S. Brown 1Labeled Observation Dataset 
+
+> Independent Behavior Prediction Applications: Swarm Behavior Recognition, Behavior Switching, Anomaly Detection, Self-Healing
+> Emergent Swarm Behavior
+
+Swarm Behavior Classification 
+
+> Swarm Behavior Classifier (SBC)
+
+Robot Swarm Behavior 
+
+> Observation Time Series
+
+Consensus and Synchronization 
+
+> Agreement and Synchronization Belief Sharing
+
+, 1 , 3
+
+, 2 , 1
+
+> Supervised Learning
+> SBC
+
+SBC Model 
+
+> 123
+> 0.149 0.278
+> 0.573
+
+2
+
+Unanimous Neighborhood Agreement 
+
+> After agreement, robots can synchronously coordinate actions without centralized communication!
+
+Fig. 1. Synchronous Swarm Behavior Classification (SyncSBC) is a dual-stage fully-decentralized framework for transforming agent-level behavioral predictions into synchronized action execution using limited-range communication and consensus. ( Left ) A trained deep neural network predicts the behavioral properties of the swarm using only egocentric local observations. ( Right ) A consensus algorithm measures neighborhood agreement and synchronizes executed actions. Example applications for SyncSBC include behavior switching and anomaly detection, which we highlight in our experiments. 
+
+Abstract — Robot swarms utilize many independent limited-sensing agents to produce complex emergent behaviors without requiring centralized control. However, little research explores how agents can infer swarm-level behavior from purely local perception, a capability critical for detecting faults and behavior changes. In this paper, we introduce Synchronized Swarm Be-havior Classification (SyncSBC), which combines improvements in machine learning and distributed consensus to classify collec-tive swarm behavior and synchronize swarm decision-making in an entirely decentralized manner. We show that SyncSBC achieves high classification accuracy and low synchronization delay, making it suitable for real-world deployment. Finally, we use SyncSBC to demonstrate two promising swarm applications on real robots where we show that swarms utilizing SyncSBC can accurately identify anomalies in robot behavior and au-tonomously coordinate collective changes in swarm behavior. Videos, code and supplemental experiments are available at 
+
+https://sites.google.com/view/sync-sbc/home .
+
+I. I NTRODUCTION 
+
+Multi-agent robotic systems empower scientists and en-gineers to solve problems using teams of agents. While many real-world systems incorporate highly capable robots, advanced communication networks, and perception pipelines to inform agent decisions, they may be infeasible for de-velopment and scaled deployment due to hardware, space, and budget constraints [12]. By contrast, swarm robotics 
+
+> 1
+
+Kahlert School of Computing, University of Utah, Salt Lake City, USA 
+
+enables tasks such as agriculture monitoring [5], under-water surveillance [10], search and rescue [1], and object transportation [34] to be solved using robots with limited communication and sensing capabilities, often with agents operating under a partially observable view of the task and other agents. However, this decentralization creates a challenge for agents when they must make locally informed decisions that affect global behavior while having only partial visibility of the swarm’s collective state. Furthermore, due to limited observability, agents typically are unaware of faulty or unstable agents in the swarm, which can further degrade collective performance [25]. We seek to enable individual swarm agents to coordinate and estimate global, emergent collective behaviors from local sensing and communication. This has the potential to improve collective decision-making, autonomous swarm control, and structured orchestration within the swarm. How-ever, introducing communication in swarms has its own challenges. Message exchange grows with the system size, increasing overhead and potentially leading to network con-gestion and stability issues [14], [27]. Thus, methods for global behavior detection must operate under strict com-munication rates. This motivates the following question: 
+
+How can we provide individual agents with the means to accurately detect and adapt to swarm-level behavior using local perception and limited decentralized communication? arXiv:2608.06587v1 [cs.RO] 6 Aug 2026 Prior work has explored learning-based approaches to algorithmically uncover control methods and parameters that, when deployed on swarm robots, efficiently produce a desired swarm-level behavior [24]. But do not address how individual agents can classify global behavior from local perception. Other swarm methods focus on global behavior agreement through local interactions, using majority rules and voter models [33], Kalman Consensus Filters [21], and Event-triggered consensus [20]. These methods ensure distributed state alignment under known/predefined decision variables. Additionally, prior work has studied how the behavior of a swarm changes in response to environmental conditions [37] or robot failures [31], emphasize robustness, yet do not address decentralized estimation or stabilization of behaviors. By contrast, our paper focuses on learned global behavior estimation through local perception and detecting when these estimates stabilize across agents. We combine this with a lightweight synchronization mechanism for discrete commitments while minimizing communication. In this paper, we introduce Swarm Behavior Classifier (SBC), a novel method that leverages machine learning to train a shared classifier model using local observations from individual agents to predict the global collective behavior of the swarm. Combining this with a hybrid consensus mechanism that incorporates synchronized consensus update to a behavior across all agents through communication, we present our method Synchronized SBC (SyncSBC). SyncSBC, as shown in Figure 1, allows individual agents in a swarm to map their local observations into temporally aligned conclusions of the collective behavior observed by the swarm. Utilizing this method, we demonstrate two use cases that have promising applications in real-world tasks: Behavior Switching and Anomaly Detection. We demonstrate the efficacy of our approach through simulation and on real robots by systematically evaluating machine-learning models and consensus methods at each stage. We present inference performance of different ML architectures and demonstrate how our hybrid consensus method can minimize inter-robot synchronization delay. Fur-thermore, we demonstrate SyncSBC’s ability to detect be-havioral convergence and leverage it as a signal to trigger subsequent control actions. We also demonstrate SyncSBC’s inherent ability to detect faulty or anomalous robots in the swarm with high confidence. Our work can be summarized with the following con-tributions: (1) We present a novel decentralized framework for online classification of global swarm behavior using an individual agent’s partially observable sensor signals, namely Swarm Behavior Classification (SBC). (2) We propose a novel distributed behavior consensus and convergence syn-chronization pipeline by combining event-triggered commu-nication [20], and coordination mechanisms [17], [28], lever-aging decentralized communication to synchronize agent consensus across the swarm. (3) We show that SyncSBC is a robust method for deployed robot applications such as anomaly detection, and closed-loop switching of behaviors in real time on real robots. II. R ELATED WORK 
+
+Swarm Behavior Detection: Using external sensors and cameras to track the behavioral characteristics of swarms has been a well-studied method that enables researchers to evaluate behavior online in real time or post hoc offline [35]. Prior work has studied using compressive subspace learning [3], conformal prediction [36] and Bayesian classi-fication [6] to enable centralized swarm behavior prediction and classification. In contrast to prior work that forms beliefs over predefined global hypotheses [38] or predefined alternatives [29], we are, to the best of our knowledge, the first to explore and propose an approach for decentralized 
+
+swarm agents to classify emergent collective dynamics using only locally observable information from their sensor data. 
+
+Consensus Methods: Consensus decision-making can be classified into two categories, one where agents need to choose from infinite options, and the other where robots have finite options. The latter category is commonly referred to as the Best-of-M problem [32]. Best-of-M problems can be classified as symmetric [8], where all options are equal, or asymmetric [2] if unequal. Best-of-M has been studied for M=2, where swarms estimate the dominating option [29]. For M>2, probability sharing approaches are used [15]. Valen-tini et al. [33] proposed voter-based methods in collective consensus for perception. While these approaches achieve agreement over predefined options, they primarily focus on convergence and do not address temporal synchronization of decisions across agents. In this paper, our goal is to employ distributed decision-making strategies that ensure swarm alignment and extend to concepts of synchronization and its importance in swarms with dynamic decision states. Our setup solves a symmetric, homogeneous, time-varying distributed synchronization problem, unlike classical consen-sus mechanisms [22]. III. P ROBLEM STATEMENT 
+
+Let V = {1, . . . , N } represent the set of robot agents and let C = {c1, . . . , c M } denote the set of behavior classes. Robot i ∈ V makes a local observation oi(t) ∈ Rdo
+
+and a history of local observations of length T , Oi,t =(oi(t − T + 1) , . . . , oi(t)) ∈ RT ×do . We learn a shared model that can classify the collective behavior of the swarm 
+
+ϕ : RT ×do → ∆M −1, where ∆M −1 = {p ∈ RM 
+
+> ≥0
+
+| 1⊤p =1} ensures that the M class probabilities are nonnegative and sum to one, yielding pi(t) = ϕ(Oi,t ).Training data are collected from R stable-behavior episodes that exhibit consistent observable patterns (e.g., Fig. 3). Episode e ∈ { 1, . . . , R } contains, for each robot 
+
+i ∈ V , a local observation sequence {o(e) 
+
+> i
+
+(t)}Le 
+
+> t=1
+
+and an episode-level class label ℓe ∈ {1, . . . , M }. Every local observation window from every robot inherits an episode label that corresponds to the resulting collective behavior of the swarm, yielding the agent-level training dataset D =
+
+{(O(e) 
+
+> i,t
+
+, ℓ e) | e ∈ { 1, . . . , R }, i ∈ V , t ∈ T e} where Te
+
+contains window endpoints within the stable portion or the portion with consistent patterns (Fig. 3) of episode e.𝜋 𝜋 2       
+
+> Belief Formation
+> i
+> Agent-Level Classifier Swarm-Level Consensus
+> Pi
+> Event triggered Communication
+> Boolean Gossip (BG) oi
+> j
+> bisi
+> rc
+> i
+> Agent-Level Classifier Swarm-Level Consensus
+> Pi
+> Event triggered Communication
+> oi
+> j
+> Belief Formation
+> Integrated Belief Synchronizer (IBS)
+> Communication Savings Temporal Alignment
+> si
+> 人 Communication Savings Temporal Alignment
+> 人
+> SBC
+> Swarm Behavior Classifier
+> SBC
+> Swarm Behavior Classifier
+> SBC
+> Swarm Behavior Classifier Fig. 2. Synchronization and Communication in SyncSBC. We study two consensus methods for use in our framework based on system design preferences: ( Left ) when minimal synchronization delay is desired, we propose using event-triggered communication and boolean gossip and ( Right ) when reducing communication messages is preferred, then a combination of event-triggered communication and integrated belief synchronizer is optimal.
+
+We study the case where each robot i, at position xi(t) ∈
+
+Rd, communicates with neighbors within radius rc, defining 
+
+Ni(t) = {j ∈ V \ { i} | ∥xi(t) − xj (t)∥2 ≤ rc} and the time-varying graph G(t) [38]. This graph G(t) remains connected, such that information can propagate between all robots through direct or multi-hop communication. During deployment, the collective behavior may change over time. Let ℓ(t) ∈ { 1, . . . , M } denote the ground-truth class index and y(t) ∈ { 0, 1}M its one-hot encoding. Each robot maintains an internal belief bi(t) ∈ { 0, 1}M and a synchronized belief si(t) ∈ { 0, 1}M .For a stable behavior interval beginning at tGT , let y∗
+
+denote the one-hot ground-truth behavior. Robot i forms the correct internal belief at tbi = min {t | bi(t) = y∗}. Since robots rely on local observations, tbi may differ across robots; an internal belief formed before tGT is considered a false positive. Let t∗ 
+
+> i
+
+= min {t ≥ tGT | si(t) = y∗} denote the time at which robot i forms the correct synchronized belief. Synchronized swarm consensus is achieved when 
+
+si(t) = y∗ for all i ∈ V . Temporal alignment is quantified by 
+
+synchronization delay ∆ = max i∈V t∗ 
+
+> i
+
+− min i∈V t∗ 
+
+> i
+
+, where 
+
+t∗ 
+
+> i
+
+is the time at which agent i sets its synchronized belief. Our goal here is to first learn a function ϕ through deep function approximation, that maps local observations from individual agents Oi,t to predictions pi(t), and then utiliz-ing the graph G(t) to efficiently communicate and employ a synchronizing consensus operator Hθ by optimizing its parameters θ. Where Hθ maps (pi(t), bj (t), bi(t)) to si(t)
+
+for agent i and neighbor j in set Ni(t) while minimizing ∆.IV. A GENT -L EVEL CLASSIFICATION 
+
+To enable agent-level predictions of collective swarm behavior, we introduce the Swarm Behavior Classifier (SBC) Model shown in Figure 1. In this classifier, each agent utilizes its locally available observations to infer the global swarm behavior. In contrast to global vision-based tracking methods, which require access to high-resolution camera trackers or other methods that require full knowledge of the swarm (robot state), SBC operates without a central system or full knowledge of the swarm, making it more scalable and practical in real-world, unstructured environments. We propose training a global behavior classifier solely from local observations of individual agents. By training on time-varying local sensor streams, we seek to capture dynam-ical patterns that reflect the swarm’s collective behavior and enable local estimates of the global behavior classes. Swarm robots can be equipped with range sensors, time-of-flight sensors, LiDAR, or cameras that provide local measurements of objects or environmental features in their vicinity. These time-series signals are well-suited for processing with neural network architectures such as convolutional models, which we emphasize in our experiments, but this approach can generalize to alternate architectures and input modalities. The SBC model is then trained over the space of predefined candidate behaviors, with appropriate ground truth labels using supervised learning. Each robot applies the model ϕ to its local observation history Oi,t , yielding class probabilities 
+
+pi(t) = ϕ(Oi,t ). Predictions are smoothed using Exponential Weighted Moving Average (EWMA): Pi(t) = Pi(t − 1) + 
+
+α(pi(t) − Pi(t − 1)) , where α is the smoothing coefficient. In the following section, we assume access to a pretrained SBC model and discuss how to use this model for collective behavior consensus. We describe our specific instantiation of the SBC model in Section VI. V. S YNCHRONIZED BELIEF FORMATION 
+
+Individual agents compute egocentric estimates of the collective behavior using SBC, but these estimates are often misaligned over time with the swarm’s ground-truth behavior and are prone to false positives. To better understand ground-truth behavior, swarm agents can leverage consensus meth-ods to assess prediction agreement with neighboring agents. In a decentralized swarm setting, individual agents lack access to the full global state and must rely on local sensing and limited communication mechanisms. To address this limitation, we propose using a distributed consensus model that enables robots to broadcast their local predictions within a communication radius rc. We decompose our synchronized belief formation method into two stages: Internal Belief Formation, for local belief updates, and Synchronization, which aligns belief formation through temporal alignment. 
+
+A. Stage-1: Internal Belief Formation 
+
+After each robot in the swarm produces its initial estimate 
+
+Pi(t) of the collective behavior, the robots can now enter the communication stage where they map local predictions Pi to an internal belief bi that shows agreement to aglobal behavior based on alignment with its neighbors. The internal belief bi is a per-class binary vector for each agent 
+
+i. Formally, internal belief formation solves the best-of-M problem where agents agree on the same behavior predicted class while communicating with their neighbors. Stage 1 requires us to apply consensus mechanisms to the agent’s local prediction to realize internal belief estimates 
+
+bi. In this work, we consider a few candidate strategies to determine which strategy closely tracks the ground-truth collective behavior: 
+
+Averaging: Each robot performs nearest-neighbor average consensus over its internal belief, where it updates its belief as the mean of its own predictions and its neighbors [22]. 
+
+Entropy-based Fusion: Following [38], robots share their strongest choice from the softmax predictor values, along with an entropy of their distribution, representing a measure of certainty about the choice they shared. 
+
+Neighbor Variance Update: A method inspired by the disagreement measure [22], where the selected class is the one with the lowest disagreement, (Pi,k (t) − Pj,k (t)) 2,where Pi,k denotes the predicted probability assigned by agent i to behavior k, and Pj,k over all j ∈ N i(t).
+
+Sample and Hold Strategy: An update mechanism in-spired by event-triggered control [9], where agents i up-date their internal estimates Ii(t) when self-disagreement 
+
+(Pi(t) − Ii(t)) 2 exceeds a predefined threshold. An agent’s internal belief bi is set when a selected class is stable and has low disagreement. In all cases, each robot i propagates its strategy-specific messages μi to its neighbors in set Ni, which consists of robots within the communication radius rc. These strategies operate only to determine an agent’s internal belief update bi
+
+and are designed to be modular, allowing alternate consensus strategies to be integrated beyond those mentioned above based on application context. 
+
+B. Stage-2: Synchronization 
+
+Distributed consensus methods facilitate agreement among neighboring agents, but do not inherently focus on temporal synchronization across the swarm in the absence of a cen-tralized controller, leading to misalignment and fragmented decision regions. Synchronization [27] is essential for reli-able swarm deployment, particularly for tasks that require coordinated transitions or closed-loop control. In this second stage, we aim to ensure that all neighbors are synchronized for a swarm-level consensus, minimizing the synchronization gap ∆ defined in Section III. To achieve this, we introduce two synchronization methods: Boolean Gossip and Integrated Belief Synchronizer as shown in Figure 2. Each method has its own trade-offs in convergence time and robustness. 
+
+Synchronization using Boolean Gossip (BG): To realize synchronized belief si from internal belief states, we employ a Boolean gossip mechanism pictured in Figure 2 (left). Boolean gossip propagates individual internal beliefs bi
+
+through neighbor interactions, similar to monotone epidemic-style information dissemination in randomized gossip algo-rithms [28]. Each robot maintains a transient synchronized belief variable si, which is iteratively updated via a logical AND operation over its internal binary belief state and a tran-sient synchronized belief state received from its neighbors, 
+
+si = bi ∧ sj . Robots additionally broadcast their states with a per-round sequence counter, enabling neighbors to align to a common epoch [13]. 
+
+Synchronization using Integrated Belief Synchronizer (IBS): We introduce a novel message-piggybacked synchro-nization mechanism operating over k behavior-specific fields. Each field Fk = ( τk, e k, Mk) maintains a distributed state consisting of: 1) Token owner τk, 2) Lamport-style epoch 
+
+ek [13], and 3) Membership set containing the robots whose internal belief bi supports that behavior Mk = {i|bi = k}.At each update, robots merge received neighbor states by selecting the state with the highest epoch ek, ensuring resolution of concurrent updates Fi,k ← arg max Fj,k ek
+
+[17], [30] and preventing split-decision formation. A robot may modify the behavior’s membership Mk of its most confident behavior in bi only if the token τk is free or locally held, thereby enforcing controlled updates. Synchronized belief si is set once all robots in the neighborhood agree and no active token holders remain, enabling a stable and decentralized synchronization layer we call the Integrated Belief Synchronizer (IBS) visualized in Figure 2 (right). While the underlying primitives in IBS and Boolean Gos-sip are inspired by techniques in distributed systems [4], their integration into decentralized swarm-level consensus and synchronization under dynamic communication topologies constitutes the system-level contribution of SyncSBC. 
+
+C. Communication Reduction 
+
+We further incorporate Event-Triggered Communication (ETC) [20] which replaces inter-robot periodic message transmissions with condition-triggered transmissions. This reduces redundant transmissions and alleviates network con-gestion in swarm deployments, promoting scalability. This triggering rule follows the event-triggered consensus frame-work [9]. In ETC, agents maintain an internal state initial-ized as Ii(0) = Pi(0) , we measure internal disagreement 
+
+Ei(t) = ∥Pi(t) − Ii(t)∥2 and local disagreement with neigh-bors ni(t) = P 
+
+> j∈N i(t)
+
+∥Ii(t) − Ij (t)∥2. The internal state is updated Ii(t) = Pi(t) and relevant messages are transmitted only when condition Ei(t) ≥ σ n i(t) is satisfied where σ
+
+is a hyperparameter > 0.ETC enables controlled message propagation. Pairing it with the Boolean gossip algorithm results in lesser commu-nication overhead; however, pairing ETC with IBS yields a substantially greater reduction. This is because Boolean Gossip relies on iterative message propagation for synchro-nization, and IBS does not require periodic propagation. VI. S IMULATED EXPERIMENTS 
+
+We evaluate SyncSBC across multiple pipeline stages and present results from simulated experiments conducted on swarm robots. Our swarm robots have limited sensing and actuation capabilities, with line-of-sight sensors and Angular Velocity Forward Velocity (a) (b) Time-of -Flight Sensor           
+
+> Cyclic Pursuit Dispersal Aggregation Fig. 3. HeRo+ Robots: (a) A single HeRo+ robot uses unicycle commands to locomote and time-of-flight sensing to detect other robots. (b) 3 emergent behaviors deployed on 8 robots. From Left to Right: Aggregation , where agents aggregate at the swarm’s centroid, Cyclic Pursuit , where agents travel about the centroid in a circular motion, and Dispersal , where agents maximize the inter-agent distance to span (explore) the environment.
+> Fig. 4. Agent-Level Model Architecture Results: We study which model architecture results in the best prediction accuracy across 6 models. For our specific robot model, which utilizes a single ToF sensor, we show that a Temporal convolutional neural network (TCN) performs the best.
+
+differential-drive wheel motors controlled by linear and an-gular velocities. The swarm controllers we study are defined as linear and angular velocity commands that depend on whether a robot detects another robot in its line of sight. Specifically, controllers are parameterized as ( Vt, a t, V f , a f )where Vt and at correspond to linear and angular velocity when a robot is detected in its line-of-sight and Vf , af when not detected. In our work, we study the following swarm behaviors using controllers published in prior work [19], which exhibited distinct collective dynamics and were shown to work on low-cost, open-source robots: Cyclic Pursuit ,
+
+Aggregation , and Dispersal . Depictions and descriptions of these behaviors can be found in Figure 3b. 
+
+A. SBC Prediction Model 
+
+In this section, we outline the data collection process, training, and design decisions for the SBC prediction model. The trained SBC model will be used by each robot in the swarm to estimate collective behavior from local perception. To build the training dataset, we use 8 differential-drive robots modeled and simulated in Isaac Sim, each outfitted with a ToF (time-of-flight) sensor that continuously measures line-of-sight distance over time. We run a suite of known swarm controllers, each associated with a known resulting emergent behavior (Cyclic Pursuit, Aggregation, Dispersal), obtained from prior robot swarms research [7], [18], [19]. During simulation, local time-varying observation mea-surements are recorded from each robot once the swarm has converged to a steady behavior pattern. We address two prediction objectives: 1) Behavior Convergence Detection:            
+
+> Fig. 5. Internal Belief Formation Results (Stage-1): Across 3 swarm controllers, we measure the delay in full-swarm consensus across 4 methods compared to a ground truth measurement of behavior convergence (repre-sented by 0). Negative results represent late predictions and Positive results represent early predictions. Results show the mean and standard error across 3 initial starting conditions.
+> Fig. 6. Synchronization Error Results (Stage-2): We compare 4synchronization methods and measure the delay between the first robot forming its synchronized belief and the last robot. Across all methods, we find that combining Event-triggered, Sample-and-Hold with Boolean Gossip or IBS (ESI,ESB) leads to <5s delay across all behaviors. Results show the mean and standard error across 3 initial starting conditions.
+
+Determining whether the swarm has converged to any stable behavior and 2) Behavior Classification: Determining the specific behavior to which the swarm has converged. Each controller rollout defines an episode-level label ℓe. After be-havior stabilization, each robot’s ToF sequence is segmented into length-T windows O(e) 
+
+> i,t
+
+, and each window inherits the corresponding episode label, yielding samples (O(e) 
+
+> i,t
+
+, ℓ e).The stabilized observation streams are then partitioned into disjoint 70/15/15% training, validation, and test segments be-fore window extraction, ensuring that no observation samples or windows are shared across splits. During inference, the input is a sliding window of the ToF sensor stream. Longer window sizes provide a richer signal for behavior classification, but also delay the prediction process. Rather than reducing the window size, we retain a larger input size by increasing the sliding window stride. 
+
+B. Neural Network Architecture Evaluation 
+
+To select the best neural network architecture, we train a supervised learning model across multiple well-known neural network architectures using a cross-entropy loss. In our experiment, we evaluate GRU, 1D-CNN, TCN, RNN, LSTM, and Transformer models [16] using multiple metrics, includ-ing accuracy, macro F1 score, Brier, and expected calibration error (ECE) [11]. Figure 4 shows the predictive quality and calibration error metrics for different architectures. We found that the Temporal Convolutional Network (TCN) performed best across all metrics. The TCN processes a T × do input using five residual causal Conv1D blocks with 128 filters, kernel size 3, dilation factors {1, 2, 4, 8, 16 }, and dropout 0.2,with 1 × 1 residual projections when needed. The head uses global average pooling, dropout 0.3, Dense (128 , ReLU) ,dropout 0.3, and an M -class softmax output. 
+
+C. Stage-1 (Internal Belief Formation) Setup and Evaluation 
+
+In this stage, we need to choose an appropriate Belief formulation mechanism that realizes its internal belief only after the swarm has converged to a stable collective behavior. Premature internal belief formation leads to inconsistent representations of true collective behavior. As a proxy ground-truth, we use learned thresholds on swarm-level measures of scatter , radial variance , and aver-age speed from [7]. A human observer annotates the time of visual stabilization for a subset of controller runs, which are then used to calibrate the threshold parameters. These learned thresholds then automatically label the behavior convergence time for other controllers. To ensure a fair comparison across methods, we optimize the parameters of each consensus strategy using a hyperpa-rameter search library, Optuna [23]. We tune the parameters of each strategy to minimize the delay between the internal belief formulation and the ground-truth convergence time, while penalizing early convergence. The results in Figure 5 illustrate the temporal gap between the ground-truth detection of a swarm behavior and the point at which all agents set their internal belief to that same behavior. Our results show that the Sample-and-Hold method achieves the lowest combined delay compared to other consensus strategies. Averaging performs next best, showing competitive but slightly higher delay. 
+
+D. Stage-2 (Synchronization) Setup and Evaluation 
+
+We adopt Sample-and-Hold (SH) as the baseline belief-formation strategy for local internal belief updates and aug-ment it with synchronization mechanisms. Specifically, we compare three methods: (1) Pure SH, (2) ETC combined with SH and Boolean Gossip synchronization (ESB), (3) ETC combined with SH and Integrated Belief Synchronizer (ESI). For each method, we evaluate synchronization delay and communication overhead, measured as the total message count (until convergence), to analyze the trade-off between synchronization and communication efficiency. In Figures 6 and 7, we observe that ESI performs slightly worse in the aggregation behavior compared to ESB and Pure SH. This is due to the formation of multiple groups, where the communication radius of one group does not overlap with that of another, resulting in higher synchronization delays. This shows that ESI can have lower communication overhead and maintain good synchronization, while ESB can achieve much better synchronization at a higher communication cost. We then evaluate SyncSBC with varying swarm sizes and communication radii, including 5, 8, and 16 robots. We chose these sizes to evaluate whether our SBC predic-tion model trained on 8 robots can work for both smaller swarms and swarms with approximately double the number of agents. Our objective is to evaluate how communication              
+
+> Fig. 7. Message Count Results: For constrained deployments with a fixed communication budget, we examine the number of total messages transmitted under each of the different synchronization methods. Across all methods, we find that combining Sample-and-Hold with Integrated Belief Synchronizer (ESI) leads to the lowest number of required messages across all behaviors. Results show the mean and standard error across 3 initial starting conditions.
+> Fig. 8. Robots vs Radius: We examined SyncSBC on swarms with varying number of robots and communication radii. We find that ESB and ESI achieve the lowest synchronization delay, especially in domains with many robots. While ESB has a higher communication rate, ESI performs well when connectivity within the swarm is dense, while minimizing communication. Results indicate mean and standard error over 9 runs.
+
+and synchronized belief formation depends on swarm size and communication radius. We test this by showing synchronization delay and mes-sage counts. We see in Figure 8 that increasing the commu-nication radius rc improves synchronization. Synchroniza-tion delay is closely tied to the dynamic connectivity of the swarm; a larger neighbor set per robot allows faster message propagation, allowing robots to exchange beliefs with more peers before concluding on a behavior. Con-nectivity is also influenced by swarm size. Increasing the number of robots in a swarm increases network density, thereby further improving synchronization performance. This effect is evident in ESI, where even with a fixed radius of 0.8m, a larger swarm achieves better synchronization at a lower communication rate. In contrast, ESB requires more communication to achieve synchronization as swarm size increases. We can also observe that event-triggered communication maintains comparable synchronization while significantly reducing communication cost. VII. C LOSED -L OOP CONTROL ON REAL ROBOTS 
+
+To demonstrate the practical applicability of SyncSBC on real robots, we use differential drive HeRo+ robots [19], ESB 𝜋                               
+
+> Cyclic Pursuit to Aggregation
+> #7 #7
+> t=16s t=36s t=66s t=15s t=48s t=130s t=27s t=60s t=120s
+> Too Early! Too Early! Too Early!
+> Correct! Correct! Correct!
+> Correct! Correct! Correct!
+> Cyclic Pursuit Aggregation Dispersal
+> Pure SH
+> ESB
+> ESI
+> Aggregation to Dispersal
+> Cyclic Pursuit to Aggregation Aggregation to Dispersal Pure SH 18.0001 s 2 6.0000 s ESB 0.0927 s 0.0927 s ESI 1.9947 s 0.0000 s Synchronization Delay ( ∆)Cyclic Pursuit →Aggregation Aggregation →Dispersal Pure SH 18.0001 s 26.0000 s
+> ESB 0.0927 s 0.0927 s
+> ESI 1.9947 s 0.0000 s Fig. 9. Application: Behavior Switching. (top) Using only decentral-ized SyncSBC, swarm robots must synchronize a controller switch from Cyclic Pursuit (left) to Aggregation (middle) to Dispersal (right). (bottom) The synchronization delay for two controller switches, with each method having separate runs with the same initialization conditions. Pure SH often switches controllers too early (before consensus) and suffers from major synchronization delay. compared to ESB and ESI.
+
+shown in Figure 3(a), an extension of the open source HeRo [26]. Here, we showcase two possible use cases: 
+
+A. Autonomous Behavior Switching 
+
+By coupling synchronized consensus with decentralized control, coordinated swarm behaviors are possible without reliance on centralized supervision or a centralized con-troller. One such example is behavior switching. We de-fine autonomous swarm behavior switching as a sequenced behavior-switching technique that switches between a global set of predefined behavior controllers, ensuring behaviors are in sync across the swarm. To implement a behavior switch, each robot uses its own synchronized belief signal si from SyncSBC as a trigger to the next behavior controller. Here, we tested switching from Cyclic Pursuit −→Aggregation −→
+
+Dispersal; the results are visualized in Figure 9. We deploy, (1) Pure SH, (2) ESB, and (3) ESI on separate runs. The results show that naively forming a global belief via basic consensus methods is insufficient for tasks that require tight synchronization under dynamic conditions. Pure SH (Sample-and-Hold) performs poorly at maintaining consis-tent, synchronized transitions. Although robots switch with lower delay in the first transition, synchronization errors compound with subsequent transitions, resulting in higher variance and misalignment within the swarm. In contrast, ESB (Event-triggered, Sample-and-Hold, Boolean gossip) and ESI (Event-triggered, Sample-and-Hold, IBS) exhibit clearly recognizable, stable behaviors before transitioning to the next behavior, while minimizing synchronization delay. While ESI shows a slightly higher synchronization delay for 𝜋 
+
+#7 
+
+#8 #7 
+
+t=90s 
+
+t=95s   
+
+> Scenario 2 Scenario 1
+> Fig. 10. Application: Anomaly Detection. (left) SyncSBC provides a mechanism where robots can self-inform themselves of incorrect behavior, i.e., anomaly detection. We studied two anomaly detection scenarios where 1-2 robots’ behaviors have been deliberately halted or modified during swarm execution. (right) The likelihood of anomaly as a function of runtime, where the robots (robot #7 in scenario 1, #7 and #8 in scenario 2) increase their probability over time.
+
+the first transition, the swarm quickly aligns itself for the subsequent transition. These results highlight synchroniza-tion as a critical enhancement to consensus-based strategies, mainly in groups where neighborhood alignment is essential. 
+
+B. Anomaly detection 
+
+SyncSBC’s pipeline incorporates a distinctive mechanism within its synchronization stage. In this phase, each robot either propagates a “not ready” signal through Boolean gossip (ESB) or compares with the largest member set in the Integrated Behavior Synchronizer (ESI). Anomaly likelihood increases when robot i strongly rejects behavior k (bi,k = 0 and arg max k Pi,k ̸ = k) while others propagate si,k = 1 in ESB. Similarly, under ESI, the anomaly likelihood increases when the robot’s internal belief 
+
+bi repeatedly disagrees with the largest membership set Mk.This allows individual agents in the swarm to identify their inconsistencies or misalignment during synchronization. To demonstrate anomaly detection, we run two scenarios. In Scenario 1, a single robot is halted while the rest of the swarm executes a dispersing behavior. In Scenario 2, we set two robots to use modified behavior controllers different from the majority. The results in Figure 10 show probability estimates for each individual robot’s self-assessment of their anomaly likelihood. In Scenario 1, Robot #7 is flagged by the system, with its anomaly likelihood increasing over time as it remains misaligned with the dispersing swarm. Similarly, in Scenario 2, Robots #7 and #8 exhibit consistently high anomaly likelihood, reflecting their persistent deviation from the majority. These experiments demonstrate that SyncSBC not only enables synchronized consensus but also provides an inherent mechanism for real-time anomaly detection, providing the potential for members of a swarm to identify, isolate misaligned agents, and self-heal without external supervision and in a fully decentralized manner. VIII. C ONCLUSION 
+
+We introduced SyncSBC, a novel framework consist-ing of real-time behavior classification using only the lo-cal observation history from individual members of the swarm and a decentralized consensus mechanism that en-ables synchronized swarm action. We show that our SBC model achieves >95% accuracy on held-out testing data, and swarm-level consensus with <1s average synchroniza-tion delay in simulation, compared to >10s delay seen in agreement-only consensus methods. On a real robot swarm consisting of 8 HeRo+ robots, our method achieves <3s delay versus >15s with agreement-only strategies. Our work also demonstrates that SyncSBC can successfully be applied to two important swarm problems—Behavior Switching and Anomaly Detection. Future work should consider the impact of sensing modality, state observability, and behavior com-plexity on the SyncSBC pipeline as well as applications to self-healing behaviors and environmental decision making. Overall, our work highlights promising results for fully decentralized classification, consensus, and synchronization for communication-constrained real-world swarm robotics. REFERENCES [1] Ross D. Arnold, Hiroyuki Yamaguchi, and Toshiyuki Tanaka. Search and rescue with autonomous flying robots through behavior-based cooperative intelligence. Journal of International Humanitarian Action 2018 .[2] Farshad Arvin, Ali Turgut, and Shigang Yue. Fuzzy-based aggregation with a mobile robot swarm. pages 346–347, 09 2012. [3] Matthew Berger, Lee M Seversky, and Daniel S Brown. Classifying swarm behavior via compressive subspace learning. In 2016 IEEE International Conference on Robotics and Automation (ICRA) .[4] Kenneth P Birman and Thomas A Joseph. Reliable communication in the presence of failures. ACM Trans. on Computer Systems , 1987. [5] Timo Blender, Thiemo Buchner, Benjamin Fernandez, Benno Pichlmaier, and Christian Schlegel. Managing a Mobile Agricultural Robot Swarm for a seeding task. In IECON 2016 .[6] Daniel S Brown and Michael A Goodrich. Limited bandwidth recognition of collective behaviors in bio-inspired swarms. In AAMAS ,2014. [7] Daniel S Brown, Ryan Turner, Oliver Hennigh, and Steven Loscalzo. Discovery and exploration of novel swarm behaviors given limited robot capabilities. In Distributed Autonomous Robotic Systems: The 13th International Symposium , pages 447–460. Springer, 2018. [8] Giulia De Masi, Judhi Prasetyo, Elio Tuci, and Eliseo Ferrante. Zealots Attack and the Revenge of the Commons: Quality vs Quantity in the Best-of-n . 10 2020. [9] Dimos V. Dimarogonas, Emilio Frazzoli, and Karl H. Johansson. Distributed event-triggered control for multi-agent systems. IEEE Transactions on Automatic Control , 57(5):1291–1297, 2012. [10] Miguel Duarte, Vasco Costa, Jorge Gomes, Tiago Rodrigues, Fernando Silva, Sancho Moura Oliveira, and Anders Lyhne Christensen. Evo-lution of Collective Behaviors for a Real Swarm of Aquatic Surface Robots. PLOS ONE , 11(3):e0151834, March 2016. [11] Chuan Guo, Geoff Pleiss, Yu Sun, and Kilian Q. Weinberger. On calibration of modern neural networks. In ICML , 2017. [12] Hakpyeong Kim, Juwon Hong, Eunseong Song, Taehoon Hong, and Jun-Ki Choi. A multi-dimensional failure factor affecting the on-site adoption of construction robots. Developments in the Built Environment , 25:100841, 2026. [13] Leslie Lamport. Time, clocks, and the ordering of events in a distributed system. Communications of the ACM , 1978. [14] Tao Li, Minyue Fu, Lihua Xie, and Ji-Feng Zhang. Distributed consensus with limited communication data rate. IEEE Transactions on Automatic Control , 56(2):279–292, 2011. [15] Yang Liu and Kiju Lee. Probabilistic consensus decision making algorithm for artificial swarm of primitive robots. SN Applied Sciences .[16] Gaoyong Lu, Yang Ou, Zhihong Wang, Yingnan Qu, Yingsheng Xia, Dibin Tang, Igor Kotenko, and Wei Li. A survey of deep learning for time series forecasting: Theories, datasets, and state-of-the-art techniques. Computers, Materials and Continua , 2025. [17] R Mahy, R Verghese, and C Torgerson. Preserving region consistency for wide-area distributed programs. IEEE Trans. on Parallel and Distributed Systems , 2004. [18] Connor Mattson and Daniel S Brown. Leveraging human feedback to evolve and discover novel emergent behaviors in robot swarms. In 
+
+Proceedings of the Genetic and Evolutionary Computation Confer-ence , pages 56–64, 2023. [19] Connor Mattson, Varun Raveendra, Ricardo Vega, Cameron Nowzari, Daniel Drew, and Daniel S Brown. Discovery and deployment of emergent robot swarm behaviors via representation learning and real2sim2real transfer. In AAMAS . ACM, 2025. [20] Cameron Nowzari, Eloy Garcia, and Jorge Cort´ es. Event-triggered communication and control of networked systems for multi-agent consensus. Automatica , 105:1–27, 2019. [21] Reza Olfati-Saber. Distributed kalman filtering for sensor networks. In Proceedings of the 46th IEEE Conference on Decision and Control .[22] Reza Olfati-Saber, J. Alex Fax, and Richard M. Murray. Consensus and cooperation in networked multi-agent systems. Proceedings of the IEEE , 95(1):215–233, 2007. [23] Yoshihiko Ozaki, Shuhei Watanabe, and Toshihiko Yanase. Op-tunaHub:a platform for black-box optimization. arXiv:2510.02798 ,2025. [24] Anil ¨ Ozdemir, Melvin Gauci, and Roderich Groß. Shepherding with robots that do not compute. In Artificial Life Conference Proceedings .MIT Press, 2017. [25] Shanu Rakesh and Manish Shrivastava. Performance analysis of fault tolerance algorithm for pattern formation of swarm agents. 
+
+Knowledge-Based Systems , 240:108020, 12 2021. [26] Paulo Rezeck, H´ ector Azp´ urua, Maur´ ıcio F. S. Corrˆ ea, and Luiz Chaimowicz. HeRo 2.0: a low-cost robot for swarm robotics research. 
+
+Autonomous Robots , 47(7):879–903, October 2023. [27] Melanie Schranz, Martina Umlauft, Micha Sende, and Wilfried Elmen-reich. Swarm robotic behaviors and current applications. Frontiers in Robotics and AI , Volume 7 - 2020, 2020. [28] Devavrat Shah. Gossip algorithms. Foundations and Trends in Networking , 2009. [29] Qihao Shan and Sanaz Mostaghim. Discrete collective estimation in swarm robotics with distributed bayesian belief sharing. Swarm Intelligence , 15, 12 2021. [30] I Suzuki and T Kasami. A distributed mutual exclusion algorithm. 
+
+ACM Trans. on Computer Systems , 1985. [31] Jonathan Timmis, Amelia Ritahani Ismail, Jan Dyre Bjerknes, and Alan FT Winfield. An immune-inspired swarm aggregation algorithm for self-healing swarm robotic systems. Biosystems , 146:60–76, 2016. [32] Gabriele Valentini, Eliseo Ferrante, and Marco Dorigo. The best-of-n problem in robot swarms: Formalization, state of the art, and novel perspectives. Frontiers in Robotics and AI , 2017. [33] Gabriele Valentini, Eliseo Ferrante, Heiko Hamann, and Marco Dorigo. Collective decision with 100 kilobots: speed versus accuracy in binary discrimination problems. AAMAS , (3), May 2016. [34] Sean Wilson, Aur´ elie Buffin, Stephen C. Pratt, and Spring Berman. Multi-robot replication of ant collective towing behaviours. Royal Society Open Science , 5(10):180409, October 2018. [35] Meihong Wu, Xiaoyan Cao, and Shihui Guo. Swarm behavior tracking based on a deep vision algorithm. arXiv:2204.03319 , 2022. [36] Zepu Xi, Hongbo Chen, Xiaoqian Chen, and Wen Yao. Conformal prediction enhanced svms for swarm behavior classification. In 2023 International Joint Conference on Neural Networks (IJCNN) .[37] Lidong Yang, Jialin Jiang, Xiaojie Gao, Qinglong Wang, Qi Dou, and Li Zhang. Autonomous environment-adaptive microrobot swarm navi-gation enabled by deep learning-based real-time distribution planning. 
+
+Nature Machine Intelligence , 4(5):480–493, 2022. [38] Cheng Zheng and Kyungjoon Lee. Consensus decision-making in artificial swarms via entropy-based local negotiation and preference updating. Swarm Intelligence , 2023.

@@ -1,0 +1,789 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-08-14T21:05:50.251089+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 2,
+    "deep_divecandidates": 6,
+    "deep_cap": 7,
+    "deep_selected": 6,
+    "quick_candidates": 12,
+    "quick_skim_target": 12,
+    "quick_selected": 12
+  },
+  "deep_dive": [
+    {
+      "id": "2608.11051v1",
+      "source": "arxiv",
+      "title": "HUI360: A 360° Egocentric Dataset and Baselines for Human-Robot Interaction Anticipation",
+      "abstract": "As robots increasingly operate in human-populated environments, anticipating human intentions is essential for enabling proactive and socially aware behavior. Automatic anticipation of human-robot interactions is thus emerging as a crucial perception challenge for embodied agents. To this end, we introduce HUI360, the largest dataset for human-robot interaction anticipation in the wild and its set of baselines. The dataset was collected from a mobile robot, in the wild, over multiple days within a 3-month period, and in several environments, capturing natural, spontaneous behaviors from both passersby and users, and encompassing a diverse range of individuals. This variety enables evaluating and improving the generalization capabilities of interaction anticipation models. We designed a pipeline and share code for automatic interaction annotation in arbitrary 360-degree equirectangular videos, along with interfaces for manual refinement. Using this pipeline, we release the HUI360 open set of 1M pre-processed annotations, including detailed 2D poses, facial keypoints, and segmentation masks, obtained using state-of-the-art computer vision methods and manually curated to ensure high-quality tracking and interaction annotation. Additionally, we release the raw panoptic 360-degree images captured from the robot's egocentric viewpoint (on demand, for research purpose only in compliance with GDPR). Finally, we establish benchmark baselines for interaction anticipation, including the first cross-dataset evaluations for this task: to this end, we also release 6M annotations for another existing in-the-wild outdoor dataset collected from a mobile robot (SSUP-HRI). Dataset and code can be found at https://hucebot.github.io/hui360.",
+      "authors": [
+        "Raphael Lorenzo-Louis",
+        "Fabio Amadio",
+        "Bertrand Luvison",
+        "Serena Ivaldi"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV"
+      ],
+      "published": "2026-08-11T15:22:14+00:00",
+      "link": "https://arxiv.org/pdf/2608.11051v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "Large-scale dataset construction for human-robot interaction anticipation",
+      "llm_evidence_cn": "大规模人机交互预测数据集构建",
+      "llm_evidence": "大规模人机交互预测数据集构建",
+      "canonical_evidence": "大规模人机交互预测数据集构建",
+      "llm_tldr_en": "HUI360 is a large-scale egocentric dataset collected from a mobile robot in the wild for human-robot interaction anticipation, with baselines and diverse natural behaviors, enabling evaluation of generalization.",
+      "llm_tldr_cn": "机器人要在人类环境中实现主动且具社会感知的行为，需要预判人的意图。该文提出了HUI360，目前最大的野外人机交互预测数据集。数据由移动机器人在数周内于多个场景中采集，包含了路人与用户的自然自发行行为，覆盖多样个体和环境，可用于评估与提升模型的泛化能力。同时提供基线模型，为人机交互预测任务建立标准化评测基准。",
+      "llm_tldr": "机器人要在人类环境中实现主动且具社会感知的行为，需要预判人的意图。该文提出了HUI360，目前最大的野外人机交互预测数据集。数据由移动机器人在数周内于多个场景中采集，包含了路人与用户的自然自发行行为，覆盖多样个体和环境，可用于评估与提升模型的泛化能力。同时提供基线模型，为人机交互预测任务建立标准化评测基准。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2608.12860v1",
+      "source": "arxiv",
+      "title": "HumanoidVLN: A Physics-Grounded Simulator and Benchmark for Vision-Language Navigation Across Diverse Humanoid Embodiments",
+      "abstract": "Vision-Language Navigation (VLN) for humanoid robots poses challenges existing benchmarks fail to address: bipedal locomotion imposes physical constraints absent from wheeled agents, humanoid morphologies vary across platforms, and egocentric observations are distorted by locomotion-induced camera dynamics. We present HumanoidVLN, a physics-grounded simulator and benchmark for VLN across diverse humanoid embodiments. Built on NVIDIA Isaac Sim, our platform supports an extensible set of humanoid configurations, demonstrated on four robots (Unitree G1, Unitree H1, Internal-A, Internal-B) spanning 10-12 lower-body DoF and heights from 1.17m to 1.80m, via a hierarchical control stack combining a reinforcement learning locomotion policy with interchangeable PD or MPC path trackers. New robots and VLN models integrate with minimal effort; we demonstrate compatibility with NaVILA, DualVLN, StreamVLN, and JanusVLN. Environments are drawn from artist-designed scenes and 3D Gaussian Splatting reconstructions, filtered for navigable areas exceeding 100 square meters. Instructions are generated by a dual generator-reviewer plus paraphraser multi-agent pipeline with human-in-the-loop verification, yielding 933 collision-aware reference episodes, each paired with one fine-grained instruction and three coarse-grained stylistic variants (formal, natural, casual). Across four models and four embodiments, JanusVLN achieves the highest mean success rate of 43.55% and nDTW of 48.38. In a 20-episode sim-to-real pilot with DualVLN and the Unitree G1, navigation errors correlate strongly (r=0.935), with a mean absolute difference of 0.68m and mean trajectory similarity of 0.782 (+/-0.188) nDTW. These results highlight the interaction between VLN models, controllers, and humanoid embodiments under physical execution. Code, benchmark, and data will be released upon acceptance at https://humanoid-vln.github.io/.",
+      "authors": [
+        "Quan-Dung Pham",
+        "Anh Dao",
+        "The-Anh Nguyen",
+        "Minh Nguyen-Dinh",
+        "Phuong Nam Dang",
+        "Tri Pham",
+        "Hung Tran",
+        "Bach Dao",
+        "Tuyen P. Le",
+        "Truong Nguyen",
+        "Quan Nguyen"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-08-13T06:16:05+00:00",
+      "link": "https://arxiv.org/pdf/2608.12860v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "Builds a physics-grounded simulator and benchmark supporting Unitree G1 among four humanoid robots",
+      "llm_evidence_cn": "构建了支持Unitree G1等四种人形机器人的物理仿真平台与基准数据集",
+      "llm_evidence": "构建了支持Unitree G1等四种人形机器人的物理仿真平台与基准数据集",
+      "canonical_evidence": "构建了支持Unitree G1等四种人形机器人的物理仿真平台与基准数据集",
+      "llm_tldr_en": "Presents a physics-grounded simulator and benchmark for vision-language navigation across diverse humanoid embodiments, including Unitree G1, with a hierarchical control stack combining reinforcement learning.",
+      "llm_tldr_cn": "针对人形机器人视觉-语言导航缺乏物理约束和多形态支持的现状，提出基于NVIDIA Isaac Sim的人形VLN仿真器与基准HumanoidVLN，支持Unitree G1、Unitree H1等四种机器人（10-12自由度，高度1.17-1.80m）。通过分层控制栈结合强化学习驱动双足运动，并输出任务评估基准。该平台为Unitree G1等仿人机器人的数据集构建和导航研究提供了可扩展的物理仿真环境。",
+      "llm_tldr": "针对人形机器人视觉-语言导航缺乏物理约束和多形态支持的现状，提出基于NVIDIA Isaac Sim的人形VLN仿真器与基准HumanoidVLN，支持Unitree G1、Unitree H1等四种机器人（10-12自由度，高度1.17-1.80m）。通过分层控制栈结合强化学习驱动双足运动，并输出任务评估基准。该平台为Unitree G1等仿人机器人的数据集构建和导航研究提供了可扩展的物理仿真环境。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "Unitree G1 humanoid robot dataset construction",
+      "matched_requirement_id": "req-1",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2608.10623v1",
+      "source": "arxiv",
+      "title": "When Your State Estimator Has Lost The Plot: Detecting Estimator Failures Via Spectral Analysis",
+      "abstract": "Reliable onboard state estimation is essential for safe robotic operation, yet unmodeled disturbances, such as sensor aliasing or out-of-distribution noise, still cause estimators to degrade or fail completely. While many methods aim to improve estimator robustness, only a few provide introspective mechanisms to assess estimate quality. Existing uncertainty measures, such as covariances, rely on idealized assumptions and tend to be overconfident, and more recent data-driven approaches are typically tied to their training data distributions.   We propose a sensor-agnostic introspective method that assesses estimator health by analyzing the frequency-domain power distribution of recent velocity estimates. The method is evaluated using outdoor flight data from an aerial robot running visual-inertial, LiDAR-inertial, and radar-inertial odometry. The dataset includes multiple estimator failures, enabling analysis of several frequency-domain indicators, such as signal power, spectral bandwidth, and entropy. We observe consistent spectral power differences between healthy and degraded estimates, allowing detection of 51%-58% of labeled failures with 60%-84% precision across three fundamentally different state estimation frameworks. Our results show that even a simple frequency-domain analysis of a state estimator's output can serve as a lightweight introspective tool to complement existing robustness techniques in real-world robotic deployments, and opens promising avenues for future investigation.",
+      "authors": [
+        "Christian Lanegger",
+        "Helen Oleynikova",
+        "Roland Siegwart",
+        "Michael Pantic"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-08-11T08:08:53+00:00",
+      "link": "https://arxiv.org/pdf/2608.10623v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "Detects robot estimator failures via spectral analysis under out-of-distribution noise, enabling safe robot operation",
+      "llm_evidence_cn": "通过频谱分析检测机器人在分布外噪声下的估计器故障，保障安全运行",
+      "llm_evidence": "通过频谱分析检测机器人在分布外噪声下的估计器故障，保障安全运行",
+      "canonical_evidence": "通过频谱分析检测机器人在分布外噪声下的估计器故障，保障安全运行",
+      "llm_tldr_en": "Proposes a sensor-agnostic introspective method that detects state estimator failures by analyzing frequency-domain power distribution of recent velocity estimates, targeting out-of-distribution noise.",
+      "llm_tldr_cn": "可靠的机载状态估计对安全机器人操作至关重要，但传感器混叠或分布外噪声等未建模干扰仍会导致估计器退化甚至失效，而协方差等不确定性度量常过于自信。论文提出一种与传感器无关的内省方法，通过分析近期速度估计的频域功率分布来评估估计器健康状态，不需要依赖训练数据分布。实验表明该方法能有效检测估计器失效，为机器人在分布外条件下的安全运行提供了一种可迁移的故障检测手段。",
+      "llm_tldr": "可靠的机载状态估计对安全机器人操作至关重要，但传感器混叠或分布外噪声等未建模干扰仍会导致估计器退化甚至失效，而协方差等不确定性度量常过于自信。论文提出一种与传感器无关的内省方法，通过分析近期速度估计的频域功率分布来评估估计器健康状态，不需要依赖训练数据分布。实验表明该方法能有效检测估计器失效，为机器人在分布外条件下的安全运行提供了一种可迁移的故障检测手段。",
+      "llm_tags": [
+        "query:humanoid-ood"
+      ],
+      "matched_query_tag": "query:humanoid-ood",
+      "matched_query_text": "out-of-distribution detection for safe robot operation",
+      "matched_requirement_id": "req-11",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2608.07045v1",
+      "source": "arxiv",
+      "title": "C2Dex: Contact-Consistent Reconstruction and Retargeting for Dexterous Manipulation from Monocular Video",
+      "abstract": "High-quality demonstrations for dexterous robot manipulation are costly and difficult to collect, whereas monocular human videos provide a scalable source of diverse manipulation behaviors. However, transferring such demonstrations to dexterous robots remains challenging: monocular hand-object interaction (HOI) reconstruction often produces temporally unstable contacts and physically implausible interactions, while conventional retargeting methods struggle to preserve task-relevant contacts and local interaction geometry across different hand embodiments. We present C2Dex, a video-to-dexterous-manipulation framework built around a shared interaction representation: stable object-side contacts recovered by aggregating noisy frame-wise observations in the canonical object space. These stable contacts serve a dual role: as trajectory-level constraints that guide reconstruction toward temporally coherent and physically plausible human HOI trajectories, and as explicit transfer targets for the dexterous hand, where Laplacian interaction optimization preserves the local hand-object geometry across embodiments and residual reinforcement learning refines the trajectory in simulation. Experiments on DexYCB and TACO show that C2Dex achieves end-to-end trajectory success rates of 57.78% and 26.67%, respectively, substantially outperforming the strongest baselines (17.78% and 10.00%) under identical evaluation criteria. Real-robot replay experiments further demonstrate physical feasibility across diverse contact-rich manipulation tasks. Project page: https://k-jie.github.io/C2Dex/",
+      "authors": [
+        "Jie Ren",
+        "Zhehao Jiang",
+        "Yinhong Yang",
+        "Haorui Jia",
+        "Han Jiang",
+        "Ben Li",
+        "Yao Yao",
+        "Cheng Lin",
+        "Qiu Shen",
+        "Zhenshan Bing",
+        "Xiao-Xiao Long",
+        "Xun Cao"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.CV"
+      ],
+      "published": "2026-08-07T09:54:00+00:00",
+      "link": "https://arxiv.org/pdf/2608.07045v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "Video-to-demonstration dataset construction framework for robot manipulation",
+      "llm_evidence_cn": "从视频到机器人演示的数据集构建框架",
+      "llm_evidence": "从视频到机器人演示的数据集构建框架",
+      "canonical_evidence": "从视频到机器人演示的数据集构建框架",
+      "llm_tldr_en": "C2Dex reconstructs stable object-side contacts from monocular videos and retargets human hand interactions to dexterous robots, enabling scalable collection of high-quality demonstrations for manipulation.",
+      "llm_tldr_cn": "灵巧操作的高质量演示采集成本高且困难，而单目人体视频提供了可扩展的行为来源。C2Dex构建了基于共享交互表示的视频到灵巧操作框架，通过聚合稳定的物体侧接触点并进行跨形态重定向，保留任务关键的接触与局部交互几何信息。该方法能够将单目视频转化为可用的机器人演示数据，为灵巧操作数据集的构建提供可扩展的途径。",
+      "llm_tldr": "灵巧操作的高质量演示采集成本高且困难，而单目人体视频提供了可扩展的行为来源。C2Dex构建了基于共享交互表示的视频到灵巧操作框架，通过聚合稳定的物体侧接触点并进行跨形态重定向，保留任务关键的接触与局部交互几何信息。该方法能够将单目视频转化为可用的机器人演示数据，为灵巧操作数据集的构建提供可扩展的途径。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2608.13028v1",
+      "source": "arxiv",
+      "title": "RGB-D Video Generation for Improving Human-to-Robot Object Handover Prediction",
+      "abstract": "Human-to-robot (H2R) object handover is a fundamental capability for human-robot collaboration, yet progress is hindered by the scarcity of large-scale, human-centric datasets and the significant sim-to-real gap. To address these challenges, we introduce Hand2Bot, an RGB-D video dataset that provides rich contextual information such as body posture and facial expressions, specifically collected for handover scenarios with real-world noise patterns. We further propose PassGen, a generative pipeline that leverages stable video diffusion and an Intention-Aware Temporal Face Encoder to synthesize realistic handover sequences while ensuring hand-object consistency. To bridge the sim-to-real gap, we implement a morphology-based depth editing strategy that replicates realistic sensor noise found in physical depth maps. Experimental evaluations demonstrate that our framework achieves high intention identification accuracy and low false trigger rates in both ablation studies and real-world deployment on a physical robot platform. Our results confirm that training on PassGen allows for robust zero-shot transfer and earlier intention anticipation compared to traditional hand-centric baselines, effectively enabling socially aware robotic behavior in shared workspaces.",
+      "authors": [
+        "Tianyu Sun",
+        "Zhoujie Fu",
+        "Zihui Gao",
+        "Bang Zhang",
+        "Guosheng Lin"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV",
+        "cs.RO"
+      ],
+      "published": "2026-08-13T09:55:59+00:00",
+      "link": "https://arxiv.org/pdf/2608.13028v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "RGB-D video dataset and generative pipeline for robot handover dataset construction",
+      "llm_evidence_cn": "用于机器人交接数据集构建的RGB-D视频数据集与生成流水线",
+      "llm_evidence": "用于机器人交接数据集构建的RGB-D视频数据集与生成流水线",
+      "canonical_evidence": "用于机器人交接数据集构建的RGB-D视频数据集与生成流水线",
+      "llm_tldr_en": "Hand2Bot provides an RGB-D video dataset for human-to-robot handover with real-world noise, and PassGen uses video diffusion to synthesize realistic sequences, addressing dataset scarcity and sim-to-real gap.",
+      "llm_tldr_cn": "人机交接研究受限于大规模、以人为中心的数据集稀缺以及显著的仿真到现实差距。该文提出Hand2Bot RGB-D视频数据集，包含人体姿态、面部表情等丰富上下文信息，并捕获真实世界噪声模式。同时提出PassGen生成流水线，利用稳定视频扩散和意图感知时间面部编码器合成真实交接序列，并确保手-物体一致性，通过形态学深度编辑策略缩小仿真与现实的差距。该工作为机器人交接预测提供了新的数据资源与数据增强方法。",
+      "llm_tldr": "人机交接研究受限于大规模、以人为中心的数据集稀缺以及显著的仿真到现实差距。该文提出Hand2Bot RGB-D视频数据集，包含人体姿态、面部表情等丰富上下文信息，并捕获真实世界噪声模式。同时提出PassGen生成流水线，利用稳定视频扩散和意图感知时间面部编码器合成真实交接序列，并确保手-物体一致性，通过形态学深度编辑策略缩小仿真与现实的差距。该工作为机器人交接预测提供了新的数据资源与数据增强方法。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2608.13555v1",
+      "source": "arxiv",
+      "title": "HumanTracker: Towards Comprehensive and Human-Aligned Motion Tracking Benchmark",
+      "abstract": "Humanoid motion tracking is central to teleoperation and whole-body imitation, yet evaluation often disagrees with what people perceive in videos. Kinematic errors average per-frame pose differences but miss the physical artifacts that matter most, particularly unstable support and incorrect contacts such as foot skating and mistimed touch-downs. Meanwhile, widely used test suites are small and lack the diversity needed to stress contact-rich, long-horizon behaviors. We introduce HumanTracker to make humanoid tracking evaluation both perceptually aligned and scalable. The HumanTracker benchmark contains approximately 153 hours of optical motion trajectories from multiple professional performers, organized into four motion families with text labels for fine-grained diagnosis. We further propose HumanScore, a preference-aligned metric trained on 12K motion pairs containing 24K motions. Across representative state-of-the-art trackers, HumanScore better predicts human preferences and reveals contact and stability failures that kinematic metrics often miss.",
+      "authors": [
+        "Dairu Liu",
+        "Zekun Qi",
+        "Jiayu Zeng",
+        "Ruixi Yu",
+        "Yu Guan",
+        "Yintianrun Zhang",
+        "Xuchuan Chen",
+        "Sikai Liang",
+        "Zekai Li",
+        "Chenghuai Lin",
+        "Xinqiang Yu",
+        "Wenyao Zhang",
+        "He Wang",
+        "Li Yi"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.AI",
+        "cs.CV"
+      ],
+      "published": "2026-08-13T17:59:40+00:00",
+      "link": "https://arxiv.org/pdf/2608.13555v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "comprehensive humanoid motion tracking benchmark with 153-hour data directly addresses humanoid dataset construction",
+      "llm_evidence_cn": "含153小时数据的仿人运动跟踪基准，直接面向仿人数据集构建",
+      "llm_evidence": "含153小时数据的仿人运动跟踪基准，直接面向仿人数据集构建",
+      "canonical_evidence": "含153小时数据的仿人运动跟踪基准，直接面向仿人数据集构建",
+      "llm_tldr_en": "HumanTracker is a 153-hour humanoid motion tracking benchmark from professional performances, with text labels and four motion families, aligning evaluation with human perception and enabling scalable testing of contact-rich long-horizon behaviors.",
+      "llm_tldr_cn": "人形运动跟踪评估常与人类感知不一致，且现有测试集规模小、多样性不足。本文提出HumanTracker基准，包含约153小时来自多位专业表演者的光学运动轨迹，划分四个运动家族并配有文本标签。该基准能针对接触丰富、长时域行为进行压力测试，使人形跟踪评估既符合人类感知又具备可扩展性，为仿人运动跟踪和模仿学习提供重要数据资源。",
+      "llm_tldr": "人形运动跟踪评估常与人类感知不一致，且现有测试集规模小、多样性不足。本文提出HumanTracker基准，包含约153小时来自多位专业表演者的光学运动轨迹，划分四个运动家族并配有文本标签。该基准能针对接触丰富、长时域行为进行压力测试，使人形跟踪评估既符合人类感知又具备可扩展性，为仿人运动跟踪和模仿学习提供重要数据资源。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "humanoid robot dataset construction",
+      "matched_requirement_id": "req-2",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "quick_skim": [
+    {
+      "id": "2608.07065v1",
+      "source": "arxiv",
+      "title": "AutoIntervene: Calibrated Intervention for Action-Chunking Imitation Learning Policies",
+      "abstract": "Action-chunking visuomotor policies learn from demonstrations and improve temporal consistency by predicting short action sequences rather than single-step commands. Yet perception errors and execution drift can move the robot outside the demonstration distribution, while the policy continues to produce smooth action chunks that are inconsistent with the observed state. We present AutoIntervene, an online framework that selectively transfers control between an action-chunking policy and an operator during deployment. AutoIntervene evaluates proposed chunks against a visual-action support memory built from successful task executions, combining visual similarity with consistency between proposed and reference actions. Phase-local support governs policy-to-operator transfer within the current task phase, whereas global support governs the return to policy control after operator recovery. We calibrate separate switching thresholds for the two directions from empirical quantiles of evaluation-level scores on held-out expert demonstrations, avoiding direct manual tuning of score cutoffs. Intervention segments retained from successful rollouts target learner-induced states and provide corrective supervision for subsequent policy updates. Experiments on real-world bimanual manipulation tasks show higher post-adaptation task success and lower operator-control time than manual intervention. Videos and additional results are available at https://aus.bot/research/autointervene/.",
+      "authors": [
+        "Jinhe Tang",
+        "Weiming Zhi"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.AI",
+        "cs.CV",
+        "cs.HC",
+        "cs.LG"
+      ],
+      "published": "2026-08-07T10:14:29+00:00",
+      "link": "https://arxiv.org/pdf/2608.07065v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "Out-of-distribution detection for safe robot operation via intervention",
+      "llm_evidence_cn": "通过干预实现安全机器人操作的分布外检测",
+      "llm_evidence": "通过干预实现安全机器人操作的分布外检测",
+      "canonical_evidence": "通过干预实现安全机器人操作的分布外检测",
+      "llm_tldr_en": "AutoIntervene selectively transfers control between an action-chunking policy and an operator when the robot moves outside the demonstration distribution, using a visual-action support memory to improve online safety.",
+      "llm_tldr_cn": "动作分块视觉运动策略在推理时可能因感知错误或执行漂移进入分布外状态。AutoIntervene提出在线干预框架，利用成功执行构建的视觉-动作支持记忆，结合视觉相似性与动作一致性评估候选动作块，在检测到分布外情况时选择性地将控制交还给操作员。该方法在部署中动态保障安全，降低策略失败风险，为机器人在开放环境中的可靠运行提供了有效的安全干预机制。",
+      "llm_tldr": "动作分块视觉运动策略在推理时可能因感知错误或执行漂移进入分布外状态。AutoIntervene提出在线干预框架，利用成功执行构建的视觉-动作支持记忆，结合视觉相似性与动作一致性评估候选动作块，在检测到分布外情况时选择性地将控制交还给操作员。该方法在部署中动态保障安全，降低策略失败风险，为机器人在开放环境中的可靠运行提供了有效的安全干预机制。",
+      "llm_tags": [
+        "query:humanoid-ood"
+      ],
+      "matched_query_tag": "query:humanoid-ood",
+      "matched_query_text": "out-of-distribution detection for safe robot operation",
+      "matched_requirement_id": "req-11",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2608.06587v1",
+      "source": "arxiv",
+      "title": "SyncSBC: Decentralized Swarm Behavior Prediction for Synchronized Autonomous Control",
+      "abstract": "Robot swarms utilize many independent limited-sensing agents to produce complex emergent behaviors without requiring centralized control. However, little research explores how agents can infer swarm-level behavior from purely local perception, a capability critical for detecting faults and behavior changes. In this paper, we introduce Synchronized Swarm Behavior Classification (SyncSBC), which combines improvements in machine learning and distributed consensus to classify collective swarm behavior and synchronize swarm decision-making in an entirely decentralized manner. We show that SyncSBC achieves high classification accuracy and low synchronization delay, making it suitable for real-world deployment. Finally, we use SyncSBC to demonstrate two promising swarm applications on real robots where we show that swarms utilizing SyncSBC can accurately identify anomalies in robot behavior and autonomously coordinate collective changes in swarm behavior. Videos, code and supplemental experiments are available at https://sites.google.com/view/sync-sbc/home.",
+      "authors": [
+        "Varun Raveendra",
+        "Connor Mattson",
+        "Daniel S. Brown"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.AI"
+      ],
+      "published": "2026-08-06T20:59:04+00:00",
+      "link": "https://arxiv.org/pdf/2608.06587v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "decentralized behavior classification for fault detection in robot swarms",
+      "llm_evidence_cn": "面向机器人群体故障检测的去中心化行为分类",
+      "llm_evidence": "面向机器人群体故障检测的去中心化行为分类",
+      "canonical_evidence": "面向机器人群体故障检测的去中心化行为分类",
+      "llm_tldr_en": "SyncSBC uses machine learning and distributed consensus to classify collective swarm behavior from local perception, enabling decentralized fault and behavior change detection with low latency for real-world deployment.",
+      "llm_tldr_cn": "机器人群体依赖大量感知受限的独立个体产生涌现行为，却很少研究个体如何从局部感知推断群体行为，而这一能力对故障和行为变化检测至关重要。本文提出SyncSBC，结合机器学习与分布式一致性，以完全去中心化的方式分类集体群体行为并同步群体决策。实验显示其分类准确率高、同步延迟低，适合实际部署，为群体机器人的故障检测提供了去中心化支撑。",
+      "llm_tldr": "机器人群体依赖大量感知受限的独立个体产生涌现行为，却很少研究个体如何从局部感知推断群体行为，而这一能力对故障和行为变化检测至关重要。本文提出SyncSBC，结合机器学习与分布式一致性，以完全去中心化的方式分类集体群体行为并同步群体决策。实验显示其分类准确率高、同步延迟低，适合实际部署，为群体机器人的故障检测提供了去中心化支撑。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "fault detection in humanoid robots",
+      "matched_requirement_id": "req-6",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2608.08859v1",
+      "source": "arxiv",
+      "title": "Agentic Anomaly Detection with ORCA-Style Dynamic Inductive Bias Adaptation in Multimodal Wearable Time Series Data",
+      "abstract": "Wireless Body Area Networks (WBANs) generate multivariate physiological time series that are highly nonstationary and must often be processed under strict computational and memory constraints. A critical yet underexplored challenge in this setting is selecting an appropriate temporal receptive field, which serves as a strong inductive bias for anomaly detection models. Existing approaches typically rely on fixed temporal contexts, which can perform inconsistently across heterogeneous signal regimes and require dataset-specific tuning. We propose ORCA, an agentically controlled anomaly detection framework that dynamically adapts the temporal receptive field at inference time based on lightweight signal statistics. Rather than introducing additional trainable parameters or learned policies, ORCA employs a supervisory controller that autonomously selects among discrete temporal contexts, enabling state-dependent inductive bias adaptation without retraining. Across a custom WBAN dataset, ORCA achieves performance comparable to the strongest fixed-context baselines (AUROC = 0.99) while eliminating the need to tune temporal horizons in advance. We further evaluate ORCA on MIMIC-IV as a challenging out-of-distribution benchmark, observing conservative generalization behavior without performance collapse under heterogeneous clinical conditions. These results highlight adaptive temporal inductive bias control as a practical and robust design principle for anomaly detection in resource-constrained, nonstationary physiological time series.",
+      "authors": [
+        "Anushka Roy",
+        "Jyotirmoy Singh",
+        "Shreea Bose",
+        "Chittaranjan Hota"
+      ],
+      "primary_category": "cs.LG",
+      "categories": [
+        "cs.LG",
+        "cs.AI"
+      ],
+      "published": "2026-08-09T18:49:13+00:00",
+      "link": "https://arxiv.org/pdf/2608.08859v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "Anomaly detection in multivariate wearable time series under strict computational/memory constraints via adaptive temporal receptive field, directly applicable to edge deployment for robot anomaly detection.",
+      "llm_evidence_cn": "提出在严格计算/内存约束下自适应时间感知野的多变量可穿戴时间序列异常检测，可直接应用于机器人边缘端异常检测。",
+      "llm_evidence": "提出在严格计算/内存约束下自适应时间感知野的多变量可穿戴时间序列异常检测，可直接应用于机器人边缘端异常检测。",
+      "canonical_evidence": "提出在严格计算/内存约束下自适应时间感知野的多变量可穿戴时间序列异常检测，可直接应用于机器人边缘端异常检测。",
+      "llm_tldr_en": "ORCA adapts temporal receptive field at inference from lightweight signal statistics for anomaly detection in multivariate time series under compute/memory limits. Supports edge deployment of robot anomaly detection.",
+      "llm_tldr_cn": "本文针对可穿戴多模态生理时间序列的异常检测，提出ORCA框架，在严格计算与内存约束下，根据轻量信号统计在推理时动态调整时间感知野。该方法解决了固定时间上下文在非平稳信号中性能不稳定、需要逐数据集调参的问题。实验表明其能高效适应不同信号状态。该资源感知设计对机器人本体感受信号的边缘端异常检测具有直接借鉴意义。",
+      "llm_tldr": "本文针对可穿戴多模态生理时间序列的异常检测，提出ORCA框架，在严格计算与内存约束下，根据轻量信号统计在推理时动态调整时间感知野。该方法解决了固定时间上下文在非平稳信号中性能不稳定、需要逐数据集调参的问题。实验表明其能高效适应不同信号状态。该资源感知设计对机器人本体感受信号的边缘端异常检测具有直接借鉴意义。",
+      "llm_tags": [
+        "query:humanoid-ood:composite"
+      ],
+      "matched_query_tag": "query:humanoid-ood:composite",
+      "matched_query_text": "Papers central to 请帮我查找与人形机器人故障诊断、异常检测（OOD / Anomaly Detection）、自监督时序重建（VAE / GRU）、以及边缘部署相关的论文。重点关注：基于本体感受信号（关节位置/速度/力矩/IMU）的故障检测方法；用于时序数据的自监督异常检测（如 OmniAnomaly, USAD）；开放集识别 / OOD 检测在机器人安全中的应用；轻量化模型（LSTM/GRU）在嵌入式平台（RK3588）上的部署；受 RAPT (Munn 等, 2026) 启发的机器人故障诊断框架。另外，请补充一些关于仿人机器人（Unitree G1 等）仿真故障注入、数据集构建的文献。, especially work that connects or combines: humanoid robot fault diagnosis using proprioceptive signals; anomaly detection from joint position velocity torque IMU signals in humanoid robots; out-of-distribution detection for safe robot operation; lightweight LSTM or GRU models deployed on embedded platforms for anomaly detection; RAPT framework for robot fault diagnosis based on proprioception; fault injection simulation for humanoid robots in MuJoCo or similar environments; Anomaly detection in humanoid robot using proprioceptive signals; Self supervised time series anomaly detection for robot fault diagnosis; Open set recognition in robotics for safety and anomaly detection; Deploying lightweight LSTM GRU on RK3588 for time series anomaly detection.",
+      "matched_requirement_id": "req-composite-humanoid-ood",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2608.07074v1",
+      "source": "arxiv",
+      "title": "M2-SMap: Memory-Efficient Semantic Mapping with Hierarchical Multi-Model Representation",
+      "abstract": "Dense point cloud maps, as a typically used mapping representation, are difficult to deploy on resource-constrained robots because their memory consumption grows rapidly with scene scale. Although compact single-model representations reduce memory cost, their fixed geometric expressiveness is insufficient for structurally diverse environments. Existing multi-model methods improve representational flexibility, yet their feature extraction and model selection are often dominated by local geometry, which can cause overfitting and adhesion between objects. To address these issues, this paper presents M2-SMap, a memory-efficient semantic mapping framework based on hierarchical multi-model representation. First, a hierarchical geometric decomposition partitions RGB-D point clouds into compact Gaussian components. Then, a projection-guided semantic annotation mechanism assigns instance identities to each component. Subsequently, these annotations are incorporated into an object-aware Gaussian fusion strategy. Furthermore, a multi-scale feature extraction strategy separates large planar regions, semantic objects, and complex residual structures, which are respectively represented by bounded planes, object-level superquadrics, and GMM primitives. Experiments on three RGB-D sequences show that M2-SMap runs in real time at no less than 29.37 Hz while achieving the lowest primitive count, with an average reduction of 18.7% over the best baseline. It also reduces the mean per-frame number of measured inter-object adhesion cases from 2.808 to 0, demonstrating efficient and semantically consistent scene representation.",
+      "authors": [
+        "QiYing Deng",
+        "ZhongLai Wang",
+        "Yuan Gao",
+        "Wei Dong"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-08-07T10:27:26+00:00",
+      "link": "https://arxiv.org/pdf/2608.07074v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "memory-efficient semantic mapping for resource-constrained robots",
+      "llm_evidence_cn": "面向资源受限机器人的内存高效语义建图",
+      "llm_evidence": "面向资源受限机器人的内存高效语义建图",
+      "canonical_evidence": "面向资源受限机器人的内存高效语义建图",
+      "llm_tldr_en": "M2-SMap proposes a hierarchical multi-model representation for memory-efficient semantic mapping, enabling complex mapping on resource-constrained robots.",
+      "llm_tldr_cn": "密集点云地图在场景规模扩大时内存消耗迅速增长，难在资源受限机器人上部署，而紧凑单模型表示又缺乏足够的几何表达能力。本文提出M2-SMap框架，以层次化多模型表示实现内存高效的语义建图，通过分层次的几何解耦避免局部几何主导的过拟合与粘连。结果表明，该方法在降低内存占用的同时保持了对多样环境的表达灵活性，为边缘部署条件下的机器人感知提供了实用的建图方案。",
+      "llm_tldr": "密集点云地图在场景规模扩大时内存消耗迅速增长，难在资源受限机器人上部署，而紧凑单模型表示又缺乏足够的几何表达能力。本文提出M2-SMap框架，以层次化多模型表示实现内存高效的语义建图，通过分层次的几何解耦避免局部几何主导的过拟合与粘连。结果表明，该方法在降低内存占用的同时保持了对多样环境的表达灵活性，为边缘部署条件下的机器人感知提供了实用的建图方案。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "edge deployment for humanoid robots",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2608.09166v1",
+      "source": "arxiv",
+      "title": "Particle-Based Conformal Prediction for Contact-Aware Uncertainty Calibration in Stratified Configuration Spaces",
+      "abstract": "Reliable uncertainty representation is essential for deploying autonomous systems that interact with their environment, as robots must reason about how uncertainty arising from both stochasticity and model mismatch is impacted by contacts with obstacles (e.g., when navigating through a cluttered environment or inserting a part into an assembly). We propose Calibrated Particle-sets for Trans-dimensional Uncertainty Representation (CaPTURe), a geometry-aware, conformal prediction-based algorithm that generates probabilistically valid prediction regions of the unknown future system configuration using particle-based models of arbitrary fidelity. While calibrated uncertainty predictions are essential for safe and efficient planning, analytical or learned motion models are often inaccurate - due to limited data, simplifying assumptions, unmodeled effects, etc. - which can lead to unsafe executions or task failure. Additionally, when a robot contacts an obstacle, the distribution of its future configurations can become multimodal or disjoint, or lie along manifolds of lower intrinsic dimension than the space of possible robot configurations. Our method uses a calibration dataset of system transitions to locally calibrate motion uncertainty estimates, constructing regions guaranteed to contain the future robot configuration at a user-set probability. Our calibration procedure captures how motion uncertainty varies between contact-rich and contactless motions, leading to sufficient coverage in both cases. We evaluate our method on two simulated planning tasks: controlling a marble around a labyrinth and performing tight-tolerance peg-in-hole insertion with a manipulator. Compared to relevant baselines, CaPTURe achieves the user-specified coverage requirement both in and out of contact and achieves up to a 30% absolute improvement in task success rate over the best baseline.",
+      "authors": [
+        "Luís Marques",
+        "Kristian Popov",
+        "Dmitry Berenson"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.LG",
+        "stat.ME"
+      ],
+      "published": "2026-08-10T06:22:10+00:00",
+      "link": "https://arxiv.org/pdf/2608.09166v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "Uncertainty calibration and conformal prediction for safe robot deployment, relevant to OOD detection for safe operation",
+      "llm_evidence_cn": "面向安全机器人部署的不确定性校准与共形预测，与安全操作中的OOD检测相关",
+      "llm_evidence": "面向安全机器人部署的不确定性校准与共形预测，与安全操作中的OOD检测相关",
+      "canonical_evidence": "面向安全机器人部署的不确定性校准与共形预测，与安全操作中的OOD检测相关",
+      "llm_tldr_en": "Proposes CaPTURe, a conformal prediction-based algorithm generating calibrated uncertainty regions for robot configuration spaces under contact constraints. Supports safe deployment by providing valid uncertainty estimates.",
+      "llm_tldr_cn": "该论文针对机器人在接触受限环境中安全部署所需的可靠不确定性估计问题，提出CaPTURe算法。该方法基于共形预测与粒子集模型，在分层构型空间中生成概率上有效的预测区域，并显式考虑接触对不确定性的影响。实验表明其能够提供校准良好的不确定性边界，从而提升机器人对模型失配与随机性的感知能力，为安全的机器人操作和决策提供基础。",
+      "llm_tldr": "该论文针对机器人在接触受限环境中安全部署所需的可靠不确定性估计问题，提出CaPTURe算法。该方法基于共形预测与粒子集模型，在分层构型空间中生成概率上有效的预测区域，并显式考虑接触对不确定性的影响。实验表明其能够提供校准良好的不确定性边界，从而提升机器人对模型失配与随机性的感知能力，为安全的机器人操作和决策提供基础。",
+      "llm_tags": [
+        "query:humanoid-ood"
+      ],
+      "matched_query_tag": "query:humanoid-ood",
+      "matched_query_text": "out-of-distribution detection for safe robot operation",
+      "matched_requirement_id": "req-11",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2608.07328v1",
+      "source": "arxiv",
+      "title": "Learning Fault-Tolerant Locomotion with Adaptive Gait Timing",
+      "abstract": "Hardware failures require legged robots to rapidly reorganize coordination and gait timing to maintain stability and mobility. This is particularly challenging for larger quadrupeds, where increased mass and tighter actuation limits reduce the feasibility of aggressive, high-frequency compensation strategies often observed on smaller platforms. In this work, we propose a deep reinforcement learning approach for fault-tolerant locomotion under actuator power loss. The method employs an asymmetric actor-critic architecture in which the critic has access to privileged information during training, while the actor learns to reconstruct a corresponding latent representation from proprioceptive observations. We introduce a latent-alignment loss that encourages consistency between actor and critic representations. Additionally, we augment the action space with a learnable gait frequency parameter, enabling adaptive gait timing in response to terrain variations and actuator degradation without predefined faulty-leg strategies. The approach is validated in high-fidelity simulation on uneven terrain and real-world experiments on flat ground using a 68 kg quadruped robot.",
+      "authors": [
+        "Giovanbattista Gravina",
+        "Luca Rossini",
+        "Carlo Rizzardo",
+        "Arturo Laurenzi",
+        "Nikos Tsagarakis"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.LG"
+      ],
+      "published": "2026-08-07T15:27:03+00:00",
+      "link": "https://arxiv.org/pdf/2608.07328v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "fault-tolerant locomotion under actuator power loss using proprioceptive observations and latent reconstruction, directly relevant to proprioceptive fault handling in legged robots",
+      "llm_evidence_cn": "利用本体感受观测和隐表示重建实现执行器功率失效下的容错运动，与腿足机器人本体感受故障处理直接相关",
+      "llm_evidence": "利用本体感受观测和隐表示重建实现执行器功率失效下的容错运动，与腿足机器人本体感受故障处理直接相关",
+      "canonical_evidence": "利用本体感受观测和隐表示重建实现执行器功率失效下的容错运动，与腿足机器人本体感受故障处理直接相关",
+      "llm_tldr_en": "Presents a DRL fault-tolerant locomotion method under actuator power loss, using asymmetric actor-critic with latent alignment from proprioceptive observations to adapt gait timing and maintain stability on legged robots.",
+      "llm_tldr_cn": "针对执行器功率损失等硬件故障，论文提出一种基于自适应步态时序的深度强化学习容错运动方法。该方法使用非对称Actor-Critic，训练时Critic可访问特权信息，Actor从本体感受观测重建对应潜表示，并引入潜对齐损失保持一致性。实验表明，经过训练的机器人能够在多种执行器失效情况下重新组织步态并维持稳定性。该工作为腿足机器人在硬件故障下的安全运行提供了有效控制框架，也与本体感受信号驱动的故障诊断密切相关。",
+      "llm_tldr": "针对执行器功率损失等硬件故障，论文提出一种基于自适应步态时序的深度强化学习容错运动方法。该方法使用非对称Actor-Critic，训练时Critic可访问特权信息，Actor从本体感受观测重建对应潜表示，并引入潜对齐损失保持一致性。实验表明，经过训练的机器人能够在多种执行器失效情况下重新组织步态并维持稳定性。该工作为腿足机器人在硬件故障下的安全运行提供了有效控制框架，也与本体感受信号驱动的故障诊断密切相关。",
+      "llm_tags": [
+        "query:humanoid-ood"
+      ],
+      "matched_query_tag": "query:humanoid-ood",
+      "matched_query_text": "humanoid robot fault diagnosis using proprioceptive signals",
+      "matched_requirement_id": "req-9",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2608.09620v1",
+      "source": "arxiv",
+      "title": "A Semantic Communication Approach to Fiducial Marker Processing in 5G-Enabled Edge SLAM",
+      "abstract": "Autonomous robots increasingly rely on edge computing to offload computationally intensive perception tasks while maintaining real-time operation over 5G networks. However, conventional fiducial marker detection pipelines provide limited opportunities for efficient task partitioning, making them poorly suited for communication-aware edge deployment. This paper proposes a semantic split inference framework for fiducial marker processing in 5G-enabled Edge SLAM. A DeepTag-inspired convolutional neural network is partitioned between the robot and the edge server, where intermediate feature representations serve as task-oriented semantic information transmitted over the wireless link. The framework is integrated into a ROS2-based robotic architecture and characterized over a real 5G communication testbed. Experimental results demonstrate accurate keypoint estimation, illustrate the impact on downstream pose estimation, and quantify the communication--computation trade-offs associated with different split points, providing practical insights for communication-aware deployment of deep visual perception in connected robotic systems.",
+      "authors": [
+        "Boris Radovanovic",
+        "Vukan Ninkovic",
+        "Katarina Vidojevic",
+        "Buda Bajic Papuga",
+        "Dejan Vukobratovic"
+      ],
+      "primary_category": "cs.NI",
+      "categories": [
+        "cs.NI",
+        "cs.RO"
+      ],
+      "published": "2026-08-10T13:59:11+00:00",
+      "link": "https://arxiv.org/pdf/2608.09620v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "edge computing, split inference for robotic perception in 5G edge SLAM",
+      "llm_evidence_cn": "边缘计算、5G边缘SLAM中感知任务的分割推理",
+      "llm_evidence": "边缘计算、5G边缘SLAM中感知任务的分割推理",
+      "canonical_evidence": "边缘计算、5G边缘SLAM中感知任务的分割推理",
+      "llm_tldr_en": "Presents a semantic split inference framework for fiducial marker processing in 5G-enabled Edge SLAM, partitioning a CNN between robot and edge server for communication-aware edge deployment.",
+      "llm_tldr_cn": "自主机器人日益依赖边缘计算卸载高开销感知任务，以在5G网络上保持实时运行，但传统的基准标记检测管道难以进行高效任务划分。本文提出一种用于5G边缘SLAM的语义分割推理框架，将DeepTag风格卷积神经网络分割在机器人与边缘服务器之间，以中间特征作为面向任务的语义信息在无线链路上传输。该方法在ROS2机器人架构中集成，实现了面向通信的边缘部署，为机器人感知的通信感知式任务划分提供了新思路。",
+      "llm_tldr": "自主机器人日益依赖边缘计算卸载高开销感知任务，以在5G网络上保持实时运行，但传统的基准标记检测管道难以进行高效任务划分。本文提出一种用于5G边缘SLAM的语义分割推理框架，将DeepTag风格卷积神经网络分割在机器人与边缘服务器之间，以中间特征作为面向任务的语义信息在无线链路上传输。该方法在ROS2机器人架构中集成，实现了面向通信的边缘部署，为机器人感知的通信感知式任务划分提供了新思路。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "edge deployment for humanoid robots",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2608.08373v1",
+      "source": "arxiv",
+      "title": "Real-time anomaly detection in base station testbeds via scalable kernel density estimation framework",
+      "abstract": "Large-scale testing infrastructures are critical for validating telecommunication systems, yet their growing complexity makes efficient resource utilization and anomaly detection increasingly challenging. In reservation-based testbed environments, errors in resource allocation or preparation often manifest as abrupt spikes or regime changes in time-based metrics. This paper proposes a scalable, unsupervised framework for real-time anomaly detection in such environments. We introduce CALM (Continuous Anomaly Localization for univariate and Multivariate data), a nonparametric method based on kernel density estimation and bootstrap-based thresholding, designed for anomaly detection at the individual testbed level. To address system-wide visibility, we further propose AggCALM, an aggregation framework that consolidates local anomaly signals across multiple testbeds to detect statistically significant global anomalies while mitigating alarm fatigue. The methodology is evaluated using simulated multivariate data and real-world data from a large-scale base station testing platform. Results demonstrate that the proposed framework enables timely, flexible, and accurate anomaly detection without requiring labeled data, supporting reliable operation of complex test environments. Although the proposed methodology is presented within the context of a telecommunication testing labs, it can be effectively used to other applications, such as condition monitoring, where anomaly detection serves as a pivotal pre-processing step for diagnostic signals.",
+      "authors": [
+        "Justyna Witulska",
+        "Marcin Szczukiewicz",
+        "Artur Tabaka",
+        "Rafał Sarniak",
+        "Ireneusz Jabłoński",
+        "Agnieszka Wyłomańska",
+        "Dominik Dulas"
+      ],
+      "primary_category": "stat.AP",
+      "categories": [
+        "stat.AP"
+      ],
+      "published": "2026-08-08T23:57:00+00:00",
+      "link": "https://arxiv.org/pdf/2608.08373v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "query:humanoid-ood"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "unsupervised real-time anomaly detection on time-series metrics via kernel density estimation, transferable to robot proprioceptive signal monitoring",
+      "llm_evidence_cn": "基于核密度估计的无监督实时时间序列异常检测，可迁移到机器人本体感受信号监测",
+      "llm_evidence": "基于核密度估计的无监督实时时间序列异常检测，可迁移到机器人本体感受信号监测",
+      "canonical_evidence": "基于核密度估计的无监督实时时间序列异常检测，可迁移到机器人本体感受信号监测",
+      "llm_tldr_en": "CALM introduces scalable unsupervised real-time anomaly detection for multivariate time-series metrics using kernel density estimation and bootstrap-based thresholds, applicable to continuous monitoring and transferable to robot proprioceptive fault detection.",
+      "llm_tldr_cn": "大型通信测试平台的资源分配错误常常表现为时间序列指标的尖峰或状态切换，而传统方法难以在大规模场景下实时监测。该文提出CALM，一种基于核密度估计与自助法阈值的无监督异常检测框架，支持单变量和多变量数据并可在个体测试台层面实时运行。实验表明该方法能有效定位异常并具备可扩展性，其技术路径可迁移到机器人本体感受信号的连续异常监测中。",
+      "llm_tldr": "大型通信测试平台的资源分配错误常常表现为时间序列指标的尖峰或状态切换，而传统方法难以在大规模场景下实时监测。该文提出CALM，一种基于核密度估计与自助法阈值的无监督异常检测框架，支持单变量和多变量数据并可在个体测试台层面实时运行。实验表明该方法能有效定位异常并具备可扩展性，其技术路径可迁移到机器人本体感受信号的连续异常监测中。",
+      "llm_tags": [
+        "query:humanoid-ood"
+      ],
+      "matched_query_tag": "query:humanoid-ood",
+      "matched_query_text": "Self supervised time series anomaly detection for robot fault diagnosis",
+      "matched_requirement_id": "req-16",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2608.11769v1",
+      "source": "arxiv",
+      "title": "Policy-Induced Hand Priors in Humanoid Dual-Arm Manipulation: Diagnosing and Mitigating Initial-Pose Dependence",
+      "abstract": "Vision-language-action (VLA) policies are expected to operate robustly across variations in the robot's initial configuration, yet aggregate task success can conceal pose-specific failures and inappropriate hand selection. This work investigates initial-pose dependence in VLA-based humanoid dual-arm manipulation. We characterize the initial-condition-dependent early hand preference as a policy-induced hand prior and quantify it using HandPriorScore, residual hand bias, and target responsiveness. Evaluations across multiple policies and 17 initial configurations reveal strong initial-pose--policy interactions: the same pose produces substantially different success rates across policies, while a single policy exhibits large performance variation across poses. Specific initial arm configurations can suppress or induce an asymmetric hand preference, with the resulting effect varying in direction and strength across policies. Wrist-camera observations also influence hand selection and task performance. Expanding initial-pose coverage in the training dataset substantially improves robustness, while targeted augmentation around a low-performing configuration increases its success rate. Comparisons across training configurations show that sufficient exposure to the target simulation task is beneficial, whereas the effect of real or auxiliary data depends on pose coverage, simulation ratio, and observation availability. These findings characterize a pose-conditioned hand prior, identify a localized initial arm configuration as a causal handle on hand-selection behavior, and demonstrate how data coverage and training composition affect initial-pose robustness.",
+      "authors": [
+        "Chaeyeon Jung",
+        "Juyoun Park"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-08-12T08:13:44+00:00",
+      "link": "https://arxiv.org/pdf/2608.11769v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "Humanoid dual-arm manipulation error analysis and failure diagnosis, matches fault diagnosis/error analysis for humanoid robots",
+      "llm_evidence_cn": "人形双机械臂操作错误分析与失败诊断，匹配人形机器人故障诊断与错误分析",
+      "llm_evidence": "人形双机械臂操作错误分析与失败诊断，匹配人形机器人故障诊断与错误分析",
+      "canonical_evidence": "人形双机械臂操作错误分析与失败诊断，匹配人形机器人故障诊断与错误分析",
+      "llm_tldr_en": "Diagnoses initial-pose dependence and policy-induced hand priors in VLA-based humanoid dual-arm manipulation, quantifying pose-specific failures across 17 initial configurations. Provides tools for humanoid error analysis.",
+      "llm_tldr_cn": "该论文针对人形双机械臂操作中VLA策略对不同初始位姿表现不稳定的问题，提出系统性的诊断框架。作者定义了策略诱导手部先验，并借助HandPriorScore、残差手部偏置等指标量化初始条件相关失败模式。在17种初始构型下的评测显示，同一位姿在不同策略间以及同一策略内部均存在显著成功率差异。这项研究为理解和缓解人形机器人操作策略的初始位姿依赖提供了重要分析工具。",
+      "llm_tldr": "该论文针对人形双机械臂操作中VLA策略对不同初始位姿表现不稳定的问题，提出系统性的诊断框架。作者定义了策略诱导手部先验，并借助HandPriorScore、残差手部偏置等指标量化初始条件相关失败模式。在17种初始构型下的评测显示，同一位姿在不同策略间以及同一策略内部均存在显著成功率差异。这项研究为理解和缓解人形机器人操作策略的初始位姿依赖提供了重要分析工具。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "fault diagnosis and error analysis for humanoid robots",
+      "matched_requirement_id": "req-7",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2608.09246v1",
+      "source": "arxiv",
+      "title": "An Explainable GNN Framework for Component-Level Anomaly Diagnosis",
+      "abstract": "Industrial processes are complex systems composed of multiple interacting sensors that generate multivariate time series (MTS). Detecting anomalies in such systems is critical for reliability and safety, yet understanding their origin is equally important. Existing Graph Neural Network (GNN)based methods for anomaly detection primarily focus on sensor-level deviations and either attribute anomalies directly to the deviating sensors. When diagnosis is attempted, generally, the most deviated sensor is identified as a root cause of a system fault. However, in many industrial systems, anomalies do not arise from faulty sensors but from disruptions in the influences governing the system dynamics. We propose an explainable GNN-based anomaly detection framework that shifts the perspective from sensor-level anomalies to component-level diagnosis, hypothesizing that anomalous measurements are symptoms of altered inter-sensor influences. Experiments show that the method effectively identifies and prioritizes the true faulty components, providing interpretable insights into system failures.",
+      "authors": [
+        "Sena Ozgunay",
+        "Louise Travé-Massuyès",
+        "Jean-Michel Loubes",
+        "Raul Sena Ferreira"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI"
+      ],
+      "published": "2026-08-10T08:08:36+00:00",
+      "link": "https://arxiv.org/pdf/2608.09246v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "Explainable GNN anomaly diagnosis for multivariate time series, transferable to robot fault diagnosis.",
+      "llm_evidence_cn": "面向多变量时间序列的可解释图神经网络异常诊断，可迁移至机器人故障诊断。",
+      "llm_evidence": "面向多变量时间序列的可解释图神经网络异常诊断，可迁移至机器人故障诊断。",
+      "canonical_evidence": "面向多变量时间序列的可解释图神经网络异常诊断，可迁移至机器人故障诊断。",
+      "llm_tldr_en": "Proposes an explainable GNN for component-level anomaly diagnosis in multivariate industrial time series, identifying disruptions in system influences beyond deviant sensors. A transferable method for robot fault diagnosis from sensor streams.",
+      "llm_tldr_cn": "工业过程由多传感器交互产生多变量时间序列，异常检测与根因诊断至关重要。现有图神经网络方法大多将异常归因于偏差最大的传感器，但实际故障常源于系统动态影响的中断。为此本文提出可解释的图神经网络异常检测框架，实现组件级异常诊断而非仅传感器级定位，并有助于理解异常来源。该方法可推广至基于关节/IMU等本体感受信号的人形机器人故障诊断。",
+      "llm_tldr": "工业过程由多传感器交互产生多变量时间序列，异常检测与根因诊断至关重要。现有图神经网络方法大多将异常归因于偏差最大的传感器，但实际故障常源于系统动态影响的中断。为此本文提出可解释的图神经网络异常检测框架，实现组件级异常诊断而非仅传感器级定位，并有助于理解异常来源。该方法可推广至基于关节/IMU等本体感受信号的人形机器人故障诊断。",
+      "llm_tags": [
+        "query:humanoid-ood:composite"
+      ],
+      "matched_query_tag": "query:humanoid-ood:composite",
+      "matched_query_text": "Papers central to 请帮我查找与人形机器人故障诊断、异常检测（OOD / Anomaly Detection）、自监督时序重建（VAE / GRU）、以及边缘部署相关的论文。重点关注：基于本体感受信号（关节位置/速度/力矩/IMU）的故障检测方法；用于时序数据的自监督异常检测（如 OmniAnomaly, USAD）；开放集识别 / OOD 检测在机器人安全中的应用；轻量化模型（LSTM/GRU）在嵌入式平台（RK3588）上的部署；受 RAPT (Munn 等, 2026) 启发的机器人故障诊断框架。另外，请补充一些关于仿人机器人（Unitree G1 等）仿真故障注入、数据集构建的文献。, especially work that connects or combines: humanoid robot fault diagnosis using proprioceptive signals; anomaly detection from joint position velocity torque IMU signals in humanoid robots; out-of-distribution detection for safe robot operation; lightweight LSTM or GRU models deployed on embedded platforms for anomaly detection; RAPT framework for robot fault diagnosis based on proprioception; fault injection simulation for humanoid robots in MuJoCo or similar environments; Anomaly detection in humanoid robot using proprioceptive signals; Self supervised time series anomaly detection for robot fault diagnosis; Open set recognition in robotics for safety and anomaly detection; Deploying lightweight LSTM GRU on RK3588 for time series anomaly detection.",
+      "matched_requirement_id": "req-composite-humanoid-ood",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2608.12416v1",
+      "source": "arxiv",
+      "title": "RoboSynChallenge: Mastering Real-World Dexterity via Generalizing Synthesized Manipulation Skills",
+      "abstract": "Achieving generalizable robotic manipulation remains a central challenge in embodied intelligence. Despite rapid advances in model architectures and learning algorithms, progress is often limited by the scarcity and narrow diversity of real-world data. The RoboSynChallenge competition introduces a unified benchmark to evaluate and advance the generalizability of manipulation policies across a spectrum of tasks, environments, and difficulty levels. To alleviate the shortage of realistic data, the challenge integrates large-scale synthetic data generation with standardized real-world robotic evaluation. Participants are encouraged to leverage synthesized state-action trials to improve general-purpose policy learning, while final assessments are conducted exclusively on unseen real-world manipulation environments. Baseline implementations, including Transformer-, Diffusion-, Vision-Language-Action, and World-Action-Model-based policies, are provided to ensure reproducibility and comparability. By coupling scalable simulation-based training with rigorous real-world validation, RoboSynChallenge aims to foster the development of broadly capable, data-efficient, and adaptable manipulation systems, thereby paving the way toward truly general robotic intelligence.",
+      "authors": [
+        "Runyi Zhao",
+        "Ruixin Wu",
+        "Chengkun Li",
+        "Hongrui Zhang",
+        "Ang Li",
+        "Ruixing Jin",
+        "Yueci Deng",
+        "Yingying Guo",
+        "Lihe Ding",
+        "Shaocong Dong",
+        "Tianfan Xue",
+        "Yanjun Gao",
+        "Yudong Luo",
+        "Pascal Poupart",
+        "Simo Wu",
+        "Kui Jia",
+        "Wei-shi Zheng",
+        "Guiliang Liu"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-08-12T04:29:00+00:00",
+      "link": "https://arxiv.org/pdf/2608.12416v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "Robotics dataset construction via large-scale synthetic data generation benchmark",
+      "llm_evidence_cn": "通过大规模合成数据生成基准进行机器人数据集构建",
+      "llm_evidence": "通过大规模合成数据生成基准进行机器人数据集构建",
+      "canonical_evidence": "通过大规模合成数据生成基准进行机器人数据集构建",
+      "llm_tldr_en": "RoboSynChallenge introduces a unified benchmark combining large-scale synthetic data generation with real-world evaluation to improve generalizable manipulation policies, addressing data scarcity in embodied intelligence.",
+      "llm_tldr_cn": "机器人操作策略的泛化往往受限于真实世界数据的稀缺和多样性不足。RoboSynChallenge竞赛引入了统一的基准测试，将大规模合成数据生成与标准化真实世界评估相结合，鼓励参与者利用合成的状态-动作样本提升通用策略学习，并在真实机器人上最终评测以检验仿真到现实的迁移。该基准覆盖多任务、多环境与多难度级别，为灵巧操作策略的泛化研究提供了系统化的训练与评测平台。",
+      "llm_tldr": "机器人操作策略的泛化往往受限于真实世界数据的稀缺和多样性不足。RoboSynChallenge竞赛引入了统一的基准测试，将大规模合成数据生成与标准化真实世界评估相结合，鼓励参与者利用合成的状态-动作样本提升通用策略学习，并在真实机器人上最终评测以检验仿真到现实的迁移。该基准覆盖多任务、多环境与多难度级别，为灵巧操作策略的泛化研究提供了系统化的训练与评测平台。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2608.13049v1",
+      "source": "arxiv",
+      "title": "H2R-Bench: Benchmarking Human-to-Robot Manipulation Video Generation in World Models",
+      "abstract": "Large-scale manipulation data is essential for robot learning, yet collecting robot demonstrations remains expensive and difficult to scale. Meanwhile, abundant egocentric human manipulation videos provide rich behavioral experiences, but transferring them across embodiments remains challenging due to differences between human hands and robotic end-effectors. Recent advances in video world models offer a promising pathway to synthesize robot-centric manipulation videos from human observations, while their cross-embodiment transfer capability remains largely unexplored. Therefore, we introduce H2R-Bench, a benchmark for evaluating cross-embodiment human-to-robot manipulation video generation, where models transform egocentric human demonstrations into robot manipulation videos under specified embodiments. Each benchmark instance contains a human demonstration video, target embodiment constraints, and source-grounded annotations covering task goals, action events, functional contacts, and object responses. H2R-Bench evaluates generated videos through five dimensions, including goal-state completion, action-event completion, functional contact transfer, embodiment correctness, and general video quality. We benchmark eleven state-of-the-art video generation models across six manipulation families and two robot embodiments. Our evaluation reveals that current video world models remain limited in human-to-robot manipulation transfer: even leading models often fail in embodiment consistency, functional interaction, and task execution. H2R-Bench provides a systematic diagnostic framework for evaluating whether video world models can bridge the human-to-robot embodiment gap and convert human manipulation observations into robot-centric training resources.",
+      "authors": [
+        "Dingyi Rong",
+        "Yue Shi",
+        "Chaofan Ma",
+        "Jiezhang Cao",
+        "Zongrui Wang",
+        "Zeyu Zhang",
+        "Yao Mu",
+        "Guangtao Zhai",
+        "Ning Liu"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.CV"
+      ],
+      "published": "2026-08-13T10:14:33+00:00",
+      "link": "https://arxiv.org/pdf/2608.13049v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "Benchmark for generating robot manipulation videos from human demos, relevant to robotics dataset construction",
+      "llm_evidence_cn": "利用人类演示生成机器人操作视频的基准，与机器人数据集构建相关",
+      "llm_evidence": "利用人类演示生成机器人操作视频的基准，与机器人数据集构建相关",
+      "canonical_evidence": "利用人类演示生成机器人操作视频的基准，与机器人数据集构建相关",
+      "llm_tldr_en": "Presents H2R-Bench, a benchmark for cross-embodiment human-to-robot manipulation video generation using world models, transforming egocentric human demos into robot-centric videos. Aims to scale robot training data.",
+      "llm_tldr_cn": "针对机器人演示数据采集昂贵、难以规模化的问题，该论文提出H2R-Bench基准，用于评估跨本体的人到机器人操作视频生成方法。它利用视频世界模型将人类第一视角演示转换为机器人视角的操作视频，从而提供一种扩大机器人学习数据规模的途径。该基准聚焦于跨本体迁移能力，为机器人操作数据集构建提供了新思路。",
+      "llm_tldr": "针对机器人演示数据采集昂贵、难以规模化的问题，该论文提出H2R-Bench基准，用于评估跨本体的人到机器人操作视频生成方法。它利用视频世界模型将人类第一视角演示转换为机器人视角的操作视频，从而提供一种扩大机器人学习数据规模的途径。该基准聚焦于跨本体迁移能力，为机器人操作数据集构建提供了新思路。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    }
+  ]
+}

@@ -1,0 +1,713 @@
+Title: Real-time anomaly detection in base station testbeds via scalable kernel density estimation framework
+
+URL Source: https://arxiv.org/pdf/2608.08373v1
+
+Published Time: Tue, 11 Aug 2026 00:58:58 GMT
+
+Number of Pages: 13
+
+Markdown Content:
+# Real-time anomaly detection in base station testbeds via scalable kernel density estimation framework 
+
+## Justyna Witulska a,∗, Marcin Szczukiewicz b, Artur Tabaka b, Rafał Sarniak b, Ireneusz Jabłoński c,Agnieszka Wyłomańska a and Dominik Dulas b
+
+> a
+
+Faculty of Pure and Applied Mathematics and Hugo Steinhaus Center, Wrocław University of Science and Technology, Wrocław, 50-370, Poland 
+
+> b
+
+Nokia Solutions and Networks, Wrocław, 54-130, Poland 
+
+> c
+
+Faculty of MINT, Brandenburg University of Technology, Cottbus, 03046, Germany 
+
+A R T I C L E I N F O 
+
+Keywords :base station testbeds anomaly detection failures detection non-Gaussian data software testing 
+
+A B S T R A C T 
+
+Large-scale testing infrastructures are critical for validating telecommunication systems, yet their growing complexity makes efficient resource utilization and anomaly detection increasingly chal-lenging. In reservation-based testbed environments, errors in resource allocation or preparation often manifest as abrupt spikes or regime changes in time-based metrics. This paper proposes a scalable, unsupervised framework for real-time anomaly detection in such environments. We introduce CALM (Continuous Anomaly Localization for univariate and Multivariate data), a nonparametric method based on kernel density estimation and bootstrap-based thresholding, designed for anomaly detection at the individual testbed level. To address system-wide visibility, we further propose AggCALM, an aggregation framework that consolidates local anomaly signals across multiple testbeds to detect statistically significant global anomalies while mitigating alarm fatigue. The methodology is evaluated using simulated multivariate data and real-world data from a large-scale base station testing platform. Results demonstrate that the proposed framework enables timely, flexible, and accurate anomaly detection without requiring labeled data, supporting reliable operation of complex test environments. Although the proposed methodology is presented within the context of a telecommunication testing labs, it can be effectively used to other applications, such as condition monitoring, where anomaly detection serves as a pivotal pre-processing step for diagnostic signals. 
+
+## 1. Introduction 
+
+1.1. Problem description and motivation 
+
+Complex systems are common in industries like IT, man-ufacturing, and healthcare [1]. These systems involve inter-connected components and dynamic, interleaving processes that result in the emergence of new properties and behaviors that are difficult to predict [2]. For engineers responsible for monitoring and managing this complex infrastructure, controlling its temporal state is a challenge, especially in sit-uations where these higher-order properties, emerging from simple interactions between many individual components, impair the operation of the entire system [3, 4]. In this sense, these unpredictable states can be interpreted as failures and sources of inefficiency, or simply anomalies. Efficient resource allocation and anomaly detection are essential to keep operations running smoothly and reliably [5, 6, 7]. For managing complex systems, the initial phase of software and hardware testing of testbeds plays a crucial role. Testing has long served as both an acceptance criterion and a quality-assurance mechanism. Modern engineering practices have shortened the feedback loop between design, implementation, and verification through approaches such 
+
+> ∗
+
+Corresponding author  
+
+> justyna.witulska@pwr.edu.pl
+
+(J. Witulska);  
+
+> marcin.szczukiewicz@nokia.com
+
+(M. Szczukiewicz);  
+
+> artur.tabaka@nokia.com
+
+(A. Tabaka); rafal.sarniak@nokia.com (R. Sarniak); ireneusz.jablonski@b-tu.de (I. Jabłoński);  
+
+> agnieszka.wylomanska@pwr.edu.pl
+
+(A. Wyłomańska);  
+
+> dominik.dulas@nokia.com
+
+(D. Dulas) 
+
+> ORCID
+
+(s): 0000-0003-4351-0783 (J. Witulska) 
+
+as continuous integration and continuous delivery/deploy-ment [8], enabling earlier detection of issues and reducing correction costs. In telecommunication networks, testing is further complicated by the combination of custom software and purpose-built hardware such as radios and baseband units [9], resulting in significantly higher complexity than in other domains [10]. Large-scale testing infrastructures are critical for val-idating telecommunication systems, yet their increasing scale and complexity make efficient resource utilization and anomaly detection increasingly difficult to manage. In testing environments, reservation systems are employed to manage shared resources, acting as queuing mechanisms that provide access, avoid bottlenecks, and ensure optimal utilization [11, 12, 13, 14]. Importantly, in reservation-based testbed environments, errors in resource allocation or preparation can easily go unnoticed, often manifesting only as abrupt spikes or regime changes in time-based metrics. In 4G, 5G, and 6G mobile networks, Nokia’s base sta-tion software testing platform exemplifies advanced resource management in such systems. It provides access to thousands of geographically distributed testbeds used to verify the functionality and performance of mobile base transceiver stations, where high operational costs make efficient utiliza-tion essential. Growing test demand and the need for par-allel usage have rendered manual coordination impractical, leading to automated reservation and scheduling systems that enable continuous and conflict-free execution. As au-tomation expanded to globally shared testbed pools, main-taining system health became increasingly complex, with 
+
+J. Witulska et al.: Preprint submitted to Elsevier Page 1 of 12 arXiv:2608.08373v1 [stat.AP] 8 Aug 2026 Real-time anomaly detection in base station testbeds 
+
+centralized scheduling and continuous operation introducing new failure modes and reinforcing the need for automated anomaly detection. Reservation-based system was designed to streamline access and optimize resource usage. It ensures that the testbeds are used efficiently while maintaining high availability for testing needs. Furthermore, the reservation system generates time-based metrics that can be recorded and analyzed to detect non-standard behavior (anomalies), identify patterns, and derive operationally meaningful in-sights. Such anomalies may arise either from faults in the system or from changes in its underlying operational char-acteristics. In general, software defects and errors can be introduced and may manifest at every stage of the software development life cycle. Mistakes in a programmer’s underlying logic may arise during implementation, while faults in the compiler or build system can lead to defective software distributions. Likewise, failures in the software environment or in third-party systems accessed through APIs can disrupt an other-wise well-designed application flow. The problem classification groups anomalies according to the dominant source of failure. IEEE Std 1044-2009 [15] provides a general framework for recording and analyzing software anomalies, but it does not define a precise or fixed taxonomy of defect types. Because such detailed categorical specifications are not defined in the standard, this study adopts the defect taxonomy used in [16] – which classifies defects into ten practical categories suitable for operational analysis. In the case-study analyzed in this paper we have fol-lowing categories: Environment, Interface, Build (Package), System, and Function . The Environment category refers to operational conditions external to the testbed infrastructure, such as maintenance windows or the temporary unavail-ability of supporting systems or other problems related. 
+
+Interface anomalies correspond to communication and in-tegration issues with external systems, typically manifested as I/O or connectivity disruptions. The Build/Package cat-egory includes failures related to dependency management or errors connected to version control. System anomalies are associated with the runtime state of the infrastructure itself (configuration/memory etc.), whereas Function refers to defects in the orchestration or control software logic (e.g., logic, pointers, loops, recursion). Finally, it is worth to note that effective monitoring should support not only fault detection, but also the classification needed to guide an appropriate remediation strategy A major challenge in systems - like Nokia’s testing plat-form - is balancing the detection of production-disrupting problems with the prevention of alarm fatigue, where ex-cessive notifications overwhelm operators and hinder their ability to respond effectively. This motivates practitioners to build the anomaly detection systems able prioritize alerts that are significant and actionable, while minimizing unnec-essary notifications [17]. This paper tackles two main challenges: identifying real anomalies in individual environments and analyzing aggre-gated anomalies globally (across multiple testbeds) to find statistically significant deviations. By using widely available metrics from the reservation system, this approach ensures scalability and shows potential for reuse in other industries and smart infrastructure where resource optimization and anomaly detection are important. 
+
+1.2. State of the Art, Research Gaps, Contributions 
+
+This article focuses on real-time anomaly detection in base transceiver station testbeds. Historical data from reser-vation systems provides a baseline, but systems must dis-tinguish between expected improvements and unexpected deviations. Statistical anomaly detection is effective for iden-tifying events across measurable data, including unforeseen problems, but still requires separate investigation to deter-mine root causes. Existing research has explored anomaly detection meth-ods, but scaling them to large, distributed environments like wireless telecommunication (e.g. Nokia’s) testbeds remains challenging, as evolving software and hardware increase variability and the heterogeneity of testbed configurations further complicates anomaly identification. Prior approaches often focus on localized detection, overlooking global pat-terns and evolving baselines [18, 19]. The simplest methods used in industry, e.g. based on statically defined thresholds, are insufficient for dynamic environments. Statistical techniques [20] show promise but need customization to handle Nokia’s scale and diversity. In [21], a global-level method for identifying issues in test environments based on machine learning algorithms is pre-sented; however, its reliance on Gaussian-based estima-tion reduces effectiveness for sparse, positively supported, and distinctly non-Gaussian (heavy-tailed) data distribu-tions. Furthermore, the online framework assumes complete train-test coverage across all testbeds, which is impractical for the considered use case, where the reservation occurance frequency of an individual object depends on its topology and current utilization requirements. In general, anomaly identification methods are used in many system monitoring applications. There is a wide range of methods for identifying anomalies in both univariate and multivariate data [22], although in the latter case, most meth-ods perform most effectively in an offline setting (i.e., not real-time). Anomaly detection methods can be categorized into the following groups: methods based on standard statis-tics, probabilistic methods, machine learning-based meth-ods, hybrid techniques etc. [23, 24, 25]. Since many of these methods rely on extensive feature engineering, labeled data, or computationally intensive training, their practical deploy-ment in real-time, large-scale environments is constrained [26, 23].   
+
+> J. Witulska et al.: Preprint submitted to Elsevier Page 2 of 12 Real-time anomaly detection in base station testbeds
+
+This work addresses these gaps by introducing a scal-able, unsupervised framework for real-time anomaly detec-tion tailored to reservation-based Nokia’s testbeds. We pro-pose CALM, a nonparametric method for detecting anoma-lies at the individual testbed level using universally available metrics, and AggCALM, an aggregation mechanism that consolidates local anomaly signals to identify statistically significant system-wide events. The proposed framework improves global visibility, adapts to evolving baselines, and mitigates alarm fatigue through prioritized alerts, enabling reliable operation of complex, distributed testing environ-ments. Although the proposed methodology is evaluated within the context of a specific testing lab problem, it possesses a universal character and is applicable to other domains where real-time anomaly detection remains a significant challenge. A prominent example of such an application is condition monitoring area, where the identification of anomalies in signals (e.g., vibrations) is a critical challenge, see e.g. [27]. The article is structured as follows. Section 2 provides a description of the proposed methodology for anomaly de-tection, called CALM and the aggregation framework called aggCALM. The simulation study is presented in Section 3, while Section 4 provides a real data example of anomaly detection for telecommunication data. Finally, in Section 5 we sum up all research. 
+
+## 2. Methodology 
+
+This section introduces a novel methodology, denoted as 
+
+CALM (Continuous Anomaly Localization for univariate and Multivariate data), that facilitates real-time identifica-tion of anomalous observations in multivariate data. It uses the kernel density estimation (KDE) to obtain the probability density function (PDF) of training data (i.e., historical data without any anomalies). Then, the anomalies are identi-fied by scoring the density estimation and comparing them against a threshold determined by bootstrap method. We applied a simplification of using multiple marginal densities estimators as input for scoring function instead of a mul-tivariate density estimator (MDE), because classical MDE (such as histograms, kernel methods, and mixture models) struggle to scale beyond low dimensions because of the curse of dimensionality or limited nonparametric flexibility even with adaptive extensions [28]. Although deep gener-ative models have recently achieved impressive empirical performance in high-dimensional settings - their statistical guarantees remain to be a challenge [28]. The simplification explained above means that the algo-rithm does not take into account the dependencies between individual components (dimensions), but focuses on the marginal properties. However, it aggregates anomaly infor-mation from a single dimension across multiple dimensions. In the real application discussed in this paper, the dependen-cies between variables may be neglected, because the ana-lyzed variables concern independent operations performed on testbeds (resource allocation, environmental preparation, etc.). However, information from each variable provides us with greater insight into the phenomenon under study. Let 
+
+𝑥 1, 𝑥 2, … , 𝑥 𝑁 , (𝑁 ∈ ℕ) denote a collection of independent and identically distributed observations drawn from a uni-variate distribution whose density function 𝑓 is unknown at an arbitrary point 𝑥 . KDE is given as follows: 
+
+(𝑥 ) = 1
+
+𝑁ℎ 
+
+> 𝑁
+
+∑
+
+> 𝑖 =1
+
+𝐾 
+
+( 𝑥 − 𝑥 𝑖 
+
+ℎ
+
+)
+
+, (1) where 𝐾 is a non-negative function named kernel , and ℎ > 0
+
+is called bandwidth (i.e., a smoothing parameter). For more details about KDE, see [29]. Detailed information about the proposed methodol-ogy is provided in the subsections below. Initially, we present the technical formulation and operational principles of the CALM algorithm. Subsequently, we describe the general framework for global anomaly detection, wherein CALM constitutes the core component responsible for local anomaly scoring. The methodology is presented in mul-tivariate scenario, however, it is also applicable for the univariate data. 
+
+2.1. Theoretical background and description of the general idea 
+
+Let us denote 𝑑 -dimensional independent random vec-tors as 𝐗 = 𝐗 1, 𝐗 2, … , 𝐗 𝑁 (𝑁 ∈ ℕ). We assume that the vectors are homogeneous within the segments correspond-ing to splitting 𝑆 𝑅 𝑁 defined as follows: 
+
+𝑆 𝑅 𝑁 = {( 𝑛 1, ..., 𝑛 𝑅 −1 ) ∈ ℕ𝑅 −1 ∶ 1 < 𝑛 1 < ... < 𝑛 𝑅 −1 < 𝑁 }
+
+that refers to the following model: 
+
+𝐗 𝑖 𝑑 
+
+=
+
+⎧⎪⎪⎨⎪⎪⎩
+
+𝐗 (1) ∼ 𝐟 1, for 1 ≤ 𝑖 < 𝑛 1,
+
+𝐗 (2) ∼ 𝐟 2, for 𝑛 1 ≤ 𝑖 < 𝑛 2,... 
+
+𝐗 (𝑅 ) ∼ 𝐟 𝑅 , for 𝑛 𝑅 −1 ≤ 𝑖 < 𝑁, 
+
+(2) where 𝑛 1, ..., 𝑛 𝑅 −2 , 𝑛 𝑅 −1 are the change points and 𝐟 1, 𝐟 2, … , 𝐟 𝑅 −1 , 𝐟 𝑅 
+
+represent PDFs of 𝑑 -dimensional random vectors corre-sponding to the following segments: [1 , 𝑛 1), [𝑛 1, 𝑛 2), …,
+
+[𝑛 𝑅 −2 , 𝑛 𝑅 −1 ), … [ 𝑛 𝑅 −1 , 𝑁 ], respectively. PDFs 𝐟 1, 𝐟 2, … , 𝐟 𝑅 −1 , 𝐟 𝑅 
+
+may represent different distributions, or the same distri-butions but with different parameters (which indicate e.g. change in mean, scale, kurtosis, etc.). The adopted definition of anomaly requires the introduc-tion of additional notations. Let 𝑋 (𝑗 ) 
+
+> 𝑖
+
+be a 𝑗 -th component of 𝐗 𝑖 and let 𝐱 𝑖 be a realization of 𝐗 𝑖 with 𝑗 -th compo-nent 𝑥 (𝑗 ) 
+
+> 𝑖
+
+. Let us denote 𝑓 Θ 
+
+> 𝑖,𝑗
+
+as a PDF of random variables 
+
+𝑋 (𝑗 )
+
+> 𝑖 −Θ
+
+, 𝑋 (𝑗 )
+
+> 𝑖 −Θ+1
+
+, … , 𝑋 (𝑗 )
+
+> 𝑖 −1
+
+. We introduce the scoring function 
+
+given by the formula: 
+
+𝑠 (𝑥 ; Θ , 𝑗 ) ∶= − 
+
+√
+
+(𝑒𝑥𝑝 (𝑓 Θ 
+
+> 𝑖,𝑗
+
+(𝑥 )) , 𝑥 ∈ ℝ. (3)   
+
+> J. Witulska et al.: Preprint submitted to Elsevier Page 3 of 12 Real-time anomaly detection in base station testbeds
+
+The proposed scoring function was selected based on an empirical analysis of real dataset. In this formulation, higher estimated density values produce more negative scores, while the square-root transformation reduces the severity of anomaly ranking compared with e.g., a logarithmic scoring function. A comparative evaluation of 𝑠 (𝑥 ; Θ , 𝑗 ) = −
+
+√
+
+(𝑒𝑥𝑝 (𝑓 Θ 
+
+> 𝑖,𝑗
+
+(𝑥 )) and 𝑠 (𝑥 ; Θ , 𝑗 ) = −𝑙𝑜𝑔 (𝑒𝑥𝑝 (𝑓 Θ 
+
+> 𝑖,𝑗
+
+(𝑥 )) =−𝑓 Θ 
+
+> 𝑖,𝑗
+
+(𝑥 ) is provided in the Appendix. The accompanying GitHub 1 implementation allows users to select the preferred scoring function according to their application requirements; additional implementation details are also available in the Appendix. Let Θ 
+
+> 𝑖,𝑗
+
+be the KDE estimated for 𝑥 (𝑗 )
+
+> 𝑖 −Θ
+
+, 𝑥 (𝑗 )
+
+> 𝑖 −Θ+1
+
+, … , 𝑥 (𝑗 )
+
+> 𝑖 −1
+
+.Then, the estimated scoring function for 𝑗 -th component is given by: ̃𝑠 (𝑥 ; Θ , 𝑗 ) ∶= − 
+
+√
+
+(𝑒𝑥𝑝 (Θ 
+
+> 𝑖,𝑗
+
+(𝑥 )) , 𝑥 ∈ ℝ, (4) and corresponding threshold 𝜏 𝑗 is calculated as an empirical quantile of ̃𝑠 (𝑥 ; Θ , 𝑗 ) obtained in multiple replications (using the bootstrap method). For more details, see step 1 in the Sec. 2.2. Based on scoring functions and thresholds calculated for each dimension 𝑗 ∈ {1 , ..., 𝑑 } we evaluate whether the multivariate observation 𝐱 ∈ ℝ𝑑 is an anomaly or not. The criterion for identification of anomalies in multidimensional scenario is as follows: 
+
+𝐿 (𝐱 ) = 
+
+{
+
+1, if for any 𝑗 ∶̃𝑠 (𝑥 (𝑗 ); Θ , 𝑗 ) > 𝜏 𝑗 ,
+
+0, otherwise, (5) where 𝑥 (𝑗 ) is denoted as single 𝑗 -th component of 𝐱 . Based on 𝐿 (𝐱 ) the algorithm determines whether the multidimen-sional observation 𝐱 constitutes an anomaly ( 𝐿 (𝐱 ) = 1 ) or not ( 𝐿 (𝐱 ) = 0 ). 
+
+2.2. Description of the procedure for anomaly detection 
+
+The proposed CALM method enables the real-time de-tection of anomalies in multivariate data. The possible de-lays arise only from the computation of the scoring function applied in the algorithm. The CALM is a non-parametric method that does not require any prior knowledge of the distribution of the input data. The algorithm requires the provision of training input data used for the estimation of KDE and the determination of threshold values based on the scoring functions (4). These thresholds ( 𝜏 𝑗 , 𝑗 ∈ {1 , ..., 𝑑 })are used in the derived decision criterion given by (5). CALM employs the following input parameters: (i) the number of bootstrap resamples 𝑁 𝑟 utilized for dynamic threshold estimation, (ii) the bootstrap quantile level 𝑞 𝑏 
+
+applied during the threshold estimation procedure, and (iii) the sample fraction 𝜙 serving as an auxiliary parameter in the 
+
+> 1The link will be provided after review.
+
+bootstrap process. Let us denote 𝑦 (𝑗 ) 
+
+> 𝑘
+
+as 𝑗 -th component of 𝑑 -dimensional vector 𝐲 𝑘 . A step-by-step description of CALM is presented below: 1. Training phase (a) Load the training data without anomalies 𝐲 1, ..., 𝐲 𝑁 ∈
+
+ℝ𝑑 .(b) For each 𝑗 ∈ {1 , ..., 𝑑 }:• Fit base KDE ( 𝑗 ) for 𝑦 (𝑗 ),• Split the training set 𝑦 (𝑗 ) into two equal subsets: 𝑌 1 and 𝑌 2. For 𝑖 in {1 , ..., 𝑁 𝑟 }:
+
+– Select a random subset from 𝑌 1 and calculate KDE from it: ̃ 𝑗 .
+
+– Select a random subset from 𝑌 2 and for each observation 𝑦 (𝑗 ) 
+
+> 𝑚
+
+∈ 𝑌 2 calculate: ̃𝑠 (𝑦 (𝑗 ) 
+
+> 𝑚
+
+) = − 
+
+√
+
+exp( ̃ 𝑗 (𝑦 (𝑗 ) 
+
+> 𝑚
+
+)) .
+
+(c) From all obtained ̃𝑠 (𝑦 (𝑗 ) 
+
+> 𝑚
+
+), calculate the empirical quantile at the level 𝑞 𝑏 . The value obtained is assigned as the threshold 𝜏 𝑗 . Once the thresholds are established, we can use them in prediction phase in which for each ’new observation’ (i.e., each observation which was collected after the training phase) the score is evaluated. 2. Prediction phase (a) Load new data dump 𝐱 1, ..., 𝐱 𝑀 ∈ ℝ𝑑 . For each 
+
+𝑚 ∈ {1 , ..., 𝑀 }:• For each 𝑗 ∈ {1 , ..., 𝑑 } compute anomaly score: ̃𝑠 (𝑥 (𝑗 ) 
+
+> 𝑚
+
+) = − 
+
+√
+
+exp( 𝑗 (𝑥 (𝑗 ) 
+
+> 𝑚
+
+)) .
+
+• Combine feature-wise labels: 
+
+𝐿 (𝐱 𝑚 ) = 
+
+{
+
+1, if for any 𝑗 ∶̃𝑠 (𝑥 (𝑗 ) 
+
+> 𝑚
+
+) > 𝜏 𝑗 ,
+
+0, otherwise. Importantly, the CALM can incorporate a retraining mechanism based on updated knowledge of the data, as the underlying data distribution (or its parameters, such as mean and variance) may change over time, as discussed above. Therefore, the retraining process aims to preserve the homogeneity of the data with respect to the underlying (non-anomalous) distribution and its parameters. In the following part, we present the pseudocodes that correspond to the proposed procedure. Algorithm 1 refers to training phase and Algorithm 2 refers to prediction phase. 
+
+2.3. Framework for detecting global anomalies 
+
+In this part, we describe the framework for detecting global anomalies (AggCALM), i.e., the procedure that per-forms global anomaly detection across multiple testbeds   
+
+> J. Witulska et al.: Preprint submitted to Elsevier Page 4 of 12 Real-time anomaly detection in base station testbeds
+
+Algorithm 1 CALM (Training Phase) 
+
+Require: Training data matrix 𝐘 ∈ ℝ𝑛 ×𝑑 , number of bootstrap resamples 𝑁 𝑟 , bootstrap quantile 𝑞 𝑏 , sample fraction 𝜙 
+
+Ensure: KDE models {𝑗 }𝑑 𝑗 =1 , thresholds {𝜏 𝑗 }𝑑 𝑗 =1  
+
+> 1:
+
+Initialize model list  ← ∅, threshold list  ← ∅ 
+
+> 2:
+
+for 𝑗 = 1 to 𝑑 do  
+
+> 3:
+
+Extract feature column 𝑦 train ← 𝐘 ∶,𝑗  
+
+> 4:
+
+Fit base KDE: 𝑗 ← KDE (𝑦 train ) 
+
+> 5:
+
+Initialize bootstrap score container 𝑗 ← ∅ 
+
+> 6:
+
+for 𝑟 = 1 to 𝑁 𝑟 do  
+
+> 7:
+
+Draw resample 𝑥 ′1, 𝑥 ′2 from 𝑦 train of size 𝜙 |𝑦 train | 
+
+> 8:
+
+Fit temporary KDE: 𝑟 ← KDE (𝑥 ′1) 
+
+> 9:
+
+for each 𝑣 ∈ 𝑥 ′2 do  
+
+> 10:
+
+Compute score: 
+
+𝑠 𝑗 = − √exp( 𝑟 (𝑣 ))  
+
+> 11:
+
+Append 𝑠 𝑗 to 𝑗  
+
+> 12:
+
+Compute threshold 𝜏 𝑗 ← Quantile (𝑗 , 𝑞 𝑏 ) 
+
+> 13:
+
+Append (𝑗 , 𝜏 𝑗 ) to (,  ) 
+
+> 14:
+
+return {𝑗 }, {𝜏 𝑗 }
+
+Algorithm 2 CALM (Prediction Phase) 
+
+Require: Observation data matrix 𝐗 ∈ ℝ𝑛 ×𝑑  
+
+> 1:
+
+for 𝑗 = 1 to 𝑑 do  
+
+> 2:
+
+Extract feature: 𝑥 𝑗 ← 𝐗 ∶,𝑗  
+
+> 3:
+
+Compute anomaly score: 
+
+𝑠 𝑗 = − 
+
+√
+
+exp( 𝑗 (𝑥 𝑗 ))  
+
+> 4:
+
+Combine feature-wise decisions: 
+
+𝐿 (𝐱 ) = 
+
+{
+
+1, if 𝑠 𝑗 > 𝜏 𝑗 for any 𝑗, 
+
+0, otherwise . 
+
+> 5:
+
+Output: Label 𝐿 (𝐱 ) for each sample. based on previously trained CALM models. The AggCALM requires the following input parameters: (i) the aggregation window 𝜔 used to collect and evaluate recent anomaly detec-tions, (ii) the alarm threshold 𝑇 𝑎 representing the minimum proportion of testbeds required to trigger a global alert, and (iii) the retraining interval 𝑡 𝑟 defining the time period after which all CALM models are retrained to maintain detection accuracy under data drift. A step-by-step description of the proposed procedure is as follows. For each variable 
+
+𝑗 and each testbed 𝑘 , CALM identifies local anomalies using the most recent data dump. The algorithm then aggre-gates the detected anomalies over an observation window 
+
+𝜔 and computes the number of affected testbeds, denoted as ̃ 𝑇 𝑎 . If the proportion of anomalous testbeds exceeds the alarm threshold 𝑇 𝑎 , a global anomaly alert is raised for the corresponding variable. The entire process is repeated continuously for each new data dump. When the elapsed time exceeds the retraining interval 𝑡 𝑟 , all CALM models are retrained for the respective variables and testbeds to ensure model adaptability to data drift. Algorithm 3 corresponds to the described procedure. 
+
+Algorithm 3 Global anomalies detection (AggCALM) 
+
+Require: 𝑑 -dimensional data streams from 𝐾 testbeds, re-training interval 𝑡 𝑟 , aggregation window 𝜔 , and alarm threshold 𝑇 𝑎 (percentage of affected testbeds)  
+
+> 1:
+
+Each CALM model has been pre-trained separately for every testbed and each variable 𝑗 = 1 , … , 𝑑 using one-dimensional historical data.  
+
+> 2:
+
+for each new data dump do  
+
+> 3:
+
+for 𝑗 = 1 to 𝑑 do  
+
+> 4:
+
+for 𝑘 = 1 to 𝐾 do  
+
+> 5:
+
+Detect anomalies for testbed 𝑘 and variable 
+
+𝑗 using the corresponding pre-trained CALM model.  
+
+> 6:
+
+Determine which testbeds show anomalies within the last aggregation window 𝜔 . 
+
+> 7:
+
+Let ̃ 𝑇 𝑎 be the number of such testbeds.  
+
+> 8:
+
+if ̃ 𝑇 𝑎 > 𝑇 𝑎 then  
+
+> 9:
+
+Raise a global anomaly alert for variable 𝑗 . 
+
+> 10:
+
+Continue processing incoming data dumps.  
+
+> 11:
+
+if elapsed time > 𝑡 𝑟 then  
+
+> 12:
+
+Retrain all CALM models for all testbeds. 
+
+## 3. Assessment of the proposed procedure for multivariate simulated data 
+
+To evaluate the performance of our anomaly detection methods under controlled conditions, we designed a flexible simulation framework that generates realistic time-series data for multiple testbeds. The generator incorporates con-trolled noise, probabilistic anomalies, and variable base dis-tributions. Below, we describe the simulation setup and its key components. The adopted model describes a contaminated stochas-tic process in which deviations from the uncontaminated multivariate distribution occur through additive, direction-ally consistent perturbations affecting individual coordinates with probability 𝑝 .Let 𝐗 1, 𝐗 2, … , 𝐗 𝑁 be a sequence of 𝑑 -dimensional ran-dom vectors. A random vector 𝐗 𝑡 ∈ ℝ𝑑 follows a multi-variate stochastic process with contamination if it can be represented as 
+
+𝐗 𝑡 = 𝐘 𝑡 + 𝐂 𝑡 , 𝑡 = 1 , … , 𝑁, (6) where 𝐘 𝑡 denotes uncontaminated time series and 𝐂 𝑡 repre-sents a contamination process. The uncontaminated component 𝐘 𝑡 represents an arbi-trary 𝑑 -dimensional stochastic process. In this study, we an-alyze it as a multivariate Gaussian distribution or a VARMA model (vector ARMA), see, Sec. 3.1 and Sec. 3.2, respec-tively. However, this framework could be further extended for other models.   
+
+> J. Witulska et al.: Preprint submitted to Elsevier Page 5 of 12 Real-time anomaly detection in base station testbeds
+
+The contamination component 𝐂 𝑡 is defined element-wise as 𝐂 𝑡 = 𝐌 𝑡 ⊙ 𝐁 𝑡 ⊙ sgn( 𝐘 𝑡 ), where • 𝐌 𝑡 ∈ ℝ𝑑 is a random magnitude vector with indepen-dent components distributed uniformly on the interval 
+
+[𝑎, 𝑏 ], i.e. 𝑀 𝑡,𝑗 ∼  (𝑎, 𝑏 ), 𝑗 = 1 , … , 𝑑, where 𝑀 𝑡,𝑗 
+
+is a 𝑗 -th component of 𝐌 𝑡 ,• 𝐁 𝑡 ∈ {0 , 1} 𝑑 is a Bernoulli contamination indicator vector with 𝐵 𝑡,𝑗 ∼ Bernoulli( 𝑝 ), where 𝐵 𝑡,𝑗 is a 𝑗 -th component of 𝐁 𝑡 , and 𝑝 is a contamination probability, • ⊙ denotes the Hadamard (element-wise) product, • sgn( ⋅) is the element-wise sign function. We assume, an observation 𝐗 𝑡 is contaminated if at least one of its components is affected, i.e., if 
+
+> 𝑑
+
+∑
+
+> 𝑗 =1
+
+𝐵 𝑡,𝑗 > 0.
+
+3.1. Multivariate Gaussian distribution with contamination 
+
+Let 𝐗 1, 𝐗 2, … , 𝐗 𝑁 be a sequence of 𝑑 -dimensional ran-dom vectors. A random vector 𝐗 𝑡 ∈ ℝ𝑑 follows a multi-variate Gaussian distribution with contamination if it can be represented as (6), where the uncontaminated component 𝐘 𝑡 
+
+is assumed to follow a 𝑑 -dimensional Gaussian distribution 
+
+𝐘 𝑡 ∼ 𝑑 (𝝁 , 𝚺 ), (7) where 𝝁 ∈ ℝ𝑑 is the mean vector, 𝚺 ∈ ℝ𝑑 ×𝑑 is the positive definite covariance matrix. 
+
+3.2. VARMA model with contamination 
+
+Let 𝐗 1, 𝐗 2, … , 𝐗 𝑁 be a sequence of 𝑑 -dimensional ran-dom vectors. A random vector 𝐗 𝑡 ∈ ℝ𝑑 follows a VARMA model with contamination if it can be represented as (6), where the uncontaminated component 𝐘 𝑡 is a d-dimensional ARMA(p,q) process defined as follows 
+
+Φ( 𝐹 )𝒀 𝒕 = Θ( 𝐹 )𝒁 𝒕 , (8) where 𝑌 𝑡 is a stationary solution of difference equations (8) and • Φ( 𝑧 ) ∶= 𝐼 − Φ 1𝑧 − ... − Φ 𝑝 𝑧 𝑝 , where Φ1, ..., Φ𝑝 are 
+
+𝑑 × 𝑑 matrices, • Θ( 𝑧 ) ∶= 𝐼 − Θ 1𝑧 − ... − Θ 𝑞 𝑧 𝑞 , where Θ1, ..., Θ𝑞 are 
+
+𝑑 × 𝑑 matrices. In the above, we have the following notions: I is 𝑑 ×
+
+𝑑 identity matrix, F is the backward shift operator, 𝒁 𝒕 is multivariate white noise sequence. For more details about VARMA model, definition of multivariate white noise, and methods for estimation of parameters, see [30]. 
+
+3.3. Evaluating CALM over baselines 
+
+In this part, we conduct a comparative analysis of the quality of classifying anomalous points as anomalies by comparing the proposed CALM method with approaches well established in the literature, namely: Unsupervised Outlier Detection Using Empirical Cumulative Distribu-tion Functions (ECOD), Isolation Forest (IFOREST), Local Outlier Factor (LOF), Minimum Covariance Determinant Method (MCD), and One-Class Support Vector Machines (OCSVM) [24]. These methods were selected because they represent classical approaches to anomaly detection and cover different classes of algorithms. All experiments were conducted on a workstation equipped with an Intel Xeon E5-2680 v4 processor with 247 GB of RAM , running Ubuntu 22.04.4 LTS with Linux kernel version 6.12.31-talos . No GPU acceleration was used. We consider three simulation scenarios. In the first sce-nario, the data are generated according to the model (6) with an uncontaminated baseline given by (7). In the second scenario, the data follow the model (6) with an uncontam-inated baseline defined by the VARMA process (8) with Gaussian noise. The model order is set to 𝑝 = 2 , 𝑞 = 0 ,there is no dependence between individual components, and the corresponding coefficients are equal to 0.2 and −0 .3.In the third scenario, the data are again generated from the model (6) with an uncontaminated baseline given by (8) with Gaussian noise, but the model order is 𝑝 = 1, 𝑞 = 1.The coefficients of the model are set to 0.3 and 0.2. The innovation covariance matrix is specified such that the first component is correlated with all remaining components, with correlation coefficient 𝜌 = 0 .99 ⋅ (1∕( 𝑑 − 1) 2) to ensure positive definiteness, while the remaining components are mutually independent. In all three scenarios, the length of the time series is fixed to 𝑁 = 1000 , the noise range parameters are set to 𝑎 = 5 and 
+
+𝑏 = 10 , and the contamination probability is equal to 0.05 .The parameters of the CALM method used in the simulations are 𝑁 𝑟 = 1000 , 𝑞 𝑏 = 0 .95 , 𝜙 = 0 .75 .The training data were prepared using offline anomaly detection methods to ensure that only non-anomalous sam-ples are included in the thresholds determination process for each data dimension. Let us denote 𝑦 (𝑗 ) 
+
+> 𝑘
+
+as 𝑗 -th component of 
+
+𝑑 -dimensional vector 𝐲 𝑘 . The training data 𝑦 (𝑗 )1 , 𝑦 (𝑗 )2 , … , 𝑦 (𝑗 )
+
+> 𝑁
+
+are first processed using offline anomaly detection methods to ensure that only non-anomalous samples are included in the thresholds determination process for each data dimen-sion 𝑗 . The procedure uses the input parameters: (𝑞 low , 𝑞 high )
+
+that are selected quantile bounds. The training data prepro-cessing for each dimension 𝑗 looks as follows: • Calculate the sample mean ( 𝜇 𝑗 ), standard deviation (𝜎 𝑗 ), and quantiles at levels 𝑞 𝑙𝑜𝑤 and 𝑞 ℎ𝑖𝑔ℎ (mark them as 𝑞 1 and 𝑞 2, respectively) based on 𝑦 (𝑗 )1 , 𝑦 (𝑗 )2 , … , 𝑦 (𝑗 ) 
+
+> 𝑁
+
+.
+
+• 𝑦 (𝑗 ) 
+
+> train
+
+= {𝑦 (𝑗 ) 
+
+> 𝑘
+
+∶ min (q1, 𝜇 𝑗 − 2 𝜎 𝑗 
+
+) < 𝑦 (𝑗 ) 
+
+> 𝑘
+
+<
+
+max (q2, 𝜇 𝑗 + 2 𝜎 𝑗 
+
+), 𝑘 ∈ {1 , ..., 𝑁 }} .  
+
+> J. Witulska et al.: Preprint submitted to Elsevier Page 6 of 12
+
+Real-time anomaly detection in base station testbeds 
+
+Table 1 
+
+Precision for contamination probability 0.05 (mean and standard deviation).                                                                                                  
+
+> Sim. Dim. CALM ECOD IFOREST LOF MCD OCSVM
+> 120.764 (0.19) 0.836 (0.08) 0.803 (0.08) 0.768 (0.10) 0.910 (0.05) 0.494 (0.05) 30.772 (0.19) 0.870 (0.09) 0.804 (0.06) 0.775 (0.08) 0.975 (0.02) 0.878 (0.04) 50.784 (0.17) 0.868 (0.10) 0.994 (0.02) 0.978 (0.03) 0.998 (0.00) 0.983 (0.02) 10 0.813 (0.15) 0.968 (0.07) 1.000 (0.00) 1.000 (0.00) 1.000 (0.00) 0.885 (0.32) 25 0.890 (0.09) 0.989 (0.07) 1.000 (0.00) 1.000 (0.00) 1.000 (0.00) 0.960 (0.06) 220.775 (0.20) 0.793 (0.12) 0.801 (0.08) 0.766 (0.10) 0.890 (0.05) 0.499 (0.05) 30.771 (0.19) 0.859 (0.10) 0.805 (0.07) 0.771 (0.08) 0.975 (0.03) 0.808 (0.05) 50.780 (0.18) 0.913 (0.09) 0.812 (0.05) 0.802 (0.06) 0.997 (0.01) 0.979 (0.03) 10 0.814 (0.15) 0.964 (0.07) 0.837 (0.03) 0.843 (0.03) 1.000 (0.00) 0.759 (0.43) 25 0.889 (0.09) 0.998 (0.02) ––1.000 (0.00) 0.986 (0.03) 320.826 (0.15) 0.506 (0.11) 0.857 (0.06) 0.824 (0.10) 0.920 (0.06) 0.529 (0.06) 30.795 (0.17) 0.714 (0.13) 0.825 (0.06) 0.776 (0.08) 0.983 (0.02) 0.659 (0.06) 50.792 (0.17) 0.877 (0.10) 0.974 (0.03) 0.957 (0.05) 0.999 (0.00) 0.954 (0.03) 10 0.811 (0.14) 0.937 (0.10) 0.999 (0.00) 1.000 (0.00) 1.000 (0.00) 0.820 (0.39) 25 0.887 (0.09) 0.992 (0.04) 1.000 (0.00) 1.000 (0.00) 1.000 (0.00) 0.978 (0.04)
+
+Table 2 
+
+Recall for contamination probability 0.05 (mean and standard deviation).                                                                                                  
+
+> Sim. Dim. CALM ECOD IFOREST LOF MCD OCSVM
+> 120.905 (0.16) 0.367 (0.08) 1.000 (0.00) 0.949 (0.09) 0.999 (0.01) 0.999 (0.01) 30.899 (0.15) 0.174 (0.05) 1.000 (0.00) 0.955 (0.07) 0.991 (0.01) 0.873 (0.06) 50.903 (0.14) 0.090 (0.03) 0.895 (0.07) 0.847 (0.08) 0.926 (0.03) 0.286 (0.06) 10 0.914 (0.13) 0.039 (0.01) 0.507 (0.05) 0.501 (0.06) 0.511 (0.07) 0.017 (0.01) 25 0.939 (0.09) 0.020 (0.01) 0.276 (0.03) 0.276 (0.03) 0.076 (0.02) 0.040 (0.02) 220.901 (0.17) 0.352 (0.09) 0.998 (0.01) 0.946 (0.10) 0.998 (0.01) 0.999 (0.01) 30.896 (0.16) 0.181 (0.06) 0.999 (0.01) 0.952 (0.08) 0.989 (0.02) 0.821 (0.07) 50.902 (0.15) 0.102 (0.04) 0.903 (0.06) 0.858 (0.07) 0.931 (0.03) 0.301 (0.07) 10 0.913 (0.13) 0.045 (0.02) 0.521 (0.06) 0.513 (0.07) 0.523 (0.08) 0.019 (0.01) 25 0.938 (0.10) 0.023 (0.01) ––0.082 (0.02) 0.042 (0.02) 320.918 (0.14) 0.402 (0.10) 1.000 (0.00) 0.961 (0.08) 0.999 (0.01) 0.999 (0.01) 30.905 (0.15) 0.221 (0.07) 1.000 (0.00) 0.957 (0.07) 0.993 (0.01) 0.881 (0.06) 50.907 (0.14) 0.121 (0.04) 0.921 (0.06) 0.879 (0.07) 0.942 (0.03) 0.334 (0.07) 10 0.916 (0.12) 0.052 (0.02) 0.548 (0.06) 0.539 (0.07) 0.547 (0.08) 0.021 (0.01) 25 0.941 (0.09) 0.026 (0.01) 0.291 (0.03) 0.291 (0.03) 0.089 (0.02) 0.045 (0.02)
+
+The parameters for training-set creation (using in this sec-tion) are as follows: 𝑞 1 = 0 .05 .For the benchmark methods (ECOD, IFOREST, LOF, MCD, and OCSVM), we use implementations available in the PYOD package [24]. For the ECOD, MCD, and OCSVM methods, MAD-based thresholding from the pythresh pack-age [31] is employed, as preliminary visual inspections on single simulations indicated that this approach provides the best performance among the tested thresholding methods in 
+
+pythresh , while maintaining low computational cost. For the IFOREST and LOF methods, thresholding techniques from 
+
+pythresh are not consistent; therefore, we apply a custom dynamic thresholding procedure. Using a fixed contamina-tion threshold in these cases would constitute an artificial performance improvement, as such a threshold is not known in real-world data applications. What is important, during the preliminary evaluation phase, a wide range of thresholding techniques available in the pythresh package was assessed for ECOD, MCD, and OCSVM. As was mentioned above, MAD-based approach for trianing set preparing was ultimately selected because it provided the most accurate results (on smaller subset of simulations) while maintaining low computational over-head. In contrast, the proposed method employs a dedicated filtering procedure integrated into its training stage as part of the developed methodology; this procedure is not based on pythresh and is therefore not directly transferable to the remaining anomaly detection methods, which are conse-quently compared using the MAD-based filtering scheme best suited to them. We assume that in a complex system, model fitting (retraining) will occur infrequently. In contrast, label pre-diction (anomaly or not) will be performed in real time. Fig. 1 presents a comparison of prediction times for CALM and for baseline methods adapted to a real-time use case. As shown, CALM minimizes the latency associated with model computations most effectively. Tables 1–4 summarize the comparative performance of the considered anomaly detection methods across different simulation scenarios and data dimensionalities. Benchmark methods such as MCD and IFOREST achieve very high precision and accuracy in low- and medium-dimensional settings; however, their recall degrades substantially as the dimensionality increases, leading to a significant drop in the F1-score. ECOD exhibits competitive performance only in low-dimensional scenarios, but its effectiveness rapidly deteriorates with increasing dimensionality. LOF shows stable behavior in moderate dimensions, yet its recall and overall robustness decrease in higher-dimensional settings. In contrast, the proposed CALM method demonstrates consistently balanced performance across all considered metrics and scenarios. In particular, CALM maintains high 
+
+J. Witulska et al.: Preprint submitted to Elsevier Page 7 of 12 Real-time anomaly detection in base station testbeds 
+
+Table 3 
+
+F1-score for contamination probability 0.05 (mean and standard deviation).                                                                                                  
+
+> Sim. Dim. CALM ECOD IFOREST LOF MCD OCSVM
+> 120.795 (0.11) 0.504 (0.09) 0.888 (0.05) 0.846 (0.08) 0.951 (0.03) 0.660 (0.05) 30.799 (0.10) 0.287 (0.07) 0.890 (0.04) 0.854 (0.07) 0.983 (0.01) 0.874 (0.04) 50.812 (0.09) 0.161 (0.05) 0.940 (0.04) 0.905 (0.05) 0.960 (0.02) 0.440 (0.08) 10 0.840 (0.07) 0.074 (0.03) 0.671 (0.05) 0.665 (0.06) 0.674 (0.06) 0.033 (0.03) 25 0.906 (0.03) 0.040 (0.02) 0.432 (0.04) 0.432 (0.04) 0.140 (0.03) 0.077 (0.03) 220.794 (0.12) 0.491 (0.10) 0.887 (0.05) 0.842 (0.09) 0.947 (0.03) 0.665 (0.06) 30.796 (0.11) 0.302 (0.08) 0.889 (0.05) 0.849 (0.07) 0.981 (0.02) 0.814 (0.05) 50.810 (0.10) 0.182 (0.05) 0.940 (0.04) 0.902 (0.05) 0.963 (0.02) 0.454 (0.08) 10 0.839 (0.08) 0.081 (0.03) 0.681 (0.05) 0.674 (0.06) 0.683 (0.06) 0.035 (0.03) 25 0.905 (0.04) 0.044 (0.02) ––0.150 (0.03) 0.081 (0.03) 320.815 (0.10) 0.541 (0.09) 0.923 (0.04) 0.885 (0.07) 0.958 (0.03) 0.682 (0.06) 30.804 (0.10) 0.343 (0.08) 0.908 (0.04) 0.866 (0.07) 0.988 (0.01) 0.752 (0.05) 50.814 (0.09) 0.214 (0.06) 0.946 (0.04) 0.918 (0.05) 0.969 (0.02) 0.498 (0.08) 10 0.842 (0.07) 0.091 (0.03) 0.706 (0.05) 0.699 (0.06) 0.705 (0.06) 0.038 (0.03) 25 0.908 (0.04) 0.049 (0.02) 0.445 (0.04) 0.445 (0.04) 0.162 (0.03) 0.085 (0.03)
+
+Table 4 
+
+Accuracy for contamination probability 0.05 (mean and standard deviation).                                                                                                  
+
+> Sim. Dim. CALM ECOD IFOREST LOF MCD OCSVM
+> 120.952 (0.03) 0.931 (0.01) 0.975 (0.01) 0.966 (0.02) 0.990 (0.00) 0.899 (0.01) 30.932 (0.04) 0.880 (0.02) 0.964 (0.01) 0.953 (0.02) 0.995 (0.00) 0.964 (0.01) 50.900 (0.06) 0.789 (0.02) 0.975 (0.01) 0.961 (0.02) 0.982 (0.01) 0.836 (0.02) 10 0.855 (0.08) 0.615 (0.02) 0.803 (0.02) 0.799 (0.03) 0.802 (0.04) 0.605 (0.02) 25 0.859 (0.05) 0.291 (0.02) 0.477 (0.03) 0.477 (0.03) 0.331 (0.03) 0.305 (0.02) 220.953 (0.03) 0.930 (0.02) 0.975 (0.01) 0.963 (0.02) 0.988 (0.01) 0.904 (0.01) 30.931 (0.04) 0.881 (0.02) 0.964 (0.02) 0.952 (0.02) 0.995 (0.00) 0.953 (0.01) 50.899 (0.06) 0.794 (0.02) 0.947 (0.02) 0.939 (0.02) 0.978 (0.01) 0.821 (0.02) 10 0.857 (0.08) 0.614 (0.02) 0.920 (0.02) 0.924 (0.02) 0.787 (0.04) 0.600 (0.02) 25 0.859 (0.06) 0.292 (0.02) ––0.327 (0.03) 0.311 (0.02) 320.966 (0.02) 0.902 (0.01) 0.983 (0.01) 0.972 (0.02) 0.990 (0.01) 0.912 (0.02) 30.941 (0.04) 0.871 (0.02) 0.969 (0.01) 0.952 (0.02) 0.995 (0.00) 0.926 (0.01) 50.906 (0.06) 0.788 (0.02) 0.968 (0.01) 0.955 (0.02) 0.980 (0.01) 0.874 (0.02) 10 0.857 (0.07) 0.614 (0.02) 0.803 (0.02) 0.801 (0.03) 0.808 (0.04) 0.606 (0.02) 25 0.857 (0.05) 0.294 (0.02) 0.480 (0.03) 0.483 (0.03) 0.340 (0.02) 0.319 (0.02)
+
+recall while preserving reasonable precision, resulting in stable F1-scores even in higher-dimensional regimes. This behavior indicates an improved robustness of CALM to the curse of dimensionality compared to the benchmark meth-ods. Moreover, CALM does not rely on prior knowledge of the contamination level, which makes its performance more representative of real-world deployment conditions. Overall, the results indicate that CALM provides a reliable trade-off between detection sensitivity and false-alarm control across a wide range of operating conditions. 
+
+## 4. Case Study: Unified Test Environment (UTE) 
+
+In this section, we present results obtained from real-world data provided by Nokia. The section includes an analysis of global anomalies detected over a long-term time horizon, with particular consideration of actual failures that occurred during the analyzed period. 
+
+4.1. Environment description 
+
+The analyzed complex testbeds include critical compo-nents such as baseband and radio modules, core network elements, transport systems, terminals, and measurement equipment. Additionally, it incorporates supporting infras-tructure like servers hosting virtual machines with testing frameworks and necessary software. On top of that network switches, power supplies, and other essential resources. Fig. 2 illustrates the high-level architecture of the testbed scheduling and orchestration system. A global orchestra-tor collects activity requests and distributes them across multiple testbeds. Each testbed maintains an independent run queue where tasks are scheduled according to a FIFO or priority-fair policy while also accommodating manually reserved execution windows. This mechanism enables coor-dinated resource utilization across heterogeneous test envi-ronments while ensuring predictable execution of automated and manually scheduled experiments. The dataset employed in this study is collected from more than 1,000 testbeds. The testbed landscape is inher-ently dynamic and non-stationary. New configurations are continuously introduced while obsolete ones are progres-sively decommissioned, mirroring the evolution of the un-derlying technology and the associated testing requirements. Consequently, the collected data reflects genuine, real-world conditions rather than a static snapshot. Moreover, testbed utilization is governed by continuously evolving software testing cycles: certain configurations are heavily reused, whereas others are only sporadically exercised depending on specific testing needs. This behavior gives rise to a naturally imbalanced usage distribution across the testbed population. Data acquisition is continuous and spans multiple years 
+
+J. Witulska et al.: Preprint submitted to Elsevier Page 8 of 12 Real-time anomaly detection in base station testbeds 
+
+across geographically distributed laboratories. The system adopts an event-driven paradigm in which each reserva-tion generates a corresponding record. On average, several thousand reservations are logged per day, with hundreds of concurrent reservations sustained in a 24∕7 operating regime. Each record is described by numerical features representing the time durations of key operational phases, namely preparation, waiting, and allocation. The prepara-tion and waiting phases exhibit distributions with durations extending up to several tens of minutes. In contrast, the allocation phase is highly skewed: its median is equal to zero and the majority of values are concentrated near zero, which introduces a strongly imbalanced feature distribution and constitutes one of the principal challenges for the de-tection task. The input to the pipeline corresponds directly to structured raw time-duration measurements derived from system events. No advanced preprocessing is performed at the data collection stage; instead, any required feature transformation is delegated to the CALM model pipeline, thereby preserving the integrity of the raw measurements and ensuring reproducibility of the ingestion procedure. The analysis is carried out after reservation completion, once all phase durations are known, and is executed periodically (e.g., every 15 minutes). This scheduling strategy yields near-real-time insights while remaining decoupled from the latency of individual reservations. With respect to computa-tional overhead and deployment feasibility, the volume and structure of the data, i.e. integer-valued time measurements amounting to several hundred up to slightly more than one thousand events per day, introduce negligible processing cost. The solution operates alongside the production systems without degrading their performance, thereby demonstrating its suitability for deployment in real-time, production-scale environments. 
+
+4.2. Real data analyses 
+
+The analysis is based on time-related measurements associated with the testbed reservation process. In particular, we focus on two key temporal components that characterize the lifecycle of a reservation request: • Preparation time (PT) refers to the interval during which an available testbed is automatically reset and configured to the expected initial state. This phase includes actions such as powering on modules, updat-ing software components, and enabling or disabling required functionalities. • Waiting time (WT) is defined as the sum of the al-location time and the preparation time , representing the total duration from the submission of a reservation request until the testbed is fully prepared and ready for use. The reservations of individual testbeds are assumed to be independent. Nevertheless, already at the level of a sin-gle observation of preparation time and waiting time , it is possible to determine whether the record is anomalous for a given testbed. It is confirmed by the analysis of historical reservation data that did not reveal any statistically signifi-cant dependencies between the next observations in this two variables, supporting the independence assumption adopted in this work. Furthermore, consecutive reservations are assumed to be independent due to the inherently stochastic nature of the reservation process, which is driven by user-defined requests and scheduling decisions. This characteristic further justifies the application of the CALM procedure to the considered dataset. In addition, the data occasionally contain obser-vations with values close to zero. The CALM framework naturally accommodates such cases by incorporating an ad-ditional low-variance noise component into the data model, thereby improving robustness in the presence of near-zero observations. In the case of aggregated results across multiple testbeds, a temporal aggregation window must be introduced in order to assess the occurrence of global anomalies. The adopted procedure operates as follows: for each testbed, the online anomaly detection is performed continuously using the pro-cedures described in Algorithms 1 and 2 using the same pa-rameters as in Sec. 3. Subsequently, the detected anomalies are aggregated to the global level using Algorithm 3. In the considered application, a time windows 𝜔 = 1 ℎ
+
+is used, and the aggregation threshold is set to 𝑇 𝑎 = 2% .The threshold 𝑇 𝑎 was determined experimentally based on historical data and (delayed) fault information. An example of anomaly identification results for a single testbed is pre-sented in Fig. 3. The blue region denotes the training dataset, where anomalies used for training the method are identified using the same procedure as described in Sec. 3. Test data are shown in black, while anomalies detected online are marked with red points. The obtained results demonstrate a reasonable alignment with the expected behavior of the system. The temporal ex-tent of detected anomalies can be adjusted by appropriately tuning the parameters of the CALM method. The parameter 
+
+𝑁 𝑟 controls the stability of the estimated thresholds by regulating the number of bootstrap resamples, where larger values generally yield more reliable quantile estimates at the cost of increased computational complexity. The quantile level 𝑞 𝑏 determines the strictness of anomaly acceptance, while the sampling fraction 𝜙 balances bias and variance in the bootstrap approximation by adjusting the effective sample size used for temporary density estimation. Importantly, monitoring complex engineering systems increasingly relies on high-frequency signals whose statis-tical properties vary over time subject to structural changes caused by evolving operating conditions, aging, or faults. Therefore, the model for identifying anomalies should take into account the possibility of retraining. The proposed framework for identification of anomalies can be extended for a two-stage continual learning paradigm. In the first stage, streaming data are segmented online using scalable change-point detection methods. In parallel, anomalies are   
+
+> J. Witulska et al.: Preprint submitted to Elsevier Page 9 of 12 Real-time anomaly detection in base station testbeds
+
+continuously identified using an unsupervised kernel density estimation approach applied to both aggregated features and raw observations. In the second stage, only statistically significant change points authorize automatic re-estimation of anomaly detection model parameters. This selective adap-tation prevents unnecessary retraining, reduces false alarms, and enables continual learning without compromising sta-bility. 
+
+4.3. Assessment of the framework for global anomaly detection for real-data 
+
+Tab. 5 presents the percentage of detected anomalies for waiting and preparation times with category, description and root cause of the anomaly that occurs in the analyzed time-window. We use the abbreviation SSP for Support System Problems. The reported value denotes the proportion of testbeds with anomalies that had reservations within a given time window relative to all testbeds that had reserva-tions in that same window (it is important to note that the reference is not the entire population of unused testbeds). From an operational perspective, an additional condition may be introduced indicating the number of testbeds at which the alarm system should trigger. By default, due to the requirement of minimal delays, a one-hour window is used; however, other windows lengths could be used as well. Each row of the table corresponds to a different event described by a unique identifier. The events correspond to 
+
+𝑁 categories listed in the Problem classification column. Within-category analysis reveals distinct patterns in the ob-served anomaly distribution. Failures classified as Environ-ment and Build/Package tend to affect a large proportion of testbeds simultaneously, with anomaly rates reaching up to 50-100% for both waiting and preparation times. This behavior indicates systemic disruptions originating from shared infrastructure components or external dependencies. In contrast, Interface anomalies typically affect a smaller but still significant fraction of testbeds (approximately 2– 21% for waiting time and 6-25% for preparation time), which suggests partial connectivity or integration problems rather than global outages. The System category exhibits moderate anomaly levels, reflecting situations where the operational state of the infrastructure introduces delays on a subset of resources. Finally, the Function category corresponds to internally caused defects in the orchestration software and is characterized by relatively low anomaly rates (around 3% and 2% for waiting and preparation times, respectively), indicating localized software faults rather than widespread infrastructure failures. As can be observed, for most failures anomalous, behavior is detected in the range of 10-100% of testbeds for waiting time and 4-100% for preparation time .Setting appropriate thresholds for the alarm system appears to be crucial. For failures affecting a small proportion of testbeds (e.g., ID 12), it may be beneficial to analyze the anomaly rate within a geographic region or topology, which could indicate software-related or mechanical failures. 
+
+## 5. Conclusion and further works 
+
+In this work, we introduced CALM, an unsupervised anomaly detection method designed for reliable operation in high-dimensional and realistic settings. CALM achieves rapid detection, identifying anomalies in real-time. The method is inherently flexible, offering multiple parameter-ization options that allow practitioners to balance detection sensitivity and false-alarm rates according to operational needs. Importantly, CALM does not require labeled data or prior knowledge of the contamination level, which makes it well suited for real-world deployments. Benchmark methods such as MCD, IFOREST, ECOD, and LOF show strong performance in low- and medium-dimensional scenarios, but their recall and F1-scores degrade significantly as di-mensionality increases. This degradation highlights their sensitivity to the curse of dimensionality and limits their robustness in complex environments. In contrast, CALM demonstrates consistently balanced performance across all evaluated scenarios and metrics. In particular, it maintains high recall while preserving reasonable precision, resulting in stable F1-scores even in high-dimensional regimes. These results indicate that CALM provides improved robustness compared to existing benchmarks. Overall, CALM offers a reliable and practical trade-off between fast detection, accuracy, and robustness, making it a strong candidate for deployment in diverse operational conditions. While the proposed methodology is validated within a specific telecommunication framework, it is highly transferable to numerous application domains where anomaly detection is a critical issue. One of the example is condition monitoring, where the identification of anomalies in diagnostic signals may indicate damage of the machine or measurement error. Providing near-instantaneous feedback in such contexts can significantly enhance the operational efficiency of monitor-ing system. The proposed framework has been specifically designed for independent data streams, which are common in the considered reservation-monitoring scenario. Future work will focus on extending the methodology to more com-plex settings, including data exhibiting temporal periodicity, without requiring extensive preprocessing or explicit sea-sonality removal. Although we have previous experience with multivariate statistical procedures, including hypothe-sis testing based on multivariate CDFs and PDFs [32], such approaches become computationally demanding in higher dimensions and typically require multiple observations be-fore an anomaly can be reliably identified. This signifi-cantly limits their applicability in continuous monitoring systems, where low latency and rapid detection are crit-ical. A promising direction is to incorporate inter-feature dependencies through dedicated feature engineering, e.g., by constructing joint descriptors or statistics derived from multiple variables. The effectiveness of such dependency-aware extensions, however, remains application-dependent and will be investigated in future studies. The bootstrap threshold ( 𝑞 𝑏 ) controls the nominal false positive rate only at the marginal level. In general, the   
+
+> J. Witulska et al.: Preprint submitted to Elsevier Page 10 of 12
+
+Real-time anomaly detection in base station testbeds 
+
+Table 5 
+
+Summary of anomalies and root causes                                                                                                     
+
+> ID WT PT Description Classification Root cause Suggested follow-up
+> 136.36 4.55 Maintenance window in an external system →SSP Environment external Monitor / no action 220.76 25.26 Connection breakdown with external system →I/O Interface external Raise to external system according to SLA 32.44 6.50 Connection breakdown with external system →I/O Interface external Raise to external system according to SLA 44.47 3.91 Race condition with external system →SSP Environment external Raise to external system according to SLA 550.38 67.94 Accidental release of broken external dependency →change management / SSP Build, Package external RCA to better understand the cause 646.53 64.90 Accidental release of broken external dependency →change management / SSP Build, Package external RCA to better understand the cause 711.46 4.17 System state at the time of anomaly caused more delays than usual System external Monitor / no action 812.58 10.69 Connection with external system →I/O Interface external Raise to external system according to SLA 916.30 18.58 Connection with external system →I/O Interface external Raise to external system according to SLA 10 100.00 100.00 Maintenance window in an external system →SSP Environment external Monitor / no action 11 100.00 25.00 Maintenance window in an external system →SSP Environment external Monitor / no action 12 2.97 2.13 Error in the orchestrator software →software logic Function internal Escape Defect Analysis
+
+overall false positive rate may increase with dimensionality. If this problem occur, the possible extension is to intro-duce an additional score aggregation mechanism, allowing low-significance isolated anomalies to be filtered out while emphasizing observations that are repeatedly identified as anomalous across multiple dimensions. Such aggregation-based thresholding may provide better control of the global false positive rate in higher-dimensional applications and will be investigated in future work. 
+
+## Acknowledgements 
+
+The work of JW and AW is supported by the NCN Weave-Unisono project entitled “Advanced signal process-ing techniques for cyclostationary modelling in Gaussian and non-Gaussian noisy environment -detection of cyclic sources, estimation, optimisation of algorithms and valida-tion in the context of fault identification” (No. 2025/07/Y/ST8/00070). 
+
+## Conflict of interest 
+
+No conflicts of interests. 
+
+## Appendix 
+
+Here, we present the comparative evaluation of using 
+
+𝑠 (𝑥 ; Θ , 𝑗 ) = − 
+
+√
+
+(𝑒𝑥𝑝 (𝑓 Θ
+
+𝑖,𝑗 (𝑥 )) and 
+
+𝑠 (𝑥 ; Θ , 𝑗 ) = −𝑙𝑜𝑔 (𝑒𝑥𝑝 (𝑓 Θ
+
+𝑖,𝑗 (𝑥 )) = −𝑓 Θ
+
+𝑖,𝑗 (𝑥 ) as a scoring functions in CALM algorithm. The same simulations as those described in Section III were performed for dimensions 𝑑 = 2, 3, and 5 (for vi-sualization purposes). The CALM method was evaluated using both scoring functions, and the resulting values of the performance metrics—precision, recall, F1-score, and accuracy—are summarized in Tables 6–9. For each dimen-sion and each scenario 100 Monte Carlo trials were made. As can be observed, the values of all evaluation metrics obtained with the two scoring functions are very similar for simulation scenarios 2 and 3. For simulation scenario 1, however, the original scoring function based on the square root yields higher Recall and F1-score values than the logarithmic scor-ing function. 
+
+## References 
+
+[1] A.-L. Barabási, The architecture of complexity, IEEE Control Sys-tems Magazine 27 (4) (2007) 33–42. [2] A.-L. Barabási, The Hidden Pattern Behind Everything We Do (2010). [3] C. Fortuna, H. Yetgin, M. Mohorčič, Smart infrastructures: Artificial intelligence-enabled lifecycle automation, IEEE Industrial Electron-ics Magazine 17 (2) (2022) 37–47. [4] M. Panek, I. Jabłoński, M. Woźniak, Automatic Performance As-sessment—Step Toward Autonomous Mobile Network Management Systems, IEEE Communications Magazine 63 (4) (2024) 73–79. [5] Q. He, N. Guan, Z. Guo, et al., Intra-task priority assignment in real-time scheduling of DAG tasks on multi-cores, IEEE Transactions on Parallel and Distributed Systems 30 (10) (2019) 2283–2295. [6] W. Hantom, A. Aldweesh, R. Alzaher, A. Rahman, A Survey on Scheduling Algorithms in Real-Time Systems, International Journal of Computer Science and Network Security 22 (4) (2022) 686–690. [7] T. Stüber, L. Osswald, S. Lindner, M. Menth, A survey of scheduling algorithms for the time-aware shaper in time-sensitive networking (TSN), Ieee Access 11 (2023) 61192–61233. [8] M. Panek, A. Pomykała, I. Jabłoński, M. Woźniak, 5G/5G+ network management employing AI-based continuous deployment, Applied Soft Computing 134 (2023) 109984. [9] Debashish Chakraborty, Exploring the evolution and potential of Open RAN, accessed: 2026-02-24 (2020). URL https://www.gsma.com/about-us/regions/asia-pacific/general/ apacpg/open-ran/ 
+
+[10] M. Shahin, M. A. Babar, L. Zhu, Continuous integration, delivery and deployment: a systematic review on approaches, tools, challenges and practices, IEEE access 5 (2017) 3909–3943. [11] A. Bharadwaj, T. V. Nguyen, K. Gulati, S. K. Baghel, Resource reservation techniques for wireless communications, uS Patent App. 16/737,775 (Jul. 16 2020). [12] D. O. Ginthoer, Method, apparatus, and use thereof for radio commu-nication, uS Patent App. 17/409,018 (Mar. 3 2022). [13] R. Djurayev, S. Djabbarov, D. Matkurbonov, O. Khasanov, Applica-tion of queueing theory for the analysis of diagnostic processes in data communication systems, in: Optical and Computational Technologies for Measurements and Industrial Applications (OptiComp 2025), Vol. 13803, SPIE, 2025, pp. 244–252. [14] P. Voudouris, P. Stenström, R. Pathan, Timing-anomaly free dy-namic scheduling of task-based parallel applications, in: 2017 IEEE Real-Time and Embedded Technology and Applications Symposium (RTAS), IEEE, 2017, pp. 365–376. [15] IEEE Standards Association and others, IEEE 1044-2009—IEEE Standard Classification for Software Anomalies. [16] W. Hayes, J. W. Over, The Personal Software Process (PSPSM): An Empirical Study of the Impact of PSP on Individual Engineers., Tech. rep. (1997). [17] J. Witulska, T. Barszcz, A. Wyłomańska, I. Jabłoński, Statistical and explainable authorization of change point in multivariate industrial data, Submitted: Measurement (2026). 
+
+J. Witulska et al.: Preprint submitted to Elsevier Page 11 of 12 Real-time anomaly detection in base station testbeds 
+
+Table 6 
+
+Precision for scoring functions (mean and standard deviation).                      
+
+> Sim. Dim. Logarithmic Sqrt
+> 120.968 (0.04) 0.965 (0.04) 30.973 (0.02) 0.970 (0.03) 50.975 (0.02) 0.970 (0.02) 220.964 (0.04) 0.976 (0.03) 30.966 (0.03) 0.966 (0.02) 50.970 (0.03) 0.969 (0.02) 320.973 (0.04) 0.974 (0.03) 30.964 (0.03) 0.966 (0.03) 50.974 (0.02) 0.969 (0.02)
+
+Table 7 
+
+Recall for scoring functions (mean and standard deviation).                      
+
+> Sim. Dim. Logarithmic Sqrt
+> 120.614 (0.13) 0.718 (0.14) 30.620 (0.11) 0.702 (0.09) 50.647 (0.10) 0.712 (0.09) 220.702 (0.15) 0.703 (0.13) 30.706 (0.11) 0.704 (0.13) 50.724 (0.09) 0.716 (0.09) 320.713 (0.13) 0.698 (0.13) 30.691 (0.10) 0.720 (0.11) 50.729 (0.09) 0.726 (0.08)
+
+Table 8 
+
+F1-score for scoring functions (mean and standard deviation).                      
+
+> Sim. Dim. Logarithmic Sqrt
+> 120.743 (0.10) 0.815 (0.09) 30.751 (0.08) 0.810 (0.07) 50.774 (0.07) 0.818 (0.06) 220.803 (0.10) 0.810 (0.10) 30.811 (0.08) 0.808 (0.09) 50.826 (0.06) 0.820 (0.06) 320.816 (0.09) 0.806 (0.09) 30.801 (0.07) 0.820 (0.07) 50.830 (0.06) 0.827 (0.05)
+
+Table 9 
+
+Accuracy for scoring functions (mean and standard deviation).                      
+
+> Sim. Dim. Logarithmic Sqrt
+> 120.960 (0.01) 0.970 (0.01) 30.943 (0.02) 0.955 (0.01) 50.916 (0.02) 0.930 (0.02) 220.968 (0.01) 0.970 (0.01) 30.954 (0.02) 0.953 (0.02) 50.933 (0.02) 0.930 (0.02) 320.970 (0.01) 0.969 (0.01) 30.952 (0.02) 0.957 (0.02) 50.933 (0.02) 0.932 (0.02)
+
+[18] N. Makris, C. Zarafetas, A. Valantasis, T. Korakis, Service orchestra-tion over wireless network slices: Testbed setup and integration, IEEE Transactions on Network and Service Management 18 (1) (2020) 482–497. [19] D. Margery, E. Morel, L. Nussbaum, O. Richard, C. Rohr, Resources description, selection, reservation and verification on a large-scale testbed, in: International Conference on Testbeds and Research In-frastructures, Springer, 2014, pp. 239–247. [20] D. Goldberg, Statistical anomaly detection (Aug 2015). URL https://innovation.ebayinc.com/stories/ statistical-anomaly-detection/ 
+
+[21] R. Kheirallah, A. Hoayek, M. Batton-Hubert, P. Burlat, Anomaly Detection in a Production Line: an Online/Offline Statistical Learning Approach (2023). [22] A. Raj, S. Sharma, A Comprehensive Study on Anomaly Detection Methods Using Traditional and Machine Learning Approaches, In-ternational Journal of High School Research (2024). [23] D. Samariya, A. Thakkar, A comprehensive survey of anomaly detec-tion algorithms, Annals of Data Science 10 (3) (2023) 829–850. [24] Y. Zhao, Z. Nasrullah, Z. Li, Pyod: A python toolbox for scalable outlier detection, Journal of machine learning research 20 (96) (2019) 1–7. [25] K. Feasel, Finding Ghosts in Your Data, Berkeley, CA: Apress (2022). [26] R. A. A. Habeeb, F. Nasaruddin, A. Gani, I. A. T. Hashem, E. Ahmed, M. Imran, Real-time big data processing for anomaly detection: A survey, International Journal of Information Management 45 (2019) 289–307. [27] D. Kuzio, R. Zimroz, A. Wyłomańska, Methodology for health in-dicators design based on distributions’ distance measures applied to robust CSC maps. Application to non-Gaussian vibration-based fault detection, Mechanical Systems and Signal Processing 238 (2025) 113166. [28] Y. Peng, Y. Khoo, D. Wang, Nonparametric Density Estimation via Variance-Reduced Sketching, arXiv preprint arXiv:2401.11646 (2024). [29] B. W. Silverman, Density estimation for statistics and data analysis, Routledge, 2018. [30] P. J. Brockwell, Davis, Time series: theory and methods, Springer Series in Statistics, 1991. [31] D. Kulik, S. Schmidl, KulikDM/pythresh: v0. 3.1, Zenodo (2023). [32] J. Witulska, M. Hendler, M. Kasprowicz, M. Czosnyka, I. Jabłoński, A. Wyłomańska, Identifying the temporal distribution structure in multivariate data for time-series segmentation based on two-sample test, Information Fusion 125 (2026) 103445. 
+
+J. Witulska et al.: Preprint submitted to Elsevier Page 12 of 12 Real-time anomaly detection in base station testbeds 
+
+Figure 1: Prediction time comparison of anomaly detection methods for simulated data. 
+
+Figure 2: High-level architecture of the testbed scheduling and orchestration system. 
+
+Figure 3: Anomaly identification example for a single testbed (the time values are normalized). J. Witulska et al.: Preprint submitted to Elsevier Page 13 of 12
