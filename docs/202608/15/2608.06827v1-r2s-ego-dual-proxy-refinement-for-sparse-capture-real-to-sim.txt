@@ -1,0 +1,356 @@
+Title: R2S-EGO: Dual-Proxy Refinement for Sparse-Capture Real-to-Sim
+
+URL Source: https://arxiv.org/pdf/2608.06827v1
+
+Published Time: Mon, 10 Aug 2026 00:29:28 GMT
+
+Number of Pages: 11
+
+Markdown Content:
+# R2S-EGO: Dual-Proxy Refinement for Sparse-Capture Real-to-Sim 
+
+Shuai Fang 1, Xin Deng 1,2, Yuchen Kang 1, Zhenjiang Li 1, and Jie Chen 1,†
+
+1XPENG Robotics , 2The Hong Kong Polytechnic University Behavior-Alignment     
+
+> SIM REAL
+> Approach Reorient Sit
+> Simulation (R2S-EGO) Real G1
+> Policy trained in the refined sim asset Zero-shot deployment on the real G1
+> Ego views Ego views
+
+Fig. 1. Behavior-aligned third- and first-person sitting rollouts in simulation and on the real Unitree G1 humanoid. Teal panels show the policy rollout in the R2S-EGO simulation scene; navy panels show the corresponding real-robot rollout, aligned at approach, reorientation, and sitting. The center columns compare the simulated ego view with the onboard head-camera view at each phase, showing closely matched appearance and behavior across the transfer. 
+
+Abstract — Real-to-sim (R2S) depends on scene representa-tions that render observations along robot ego trajectories, yet dense multi-view capture limits per-environment real-image capture-count efficiency, and sparse human capture can leave behavior-scoped robot views under-supported. Camera-controlled synthesis can fill missing views, but its use in R2S requires behavior-admissible queries and capture-anchored structural conditioning. We present R2S-EGO, which couples a simulator-derived robot proxy that represents the behavior-scoped executable query domain with a capture-anchored ge-ometry proxy that supplies scene-specific structural conditions. Within this domain, fixed-budget selection targets current support deficits for which geometry support is available. The generated observations are assimilated as pseudo-observations to refine the visual asset, while real captures remain anchors. The fused geometry proxy also supplies the scene collision surface, which is refreshed between rounds. Together, these updates refine the existing simulation scene while its robot dynamics and control stack stay fixed. Across 48 frozen Unitree G1 ego views in three Replica scenes, six-view R2S-EGO reaches 19.062 dB PSNR, compared with 14.226 dB for the strongest reported R2S baseline. Across five paired policy-training seeds, R2S-EGO achieves 82 .5% ±6.8% real-G1 sitting success, compared with 10 .0% ± 10 .5% for GaussGym. 
+
+I. I NTRODUCTION 
+
+Real-to-sim (R2S) turns real environments into repeatable simulation settings for robot training and evaluation [1]–[3]. 
+
+> †
+
+Corresponding author: Jie Chen, chenj81@xiaopeng.com .
+
+Its scenes are commonly reconstructed from calibrated multi-view observations using neural or Gaussian representations [3]–[6]. We focus specifically on per-environment real-image capture-count efficiency. The existing simulator’s visual asset is initialized from registered sparse RGB captures. Human-convenient capture and behavior-scoped robot cameras need not sample the same poses, visible surfaces, or occlusions; consequently, sparse capture can leave behavior-scoped robot views with insufficient visual and structural support. We refer to this failure mode as the capture–consumption support gap .Camera-controlled novel-view and video synthesis can generate observations beyond the captured views [7]–[10]. For R2S scene refinement, however, a synthetic observation is useful only when it satisfies two distinct forms of validity. On the query side, the requested camera sequence must be realizable by the embodied robot within the declared behavior scope. On the evidence side, generation must be conditioned on structure tied to the captured scene, because camera control alone does not determine the layout, visibil-ity, or occlusion of sparsely observed regions. The central challenge is therefore to address the capture–consumption support gap with observations whose queries are behavior-admissible and whose content is conditioned by capture-anchored geometry. With limited generation resources, a secondary prioritization step is required: the implementation ranks under-supported queries for which the geometry proxy arXiv:2608.06827v1 [cs.RO] 7 Aug 2026 supplies usable structural conditions. R2S-EGO operationalizes behavior-scoped support with a simulator-derived robot proxy . Starting from a declared behavior scope, it rolls out a fixed controller in simulation in every refinement round and maps each robot configuration through the camera mount into a stream of executable ego-camera poses. These poses represent the behavior-scoped query domain that the scene must support. Initial conditions or reference motions are resampled across rounds, and failed rollouts are discarded and resampled. Within this domain, the current visual-asset deficit and geometry-proxy availability determine which candidates are eligible, and temporal local maxima are retained as a fixed budget of complementary keyframes. The robot proxy therefore identifies which miss-ing observations are behavior-relevant and physically realiz-able; budgeted selection determines which eligible support deficits are addressed first. R2S-EGO addresses the structural requirement with a 
+
+geometry proxy . This requirement distinguishes R2S scene refinement from generic novel-view synthesis: a generated image can be perceptually plausible yet place a surface or occluder inconsistently with the captured environment, which matters when that image becomes a training observation at a calibrated simulator pose. Registered captures first provide triangulated geometry fragments and their multi-view support. A shape prior proposes structure that is absent from those fragments, but initially lives in an independent coordinate frame. R2S-EGO aligns each prior region in scale, rotation, and translation using capture support, then fuses the aligned prior with observed fragments and current asset geometry. The aligned prior is retained in its object region, while NKSR [11] reconstructs regions without an object prior. Rendering this proxy along the camera path that ends at a selected robot view produces frame-aligned cues for layout, visibility, depth ordering, and occlusion. The prior thereby extends structural context into sparsely observed regions while registered capture anchors its scene-specific placement; the resulting condition is a capture-aligned structural hypothesis for generation. The two proxies solve the R2S problem through their coupling (Fig. 2). During allocation, geometry availabil-ity prevents the robot proxy from spending its budget on candidate poses that lack usable structural support. During generation, the geometry proxy is rendered at the same mounted-camera poses supplied by the robot proxy. A real reference image provides scene appearance, relative camera motion specifies how the view evolves, and the rendered proxy specifies what structure should be visible at each pose. The generator consequently returns ego observations with estimated camera poses: VGGT registers each retained frame relative to a fixed real reference capture. R2S-EGO assimilates these frames into the visual asset as lower-weight pseudo-observations while retaining registered real captures as persistent anchors. This converts targeted generation into a R2S scene-refinement loop: the observations update the visual asset, while the fused geometry supplies the refreshed collision surface used by the next-round rollout and down-stream simulation. We evaluate the resulting scene on held-out robot views and in downstream policy use. Across 48 frozen Unitree G1 ego views in three Replica scenes, six-view R2S-EGO reaches 19.062 dB PSNR, compared with 14.226 dB for the strongest baseline. Under the controlled real-G1 sitting protocol, policies trained in GaussGym and R2S-EGO simu-lation scenes succeed in 4/40 and 33/40 trials across five independently trained policies per condition, respectively; Fig. 1 shows the R2S-EGO transfer, with the simulated and onboard ego views compared at each sitting phase. Our contributions are:  
+
+> •
+
+We formulate sparse-capture R2S scene refinement around the capture–consumption support gap, targeting support deficits within behavior-scoped executable robot views in an existing simulator rather than uniform global view completion.  
+
+> •
+
+We introduce a dual-proxy method in which a robot proxy represents behavior-scoped executable camera queries and localizes current support deficits, while a capture-anchored geometry proxy supplies structural conditioning. Fixed-budget selection targets eligible deficits; their coupling then produces registered ego observations and a refreshed geometry/collision proxy for anchor-preserving R2S scene refinement.  
+
+> •
+
+We validate the refined scene through frozen robot-view appearance evaluation and a controlled real-G1 downstream-policy comparison. II. R ELATED WORK 
+
+Reconstructed and generated environments for robot learning: R2S systems convert real observations into task-ready simulation assets. RialTo and URDFormer recover interactive or articulated simulation assets [12], [13], while SplatSim, RoboGSim, GaussGym, Vid2Sim, Wanderland, and RobotArena ∞ connect reconstructed or video-derived environments to robot training, transfer, or evaluation [1]– [3], [6], [14], [15]. Complementary generative models pre-dict action-conditioned observations [16], [17], or synthesize views for visual-policy learning [18], [19]. GRAIL likewise pairs 3D content with video priors to obtain humanoid loco-manipulation on a G1 [20], but its content is generated rather than captured—text-to-mesh objects on procedural terrain—and its video prior supplies motion, in that human– object interaction videos are converted into body and ob-ject trajectories. R2S-EGO addresses a different stage: it introduces neither a new simulator nor a policy learner, but performs R2S scene refinement for a specific sparse-capture environment along behavior-scoped robot views. 
+
+Sparse scene recovery and generative refinement: 
+
+Sparse scene recovery spans radiance-field and Gaussian representations [4], [5], few-view prior methods [21], [22], and pointmap-based geometric reconstruction [23], [24]. 3DFIRES, WorldMirror, and SAM 3D further infer structure beyond directly fitted visible surfaces [25]–[27]. In parallel, video diffusion supplies appearance and temporal priors [28], [29], while camera-controlled generators synthesize A. Real-to-sim generation B. Reusable simulation scene            
+
+> SAM 3D
+> Shape prior
+> Generator Gθ
+> 3DGS Mesh feed back to scene training Policy training & evaluation
+> Sparse captures Fragmentary geometry Geometry scaffold Robot target-view selection
+> Reference
+> Ego-view video
+> ···
+> ego view
+> t
+> Xvalong τ v
+> C = {(I i, π i)} Mobs
+> VK
+> zv
+> Mscaf
+> Ii(v) Fig. 2. R2S-EGO pipeline. R2S-EGO refines an existing simulation scene along behavior-scoped robot views. A simulator-derived robot proxy represents executable camera queries and identifies which remain under-supported, while a capture-anchored geometry proxy supplies view-aligned structural conditions. Registered ego observations update the visual asset as lower-weight pseudo-observations while real captures remain anchors; the refreshed geometry/collision proxy supports the next-round rollout and downstream simulation. All panels show the same room 0 scene reconstructed from the same six captures. In the geometry panels, gray marks capture-observed surfaces and teal marks surfaces supplied by the shape prior.
+
+calibrated novel-view sequences [7]–[10], and generated or restored views can be returned to NeRF or 3DGS opti-mization [30]–[37]. These methods are direct precedents for our generated-view visual-update branch : they improve novel-view rendering by generating, repairing, or allocating pseudo views and feeding them back to a radiance-field or Gaussian asset. Their stated task and evaluation, however, end at reconstruction or visual camera exploration; they do not define or evaluate an end-to-end robot simulation interface that couples the visual asset to collision geometry, dynamics, embodied control, and downstream policy use. Real-to-sim systems draw the same boundary: Vid2Sim combines Gaussian appearance with mesh-based physical interaction, GaussGym synchronizes a 3DGS renderer with collision physics, and Wanderland couples view synthesis with metric geometry and collision meshes. R2S-EGO there-fore does not claim novelty for feeding generated views back into 3DGS. Its full output is instead a refined simulation scene comprising an updated visual asset and refreshed geometry/collision proxy. Its distinction is how generated views are selected and consumed: queries come from a fixed robot embodiment, mounted camera, and declared behavior scope, while capture-anchored structure constrains the views that become simulator observations. This changes generic reconstruction coverage into targeted support for behavior-scoped executable robot views used in downstream policy training. 
+
+Active and robot-targeted view allocation: Next-best-view and active-mapping methods choose new sensing poses to improve reconstruction or mapping [38]–[40]. Recent systems extend this principle with Gaussian-rendering in-formation gain, feed-forward uncertainty, vision-language guidance, or imagined geometry [41]–[43]. These methods acquire new real measurements for global reconstruction. R2S-EGO instead represents a behavior-scoped executable query domain within an existing simulator, then allocates synthetic observations to current support deficits for which capture-anchored structural conditions are available. Prior work therefore provides the necessary components—sparse reconstruction, geometry completion, controlled generation, scene feedback, and active view selection—but does not jointly define robot-relevant queries and ground the generated observations in capture-anchored structure. III. M ETHOD 
+
+A. Problem Setting and Output 
+
+We consider refinement of an existing robot simulation scene. Let C = {(Ii, π i)}Ni=1 denote sparse RGB captures with calibrated poses. A fixed registration maps the captures and initial asset A0 into the simulator world frame W,yielding CW and A0. The simulator S supplies the robot em-bodiment E, robot dynamics, camera mount B TC , and con-trol interface. A behavior scope B specifies reachable con-figurations, admissible motion, and body-relevant regions. Given (CW , S, B, A0), R2S-EGO acquires no additional real observations and returns a refined scene: the visual asset 
+
+A∗ together with the current collision surface derived from the capture-anchored fused geometry (Sec. III-B.1). The NKSR complement and collision mesh are refreshed between rounds; robot dynamics and control interfaces remain fixed. Useful synthetic observations require two complementary forms of validity. A robot proxy represents the behavior-scoped executable camera domain and localizes views that the current visual asset under-renders, while a geometry proxy supplies capture-anchored structural conditions. Afixed target-view budget then makes selection necessary: current deficit and geometry availability prioritize eligible views within the robot-proxy domain. This decomposition separates the feasibility of a query from the scene support available to answer it, then couples both before synthesis. We introduce the geometry proxy first because its availability also enters budgeted selection. The selected target views and their rendered structural conditions drive ego-view genera-tion, whose registered output is assimilated into the visual asset. Throughout, l indexes the refinement round, whether used as a superscript or a subscript; in particular, Al is the visual asset at the start of round l. Figure 2 and Algorithm 1 summarize the pipeline and its fixed-round execution. 
+
+B. Dual-Proxy Ego-View Construction 1) Capture-Anchored Geometry Proxy: A camera-controlled generator can reproduce a requested motion, but camera motion alone does not determine the layout, visibility, or occlusion of the target scene. Sparse captures provide anchors where the scene was observed, while leaving incomplete support at surfaces revealed from robot views. A shape prior can supply missing structure, but its prediction begins in an independent canonical frame. We therefore build the geometry proxy by aligning prior geometry to capture-derived fragments before using it as a rendering condition. Calibrated multi-view tracks are triangulated into frag-mentary geometry Mobs = ( Pobs , A obs ), where the support record Aobs identifies the captures contributing to each re-gion. A predefined category vocabulary prompts SAM 3 [44]; every detected instance mask is passed automatically to SAM 3D [27] to obtain Pprior = {P m
+
+> prior
+
+}m. The proxy is then composed as 
+
+Ml 
+
+> scaf
+
+= Compose 
+
+
+
+{T ∗
+
+> m
+
+(Pm
+
+> prior
+
+)}m,
+
+NKSR  P¬prior obs ∪ P (Al)¬prior 
+
+.
+
+(1) 
+
+T ∗
+
+> m
+
+(p) = s∗
+
+> m
+
+R∗
+
+> m
+
+p + t∗ 
+
+> m
+
+is the world-frame similarity transform estimated from overlap between real triangulated and prior points, together with multi-view consistency be-tween the projected prior silhouette and image masks. It is solved once from real captures and then held fixed during refinement. Compose retains the aligned SAM 3D surface in its object region; after removing those object points, NKSR reconstructs the remaining region from real triangulated points and the current backend geometry. Rendering Ml
+
+> scaf
+
+at a target pose supplies a frame-aligned structural condition, including scene layout, visibility, and occlusion. Thus, the geometry proxy turns an appearance-only generation request into a query tied to the captured scene, while prior-only surfaces remain structural hypotheses rather than verified scene geometry. 
+
+2) Behavior-Scoped Robot Proxy: The robot proxy first represents the ego-camera query domain induced by the robot embodiment and declared behavior scope. In each round, the fixed behavior controller μB is rerun with resampled initial conditions or reference motions; failed rollouts are discarded and resampled until 12 successful rollouts are obtained. Forward kinematics and the fixed camera mount yield the round-specific candidate stream Vl 
+
+> 0
+
+= {W TC,t }t. Within this domain, fixed-budget selection localizes current deficits for which the geometry proxy supplies usable support. We score each accepted candidate and keep the temporal local maxima:  
+
+> W
+
+TC,t = W TB (qt) B TC ,sl(t) = ul(t) gl(t),
+
+Vl = TopK  NMS t(sl), Vl
+
+> 0
+
+, K  , |V l| = K. 
+
+(2) The asset deficit ul(t) is the fraction of pixels the current visual asset cannot render at that pose, and the geome-try availability gl(t) is the fraction the geometry proxy can render there. The values 0.8 in Table I are per-pixel alpha/coverage and depth/splat-validity thresholds used to form these masks, not pose-level gates. Their product is high only where visual support is genuinely missing and a usable structural condition exists, and because the deficit is measured against the current asset, allocation targets what is missing now rather than global scene coverage. Scoring every pose leaves long runs of near-identical values, so non-maximum suppression over t collapses each run into a single keyframe, and TopK returns the K highest-scoring surviving poses as the target views. Thus, Vl 
+
+> 0
+
+represents the round’s behavior-scoped executable query domain, whereas Vl is only its fixed-budget subset. Each v ∈ V l is one mounted-camera pose the robot actually reaches while performing the declared behavior, and the fixed controller defines these queries independently of the downstream learned policy. 
+
+3) Joint Ego-View Generation: The robot and geome-try proxies contribute complementary motion and structural inputs, which synthesis must join at a single view index that binds the rendered structural condition, the reference-relative camera motion, and the generated frame registration; otherwise the generated frames cannot serve as registered observations. For each target view v, a real capture Ii(v)
+
+provides the appearance reference and τv is the camera path along which that view is generated: 
+
+zlv = R(Ml 
+
+> scaf
+
+, τ v ),Xlv = Gθ
+
+ Ii(v), z lv , ¯τv
+
+ ,
+
+Dl 
+
+> ego
+
+= {(Xl,N f 
+
+> v
+
+, ˆπlv ) : v ∈ V l}.
+
+(3) Here Nf is the fixed generation sequence length, so τv
+
+carries Nf poses, zlv is the Nf -frame structural-condition sequence rendered along τv , and ¯τv = {¯πv,t }Nf 
+
+> t=1
+
+collects those poses relative to the reference camera; the rule for 
+
+i(v), the construction of τv , and the definition of ¯πv,t are given in Sec. III-C. Only the terminal frame is retained; the intermediate frames supply a continuous transition from the reference. The query v controls generation but is not used as the terminal frame’s training pose. VGGT jointly processes the fixed real captures and generated frames, estimates each generated pose and intrinsics relative to its real reference, and composes the relative pose with that reference’s fixed world pose to obtain ˆπlv . VGGT estimates for real captures are used only for this relative composition and never replace their registered poses. 
+
+C. Scene Refinement and Implementation 
+
+Generated frames address missing support only when they become part of the reusable simulator asset. Let Dl 
+
+> ego
+
+=Slj=0 Dj 
+
+> ego
+
+collect registered generated observations through round l. Starting from Al, we refine the visual representation jointly with the registered real captures and this cumulative observation set. Real captures retain unit weight, while each generated observation has wsyn = 0.5 and wreal = 1.The captures therefore remain persistent coordinate and appearance anchors, while the generated observations extend renderable support at the selected target views. The visual result retains the input asset interface, while the current fused geometry is installed as the scene collision surface. Downstream simulation and policy training therefore con-sume the refined scene without changing robot dynamics or control interfaces. Algorithm 1 gives the complete fixed-round execution of this output interface. 
+
+Algorithm 1 R2S-EGO Dual-Proxy Scene Refinement                                                                                                     
+
+> Require: Captures C; capture registration WTcap ; simulator S; behavior scope B; rounds L; target-view budget K; initial asset A0; fixed configuration H
+> 1: (CW,A0)←REGISTER INPUTS (C,A0,WTcap )
+> 2: (Mobs ,Pprior )←OBSERVED AND PRIOR GEOMETRY (CW;H)
+> 3: {T∗
+> m}m←ALIGN PRIOR (Mobs ,Pprior ;H)
+> ▷Prior transforms remain fixed across all rounds 4: D−1ego ←∅
+> 5: for l= 0 to L−1do
+> 6: Ml
+> scaf ←GEOMETRY PROXY (Mobs ,Pprior ,{T∗
+> m}m,Al;H)
+> 7: REPLACE COLLISION MESH (Ml
+> scaf ;H)
+> 8: Vl
+> 0←SUCCESSFUL EGO POSES (S, μ B,B;H)
+> ▷Resample failed rollouts until 12 succeed 9: {i(v)}v←SELECT REFERENCES (CW,Vl
+> 0,Mobs ;H)
+> 10: Vl←ROBOT PROXY (Vl
+> 0,Ml
+> scaf ,Al, K ;H)
+> 11: Dl
+> ego ←EGO VIDEO REG (CW,Ml
+> scaf ,Vl,{i(v)}v;H)
+> 12: Dl
+> ego ← D l−1ego ∪ D l
+> ego
+> 13: Al+1 ←UPDATE VISUAL ASSET (Al,CW,Dl
+> ego ;H)
+> 14: end for
+> 15: return refined scene: A∗← A Land current collision mesh
+
+Registration and geometry: The fixed transform W Tcap 
+
+maps the capture frame to W, giving W TC,i = W Tcap πi
+
+and A0 = RegisterAsset( A0, W Tcap ); ATB maps frame B
+
+to frame A. Ground correction rotates the common frame to align its z axis and uses the first real capture as the new world origin; scale is calibrated separately. The same transform is applied to captures, assets, robot poses, and collision geometry. A predefined vocabulary prompts SAM 3, and each detected mask is passed automatically to SAM 3D [27] using public checkpoints and default thresholds, with-out manual instance selection. After prior alignment, prior-covered object points are excluded from the NKSR input. NKSR then reconstructs the remaining real points together with current backend geometry, and its output and the colli-sion mesh are replaced each round. Prior-completed regions remain structural hypotheses, and we do not independently evaluate their metric or collision accuracy (Sec. V). 
+
+Reference-conditioned generation: For each target view, a fixed rule caches the real reference i(v) with the great-est capture-anchored overlap, measured as the fraction of proxy points visible at the target that are also visible in the candidate capture. The path τv then interpolates from that reference camera to the target pose in Nf steps so that ViewCrafter [10] receives the continuous transition it                  
+
+> TABLE I
+> Key implementation settings.
+> Setting Configuration Refinement rounds L3Successful rollouts per round 12 Views per round K12 Frames per clip Nf25; terminal retained Synthetic weight wsyn 0.5; wreal = 1
+> Temporal NMS window 15 Asset alpha/coverage pixel threshold 0.8 Geometry validity pixel threshold 0.8 3DGS optimization 5k/round; 15k total Generated-view calibration VGGT
+
+requires. Generator poses are expressed relative to the ref-erence as ¯πv,t = ( W TC,i (v))−1W TC,v,t , and the geometry condition is rendered along the same path. ViewCrafter receives the cached reference, relative motion, and point condition; of the returned sequence only the terminal frame, which lies at the query endpoint, is retained. VGGT then estimates that generated frame’s intrinsics and pose relative to the fixed real reference before it enters the visual-asset update; the query pose itself is not used as its training pose. 
+
+Backends and controls: We represent the visual asset with 3DGS. The number of rounds L, per-round target-view budget K, generation sequence length Nf = 25 ,generation budget, and reconstruction budget are fixed. The remaining alignment, rasterization, selection, generation, and reconstruction settings in H are chosen on a disjoint devel-opment split. After each update, support is recomputed over the newly generated candidate pose stream before the next allocation; the prior transform remains fixed. The controller rollouts, however, are rerun with newly sampled initial condi-tions or reference motions after each geometry/collision up-date. All learned components use frozen public checkpoints with no scene-specific fine-tuning. Comparison arms use the same registered inputs, preprocessing, and simulator settings. R2S-EGO uses 5k 3DGS steps per round and accumulates at most 36 generated frames over L = 3 rounds. For every condition that performs iterative 3DGS optimization, the total reconstruction budget is fixed to 15k steps, including multi-round and one-shot variants; generated-frame budgets are additionally matched wherever generation is used. Di-fix3D+ remains the fixed official one-step postprocessor and therefore has no iterative reconstruction budget. R2S-EGO is an offline asset-construction method rather than a real-time pipeline. IV. E XPERIMENTS 
+
+We evaluate R2S-EGO through scene refinement and downstream policy use. First, we compare held-out ego-view appearance against Vanilla 3DGS, GaussGym, and Difix3D+ on 48 fixed G1-mounted cameras across three Replica scenes. We then characterize real-image capture-count efficiency on 
+
+office 2 with nested input sets, and examine the roles of SAM 3D geometry grounding, ego-video generation, and re-peated scene refinement through dependency-aware ablations under the common six-view protocol and 48 frozen target views. Finally, we train otherwise matched sitting policies in GaussGym and R2S-EGO simulation scenes, report each policy in its training simulator, and compare them under the same controlled real-G1 deployment protocol. 
+
+A. Setup Benchmark protocol: We use three Replica scenes: 
+
+office 2 , office 3 , and room 0 . Each scene uses six input frames sampled at equal intervals along a fixed cap-ture trajectory and 16 fixed G1-mounted evaluation cam-eras: eight geometry-farthest placements and eight held-out routine-route placements. The 48 targets are distinct from both the inputs and all retained pseudo-observation target poses. The six inputs, 48 targets, and three qualitative views were fixed before running any comparison, inspecting method outputs, selecting hyperparameters, or conducting ablations. Development and evaluation views are disjoint but come from the same three scenes. They nevertheless lie within the same declared behavior scope and robot-mounted camera distribution used by the robot proxy. The benchmark therefore evaluates generalization to unseen camera poses within the target behavior distribution, rather than to unseen behaviors, embodiments, or camera configurations. Exact full-reference metrics require pixel-aligned ground truth at calibrated held-out robot-camera poses, which is difficult to acquire densely and repeatably in a physical scene. Replica Ptex rendering provides this controlled GT, and every GT/render pair uses the same 640 × 480 intrinsics and camera-to-world matrix. The six real inputs and all evaluation cameras use Replica ground-truth intrinsics and extrinsics; only generated observations use VGGT calibra-tion. In physical rooms, where GT calibration is unavailable, VGGT also estimates the initial real-capture intrinsics and extrinsics. We report PSNR, SSIM, and LPIPS-Alex over the complete 640 × 480 images using the original 3DGS metric implementation, with no mask, crop, exposure/color correction, or image alignment; all pixels are included and LPIPS uses AlexNet. This benchmark measures controlled rendering accuracy; the matched ego-view comparison in Fig. 6 and the real-G1 trials provide complementary real-world evidence. 
+
+Comparison methods: For the main benchmark and component ablation, all conditions use the same six reg-istered inputs. All methods use frozen public checkpoints and no scene-specific fine-tuning. Vanilla 3DGS, GaussGym, Difix3D+, and GenFusion are reported from one fixed run; full R2S-EGO and every ablation use five pre-specified, paired pipeline seeds. For seeded results, metrics are av-eraged over 48 views within each seed and then across seeds. Vanilla 3DGS denotes the formal Origin baseline reconstructed without generated ego video, obtained by per-scene 3DGS optimization. The input asset A0 that R2S-EGO refines is instead produced by a feed-forward pointmap-to-Gaussian reconstructor of the DUSt3R/VGGT family [23], [45], so the w/o ego-video generation ablation row, which reduces to A0, is not numerically identical to Vanilla 3DGS despite using the same six inputs. GaussGym uses its sparse-stable SH3 condition, optimized for the common 15k-step reconstruction budget. Difix3D+ is the fixed official one-step postprocessor applied to the corresponding GaussGym render, not an independent reconstruction. GenFusion is included only in the frozen-view visual benchmark as a component-level baseline for the visual update: it closes the loop between video generation and reconstruction, but does not define query allocation from a fixed robot embodiment and behavior scope or a downstream R2S policy interface. We evaluate it using the same six registered inputs under a matched generated-frame and reconstruction budget; it is therefore not included in the real-G1 policy comparison. R2S-EGO applies the dual-proxy method in Sec. III using the fixed-round implementation in Algorithm 1. 
+
+Downstream policy and hardware protocol: We follow GRAIL’s egocentric visual sim-to-real setup [20] on the same SONIC stack, distilling the privileged scene-aware sitting teacher into a student that maps head RGB and proprioception to SONIC latent tokens. The GaussGym and R2S-EGO conditions share the teacher, student architecture, training setup, simulator physics—including the same final R2S-EGO-derived scene collision mesh and the same set of separately authored chair collision assets—and SONIC/WBC stack, changing only the training visual asset; neither uses real-data fine-tuning. Policy training and hardware evaluation vary the initial positions and orientations of both the robot and chair and include chair types that differ in backrest, height, shape, and appearance. At deployment, the student receives no chair distance, reference ID, or manual reference initialization. We train five students independently for each visual-asset condition using five paired policy-training seeds; pair i shares initialization, teacher data, and training con-figuration. Seeds, training steps, and checkpoints are fixed in simulation before any real-robot outcome is observed. For each seed, we report 25 in-simulation episodes in its training simulator and eight real-G1 trials with manual resets approximating predefined robot–chair relative-position and orientation ranges. Methods follow a fixed alternating order, and the operator is aware of the condition. Success requires no operator intervention or load-bearing tether engagement and stable chair support for at least 3 s. We report seed-wise counts because the independently trained policy, rather than an individual deployment trial, is the experimental replicate. These hardware trials are intended as a controlled proof-of-concept validation of the complete R2S-EGO pipeline, covering robot–chair pose and chair-type variation within the declared sitting scope. Evaluation of additional behaviors and skills is outside the present study. 
+
+B. Ego-View Quality and View Efficiency Same-view comparison: Figure 3 compares GT and all four methods at the same fixed G1-mounted camera in each scene. The red boxes mark identical regions in every column and concentrate on object boundaries and structure: the 
+
+room 0 table rim, the office 2 chair, and the office 3 
+
+sofa contour. There, Vanilla 3DGS and GaussGym collapse GT Vanilla 3DGS GaussGym Difix3D+ R2S-EGO room_0 
+
+office_2 
+
+office_3 Fig. 3. Same-camera qualitative comparison on frozen G1 ego views. Each row uses the identical mounted-camera pose for GT, Vanilla 3DGS, GaussGym, Difix3D+, and R2S-EGO. The displayed routine-route view is fixed within each scene and is not chosen per method. Red boxes mark the same image regions in every column: the table rim, the office chair, and the sofa boundary, where Vanilla 3DGS and GaussGym degrade into floaters and blur and Difix3D+ distorts object structure, while R2S-EGO stays close to GT. TABLE II                       
+
+> Quantitative comparison on frozen G1 ego views. Values average 48 views from three Replica scenes. R2S-EGO is the mean over five pre-specified pipeline seeds; other methods are single fixed runs. Vanilla 3DGS is the formal six-view Origin baseline; Difix3D+ is the fixed official one-step postprocessor on GaussGym. GenFusion is a component-level visual-update comparison rather than an end-to-end R2S system and is evaluated under the matched six-view protocol. Best values are bold. Method PSNR ↑SSIM ↑LPIPS-Alex ↓
+> Vanilla 3DGS 13.239 0.549 0.593 GenFusion [35] 14.012 0.481 0.571 Difix3D+ 14.059 0.461 0.552 GaussGym 14.226 0.567 0.628
+> R2S-EGO 19.062 0.757 0.273
+
+into floaters and blur, and Difix3D+ produces sharp but structurally distorted objects, whereas R2S-EGO preserves the table rim, chair geometry, and sofa contour of GT. The corresponding 48-view aggregate is reported in Table II. Among the completed comparisons, R2S-EGO ranks first on PSNR, SSIM, and LPIPS-Alex, reaching 19.062 dB, 0.757, and 0.273, respectively. The R2S-baseline ordering is metric-dependent: GaussGym has the strongest PSNR and SSIM, while Difix3D+ has the lowest LPIPS-Alex. GenFusion sep-arately tests whether generic generation–reconstruction feed-back can match the behavior-scoped visual update without a robot proxy. The qualitative rows show fixed routine-route views and are not selected separately for each method. 
+
+Real-image capture-count efficiency: For the declared 
+
+office 2 protocol, Vanilla 3DGS, GaussGym, and Di-fix3D+ use common nested input-image sets at N ∈{6, 10 , 15 , 30 , 45 } and the same 16 target cameras. Each count keeps the registered six-view DUSt3R initializer fixed. Both Vanilla 3DGS and GaussGym use the common 15k-step reconstruction budget, while Difix3D+ postprocesses the matching GaussGym renders. R2S-EGO remains a single six-view point. Figure 4 reports PSNR at all five measured budgets, with SEM over the 16 fixed target views describing target-view variation rather than seed uncertainty. R2S-EGO obtains 19.674 dB from six real views. At 45 real views, GaussGym, Difix3D+, and Vanilla 3DGS obtain 13.458, 13.221, and 12.424 dB, respectively. None of the measured baseline budgets reaches the R2S-EGO six-view level. This result is specific to the declared office 2 protocol, its 16 frozen target cameras, and PSNR. We do not interpolate an unmeasured catch-up count or interpret appearance as geometry equivalence. GenFusion is evaluated only under the common six-view protocol in Table II, where it serves as a component-level test of generic generation–reconstruction feedback. We therefore neither infer nor plot an unmeasured GenFusion view-count curve in Fig. 4. 
+
+C. R2S-EGO Component Ablation Geometry-proxy visualization: Figure 5 pairs each RGB observation with its geometry-proxy rendering. Shared colors 6 10 15 30 45 Real input views 12 14 16 18 20 G1 ego-view PSNR (dB) not reached by 45 views           
+
+> R2S-EGO (6 views) Vanilla 3DGS GaussGym Difix3D+ Fig. 4. Measured real-image capture-count efficiency on G1 ego views. Vanilla 3DGS, GaussGym, and Difix3D+ use nested input-image sets at the five displayed budgets; R2S-EGO remains a six-view point. Error bars are SEM over 16 fixed office 2 target views, not seed uncertainty. No measured baseline setting through the 45-view endpoint reaches R2S-EGO@6. GenFusion is reserved for the matched six-view component comparison in Table II; because it is not an end-to-end R2S baseline, we do not construct a separate capture-count curve for it.
+
+associate RGB regions with proxy objects within each pair, and the joint legend lists object IDs across both views. This visualization is qualitative and supplies no independent geometry-accuracy metric.                       
+
+> TABLE III
+> Component ablation of R2S-EGO. Mean over five paired pipeline seeds with six real inputs and 48 frozen G1 views. Variant PSNR ↑SSIM ↑LPIPS ↓
+> w/o ego video ( A0)13.417 0.552 0.588 w/o robot-proxy allocation 16.182 0.661 0.406 w/o SAM 3D grounding 16.384 0.671 0.412 w/o iterative refinement 17.508 0.706 0.334
+> Full R2S-EGO 19.062 0.757 0.273
+
+Row-wise ablation protocol: Table III reports four dependency-aware variants using the same six inputs and 48 frozen target views. w/o SAM 3D geometry grounding 
+
+removes the complete object-prior branch; NKSR alone supplies generation conditioning, collision, and the geometry used by the next round’s rollouts. w/o ego-video genera-tion produces no pseudo-observations and therefore reduces to the feed-forward sparse asset A0. w/o robot-proxy al-location retains the fused geometry condition, generation count, retained-frame count, and optimization budget, but samples camera-space trajectories without robot feasibility or deficit/coverage ranking. w/o iterative scene refinement 
+
+selects 36 distinct targets once from the initial proxy, retains 36 terminal frames, and performs one 15k-step update; it has no intermediate NKSR/collision update, controller rerollout, or reranking. Its retained-frame count and total 3DGS opti-mization budget match full R2S-EGO. 
+
+Component contributions: Without generated pseudo-observations, the pipeline reduces to A0 and loses 5.645 dB PSNR relative to the full method. Replacing robot-proxy allocation with random generation trajectories lowers PSNR from 19.062 to 16.182 dB and SSIM from 0.757 to 0.661, while LPIPS-Alex increases from 0.273 to 0.406 under matched generation and optimization budgets. Because this ablation jointly changes candidate-pose construction and ranking, the 2.880 dB difference supports the coupled robot-proxy allocation procedure as a whole, rather than isolat-ing the effects of robot feasibility, asset-deficit scoring, or geometry-availability scoring. Removing SAM 3D grounding gives 16.384 dB, showing that capture-anchored structural conditioning is complementary to allocation. The budget-matched one-shot variant reaches 17.508 dB, compared with 19.062 dB for fixed-round reassessment and refinement. These are aggregate differences over 48 frozen views, not significance or per-scene consistency claims. 
+
+D. Real-Robot Sitting Validation 
+
+Table IV reports five independently trained students per visual-asset condition. Across policy seeds, GaussGym and R2S-EGO obtain 87 .2% ± 5.2% and 97 .6% ± 2.2% in-simulation success, respectively. On the real G1, they obtain 
+
+10 .0% ± 10 .5% and 82 .5% ± 6.8% , respectively. Means and sample standard deviations are computed across indepen-dently trained policies. The hardware difference has the same direction for all five policy seeds. The pooled counts, 4/40 and 33/40, are descriptive because trials are nested within policies; the paired real-G1 seed counts are (0 , 0, 1, 2, 1) 
+
+versus (7 , 7, 7, 6, 6) . Similar in-simulation performance and consistently separated hardware results support an associa-tion between the refined ego-view asset and transfer under this protocol. Figure 6(a) provides a same-pose qualita-tive comparison between the real head-camera observation and the two training-asset renderings. Figure 6(b) shows a time-annotated R2S-EGO success and two representative GaussGym failures whose annotated causes—a premature sit-down that misses the seat and a foot–chair collision during approach—are illustrative examples rather than a causal diagnosis of the success-rate gap. Each policy first runs with a slack overhead safety tether. The tether supplies no support during nominal motion and becomes load-bearing only after loss of balance; tether engagement or operator intervention is counted as failure. A policy is detached only after a suc-cessful tethered sit. The illustrated GaussGym policy did not pass this gate, so its failure trials remain tethered, whereas the R2S-EGO success in Fig. 6(b1) executes untethered. Across the evaluated robot–chair configurations and chair types, R2S-EGO achieves higher hardware success for each policy seed. V. C ONCLUSION 
+
+We presented R2S-EGO, a dual-proxy method for R2S scene refinement along behavior-scoped robot views in a sparse-capture scene. Rollout-derived robot poses define Masks · 21 unique across both views                      
+
+> armchair 0 armchair 1 basket 75 blanket 86 book 12 book 59 coffee table cushion 13 cushion 32 cushion 5 cushion 69 cushion 70 cushion 72 cushion 8 indoor plant 35 plant stand 55 pot 43 sofa 0 sofa 1 table lamp 87 tabletop decor 54 background
+> Frame 392 Frame 658
+> RGB Mesh proxy Mesh proxy RGB
+
+Fig. 5. Two-view RGB–geometry-proxy correspondence. Each card groups one room 0 view (frames 392 and 658): the RGB observation followed by its geometry-proxy rendering. Shared mask colors denote object-level associations; the joint legend contains 21 object masks plus the background mesh. These annotations are qualitative and are not supplied to the generator. (a) Ego-view gap at a matched approach pose 
+
+(a1) Real scene reference 
+
+(a2) GaussGym scene baseline render 
+
+(a3) R2S-EGO scene ours 
+
+(b) Real-G1 sitting trials (earlier poses ghosted) 
+
+> 0.0 s 1.8 s 2.5 s 4.8 s
+
+(b1) R2S-EGO policy sits stably on chair 
+
+(b2) GaussGym policy misses the seat 
+
+(b3) GaussGym policy foot strikes chair 
+
+> 2.3 s
+> 1.7 s 1.9 s 2.8 s
+
+Fig. 6. Real-G1 sitting validation. The R2S-EGO scene’s smaller ego-view gap (a) coincides with 33/40 versus 4/40 sitting success across five independently trained policies per visual asset (b). (a) At a matched approach pose, the real head-camera observation (a1) versus the same viewpoint rendered from the GaussGym (a2) and R2S-EGO (a3) training scenes; a2 is cropped to the real camera’s field of view, and the boxed chair region is the same in all three and is magnified beside it. (b) Temporally composited real-G1 trials with phase timestamps: an R2S-EGO success (b1) and two GaussGym failures whose cause is boxed in red (b2, b3). Because (b1) spans the whole approach, its camera sits farther from the chair than in (b2) and (b3). 
+
+the behavior-scoped executable query domain, and current-deficit scoring identifies which ego views to generate; capture-anchored geometry supplies structural conditioning and the refreshed collision surface. The resulting registered generated observations are assimilated at lower weight into the visual asset. Across 48 frozen G1 ego views in three Replica scenes, six-view R2S-EGO reaches 19.062 dB PSNR versus 14.226 dB for the strongest reported R2S baseline. Across five independently trained policies per condition, GaussGym and R2S-EGO succeed in 4/40 and 33/40 con-trolled real-G1 sitting trials, respectively, with the same or-dering for every seed. These results support targeting sparse-capture scene refinement to behavior-scoped robot views to improve robot-view rendering and downstream policy performance in the evaluated settings. Three boundaries remain. Prior-completed geometry is a capture-anchored structural hypothesis rather than scene truth; although the fused geometry also instantiates the scene TABLE IV 
+
+Success rates in simulation and real-world deployment. Mean ±
+
+sample standard deviation across five independently trained policies; 25 simulation episodes and 8 real-G1 trials per policy, spanning varied robot–chair poses and chair types. Training scene Sim (%, mean ± std) Real (%, mean ± std) GaussGym 87.2 ± 5.2 10.0 ± 10.5 
+
+R2S-EGO 97.6 ± 2.2 82.5 ± 6.8 
+
+collision surface used downstream, we do not independently quantify its metric or collision accuracy, nor isolate its contribution from visual-asset refinement. The robot proxy covers a declared behavior scope rather than learned-policy occupancy, and repeated pseudo-observation updates may propagate errors in generated appearance or prior-completed structure. As a proof-of-concept complement to the main visual benchmark, the hardware evaluation covers variation in robot and chair pose and in chair backrest, height, shape, and appearance across five independently trained policies per visual asset. Evaluation of additional behaviors and skills, including arm-based manipulation and fine-grained hand– object interaction, remains future work. REFERENCES [1] Z. Xie, Z. Liu, Z. Peng, W. Wu, and B. Zhou, “Vid2Sim: Realistic and interactive simulation from video for urban navigation,” in Proceed-ings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR) , 2025, pp. 1581–1591. [2] A. Escontrela, J. Kerr, A. Allshire, J. Frey, R. Duan, C. Sferrazza, and P. Abbeel, “GaussGym: An open-source real-to-sim framework for learning locomotion from pixels,” 2025. [Online]. Available: https://arxiv.org/abs/2510.15352 [3] X. Li, J. Li, Z. Zhang, R. Zhang, F. Jia, T. Wang, H. Fan, K.-K. Tseng, and R. Wang, “RoboGSim: A real2sim2real robotic Gaussian splatting simulator,” 2024. [Online]. Available: https://arxiv.org/abs/2411.11839 [4] B. Mildenhall, P. P. Srinivasan, M. Tancik, J. T. Barron, R. Ramamoor-thi, and R. Ng, “NeRF: Representing scenes as neural radiance fields for view synthesis,” in European Conference on Computer Vision (ECCV) , 2020. [5] B. Kerbl, G. Kopanas, T. Leimk¨ uhler, and G. Drettakis, “3D Gaussian splatting for real-time radiance field rendering,” ACM Transactions on Graphics (Proc. SIGGRAPH) , vol. 42, no. 4, 2023. [6] M. N. Qureshi, S. Garg, F. Yandun, D. Held, G. Kantor, and A. Silwal, “SplatSim: Zero-shot sim2real transfer of RGB manipulation policies using Gaussian splatting,” in 2025 IEEE International Conference on Robotics and Automation (ICRA) , 2025, pp. 6502–6509. [7] G. Zheng, T. Li, R. Jiang, Y. Lu, T. Wu, and X. Li, “CamI2V: Camera-controlled image-to-video diffusion model,” 2024. [Online]. Available: https://arxiv.org/abs/2410.15957 [8] H. He, Y. Xu, Y. Guo, G. Wetzstein, B. Dai, H. Li, and C. Yang, “CameraCtrl: Enabling camera control for video diffusion models,” in 
+
+International Conference on Learning Representations (ICLR) , 2025. [Online]. Available: https://proceedings.iclr.cc/paper files/paper/2025/ hash/f98fd73d59d8494489ea970747b91fe4-Abstract-Conference.html [9] Z. Wang, Z. Yuan, X. Wang, Y. Li, T. Chen, M. Xia, P. Luo, and Y. Shan, “MotionCtrl: A unified and flexible motion controller for video generation,” in ACM SIGGRAPH 2024 Conference Papers , 2024, pp. 1–11. [10] W. Yu, J. Xing, L. Yuan, W. Hu, X. Li, Z. Huang, X. Gao, T.-T. Wong, Y. Shan, and Y. Tian, “ViewCrafter: Taming video diffusion models for high-fidelity novel view synthesis,” IEEE Transactions on Pattern Analysis and Machine Intelligence , 2025. [11] J. Huang, Z. Gojcic, M. Atzmon, O. Litany, S. Fidler, and F. Williams, “Neural kernel surface reconstruction,” in Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recog-nition (CVPR) , 2023, pp. 4369–4379. [12] M. Torne Villasevil, A. Simeonov, Z. Li, A. Chan, T. Chen, A. Gupta, and P. Agrawal, “Reconciling reality through simulation: A real-to-sim-to-real approach for robust manipulation,” in Proceedings of Robotics: Science and Systems (RSS) , 2024. [13] Q. Chen, A. Walsman, M. Memmel, K. Mo, A. Fang, D. Fox, and A. Gupta, “URDFormer: A pipeline for constructing articulated simulation environments from real-world images,” in Proceedings of Robotics: Science and Systems (RSS) , 2024. [14] X. Liu, J. Li, Y. Deng, R. Chen, Y. Zhang, Y. Ma, L. Guo, Y. Li, J. Zhang, and C. Feng, “Wanderland: Geometrically grounded simulation for open-world embodied AI,” 2026. [Online]. Available: https://arxiv.org/abs/2511.20620 [15] Y. Jangir, Y. Zhang, K. Yamazaki, C. Zhang, K.-H. Tu, T.-W. Ke, L. Ke, Y. Bisk, and K. Fragkiadaki, “RobotArena ∞: Scalable robot benchmarking via real-to-sim translation,” in International Conference on Learning Representations (ICLR) , 2026. [Online]. Available: https://iclr.cc/virtual/2026/poster/10009739 [16] S. Yang, Y. Du, S. K. S. Ghasemipour, J. Tompson, L. Kaelbling, D. Schuurmans, and P. Abbeel, “Learning interactive real-world sim-ulators,” in International Conference on Learning Representations (ICLR) , 2024, outstanding Paper Award. [17] F. Zhu, H. Wu, S. Guo, Y. Liu, C. Cheang, and T. Kong, “IRASim: A fine-grained world model for robot manipulation,” 2024. [Online]. Available: https://arxiv.org/abs/2406.14540 [18] A. Yu, G. Yang, R. Choi, Y. Ravan, J. Leonard, and P. Isola, “Learning visual parkour from generated images,” in Proceedings of the Conference on Robot Learning (CoRL) , ser. Proceedings of Machine Learning Research, vol. 270, 2025, pp. 2500–2516. [Online]. Available: https://proceedings.mlr.press/v270/yu25b.html [19] S. Tian, B. Wulfe, K. Sargent, K. Liu, S. Zakharov, V. C. Guizilini, and J. Wu, “View-invariant policy learning via zero-shot novel view synthesis,” in Proceedings of the Conference on Robot Learning (CoRL) , ser. Proceedings of Machine Learning Research, vol. 270, 2025, pp. 1173–1193. [Online]. Available: https://proceedings.mlr.press/v270/tian25a.html [20] T. Xie, H. Zhang, J. Park, Z. Wang, B. Wen, J. Li, X. Li, Q. Ben, H. Weng, Y. Ye, D. Minor, T. Wang, C. Jiang, S. Fidler, J. Kautz, L. Fan, Y. Zhu, Z. Luo, U. Iqbal, and Y. Yuan, “GRAIL: Generating humanoid loco-manipulation from 3D assets and video priors,” 2026. [Online]. Available: https://arxiv.org/abs/2606.05160 [21] A. Yu, V. Ye, M. Tancik, and A. Kanazawa, “pixelNeRF: Neural radiance fields from one or few images,” in Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR) , 2021. [22] Y. Chen, H. Xu, C. Zheng, B. Zhuang, M. Pollefeys, A. Geiger, T.-J. Cham, and J. Cai, “MVSplat: Efficient 3D Gaussian splatting from sparse multi-view images,” in European Conference on Computer Vision (ECCV) , 2024. [Online]. Available: https: //eccv.ecva.net/virtual/2024/poster/1231 [23] S. Wang, V. Leroy, Y. Cabon, B. Chidlovskii, and J. Revaud, “DUSt3R: Geometric 3D vision made easy,” in Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR) ,2024. [24] V. Leroy, Y. Cabon, and J. Revaud, “Grounding image matching in 3D with MASt3R,” in European Conference on Computer Vision (ECCV) ,2024. [25] L. Jin, N. Kulkarni, and D. F. Fouhey, “3DFIRES: Few image 3D reconstruction for scenes with hidden surfaces,” in Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR) , 2024, pp. 9742–9751. [26] Y. Liu, Z. Min, Z. Wang, J. Wu, T. Wang, Y. Yuan, Y. Luo, and C. Guo, “WorldMirror: Universal 3D world reconstruction with any-prior prompting,” 2025. [Online]. Available: https://arxiv.org/abs/ 2510.10726 [27] X. Chen, F.-J. Chu, P. Gleize, K. J. Liang, A. Sax, H. Tang, W. Wang, M. Guo, T. Hardin, X. Li, A. Lin, J.-W. Liu, Z. Ma, A. Sagar, B. Song, X. Wang, J. Yang, B. Zhang, P. Doll´ ar, G. Gkioxari, M. Feiszli, and J. Malik, “SAM 3D: 3Dfy anything in images,” in Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR) , 2026, pp. 7220–7232. [28] A. Blattmann, T. Dockhorn, S. Kulal, D. Mendelevitch, M. Kilian, D. Lorenz, Y. Levi, Z. English, V. Voleti, A. Letts, V. Jampani, and R. Rombach, “Stable video diffusion: Scaling latent video diffusion models to large datasets,” 2023. [29] J. Xing, M. Xia, Y. Zhang, H. Chen, W. Yu, H. Liu, G. Liu, X. Wang, Y. Shan, and T.-T. Wong, “DynamiCrafter: Animating open-domain images with video diffusion priors,” in European Conference on Computer Vision (ECCV) , 2024. [30] X. Liu, J. Chen, S.-H. Kao, Y.-W. Tai, and C.-K. Tang, “Diffusion-generated pseudo-observations for high-quality sparse-view reconstruction,” in European Conference on Computer Vision (ECCV) , 2024. [Online]. Available: https://eccv.ecva.net/virtual/2024/ poster/2393 [31] H. Kong, X. Yang, and X. Wang, “Generative sparse-view Gaussian splatting,” in Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR) , 2025, pp. 26 745–26 755. [32] Y. Zhong, Z. Li, D. Z. Chen, L. Hong, and D. Xu, “Taming video dif-fusion prior with scene-grounding guidance for 3D Gaussian splatting from sparse inputs,” in Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR) , 2025, pp. 6133– 6143. [33] A. Paliwal, X. Zhou, W. Ye, J. Xiong, R. Ranjan, and N. K. Kalantari, “RI3D: Few-shot Gaussian splatting with repair and inpainting diffu-sion priors,” in Proceedings of the IEEE/CVF International Conference on Computer Vision (ICCV) , 2025, pp. 25 094–25 103. [34] M. Kim, S. Jeon, I. Cho, M. Yoo, and S. J. Kim, “ExploreGS: Explorable 3D scene reconstruction with virtual camera samplings and diffusion priors,” in Proceedings of the IEEE/CVF International Conference on Computer Vision (ICCV) , 2025, pp. 27 042–27 051. [35] S. Wu, C. Xu, B. Huang, A. Geiger, and A. Chen, “GenFusion: Closing the loop between reconstruction and generation via videos,” in Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR) , 2025, pp. 6078–6088. [36] Y. Xu, Y. Wang, and S. X. Yu, “Novel view synthesis from a few glimpses via test-time natural video completion,” in Advances in Neu-ral Information Processing Systems (NeurIPS) , vol. 38, 2025. [Online]. Available: https://proceedings.neurips.cc/paper files/paper/2025/hash/ 4254e856d01a5e7b7ea050477c3ef9b9-Abstract-Conference.html [37] T.-A.-Q. Nguyen, L. Caraffa, J.-P. Tarel, and R. Br´ emond, “Pointmap-conditioned diffusion for consistent novel view synthesis,” in Proceed-ings of the IEEE/CVF Winter Conference on Applications of Computer Vision (WACV) , 2026, pp. 6360–6370. [38] R. Pito, “A solution to the next best view problem for automated surface acquisition,” IEEE Transactions on Pattern Analysis and Machine Intelligence (TPAMI) , vol. 21, no. 10, pp. 1016–1030, 1999. [39] C. Stachniss, G. Grisetti, and W. Burgard, “Information gain-based exploration using Rao-Blackwellized particle filters,” in Robotics: Science and Systems (RSS) , 2005. [40] X. Pan, Z. Lai, S. Song, and G. Huang, “ActiveNeRF: Learning where to see with uncertainty estimation,” in European Conference on Computer Vision (ECCV) , 2022. [41] L. Chen, H. Zhan, K. Chen, X. Xu, Q. Yan, C. Cai, and Y. Xu, “Ac-tiveGAMER: Active Gaussian mapping through efficient rendering,” in Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR) , 2025, pp. 16 486–16 497. [42] T. Xu, S. Gan, L. Gu, Y. Li, F. Zhan, and H. Pfister, “AREA3D: Active reconstruction agent with unified feed-forward 3D perception and vision-language guidance,” in Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR) ,2026, pp. 37 133–37 142. [43] S. Li, A. Gu´ edon, S. Chen, and V. Lepetit, “MAGICIAN: Efficient long-term planning with imagined Gaussians for active mapping,” in 
+
+Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR) , 2026, pp. 21 606–21 615. [44] N. Carion, L. Gustafson, Y.-T. Hu, S. Debnath, R. Hu, D. Suris Coll-Vinent, C. Ryali, K. V. Alwala, H. Khedr, A. Huang, J. Lei, T. Ma, B. Guo, A. Kalla, M. Marks, J. Greer, M. Wang, P. Sun, R. R¨ adle, T. Afouras, E. Mavroudi, K. Xu, T.-H. Wu, Y. Zhou, L. Momeni, R. Hazra, S. Ding, S. Vaze, F. Porcher, F. Li, S. Li, A. Kamath, H. K. Cheng, P. Doll´ ar, N. Ravi, K. Saenko, P. Zhang, and C. Feichtenhofer, “SAM 3: Segment anything with concepts,” 2025. [Online]. Available: https://arxiv.org/abs/2511.16719 [45] J. Wang, M. Chen, N. Karaev, A. Vedaldi, C. Rupprecht, and D. Novotny, “VGGT: Visual geometry grounded transformer,” in 
+
+Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR) , 2025.

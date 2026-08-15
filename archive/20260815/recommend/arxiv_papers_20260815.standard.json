@@ -1,0 +1,583 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-08-15T19:24:06.554853+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 2,
+    "deep_divecandidates": 1,
+    "deep_cap": 7,
+    "deep_selected": 1,
+    "quick_candidates": 13,
+    "quick_skim_target": 12,
+    "quick_selected": 12
+  },
+  "deep_dive": [
+    {
+      "id": "2608.12122v1",
+      "source": "arxiv",
+      "title": "HandEdit: A Unified Benchmark for Egocentric Human-to-Robot Dexterous Hand Image Editing",
+      "abstract": "Robotic manipulation with dexterous hands is a cornerstone of Embodied AI, yet its progress is stifled by the high cost of collecting embodiment-aware teleoperation data. While abundant egocentric videos of human hands offer a scalable alternative, the profound discrepancies in appearance, articulation, and camera viewpoints between human and robotic data raise significant challenges for co-training. Though existing general image-editing models demonstrate strong capabilities, they lack necessary embodiment-specific priors to fully bridge this gap. In this work, we present HandEdit, a unified large-scale embodiment-aware image-editing dataset and benchmark specifically designed to transform human hands and arms into various dexterous robotic embodiments within egocentric frames. HandEdit comprises over 200M editing instances derived from five diverse source datasets, covering 26 distinct URDFs, including 13 hand-only and 13 hand-arm configurations. Alongside the dataset, we establish a unified benchmark protocol with two tracks: Hand-only and Hand-Arm, supporting URDF-conditioned evaluation. We conduct extensive evaluations of 11 representative image-editing baselines using a multi-dimensional metric suite, including generic similarity metrics, VLM-based judgment, and embodiment-aware metrics. HandEdit serves as a critical resource at the intersection of image editing and robotics: it advances embodiment-aware editing models while enabling scalable dexterous robotic learning from abundant human video data, paving the way for more generalizable Embodied AI.",
+      "authors": [
+        "Zhenjie Yang",
+        "Xingyu Jiao",
+        "Guopeng Zhong",
+        "Shuzhe Yang",
+        "Shi Che",
+        "Chao Wu",
+        "Chenyu Jiang",
+        "Dongjie Zhang",
+        "Yideng Zhang",
+        "Zheng Zhang",
+        "Muyun Jiang",
+        "Haisheng Su",
+        "Shuang Jin",
+        "Donghang Zhang",
+        "Chao Yang",
+        "Li Chen",
+        "Hongyang Li",
+        "Zuxuan Wu",
+        "Yu-Gang Jiang",
+        "Xiaosong Jia",
+        "Junchi Yan"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.CV"
+      ],
+      "published": "2026-08-12T14:41:53+00:00",
+      "link": "https://arxiv.org/pdf/2608.12122v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "large-scale embodiment-aware dataset and benchmark for transferring human hand images to robot hands, addressing data collection cost for dexterous manipulation",
+      "llm_evidence_cn": "大规模具身感知数据集与基准，将人手图像转换为机器人手，降低灵巧操作数据采集成本",
+      "llm_evidence": "大规模具身感知数据集与基准，将人手图像转换为机器人手，降低灵巧操作数据采集成本",
+      "canonical_evidence": "大规模具身感知数据集与基准，将人手图像转换为机器人手，降低灵巧操作数据采集成本",
+      "llm_tldr_en": "Presents HandEdit, a unified large-scale embodiment-aware image-editing dataset and benchmark for transforming human hand images into dexterous robotic hands, enabling scalable training data for dexterous manipulation.",
+      "llm_tldr_cn": "针对灵巧操作数据采集成本高的问题，提出HandEdit统一的大规模具身感知图像编辑数据集和基准，将人手和手臂转换为多种灵巧机器人手，弥合人类与机器人数据在外观、关节和视角上的差距。该基准为以人为中心的机器人灵巧操作训练提供可扩展的数据来源，有效降低了对昂贵遥操作数据的依赖。",
+      "llm_tldr": "针对灵巧操作数据采集成本高的问题，提出HandEdit统一的大规模具身感知图像编辑数据集和基准，将人手和手臂转换为多种灵巧机器人手，弥合人类与机器人数据在外观、关节和视角上的差距。该基准为以人为中心的机器人灵巧操作训练提供可扩展的数据来源，有效降低了对昂贵遥操作数据的依赖。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "humanoid robot dataset construction",
+      "matched_requirement_id": "req-2",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "quick_skim": [
+    {
+      "id": "2608.07770v1",
+      "source": "arxiv",
+      "title": "From Benchmark Performance to Tool Deployment: Human-in-the-Loop Anomaly Detection",
+      "abstract": "Automated anomaly detection methods often report strong performance on curated academic benchmarks, but their behavior under real-world industrial conditions is less clear. In this work, we evaluate 19 unsupervised anomaly detection models on the BowTie dataset, a challenging manufacturing dataset with reflective surfaces, subtle defects, and profile-specific variation. In contrast to benchmark results, we observe that model performance is less stable than typically reported on standard benchmarks such as MVTec AD, highly sensitive to preprocessing, and inconsistent across conditions, with no single approach emerging as uniformly robust; a consensus audit further indicates that nominal-data quality affects deployment.   Motivated by these findings, we developed and initially deployed a unified human-in-the-loop framework for manufactured-part inspection that combines image annotation, AI-assisted defect detection, and an integrated validation engine, replacing a prior manual visual inspection and documentation workflow. The system supports heatmap-guided defect review, SAM-refined candidate regions for inspector acceptance, rejection, or boundary adjustment, mask evaluation where annotations exist, and review history for inspector consistency and onboarding. Together, the results highlight the gap between benchmark performance and deployment reality, and provide a practical framework for addressing it.",
+      "authors": [
+        "Mike Szklarzewski",
+        "CJ George",
+        "Gavin Smithson",
+        "Christopher Stokes",
+        "Dakota Fulp",
+        "William M. Jones",
+        "Benjamin Wynn",
+        "Alexander Ur",
+        "Agit Yesiloz",
+        "Clint Kallenbach",
+        "Mark Swartz",
+        "Nathan DeBardeleben",
+        "Sharmistha Chakrabarti"
+      ],
+      "primary_category": "cs.LG",
+      "categories": [
+        "cs.LG",
+        "cs.CV"
+      ],
+      "published": "2026-08-07T21:31:20+00:00",
+      "link": "https://arxiv.org/pdf/2608.07770v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "unsupervised anomaly detection models evaluated for real-world deployment with human-in-the-loop",
+      "llm_evidence_cn": "评估无监督异常检测模型在真实部署中的人机协同性能",
+      "llm_evidence": "评估无监督异常检测模型在真实部署中的人机协同性能",
+      "canonical_evidence": "评估无监督异常检测模型在真实部署中的人机协同性能",
+      "llm_tldr_en": "Evaluates 19 unsupervised anomaly detection models on a challenging manufacturing dataset, showing performance instability and the need for human-in-the-loop deployment strategies.",
+      "llm_tldr_cn": "异常检测方法在学术基准上表现良好，但在真实工业条件下性能不稳定。本文在BowTie制造数据集上评估了19种无监督异常检测模型，发现其性能高度依赖预处理且在条件变化下不一致，单一模型难以普遍稳健。作者提出结合共识审计和人在回路的方式提升部署可靠性。该研究为异常检测模型在真实世界特别是工业机器人场景中的应用提供了重要经验。",
+      "llm_tldr": "异常检测方法在学术基准上表现良好，但在真实工业条件下性能不稳定。本文在BowTie制造数据集上评估了19种无监督异常检测模型，发现其性能高度依赖预处理且在条件变化下不一致，单一模型难以普遍稳健。作者提出结合共识审计和人在回路的方式提升部署可靠性。该研究为异常检测模型在真实世界特别是工业机器人场景中的应用提供了重要经验。",
+      "llm_tags": [
+        "query:humanoid-ood"
+      ],
+      "matched_query_tag": "query:humanoid-ood",
+      "matched_query_text": "out-of-distribution detection for safe robot operation",
+      "matched_requirement_id": "req-11",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2608.06827v1",
+      "source": "arxiv",
+      "title": "R2S-EGO: Dual-Proxy Refinement for Sparse-Capture Real-to-Sim",
+      "abstract": "Real-to-sim (R2S) depends on scene representations that render observations along robot ego trajectories, yet dense multi-view capture limits per-environment real-image capture-count efficiency, and sparse human capture can   leave behavior-scoped robot views under-supported. Camera-controlled synthesis can fill missing views, but its use in R2S requires behavior-admissible queries and capture-anchored structural conditioning. We present R2S-EGO,   which couples a simulator-derived robot proxy that represents the behavior-scoped executable query domain with a capture-anchored geometry proxy that supplies scene-specific structural conditions. Within this domain, fixed-   budget selection targets current support deficits for which geometry support is available. The generated observations are assimilated as pseudo-observations to refine the visual asset, while real captures remain anchors. The   fused geometry proxy also supplies the scene collision surface, which is refreshed between rounds. Together, these updates refine the existing simulation scene while its robot dynamics and control stack stay fixed. Across 48   frozen Unitree G1 ego views in three Replica scenes, six-view R2S-EGO reaches 19.062 dB PSNR, compared with 14.226 dB for the strongest reported R2S baseline. Across five paired policy-training seeds, R2S-EGO achieves 82.5%   +/- 6.8% real-G1 sitting success, compared with 10.0% +/- 10.5% for GaussGym.",
+      "authors": [
+        "Shuai Fang",
+        "Xin Deng",
+        "Yuchen Kang",
+        "Zhenjiang Li",
+        "Jie Chen"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.CV",
+        "cs.GR"
+      ],
+      "published": "2026-08-07T05:37:26+00:00",
+      "link": "https://arxiv.org/pdf/2608.06827v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "Real-to-sim dataset construction along robot ego trajectories, improving capture efficiency",
+      "llm_evidence_cn": "沿机器人本体轨迹构建真到仿真数据集的方法，提高采集效率",
+      "llm_evidence": "沿机器人本体轨迹构建真到仿真数据集的方法，提高采集效率",
+      "canonical_evidence": "沿机器人本体轨迹构建真到仿真数据集的方法，提高采集效率",
+      "llm_tldr_en": "Introduces R2S-EGO, a real-to-sim approach that couples robot and geometry proxies to generate behavior-scoped training data efficiently from sparse captures.",
+      "llm_tldr_cn": "真实到仿真（R2S）依赖沿机器人本体轨迹渲染观测，但稠密多视角采集成本高，稀疏采集又难以覆盖行为相关视图。R2S-EGO结合仿真器导出的机器人代理与采集锚定的几何代理，在固定预算下选择行为合法且几何支撑充分的视点进行合成，以少量采集高效生成机器人训练数据。该方法可显著提升机器人数据集构建的效率，为人形机器人等复杂系统的数据采集提供了可扩展方案。",
+      "llm_tldr": "真实到仿真（R2S）依赖沿机器人本体轨迹渲染观测，但稠密多视角采集成本高，稀疏采集又难以覆盖行为相关视图。R2S-EGO结合仿真器导出的机器人代理与采集锚定的几何代理，在固定预算下选择行为合法且几何支撑充分的视点进行合成，以少量采集高效生成机器人训练数据。该方法可显著提升机器人数据集构建的效率，为人形机器人等复杂系统的数据采集提供了可扩展方案。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2608.07895v1",
+      "source": "arxiv",
+      "title": "Auditing Instruction-Trajectory Mismatches in Multimodal Robot Demonstrations",
+      "abstract": "Robot demonstration datasets used to train vision-language-action policies can contain a subtle but harmful failure mode: trajectories that are behaviorally correct but paired with the wrong language instruction. We study post-hoc auditing of these Instruction-Trajectory Mismatches (ITMs). Unlike failed rollouts, ITMs often look plausible, and can corrupt the language-behavior mapping learned by the policy. We propose Multimodal Probabilistic Fusion (MMPF), a training-free auditing framework that treats each modality as an expert, estimates a task-label distribution from local neighborhood agreement and global prototype similarity, and then fuses modalities with predictive-entropy weighting in a product of experts. Across LIBERO benchmarks with injected instruction mismatches and noisy real-robot data, MMPF achieves the strongest overall ITM detection and label correction accuracy. We also show that auditing improves most downstream policy learning in settings where language is needed to disambiguate the task. We demonstrate in real robot experiments that our method can achieve improved policy performance and show the trade-off of filtering demonstrations compared to relabeling.",
+      "authors": [
+        "Simon Holk",
+        "Ryosuke Takanami",
+        "Tatsuya Matsushima",
+        "Yusuke Iwasawa",
+        "Yutaka Matsuo",
+        "Yueh-Hua Wu",
+        "Kei Ota"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.LG"
+      ],
+      "published": "2026-08-08T03:43:58+00:00",
+      "link": "https://arxiv.org/pdf/2608.07895v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "auditing robot demonstration datasets for instruction-trajectory mismatches, improving dataset quality",
+      "llm_evidence_cn": "对机器人演示数据集中的指令-轨迹不匹配进行审计，提升数据集质量",
+      "llm_evidence": "对机器人演示数据集中的指令-轨迹不匹配进行审计，提升数据集质量",
+      "canonical_evidence": "对机器人演示数据集中的指令-轨迹不匹配进行审计，提升数据集质量",
+      "llm_tldr_en": "Proposes Multimodal Probabilistic Fusion (MMPF), a training-free auditing framework for detecting instruction-trajectory mismatches in robot demonstration datasets, fusing local/global multimodal cues with entropy weighting; validated on LIBERO benchmarks.",
+      "llm_tldr_cn": "机器人演示数据集用于训练视觉-语言-动作策略，但其中存在指令与轨迹不匹配的隐性故障，会破坏语言-行为映射。本文提出无需训练的多模态概率融合（MMPF）审计框架，将每个模态视为专家，利用局部邻域一致性与全局原型相似度估计任务标签分布，并以预测熵加权进行产品式融合。在LIBERO基准上的实验验证了其有效性，为机器人数据集的构建与质量控制提供了重要工具。",
+      "llm_tldr": "机器人演示数据集用于训练视觉-语言-动作策略，但其中存在指令与轨迹不匹配的隐性故障，会破坏语言-行为映射。本文提出无需训练的多模态概率融合（MMPF）审计框架，将每个模态视为专家，利用局部邻域一致性与全局原型相似度估计任务标签分布，并以预测熵加权进行产品式融合。在LIBERO基准上的实验验证了其有效性，为机器人数据集的构建与质量控制提供了重要工具。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2608.07075v1",
+      "source": "arxiv",
+      "title": "Detection and Ranging of Transient Extrinsic Contacts Based on 6D Dynamic Tactile Sensing",
+      "abstract": "Delicate manipulation often involves transient and subtle collisions between a grasped object and the environment. While the human hand localizes these contacts effortlessly thanks to superior tactile sensitivity, robotic systems often lack the requisite resolution to acquire the information necessary for motion planning, resulting in clumsy manipulation or even task failure. Here, we propose transient extrinsic contact detection and ranging (TECDAR), a simple yet fast and efficient method for detecting and ranging extrinsic contact of grasped objects. Our design of gripper tips employs dynamic tactile sensing leveraging a single 2.5$\\times$3 mm 6D inertial measurement unit. The sensor captures sub-millisecond tip deformations at a 7 kHz sampling rate, but operating on a data stream of only 84 KB/s. High bandwidth and compact data size enable the system to rapidly detect and localize contact between grasped objects and their surroundings. Specifically, fusing tactile data with robot pose via an extended Kalman filter enables fast and precise localization of extrinsic contact, reaching millimeter-level accuracy within 180 ms. Experimental results demonstrate that the system achieves an average localization accuracy of approximately 7\\,mm in both line-contact and point-contact localization tasks. Furthermore, this near-instantaneous localization enables the robot to rectify its trajectory on a millisecond scale, facilitating precise tool manipulation and enhanced perception of complex environments purely through tactile exploration and mapping. We envision such techniques advancing the future of robotics across domains requiring delicate manipulation, including precision assembly, surgical assistance, and autonomous exploration in touch-dominant environments. Project page: humitlab.github.io/TECDAR/",
+      "authors": [
+        "Haowen Zheng",
+        "Yinghao Wu",
+        "Fuyuan Liu",
+        "Yichen Li",
+        "Yitian Shao"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-08-07T10:27:37+00:00",
+      "link": "https://arxiv.org/pdf/2608.07075v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "uses a 6D IMU on gripper tips to detect and range transient contacts, relevant to anomaly detection from IMU signals in robots",
+      "llm_evidence_cn": "利用6D IMU检测夹爪瞬态外部接触，可用于机器人IMU信号异常检测",
+      "llm_evidence": "利用6D IMU检测夹爪瞬态外部接触，可用于机器人IMU信号异常检测",
+      "canonical_evidence": "利用6D IMU检测夹爪瞬态外部接触，可用于机器人IMU信号异常检测",
+      "llm_tldr_en": "Proposes TECDAR, a simple and fast method for detecting and ranging transient extrinsic contacts using a single 6D IMU on gripper tips, capturing sub-millisecond tip deformations to enable delicate manipulation.",
+      "llm_tldr_cn": "针对精细操作中瞬态且微妙的外部接触难以察觉的问题，提出TECDAR方法，利用夹爪指尖的单个6D惯性测量单元捕捉亚毫秒级形变，实现对外部接触的快速检测与测距。该方法能够提升机械臂操作的安全性与鲁棒性，为基于IMU信号的机器人异常检测提供了新思路。",
+      "llm_tldr": "针对精细操作中瞬态且微妙的外部接触难以察觉的问题，提出TECDAR方法，利用夹爪指尖的单个6D惯性测量单元捕捉亚毫秒级形变，实现对外部接触的快速检测与测距。该方法能够提升机械臂操作的安全性与鲁棒性，为基于IMU信号的机器人异常检测提供了新思路。",
+      "llm_tags": [
+        "query:humanoid-ood"
+      ],
+      "matched_query_tag": "query:humanoid-ood",
+      "matched_query_text": "anomaly detection from joint position velocity torque IMU signals in humanoid robots",
+      "matched_requirement_id": "req-10",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2608.09303v1",
+      "source": "arxiv",
+      "title": "SAFE-CHEM: Uncertainty-Aware Policy Switching for Robust Robotic Chemistry",
+      "abstract": "The deployment of autonomous robotic systems in chemistry laboratories is accelerating experimental workflows and providing the foundational data for AI-driven scientific discovery. However, despite the success of data-driven methods in acquiring dexterous skills, safety remains a primary barrier to their deployment in high-risk domains, such as early-stage materials chemistry experiments. Specifically, learning-based policies frequently struggle to distinguish between safe and unsafe actions, leading to overconfident extrapolation and potentially catastrophic failures. To mitigate these safety risks, we propose SAFE-CHEM, an uncertainty-aware framework designed for robust, learning-based robotic chemists. Our approach leverages an ensemble of recurrent neural network-based imitation learning policies to quantify epistemic uncertainty online through the variance of action predictions. By characterising the success-conditioned density of this variance using kernel density estimation, we introduce a hybrid control architecture that autonomously switches from the learned policy to a deterministic, rule-based backup controller when uncertainty exceeds a calibrated safety threshold. We evaluate SAFE-CHEM across three fundamental laboratory manipulation tasks, where our empirical results demonstrate that this hybrid strategy improves overall task success rates and reduces critical safety violations compared to traditional single-policy baselines. Finally, we demonstrate the practical viability of the framework through zero-shot sim-to-real transfer onto a physical Franka Production 3 robot manipulator.",
+      "authors": [
+        "Laura Jones",
+        "Shazil Shahzad",
+        "Ayesha Sana",
+        "Gabriella Pizzuto"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.LG"
+      ],
+      "published": "2026-08-10T08:51:43+00:00",
+      "link": "https://arxiv.org/pdf/2608.09303v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "Uncertainty-aware policy switching detects unsafe actions, addressing OOD detection for safe robot operation",
+      "llm_evidence_cn": "不确定性感知策略切换检测不安全动作，服务于安全机器人操作中的OOD检测",
+      "llm_evidence": "不确定性感知策略切换检测不安全动作，服务于安全机器人操作中的OOD检测",
+      "canonical_evidence": "不确定性感知策略切换检测不安全动作，服务于安全机器人操作中的OOD检测",
+      "llm_tldr_en": "SAFE-CHEM uses an ensemble of recurrent networks for uncertainty estimation and policy switching to prevent overconfident extrapolation in robotic chemistry, improving safety in high-risk deployment.",
+      "llm_tldr_cn": "针对化学实验室等高风险场景中学习型策略常难以区分安全与不安全动作、过度自信推断导致潜在危险的问题，提出SAFE-CHEM框架。该方法基于递归网络集成的贝叶斯不确定性估计，在不确定性高时切换策略，避免不安全动作。在与安全相关的多种化学操作任务上证实能显著提升鲁棒性与安全性。该框架可推广至其他对安全性要求高的机器人部署场景。",
+      "llm_tldr": "针对化学实验室等高风险场景中学习型策略常难以区分安全与不安全动作、过度自信推断导致潜在危险的问题，提出SAFE-CHEM框架。该方法基于递归网络集成的贝叶斯不确定性估计，在不确定性高时切换策略，避免不安全动作。在与安全相关的多种化学操作任务上证实能显著提升鲁棒性与安全性。该框架可推广至其他对安全性要求高的机器人部署场景。",
+      "llm_tags": [
+        "query:humanoid-ood"
+      ],
+      "matched_query_tag": "query:humanoid-ood",
+      "matched_query_text": "out-of-distribution detection for safe robot operation",
+      "matched_requirement_id": "req-11",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2608.07192v1",
+      "source": "arxiv",
+      "title": "MAUPITI: On-Device Prototype-Based Learning on a Smart Infrared Sensor",
+      "abstract": "Low-resolution infrared (IR) array sensors represent an interesting solution for privacy-preserving human sensing in embedded systems. In this letter, we describe a smart multi-pixel IR sensor integrating a 16$\\times$16 thermal MOSFET (TMOS) array and a RISC-V microcontroller extended with low-precision SIMD instructions, capable of on-device learning and continual adaptation for pose and gesture recognition tasks under tight memory and power constraints ($<$32kB on-chip memory, $\\approx$1.5mW). To avoid the memory overheads of backpropagation and replay buffers, we adopt a prototype-based Nearest Class Mean (NCM) classifier in which a simple Convolutional Neural Network (CNN) encoder is trained and quantized offline, while class prototypes are stored and updated on the device in streaming mode. With experiments on two datasets, we show that this approach yields accuracy on par with a conventional classifier, with negligible latency overheads in both the classification and the prototype update ($<$0.29% considering both phases), effectively enabling online adaptation of the perception framework.",
+      "authors": [
+        "Beatrice Alessandra Motetti",
+        "Tanguy Dugas du Villard",
+        "Matteo Risso",
+        "Alessio Burrello",
+        "Francesco Daghero",
+        "Enrico Macii",
+        "Massimo Poncino",
+        "Marco Castellano",
+        "Alfio Basile",
+        "Daniele Jahier Pagliari"
+      ],
+      "primary_category": "cs.LG",
+      "categories": [
+        "cs.LG"
+      ],
+      "published": "2026-08-07T13:07:24+00:00",
+      "link": "https://arxiv.org/pdf/2608.07192v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "on-device learning on a RISC-V microcontroller with 32kB memory, demonstrates edge deployment of ML with continual adaptation",
+      "llm_evidence_cn": "在RISC-V微控制器上进行设备端原型学习，演示了低资源边缘部署与持续自适应",
+      "llm_evidence": "在RISC-V微控制器上进行设备端原型学习，演示了低资源边缘部署与持续自适应",
+      "canonical_evidence": "在RISC-V微控制器上进行设备端原型学习，演示了低资源边缘部署与持续自适应",
+      "llm_tldr_en": "Presents a smart IR sensor with 16x16 TMOS array and RISC-V microcontroller that performs on-device prototype-based learning for pose and gesture recognition under 32kB memory and 1.5mW, enabling continual adaptation.",
+      "llm_tldr_cn": "针对红外阵列传感器在嵌入式系统中需保护隐私且资源受限的问题，提出MAUPITI智能红外传感器，集成16×16 TMOS阵列与RISC-V微控制器。采用基于原型的最近类均值分类器，CNN编码器离线训练量化，原型在线存储，在32kB内存和约1.5mW功耗下实现姿态与手势识别的设备端学习和持续自适应，避免了反向传播和重放缓冲的内存开销，为嵌入式AI部署提供了可行范例。",
+      "llm_tldr": "针对红外阵列传感器在嵌入式系统中需保护隐私且资源受限的问题，提出MAUPITI智能红外传感器，集成16×16 TMOS阵列与RISC-V微控制器。采用基于原型的最近类均值分类器，CNN编码器离线训练量化，原型在线存储，在32kB内存和约1.5mW功耗下实现姿态与手势识别的设备端学习和持续自适应，避免了反向传播和重放缓冲的内存开销，为嵌入式AI部署提供了可行范例。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "edge deployment for humanoid robots",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2608.08859v1",
+      "source": "arxiv",
+      "title": "Agentic Anomaly Detection with ORCA-Style Dynamic Inductive Bias Adaptation in Multimodal Wearable Time Series Data",
+      "abstract": "Wireless Body Area Networks (WBANs) generate multivariate physiological time series that are highly nonstationary and must often be processed under strict computational and memory constraints. A critical yet underexplored challenge in this setting is selecting an appropriate temporal receptive field, which serves as a strong inductive bias for anomaly detection models. Existing approaches typically rely on fixed temporal contexts, which can perform inconsistently across heterogeneous signal regimes and require dataset-specific tuning. We propose ORCA, an agentically controlled anomaly detection framework that dynamically adapts the temporal receptive field at inference time based on lightweight signal statistics. Rather than introducing additional trainable parameters or learned policies, ORCA employs a supervisory controller that autonomously selects among discrete temporal contexts, enabling state-dependent inductive bias adaptation without retraining. Across a custom WBAN dataset, ORCA achieves performance comparable to the strongest fixed-context baselines (AUROC = 0.99) while eliminating the need to tune temporal horizons in advance. We further evaluate ORCA on MIMIC-IV as a challenging out-of-distribution benchmark, observing conservative generalization behavior without performance collapse under heterogeneous clinical conditions. These results highlight adaptive temporal inductive bias control as a practical and robust design principle for anomaly detection in resource-constrained, nonstationary physiological time series.",
+      "authors": [
+        "Anushka Roy",
+        "Jyotirmoy Singh",
+        "Shreea Bose",
+        "Chittaranjan Hota"
+      ],
+      "primary_category": "cs.LG",
+      "categories": [
+        "cs.LG",
+        "cs.AI"
+      ],
+      "published": "2026-08-09T18:49:13+00:00",
+      "link": "https://arxiv.org/pdf/2608.08859v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "adaptive time-series anomaly detection under computational and memory constraints",
+      "llm_evidence_cn": "面向多模态时间序列的计算与内存受限异常检测",
+      "llm_evidence": "面向多模态时间序列的计算与内存受限异常检测",
+      "canonical_evidence": "面向多模态时间序列的计算与内存受限异常检测",
+      "llm_tldr_en": "Proposes ORCA, an agentically controlled anomaly detection framework that dynamically adapts the temporal receptive field at inference time based on lightweight signal statistics for multivariate wearable time series under strict computational/memory constraints.",
+      "llm_tldr_cn": "无线体域网产生的多模态生理时间序列高度非平稳，且需在严格计算和内存约束下处理。现有方法通常使用固定时间上下文，难以适应不同信号状态。本文提出ORCA，一种智能体控制的异常检测框架，在推理时基于轻量信号统计动态调整时间感受野。该方法在受限设备上提升了异常检测的适应性与效率，可迁移至机器人边缘部署中的时序异常检测。",
+      "llm_tldr": "无线体域网产生的多模态生理时间序列高度非平稳，且需在严格计算和内存约束下处理。现有方法通常使用固定时间上下文，难以适应不同信号状态。本文提出ORCA，一种智能体控制的异常检测框架，在推理时基于轻量信号统计动态调整时间感受野。该方法在受限设备上提升了异常检测的适应性与效率，可迁移至机器人边缘部署中的时序异常检测。",
+      "llm_tags": [
+        "query:humanoid-ood"
+      ],
+      "matched_query_tag": "query:humanoid-ood",
+      "matched_query_text": "Self supervised time series anomaly detection for robot fault diagnosis",
+      "matched_requirement_id": "req-16",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2608.09246v1",
+      "source": "arxiv",
+      "title": "An Explainable GNN Framework for Component-Level Anomaly Diagnosis",
+      "abstract": "Industrial processes are complex systems composed of multiple interacting sensors that generate multivariate time series (MTS). Detecting anomalies in such systems is critical for reliability and safety, yet understanding their origin is equally important. Existing Graph Neural Network (GNN)based methods for anomaly detection primarily focus on sensor-level deviations and either attribute anomalies directly to the deviating sensors. When diagnosis is attempted, generally, the most deviated sensor is identified as a root cause of a system fault. However, in many industrial systems, anomalies do not arise from faulty sensors but from disruptions in the influences governing the system dynamics. We propose an explainable GNN-based anomaly detection framework that shifts the perspective from sensor-level anomalies to component-level diagnosis, hypothesizing that anomalous measurements are symptoms of altered inter-sensor influences. Experiments show that the method effectively identifies and prioritizes the true faulty components, providing interpretable insights into system failures.",
+      "authors": [
+        "Sena Ozgunay",
+        "Louise Travé-Massuyès",
+        "Jean-Michel Loubes",
+        "Raul Sena Ferreira"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI"
+      ],
+      "published": "2026-08-10T08:08:36+00:00",
+      "link": "https://arxiv.org/pdf/2608.09246v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "Multivariate time series anomaly detection and component-level diagnosis, transferable to robot fault diagnosis",
+      "llm_evidence_cn": "面向多变量时间序列的异常检测与组件级诊断，可迁移到机器人故障诊断",
+      "llm_evidence": "面向多变量时间序列的异常检测与组件级诊断，可迁移到机器人故障诊断",
+      "canonical_evidence": "面向多变量时间序列的异常检测与组件级诊断，可迁移到机器人故障诊断",
+      "llm_tldr_en": "Proposes an explainable GNN framework for component-level anomaly diagnosis in industrial multivariate time series, addressing root cause beyond deviating sensors.",
+      "llm_tldr_cn": "针对工业多变量时间序列中的异常检测与溯源问题，现有GNN方法往往将异常归因于偏差最大的传感器，忽略了系统动态中影响关系的扰动。本文提出一种可解释的GNN异常检测与组件级诊断框架，能识别导致系统故障的影响关系异常。该方法为机器人等多传感器系统的故障诊断提供了可迁移的建模思路，有助于定位真正的故障组件。",
+      "llm_tldr": "针对工业多变量时间序列中的异常检测与溯源问题，现有GNN方法往往将异常归因于偏差最大的传感器，忽略了系统动态中影响关系的扰动。本文提出一种可解释的GNN异常检测与组件级诊断框架，能识别导致系统故障的影响关系异常。该方法为机器人等多传感器系统的故障诊断提供了可迁移的建模思路，有助于定位真正的故障组件。",
+      "llm_tags": [
+        "query:humanoid-ood"
+      ],
+      "matched_query_tag": "query:humanoid-ood",
+      "matched_query_text": "Self supervised time series anomaly detection for robot fault diagnosis",
+      "matched_requirement_id": "req-16",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2608.10249v1",
+      "source": "arxiv",
+      "title": "STCAD: Scalable Trajectory Clustering and Anomaly Detection on Terabyte-Scale AIS Data",
+      "abstract": "We present a scalable framework for unsupervised clustering of maritime trajectories derived from terabyte-scale Automatic Identification System (AIS) archives. Variable-length trajectories are encoded with a custom BERT-based model trained via masked token modeling and clustered using CURE hierarchical clustering, producing physically interpretable trajectory groups without requiring a predefined number of clusters. An intrinsic unsupervised anomaly detection method based on reconstruction loss and clustering noise assignment identifies irregular navigation patterns. The framework is demonstrated on a national-scale AIS dataset comprising billions of messages spanning one year, yielding stable trajectory clusters and a clear separation between nominal and anomalous vessel behavior.",
+      "authors": [
+        "Bertram Hage",
+        "Alexander Schiøtz",
+        "Felix Thomsen",
+        "Christian Rand",
+        "Peder Heiselberg"
+      ],
+      "primary_category": "cs.LG",
+      "categories": [
+        "cs.LG"
+      ],
+      "published": "2026-08-10T21:32:42+00:00",
+      "link": "https://arxiv.org/pdf/2608.10249v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "unsupervised trajectory anomaly detection via reconstruction loss and clustering noise assignment",
+      "llm_evidence_cn": "基于重建损失与聚类噪声分配的轨迹异常检测",
+      "llm_evidence": "基于重建损失与聚类噪声分配的轨迹异常检测",
+      "canonical_evidence": "基于重建损失与聚类噪声分配的轨迹异常检测",
+      "llm_tldr_en": "STCAD presents a scalable unsupervised framework that encodes trajectories with a custom BERT-based model, clusters them via CURE, and detects anomalies using reconstruction loss and noise assignment on terabyte-scale AIS data.",
+      "llm_tldr_cn": "针对大规模轨迹数据缺乏标注且异常检测困难的问题，STCAD提出可扩展的无监督轨迹聚类与异常检测框架，用定制BERT模型对变长轨迹进行掩码建模并编码，再用CURE层次聚类得到可解释轨迹组，通过重建损失和聚类噪声分配识别异常航行模式。在数十亿条AIS消息上展示了稳定聚类和清晰异常分离，其重建式异常检测思路可用于机器人时序信号的无监督故障检测。",
+      "llm_tldr": "针对大规模轨迹数据缺乏标注且异常检测困难的问题，STCAD提出可扩展的无监督轨迹聚类与异常检测框架，用定制BERT模型对变长轨迹进行掩码建模并编码，再用CURE层次聚类得到可解释轨迹组，通过重建损失和聚类噪声分配识别异常航行模式。在数十亿条AIS消息上展示了稳定聚类和清晰异常分离，其重建式异常检测思路可用于机器人时序信号的无监督故障检测。",
+      "llm_tags": [
+        "query:humanoid-ood"
+      ],
+      "matched_query_tag": "query:humanoid-ood",
+      "matched_query_text": "Self supervised time series anomaly detection for robot fault diagnosis",
+      "matched_requirement_id": "req-16",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2608.10847v1",
+      "source": "arxiv",
+      "title": "Enabling Scalable Kinesthetic Teaching via Observer-based Hand-guiding with Active Support",
+      "abstract": "Kinesthetic teaching through robot hand-guiding provides a natural interface for collecting demonstrations in imitation learning and programming-by-demonstration. However, extended sessions cause operator fatigue, reducing demonstration quality and limiting scalability. Current industrial hand-guiding approaches typically provide no active assistance, and alternatives require costly wrist-mounted force-torque sensors or rely on learned motion priors unavailable for new tasks. We propose RHOAS, a hand-guiding scheme that actively supports operator-intended motions using model-based force estimation without additional hardware. Our approach considers robot hand-guiding as an actively controlled interaction by the human operator, rather than an interaction with a passive environment. Standard methods used for hand-guiding typically rely on general passivity-based compliant control architectures that unnecessarily increase operator effort and limit the range of demonstrable motions without providing the intended stability guarantees in active interaction. Instead, our design utilizes model-based external torque estimation, internal joint torque sensing, and redundant robot kinematics to actively support human physical input within the human interaction frequency bandwidth. We address practical challenges of relying on observer-based force estimation, including suppression of unmodeled joint elastic dynamic effects and measurement noise in the feedback path, reduced estimate accuracy close to kinematic singularities, and static gravity compensation errors. In a user study with 16 participants on a KUKA LWR iiwa we demonstrate statistically significant reductions in physical effort, improved maneuverability for both precise and agile tasks, and clear user preference.",
+      "authors": [
+        "Anna Tuma",
+        "Giuseppe Monetti",
+        "Jochen J. Steil",
+        "Niels Dehio"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-08-11T12:19:17+00:00",
+      "link": "https://arxiv.org/pdf/2608.10847v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "Kinesthetic teaching enables scalable demonstration collection for robotics datasets",
+      "llm_evidence_cn": "通过动觉教学实现可扩展的示范采集，支持机器人数据集构建",
+      "llm_evidence": "通过动觉教学实现可扩展的示范采集，支持机器人数据集构建",
+      "canonical_evidence": "通过动觉教学实现可扩展的示范采集，支持机器人数据集构建",
+      "llm_tldr_en": "RHOAS reduces operator fatigue in kinesthetic teaching via observer-based model-based force estimation without extra sensors, enabling higher quality and more scalable demonstration collection for imitation learning.",
+      "llm_tldr_cn": "针对长时间机器人手把手示教会导致操作者疲劳、降低示范质量并限制数据采集规模的问题，提出基于观测器的主动支撑手引导方案RHOAS。该方法无需额外力传感器，通过基于模型的力估计主动辅助操作者意图运动，减轻疲劳并提高示范质量。实验表明该方法可扩展示教数据采集，为模仿学习提供更可靠的数据来源。该方案有望提升机器人数据集构建的规模与质量。",
+      "llm_tldr": "针对长时间机器人手把手示教会导致操作者疲劳、降低示范质量并限制数据采集规模的问题，提出基于观测器的主动支撑手引导方案RHOAS。该方法无需额外力传感器，通过基于模型的力估计主动辅助操作者意图运动，减轻疲劳并提高示范质量。实验表明该方法可扩展示教数据采集，为模仿学习提供更可靠的数据来源。该方案有望提升机器人数据集构建的规模与质量。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2608.11063v1",
+      "source": "arxiv",
+      "title": "Deployment Is Not Destiny: Robot Recomposition in the Field with Unseen Software, Hardware, and Compute Payloads",
+      "abstract": "The tight coupling of subsystems in most robots, though a natural consequence of their complexity, leads to monolithic designs that are time-consuming and difficult to adapt after initial deployment. To address this challenge, we present a framework and supporting abstractions for recomposition during runtime that enable robots to quickly integrate previously unseen modular software, hardware, and compute payloads. Our approach allows non-expert users to quickly add new capabilities in the field through a true plug-and-play process. Crucially, new resources are not only immediately available to a host robot but are also shared with distributed peers, enabling compute-constrained systems to access powerful new remote capabilities. Our framework reduces reconfiguration time to a matter of minutes with no developer intervention, in stark contrast to the hours of expert effort often required for traditional manual integration. We demonstrate our method in two disaster response scenarios, including radioactive source localization at an operational nuclear reactor facility and a thermal-guided search for people in dark, difficult-to-reach spaces. These demonstrations show how in-field recomposition provides timely, flexible, and accessible adaptation to dynamic requirements, representing a critical step toward creating robots that can quickly evolve alongside the tasks, technologies, and environments they support.",
+      "authors": [
+        "Steven Swanbeck",
+        "Jonathan Salfity",
+        "Jeffery Gunawan",
+        "Corrie Van Sice",
+        "Mitch Pryor",
+        "Robert Blake Anderson"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-08-11T15:29:54+00:00",
+      "link": "https://arxiv.org/pdf/2608.11063v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "runtime robot recomposition with unseen compute payloads; enables edge deployment for compute-constrained robots",
+      "llm_evidence_cn": "运行时机器人重构，支持计算受限系统灵活接入新型计算负载，促进边缘部署",
+      "llm_evidence": "运行时机器人重构，支持计算受限系统灵活接入新型计算负载，促进边缘部署",
+      "canonical_evidence": "运行时机器人重构，支持计算受限系统灵活接入新型计算负载，促进边缘部署",
+      "llm_tldr_en": "Presents a framework for runtime recomposition of robots, integrating previously unseen modular software, hardware, and compute payloads, and sharing resources with distributed peers, enabling compute-constrained robots to access new capabilities in the field.",
+      "llm_tldr_cn": "机器人的紧耦合子系统导致部署后难以适应变化。本文提出运行时重构框架，支持非专家用户在野外快速集成未见过的模块化软件、硬件和计算负载，并通过分布式共享使计算受限系统获得更多资源。该方法让机器人能够灵活接入新能力，为边缘端部署与计算扩展提供了一般性支持。",
+      "llm_tldr": "机器人的紧耦合子系统导致部署后难以适应变化。本文提出运行时重构框架，支持非专家用户在野外快速集成未见过的模块化软件、硬件和计算负载，并通过分布式共享使计算受限系统获得更多资源。该方法让机器人能够灵活接入新能力，为边缘端部署与计算扩展提供了一般性支持。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "edge deployment for humanoid robots",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2608.11277v1",
+      "source": "arxiv",
+      "title": "Knowledge-Graph-Guided Retrieval-Augmented LLMs for Explainable Root Cause Analysis in Automotive HiL Validation",
+      "abstract": "Hardware-in-the-Loop validation of automotive software systems generates large multivariate time-series recordings whose manual analysis is time-consuming and often limited to anomaly detection and fault classification rather than root-cause analysis. Although deep learning methods have shown strong performance in fault detection and classification, they usually require task-specific training or retraining when new fault locations, systems, or operating conditions are introduced. They also tend to treat localization as a classification task, without explicitly representing the spatial and functional relationships between fault locations, sensors, and downstream subsystem effects. This limits their generalizability and their usefulness for engineering root cause analysis and diagnosis. This paper proposes a knowledge-graph-guided retrieval-augmented large language model framework for RCA (root cause analysis) and fault localization in automotive HiL data. The method converts raw time-series recordings into compact diagnostic evidence, enriches this evidence with sensor-to-location and propagation knowledge, and retrieves similar historical cases to support the final reasoning step. The LLM is then used as a decision and explanation layer rather than as a direct time-series classifier, producing a ranked fault-location prediction together with an interpretable RCA explanation. The framework is evaluated on two automotive HiL case studies: an ASM gasoline engine and an electric vehicle system. The best-performing model achieves Top-1 accuracies of 90\\% and 94\\%, respectively, while recording-level aggregation reaches perfect file-level fault localization in the evaluated subset. These results demonstrate the potential of KG-guided RAG-LLM reasoning for explainable and generalizable HiL RCA.",
+      "authors": [
+        "Hamza Ouarrad",
+        "Mohammad Abboush",
+        "Andreas Rausch"
+      ],
+      "primary_category": "cs.CR",
+      "categories": [
+        "cs.CR",
+        "cs.SE"
+      ],
+      "published": "2026-08-11T10:19:33+00:00",
+      "link": "https://arxiv.org/pdf/2608.11277v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "explainable root cause analysis of faults in multivariate time-series from hardware-in-the-loop validation; transferable to robot fault diagnosis",
+      "llm_evidence_cn": "面向硬件在环多变量时间序列的可解释故障根因分析，可迁移至机器人故障诊断",
+      "llm_evidence": "面向硬件在环多变量时间序列的可解释故障根因分析，可迁移至机器人故障诊断",
+      "canonical_evidence": "面向硬件在环多变量时间序列的可解释故障根因分析，可迁移至机器人故障诊断",
+      "llm_tldr_en": "A knowledge-graph-guided retrieval-augmented LLM framework performs explainable root cause analysis on multivariate time-series faults in automotive HiL validation, generalizing across new fault locations and systems.",
+      "llm_tldr_cn": "针对硬件在环验证中多变量时间序列故障分析耗时且局限于异常检测的问题，提出知识图谱引导的检索增强大语言模型框架，将故障定位与空间功能关系显式建模，实现可解释的根因分析。该方法能泛化到新故障位置和系统条件，避免为每个新场景重新训练模型，为类似的多传感器时序故障诊断提供了通用思路。",
+      "llm_tldr": "针对硬件在环验证中多变量时间序列故障分析耗时且局限于异常检测的问题，提出知识图谱引导的检索增强大语言模型框架，将故障定位与空间功能关系显式建模，实现可解释的根因分析。该方法能泛化到新故障位置和系统条件，避免为每个新场景重新训练模型，为类似的多传感器时序故障诊断提供了通用思路。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "fault diagnosis and error analysis for humanoid robots",
+      "matched_requirement_id": "req-7",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    }
+  ]
+}
