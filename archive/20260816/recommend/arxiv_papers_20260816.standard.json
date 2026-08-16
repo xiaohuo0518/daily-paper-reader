@@ -1,0 +1,399 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-08-16T20:38:43.536023+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 2,
+    "deep_divecandidates": 1,
+    "deep_cap": 7,
+    "deep_selected": 1,
+    "quick_candidates": 8,
+    "quick_skim_target": 12,
+    "quick_selected": 8
+  },
+  "deep_dive": [
+    {
+      "id": "2608.09853v1",
+      "source": "arxiv",
+      "title": "RynnValue: Scaling Robotic Value Foundation Models with Temporal Distance",
+      "abstract": "General-purpose reward models are increasingly the bottleneck for scaling robot learning, yet the recipe for learning value-related capabilities from large-scale heterogeneous corpora remains underexplored. Existing approaches tie supervision to task-internal anchors such as preferences or normalized progress, none of which transfer cleanly across embodiments and data sources. We introduce RynnValue, an open-source value foundation model for robotic manipulation that replaces these anchors with temporal distance, the directed cost-to-go from an observation to the language-specified goal. Because temporal-distance labels can be derived directly from timestamps, RynnValue scales to over 7,000 hours and roughly 3M instruction-conditioned clips without preference or progress annotations. To make temporal-value learning reliable at scale, we combine random temporal sampling, temporal-order shuffling, and value-isolation attention, suppressing shortcuts that would leave predictions insensitive to failures and regressions. Trained without preference labels, RynnValue attains an average Kendall's tau_a of 0.675 on RBM-EVAL-OOD, surpassing the fully preference-supervised state of the art (0.655) and more than doubling a progress-only counterpart (0.292), while generalizing zero-shot to unseen tasks, embodiments, and viewpoints. Converted into dense rewards via potential-based shaping, it raises real-world policy success from 52.5% to 72.5% online and from 63.8% to 82.5% offline. These results establish temporal distance as a scalable supervision target and practical reward interface for generalist robot policies.",
+      "authors": [
+        "Dongchi Huang",
+        "Hongyin Zhang",
+        "Bohan Hou",
+        "Siteng Huang",
+        "Zhian Su",
+        "Hang Guo",
+        "Tong Lu",
+        "Zhaofeng Xu",
+        "Jiahao Tang",
+        "Jianfei Yang",
+        "Donglin Wang",
+        "Peixi Peng",
+        "Mingxiu Chen",
+        "Deli Zhao",
+        "Xin Li"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.CV",
+        "cs.LG"
+      ],
+      "published": "2026-08-10T17:09:37+00:00",
+      "link": "https://arxiv.org/pdf/2608.09853v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "large-scale heterogeneous robotic dataset with temporal-distance labels; supports dataset construction for robotics",
+      "llm_evidence_cn": "利用时间距离自动标注的大规模异构机器人数据集，支持机器人数据集构建",
+      "llm_evidence": "利用时间距离自动标注的大规模异构机器人数据集，支持机器人数据集构建",
+      "canonical_evidence": "利用时间距离自动标注的大规模异构机器人数据集，支持机器人数据集构建",
+      "llm_tldr_en": "RynnValue replaces task-internal anchors with temporal distance, deriving labels from timestamps to scale a 7,000-hour, 3M-clip instruction-conditioned dataset, yielding an open-source value foundation model for robotic manipulation.",
+      "llm_tldr_cn": "奖励/价值模型通常依赖偏好或进度等任务内锚点，难以跨具身和数据源迁移。RynnValue提出以时间距离（从观测到语言目标的代价）作为监督，时间戳可直接导出标签，从而扩展到7000多小时、约300万条指令条件片段，训练出开源价值基座模型。该工作展示了大规模异构机器人数据自动标注与价值学习的可扩展途径，对机器人数据集构建具有重要参考价值。",
+      "llm_tldr": "奖励/价值模型通常依赖偏好或进度等任务内锚点，难以跨具身和数据源迁移。RynnValue提出以时间距离（从观测到语言目标的代价）作为监督，时间戳可直接导出标签，从而扩展到7000多小时、约300万条指令条件片段，训练出开源价值基座模型。该工作展示了大规模异构机器人数据自动标注与价值学习的可扩展途径，对机器人数据集构建具有重要参考价值。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "quick_skim": [
+    {
+      "id": "2608.09011v1",
+      "source": "arxiv",
+      "title": "Dynamic Distribution-Aware Uncertainty Tracking in Vision-Language Representation Learning",
+      "abstract": "Uncertainty Quantification (UQ) aims to measure the reliability of model predictions, serving as a critical safeguard for deploying Vision-Language Models (VLMs) in safety-critical scenarios. Post-hoc approaches are widely adopted due to their lightweight nature, mapping the outputs of VLMs to uncertainty measures through learnable modules or inductive summarization. However, Post-hoc approaches remain inherently confined to fitting the failure patterns of the source domain, ignoring the dynamic nature of test distributions. To address this challenge, we propose a Dynamic Distribution-Aware Uncertainty Quantification framework (DDA-UQ) that shifts the paradigm from static mapping to a dynamic distribution-aware process. During training, we leverage a Gaussian Mixture Model to model the VVLMs'embedding space and extract distributional evidence, thereby dynamically deriving uncertainty estimates. During inference, the design dynamically responds to changes in the data distribution. Extensive experiments demonstrate that our approach significantly outperforms state-of-the-art methods.",
+      "authors": [
+        "Ao Zhou",
+        "Zhiwei Jiang",
+        "Zifeng Cheng",
+        "Cong Wang",
+        "Shufan Yang",
+        "Haoru Chen",
+        "Qing Gu"
+      ],
+      "primary_category": "cs.LG",
+      "categories": [
+        "cs.LG"
+      ],
+      "published": "2026-08-10T01:53:28+00:00",
+      "link": "https://arxiv.org/pdf/2608.09011v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "Dynamic distribution-aware uncertainty quantification for OOD/safety-critical deployment",
+      "llm_evidence_cn": "面向安全关键部署的分布感知动态不确定性量化",
+      "llm_evidence": "面向安全关键部署的分布感知动态不确定性量化",
+      "canonical_evidence": "面向安全关键部署的分布感知动态不确定性量化",
+      "llm_tldr_en": "This paper proposes DDA-UQ, a dynamic distribution-aware uncertainty quantification framework that tracks distribution shifts during training and estimates reliability, providing an effective tool for open-set/OOD detection in safety-critical vision-language deployment.",
+      "llm_tldr_cn": "现有的视觉-语言模型后验不确定性量化方法通常静态拟合源域失效模式，难以应对动态测试分布的变化，这限制了模型在安全关键场景中的可靠性。为此，本文提出动态分布感知不确定性量化框架（DDA-UQ），将不确定性估计从静态映射转为动态分布感知过程，在训练阶段持续跟踪分布漂移并学习不确定性。实验表明该方法能更可靠地反映模型预测的置信度，为开放集/分布外检测提供了有效工具，也可迁移至机器人操作中的安全监测。",
+      "llm_tldr": "现有的视觉-语言模型后验不确定性量化方法通常静态拟合源域失效模式，难以应对动态测试分布的变化，这限制了模型在安全关键场景中的可靠性。为此，本文提出动态分布感知不确定性量化框架（DDA-UQ），将不确定性估计从静态映射转为动态分布感知过程，在训练阶段持续跟踪分布漂移并学习不确定性。实验表明该方法能更可靠地反映模型预测的置信度，为开放集/分布外检测提供了有效工具，也可迁移至机器人操作中的安全监测。",
+      "llm_tags": [
+        "query:humanoid-ood"
+      ],
+      "matched_query_tag": "query:humanoid-ood",
+      "matched_query_text": "out-of-distribution detection for safe robot operation",
+      "matched_requirement_id": "req-11",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2608.08725v1",
+      "source": "arxiv",
+      "title": "WA-SpecDec: World-Aware Speculative Decoding for Vision-Language-Action Models",
+      "abstract": "Vision-language-action (VLA) policies generate robot controls autoregressively, making closed-loop latency dominated by repeated target-model forward passes. Speculative decoding reduces this cost by verifying blocks of draft action tokens in parallel, and recent VLA methods further relax token-level acceptance because small differences in action-token space often map to similar continuous controls. However, this relaxation remains scene-agnostic. A fixed token-distance tolerance treats the same action-token deviation as equally safe across states, although deviations that are harmless in free space can cause collisions or grasp failures near contact. We propose WA-SpecDec, a world-aware speculative decoding framework that injects world-model-derived physical scene awareness during the VLA prefill stage, producing shared world-aware prefill states for draft proposal and target verification without changing the relaxed acceptance rule. Across three state-of-the-art relaxed acceptance schemes, WA-SpecDec preserves higher task success under looser relaxation and enables longer accepted prefixes. At comparable-success operating points, WA-SpecDec achieves a 1.5x matched-success speedup over VLA speculative decoding alone and reduces near-contact failure (NCF) by 18.6% on average relative to the corresponding speculative baselines.",
+      "authors": [
+        "Zikang Wen",
+        "Yuning Zhang",
+        "Dong Yuan"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-08-09T14:17:46+00:00",
+      "link": "https://arxiv.org/pdf/2608.08725v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "reduces closed-loop latency for robot VLA policies, supporting edge-side deployment of control models",
+      "llm_evidence_cn": "降低机器人VLA策略闭环延迟，支持控制模型边缘侧部署",
+      "llm_evidence": "降低机器人VLA策略闭环延迟，支持控制模型边缘侧部署",
+      "canonical_evidence": "降低机器人VLA策略闭环延迟，支持控制模型边缘侧部署",
+      "llm_tldr_en": "WA-SpecDec makes speculative decoding world-aware for VLA policies, reducing closed-loop latency while avoiding unsafe action-token deviations, thus improving deployability on constrained hardware.",
+      "llm_tldr_cn": "针对VLA策略自回归生成导致闭环延迟高的问题，WA-SpecDec提出世界感知的投机解码框架。它在验证草稿动作块时引入世界模型约束，将状态相关的安全条件纳入token接受判定，避免自由空间中的无害偏差在接触场景引发碰撞。该方法在降低推理时延的同时保持安全性，对机器人模型在边缘端部署具有重要价值。",
+      "llm_tldr": "针对VLA策略自回归生成导致闭环延迟高的问题，WA-SpecDec提出世界感知的投机解码框架。它在验证草稿动作块时引入世界模型约束，将状态相关的安全条件纳入token接受判定，避免自由空间中的无害偏差在接触场景引发碰撞。该方法在降低推理时延的同时保持安全性，对机器人模型在边缘端部署具有重要价值。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "edge deployment for humanoid robots",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2608.10587v1",
+      "source": "arxiv",
+      "title": "BREAD: Baseline-Referenced Explanations for Anomaly Diagnosis",
+      "abstract": "Artificial Intelligence (AI)-based prospective anomaly detection methods are increasingly deployed in high-dimensional and nonlinear settings. Among these approaches, AI-based statistical process monitoring (SPM) is widely used, providing a structured framework for prospective monitoring. Once an anomaly is detected, a diagnosis method is needed to identify the features driving the flagged observation away from normal behaviour. Traditional SPM diagnosis methods are typically designed for specific detection models and cannot be directly applied to AI-based methods. Model-agnostic explainable AI (XAI) offers a general framework for feature relevance explanation. However, existing methods suffer from scalability limitations or assign relevance to noise features, reducing diagnosis accuracy. We propose a scalable, baseline-referenced diagnosis method that uses both the anomalous observation and normal baseline information. We provide mathematical guarantees that under a mean-shift anomaly setting, the proposed method achieves higher faithfulness in detecting the features causing the anomaly compared to LIME. Simulation studies and a real-world case study validate the effectiveness of the proposed method and show that it generates more faithful and accurate diagnosis results for AI-based prospective anomaly detection methods.",
+      "authors": [
+        "Jiaqi Qiu",
+        "Rob Goedhart",
+        "Jannis Kurtz",
+        "Inez M. Zwetsloot"
+      ],
+      "primary_category": "cs.LG",
+      "categories": [
+        "cs.LG"
+      ],
+      "published": "2026-08-11T07:16:06+00:00",
+      "link": "https://arxiv.org/pdf/2608.10587v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "baseline-referenced explainable AI for anomaly diagnosis, identifies features driving flagged observations",
+      "llm_evidence_cn": "通过基线参照解释识别驱动异常的特征，支持故障诊断",
+      "llm_evidence": "通过基线参照解释识别驱动异常的特征，支持故障诊断",
+      "canonical_evidence": "通过基线参照解释识别驱动异常的特征，支持故障诊断",
+      "llm_tldr_en": "Introduces a model-agnostic explainable AI diagnosis approach for AI-based anomaly detection, referencing normal baselines to scale and identify the features that truly drive flagged observations rather than noise.",
+      "llm_tldr_cn": "基于AI的异常检测在高维非线性场景中广泛部署，但异常触发后的归因诊断仍缺乏适用方法。BREAD提出基线参照的解释框架，通过对比基线状态来解释哪些特征真正驱动异常判定，并应对噪声特征和扩展性问题。该方法面向AI统计过程监控，可帮助运维人员定位故障源，对机器人传感器异常诊断具有借鉴意义。",
+      "llm_tldr": "基于AI的异常检测在高维非线性场景中广泛部署，但异常触发后的归因诊断仍缺乏适用方法。BREAD提出基线参照的解释框架，通过对比基线状态来解释哪些特征真正驱动异常判定，并应对噪声特征和扩展性问题。该方法面向AI统计过程监控，可帮助运维人员定位故障源，对机器人传感器异常诊断具有借鉴意义。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "fault diagnosis and error analysis for humanoid robots",
+      "matched_requirement_id": "req-7",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2608.12714v1",
+      "source": "arxiv",
+      "title": "Towards Sparsely Annotated Open-World Object Detection",
+      "abstract": "Real-world object detection operates under ambiguous supervision, where unlabeled regions may correspond to missing annotations of known objects or genuinely unknown categories. These challenges have been addressed separately in Sparsely Annotated Object Detection (SAOD) and Open-World Object Detection (OWOD). In practice, their co-occurrence remains an open problem. To address this problem, we introduce Sparsely Annotated Open-World Object Detection (SA-OWOD), a new task that jointly considers sparse supervision and the presence of unseen categories. We propose Dual-Perspective Object Discovery (DPOD), a unified framework that jointly models unlabeled known and unknown instances via two complementary mechanisms. The Known Target Recovery Module (KTRM) recovers supervision for unlabeled known instances and explicitly regularizes the feature space to separate known and unknown representations. Complementarily, the Dual-Disagreement Target Generator (DDTG) identifies reliable unknown candidates through cross-view semantic inconsistency. By integrating these modules, DPOD resolves contradictory supervision signals caused by ambiguous unlabeled regions. As a result, it prevents misclassification between known and unknown objects and stabilizes the decision boundaries. Experimental results on sparsely annotated open-world benchmarks demonstrate that the proposed method outperforms existing open-world detection methods, particularly in detecting unknown objects.",
+      "authors": [
+        "HeeJu Han",
+        "AJeong Kim",
+        "Jinsun Park"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV"
+      ],
+      "published": "2026-08-13T01:59:00+00:00",
+      "link": "https://arxiv.org/pdf/2608.12714v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "jointly handles sparse annotations and unknown-category discovery, relevant to open-set/OOD recognition for robot safety",
+      "llm_evidence_cn": "联合稀疏标注与未知类别发现，与机器人安全的开放集/OOD识别相关",
+      "llm_evidence": "联合稀疏标注与未知类别发现，与机器人安全的开放集/OOD识别相关",
+      "canonical_evidence": "联合稀疏标注与未知类别发现，与机器人安全的开放集/OOD识别相关",
+      "llm_tldr_en": "SA-OWOD introduces sparsely annotated open-world object detection and a DPOD framework that jointly recovers known targets and discovers unknown categories, relevant to open-set recognition for safe robotics.",
+      "llm_tldr_cn": "针对真实场景中同时存在稀疏标注和未知类别的问题，论文提出稀疏标注开放世界目标检测任务及其统一框架DPOD。DPOD通过已知目标恢复模块与未知实例发现模块协同建模未标注数据，同时处理已知类别缺失标注和未知类别出现。该方法为开放集识别提供了一种可迁移思路，可用于机器人安全运行中的未知目标/OOD检测。",
+      "llm_tldr": "针对真实场景中同时存在稀疏标注和未知类别的问题，论文提出稀疏标注开放世界目标检测任务及其统一框架DPOD。DPOD通过已知目标恢复模块与未知实例发现模块协同建模未标注数据，同时处理已知类别缺失标注和未知类别出现。该方法为开放集识别提供了一种可迁移思路，可用于机器人安全运行中的未知目标/OOD检测。",
+      "llm_tags": [
+        "query:humanoid-ood"
+      ],
+      "matched_query_tag": "query:humanoid-ood",
+      "matched_query_text": "Open set recognition in robotics for safety and anomaly detection",
+      "matched_requirement_id": "req-17",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2608.11876v1",
+      "source": "arxiv",
+      "title": "D3D-GEN: Robot-Aware Domain-Grounded Interactive 3D World Generation for Social Robotics",
+      "abstract": "Training and validation of Embodied AI for social navigation critically depends on realistic simulation environments, yet many current approaches fail to find a balance between realism and simulability. We propose D3D-GEN, a novel world generation system that combines a domain agent with a retrieval-augmented generation (RAG) pipeline grounded in that domain. Our system enables users to rapidly generate domain-grounded, fully interactive 3D worlds by automating both the collection of domain knowledge and the synthesis of realistic floorplans and object placements, without dependence on any fixed 3D model database. Given a domain description prompt, the research agent collects publicly accessible domain-specific data and constructs a persistent domain database. Using this database, our RAG pipeline generates plausible floorplans and object placements by dynamically querying a user-provided semantic database, which can be easily extended or modified. The output is a fully interactive 3D world loadable by the popular simulators Isaac Sim and Gazebo. With our approach, we have built databases for several common domains (indoor residential, hospital, office) and generated dozens of distinct, plausible simulation environments for each domain. We present D3D-GEN with a local web frontend that facilitates rapid, interactive world generation for robot simulation.",
+      "authors": [
+        "Anh Duc Do",
+        "Volodymyr Scherbyna",
+        "Tai Duc Nguyen",
+        "Spaarsh Thakkar",
+        "Zhengcheng Shen",
+        "Teham Buiyan",
+        "Archan Misra",
+        "Linh Kästner"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.HC"
+      ],
+      "published": "2026-08-12T10:03:01+00:00",
+      "link": "https://arxiv.org/pdf/2608.11876v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "automates generation of domain-grounded interactive 3D worlds for embodied AI training/validation, a form of dataset construction",
+      "llm_evidence_cn": "自动化生成域接地交互式3D世界，用于具身AI训练与验证，属于数据集构建的一种形式",
+      "llm_evidence": "自动化生成域接地交互式3D世界，用于具身AI训练与验证，属于数据集构建的一种形式",
+      "canonical_evidence": "自动化生成域接地交互式3D世界，用于具身AI训练与验证，属于数据集构建的一种形式",
+      "llm_tldr_en": "D3D-GEN combines a domain agent with RAG to automatically synthesize realistic, interactive 3D worlds from a text prompt, enabling rapid creation of training/validation environments.",
+      "llm_tldr_cn": "训练社交机器人需要大量真实且可仿真的环境，但现有方法难以兼顾真实性与可模拟性。D3D-GEN 提出结合领域智能体与检索增强生成（RAG）的世界生成系统，可根据用户提示自动收集领域知识并合成逼真的交互式3D世界，无需依赖固定模型库。该系统支持快速生成域接地的训练与验证环境，为具身智能的数据集构建和仿真评估提供高效工具。虽然聚焦社交机器人，其方法论可迁移至其他机器人领域的数据生成。",
+      "llm_tldr": "训练社交机器人需要大量真实且可仿真的环境，但现有方法难以兼顾真实性与可模拟性。D3D-GEN 提出结合领域智能体与检索增强生成（RAG）的世界生成系统，可根据用户提示自动收集领域知识并合成逼真的交互式3D世界，无需依赖固定模型库。该系统支持快速生成域接地的训练与验证环境，为具身智能的数据集构建和仿真评估提供高效工具。虽然聚焦社交机器人，其方法论可迁移至其他机器人领域的数据生成。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2608.13047v1",
+      "source": "arxiv",
+      "title": "Topology-Unified 2D Pose Estimation across Intact, Residual and Prosthetic Limbs",
+      "abstract": "Driven by the availability of large-scale datasets, Human Pose Estimation (HPE) plays a critical role in numerous downstream tasks. However, mainstream benchmarks exhibit severe representation bias, predominantly featuring able-bodied individuals. While a few pioneering datasets have attempted to address limb differences, their annotation protocols fail to generalize, struggling to represent specialized mechanical structures like running blades or unprosthetized residual limbs. To bridge this gap, we introduce ProPose, a large-scale benchmark featuring a novel annotation protocol that unifies the topological representation of biological limbs, diverse prostheses, and physical absences within a single framework. Because real-world prosthetic images are inherently scarce and exhibit extreme long-tail distributions, we design a Real-to-Synthetic data expansion pipeline to explicitly synthesize and expand the underrepresented cases. However, simply training existing models on this enriched dataset often leads to suboptimal solutions, as they estimate each keypoint independently and might hallucinate non-existent joints on mechanical structures. To resolve this, we propose ProLoss, a structure-aware objective that enforces keypoint dependencies within a single limb to prevent unrealistic limb predictions. Extensive experiments demonstrate that our approach improves the classification accuracy of long-tail prosthetic joints by 2% to 6% without compromising spatial coordinate localization performance. This work sets a foundation for inclusive pose estimation, unlocking new possibilities for understanding the interactions between human bodies and assistive devices.",
+      "authors": [
+        "Tianye Qi",
+        "Tengyue Zhang",
+        "Jiaying Ying",
+        "Tianqing Zhu",
+        "Xin Yu"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV"
+      ],
+      "published": "2026-08-13T10:11:51+00:00",
+      "link": "https://arxiv.org/pdf/2608.13047v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "Large-scale benchmark with unified annotation protocol for limb topology",
+      "llm_evidence_cn": "提供统一肢体拓扑标注协议的大规模基准数据集",
+      "llm_evidence": "提供统一肢体拓扑标注协议的大规模基准数据集",
+      "canonical_evidence": "提供统一肢体拓扑标注协议的大规模基准数据集",
+      "llm_tldr_en": "ProPose introduces a large-scale pose estimation benchmark with a topology-unified annotation protocol covering intact, residual, and prosthetic limbs, improving generalization across diverse body configurations.",
+      "llm_tldr_cn": "针对主流人体姿态估计基准仅以健全人为主要对象、标注协议难以统一肢体差异的问题，本文提出ProPose大规模基准，将生物肢体、义肢和缺失肢体统一到同一个拓扑表示框架。通过设计新的标注协议，该基准覆盖多种肢体形态，显著降低了表示偏差，并支持对残肢、义肢等场景的姿态估计评测与训练。该工作为人体姿态数据集构建提供了新标准，也对人形机器人相关数据集设计有参考意义。",
+      "llm_tldr": "针对主流人体姿态估计基准仅以健全人为主要对象、标注协议难以统一肢体差异的问题，本文提出ProPose大规模基准，将生物肢体、义肢和缺失肢体统一到同一个拓扑表示框架。通过设计新的标注协议，该基准覆盖多种肢体形态，显著降低了表示偏差，并支持对残肢、义肢等场景的姿态估计评测与训练。该工作为人体姿态数据集构建提供了新标准，也对人形机器人相关数据集设计有参考意义。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2608.13014v1",
+      "source": "arxiv",
+      "title": "EgoPHI: Estimating Contact and Force from Egocentric Vision",
+      "abstract": "Understanding hand-object interaction from egocentric vision is essential for modeling how people physically engage with the surrounding world. Yet reasoning about physically grounded interaction requires estimating the forces acting on hands and objects, beyond localizing contact. We present EgoPHI, the first method that jointly estimates dense contact maps and 3D force distributions on hand and object meshes from a single monocular RGB image and object geometry. To address the lack of scalable ground-truth force annotations, we introduce a physics-based simulation pipeline that augments existing hand-object datasets with dense per-vertex force supervision. EgoPHI then learns dense 3D contact and force on interacting hand and articulated object meshes, extending vision-based force estimation beyond image-space or planar settings. Our evaluation on in-distribution and out-of-distribution benchmarks shows that EgoPHI improves force estimation over existing approaches while generalizing to unseen datasets. To evaluate sim-to-real transfer, we constructed two physical objects that capture dense object contact and force magnitude and used them to record a dataset of interactions from eight participants across diverse touch and grasp types. Our results demonstrate that EgoPHI recovers meaningful 3D contact and force distributions in simulated, out-of-distribution, and real-world settings, advancing egocentric hand-object understanding from contact localization toward physically grounded interaction reasoning.",
+      "authors": [
+        "Andela Ilic",
+        "Rachel Schuchert",
+        "Yijing Jiang",
+        "Christian Holz"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV",
+        "cs.GR",
+        "cs.HC",
+        "cs.RO"
+      ],
+      "published": "2026-08-13T09:34:08+00:00",
+      "link": "https://arxiv.org/pdf/2608.13014v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "simulation-based dataset augmentation with dense per-vertex force supervision for robot hand-object interaction",
+      "llm_evidence_cn": "采用物理仿真管线为手物交互数据集补充稠密接触与力标注",
+      "llm_evidence": "采用物理仿真管线为手物交互数据集补充稠密接触与力标注",
+      "canonical_evidence": "采用物理仿真管线为手物交互数据集补充稠密接触与力标注",
+      "llm_tldr_en": "Presents the first method jointly estimating dense contact maps and 3D force distributions on hand and object meshes from a single RGB image, backed by a physics-based simulation pipeline that augments existing hand-object datasets with dense per-vertex force supervision.",
+      "llm_tldr_cn": "手物交互理解需要估计接触与受力，但现有数据集缺少可扩展的力的真值标注。本文提出EgoPHI，从单目RGB图像和物体几何联合估计手和物体网格上的稠密接触图与三维力分布，并设计基于物理的仿真管线为已有手物交互数据集补充逐顶点的力监督。实验表明该方法能学习稠密三维接触与力，为机器人交互感知和相关数据集建设提供了新途径。",
+      "llm_tldr": "手物交互理解需要估计接触与受力，但现有数据集缺少可扩展的力的真值标注。本文提出EgoPHI，从单目RGB图像和物体几何联合估计手和物体网格上的稠密接触图与三维力分布，并设计基于物理的仿真管线为已有手物交互数据集补充逐顶点的力监督。实验表明该方法能学习稠密三维接触与力，为机器人交互感知和相关数据集建设提供了新途径。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2608.13438v1",
+      "source": "arxiv",
+      "title": "ContactGuard: Pre-Contact Execution Monitoring with Action-Conditioned Latent World Models",
+      "abstract": "Contact-rich manipulation failures are often detected only after the robot has committed to contact. This is especially limiting in wrist-camera setups: close gripper--object views help observe contact, but a poor approach may already push, miss, slip, or disturb the object before conventional detectors react. We introduce \\emph{ContactGuard}, a pre-contact execution monitor for chunked visuomotor policies. Given the policy's planned action chunk, ContactGuard predicts its short-horizon consequence in latent visual space and aborts if the predicted future latent indicates likely failure. Its latent world model is trained from unlabelled robot trajectories to predict compact multi-view visual embeddings under planned actions, avoiding pixel-level video prediction. A lightweight failure probe is then trained from a small labelled set of pre-contact clips. At deployment, ContactGuard anchors prediction before an imminent contact event, rolls the model forward under the policy's own actions, and verifies the predicted post-contact latent. Across real-world contact-rich manipulation tasks, ContactGuard predicts failure more accurately than direct and corrupted-action ablations, and transfers to live robot as a pre-contact abort signal without modifying the underlying policy.",
+      "authors": [
+        "Gehan Zheng",
+        "Matthew Johnson-Roberson",
+        "Weiming Zhi"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.AI",
+        "cs.CV"
+      ],
+      "published": "2026-08-13T16:25:54+00:00",
+      "link": "https://arxiv.org/pdf/2608.13438v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "Pre-contact failure monitoring via latent world models; relevant to robot fault detection and error analysis",
+      "llm_evidence_cn": "基于潜世界模型的接触前故障监控，与机器人故障检测和错误分析相关",
+      "llm_evidence": "基于潜世界模型的接触前故障监控，与机器人故障检测和错误分析相关",
+      "canonical_evidence": "基于潜世界模型的接触前故障监控，与机器人故障检测和错误分析相关",
+      "llm_tldr_en": "ContactGuard predicts short-horizon consequences of planned action chunks in latent visual space and aborts before contact if failure is likely, enabling early robot failure detection from unlabelled trajectories.",
+      "llm_tldr_cn": "针对接触丰富操作中的故障往往在接触后才被发现的问题，ContactGuard构建动作条件潜世界模型，在规划动作执行前预测其短时后果，并在预测到失败风险时提前中止。模型仅需无标注轨迹训练，可避免推动、遗漏、滑动等接触失误。实验表明其能有效提前检测失败，为机器人误操作分析和安全执行监控提供新思路。该方法通过多视角视觉嵌入预测未来潜状态，不依赖显式接触推理。",
+      "llm_tldr": "针对接触丰富操作中的故障往往在接触后才被发现的问题，ContactGuard构建动作条件潜世界模型，在规划动作执行前预测其短时后果，并在预测到失败风险时提前中止。模型仅需无标注轨迹训练，可避免推动、遗漏、滑动等接触失误。实验表明其能有效提前检测失败，为机器人误操作分析和安全执行监控提供新思路。该方法通过多视角视觉嵌入预测未来潜状态，不依赖显式接触推理。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "fault diagnosis and error analysis for humanoid robots",
+      "matched_requirement_id": "req-7",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    }
+  ]
+}
