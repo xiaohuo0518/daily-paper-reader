@@ -1,0 +1,661 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-08-19T20:27:07.656306+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 2,
+    "deep_divecandidates": 3,
+    "deep_cap": 7,
+    "deep_selected": 3,
+    "quick_candidates": 14,
+    "quick_skim_target": 12,
+    "quick_selected": 12
+  },
+  "deep_dive": [
+    {
+      "id": "2608.16222v1",
+      "source": "arxiv",
+      "title": "HiPHI: A Large-Scale Benchmark for High-Precision Human Motion and Object-Interaction",
+      "abstract": "Humanoid intelligence requires learning over an extremely diverse space of whole-body motions and physically grounded interactions. However, existing embodied datasets remain fundamentally limited: internet-scale video data lack precise physical states and interaction grounding, while laboratory motion datasets provide high fidelity but only narrow behavioral coverage. This mismatch creates a critical bottleneck for scalable humanoid policy learning. We present HiPHI, a 600+ hour scale high-fidelity whole-body human motion dataset designed to systematically maximize coverage of the human motion and interaction manifold. HiPHI is theoretically guided by FrameNet, a linguistic framework organizing human primitives. Created using an optical motion capture pipeline, HiPHI provides sub-millimeter spatial marker tracking accuracy for full-body human motion and mesh-level object trajectories. We further introduce a benchmark suite evaluating motion-space diversity, interaction grounding, object consistency, and physical AI applications. Our analyses demonstrate that HiPHI significantly expands motion coverage compared to existing motion datasets while maintaining high-fidelity interaction quality, and establishes a scalable data foundation for training, evaluating, and generalizing humanoid policies in real-world embodied tasks, where similar extensions are also applicable to motion prior models in computer graphics.",
+      "authors": [
+        "Jiahao Ji",
+        "Ji Ma",
+        "Runhan Zhang",
+        "Runyi Yu",
+        "Wenjia Wang",
+        "Weiheng Chi",
+        "Qianqian Peng",
+        "Weichao Yan",
+        "Yongfei Gu",
+        "Ye Tian",
+        "Ting Wu",
+        "Longwei Li",
+        "Chun Yuan",
+        "Ruoli Dai",
+        "Lei Han"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.AI"
+      ],
+      "published": "2026-08-17T07:54:26+00:00",
+      "link": "https://arxiv.org/pdf/2608.16222v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "Large-scale whole-body human motion dataset for humanoid intelligence",
+      "llm_evidence_cn": "面向人形智能的大规模全身人体运动数据集",
+      "llm_evidence": "面向人形智能的大规模全身人体运动数据集",
+      "canonical_evidence": "面向人形智能的大规模全身人体运动数据集",
+      "llm_tldr_en": "HiPHI introduces a 600+ hour high-fidelity whole-body human motion dataset to maximize coverage of human motion and interaction manifold, addressing the scarcity of precise physical-state datasets for humanoid policy learning.",
+      "llm_tldr_cn": "HiPHI针对现有人形机器人数据集在物理状态精确性与行为覆盖广度上的不足，构建了超过600小时的高保真全身人体运动与物体交互数据集。该数据集以FrameNet为理论指导，利用光学动捕等技术系统覆盖人体运动与交互流形，为大规模人形策略学习提供了关键数据支撑，有望缓解人形智能研究中的数据瓶颈。",
+      "llm_tldr": "HiPHI针对现有人形机器人数据集在物理状态精确性与行为覆盖广度上的不足，构建了超过600小时的高保真全身人体运动与物体交互数据集。该数据集以FrameNet为理论指导，利用光学动捕等技术系统覆盖人体运动与交互流形，为大规模人形策略学习提供了关键数据支撑，有望缓解人形智能研究中的数据瓶颈。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "humanoid robot dataset construction",
+      "matched_requirement_id": "req-2",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2608.17698v1",
+      "source": "arxiv",
+      "title": "Fault detection on manifolds of nonlinear dynamical systems with dual autoencoders",
+      "abstract": "Autoencoders are commonly used for unsupervised data-driven fault detection in nonlinear dynamical systems. Despite their widespread success and often favorable performance compared with traditional approaches, most applications rely on heuristic reconstruction of measured data using features learned from nominal training data, without explicit insight into the underlying nonlinear dynamics. This lack of interpretability limits the extension of autoencoder-based fault detection methods to higher levels of fault diagnosis, e.g., fault localization and quantification, and confines their use largely to application-oriented studies. To address this limitation, we propose a strategy for detecting parametric faults in nonlinear stochastic mechanical systems. A mathematical representation of the output data is developed using Koopman operator theory, which motivates their embedding on a manifold and its subsequent approximation with a two-stage autoencoder. Fault detection is formulated within a hypothesis-testing framework, in which new data are tested for consistency with a neighborhood of the manifold identified from nominal observations. The proposed method is validated through Monte Carlo simulations of a toy mechanical system with two types of nonlinearity and applied to two well-known real benchmarks, where it provides favorable fault-detection performance compared with standard autoencoders.",
+      "authors": [
+        "Bulut Kuşkonmaz",
+        "Szymon Greś",
+        "Rafał Wiśniewski"
+      ],
+      "primary_category": "eess.SY",
+      "categories": [
+        "eess.SY"
+      ],
+      "published": "2026-08-18T12:16:54+00:00",
+      "link": "https://arxiv.org/pdf/2608.17698v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "Unsupervised autoencoder-based fault detection for nonlinear dynamical systems, directly transferable to robot time-series fault diagnosis.",
+      "llm_evidence_cn": "基于无监督自编码器的非线性动态系统故障检测，可迁移至机器人时序故障诊断。",
+      "llm_evidence": "基于无监督自编码器的非线性动态系统故障检测，可迁移至机器人时序故障诊断。",
+      "canonical_evidence": "基于无监督自编码器的非线性动态系统故障检测，可迁移至机器人时序故障诊断。",
+      "llm_tldr_en": "Proposes a dual-autoencoder strategy for detecting parametric faults in nonlinear stochastic mechanical systems, improving interpretability and enabling fault localization and quantification.",
+      "llm_tldr_cn": "针对自编码器故障检测缺乏动力学可解释性的问题，论文提出双自编码器策略，在非线性随机力学系统的流形上检测参数故障。该方法利用潜在流形结构进行重构，使故障检测能扩展到定位与量化层面。实验证明其在多种参数故障场景下优于传统启发式重构方法。该工作为机器人关节等非线性系统的自监督异常检测提供了新的强有力工具。",
+      "llm_tldr": "针对自编码器故障检测缺乏动力学可解释性的问题，论文提出双自编码器策略，在非线性随机力学系统的流形上检测参数故障。该方法利用潜在流形结构进行重构，使故障检测能扩展到定位与量化层面。实验证明其在多种参数故障场景下优于传统启发式重构方法。该工作为机器人关节等非线性系统的自监督异常检测提供了新的强有力工具。",
+      "llm_tags": [
+        "query:humanoid-ood"
+      ],
+      "matched_query_tag": "query:humanoid-ood",
+      "matched_query_text": "Self supervised time series anomaly detection for robot fault diagnosis",
+      "matched_requirement_id": "req-16",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2608.17962v1",
+      "source": "arxiv",
+      "title": "PRISM: Precision and contact-rich Real-world Industrial Skill dataset with Multimodal sensing",
+      "abstract": "Recent progress in robotic learning has been fueled by large-scale datasets collected in everyday environments. However, most existing datasets emphasize short-horizon, low-contact tasks such as pick-and-place, and therefore do not capture the precision control, force/torque or tactile regulation, and multimodal feedback required for industrial assembly. To address this gap, we introduce PRISM, a large-scale multimodal dataset for contact-rich industrial operations. The dataset spans more than 25 manipulation tasks (e.g., electronic components plug/unplug, conveyor-based sorting) and covers diverse mechanical constraints. PRISM includes more than 5,000 trajectories totaling 45 hours of teleoperated demonstrations, recorded using synchronized multi-view RGB-D, force/torque, tactile, and robot-state measurements. In contrast to datasets collected in household or laboratory settings, PRISM provides a realistic benchmark for multimodal perception and control under high-precision industrial constraints, and serves as a foundation for contact-rich, generalizable manipulation in real-world manufacturing environments. The dataset is open-sourced at: https://tengbo-yu.github.io/PRISM/",
+      "authors": [
+        "Tengbo Yu",
+        "Jiahao Wu",
+        "Hanning Wang",
+        "Rui Chen",
+        "Chuanhou Liu",
+        "Chuang Sun",
+        "Hangxin Liu"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-08-18T16:16:23+00:00",
+      "link": "https://arxiv.org/pdf/2608.17962v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "large-scale multimodal real-world robot dataset for contact-rich operations, directly relevant to robotics dataset construction",
+      "llm_evidence_cn": "面向接触丰富工业操作的大规模多模态机器人数据集，直接关系到机器人数据集构建",
+      "llm_evidence": "面向接触丰富工业操作的大规模多模态机器人数据集，直接关系到机器人数据集构建",
+      "canonical_evidence": "面向接触丰富工业操作的大规模多模态机器人数据集，直接关系到机器人数据集构建",
+      "llm_tldr_en": "PRISM is a large-scale multimodal dataset of over 5,000 trajectories for contact-rich industrial operations, capturing force/torque and tactile feedback, filling the gap in precision contact-rich skill datasets for robotic learning.",
+      "llm_tldr_cn": "现有机器人数据集多为短时程、低接触的抓取任务，缺乏工业装配所需的力/力矩与触觉调节等反馈。为此，PRISM构建了涵盖25余种接触丰富工业操作（如电子元件插拔、输送带分拣）的大规模多模态数据集，包含超过5,000条轨迹、总计45小时遥操作演示。该数据集为机器人接触丰富技能学习及多模态感知研究提供了宝贵的真实世界数据资源。",
+      "llm_tldr": "现有机器人数据集多为短时程、低接触的抓取任务，缺乏工业装配所需的力/力矩与触觉调节等反馈。为此，PRISM构建了涵盖25余种接触丰富工业操作（如电子元件插拔、输送带分拣）的大规模多模态数据集，包含超过5,000条轨迹、总计45小时遥操作演示。该数据集为机器人接触丰富技能学习及多模态感知研究提供了宝贵的真实世界数据资源。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "quick_skim": [
+    {
+      "id": "2608.14186v1",
+      "source": "arxiv",
+      "title": "Revisiting Energy-based Tabular Anomaly Detection: Energy and Reconstruction are Complementary",
+      "abstract": "Tabular anomaly detection is dominated by classical density-proxy methods (Isolation Forest, OCSVM, LOF), reconstruction-based detectors (Autoencoders, VAEs), and modern non-parametric scorers (COPOD, ECOD, Deep SVDD), all of which approximate the inlier distribution only indirectly; explicit energy-based models are largely absent. Motivated by the recent revival of EBMs in deep learning (e.g., Energy-Based Transformers, JEPA), we revisit the classical Deep Boltzmann Machine (DBM) for this task and hypothesize that its mean-field energy combines more effectively with a reconstruction-based score than same-lineage pairs do. We evaluate a two-hidden-layer DBM on two tabular benchmarks spanning distinct domains (UCI Bank Marketing and NSL-KDD) against eight classical and modern baselines across twenty random seeds. The DBM mean-field energy matches the strongest baseline (the Autoencoder) on Bank Marketing and statistically beats it on NSL-KDD, while significantly outperforming the remaining seven on both datasets. When fused with the Autoencoder via rank fusion, the DBM energy yields a statistically significant improvement on both datasets (AUROC=+0.014, p<0.01 on Bank Marketing; +0.002, p<0.001 on NSL-KDD); every non-DBM-derived base model instead fails to improve or significantly degrades the AE-paired ensemble. Our position is that classical EBMs, exemplified by the DBM, deserve a place in the tabular anomaly detection toolbox as a non-redundant complementary view to the reconstruction-based scores that dominate current practice.",
+      "authors": [
+        "Junichiro Niimi"
+      ],
+      "primary_category": "cs.LG",
+      "categories": [
+        "cs.LG",
+        "stat.ML"
+      ],
+      "published": "2026-08-14T11:04:02+00:00",
+      "link": "https://arxiv.org/pdf/2608.14186v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "query:humanoid-ood"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "energy-based and reconstruction-based scores for anomaly detection, directly transferable to OOD/anomaly detection for robot safety",
+      "llm_evidence_cn": "基于能量与重建的异常检测评分方法，可迁移至机器人安全中的OOD/异常检测",
+      "llm_evidence": "基于能量与重建的异常检测评分方法，可迁移至机器人安全中的OOD/异常检测",
+      "canonical_evidence": "基于能量与重建的异常检测评分方法，可迁移至机器人安全中的OOD/异常检测",
+      "llm_tldr_en": "This paper revisits Deep Boltzmann Machines with mean-field energy combined with reconstruction scores, showing their complementarity for tabular anomaly detection, offering an anomaly scoring fusion idea applicable to robotic sensor signals.",
+      "llm_tldr_cn": "表格异常检测中显式能量模型较少。该文重新评估深度玻尔兹曼机（DBM），假设其平均场能量与重建分数互补，并在两个表格基准上验证。结果显示能量与重建信息的结合能提升异常检测性能，为机器人传感器信号的异常得分融合提供了可借鉴思路。",
+      "llm_tldr": "表格异常检测中显式能量模型较少。该文重新评估深度玻尔兹曼机（DBM），假设其平均场能量与重建分数互补，并在两个表格基准上验证。结果显示能量与重建信息的结合能提升异常检测性能，为机器人传感器信号的异常得分融合提供了可借鉴思路。",
+      "llm_tags": [
+        "query:humanoid-ood"
+      ],
+      "matched_query_tag": "query:humanoid-ood",
+      "matched_query_text": "out-of-distribution detection for safe robot operation",
+      "matched_requirement_id": "req-11",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2608.14243v1",
+      "source": "arxiv",
+      "title": "Zero-Shot Skeleton-Based Action Anticipation",
+      "abstract": "Action anticipation (AA) aims to recognize ongoing human or humanoids actions from partial observations, enabling robots to predict intentions before the actions are completed. Although skeleton-based AA offers efficiency advantages, existing approaches assume that all action classes are seen during training, which limits their deployment in real-world scenarios where novel actions inevitably arise. To address this gap, we study the new task of Zero-Shot Skeleton-Based Action Anticipation (ZS-SkAA). This task requires recognizing unseen action classes using only limited early-stage skeleton sequences, combining the challenges of partial observations, temporal dynamics, and zero-shot generalization. To establish foundational research for ZS-SkAA, we introduce:(1) A baseline model comprising a spatio-temporal feature extractor and a mutual information estimation and maximization module. This baseline model explicitly aligns partial visual features with semantic class embeddings across modalities by estimating and maximizing their mutual information, enhancing generalization to unseen classes.(2) A benchmark protocol using the NTU RGB+D dataset, which is adapted for rigorous ZS-SkAA evaluation. Experiments demonstrate the effectiveness of our model as a strong baseline for ZS-SkAA, achieving high zero-shot accuracy on NTU RGB+D. This work establishes ZS-SkAA as a vital research direction for real-world systems requiring generalization to novel actions.",
+      "authors": [
+        "Hongsong Wang",
+        "Pengbo Yan",
+        "Yang Zhang",
+        "Qiuxia Lai"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV"
+      ],
+      "published": "2026-08-14T12:23:47+00:00",
+      "link": "https://arxiv.org/pdf/2608.14243v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "Zero-shot recognition of unseen action classes from partial skeleton sequences for robot anticipation",
+      "llm_evidence_cn": "基于部分骨架序列的未知动作类零样本识别，用于机器人意图预测",
+      "llm_evidence": "基于部分骨架序列的未知动作类零样本识别，用于机器人意图预测",
+      "canonical_evidence": "基于部分骨架序列的未知动作类零样本识别，用于机器人意图预测",
+      "llm_tldr_en": "This paper introduces zero-shot skeleton-based action anticipation, enabling recognition of novel action classes from limited early skeleton sequences, combining partial observation, temporal dynamics, and zero-shot generalization.",
+      "llm_tldr_cn": "针对现有骨架动作预测无法识别未见动作的问题，提出零样本骨架动作预测任务。该方法在仅有限早期骨架序列条件下识别未知动作类别，综合挑战部分观测、时间动态和零样本泛化。通过引入基线模型和基准数据集，验证了该任务的有效性。该研究为机器人基于骨架的未知动作预测与安全交互奠定基础。",
+      "llm_tldr": "针对现有骨架动作预测无法识别未见动作的问题，提出零样本骨架动作预测任务。该方法在仅有限早期骨架序列条件下识别未知动作类别，综合挑战部分观测、时间动态和零样本泛化。通过引入基线模型和基准数据集，验证了该任务的有效性。该研究为机器人基于骨架的未知动作预测与安全交互奠定基础。",
+      "llm_tags": [
+        "query:humanoid-ood"
+      ],
+      "matched_query_tag": "query:humanoid-ood",
+      "matched_query_text": "Open set recognition in robotics for safety and anomaly detection",
+      "matched_requirement_id": "req-17",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2608.15060v1",
+      "source": "arxiv",
+      "title": "EgoTac: In-the-wild Tactile Prediction from Egocentric Vision",
+      "abstract": "Touch is fundamental to dexterous manipulation, yet most egocentric human data increasingly used for robot learning lacks tactile information. Directly collecting large-scale tactile data is challenging due to sensor limitations, while human video data is abundant, contact-rich, and easily scalable. This motivates a natural question: can tactile signals be inferred purely from vision? To address this, we introduce EgoTac, a generalizable model that predicts rich tactile information directly from egocentric human videos. EgoTac is trained on a unified corpus of over 5.7M image-tactile pairs, covering both continuous force measurements and binary contacts. By learning from this diverse dataset, EgoTac captures nuanced touch dynamics across varied interactions. Experiments demonstrate strong performance: in-domain prediction achieves an average force error below 0.06N. On out-of-domain contact prediction benchmarks, EgoTac consistently outperforms the state-of-the-art contact estimator. It also captures the rise and fall patterns of real tactile data and enables zero-shot predictions on unconstrained real-world videos. Scaling analyses further reveal that both data diversity and volume improve performance steadily. Overall, EgoTac provides a scalable pathway to extract tactile priors from egocentric human videos, enabling broadly applicable tactile-aware robot learning.",
+      "authors": [
+        "Wenkang Zhang",
+        "Chengbo Yuan",
+        "Zicheng Zhang",
+        "Zhengxue Cheng",
+        "Yang Gao"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV",
+        "cs.RO"
+      ],
+      "published": "2026-08-15T06:18:13+00:00",
+      "link": "https://arxiv.org/pdf/2608.15060v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "Large-scale image-tactile corpus construction for tactile prediction",
+      "llm_evidence_cn": "构建大规模图像-触觉对数据语料库用于触觉预测",
+      "llm_evidence": "构建大规模图像-触觉对数据语料库用于触觉预测",
+      "canonical_evidence": "构建大规模图像-触觉对数据语料库用于触觉预测",
+      "llm_tldr_en": "EgoTac is a generalizable model that predicts rich tactile information directly from egocentric human videos, trained on a unified corpus of over 5.7M image-tactile pairs covering continuous force and binary contact, capturing nuanced touch dynamics.",
+      "llm_tldr_cn": "针对触觉数据难以大规模采集的问题，提出从第一视角人类视频直接预测触觉信号的EgoTac模型。模型在超过570万图像-触觉对统一语料库上训练，覆盖连续力测量和二元接触，能够捕捉多样交互中的细微触觉动态。实验展示了其泛化能力。该方法利用丰富易得的人类视频为机器人学习提供大规模触觉数据，缓解触觉传感器数据稀缺的瓶颈。",
+      "llm_tldr": "针对触觉数据难以大规模采集的问题，提出从第一视角人类视频直接预测触觉信号的EgoTac模型。模型在超过570万图像-触觉对统一语料库上训练，覆盖连续力测量和二元接触，能够捕捉多样交互中的细微触觉动态。实验展示了其泛化能力。该方法利用丰富易得的人类视频为机器人学习提供大规模触觉数据，缓解触觉传感器数据稀缺的瓶颈。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2608.15490v1",
+      "source": "arxiv",
+      "title": "Vision-Based Tactile Intelligence for Robotics: Sensing, Learning, and Embodied Manipulation",
+      "abstract": "Tactile sensing is essential for robots in contact-rich tasks, yet many tactile sensors still provide sparse, low-dimensional signals that do not capture sufficient information for complex robotic perception and interaction. Vision-based tactile sensors (VBTSs) offer a powerful alternative by con-verting contact-induced deformation of a soft interface into im-ages. The image-based formulation gives VBTSs high-resolution, information-rich tactile observations that enable complex robotic tasks. This review surveys the full VBTS pipeline and treats sensing hardware, learning methods, simulation, and datasets as an integrated sensing-and-learning system. We 1) organize representative VBTSs into a hardware taxonomy structured by deformable elastomer design, sensor size and shape, and optical system design to guide future sensor development; 2) present a hierarchical view of learning-based tactile intelligence from low-level signal understanding to task-level policies and foundation models; and 3) examine simulation platforms and tactile datasets as a scaling layer, together with sim-to-real transfer and cross-sensor adaptation for training, benchmarking, and deployment. Finally, we identify open challenges and future directions for VBTSs in robotics. By providing a holistic view of how hardware, AI architectures, simulation, and datasets interact, this review aims to advance tactile intelligence for contact-rich robotic tasks.",
+      "authors": [
+        "Peng Zhou",
+        "Jun Hu",
+        "Sihan Chen",
+        "Zeqing Zhang",
+        "Haofei Ma",
+        "Zhenyu Lu",
+        "Sichao Liu",
+        "Xueqian Wang",
+        "Pai Zheng",
+        "Xiang Li",
+        "Shan Luo",
+        "Jia Pan",
+        "David Navarro-Alarcon",
+        "Chenguang Yang",
+        "Michael Yu Wang"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-08-16T02:39:12+00:00",
+      "link": "https://arxiv.org/pdf/2608.15490v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "comprehensive review covering tactile sensing, learning, simulation, and datasets for robotics dataset construction",
+      "llm_evidence_cn": "全面评述视觉触觉传感器的感知、学习、仿真与数据集，与机器人数据集构建需求相关",
+      "llm_evidence": "全面评述视觉触觉传感器的感知、学习、仿真与数据集，与机器人数据集构建需求相关",
+      "canonical_evidence": "全面评述视觉触觉传感器的感知、学习、仿真与数据集，与机器人数据集构建需求相关",
+      "llm_tldr_en": "This review surveys the full pipeline of vision-based tactile sensors, integrating sensing hardware, learning methods, simulation, and datasets, providing a valuable reference for building robotic manipulation datasets with rich multimodal feedback.",
+      "llm_tldr_cn": "视觉触觉传感器通过将接触形变转为图像，提供高分辨率触觉观测。该综述将传感硬件、学习方法、仿真与数据集视为整体系统进行梳理，按形变机制对传感器分类，并讨论相应的学习与仿真方法。对于需要构造多模态、接触丰富机器人数据集的研究，该文提供了系统性的方法论参考与数据使用建议，尤其有助于理解仿真与真实数据在触觉学习中的协同作用。",
+      "llm_tldr": "视觉触觉传感器通过将接触形变转为图像，提供高分辨率触觉观测。该综述将传感硬件、学习方法、仿真与数据集视为整体系统进行梳理，按形变机制对传感器分类，并讨论相应的学习与仿真方法。对于需要构造多模态、接触丰富机器人数据集的研究，该文提供了系统性的方法论参考与数据使用建议，尤其有助于理解仿真与真实数据在触觉学习中的协同作用。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2608.15502v1",
+      "source": "arxiv",
+      "title": "EcoVLA: Energy-Efficient Device-Edge Co-Inference for Vision-Language-Action Models under Real-Time Constraints",
+      "abstract": "Vision-Language-Action (VLA) models have emerged as a promising foundation for Embodied AI, but their high inference cost poses significant challenges for deployment in robotic systems. In practice, on-device inference is constrained by limited compute capacity and energy budgets, struggling to simultaneously satisfy real-time control and energy efficiency requirements. Alternatively, offloading the inference workload to an edge server is susceptible to fluctuations in system conditions, introducing unpredictable latency risks. Device-edge co-inference offers a promising solution, but systematic research tailored to VLA models remains scarce, particularly a unified co-inference framework that jointly addresses real-time constraints and system-level energy efficiency. Thus, we propose EcoVLA, an adaptive device-edge co-inference framework for VLA models that maximizes system energy efficiency under real-time constraints. EcoVLA first introduces a unified stage-level abstraction over different VLA paradigms, establishing an architecture-agnostic co-inference design space. It then formulates a joint device-edge-network latency and energy prediction model to enable rapid runtime evaluation of candidate co-inference schemes. Building on this, EcoVLA continuously selects the energy-optimal scheme satisfying real-time constraints with millisecond-level overhead, adapting to runtime variations in network and system states. Furthermore, EcoVLA incorporates a lightweight transmission mechanism for inter-stage intermediate tensors to reduce the communication overhead incurred by cross-device collaboration. Experimental results across VLA models show that EcoVLA improves system energy efficiency by up to 236% over existing co-inference approaches under a 20 Hz action output frequency constraint, while consistently maintaining SLO satisfaction under dynamic network and edge workload conditions.",
+      "authors": [
+        "Ao Zhou",
+        "Bo Dai",
+        "Le Yu",
+        "Xingyu Liu",
+        "Zeyu Hao",
+        "Lingkun Long",
+        "Chunming Hu",
+        "Jianlei Yang"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI",
+        "cs.RO"
+      ],
+      "published": "2026-08-16T03:08:40+00:00",
+      "link": "https://arxiv.org/pdf/2608.15502v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "Device-edge co-inference for VLA models under real-time and energy constraints, directly applicable to edge deployment for humanoid robots.",
+      "llm_evidence_cn": "VLA模型的设备-边缘协同推理，直接适用于人形机器人边缘部署。",
+      "llm_evidence": "VLA模型的设备-边缘协同推理，直接适用于人形机器人边缘部署。",
+      "canonical_evidence": "VLA模型的设备-边缘协同推理，直接适用于人形机器人边缘部署。",
+      "llm_tldr_en": "Proposes EcoVLA, a unified device-edge co-inference framework for Vision-Language-Action models that jointly optimizes real-time control and energy efficiency, addressing deployment constraints in robotic systems.",
+      "llm_tldr_cn": "面向机器人体内设备算力受限与边缘侧延迟不确定的矛盾，论文提出 EcoVLA 设备-边缘协同推理框架，统一优化实时性与能效。该方法在设备端与边缘服务器之间合理切分 VLA 模型计算，以适应系统状态波动。实验显示在保证实时控制要求的同时显著降低能耗和延迟风险。该工作为机器人模型边缘部署提供了系统化参考。",
+      "llm_tldr": "面向机器人体内设备算力受限与边缘侧延迟不确定的矛盾，论文提出 EcoVLA 设备-边缘协同推理框架，统一优化实时性与能效。该方法在设备端与边缘服务器之间合理切分 VLA 模型计算，以适应系统状态波动。实验显示在保证实时控制要求的同时显著降低能耗和延迟风险。该工作为机器人模型边缘部署提供了系统化参考。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "edge deployment for humanoid robots",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2608.17027v1",
+      "source": "arxiv",
+      "title": "FetchMan: Learning Visual Humanoid Loco-Manipulation Policies from Simulated Experiences",
+      "abstract": "Visual loco-manipulation policies that can generalize to novel scenes and objects have long been a goal of robotics research. However, today's data-hungry algorithms make collecting sufficient demonstrations a struggle for tabletop manipulation, and even more so for humanoids that must also walk and balance. Learning from simulated data and transferring that behavior to the real world, as is commonly done in locomotion, sidesteps this struggle, so we replicate that recipe for loco-manipulation. In doing so, we find that cloning synthetic demonstrations results in a low performance ceiling no matter the amount of training data. Reinforcement learning breaks through it, and refining the cloned policy with Flow-GRPO on a single sparse reward yields performance that synthetic behavior cloning cannot match. Together, these stages form our end-to-end sim-to-real pipeline spanning more than 150,000 scenes, which we use to train FetchMan. We evaluate it on FetchMan-Bench, a simulation benchmark we release, and deploy it zero-shot on a real Unitree G1, where our single-object reach-and-pick policy walks to and grasps a target across unseen scenes at 73.3% success. Finally, we extend this recipe to multi-object training, a first step toward loco-manipulation generalist policies at this data scale.",
+      "authors": [
+        "Omar Rayyan",
+        "Zhi Li",
+        "Max Argus",
+        "Yuxin Jiang",
+        "Chang Yu",
+        "Chenfanfu Jiang",
+        "Yuchen Cui"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-08-17T18:24:41+00:00",
+      "link": "https://arxiv.org/pdf/2608.17027v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "Uses simulated experiences to generate training data for humanoid loco-manipulation policies",
+      "llm_evidence_cn": "利用仿真经验生成人形行走-操作策略的训练数据",
+      "llm_evidence": "利用仿真经验生成人形行走-操作策略的训练数据",
+      "canonical_evidence": "利用仿真经验生成人形行走-操作策略的训练数据",
+      "llm_tldr_en": "FetchMan learns visual humanoid loco-manipulation policies from simulated experiences, combining behavior cloning with Flow-GRPO reinforcement learning to avoid real-world data collection.",
+      "llm_tldr_cn": "针对人形机器人集行走与操作一体的策略训练中数据收集困难的问题，提出从仿真经验学习视觉人形行走-操作策略。该方法克隆合成演示后，使用Flow-GRPO在单一稀疏奖励下进行强化学习微调，突破了克隆策略的性能上限。实验表明该范式能够泛化到新场景和物体。该工作为减少人形机器人对真实演示依赖提供了一条仿真到真实验证路径。",
+      "llm_tldr": "针对人形机器人集行走与操作一体的策略训练中数据收集困难的问题，提出从仿真经验学习视觉人形行走-操作策略。该方法克隆合成演示后，使用Flow-GRPO在单一稀疏奖励下进行强化学习微调，突破了克隆策略的性能上限。实验表明该范式能够泛化到新场景和物体。该工作为减少人形机器人对真实演示依赖提供了一条仿真到真实验证路径。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "humanoid robot dataset construction",
+      "matched_requirement_id": "req-2",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2608.15636v1",
+      "source": "arxiv",
+      "title": "Algorithm-Architecture Co-Design for Efficient VLA Inference via Speculative Inference and Verification",
+      "abstract": "Vision-Language-Action (VLA) models have demonstrated remarkable capabilities in the field of embodied AI, but their high computational cost and limited predicted action length hinder real-time deployment. Although Dadu-Corki, a dedicated accelerator for efficient embodied AI, has been introduced, it does not exploit the inherent interaction patterns between the robot and its environment, which results in a relatively short predicted action length. We observe that robotic environments naturally alternate between active states-where precise actions are crucial-and inactive states-where actions have limited impact on task success. This insight enables a new scheduling opportunity: long-action-length speculative prediction in inactive states, paired with selective verification in active states.   We propose SpecVLA, an algorithm-system co-design framework that adaptively balances action length, inference latency, and task reliability. On the algorithm side, SpecVLA introduces a state-aware VLA inference execution paradigm and a hardware-friendly construction of a smaller verification model (sVLA) using differential residuals and block-wise mixed-precision quantization. On the system side, we develop a heterogeneous architecture consisting of a GPU and a robotic-specific hardware module, along with a speculative dataflow that decouples VLA and sVLA through parallel execution. Comprehensive evaluations on OpenVLA and RDT across LIBERO and ManiSkill benchmarks show that SpecVLA reduces end-to-end latency significantly while preserving task success rate. By enabling long-action-length speculative prediction with timely verification, SpecVLA achieves real-time robotic manipulation with both high efficiency and reliability.",
+      "authors": [
+        "Chunyu Qi",
+        "Zhuoran Song",
+        "Jian Weng",
+        "Haozhe Jiang",
+        "Xueyuan Liu",
+        "Naifeng Jing",
+        "Guanghui He",
+        "Xiaoyao Liang",
+        "Haibing Guan"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.AI"
+      ],
+      "published": "2026-08-16T08:59:22+00:00",
+      "link": "https://arxiv.org/pdf/2608.15636v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "algorithm-architecture co-design for efficient VLA inference addresses real-time edge deployment of robot learning models",
+      "llm_evidence_cn": "面向VLA模型高效推理的算法-架构协同设计，直接面向机器人模型实时边缘部署",
+      "llm_evidence": "面向VLA模型高效推理的算法-架构协同设计，直接面向机器人模型实时边缘部署",
+      "canonical_evidence": "面向VLA模型高效推理的算法-架构协同设计，直接面向机器人模型实时边缘部署",
+      "llm_tldr_en": "This work co-designs algorithm and hardware to enable efficient Vision-Language-Action inference via speculative prediction and verification, exploiting robot-environment interaction patterns to extend action length for real-time deployment.",
+      "llm_tldr_cn": "视觉-语言-动作模型计算成本高且预测动作长度有限，制约实时部署。该研究利用机器人环境中活跃与静止状态的交替，提出长动作长度推测性预测与验证机制，并通过算法-架构协同设计（基于Dadu-Corki加速器）提升推理效率。该方法在不牺牲任务成功率的前提下显著延长预测动作长度，为人形机器人等边缘端部署提供了高效的模型推理方案。",
+      "llm_tldr": "视觉-语言-动作模型计算成本高且预测动作长度有限，制约实时部署。该研究利用机器人环境中活跃与静止状态的交替，提出长动作长度推测性预测与验证机制，并通过算法-架构协同设计（基于Dadu-Corki加速器）提升推理效率。该方法在不牺牲任务成功率的前提下显著延长预测动作长度，为人形机器人等边缘端部署提供了高效的模型推理方案。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "edge deployment for humanoid robots",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2608.17496v1",
+      "source": "arxiv",
+      "title": "Calibrated Predictive Safety for Heterogeneous Robots: An Action-Conditioned JEPA Framework with Model-Based Safety Shields",
+      "abstract": "Vision-language-action policies generalize broadly but provide no execution-time guarantees; classical model-based planners respect kinematic and geometric constraints but generalize poorly. We study whether an action-conditioned Joint-Embedding Predictive Architecture (JEPA) world model can predict, before execution, both task progress and physical risk for candidate action chunks, and whether coupling these predictions to an embodiment-specific model-based safety shield yields a deployable pipeline for heterogeneous robots.   We propose a receding-horizon decision pipeline: (1) a proposer produces K candidate action chunks; (2) an action-conditioned JEPA rolls each candidate forward in a frozen-encoder latent space conditioned on an embodiment embedding; (3) calibrated risk and progress heads score each rollout and report uncertainty; (4) a deterministic per-embodiment safety shield filters inadmissible candidates; (5) a fallback ladder handles empty-admissible-set cases. The learned ranking only reorders admissible candidates; enforcement guarantees come from the deterministic shield and fallback ladder.   We evaluate with a pre-registered protocol in simulation (LIBERO-Long). In 600-episode configurations the full framework improved success over a shield-only baseline and reduced collision false negatives at matched recall. Deployment-efficiency measurements on target on-robot and edge accelerators are included. Real-robot experiments and an offline reranking significance test remain future work; see the paper for disclosures.",
+      "authors": [
+        "Kaiming Zhong",
+        "Tianhua Liu",
+        "Yue Wang"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-08-18T08:24:08+00:00",
+      "link": "https://arxiv.org/pdf/2608.17496v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "predicts physical risk before execution and couples with safety shields, relevant to safe robot operation and OOD safety",
+      "llm_evidence_cn": "执行前预测物理风险并结合安全盾，与安全机器人操作和分布外安全监测相关",
+      "llm_evidence": "执行前预测物理风险并结合安全盾，与安全机器人操作和分布外安全监测相关",
+      "canonical_evidence": "执行前预测物理风险并结合安全盾，与安全机器人操作和分布外安全监测相关",
+      "llm_tldr_en": "Action-conditioned JEPA world model predicts task progress and physical risk for candidate actions, combined with model-based safety shields for safer deployment.",
+      "llm_tldr_cn": "视觉-语言-动作策略缺乏执行时保证，经典模型规划器泛化差。论文提出动作条件JEPA世界模型，在执行前预测候选动作块的任务进展与物理风险，并与具身专用模型安全盾结合，形成滚动时域决策管线。实验表明该管线能在异构机器人上预测风险并提升部署安全性，对开放集/分布外安全监测具有方法参考价值。",
+      "llm_tldr": "视觉-语言-动作策略缺乏执行时保证，经典模型规划器泛化差。论文提出动作条件JEPA世界模型，在执行前预测候选动作块的任务进展与物理风险，并与具身专用模型安全盾结合，形成滚动时域决策管线。实验表明该管线能在异构机器人上预测风险并提升部署安全性，对开放集/分布外安全监测具有方法参考价值。",
+      "llm_tags": [
+        "query:humanoid-ood"
+      ],
+      "matched_query_tag": "query:humanoid-ood",
+      "matched_query_text": "out-of-distribution detection for safe robot operation",
+      "matched_requirement_id": "req-11",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2608.15680v1",
+      "source": "arxiv",
+      "title": "Robo-Dopamine 2.0: History-Conditioned and OOD-Aware Process Reward Modeling for Robotic Manipulation",
+      "abstract": "Vision-language-action (VLA) models improve robotic manipulation but remain vulnerable to compounding errors, scene changes, and off-trajectory states. Reinforcement learning can refine pretrained VLA policies, yet sparse success signals hinder exploration, while engineered dense rewards are costly and task-specific. Existing learned visual reward models often rely on static before-after observations, causing temporal ambiguity and weak discrimination between robustness-preserving variations and task-invalid failures under out-of-distribution (OOD) execution. We introduce Robo-Dopamine 2.0, a history- and OOD-aware process reward model with a pairwise prediction interface. It combines (1) history-conditioned pairwise rewards that use source-aligned reference panels for synthetic OOD queries and observed rollout history for online queries, while preserving the queried endpoints, and (2) an OOD-aware signed progress space that represents valid progress, robustness, failure, and recovery. A Signed-Hop Curriculum with transition-aware replay learns coarse execution ordering before fine-grained progress calibration. We also construct an OOD trajectory dataset and a five-family benchmark. Reference panels improve mean visual order consistency (VOC) from 0.967 to 0.986 and OOD-robust VOC from 0.906 to 0.958. With the same 400K pairwise-reward budget, Signed-Hop training with 25% replay reaches 0.9872 mean VOC, compared with 0.9858 for a matched-pool shuffled control. In downstream reinforcement learning, the full model achieves 86.8% mean RoboTwin success and 71/80 successful real-world insertions.",
+      "authors": [
+        "Yijie Xu",
+        "Haopeng Jin",
+        "Run Zhou",
+        "Shengbang Liu",
+        "Sixiang Chen",
+        "Hongyang Cheng",
+        "Sicheng Hu",
+        "Peterson Co",
+        "Jinwen Luo",
+        "Huajie Tan",
+        "Shanghang Zhang"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.AI"
+      ],
+      "published": "2026-08-16T11:15:55+00:00",
+      "link": "https://arxiv.org/pdf/2608.15680v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "history-conditioned and OOD-aware process reward model detects off-distribution execution and distinguishes failures, directly relevant to OOD detection",
+      "llm_evidence_cn": "历史条件与OOD感知的过程奖励模型可区分分布外执行和任务失败，直接关乎OOD检测",
+      "llm_evidence": "历史条件与OOD感知的过程奖励模型可区分分布外执行和任务失败，直接关乎OOD检测",
+      "canonical_evidence": "历史条件与OOD感知的过程奖励模型可区分分布外执行和任务失败，直接关乎OOD检测",
+      "llm_tldr_en": "Robo-Dopamine 2.0 introduces an OOD-aware process reward model with pairwise prediction, improving robustness under out-of-distribution execution.",
+      "llm_tldr_cn": "VLA模型在操作中易受复合误差和分布外状态影响，现有效奖赏模型多依赖前后静态观测，难以区分鲁棒性扰动与任务无效失败。论文提出历史条件与OOD感知的过程奖励模型，结合成对预测接口，利用历史状态和OOD信号来细化奖励。实验证明该奖励模型能更好判断分布外执行下的操作质量，为机器人安全与OOD检测提供有力工具。",
+      "llm_tldr": "VLA模型在操作中易受复合误差和分布外状态影响，现有效奖赏模型多依赖前后静态观测，难以区分鲁棒性扰动与任务无效失败。论文提出历史条件与OOD感知的过程奖励模型，结合成对预测接口，利用历史状态和OOD信号来细化奖励。实验证明该奖励模型能更好判断分布外执行下的操作质量，为机器人安全与OOD检测提供有力工具。",
+      "llm_tags": [
+        "query:humanoid-ood"
+      ],
+      "matched_query_tag": "query:humanoid-ood",
+      "matched_query_text": "out-of-distribution detection for safe robot operation",
+      "matched_requirement_id": "req-11",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2608.17600v1",
+      "source": "arxiv",
+      "title": "LIBERO-VIFO: Benchmarking the Capability and Safety of Visual Cue Following in Vision-Language-Action Models",
+      "abstract": "Visual cues are increasingly adopted to guide robot learning, but whether Vision-Language-Action (VLA) models can reliably follow authorized cues while disregarding unauthorized ones remains unclear. Existing work covers only a narrow range of cue forms and focuses on final task success, providing only a coarse assessment of cue-following capability. Treating all visual cues as authorized also leaves safety risks of unauthorized following unexplored. To address these gaps, we introduce LIBERO-VIFO, a benchmark to evaluate both the capability and safety of visual cue following in VLA models. LIBERO-VIFO defines eight visual cue families spanning diverse forms. A total of four protocols in two parts are defined: Part I tests cue understanding and authorized following, while Part II evaluates unauthorized visual cue following under language-cue conflict and empty language conditions. Evaluating seven VLA models reveals that although visual cue understanding does not reliably translate into execution, current VLAs are able to execute cue-indicated tasks without language instruction, exposing an emerging risk of unauthorized visual cue following. Extended experiments on scene-instantiated cues, safety-critical settings, and real-robot deployment corroborate these findings. LIBERO-VIFO brings both the capability and safety of visual cue following into systematic evaluation, establishing visual-centric safety as a new perspective for the VLA community.",
+      "authors": [
+        "Zhengyan Qian",
+        "Rui Yan",
+        "Alex Jinpeng Wang",
+        "Jinhui Tang"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-08-18T10:07:17+00:00",
+      "link": "https://arxiv.org/pdf/2608.17600v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "benchmark for visual cue following capability and safety in robot VLA models",
+      "llm_evidence_cn": "机器人视觉语言动作模型中视觉线索跟随能力与安全的基准",
+      "llm_evidence": "机器人视觉语言动作模型中视觉线索跟随能力与安全的基准",
+      "canonical_evidence": "机器人视觉语言动作模型中视觉线索跟随能力与安全的基准",
+      "llm_tldr_en": "LIBERO-VIFO introduces a benchmark for visual cue following in VLA models, defining eight cue families and four protocols to evaluate capability and safety, including unauthorized cue rejection.",
+      "llm_tldr_cn": "针对视觉语言动作（VLA）模型在视觉线索跟随上的能力与安全评估缺失问题，LIBERO-VIFO定义了八种视觉线索族和包含两部分的四个协议，系统评估模型遵循授权线索和拒绝未授权线索的能力。该基准为VLA模型在机器人安全部署中的行为测试提供了标准化工具，填补了现有评测仅关注任务成功率的空白。",
+      "llm_tldr": "针对视觉语言动作（VLA）模型在视觉线索跟随上的能力与安全评估缺失问题，LIBERO-VIFO定义了八种视觉线索族和包含两部分的四个协议，系统评估模型遵循授权线索和拒绝未授权线索的能力。该基准为VLA模型在机器人安全部署中的行为测试提供了标准化工具，填补了现有评测仅关注任务成功率的空白。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2608.15727v1",
+      "source": "arxiv",
+      "title": "FirstDiff: One-Step Diffusion-Based Anomaly Detection for Multivariate Time Series via Initial Noise Prediction",
+      "abstract": "Diffusion models have recently shown strong potential for multivariate time-series anomaly detection by learning the distribution of normal data through iterative denoising. Existing diffusion-based approaches, however, typically perform anomaly detection after completing the reverse diffusion process, relying primarily on the final reconstructed signal and overlooking informative representations produced during denoising. This design incurs substantial computational cost and limits the use of intermediate diffusion information for anomaly detection.   In this paper, we propose FirstDiff, a diffusion-based anomaly detection framework based on the observation that the predicted diffusion noise at the initial reverse-diffusion evaluation already contains sufficient information for accurate anomaly detection. FirstDiff models the statistical distribution of predicted diffusion noise under normal behavior using validation data, enabling anomaly inference from a single denoising-network evaluation rather than completing the reverse diffusion trajectory.   To model complex temporal and inter-sensor dependencies, FirstDiff employs a Diffusion Transformer as the denoising backbone. Extensive experiments on five public benchmark datasets demonstrate that FirstDiff achieves state-of-the-art performance while reducing diffusion inference from the full reverse trajectory to a single denoising-network evaluation.",
+      "authors": [
+        "Ali Boudaghi",
+        "Alireza Nemati",
+        "Hadi Zare"
+      ],
+      "primary_category": "cs.LG",
+      "categories": [
+        "cs.LG",
+        "cs.AI",
+        "stat.ML"
+      ],
+      "published": "2026-08-16T12:59:38+00:00",
+      "link": "https://arxiv.org/pdf/2608.15727v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "query:humanoid-ood"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "one-step diffusion-based anomaly detection for multivariate time series, applicable to self-supervised robot fault diagnosis",
+      "llm_evidence_cn": "面向多元时间序列的单步扩散异常检测方法，可用于机器人自监督故障诊断",
+      "llm_evidence": "面向多元时间序列的单步扩散异常检测方法，可用于机器人自监督故障诊断",
+      "canonical_evidence": "面向多元时间序列的单步扩散异常检测方法，可用于机器人自监督故障诊断",
+      "llm_tldr_en": "FirstDiff performs one-step diffusion-based anomaly detection by predicting initial noise, reducing computational cost and leveraging intermediate diffusion information for better multivariate time-series anomaly detection.",
+      "llm_tldr_cn": "针对扩散式时间序列异常检测计算开销大且忽略去噪中间表示的问题，论文提出FirstDiff，利用初始噪声预测实现单步逆扩散，从源头刻画异常。该方法大幅降低检测成本，同时利用扩散中间信息提升精度，为机器人本体感受信号等多元时间序列的实时异常检测提供了高效方案。",
+      "llm_tldr": "针对扩散式时间序列异常检测计算开销大且忽略去噪中间表示的问题，论文提出FirstDiff，利用初始噪声预测实现单步逆扩散，从源头刻画异常。该方法大幅降低检测成本，同时利用扩散中间信息提升精度，为机器人本体感受信号等多元时间序列的实时异常检测提供了高效方案。",
+      "llm_tags": [
+        "query:humanoid-ood"
+      ],
+      "matched_query_tag": "query:humanoid-ood",
+      "matched_query_text": "Self supervised time series anomaly detection for robot fault diagnosis",
+      "matched_requirement_id": "req-16",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2608.16058v1",
+      "source": "arxiv",
+      "title": "SurgVIL: Scaling Surgical Robot Imitation Learning with Open-source Surgical Videos",
+      "abstract": "Learning-based surgical robot autonomy requires large-scale demonstrations with synchronized videos and robot actions, but such data are exceedingly rare in clinical or realistic tissue settings because robot kinematics are typically inaccessible outside controlled research systems. In contrast, phantom data collected on research platforms provide accurate action labels but lack the visual diversity of real tissue. We propose SurgVIL, a framework for scaling surgical robot imitation learning using open-source surgical videos. SurgVIL combines kinematically labeled phantom robot demonstrations with surgical videos from open-source datasets and online sources for policy learning. Since these videos lack robot motion labels, we estimate approximate kinematics as weak supervision. We evaluate SurgVIL on two da Vinci robot tasks: needle pick-up and cholecystectomy cutting. Across ACT, $π_0$, and GR00T-H backbones, adding surgical videos substantially improves generalization to real-tissue and out-of-distribution settings, suggesting a scalable path from phantom training toward generalizable surgical robot policies.",
+      "authors": [
+        "Xinhao Chen",
+        "JuoTung Chen",
+        "Nigel Nelson",
+        "Antony Goldenberg",
+        "Jesse Haworth",
+        "Sean D. Huver",
+        "Axel Krieger"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-08-17T03:33:03+00:00",
+      "link": "https://arxiv.org/pdf/2608.16058v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "combines phantom demonstrations with open-source videos to scale robot imitation learning data",
+      "llm_evidence_cn": "结合模型演示与开源视频扩展机器人模仿学习数据",
+      "llm_evidence": "结合模型演示与开源视频扩展机器人模仿学习数据",
+      "canonical_evidence": "结合模型演示与开源视频扩展机器人模仿学习数据",
+      "llm_tldr_en": "SurgVIL scales surgical robot imitation learning by combining kinematically labeled phantom demonstrations with open-source surgical videos, estimating missing action labels to build large-scale training data.",
+      "llm_tldr_cn": "针对手术机器人模仿学习中带动作标注数据稀缺的问题，SurgVIL将具有运动学标注的模型演示与开源手术视频结合，通过估计视频中的动作来扩充数据集。该方法在保留真实组织视觉多样性的同时获得可用的动作标签，为机器人学习提供可扩展的数据构建范式，也可迁移至其他机器人数据稀缺场景。",
+      "llm_tldr": "针对手术机器人模仿学习中带动作标注数据稀缺的问题，SurgVIL将具有运动学标注的模型演示与开源手术视频结合，通过估计视频中的动作来扩充数据集。该方法在保留真实组织视觉多样性的同时获得可用的动作标签，为机器人学习提供可扩展的数据构建范式，也可迁移至其他机器人数据稀缺场景。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    }
+  ]
+}
