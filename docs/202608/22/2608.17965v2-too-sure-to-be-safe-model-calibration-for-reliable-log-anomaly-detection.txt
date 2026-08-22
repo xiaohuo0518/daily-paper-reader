@@ -1,0 +1,568 @@
+Title: Too Sure to Be Safe: Model Calibration for Reliable Log Anomaly Detection
+
+URL Source: https://arxiv.org/pdf/2608.17965v2
+
+Published Time: Fri, 21 Aug 2026 00:07:15 GMT
+
+Number of Pages: 11
+
+Markdown Content:
+# Too Sure to Be Safe: Model Calibration for Reliable Log Anomaly Detection 
+
+Bin Li 1∗, Dongdong Wang 2∗, Siyang Lu 3†
+
+> 1
+
+School of Cyberspace Science and Technology, Beijing Jiaotong University, Beijing, China 
+
+> 2
+
+University of Florida, Gainesville, FL, USA 
+
+> 3
+
+School of Computer and Technology, Beijing Jiaotong University, Beijing, China 24120434@bjtu.edu.cn, dongdongwang@ufl.edu, sylu@bjtu.edu.cn 
+
+Abstract —Online log anomaly detection is critical for main-taining the reliability of large-scale computing systems. Although recent language model-based log anomaly detectors achieve strong detection performance, their confidence estimates remain poorly calibrated. We show that these detectors frequently assign excessive confidence to incorrect predictions, particularly for anomalous logs under severe class imbalance. Moreover, confidence on erroneous predictions remains persistently high even when conventional calibration metrics indicate good calibration, creating a critical reliability gap for operational monitoring systems. To address this issue, we propose Log Reconstruction and Distance (LoRD), a lightweight post-hoc calibration framework for reliable log anomaly detection. LoRD learns prediction-route-specific reliability models from latent representations of correctly classified validation samples and estimates prediction reliability through route-wise reconstruction distances. Based on the estimated reliability, LoRD selectively recalibrates high-risk predictions to suppress overconfident errors while preserving reliable predictions. Extensive experiments on four large-scale log benchmark datasets and multiple language model-based detectors demonstrate that LoRD consistently improves confidence reliability and substantially reduces overconfident anomaly-related errors without sacrificing anomaly detection performance. 
+
+Index Terms —Log anomaly detection, model calibration, confi-dence reliability, overconfidence 
+
+I. I NTRODUCTION 
+
+Large-scale data systems are increasingly critical in the era of artificial intelligence and high-performance computing. Maintaining system reliability relies heavily on continuous log monitoring, making log anomaly detection essential for identifying abnormal events and preventing system failures. Existing log anomaly detection approaches have achieved substantial progress in semantic log analysis and anomalous event detection [1]–[4]. Current methods for log anomaly detection can generally be categorized into two paradigms [5]. The first models normal log patterns and identifies deviations from expected behavior as anomalies. The other formulates log anomaly detection as a supervised classification problem, where models directly predict whether a log sequence is normal or anomalous. While the former typically requires less labeled data, the latter often 
+
+Accepted at the 2026 IEEE International Conference on Data Mining. 
+
+> ∗
+
+These authors contributed equally to this work. 
+
+> †
+
+Corresponding author: Siyang Lu (sylu@bjtu.edu.cn). 
+
+achieves stronger benchmark [6], [7] performance but relies heavily on high-quality annotations and reliable preprocessing pipelines. In this paper, we focus on supervised classification-based log anomaly detectors and investigate the reliability of their confidence estimation. However, strong classification performance does not guaran-tee reliable decision-making. In log anomaly detection, predic-tion errors are asymmetric in their operational impact [8]. A normal log sequence that is incorrectly classified as anomalous may trigger a false alarm, causing additional inspection costs and potentially contributing to alert fatigue. While such errors are undesirable, they still expose suspicious cases to operators or downstream monitoring modules. By contrast, an anomalous log sequence that is incorrectly classified as normal constitutes a missed anomaly, allowing the underlying abnormal behavior to bypass the detection pipeline. This risk becomes more severe when the detector assigns high confidence to the incorrect normal prediction, as the system may treat the decision as reliable and suppress further intervention. Therefore, high-confidence false negatives constitute a central reliability risk for supervised log anomaly detectors. We first examine the confidence behavior of representative supervised log anomaly detectors. The results reveal a recurring reliability issue: detectors can be confidently wrong. Both false positives and false negatives often receive confidence scores comparable to correctly classified samples, suggesting that detector confidence is not consistently aligned with prediction correctness. This issue is not simply resolved by increasing model complexity. More complex detectors may obtain higher accuracy and more favorable aggregate calibration scores, yet their confidence distributions often remain highly concentrated near one, leaving incorrect predictions overconfident. We also find that anomalous samples tend to exhibit larger calibration errors than normal samples. These observations indicate that strong benchmark performance can still conceal important reliability risks, particularly when anomalous log sequences are confidently predicted as normal. To mitigate this risk, we design a selector-based calibration framework for supervised log anomaly detectors. Given the output of a pre-trained log anomaly detector, the selector predicts whether the detector’s current prediction is correct or incorrect. Specifically, for each input, we use the detector’s arXiv:2608.17965v2 [cs.LG] 19 Aug 2026 hidden representation as the basis for reliability estimation. Since predictions assigned to the normal class and those assigned to the anomalous class exhibit different error patterns, we construct two prediction routes according to the detector’s output label. For each route, an autoencoder is trained on the hidden representations of correctly classified validation samples, and its reconstruction error is used as a reliability score. Although the two routes follow the same autoencoder-based scoring principle, their calibration objectives are asymmetric. The predicted-normal route prioritizes potential false negatives, while the predicted-anomalous route is treated more conserva-tively to avoid weakening reliable anomaly predictions. This design reflects the asymmetric risk of log anomaly detection, where missed anomalies are typically more critical than false alarms. In this work, we first show that supervised log anomaly detectors can remain overconfident on misclassified samples despite strong benchmark performance. We then propose a selector-based calibration framework that predicts whether a detector’s output is correct or incorrect using its predictions and hidden representations. Finally, we demonstrate across multiple datasets and representative detectors that our method achieves a task-oriented calibration trade-off, yielding more reliable confidence estimates for anomalous samples, especially those confidently predicted as normal, while keeping the calibration degradation on normal samples within an acceptable range. Our contributions are summarized as follows:  
+
+> •
+
+To the best of our knowledge, this is the first work to systematically investigate reliability and confidence calibration in language model-based log anomaly detection. We reveal a persistent overconfidence phenomenon in which state-of-the-art detectors assign excessively high confidence to erroneous anomaly predictions despite exhibiting strong performance under conventional cali-bration metrics. Through extensive analyses across history window length, LoRA rank, model complexity, and class-imbalance mitigation strategies, we show that Confidence on Error (CoE) remains consistently high across models and settings, exposing a critical reliability gap that is overlooked by existing calibration metrics.  
+
+> •
+
+We propose LoRD (Log Reconstruction and Distance), a lightweight post-hoc calibration framework for log anomaly detection. LoRD learns route-specific reconstruc-tion models that characterize the reliable conditional latent distributions of normal and anomalous predictions, and leverages reconstruction distances as reliability signals for tri-region confidence calibration. By selectively preserving reliable predictions while suppressing overconfident errors, LoRD directly targets the reliability challenge identified in modern log anomaly detectors.  
+
+> •
+
+We conduct extensive experiments on four large-scale log benchmark datasets using diverse language model-based log anomaly detectors with varying architectures and model scales. Experimental results demonstrate that LoRD consistently improves reliability and calibration quality across datasets and detectors, effectively reducing overconfident mispredictions while preserving detection performance. These findings highlight the robustness, effectiveness, and generalizability of LoRD for reliability-aware log anomaly detection. II. R ELATED WORK 
+
+A. Log Anomaly Detection 
+
+Researchers have extensively employed sequence modeling techniques for system log analysis with notable success. Among these applications, log anomaly detection has emerged as a critical task, often formulated as a text classification problem in natural language processing. Driven by advances in deep neural networks, increasingly powerful text classification models have substantially improved the accuracy and robustness of log anomaly detection. Log anomaly detection aims to identify abnormal system behaviors from log data. Existing studies mainly follow two lines [5]: i) semi-supervised methods and ii) supervised methods. Semi-supervised methods usually learn normal log patterns from historical logs and identify samples that deviate from the learned normality as anomalies. DeepLog [9] is a representative method in this line, which models normal log sequences with an LSTM and detects anomalies based on deviations from predicted execution patterns. LogAnomaly [10] extends this idea by considering both sequential and quantitative anomalies, and further incorporates semantic representations of log templates to better handle unstructured logs. PLELog [11] reduces the reliance on manual labeling by estimating prob-abilistic labels and learning semantic representations for log anomaly detection. Supervised methods treat log anomaly detection as a binary classification task, learning discriminative patterns from labeled normal and anomalous sequences. Inspired by TextCNN, Lu et al. [12] apply multiple convolutional filters with different kernel sizes in parallel to capture local patterns at different granulari-ties, achieving strong performance in supervised log anomaly detection. LogRobust [13] combines semantic log-template representations with an attention-based recurrent model to improve robustness to unstable log events. LightLog [14] improves efficiency by applying PCA-based dimensionality reduction to log semantic representations before using a lightweight temporal convolutional network to model sequential dependencies. NeuralLog [15] uses pretrained language models to encode the semantics of log events and adopts a Transformer-based encoder to capture contextual dependencies within log sequences, thereby improving anomaly classification. Recent studies have also begun to explore the potential of large language models in log anomaly detection. LogLLM [16] follows a semantic-enhanced framework similar to NeuralLog: it first uses pretrained language models such as BERT to encode log sequences, then employs a projector to align the extracted log representations with the input space of LLaMA, and finally applies parameter-efficient fine-tuning techniques such as LoRA for anomaly classification. Another line of work adapts GPT-2 [17] to log anomaly detection through a simpler Fig. 1. Overview of existing log anomaly detection frameworks. Logs are preprocessed, embedded into semantic representations, encoded using sequential models such as Bi-LSTM or Transformer, and finally used for anomaly prediction. 5 10 20 30 50        
+
+> History Length
+> 0.80 0.85 0.90 0.95 1.00
+> Perf./Conf.
+> Varying History Length
+> 4816 32
+> LoRA Rank
+> 0.6 0.7 0.8 0.9 1.0
+> Perf./Conf.
+> Varying LoRA Rank
+> 1.67M 1.70M 1.71M 2.67M
+> Model Size
+> 0.875 0.900 0.925 0.950 0.975 1.000
+> Perf./Conf.
+> Varying Model Size
+> None Label Sm. Over Samp. Under Samp. Bal. Samp. Class Wtd. Focal Loss
+> 0.70 0.75 0.80 0.85 0.90 0.95 1.00
+> Conf.
+> Imbalance Handling
+> 0.0 0.4 0.8 1.2
+> Calib. Error
+> 0.0 0.5 1.0 1.5 2.0
+> Calib. Error
+> 0.000 0.001 0.002 0.003
+> Calib. Error
+> 0.00 0.04 0.08 0.12
+> Calib. Error
+
+(a) (b) (c) (d)       
+
+> Acc F1 CoC ECE NLL Brier CoE
+
+Fig. 2. Ablation analysis of factors affecting confidence calibration and error confidence in log anomaly detection. Panels (a)–(c) report Acc, F1, and CoE on the left axis and ECE, NLL, and Brier score on the right axis. Panel (d) reports abnormal-class ECE, Brier score, CoC, and CoE for imbalance handling strategies. Green bars denote higher-is-better metrics, while red bars denote lower-is-better metrics. Label Sm., Over Samp., Under Samp., Bal. Samp., and Class Wtd. denote Label Smoothing, Over-Sampler, Under-Sampler, Balanced Sampler, and Class-Weighted Loss, respectively. Text CNN Log Robust Light Log Neural Log GPT2 
+
+> 10 −3
+> 10 −2
+> 10 −1
+> ECE (log)
+
+ECE: Normal vs Abnormal 
+
+> Text CNN Log Robust Light Log Neural Log GPT2
+> 10 −2
+> 10 −1
+> 10 0
+> NLL (log)
+
+NLL: Normal vs Abnormal 
+
+> Text CNN Log Robust Light Log Neural Log GPT2
+> 10 −3
+> 10 −2
+> 10 −1
+> Brier (log)
+
+Brier: Normal vs Abnormal 
+
+> Text CNN Log Robust Light Log Neural Log GPT2
+> 0.75 0.85 0.95 1.00
+> Confidence
+
+Confidence by Class 
+
+(a) (b) (c) (d)      
+
+> Normal Abnormal Nor. CoC Abn. CoC Nor. CoE Abn. CoE
+
+Fig. 3. Class-wise calibration comparison on the BGL dataset. Panels (a)–(c) compare normal-class and abnormal-class ECE, NLL, and Brier score using a logarithmic axis. Panel (d) compares class-wise confidence on correct predictions and erroneous predictions. 
+
+preprocessing pipeline, directly feeding the processed log-text sequences into GPT-2. 
+
+B. Model Calibration 
+
+Model calibration aims to make predictive confidence better reflect empirical correctness. Existing methods can be broadly grouped into three categories: regularization-based training, uncertainty estimation, and post-hoc calibration [18]. Regularization-based methods improve calibration by reduc-ing overconfidence during training. Typical examples include label smoothing [19], confidence penalty [20], mixup [21], focal loss [22], and class-balanced loss [23]. These methods can improve calibration, but require detector retraining and may alter the original detection behavior. Uncertainty estimation methods quantify predictive uncer-tainty through approaches such as Monte Carlo dropout [24], deep ensembles [25], and Bayesian neural networks [26]. However, they often require extra computation or multiple forward passes, making them less suitable for lightweight post-hoc calibration. Post-hoc calibration methods adjust the output probabilities of a trained model without modifying its parameters. Represen-tative methods include Temperature Scaling and Logistic Scal-ing [27], Beta Scaling [28], and Selective Scaling [29]. These methods improve confidence estimation through probability-level mappings or auxiliary calibration models, and serve as strong post-hoc calibration baselines. III. P RELIMINARIES 
+
+A. Problem Formulation 
+
+We study supervised log anomaly detection. The problem is formulated as a binary confidence calibration problem. Given an input log instance xi with binary indicator label yi ∈ { 0, 1},where yi = 0 denotes a normal sample and yi = 1 denotes an anomalous sample, a detector fθ produces a scalar anomaly confidence score: 
+
+pi = σ(fθ (xi)) , pi ∈ (0 , 1) , (1) where σ(·) denotes the sigmoid function and pi represents the predicted confidence that xi is anomalous. The final prediction is obtained by applying a decision threshold τ :
+
+ˆyi =
+
+(
+
+1, if pi ≥ τ, 
+
+0, if pi < τ. (2) Based on the relationship between the predicted label ˆyi
+
+and the ground-truth label yi, predictions are partitioned into four categories: true negatives (TN), false positives (FP), true positives (TP), and false negatives (FN). This formulation enables systematic analysis of prediction confidence and calibration behavior across correct and incorrect anomaly predictions. 
+
+B. Calibration Metrics 
+
+Besides accuracy and F1 score, we evaluate model reliability using several widely adopted confidence calibration metrics for log anomaly detection. For example, negative log-likelihood (NLL) evaluates the quality of probabilistic predictions by measuring the likelihood assigned to the ground-truth labels. Lower NLL indicates better calibrated confidence estimates. To provide a comprehensive assessment of calibration quality, we further consider the following metrics that capture confidence– accuracy alignment, probabilistic prediction quality, and confi-dence behavior on both correct and incorrect predictions. 
+
+Expected Calibration Error (ECE). ECE [30] measures the discrepancy between prediction confidence and empirical accu-racy by partitioning predictions into M fixed-width confidence bins: 
+
+ECE = 
+
+> M
+
+X
+
+> m=1
+
+|Bm|
+
+N |acc( Bm) − conf( Bm)| , (3) where Bm denotes the m-th confidence bin, N is the total number of samples, and acc( Bm) and conf( Bm) represent the empirical accuracy and average confidence within the bin, respectively. 
+
+Brier Score (BS). BS measures the mean squared error between predicted probabilities and ground-truth labels: 
+
+BS = 1
+
+N
+
+> N
+
+X
+
+> i=1
+
+(pi − yi)2. (4) Unlike ECE, which evaluates calibration by comparing confi-dence with empirical accuracy, BS measures overall probability quality by directly penalizing probability estimation errors. As a result, BS reflects both calibration and class discrimination. However, similar to ECE, BS aggregates over all predictions and may therefore overlook confidence behavior on rare but critical mispredictions. 
+
+Confidence on Error (CoE). CoE measures the average confidence assigned to misclassified samples: 
+
+CoE = 1
+
+|E| 
+
+X
+
+> i∈E
+
+ci, (5) where E = {i | ˆyi̸ = yi} denotes the set of incorrectly classified samples and ci is the confidence score of sample i. A high CoE indicates that the model is systematically overconfident on its mistakes — a particularly concerning failure mode in anomaly detection, where missed abnormal cases carry high operational cost. Unlike ECE and BS, which aggregate over all predictions, CoE isolates confidence behavior specifically on failure cases, providing a targeted diagnostic that the other metrics do not directly expose. Conversely, Confidence on Correct (CoC) measures the average confidence assigned to correctly classified samples. IV. E MPIRICAL ANALYSIS OF CONFIDENCE CALIBRATION IN LOG ANOMALY DETECTION 
+
+A. History Length 
+
+We analyze the influence of sliding-window history size while fixing the stride to 1. As shown in Figure 2(a), increasing the history length produces only modest variations in predictive performance, with Acc remaining above 98% and F1 remaining above 0.84 across all settings. Although ECE and Brier score exhibit noticeable changes as the context length varies, CoE remains consistently high, ranging from 0.90 to 0.98. Interest-ingly, larger history windows reduce CoE more substantially than they improve conventional calibration metrics. While ECE increases from 0.13 to 0.17 as the history length grows from 5 to 30, CoE decreases from 0.98 to 0.90. This discrepancy suggests that average calibration metrics do not adequately reflect confidence behavior on erroneous predictions. Even when additional contextual information improves reliability, the model continues to assign excessively high confidence to incorrect predictions. Therefore, longer temporal context alone is insufficient to resolve the overconfidence problem. 
+
+B. LoRA Rank 
+
+Figure 2(b) presents the impact of LoRA rank on calibration behavior. Increasing the LoRA rank substantially improves predictive performance, with F1 increasing from 0.61 at rank 4 to 0.94 at rank 32. Accuracy exhibits a similar trend, indicating that larger adaptation capacity enables the model to capture richer task-specific patterns. However, calibration-related metrics remain largely unchanged. ECE and Brier score stay nearly constant across all LoRA ranks, while CoE remains extremely high, approaching 1.0 regardless of adaptation capacity. These results suggest that increasing model expressiveness primarily improves predictive accuracy but provides limited benefit for mitigating overconfident errors. Even highly accurate models continue to assign near-maximal confidence to misclassified samples. This observation further demonstrates that improving predictive performance alone is insufficient for reliable confidence estimation. 
+
+C. Model Complexity 
+
+Figure 2(c) investigates the effect of model complexity by varying the number of trainable parameters in a multilayer perceptron. Performance metrics remain nearly identical across all model sizes, with Acc and F1 consistently exceeding 0.999. Likewise, ECE and Brier score remain extremely small, suggesting excellent calibration according to conventional metrics. Surprisingly, CoE increases monotonically as model size grows, rising from 0.90 to nearly 0.99. This finding indicates that larger models become increasingly confident on their mistakes despite exhibiting near-perfect conventional calibration scores. The result highlights a potential trade-off between model capacity and confidence reliability, where additional representational power may amplify overconfidence on rare erroneous predictions. Consequently, model scaling alone does not improve confidence quality and may even exacerbate error confidence. 
+
+D. Solutions for Imbalances 
+
+Figure 2(d) compares several commonly used strategies for addressing class imbalance. Traditional sampling-based meth-ods, including over-sampling, under-sampling, and balanced sampling, produce only modest improvements in calibration behavior. Although these approaches slightly reduce CoE rela-tive to the baseline, error confidence remains consistently high. Among all methods, class-weighted loss achieves the largest re-duction in CoE, decreasing error confidence from 0.996 to 0.718 while simultaneously reducing ECE and Brier score. Focal loss also improves calibration relative to the baseline but remains less effective than class weighting. These results suggest that imbalance-aware optimization is more effective than data-level resampling for reducing overconfidence. Nevertheless, even the strongest baseline continues to exhibit substantial error confidence, indicating that class imbalance treatment alone cannot fully address the overconfidence problem. 
+
+E. Class-wise Calibration 
+
+Figure 3 compares calibration behavior between normal and abnormal logs. A consistent class-wise disparity is observed across all detectors. In terms of calibration metrics, abnormal logs exhibit substantially larger ECE, NLL, and Brier scores than normal logs, indicating that confidence estimates for anomaly predictions are considerably less reliable. The gap is particularly pronounced for LightLog, NeuralLog, and GPT2, where abnormal-class calibration errors exceed those of the normal class by more than an order of magnitude. The confidence decomposition in Figure 3(d) further reveals the source of this disparity. While both normal and abnormal correctly classified samples (Nor. CoC and Abn. CoC) generally receive high confidence, incorrectly classified abnormal samples (Abn. CoE) also receive surprisingly high confidence scores, often exceeding 0.9. In contrast, confidence on incorrectly classified normal samples (Nor. CoE) remains substantially lower and closer to the uncertainty region. This indicates that language model-based log anomaly detectors tend to be particularly overconfident when making anomaly-related mistakes, especially false negatives. These observations suggest that calibration errors are not uniformly distributed across classes. Instead, the primary calibration challenge arises from overconfident mispredictions involving anomalous logs. Consequently, improving confidence reliability for anomaly predictions is likely to yield the greatest gains in overall calibration quality, motivating the anomaly-focused route-wise calibration strategy adopted by LoRD. 
+
+F. Characterizing Error Confidence 
+
+The preceding analyses reveal a consistent pattern across different architectures, hyperparameters, and training strategies. Although ECE and Brier score often indicate moderate calibra-tion performance, confidence on erroneous predictions (CoE) remains persistently high, frequently exceeding 0.9. This sug-gests that models can appear well calibrated on average while still assigning near-maximal confidence to incorrect predictions. This discrepancy arises because conventional calibration metrics are dominated by correctly classified samples and therefore provide limited insight into confidence behavior on rare prediction errors. For log anomaly detection, such overconfident failures are particularly problematic because they may lead to missed anomalies or incorrect operational decisions. These observations consistently show that CoE remains a persistent challenge regardless of model architecture, history window length, adaptation rank, model complexity, or imbalance-handling strategy. This finding suggests that confidence on erroneous predictions is an important yet largely overlooked aspect of reliability in log anomaly detection. Consequently, we introduce CoE as a complementary reliability metric and develop a reliability-aware calibration framework that explicitly optimizes confidence quality on misclassified samples. V. L ORD S CALING 
+
+In this section, we present Log Reconstruction and Dis-tance (LoRD) , a lightweight calibration framework designed to improve reliability in log anomaly detection. Building on the observation that confidence on erroneous predictions remains persistently high across different detectors and training settings, LoRD estimates prediction reliability from latent representations and uses the resulting reliability scores to recalibrate confidence. Specifically, LoRD combines route-wise reconstruction modeling, asymmetric threshold and margin Fig. 4. Overview of LoRD with AE. Correctly classified validation samples are separated by prediction route to train route-specific AE. Reliability distances are then used to partition predictions into route-aware regions, which are subsequently mapped to confidence calibration policies. 
+
+selection, and selective confidence adjustment to better align prediction confidence with underlying prediction reliability. Given an input log sequence xi, a trained anomaly detector produces a hidden representation hi ∈ Rd, a predicted prob-ability vector pi, and a predicted label ˆyi ∈ { 0, 1}. The true label is denoted as yi, where 0 indicates normal and 1 indicates anomalous. Our goal is to recalibrate the detector confidence so that high-risk predictions, especially anomalous samples incorrectly predicted as normal, receive lower confidence while preserving the detector’s original prediction labels. 
+
+A. Representation Learning 
+
+LoRD estimates prediction reliability through route-specific conditional representation learning in the detector latent space. Let hi denote the hidden representation of sample i, and let ˆyi, y i ∈ {0, 1} denote the predicted and ground-truth labels, respectively. The key observation is that reliable normal predictions and reliable anomaly predictions follow distinct latent distributions, 
+
+p(h | ˆy = 0 , y = 0) ̸ = p(h | ˆy = 1 , y = 1) . (6) Consequently, fitting a single reliability model to all reliable samples may obscure route-specific reliability structures and reduce the separability of prediction errors. To address this issue, LoRD learns route-specific reliability models that capture the conditional latent distributions of reliable predictions: 
+
+Mr ∼ p(h | ˆy = r, y = r), r ∈ { 0, 1}, (7) where Mr denotes the reliable latent manifold associated with prediction route r. For each route, LoRD learns a representation function fr (·) and a reconstruction function gr (·). Given a sample assigned to route ˆyi, the corresponding route-specific model generates a reconstructed latent representation: 
+
+ˆhi = gˆyi (fˆyi (hi)) . (8) In this work, fr (·) and gr (·) are implemented as encoder– decoder networks, although alternative representation learning architectures can be incorporated. We estimate the reliability distance of a sample using its reconstruction error: 
+
+di = hi − ˆhi
+
+> 22
+
+, (9) where di measures the deviation of hi from the route-specific reliable manifold Mˆyi . A small reliability distance indicates that the sample is well aligned with the reliable conditional distribution of its prediction route, whereas a large distance suggests atypical latent behavior. Consequently, false negatives tend to deviate from the reliable normal manifold, while false positives tend to deviate from the reliable anomaly manifold. The resulting reliability distance provides a unified measure of prediction reliability and serves as the basis for subsequent confidence calibration. 
+
+B. Route-Aware Reliability Partitioning 
+
+LoRD constructs route-specific calibration regions based on the reliability distance from the corresponding reliable manifold. To capture route-specific error patterns, LoRD learns two thresholds, τ (1)  
+
+> r
+
+< τ (2)  
+
+> r
+
+, for each prediction route and partitions samples into low-, mid-, and high-distance regions: 
+
+Rlow  
+
+> r
+
+= {di ≤ τ (1)  
+
+> r
+
+},
+
+Rmid  
+
+> r
+
+= {τ (1)  
+
+> r
+
+< d i ≤ τ (2)  
+
+> r
+
+},
+
+Rhigh  
+
+> r
+
+= {di > τ (2)  
+
+> r
+
+}.
+
+(10) Here, τ (1)  
+
+> r
+
+and τ (2)  
+
+> r
+
+are selected on the validation set according to the route-specific target recall Rr and flagged rate ρr. In practice, Rr and ρr are selected according to the operational risk tolerance of the application. Larger Rr
+
+increases the likelihood of identifying unreliable predictions, whereas smaller ρr limits unnecessary calibration of reliable samples. The normal route (r = 0) prioritizes false-negative coverage, while the abnormal route (r = 1) prioritizes preserving reliable anomaly alarms. This partition reflects the route-dependent reliability structure. In the normal route, samples with small reliability distance are more likely to be reliable true negatives, whereas samples with large distance are more likely to be false negatives. In the abnormal route, samples with small reliability distance are more likely to be reliable true positives, whereas samples with large distance are more likely to be false positives. Samples in the mid-distance region are treated as uncertain and are left for the reject option in the subsequent calibration policy. 
+
+C. Calibration Policies 
+
+Based on the route-aware calibration map, LoRD assigns a calibration action to each route-region combination, as summarized in Table I. Predictions in the uncertain region are left unchanged through a reject option, while predictions in the reliable and high-risk regions undergo confidence adjustment according to their estimated log risk. The policy is designed to increase confidence for samples that are more likely to be safe logs and suppress confidence for samples that are more likely to be anomalous logs. Based on Table I, LoRD defines a route-region calibration policy π(r, z ), where r denotes the prediction route and z
+
+denotes the reliability-distance region. Here, pi denotes the confidence assigned to the detector’s original predicted label. LoRD is label-preserving: it recalibrates the confidence score but does not recompute the predicted label after calibration. The Identity policy leaves pi unchanged. For the remaining regions, LoRD either directly assigns a target confidence through HardAssign or gradually moves pi toward a target confidence through SoftPull. The target confidence qr,z is determined by the selected route-region policy. Specifically, the normal low-distance region uses qr,z = 1 , the normal high-distance region uses qr,z → 0.5 + ϵ, the abnormal low-distance region uses qr,z → 1, and the abnormal high-distance region uses qr,z = 0 .5 + ϵ.For SoftPull, the adjustment strength is determined by the distance to the nearest calibration boundary: 
+
+αi = 1 − exp 
+
+
+
+− ∆i
+
+s
+
+
+
+, αi ∈ [0 , 1] , (11) where ∆i denotes the boundary distance and s is a scale parameter determined by the corresponding margin. The recalibrated confidence is computed as 
+
+pnew  
+
+> i
+
+= (1 − αi)pi + αiqr,z , (12) where qr,z is specified by the selected calibration policy. Thus, samples close to the boundary are only mildly adjusted, while                           
+
+> TABLE I ROUTE -REGION CALIBRATION POLICY MAP π.
+> Route Rlow
+> rRmid
+> rRhigh
+> r
+> Normal (r= 0) HardAssign: p= 1 Identity SoftPull: p→0.5 + ϵ
+> Abnormal (r= 1) SoftPull: p→1Identity HardAssign: p= 0 .5 + ϵ
+
+Algorithm 1 LoRD Calibration 
+
+Require: Detector fθ , validation set Dsel , test set Dtest , route targets 
+
+{(Rr , ρ r )}r∈{ 0,1}, calibration policy π
+
+Ensure: Calibrated probabilities pnew i 
+
+> 1:
+
+Obtain (ˆ yi, y i, pi, hi) from fθ (Dsel ) 
+
+> 2:
+
+ˆyi, y i ∈ { 0, 1}, where 0 is normal and 1 is abnormal  
+
+> 3:
+
+for r ∈ { 0, 1} do  
+
+> 4:
+
+Define route-reliable set Tr = {i : ˆ yi = r, y i = r} 
+
+> 5:
+
+Define route-error set Er = {i : ˆ yi = r, y i̸ = r} 
+
+> 6:
+
+Train route autoencoder (fr , g r ) on {hi : i ∈ T r } 
+
+> 7:
+
+Compute dri = ∥hi − gr (fr (hi)) ∥22 for i ∈ T r ∪ E r 
+
+> 8:
+
+Update Rlow r , Rmid r , Rhigh r under (Rr , ρ r ) with Er 
+
+> 9:
+
+end for  
+
+> 10:
+
+for i ∈ D test do  
+
+> 11:
+
+Obtain (ˆ yi, pi, hi) from fθ (xi) 
+
+> 12:
+
+Set route r ← ˆyi 
+
+> 13:
+
+Compute dri = ∥hi − gr (fr (hi)) ∥22 
+
+> 14:
+
+Calibrate pi with π given dri 
+
+> 15:
+
+end for 
+
+samples farther away are pulled more strongly toward the target confidence. For HardAssign, LoRD directly sets pnew  
+
+> i
+
+= qr,z .
+
+D. Algorithm 
+
+We summarize the calibration framework in Algorithm 1. LoRD performs route-specific confidence calibration by model-ing the latent representations of reliable predictions separately for the normal and abnormal routes. First, the base detector is applied to a validation set to obtain predicted labels, confidence scores, and hidden representations. For each route 
+
+r ∈ { 0, 1}, correctly classified samples are treated as route-reliable instances, while misclassified samples form the route-error set. A route-specific autoencoder is then trained on the latent representations of reliable samples to learn the characteristic feature distribution of trustworthy predictions. Reconstruction distances are computed for both reliable and error samples, and these distances are used to construct low-, medium-, and high-reliability regions according to predefined route-specific targets. During inference, each test sample is assigned to its predicted route, and its reconstruction distance is evaluated using the corresponding route autoencoder. The resulting distance serves as a reliability indicator that is mapped through a calibration policy to adjust the detector’s original confidence score, producing calibrated probabilities that better reflect prediction reliability. VI. E XPERIMENTS 
+
+A. Datasets 
+
+We evaluate our method on four large-scale supercomputing log datasets: BGL [31], Spirit [31], Liberty [31], and Thun-derbird [31], covering anomaly ratios ranging from 0.49% to 32.01%. Following prior work, we use 4.7M log messages from BGL, the first 5M log messages from Spirit and Liberty, and 10M log messages from Thunderbird. To prevent information leakage, each dataset is chronologically partitioned into non-overlapping training, detector-validation, selector-validation, and test splits with a ratio of 7 : 0 .5 : 0 .5 : 2 . The training split is used to optimize the base detector, the detector-validation split is used for early stopping and checkpoint selection, and the selector-validation split is used for calibrator training and threshold selection. When route-specific validation errors are unavailable in the selector-validation split, the detector-validation split is used as a fallback. The test split is reserved exclusively for final evaluation. 
+
+B. Log Anomaly Detectors 
+
+We evaluate five widely used supervised log anomaly detectors covering both conventional deep learning and lan-guage model-based approaches: TextCNN [12], which employs multi-scale one-dimensional convolutions to capture local log patterns; LogRobust [13], which models log sequences using an attention-enhanced bidirectional recurrent network; 
+
+LightLog [14], which combines compressed semantic log representations with a lightweight temporal convolutional architecture; NeuralLog [15], which leverages pretrained language-model embeddings and a Transformer encoder to capture contextual dependencies; and GPT2 [17], which adapts a pretrained large language model for log anomaly detection through direct sequence modeling of log text. Unless otherwise specified, all detectors are evaluated at the log-sequence level using a sliding-window configuration with history length 10 and stride 1. 
+
+C. Baseline Calibration Methods 
+
+We compare LoRD against five representative post-hoc cali-bration methods. Temperature Scaling (TempS) [27] calibrates confidence using pTS  
+
+> i
+
+= softmax( zi/T ), where T is optimized on a validation set. Logistic Scaling (LogS) [27] generalizes TS through a learnable affine transformation, pLS  
+
+> i
+
+= softmax( w ⊙
+
+zi + b). Beta Scaling (BetaS) [28] performs probability-level calibration using pBS  
+
+> i
+
+= σ(a log pi + b log(1 − pi) + c).
+
+Selective Scaling (SeleS) [29] applies separate temperatures to selected high-risk and low-risk predictions based on output-level signals such as confidence, entropy, or logit margin. 
+
+Ensembling (Ens.) [29] averages predictions from multiple independently trained detectors, pEns  
+
+> i
+
+= 1
+
+> K
+
+PKk=1 p(k) 
+
+> i
+
+. All calibration parameters are optimized using the validation set. 
+
+D. Results 1) Performance: The main experiments show that LoRD consistently improves calibration reliability for anomalous log detection across datasets and base detectors. In Table II, LoRD obtains the lowest CoE in nearly every dataset–model combination, indicating that it effectively suppresses overconfi-dent misclassifications without degrading the detector’s overall discrimination ability. Compared to standard post-hoc methods such as Temperature Scaling, Logistic Scaling, Beta Scaling, Selective Scaling, and Ensembling, LoRD yields substantially lower error confidence while preserving reliable anomaly alarms. This behavior is pronounced for language-model-based and high-capacity detectors, where LoRD reduces CoE from values near one to values close to 0.5 in many settings. LoRD also maintains high confidence on correctly classified anomalous samples, as reflected by its robustness in CoC values. This demonstrates that the proposed route-wise reconstruction mechanism selectively lowers confidence on risky predictions while retaining trustworthy anomaly detections. These results confirm that LoRD provides a task-driven calibration trade-off that is well suited for supervised log anomaly detection. 
+
+2) Ablation study: Table III first evaluates the necessity of route-specific reliability modeling in LoRD. Replacing the route-specific autoencoders with a single shared autoencoder (SingleAE) consistently degrades abnormal calibration across all datasets and detectors. For example, with LogRobust on Spirit, Abn. CoE increases from 0.508 to 0.516 , while with NeuralLog on Liberty it increases from 0.680 to 0.788 .These results suggest that predicted-normal and predicted-abnormal samples follow distinct reliability patterns in the latent space. A shared reconstruction model must simul-taneously characterize both distributions, which may blur route-dependent reliability structures and reduce its ability to distinguish reliable predictions from potential errors. In contrast, route-specific modeling allows each autoencoder to learn a more homogeneous reliability manifold, resulting in improved separation between reliable and unreliable predictions. This observation is consistent with our hypothesis that normal and abnormal prediction routes exhibit different latent reliability characteristics and therefore benefit from separate modeling. We next evaluate the contributions of the two remaining components of LoRD: the reject region mechanism and the distance aware soft calibration strategy. Because confidence calibration involves multiple objectives, including preserving confidence on correctly classified samples while suppressing confidence on misclassified samples, we introduce two aggre-gate measures to summarize overall calibration quality. Let 
+
+x = ( x1, . . . , x m) denote a set of calibration objectives. For each objective xj , we define a target value tj , where tj = 1 
+
+for correct prediction confidence metrics and tj = 0 .5 for error confidence metrics. The objective deviation vector is defined as 
+
+z = ( |x1 − t1|, . . . , |xm − tm|) . We then define the aggregate calibration distance as D = ∥z∥2. To obtain a normalized relative score, we further define C = ∥z−z−∥2 
+
+> ∥z∥2+∥z−z−∥2
+
+,where z−
+
+denotes the worst achievable deviation vector. Smaller D and larger C indicate better overall calibration quality. Tables IV and V show that removing either the reject region or the soft calibration component consistently degrades overall calibration quality. For example, on Spirit with LogRobust, LoRD achieves the best performance with D = 0 .405 and 
+
+C = 0 .783 , outperforming both w/o Reject ( D = 0 .468 , C =0.754 ) and w/o Soft ( D = 0 .415 , C = 0 .776 ). Similar trends are observed on Liberty and with NeuralLog, indicating that the two components provide complementary benefits. These results demonstrate that route specific reliability modeling, the reject TABLE II CALIBRATION PERFORMANCE MEASURED BY COE ON ANOMALOUS LOG DETECTION ACROSS BENCHMARK DATASETS AND REPRESENTATIVE DETECTORS .REPORTED VALUES DENOTE MEAN COE WITH STANDARD DEVIATION OVER MULTIPLE RUNS , WHERE LOWER VALUES INDICATE BETTER PERFORMANCE .THE BEST AND SECOND -BEST RESULTS IN EACH ROW ARE HIGHLIGHTED IN BOLD AND UNDERLINED ITALICS .
+
+Dataset Model Uncal TempS LogS BetaS SeleS Ens. LoRD 
+
+BGL TextCNN 0.977 ±0.003 0.976 ±0.004 0.988 ±0.002 0.989 ±0.003 0.968 ±0.005 0.966 ±0.005 0.540 ±0.006 
+
+LogRobust 0.987 ±0.009 0.973 ±0.016 0.988 ±0.004 0.988 ±0.003 0.907 ±0.098 0.748 ±0.163 0.577 ±0.092 
+
+LightLog 0.829 ±0.022 0.983 ±0.007 0.967 ±0.009 0.979 ±0.004 0.831 ±0.015 0.998 ±0.000 0.702 ±0.036 
+
+NeuralLog 0.990 ±0.002 0.975 ±0.007 0.974 ±0.007 0.988 ±0.001 0.847 ±0.016 0.985 ±0.001 0.509 ±0.002 
+
+GPT2 0.998 ±0.000 0.992 ±0.000 0.993 ±0.000 0.991 ±0.000 1.000 ±0.000 0.998 ±0.000 0.566 ±0.002 
+
+Spirit TextCNN 0.890 ±0.055 0.862 ±0.051 0.776 ±0.091 0.833 ±0.056 0.858 ±0.039 0.926 ±0.009 0.556 ±0.022 
+
+LogRobust 0.957 ±0.007 0.936 ±0.005 0.929 ±0.009 0.950 ±0.011 0.930 ±0.021 0.951 ±0.010 0.506 ±0.004 
+
+LightLog 0.959 ±0.014 0.983 ±0.007 0.967 ±0.009 0.979 ±0.004 0.929 ±0.010 0.948 ±0.029 0.514 ±0.014 
+
+NeuralLog 0.996 ±0.003 0.975 ±0.007 0.974 ±0.007 0.988 ±0.001 0.972 ±0.009 0.991 ±0.006 0.508 ±0.007 
+
+GPT2 0.936 ±0.000 1.000 ±0.000 0.982 ±0.009 0.942 ±0.000 0.998 ±0.001 0.936 ±0.001 0.500 ±0.000 
+
+Liberty TextCNN 0.979 ±0.002 0.972 ±0.003 0.881 ±0.025 0.933 ±0.013 0.949 ±0.016 0.967 ±0.002 0.506 ±0.002 
+
+LogRobust 0.937 ±0.050 0.930 ±0.052 0.944 ±0.020 0.979 ±0.007 0.958 ±0.036 0.952 ±0.038 0.502 ±0.002 
+
+LightLog 0.959 ±0.015 0.960 ±0.020 0.925 ±0.044 0.979 ±0.007 0.861 ±0.022 0.916 ±0.030 0.505 ±0.001 
+
+NeuralLog 0.995 ±0.005 0.994 ±0.006 0.982 ±0.007 0.995 ±0.003 0.995 ±0.004 0.995 ±0.006 0.683 ±0.018 
+
+GPT2 1.000 ±0.000 0.993 ±0.003 0.994 ±0.000 0.988 ±0.001 1.000 ±0.000 1.000 ±0.000 0.590 ±0.004 
+
+Thunderbird TextCNN 0.852 ±0.020 0.884 ±0.007 0.910 ±0.027 0.999 ±0.000 0.708 ±0.052 0.737 ±0.013 0.561 ±0.040 
+
+LogRobust 0.926 ±0.033 0.929 ±0.048 0.902 ±0.093 0.995 ±0.004 0.898 ±0.036 0.706 ±0.076 0.619 ±0.123 
+
+LightLog 0.656 ±0.016 0.973 ±0.036 0.975 ±0.038 0.999 ±0.001 0.905 ±0.063 0.723 ±0.048 0.500 ±0.000 
+
+NeuralLog 0.852 ±0.087 0.947 ±0.061 0.951 ±0.062 0.991 ±0.005 0.902 ±0.087 0.881 ±0.060 0.516 ±0.021 
+
+GPT2 1.000 ±0.000 1.000 ±0.000 1.000 ±0.000 0.994 ±0.010 1.000 ±0.000 1.000 ±0.000 0.534 ±0.008 
+
+TABLE III ABLATION STUDY OF LORD ON BGL, S PIRIT , AND LIBERTY WITH LOG ROBUST AND NEURAL LOG AS BASE DETECTORS . A BN . C OC AND ABN . C OE
+
+DENOTE THE AVERAGE CONFIDENCE ON CORRECTLY AND INCORRECTLY CLASSIFIED ABNORMAL SAMPLES , RESPECTIVELY .
+
+Detector Architecture BGL Spirit Liberty Abn. CoC ↑ Abn. CoE ↓ Abn. CoC ↑ Abn. CoE ↓ Abn. CoC ↑ Abn. CoE ↓
+
+LogRobust SingleAE 0.562 ±0.066 0.582 ±0.038 0.556 ±0.041 0.516 ±0.011 0.740 ±0.049 0.506 ±0.002 
+
+Route-0-Only 0.993 ±0.005 0.542 ±0.002 0.999 ±0.001 0.583 ±0.018 0.999 ±0.001 0.617 ±0.050 
+
+LoRD 0.990 ±0.003 0.541 ±0.002 0.999 ±0.000 0.508 ±0.003 0.986 ±0.008 0.502 ±0.001 
+
+NeuralLog SingleAE 0.549 ±0.052 0.610 ±0.023 0.647 ±0.111 0.543 ±0.059 0.783 ±0.033 0.788 ±0.200 
+
+Route-0-Only 0.998 ±0.001 0.506 ±0.002 0.998 ±0.001 0.575 ±0.059 1.000 ±0.000 0.716 ±0.044 
+
+LoRD 0.998 ±0.001 0.506 ±0.002 0.999 ±0.001 0.511 ±0.008 1.000 ±0.000 0.680 ±0.047 
+
+TABLE IV ABLATION STUDY OF LORD ON SPIRIT AND LIBERTY WITH LOG ROBUST AS THE BASE DETECTOR . C OC AND COE DENOTE THE AVERAGE CONFIDENCE ON CORRECTLY AND INCORRECTLY CLASSIFIED SAMPLES , RESPECTIVELY . L OWER D AND HIGHER C INDICATE BETTER OVERALL CALIBRATION QUALITY .
+
+Spirit Liberty Method Nor. CoC ↑ Nor. CoE ↓ Abn. CoC ↑ Abn. CoE ↓ D ↓ C ↑ Nor. CoC ↑ Nor. CoE ↓ Abn. CoC ↑ Abn. CoE ↓ D ↓ C ↑
+
+w/o Reject 0.899 0.957 1.000 0.504 0.468 0.754 0.856 0.922 0.994 0.501 0.446 0.759 w/o Soft 0.908 0.905 1.000 0.503 0.415 0.776 0.879 0.843 0.988 0.501 0.364 0.796 
+
+LoRD 0.942 0.901 1.000 0.509 0.405 0.783 0.916 0.812 0.986 0.502 0.323 0.817 
+
+region mechanism, and distance aware soft calibration work together to improve confidence reliability without sacrificing anomaly detection performance. VII. C ONCLUSION 
+
+We propose LoRD, a lightweight post-hoc calibration framework for supervised log anomaly detection. By training separate autoencoders for predicted-normal and predicted-anomalous routes, LoRD captures route-specific reliability signals from detector latent representations and selectively recalibrates high-risk predictions while preserving the original detection labels. Experiments on multiple benchmark datasets and representative detectors show that LoRD effectively reduces confidence on misclassified anomalous samples, maintains trust-worthy anomaly alarms, and outperforms standard scaling and ensemble-based calibration baselines. These results demonstrate the effectiveness of task-oriented, route-aware calibration for improving the reliability of real-world log anomaly detection systems. VIII. L IMITATIONS 
+
+LoRD has several limitations. First, its threshold and margin selection depend on route-specific validation errors, so the calibration boundary may be less stable when false negatives TABLE V ABLATION STUDY OF LORD ON ABNORMAL LOG CALIBRATION USING LOG ROBUST AND NEURAL LOG AS BASE DETECTORS . “ W/O REJECT ” AND “W/O
+
+SOFT ” REMOVE THE REJECT REGION AND SOFT PULL CALIBRATION , RESPECTIVELY . L OWER D AND HIGHER C INDICATE BETTER OVERALL CALIBRATION .
+
+Spirit Liberty Method CoC ↑ CoE ↓ D ↓ C ↑ CoC ↑ CoE ↓ D ↓ C ↑
+
+LogRobust 
+
+w/o Reject 1.000 0.504 0.468 0.754 0.994 0.501 0.446 0.759 w/o Soft 1.000 0.503 0.415 0.776 0.988 0.501 0.364 0.796 
+
+LoRD 1.000 0.509 0.405 0.783 0.986 0.502 0.323 0.817 NeuralLog 
+
+w/o Reject 1.000 0.507 0.508 0.736 1.000 0.572 0.450 0.757 w/o Soft 1.000 0.507 0.506 0.741 1.000 0.602 0.395 0.790 
+
+LoRD 1.000 0.513 0.495 0.747 1.000 0.680 0.354 0.814 
+
+or false positives are rare. Second, LoRD is a task-oriented calibration method. It focuses on reducing the confidence of high-risk errors rather than improving all aggregate calibration metrics, which may lead to trade-offs in metrics such as ECE, NLL, or Brier score. Third, LoRD requires access to detector hidden representations and is therefore more suitable for white-box or gray-box detectors. Future work will extend LoRD to stronger distribution shifts and multi-class diagnosis. IX. A CKNOWLEDGMENT 
+
+This research was supported by the National Natural Science Foundation of China (No.62376023). REFERENCES [1] N. Han, S. Lu, D. Wang, M. Wang, X. Tan, and X. Wei, “Skd-log: self-knowledge distillation-based cnn for abnormal log detec-tion,” in 2022 IEEE Smartworld, Ubiquitous Intelligence & Com-puting, Scalable Computing & Communications, Digital Twin, Pri-vacy Computing, Metaverse, Autonomous & Trusted Vehicles (Smart-World/UIC/ScalCom/DigitalTwin/PriComp/Meta) . IEEE, 2022, pp. 796– 805. [2] S. Lu, N. Han, M. Wang, X. Wei, Z. Lin, and D. Wang, “Ssdlog: a semi-supervised dual branch model for log anomaly detection,” World Wide Web , vol. 26, no. 5, pp. 3137–3153, 2023. [3] S. Lu, M. Wang, D. Wang, X. Wei, S. Xiao, Z. Wang, N. Han, and L. Wang, “Black-box attacks against log anomaly detection with adversarial examples,” Information Sciences , vol. 619, pp. 249–262, 2023. [4] S. Nedelkoski, J. Bogatinovski, A. Acker, J. Cardoso, and O. Kao, “Self-attentive classification-based anomaly detection in unstructured logs,” in 
+
+2020 IEEE international conference on data mining (ICDM) . IEEE, 2020, pp. 1196–1201. [5] V.-H. Le and H. Zhang, “Log-based anomaly detection with deep learning: How far are we?” in Proceedings of the 44th international conference on software engineering , 2022, pp. 1356–1367. [6] M. Landauer, F. Skopik, and M. Wurzenberger, “A critical review of common log data sets used for evaluation of sequence-based anomaly detection techniques,” Proceedings of the ACM on Software Engineering ,vol. 1, no. FSE, pp. 1354–1375, 2024. [7] J. Zhu, S. He, P. He, J. Liu, and M. R. Lyu, “Loghub: A large collection of system log datasets for ai-driven log analytics,” in 2023 IEEE 34th International Symposium on Software Reliability Engineering (ISSRE) .IEEE, 2023, pp. 355–366. [8] L. Wu, B. Lei, D. Xu, and D. Zhou, “Towards reliable rare category analysis on graphs via individual calibration,” in Proceedings of the 29th ACM SIGKDD Conference on Knowledge Discovery and Data Mining ,2023, pp. 2629–2638. [9] M. Du, F. Li, G. Zheng, and V. Srikumar, “Deeplog: Anomaly detection and diagnosis from system logs through deep learning,” in Proceedings of the 2017 ACM SIGSAC conference on computer and communications security , 2017, pp. 1285–1298. [10] W. Meng, Y. Liu, Y. Zhu, S. Zhang, D. Pei, Y. Liu, Y. Chen, R. Zhang, S. Tao, P. Sun et al. , “Loganomaly: Unsupervised detection of sequential and quantitative anomalies in unstructured logs.” in Ijcai , vol. 19, no. 7, 2019, pp. 4739–4745. [11] L. Yang, J. Chen, Z. Wang, W. Wang, J. Jiang, X. Dong, and W. Zhang, “Plelog: Semi-supervised log-based anomaly detection via probabilistic label estimation,” in 2021 IEEE/ACM 43rd International Conference on Software Engineering: Companion Proceedings (ICSE-Companion) .IEEE, 2021, pp. 230–231. [12] S. Lu, X. Wei, Y. Li, and L. Wang, “Detecting anomaly in big data system logs using convolutional neural network,” in 2018 IEEE 16th Intl Conf on Dependable, Autonomic and Secure Computing, 16th Intl Conf on Pervasive Intelligence and Computing, 4th Intl Conf on Big Data Intelligence and Computing and Cyber Science and Technology Congress (DASC/PiCom/DataCom/CyberSciTech) , 2018, pp. 151–158. [13] X. Zhang, Y. Xu, Q. Lin, B. Qiao, H. Zhang, Y. Dang, C. Xie, X. Yang, Q. Cheng, Z. Li et al. , “Robust log-based anomaly detection on unstable log data,” in Proceedings of the 2019 27th ACM joint meeting on European software engineering conference and symposium on the foundations of software engineering , 2019, pp. 807–817. [14] Z. Wang, J. Tian, H. Fang, L. Chen, and J. Qin, “Lightlog: A lightweight temporal convolutional network for log anomaly detection on the edge,” 
+
+Computer Networks , vol. 203, p. 108616, 2022. [15] V.-H. Le and H. Zhang, “Log-based anomaly detection without log parsing,” in 2021 36th IEEE/ACM International Conference on Automated Software Engineering (ASE) . IEEE, 2021, pp. 492–504. [16] W. Guan, J. Cao, S. Qian, J. Gao, and C. Ouyang, “Logllm: Log-based anomaly detection using large language models,” arXiv preprint arXiv:2411.08561 , 2024. [17] Y. F. Lim, J. Zhu, and G. Pang, “Adapting large language models for parameter-efficient log anomaly detection,” in Pacific-Asia Conference on Knowledge Discovery and Data Mining . Springer, 2025, pp. 325–337. [18] J. Gawlikowski, C. R. N. Tassi, M. Ali, J. Lee, M. Humt, J. Feng, A. Kruspe, R. Triebel, P. Jung, R. Roscher et al. , “A survey of uncertainty in deep neural networks,” Artificial intelligence review , vol. 56, no. Suppl 1, pp. 1513–1589, 2023. [19] R. Müller, S. Kornblith, and G. E. Hinton, “When does label smoothing help?” Advances in neural information processing systems , vol. 32, 2019. [20] G. Pereyra, G. Tucker, J. Chorowski, Ł. Kaiser, and G. Hinton, “Reg-ularizing neural networks by penalizing confident output distributions,” 
+
+arXiv preprint arXiv:1701.06548 , 2017. [21] S. Thulasidasan, G. Chennupati, J. A. Bilmes, T. Bhattacharya, and S. Michalak, “On mixup training: Improved calibration and predictive uncertainty for deep neural networks,” Advances in neural information processing systems , vol. 32, 2019. [22] J. Mukhoti, V. Kulharia, A. Sanyal, S. Golodetz, P. Torr, and P. Dokania, “Calibrating deep neural networks using focal loss,” Advances in neural information processing systems , vol. 33, pp. 15 288–15 299, 2020. [23] Y. Cui, M. Jia, T.-Y. Lin, Y. Song, and S. Belongie, “Class-balanced loss based on effective number of samples,” in Proceedings of the IEEE/CVF conference on computer vision and pattern recognition , 2019, pp. 9268– 9277. [24] Y. Gal and Z. Ghahramani, “Dropout as a bayesian approximation: Representing model uncertainty in deep learning,” in international conference on machine learning . PMLR, 2016, pp. 1050–1059. [25] B. Lakshminarayanan, A. Pritzel, and C. Blundell, “Simple and scalable predictive uncertainty estimation using deep ensembles,” Advances in neural information processing systems , vol. 30, 2017. [26] A. G. Wilson and P. Izmailov, “Bayesian deep learning and a probabilistic perspective of generalization,” Advances in neural information processing systems , vol. 33, pp. 4697–4708, 2020. [27] C. Guo, G. Pleiss, Y. Sun, and K. Q. Weinberger, “On calibration of modern neural networks,” in International conference on machine learning . PMLR, 2017, pp. 1321–1330. [28] M. Kull, T. Silva Filho, and P. Flach, “Beta calibration: a well-founded and easily implemented improvement on logistic calibration for binary classifiers,” in Artificial intelligence and statistics . PMLR, 2017, pp. 623–631. [29] D. Wang, B. Gong, and L. Wang, “On calibrating semantic segmentation models: Analyses and an algorithm,” in Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition , 2023, pp. 23 652–23 662. [30] M. P. Naeini, G. Cooper, and M. Hauskrecht, “Obtaining well calibrated probabilities using bayesian binning,” in Proceedings of the AAAI conference on artificial intelligence , vol. 29, no. 1, 2015. [31] A. Oliner and J. Stearley, “What supercomputers say: A study of five system logs,” in 37th annual IEEE/IFIP international conference on dependable systems and networks (DSN’07) . IEEE, 2007, pp. 575–584.

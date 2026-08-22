@@ -1,0 +1,466 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-08-22T20:47:23.254310+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 2,
+    "deep_divecandidates": 3,
+    "deep_cap": 7,
+    "deep_selected": 3,
+    "quick_candidates": 7,
+    "quick_skim_target": 12,
+    "quick_selected": 7
+  },
+  "deep_dive": [
+    {
+      "id": "2608.18948v1",
+      "source": "arxiv",
+      "title": "RoboEdit: Turning Human Manipulation Videos into Scalable Robot Experience",
+      "abstract": "Collecting robot hand-object interaction data is costly and embodiment-specific, yet abundant human-object videos remain unusable for robot training. We present RoboEdit, a human-to-robot video editing suite that transforms human manipulation videos into action-consistent, physically plausible robot videos with aligned 3D hand states. To enable scalable supervision, we introduce RoboEdit-ADC, an automatic pipeline that reconstructs and retargets 3D interactions from RGB videos across embodiments. This pipeline generates RoboEdit-14M, a large-scale dataset of 174K aligned video pairs (14M frames) spanning seven robot embodiments, diverse scenes, and interaction types. The core editing engine, RoboEdit-Trans, employs cross-embodiment adaptation modules to preserve temporal coherence while adapting appearance and motion. It further integrates a 3D Robot-State Decoder to recover per-frame hand states for structured motion supervision. Experiments show that RoboEdit achieves state-of-the-art editing quality and supports downstream robot control policies in real-world manipulation tasks. Ultimately, the RoboEdit suite unlocks the vast potential of unlabeled human videos, providing scalable, high-fidelity visual and 3D motion supervision for generalizable robot learning.",
+      "authors": [
+        "Yaowei Guo",
+        "Zeng Tao",
+        "Yuxin Jiang",
+        "Yunuo Chen",
+        "Zhiyang Dou",
+        "Yuxiang Ma",
+        "Yin Yang",
+        "Demetri Terzopoulos",
+        "Ying Jiang",
+        "Chenfanfu Jiang"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-08-19T14:15:36+00:00",
+      "link": "https://arxiv.org/pdf/2608.18948v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "Large-scale robot dataset construction from human manipulation videos (RoboEdit-14M)",
+      "llm_evidence_cn": "从人类操作视频构建大规模机器人数据集（RoboEdit-14M）",
+      "llm_evidence": "从人类操作视频构建大规模机器人数据集（RoboEdit-14M）",
+      "canonical_evidence": "从人类操作视频构建大规模机器人数据集（RoboEdit-14M）",
+      "llm_tldr_en": "RoboEdit converts human videos into physically plausible robot videos with 3D hand states, generating a 174K-pair, 14M-frame dataset across seven embodiments. It enables scalable robot data collection.",
+      "llm_tldr_cn": "机器人手-物交互数据采集成本高昂且受具体本体限制，大量人类操作视频无法直接用于机器人训练。为此提出RoboEdit，将人类操作视频编辑为动作一致、物理上合理的机器人视频，并与3D手部状态对齐。其自动管线RoboEdit-ADC可从RGB视频中跨本体重建和重定向交互，构建包含174K对齐视频对（14M帧）的RoboEdit-14M数据集，覆盖七种机器人本体与多种场景。该工作为机器人技能学习提供了可扩展的大规模数据生成途径。",
+      "llm_tldr": "机器人手-物交互数据采集成本高昂且受具体本体限制，大量人类操作视频无法直接用于机器人训练。为此提出RoboEdit，将人类操作视频编辑为动作一致、物理上合理的机器人视频，并与3D手部状态对齐。其自动管线RoboEdit-ADC可从RGB视频中跨本体重建和重定向交互，构建包含174K对齐视频对（14M帧）的RoboEdit-14M数据集，覆盖七种机器人本体与多种场景。该工作为机器人技能学习提供了可扩展的大规模数据生成途径。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2608.20114v1",
+      "source": "arxiv",
+      "title": "DECOWAM: Decoupled Whole-Body World-Action Model for Legged Mobile Manipulation",
+      "abstract": "Mobile manipulation requires a robot to predict how locomotion and arm motion jointly alter future observations and control. Existing world-action models, developed largely for fixed-base platforms, do not explicitly distinguish camera ego-motion from base and arm actions. Here we introduce DECOWAM, a whole-body world-action model that separates these factors through dedicated conditional interfaces. DECOWAM freezes an adapted FastWAM backbone and trains residual adapters, an action-equivalent future bottleneck distilled from privileged observations, adversarially separated base and arm latents, and base-velocity conditioning for video prediction. We further introduce ARMDOG, a real-robot dataset that synchronizes video, whole-body state and action, and language. On a fixed replay protocol, DECOWAM improved both future-video and action prediction over FastWAM, reducing action MSE by 21.7% with 25.95M trainable adaptation parameters. Across 79 closed-loop trials per method, it achieved the highest observed whole-body coordination and base-displacement robustness among the compared systems, while task completion remained comparable to the strongest baseline. These results show that embodiment-aware factorization can support parameter-efficient joint visual prediction and whole-body control under moving viewpoints.",
+      "authors": [
+        "Siyuan Ma",
+        "Boshi Zhang",
+        "Yutian Zhang",
+        "Qinglian Wu",
+        "Jiaqi Zhai",
+        "Dong Wei",
+        "Qiaojun Yu"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI",
+        "cs.RO"
+      ],
+      "published": "2026-08-20T14:44:11+00:00",
+      "link": "https://arxiv.org/pdf/2608.20114v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "introduces ARMDOG, a real-robot dataset synchronizing video and whole-body state for legged mobile manipulation",
+      "llm_evidence_cn": "提出ARMDOG真实机器人数据集，同步视频与全身状态，用于腿式移动操作",
+      "llm_evidence": "提出ARMDOG真实机器人数据集，同步视频与全身状态，用于腿式移动操作",
+      "canonical_evidence": "提出ARMDOG真实机器人数据集，同步视频与全身状态，用于腿式移动操作",
+      "llm_tldr_en": "Presents DECOWAM, a decoupled whole-body world-action model, and introduces ARMDOG, a real-robot dataset synchronizing video, whole-body state, and actions, supporting dataset construction for legged mobile manipulation.",
+      "llm_tldr_cn": "该文提出解耦全身世界动作模型DECOWAM，区分相机自运动与基座/机械臂动作，并引入ARMDOG真实机器人数据集，该数据集同步视频、全身状态和动作，为腿式移动操作研究提供基础。虽然数据集面向腿式平台而非人形机器人，但其同步多模态数据的数据集构建方法对机器人数据集构建具有直接参考价值。",
+      "llm_tldr": "该文提出解耦全身世界动作模型DECOWAM，区分相机自运动与基座/机械臂动作，并引入ARMDOG真实机器人数据集，该数据集同步视频、全身状态和动作，为腿式移动操作研究提供基础。虽然数据集面向腿式平台而非人形机器人，但其同步多模态数据的数据集构建方法对机器人数据集构建具有直接参考价值。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2608.18716v1",
+      "source": "arxiv",
+      "title": "Multi-Class Electrical and Mechanical Fault Classification Using Random Convolutional Kernels",
+      "abstract": "Diagnosing faults in rotating machinery is essential for ensuring the reliability of industrial processes. Random convolutional kernel-based Time Series Classification (TSC) methods, such as ROCKET and its variants, provide an attractive trade-off between predictive performance and computational efficiency. In this work, we evaluate SelF-Rocket for the multi-class diagnosis of both mechanical and electrical faults and introduce, as a new contribution, a multivariate extension of the original method. The proposed approach is compared with leading ROCKET-based methods on two public benchmark datasets, MaFaulDa (mechanical faults) and ITSC-UDG (stator inter-turn short circuits), under both univariate and multivariate settings. Experimental results show that SelF-Rocket achieves the best overall accuracy-latency trade-off among the evaluated methods, obtaining the highest classification performance on MaFaulDa while remaining highly competitive on the more challenging ITSC-UDG dataset.",
+      "authors": [
+        "Mouhamadou Mansour Lo",
+        "Mouad Talbaoui",
+        "Gildas Morvan",
+        "Mathieu Rossi",
+        "Fabrice Morganti",
+        "David Mercier"
+      ],
+      "primary_category": "cs.LG",
+      "categories": [
+        "cs.LG"
+      ],
+      "published": "2026-08-19T09:18:32+00:00",
+      "link": "https://arxiv.org/pdf/2608.18716v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "multi-class fault classification using time series classification on mechanical/electrical faults",
+      "llm_evidence_cn": "使用时间序列分类进行机械与电气故障的多分类诊断",
+      "llm_evidence": "使用时间序列分类进行机械与电气故障的多分类诊断",
+      "canonical_evidence": "使用时间序列分类进行机械与电气故障的多分类诊断",
+      "llm_tldr_en": "Fault diagnosis in rotating machinery is essential. This paper evaluates SelF-Rocket and a new multivariate extension for multi-class electrical and mechanical fault classification, showing compelling performance on MaFaulDa and ITSC-UDG benchmarks with time series classification methods.",
+      "llm_tldr_cn": "旋转机械的故障诊断对工业可靠性至关重要。基于随机卷积核的时间序列分类方法（如ROCKET）在精度和计算效率之间提供了良好折中。该工作在SelF-Rocket基础上引入多元扩展，用于多类机械与电气故障诊断，并在MaFaulDa和ITSC-UDG两个公共基准上进行了单变量和多变量对比实验。结果显示所提方法具备良好性能。该研究为基于时间序列信号的故障诊断提供了高效且可迁移的分类方法，对机器人等设备的状态监测有借鉴价值。",
+      "llm_tldr": "旋转机械的故障诊断对工业可靠性至关重要。基于随机卷积核的时间序列分类方法（如ROCKET）在精度和计算效率之间提供了良好折中。该工作在SelF-Rocket基础上引入多元扩展，用于多类机械与电气故障诊断，并在MaFaulDa和ITSC-UDG两个公共基准上进行了单变量和多变量对比实验。结果显示所提方法具备良好性能。该研究为基于时间序列信号的故障诊断提供了高效且可迁移的分类方法，对机器人等设备的状态监测有借鉴价值。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "fault diagnosis for humanoid robots",
+      "matched_requirement_id": "req-3",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "quick_skim": [
+    {
+      "id": "2608.19490v1",
+      "source": "arxiv",
+      "title": "Fine-Tuning VLAs with Self-Demonstrated Generative Control for Multi-Task Manipulation",
+      "abstract": "State-of-the-art vision-language-action (VLA) models such as $π_{0.5}$ exhibit strong semantic understanding, instruction following and task behavior. However, when deployed on new robots, even minor mismatches in hardware configuration relative to pretraining can cause severe performance drops. Finetuning the VLA on in-domain expert data from the new embodiment improves performance on the expert task but leads to a loss in its original instruction following and behavioral priors. In this paper, we propose a self-supervised method that generates online interaction rollouts from the zero-shot VLA as additional training data for finetuning. Our experiments show this finetuning scheme yields strong multi-task policies that, on the target robot, (1) inherit prior tasks distilled from the zero-shot model, (2) enable generalist instruction following, while (3) learning new skills from expert data with improved sample efficiency. We demonstrate the success of our approach across test sets probing generalization on a real ALOHA robot and a new simulation benchmark in RoboTwin. Video results are available at https://self-supervised-control.pages.dev/",
+      "authors": [
+        "Prachi Garg",
+        "Steve Xing",
+        "Prahit Yaugand",
+        "Saurabh Gupta",
+        "Derek Hoiem"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.CV",
+        "cs.LG"
+      ],
+      "published": "2026-08-19T23:02:07+00:00",
+      "link": "https://arxiv.org/pdf/2608.19490v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "self-supervised generation of online interaction rollouts as extra training data for finetuning on new robots; dataset construction for robotics",
+      "llm_evidence_cn": "通过自监督方式生成在线交互轨迹作为附加训练数据，属于机器人数据集构建",
+      "llm_evidence": "通过自监督方式生成在线交互轨迹作为附加训练数据，属于机器人数据集构建",
+      "canonical_evidence": "通过自监督方式生成在线交互轨迹作为附加训练数据，属于机器人数据集构建",
+      "llm_tldr_en": "VLAs drop sharply on new robots with hardware mismatch; finetuning on expert data hurts original skills. This paper generates online interaction rollouts from the zero-shot VLA as extra training data, yielding strong multi-task policies on the target robot while preserving priors.",
+      "llm_tldr_cn": "针对VLA模型在新机器人上因硬件偏差导致性能骤降、传统微调又损失通用能力的问题，本文提出自监督的自演示生成控制方法：利用零样本VLA在线交互生成轨迹作为额外训练数据。实验表明该方法在目标机器人上得到强多任务策略，同时保持原有指令跟随与行为先验。这为跨本体部署与机器人训练数据构建提供了低成本、可扩展的新途径。",
+      "llm_tldr": "针对VLA模型在新机器人上因硬件偏差导致性能骤降、传统微调又损失通用能力的问题，本文提出自监督的自演示生成控制方法：利用零样本VLA在线交互生成轨迹作为额外训练数据。实验表明该方法在目标机器人上得到强多任务策略，同时保持原有指令跟随与行为先验。这为跨本体部署与机器人训练数据构建提供了低成本、可扩展的新途径。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2608.14284v1",
+      "source": "arxiv",
+      "title": "PRM-as-a-Judge 1.5: A Toolkit for Robot Process Assessment",
+      "abstract": "Fine-grained robotic evaluation matters for understanding embodied models, going beyond binary success rates and rule-based process scores. We present PRM-as-a-Judge 1.5, a toolkit for robot process assessment that turns rollout videos into dense progress curves and derives multiple fine metrics. PRM-as-a-Judge 1.5 introduces three metrics, building on version 1.0, that characterize failure-side progress, post-drawdown recovery, and success-side execution quality, helping users understand embodied model capability. Based on the rollout videos from benchmarks, we perform a comprehensive assessment of the embodied models, providing some fine-grained metric results and key findings. We further introduce RoboPulse++ to evaluate the reliability of process reward models (PRM), providing evaluators with a more accurate testing platform. Moreover, we release a user-friendly assessment suite, including the benchmark, metric implementation, and visualization tools, to support reproducible manipulation process evaluation. We call on the community to rethink how robots are evaluated and establish transparent, procedural, and reproducible assessment as a foundation for the next generation of embodied intelligence.",
+      "authors": [
+        "Yuyang Liu",
+        "Yanqing Shen",
+        "Ruike Chen",
+        "Jifan Zhao",
+        "Yuxuan Tian",
+        "Yichi Zhang",
+        "Tianfeng Long",
+        "Zixuan Yin",
+        "Yipu Wang",
+        "Ziheng Qin",
+        "Wenxing Tan",
+        "Yang Shi",
+        "Mingyu Cao",
+        "Runze Xiao",
+        "Ziqi Wang",
+        "Zhixin Yin",
+        "Shiwei Chu",
+        "Yi-Fan Zhang",
+        "Yao Mu",
+        "Yuheng Ji",
+        "Yihao Wang",
+        "Jun Yan",
+        "Zhongyuan Wang",
+        "Pengwei Wang",
+        "Xiaolong Zheng"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.CV"
+      ],
+      "published": "2026-08-14T13:10:02+00:00",
+      "link": "https://arxiv.org/pdf/2608.14284v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "Robot process assessment with failure-side progress and recovery metrics, useful for error analysis and fault diagnosis.",
+      "llm_evidence_cn": "包含失败侧进度和恢复度量的机器人过程评估，可用于错误分析和故障诊断。",
+      "llm_evidence": "包含失败侧进度和恢复度量的机器人过程评估，可用于错误分析和故障诊断。",
+      "canonical_evidence": "包含失败侧进度和恢复度量的机器人过程评估，可用于错误分析和故障诊断。",
+      "llm_tldr_en": "Presents PRM-as-a-Judge 1.5, a toolkit that converts rollout videos into dense progress curves and derives fine-grained failure, recovery, and success metrics for embodied model evaluation.",
+      "llm_tldr_cn": "该论文针对机器人评估仅关注二元成功率和规则化过程分数的局限，提出PRM-as-a-Judge 1.5工具包。工具将成功/失败轨迹视频转化为稠密进度曲线，并引入失败侧进度、回撤恢复和成功侧执行质量三类细粒度指标，帮助理解具身模型能力。基于多个基准的评估展示了其在故障模式刻画和恢复能力度量上的有效性，并提供可靠性验证工具RoboPulse++。该工作为机器人错误分析和过程监控提供了可复用的量化工具。",
+      "llm_tldr": "该论文针对机器人评估仅关注二元成功率和规则化过程分数的局限，提出PRM-as-a-Judge 1.5工具包。工具将成功/失败轨迹视频转化为稠密进度曲线，并引入失败侧进度、回撤恢复和成功侧执行质量三类细粒度指标，帮助理解具身模型能力。基于多个基准的评估展示了其在故障模式刻画和恢复能力度量上的有效性，并提供可靠性验证工具RoboPulse++。该工作为机器人错误分析和过程监控提供了可复用的量化工具。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "fault diagnosis and error analysis for humanoid robots",
+      "matched_requirement_id": "req-7",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2608.15284v1",
+      "source": "arxiv",
+      "title": "VTInstructor: Visual Trajectory Prompting for Navigation Instruction Generation in Continuous Environments",
+      "abstract": "Navigation instruction generation from ego-centric RGB video in continuous environments is an important yet challenging task for human-robot interaction and scalable dataset construction. Prior instruction generators assume discrete viewpoint graphs with panoramic observations, where trajectory structure is explicit; in continuous environments, however, the agent receives only a dense RGB stream, making trajectory cues difficult to recover. We propose VTInstructor, the first VLN instruction generation framework for continuous environments. Our key idea is to convert implicit trajectory geometry into explicit visual trajectory prompts: EDTC condenses long RGB trajectories into navigation-critical keyframes, VTP overlays path, turn, and goal cues onto these anchors, VTMod injects the resulting trajectory signals into the visual encoder, and VT-GRPO further calibrates this spatial injection during training, all without requiring a navigation graph, pre-built map, or scene reconstruction. On the challenging R2R-CE and RxR-CE Val Unseen benchmarks, VTInstructor sets a new state of the art across all standard NLG metrics, surpassing the strongest baseline by +0.357 CIDEr and +0.109 CIDEr, respectively. Beyond automatic metrics, VTInstructor-generated instructions raise a frozen follower's success rate to 63.3%, a +14.7 percentage-point gain over the best competing instruction source, and provide consistent data augmentation gains of +3 SR points on downstream navigation tasks.",
+      "authors": [
+        "Haolin Yang",
+        "Yuxing Long",
+        "Zihan Yang",
+        "Hao Dong"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.AI",
+        "cs.CL",
+        "cs.CV",
+        "cs.MM"
+      ],
+      "published": "2026-08-15T15:31:27+00:00",
+      "link": "https://arxiv.org/pdf/2608.15284v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "explicitly targets scalable dataset construction for robot navigation instruction generation",
+      "llm_evidence_cn": "明确提出面向可扩展数据集构建的导航指令生成方法",
+      "llm_evidence": "明确提出面向可扩展数据集构建的导航指令生成方法",
+      "canonical_evidence": "明确提出面向可扩展数据集构建的导航指令生成方法",
+      "llm_tldr_en": "VTInstructor generates navigation instructions from ego-centric RGB videos in continuous environments, using visual trajectory prompting to enable scalable dataset construction.",
+      "llm_tldr_cn": "连续环境下的导航指令生成对可扩展数据集的构建至关重要，但现有方法依赖离散视角图。VTInstructor提出基于视觉轨迹提示的框架，通过关键帧抽取和视觉轨迹叠加将隐式轨迹几何转换为显式提示，无需显式轨迹结构即可从RGB视频流生成指令，提高了数据构建的可扩展性。",
+      "llm_tldr": "连续环境下的导航指令生成对可扩展数据集的构建至关重要，但现有方法依赖离散视角图。VTInstructor提出基于视觉轨迹提示的框架，通过关键帧抽取和视觉轨迹叠加将隐式轨迹几何转换为显式提示，无需显式轨迹结构即可从RGB视频流生成指令，提高了数据构建的可扩展性。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2608.17209v1",
+      "source": "arxiv",
+      "title": "Teach and Grow: An Agent-Centered Architecture for General Robot Learning",
+      "abstract": "End-to-end vision-language-action (VLA) and world-action models offer an elegant route to general-purpose robotics, but their reliability is bounded by validated physical coverage. When an unfamiliar object, sensor, embodiment, or contact falls outside that coverage and no validated fallback exists, correcting the failure requires new robot data, a policy update, and regression testing. This recurring burden is the retraining tax. Unlike text, embodied data must often be created by operating machines. We present Teach-and-Grow Learning (TGL), an agent-centered architecture for general robot learning. In its general form, a multimodal agent turns a few successful demonstrations into reusable Skill Blocks: closed-loop behaviors for meaningful subgoals. In a new scene, the agent grounds and composes these blocks, selects learned or geometric tools, observes the physical outcome, and revises the route when execution departs from intent. A Skill Library stores executable behavior, while structured Experience Memory carries forward success, failure, and repair. New tasks are acquired without task-specific policy retraining. Our LIBERO evaluation attains state-of-the-art performance; controlled studies expose skill induction, persistent reuse, and agent-directed adaptation. Finally, we propose the Teach-and-Grow scaling-law hypothesis: if X denotes effective reusable experience, future-task error and teaching demand should approach irreducible floors as power laws in X. The architecture therefore treats deployment as a period of continued learning, in which one task can make the next easier.",
+      "authors": [
+        "Chang Nie",
+        "Zhe Liu",
+        "Hesheng Wang"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.AI",
+        "cs.CV",
+        "cs.LG"
+      ],
+      "published": "2026-08-17T23:45:21+00:00",
+      "link": "https://arxiv.org/pdf/2608.17209v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "addresses embodied data creation and skill-block reuse, relevant to robotics dataset construction",
+      "llm_evidence_cn": "关注具身数据生成和技能块复用，与机器人数据集构建相关",
+      "llm_evidence": "关注具身数据生成和技能块复用，与机器人数据集构建相关",
+      "canonical_evidence": "关注具身数据生成和技能块复用，与机器人数据集构建相关",
+      "llm_tldr_en": "Teach-and-Grow Learning proposes an agent-centered architecture that converts a few demonstrations into reusable Skill Blocks, reducing the retraining tax by creating and reusing embodied data for general robot learning.",
+      "llm_tldr_cn": "论文提出Teach-and-Grow Learning，旨在解决端到端机器人学习因覆盖面不足而反复采集数据、更新策略的再训练税问题。智能体将少量成功示范转化为可复用的Skill Blocks，形成多模态技能库。该方法强调通过操作机器人生成经验数据并复用，为机器人数据集构建和持续学习提供一种新架构。",
+      "llm_tldr": "论文提出Teach-and-Grow Learning，旨在解决端到端机器人学习因覆盖面不足而反复采集数据、更新策略的再训练税问题。智能体将少量成功示范转化为可复用的Skill Blocks，形成多模态技能库。该方法强调通过操作机器人生成经验数据并复用，为机器人数据集构建和持续学习提供一种新架构。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2608.17965v2",
+      "source": "arxiv",
+      "title": "Too Sure to Be Safe: Model Calibration for Reliable Log Anomaly Detection",
+      "abstract": "Online log anomaly detection is critical for maintaining the reliability of large-scale computing systems. Although recent language model-based log anomaly detectors achieve strong detection performance, their confidence estimates remain poorly calibrated. We show that these detectors frequently assign excessive confidence to incorrect predictions, particularly for anomalous logs under severe class imbalance. Moreover, confidence on erroneous predictions remains persistently high even when conventional calibration metrics indicate good calibration, creating a critical reliability gap for operational monitoring systems. To address this issue, we propose Log Reconstruction and Distance (LoRD), a lightweight post-hoc calibration framework for reliable log anomaly detection. LoRD learns prediction-route-specific reliability models from latent representations of correctly classified validation samples and estimates prediction reliability through route-wise reconstruction distances. Based on the estimated reliability, LoRD selectively recalibrates high-risk predictions to suppress overconfident errors while preserving reliable predictions. Extensive experiments on four large-scale log benchmark datasets and multiple language model-based detectors demonstrate that LoRD consistently improves confidence reliability and substantially reduces overconfident anomaly-related errors without sacrificing anomaly detection performance.",
+      "authors": [
+        "Bin Li",
+        "Dongdong Wang",
+        "Siyang Lu"
+      ],
+      "primary_category": "cs.LG",
+      "categories": [
+        "cs.LG",
+        "cs.AI",
+        "cs.SE"
+      ],
+      "published": "2026-08-18T16:19:45+00:00",
+      "link": "https://arxiv.org/pdf/2608.17965v2",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "lightweight post-hoc calibration for reliable anomaly detection, enhancing OOD safety",
+      "llm_evidence_cn": "用于可靠异常检测的轻量后验校准，提升模型对分布外样本的安全性",
+      "llm_evidence": "用于可靠异常检测的轻量后验校准，提升模型对分布外样本的安全性",
+      "canonical_evidence": "用于可靠异常检测的轻量后验校准，提升模型对分布外样本的安全性",
+      "llm_tldr_en": "This paper addresses overconfident anomaly detection by proposing LoRD, a lightweight post-hoc calibration framework that improves reliability for online log anomaly detection under class imbalance.",
+      "llm_tldr_cn": "日志异常检测系统常对错误预测过度自信，尤其在类别不平衡下模型校准不可靠。本文提出LoRD，一种轻量级后处理校准框架，在不牺牲检测性能的前提下显著提升置信度与真实正确性的一致性，为在线监控和分布外风险控制提供更可靠的异常检测基础。",
+      "llm_tldr": "日志异常检测系统常对错误预测过度自信，尤其在类别不平衡下模型校准不可靠。本文提出LoRD，一种轻量级后处理校准框架，在不牺牲检测性能的前提下显著提升置信度与真实正确性的一致性，为在线监控和分布外风险控制提供更可靠的异常检测基础。",
+      "llm_tags": [
+        "query:humanoid-ood"
+      ],
+      "matched_query_tag": "query:humanoid-ood",
+      "matched_query_text": "out-of-distribution detection for safe robot operation",
+      "matched_requirement_id": "req-11",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2608.18341v1",
+      "source": "arxiv",
+      "title": "Low-Power, Neuromorphic, Acoustic Anomaly Detection for Persistent Machine Monitoring",
+      "abstract": "Persistent acoustic monitoring can detect machine faults without physical contact, but always-on inference is constrained by power, latency, and deployment complexity. We demonstrate autoencoder-based acoustic anomaly detection on an Intel Loihi 2 neuromorphic processor under clean and noisy conditions. Log-mel features are computed off chip; normalization, autoencoder inference, L1 reconstruction scoring, and thresholding run on chip. In a clean, microphone-position-invariant ToyADMOS ToyCar benchmark, the on-chip model achieves 0.9959 AUC and 0.9785 standardized pAUC at maximum false-positive rate 0.1. In the DCASE 2026 Task 2 ToyCar noisy benchmark, the model achieves source AUC 0.7990, target AUC 0.6466, and pAUC 0.6426, exceeding reported baseline metrics. Power profiling on a 16-chip Loihi 2 VPX system shows real-time throughput with 0.0406$\\unicode{x2013}$0.0426 mJ dynamic energy per sample, two orders of magnitude lower than both a CPU and GPU. These results support neuromorphic acoustic anomaly detection as a practical candidate for low-power, persistent machine monitoring.",
+      "authors": [
+        "Steven C. Nesbit",
+        "Victor M. Vergara",
+        "Michael A. Felix",
+        "Evan T. Kain",
+        "Luis R. García Carrillo",
+        "Gerd J. Kunde",
+        "Andrew T. Sornborger"
+      ],
+      "primary_category": "cs.NE",
+      "categories": [
+        "cs.NE",
+        "cs.AI",
+        "cs.ET",
+        "cs.LG",
+        "cs.SD",
+        "eess.AS"
+      ],
+      "published": "2026-08-18T21:46:11+00:00",
+      "link": "https://arxiv.org/pdf/2608.18341v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "low-power edge anomaly detection with autoencoder on neuromorphic chip",
+      "llm_evidence_cn": "在神经形态芯片上运行自编码器，实现低功耗边缘异常检测",
+      "llm_evidence": "在神经形态芯片上运行自编码器，实现低功耗边缘异常检测",
+      "canonical_evidence": "在神经形态芯片上运行自编码器，实现低功耗边缘异常检测",
+      "llm_tldr_en": "Persistent acoustic monitoring can detect machine faults, but always-on inference is constrained by power and latency. This work runs autoencoder-based acoustic anomaly detection entirely on Intel Loihi 2, achieving strong AUC on ToyADMOS/DCASE benchmarks while keeping inference on-chip.",
+      "llm_tldr_cn": "持续声学监测可非接触检测机器故障，但常开推理受功耗和延迟限制。该研究在Intel Loihi 2神经形态芯片上运行基于自编码器的声学异常检测，将归一化、推理、重构评分和阈值化全部放到芯片上。在ToyADMOS ToyCar与DCASE 2026 Task 2基准上取得了较好AUC/pAUC，明显优于对比方法。这项工作展示了在资源受限边缘设备上部署高效异常检测模型的可行路径，对低功耗运维监测具有参考价值。",
+      "llm_tldr": "持续声学监测可非接触检测机器故障，但常开推理受功耗和延迟限制。该研究在Intel Loihi 2神经形态芯片上运行基于自编码器的声学异常检测，将归一化、推理、重构评分和阈值化全部放到芯片上。在ToyADMOS ToyCar与DCASE 2026 Task 2基准上取得了较好AUC/pAUC，明显优于对比方法。这项工作展示了在资源受限边缘设备上部署高效异常检测模型的可行路径，对低功耗运维监测具有参考价值。",
+      "llm_tags": [
+        "query:humanoid-ood"
+      ],
+      "matched_query_tag": "query:humanoid-ood",
+      "matched_query_text": "lightweight LSTM or GRU models deployed on embedded platforms for anomaly detection",
+      "matched_requirement_id": "req-12",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2608.19987v1",
+      "source": "arxiv",
+      "title": "STEP: Score-Based Temporal Energy for Human Pose Video Anomaly Detection",
+      "abstract": "Skeleton-based Video Anomaly Detection (VAD) offers a robust, privacy-preserving solution for identifying abnormal behaviors. To model the distribution of normal static and moving poses, recent methods train Energy-Based Models (EBMs) via Denoising Score Matching (DSM). However, directly injecting noise, required for training, into raw joint coordinates creates physically impossible poses, and this structural collapse severely worsens as the temporal window expands. To address this, we introduce STEP, a simple framework that utilizes Principal Component Analysis (PCA) to project pose sequences into a compact, whitened PC-space. Learning the data density within this well-behaved PC-space ensures that the injected noise translates into physically plausible variations, which allows the model to process longer video sequences without the performance collapse of raw coordinate baselines. Additionally, to mitigate inherent pose estimation inaccuracies arising from occlusions or motion blur, we integrate a sequence-level weighting mechanism based on the estimator's confidence scores. Operating at real-time computational efficiency, our simple and lightweight framework outperforms the previous skeleton-based state-of-the-art by 12.2% (90.1% AUROC) on the challenging UBnormal dataset and achieves highly competitive results by improving on the ShanghaiTech benchmark.",
+      "authors": [
+        "Jakub Micorek",
+        "Mateusz Koziński",
+        "Horst Possegger"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV"
+      ],
+      "published": "2026-08-20T13:02:19+00:00",
+      "link": "https://arxiv.org/pdf/2608.19987v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "human pose video anomaly detection using joint coordinates and temporal energy",
+      "llm_evidence_cn": "利用关节坐标和时间能量进行人体姿态视频异常检测",
+      "llm_evidence": "利用关节坐标和时间能量进行人体姿态视频异常检测",
+      "canonical_evidence": "利用关节坐标和时间能量进行人体姿态视频异常检测",
+      "llm_tldr_en": "Proposes STEP, a score-based temporal energy model that projects human pose sequences into PC-space for video anomaly detection, avoiding physically impossible noisy joints and improving temporal modeling.",
+      "llm_tldr_cn": "骨架视频异常检测常使用基于能量的模型，但直接加噪可能产生不物理的姿势。本文提出STEP，用PCA将姿势序列投影到白化主成分空间，再学习数据密度，既保证注入噪声的物理合理性，又提升时间窗口扩展下的检测稳定性。该方法为人体姿态异常检测提供了新思路，可迁移到关节信号异常检测中。",
+      "llm_tldr": "骨架视频异常检测常使用基于能量的模型，但直接加噪可能产生不物理的姿势。本文提出STEP，用PCA将姿势序列投影到白化主成分空间，再学习数据密度，既保证注入噪声的物理合理性，又提升时间窗口扩展下的检测稳定性。该方法为人体姿态异常检测提供了新思路，可迁移到关节信号异常检测中。",
+      "llm_tags": [
+        "query:humanoid-ood"
+      ],
+      "matched_query_tag": "query:humanoid-ood",
+      "matched_query_text": "anomaly detection from joint position velocity torque IMU signals in humanoid robots",
+      "matched_requirement_id": "req-10",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    }
+  ]
+}
