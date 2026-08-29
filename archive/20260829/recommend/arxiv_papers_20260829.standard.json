@@ -1,0 +1,546 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-08-29T22:47:35.251094+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 2,
+    "deep_divecandidates": 0,
+    "deep_cap": 7,
+    "deep_selected": 0,
+    "quick_candidates": 12,
+    "quick_skim_target": 12,
+    "quick_selected": 12
+  },
+  "deep_dive": [],
+  "quick_skim": [
+    {
+      "id": "2608.21302v1",
+      "source": "arxiv",
+      "title": "Fault Diagnosis of Dynamic Systems Under Unknown Operating Conditions: A Condition-Guided Selective Adaptation Approach",
+      "abstract": "Fault diagnosis under unknown operating conditions remains challenging for dynamic industrial systems, as the distribution shift caused by changing operating conditions can significantly degrade the performance of diagnostic models in real-world applications. To address the problem, a condition-guided selective adaptation approach is proposed. Specifically, a novel continuous operating-condition adversarial learning strategy with progressive training is developed in the offline stage to enhance the generalization ability of the diagnostic model. During online deployment, residual operating-condition responses are exploited to identify reliable unlabeled samples from streaming data, which are then used to update the diagnostic model. Extensive experiments on real-world gearbox and motor datasets have demonstrated that the proposed framework outperforms state-of-the-art methods in diagnostic accuracy while maintaining relatively low test-time, showing its potential for practical industrial applications.",
+      "authors": [
+        "Jiaming Liu",
+        "Zeyi Liu",
+        "Hongshuo Zhao",
+        "Pengyu Han",
+        "Xiao He"
+      ],
+      "primary_category": "eess.SY",
+      "categories": [
+        "eess.SY"
+      ],
+      "published": "2026-08-21T17:04:01+00:00",
+      "link": "https://arxiv.org/pdf/2608.21302v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "Fault diagnosis for dynamic systems, transferable to humanoid robot fault diagnosis",
+      "llm_evidence_cn": "面向动态系统的故障诊断方法，可迁移至人形机器人故障诊断",
+      "llm_evidence": "面向动态系统的故障诊断方法，可迁移至人形机器人故障诊断",
+      "canonical_evidence": "面向动态系统的故障诊断方法，可迁移至人形机器人故障诊断",
+      "llm_tldr_en": "This paper presents a condition-guided selective adaptation approach for fault diagnosis under unknown operating conditions, using adversarial learning and residual-condition sample selection to adapt models for robust deployment.",
+      "llm_tldr_cn": "针对未知运行条件使动态系统故障诊断模型性能下降的问题，提出条件引导的选择性自适应方法。离线阶段引入连续工况对抗学习与渐进训练以提高泛化，在线阶段基于残差工况响应挑选可靠未标注样本进行自适应，并通过选择性适应缓解分布偏移。在动态系统上的实验表明该方法能有效提升未知工况下的诊断可靠性，为故障诊断模型的在线部署提供了可行方案。",
+      "llm_tldr": "针对未知运行条件使动态系统故障诊断模型性能下降的问题，提出条件引导的选择性自适应方法。离线阶段引入连续工况对抗学习与渐进训练以提高泛化，在线阶段基于残差工况响应挑选可靠未标注样本进行自适应，并通过选择性适应缓解分布偏移。在动态系统上的实验表明该方法能有效提升未知工况下的诊断可靠性，为故障诊断模型的在线部署提供了可行方案。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "fault diagnosis for humanoid robots",
+      "matched_requirement_id": "req-3",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2608.21550v1",
+      "source": "arxiv",
+      "title": "GOLEM: Modular Humanoid Autonomy Towards Electric Vehicle Battery Disassembly",
+      "abstract": "Disassembling end-of-life electric vehicle (EV) battery packs is dull and dangerous work, performed almost entirely by humans. We present GOLEM (Generalized Open Library of Embodied Modules), an end-to-end, open-source system architecture for EV battery disassembly with the Unitree H1-2 humanoid robot in which walking, manipulation, dynamic stability, navigation, and spatial memory are independent modules with abstract interfaces, so that methods are easily developed, interchanged, and compared. GOLEM is deployed as a Docker-based ROS 2 abstraction in which MuJoCo and IsaacLab digital twins expose interfaces matching the physical robot. GOLEM's composability and per-module customization enable development and demonstration of humanoid EV battery disassembly, from simulation to reality. GOLEM provides fair comparison between humanoid modules, enabling evaluation as a capability ladder, in which one module is characterized at a time and added as a rung: LiDAR-inertial navigation places the robot within 13.0cm of a 6m goal; a learned standing controller recovers from external disturbances that sampling-based lower-body MPC does not; and grasping loosened fasteners from a real Hyundai Ioniq 5 pack degrades from 97% tethered to 87% free-standing to 37% under navigation-induced pose variance. Source code is available at the project page https://golem-humanoid.github.io",
+      "authors": [
+        "Max Conway",
+        "William Xie",
+        "Allen Devaraj",
+        "Yutong Zhang",
+        "Niraj Pudasaini",
+        "Mateo Feit",
+        "Adam Abid",
+        "Zachary Allen",
+        "Chen Liu",
+        "Xuan Tan",
+        "Jensen Lavering",
+        "Jason Chen",
+        "Lyle Antieau",
+        "Anthony Von Pischke",
+        "Alessandro Roncone",
+        "Zachary Sunberg",
+        "Nikolaus Correll"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-08-21T18:38:20+00:00",
+      "link": "https://arxiv.org/pdf/2608.21550v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "Open-source modular autonomy architecture for Unitree H1-2 humanoid with Docker/ROS 2 and MuJoCo/IsaacLab twins",
+      "llm_evidence_cn": "面向宇树H1-2人形机器人提供开源模块化自主系统，采用Docker/ROS 2并配有MuJoCo/IsaacLab数字孪生",
+      "llm_evidence": "面向宇树H1-2人形机器人提供开源模块化自主系统，采用Docker/ROS 2并配有MuJoCo/IsaacLab数字孪生",
+      "canonical_evidence": "面向宇树H1-2人形机器人提供开源模块化自主系统，采用Docker/ROS 2并配有MuJoCo/IsaacLab数字孪生",
+      "llm_tldr_en": "GOLEM is an open-source modular autonomy architecture for Unitree H1-2 humanoid EV battery disassembly, with independent functional modules and Docker/ROS 2 deployment plus MuJoCo and IsaacLab digital twins.",
+      "llm_tldr_cn": "针对人形机器人执行电动汽车电池拆解作业的自动化需求，提出了名为GOLEM的开源模块化自主系统。该系统基于Unitree H1-2人形机器人，将行走、操作、动态稳定、导航和空间记忆建模为具有抽象接口的独立模块，便于开发、互换与对比。系统通过Docker和ROS 2进行部署，并使用MuJoCo与IsaacLab数字孪生提供与物理机器人一致的仿真接口。其模块化、可组合架构为宇树人形机器人的仿真研究、算法验证和复杂任务部署提供了基础平台。",
+      "llm_tldr": "针对人形机器人执行电动汽车电池拆解作业的自动化需求，提出了名为GOLEM的开源模块化自主系统。该系统基于Unitree H1-2人形机器人，将行走、操作、动态稳定、导航和空间记忆建模为具有抽象接口的独立模块，便于开发、互换与对比。系统通过Docker和ROS 2进行部署，并使用MuJoCo与IsaacLab数字孪生提供与物理机器人一致的仿真接口。其模块化、可组合架构为宇树人形机器人的仿真研究、算法验证和复杂任务部署提供了基础平台。",
+      "llm_tags": [
+        "query:ur:composite"
+      ],
+      "matched_query_tag": "query:ur:composite",
+      "matched_query_text": "Papers central to 查找宇树G1人形机器人的数据集构建、故障诊断、错误分析以及边缘端部署的相关论文, especially work that connects or combines: Unitree G1 humanoid robot dataset construction; humanoid robot dataset construction; fault diagnosis for humanoid robots; edge deployment for humanoid robots; dataset construction for robotics; fault detection in humanoid robots; fault diagnosis and error analysis for humanoid robots; edge deployment of Unitree robots research.",
+      "matched_requirement_id": "req-composite-ur",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2608.22976v1",
+      "source": "arxiv",
+      "title": "Privileged Critic Training Enables Sensor-Free Thruster Fault Adaptation in End-to-End RL",
+      "abstract": "Fault-tolerant navigation for thruster-actuated robots requires online adaptation to failures that are neither binary nor fully observable: thrusters may degrade continuously, fail dead, or jam stuck-open. Classical fault detection pipelines require dedicated sensors unavailable at deployment; oracle controllers that observe the true failure state are equally impractical. We show that privileged critic training is sufficient for sensor-free fault adaptation: giving the PPO value function access to the true degradation state dgt during training, while the actor receives only standard task observations, shapes a policy that compensates for failures at deployment without any dedicated fault sensing. We propose RAFT (Recurrent Asymmetric Fault Tolerant), a policy with recurrent memory trained with a privileged asymmetric critic. Evaluated on a floating-platform robot (8 thrusters, 1 reaction wheel) under up to four simultaneous thruster failures, RAFT achieves 70.2% success at four concurrent failures, closing 84% of the gap from a failure-naive baseline (4.8%) to an oracle policy that sees the full degradation state at deployment (82.4%). All code, checkpoints, and data are open-source.",
+      "authors": [
+        "Ricard Marsal I Castan",
+        "Miguel A. Olivares-Méndez"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-08-24T08:36:34+00:00",
+      "link": "https://arxiv.org/pdf/2608.22976v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "fault-tolerant navigation via sensor-free fault adaptation, transferable method",
+      "llm_evidence_cn": "无传感器故障自适应方法，可迁移至机器人故障检测",
+      "llm_evidence": "无传感器故障自适应方法，可迁移至机器人故障检测",
+      "canonical_evidence": "无传感器故障自适应方法，可迁移至机器人故障检测",
+      "llm_tldr_en": "Shows that privileged critic training with access to true thruster degradation during training enables end-to-end RL policies to adapt to faults at deployment without dedicated fault sensors, validated on thruster degradation and jamming cases.",
+      "llm_tldr_cn": "针对推进器故障退化状态难以观测且传统检测依赖专用传感器的问题，本文提出特权评论者训练方法：仅在训练时让价值函数访问真实退化状态，而actor只接收常规观测。由此训练出的策略在部署时无需任何故障传感即可自动补偿推力损失。实验在多种推进器故障模式下验证了该方法对端到端强化学习策略的有效性，为无传感器故障自适应提供了新范式。",
+      "llm_tldr": "针对推进器故障退化状态难以观测且传统检测依赖专用传感器的问题，本文提出特权评论者训练方法：仅在训练时让价值函数访问真实退化状态，而actor只接收常规观测。由此训练出的策略在部署时无需任何故障传感即可自动补偿推力损失。实验在多种推进器故障模式下验证了该方法对端到端强化学习策略的有效性，为无传感器故障自适应提供了新范式。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "fault detection in humanoid robots",
+      "matched_requirement_id": "req-6",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2608.21910v1",
+      "source": "arxiv",
+      "title": "PRISM: Predictive Runtime In-place Scaling and Model Selection for Edge Microservices",
+      "abstract": "Latency-sensitive edge AI services must balance strict deadlines, output quality, and limited compute and energy budgets. However, static CPU provisioning wastes resources because inference cost varies substantially across inputs, model variants, and runtime conditions. We present PRISM, a prediction-guided runtime framework that jointly selects model variants and CPU allocations for containerized edge microservices. Using container-level energy monitoring and lightweight regression models, PRISM adapts each pipeline stage in place and minimizes predicted CPU-package energy under deadline, resource, and offline model-level Quality of Result (QoR) constraints. We evaluate PRISM on more than 52,000 requests in an Automatic License Plate Recognition (ALPR) pipeline with detection and recognition stages. For detection, PRISM reduces energy consumption by 36 % compared to the strongest static configuration while preserving a comparable success rate and using less than half of the average CPU allocation. For recognition, it reaches near-static-best performance with lower average CPU allocation. These results show that predictive in-place adaptation is a practical mechanism for making time-sensitive AI microservice pipelines more energy-efficient at the edge.",
+      "authors": [
+        "Uwe Gropengießer",
+        "Thomas Reuter",
+        "Dominik Schön",
+        "Osama Abboud",
+        "Xun Xiao",
+        "Max Mühlhäuser"
+      ],
+      "primary_category": "cs.DC",
+      "categories": [
+        "cs.DC"
+      ],
+      "published": "2026-08-22T10:45:59+00:00",
+      "link": "https://arxiv.org/pdf/2608.21910v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "prediction-guided runtime model selection and CPU scaling for edge AI services; applicable to edge deployment of robot models",
+      "llm_evidence_cn": "面向边缘AI服务的预测引导模型选择与CPU缩放，可应用于机器人模型边缘部署",
+      "llm_evidence": "面向边缘AI服务的预测引导模型选择与CPU缩放，可应用于机器人模型边缘部署",
+      "canonical_evidence": "面向边缘AI服务的预测引导模型选择与CPU缩放，可应用于机器人模型边缘部署",
+      "llm_tldr_en": "PRISM jointly selects model variants and CPU allocations for containerized edge microservices using lightweight regression and energy monitoring, minimizing energy under latency and quality constraints.",
+      "llm_tldr_cn": "延迟敏感的边缘AI服务需要在实时性、输出质量和计算能耗之间权衡，静态CPU分配会造成浪费。PRISM提出预测引导的运行时框架，利用容器级能量监控和轻量级回归模型，联合选择模型变体与CPU分配，在满足截止时间和质量约束下最小化预测能耗。在超过52,000次请求上的评估表明其能有效适配边缘服务负载。该框架可推广到人形机器人边缘端模型的运行时资源管理。",
+      "llm_tldr": "延迟敏感的边缘AI服务需要在实时性、输出质量和计算能耗之间权衡，静态CPU分配会造成浪费。PRISM提出预测引导的运行时框架，利用容器级能量监控和轻量级回归模型，联合选择模型变体与CPU分配，在满足截止时间和质量约束下最小化预测能耗。在超过52,000次请求上的评估表明其能有效适配边缘服务负载。该框架可推广到人形机器人边缘端模型的运行时资源管理。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "edge deployment for humanoid robots",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2608.23304v1",
+      "source": "arxiv",
+      "title": "Design of a Biomimetic Joint-Covering Skin with Tissue-Like Structure to Enhance Proprioception in a Musculoskeletal Humanoid",
+      "abstract": "Proprioception in musculoskeletal humanoids is typically estimated primarily from muscle sensing, while the role of cutaneous deformation around joints remains insufficiently explored. In biological systems, mechanoreceptors distributed within soft tissue complement muscle feedback and support reliable joint state estimation. This study presents the design of a biomimetic joint-covering skin with a tissue-like layered structure that integrates pressure- and stretch-sensitive elements within the joint-covering tissue. The proposed skin is implemented on the musculoskeletal humanoid Musashi-W, and its independent proprioceptive capability as well as its integration with muscle sensing are evaluated. Experimental results show that the proposed skin alone achieves joint angle estimation with an average error of approximately 3 degrees. Furthermore, integration with muscle sensing improves estimation accuracy. Owing to its joint-covering structure, the skin may mechanically mitigate the influence of external disturbances on the muscles, and the integration of multiple modalities suggests the possibility of contributing to the identification of external stimuli that are difficult to interpret using muscle sensing alone. This work presents a design methodology for biomimetic joint-covering skin and demonstrates that such tissue-structured skin can serve as an effective approach for extending proprioceptive systems in musculoskeletal humanoids.",
+      "authors": [
+        "Akihiro Miki",
+        "Shun Hasegawa",
+        "Yoshimoto Ribayashi",
+        "Kento Kawaharazuka",
+        "Kei Okada"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-08-24T14:27:23+00:00",
+      "link": "https://arxiv.org/pdf/2608.23304v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "biomimetic skin enhances humanoid proprioception for state estimation",
+      "llm_evidence_cn": "仿生皮肤增强人形机器人本体感觉，利于状态估计",
+      "llm_evidence": "仿生皮肤增强人形机器人本体感觉，利于状态估计",
+      "canonical_evidence": "仿生皮肤增强人形机器人本体感觉，利于状态估计",
+      "llm_tldr_en": "Presents a biomimetic joint-covering skin with tissue-like layered structure and integrated pressure/stretch sensing for the musculoskeletal humanoid Musashi-W, showing independent proprioception and improved joint state estimation when fused with muscle sensing.",
+      "llm_tldr_cn": "针对肌肉骨骼人形机器人本体感觉过度依赖肌肉传感器的问题，本文设计了组织样分层结构的仿生关节覆盖皮肤，将压力与应变敏感元件集成到关节组织中。该系统在Musashi-W上实现，并与肌肉感知进行对比与融合评估。结果显示该皮肤能独立提供本体感觉，且与肌肉信号集成后可提高关节状态估计的可靠性。该工作为人形机器人感知提升提供了仿生硬件基础，也可支撑基于本体感觉的故障诊断研究。",
+      "llm_tldr": "针对肌肉骨骼人形机器人本体感觉过度依赖肌肉传感器的问题，本文设计了组织样分层结构的仿生关节覆盖皮肤，将压力与应变敏感元件集成到关节组织中。该系统在Musashi-W上实现，并与肌肉感知进行对比与融合评估。结果显示该皮肤能独立提供本体感觉，且与肌肉信号集成后可提高关节状态估计的可靠性。该工作为人形机器人感知提升提供了仿生硬件基础，也可支撑基于本体感觉的故障诊断研究。",
+      "llm_tags": [
+        "query:humanoid-ood"
+      ],
+      "matched_query_tag": "query:humanoid-ood",
+      "matched_query_text": "humanoid robot fault diagnosis using proprioceptive signals",
+      "matched_requirement_id": "req-9",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2608.22591v1",
+      "source": "arxiv",
+      "title": "WorldToken: Time-First Sequence Modeling for Robotic Imitation Learning",
+      "abstract": "Robot policies receive heterogeneous observations at each decision step, yet sequence models differ in how they organize these inputs over time. We introduce WorldToken, a time-first policy instantiation that fuses multiview images, proprioception, and task conditioning within each policy timestep into one world token. A causal temporal Transformer models the resulting world-token sequence, and a diffusion action head generates action chunks. On 23 RoboCasa tasks, an 85.3M-parameter policy trained from scratch apart from a frozen pretrained CLIP text encoder achieves 59.45% mean closed-loop success using 2,900 generated demonstrations per task. A complete factorial sweep over five dataset sizes, five model sizes, and two training seeds shows consistent gains from additional target-domain data and diminishing returns beyond moderate model size. Under same-checkpoint history truncation, reducing visible history to one or two policy timesteps lowers closed-loop success for all 50 RoboCasa policies. On RMBench Blocks Ranking, reducing visible history from 146 to 8 seconds lowers evaluator success from 95% to 28%, while an exploratory extended rollout sustains the reference swap sequence for over 850 seconds. These results establish the empirical feasibility of the complete WorldToken instantiation and characterize its data-scaling and temporal-context behavior under the tested recipes. They do not establish superiority over alternative sequence organizations or isolate which components of the complete implementation drive the observed performance.",
+      "authors": [
+        "Chunkai Yang",
+        "Andong Yang",
+        "Chao Gao"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-08-23T20:56:29+00:00",
+      "link": "https://arxiv.org/pdf/2608.22591v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "Uses 2,900 generated demonstrations per task to train policy, a scalable data generation recipe",
+      "llm_evidence_cn": "每任务仅用2900条生成演示训练策略，提供可扩展的数据生成方案",
+      "llm_evidence": "每任务仅用2900条生成演示训练策略，提供可扩展的数据生成方案",
+      "canonical_evidence": "每任务仅用2900条生成演示训练策略，提供可扩展的数据生成方案",
+      "llm_tldr_en": "WorldToken fuses multiview images, proprioception, and task inputs into per-timestep tokens, modeled by a causal Transformer with a diffusion action head, reaching 59.45% success on RoboCasa with 2,900 generated demos per task.",
+      "llm_tldr_cn": "机器人模仿学习需要融合多视角图像与本体感受，但序列模型在时间组织上缺乏一致性。WorldToken将每个决策时刻的多模态观测与任务条件融合为一个世界令牌，用因果Transformer建模，并提供扩散动作头生成动作块。在RoboCasa的23个任务上，仅用2900条生成演示即达到59.45%的成功率，且在不同数据与模型规模下表现稳定，展示了数据高效模仿学习的通用方案。",
+      "llm_tldr": "机器人模仿学习需要融合多视角图像与本体感受，但序列模型在时间组织上缺乏一致性。WorldToken将每个决策时刻的多模态观测与任务条件融合为一个世界令牌，用因果Transformer建模，并提供扩散动作头生成动作块。在RoboCasa的23个任务上，仅用2900条生成演示即达到59.45%的成功率，且在不同数据与模型规模下表现稳定，展示了数据高效模仿学习的通用方案。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2608.26578v1",
+      "source": "arxiv",
+      "title": "TrapVLA: Trapping Vision-Language-Action Models in Configured Failure Modes",
+      "abstract": "This work introduces Configured Failure Trapping, a novel backdoor attack task against Vision-Language-Action (VLA) models, which aims to activate attacks through stealthy textual triggers and induce configured failure modes. Unlike prior backdoor attacks that treat any task failure as a successful attack, Configured Failure Trapping requires the attacker to control how the robot fails (e.g., causing the robot to grasp with a specified positional offset), making it substantially more challenging and hard to detect. To support the new task, we propose an effective data engine for synthesizing high-quality target trajectories and an automated suite for measuring configured-failure fidelity. Then, based on this foundation, we construct two new benchmarks, namely Trap-LIBERO and Trap-RoboTwin, that instantiate Configured Failure Trapping across four representative failure modes. To address this task, we identify sparse action deviation as a critical challenge and accordingly propose a novel method named TrapVLA, which explicitly learns trigger-induced action residuals to steer the policy toward the configured failure behavior. Extensive experiments across simulation benchmarks and real-world robotic settings show that TrapVLA effectively injects configured failure modes into VLA models while largely preserving performance on clean data. Project page: https://john-liua.github.io/TrapVLA/",
+      "authors": [
+        "Jun-Hui Liu",
+        "Kun-Yu Lin",
+        "Yi-Lin Wei",
+        "Xu-Han Chen",
+        "Yinghao Li",
+        "Zhuohao Li",
+        "Yuan-Ming Li",
+        "Qing Zhang",
+        "Xiaoyi Fan",
+        "Dongmei Jiang",
+        "Yan Li",
+        "Wei-Shi Zheng"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.CV"
+      ],
+      "published": "2026-08-27T03:44:49+00:00",
+      "link": "https://arxiv.org/pdf/2608.26578v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "Synthesizes configured failure trajectories, acting as fault injection and error analysis benchmark",
+      "llm_evidence_cn": "合成配置化失败轨迹，可作为故障注入与错误分析基准",
+      "llm_evidence": "合成配置化失败轨迹，可作为故障注入与错误分析基准",
+      "canonical_evidence": "合成配置化失败轨迹，可作为故障注入与错误分析基准",
+      "llm_tldr_en": "TrapVLA introduces configured failure trapping, a backdoor attack that controls how a VLA model fails, supported by a data engine synthesizing target trajectories and a suite measuring failure fidelity, providing a benchmark for robot model failure and error analysis.",
+      "llm_tldr_cn": "视觉-语言-动作模型面临新型安全威胁：攻击者不仅希望任务失败，还希望控制机器人以特定方式失败。TrapVLA提出配置故障诱捕任务，通过数据引擎合成高质量目标轨迹，并设计自动化套件量化故障忠实度，构建新基准。该方法能诱导模型产生指定偏移等可配置错误，为机器人模型的安全评估与错误分析提供了故障注入与数据合成工具。",
+      "llm_tldr": "视觉-语言-动作模型面临新型安全威胁：攻击者不仅希望任务失败，还希望控制机器人以特定方式失败。TrapVLA提出配置故障诱捕任务，通过数据引擎合成高质量目标轨迹，并设计自动化套件量化故障忠实度，构建新基准。该方法能诱导模型产生指定偏移等可配置错误，为机器人模型的安全评估与错误分析提供了故障注入与数据合成工具。",
+      "llm_tags": [
+        "query:humanoid-ood"
+      ],
+      "matched_query_tag": "query:humanoid-ood",
+      "matched_query_text": "fault injection simulation for humanoid robots in MuJoCo or similar environments",
+      "matched_requirement_id": "req-14",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2608.22648v1",
+      "source": "arxiv",
+      "title": "Lightweight Multi-scale Hierarchical Anomaly Detection and Localization for Geospatial Big Data Applications at the Edge",
+      "abstract": "As an increasing number of critical applications, including environmental, emergency, meteorological, and agricultural, rely on real-time anomaly detection in geospatial data streams, challenges related to the storage, processing, and communication of this data arise. Traditionally, large volumes of data have been sent to centralized processing locations for insight extraction. Given the big data context of these applications, this approach becomes increasingly infeasible as data volume and velocity continue to increase. This paper proposes a lightweight edge-oriented approach for anomaly detection and localization for geospatial data streams. By leveraging the H3 discrete global grid system and a multi-scale drill-down logic, the proposed approach significantly reduces computational overhead, achieving a 99.7\\% reduction in evaluations compared to traditional flat-scan methods. Furthermore, by filtering out noise-induced flickering anomalies at lower resolutions, spatially-persistent anomalous signals can be efficiently identified. The results demonstrate that the proposed framework effectively distills massive geospatial data into actionable insights.",
+      "authors": [
+        "Thomas Benton Townsend",
+        "Joshua Bean",
+        "Benjamin K Tkach",
+        "Narcisa Gabriela Pricope",
+        "Dimitrios Michael Manias"
+      ],
+      "primary_category": "eess.SP",
+      "categories": [
+        "eess.SP",
+        "cs.LG",
+        "eess.SY"
+      ],
+      "published": "2026-08-23T23:06:14+00:00",
+      "link": "https://arxiv.org/pdf/2608.22648v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "query:humanoid-ood"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "lightweight edge-oriented anomaly detection and localization for streaming data; transferable to embedded anomaly detection",
+      "llm_evidence_cn": "面向边缘的轻量级流数据异常检测与定位方法，可迁移至嵌入式异常检测场景",
+      "llm_evidence": "面向边缘的轻量级流数据异常检测与定位方法，可迁移至嵌入式异常检测场景",
+      "canonical_evidence": "面向边缘的轻量级流数据异常检测与定位方法，可迁移至嵌入式异常检测场景",
+      "llm_tldr_en": "Proposes a lightweight edge anomaly-detection and localization approach using H3 discrete global grid and multi-scale hierarchy, avoiding centralized processing for geospatial data streams.",
+      "llm_tldr_cn": "地理空间大数据流应用依赖实时异常检测，但集中式处理难以应对数据规模与速度。本文提出一种轻量级边缘导向的异常检测与定位方法，利用H3离散全球网格系统和多尺度分层结构在边缘完成分析。该方法降低了对集中式平台和大量通信的需求，适合资源受限的边缘场景。其轻量边缘异常检测思路可迁移到机器人边缘部署任务中。",
+      "llm_tldr": "地理空间大数据流应用依赖实时异常检测，但集中式处理难以应对数据规模与速度。本文提出一种轻量级边缘导向的异常检测与定位方法，利用H3离散全球网格系统和多尺度分层结构在边缘完成分析。该方法降低了对集中式平台和大量通信的需求，适合资源受限的边缘场景。其轻量边缘异常检测思路可迁移到机器人边缘部署任务中。",
+      "llm_tags": [
+        "query:humanoid-ood"
+      ],
+      "matched_query_tag": "query:humanoid-ood",
+      "matched_query_text": "lightweight LSTM or GRU models deployed on embedded platforms for anomaly detection",
+      "matched_requirement_id": "req-12",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2608.23320v1",
+      "source": "arxiv",
+      "title": "ROS2SmolVLA: Enabling Small Vision-Language-Action Models for Integration into Industrial-Grade Lightweight Robots",
+      "abstract": "Industrial demand changes the paradigms of production. Due to smaller batch sizes and more variations in products, companies face a growing challenge to adopt more adaptive production systems. In particular, robot-based automation is usually static and fails to respond to constantly changing processes. Vision-Language-Action (VLA) Models are a promising opportunity to mitigate this challenge by generating robot actions based on the observed system state. However, current research either focuses on large models that cannot be computed on premise, creating compliance and security challenges, or use lab-grade robot hardware that obscures exploitation in real industrial settings. In this work, we adapt Hugging Face's SmolVLA for Universal Robots lightweight robots. Further, we release the open-source repository ROS2SmolVLA that implements an interface for ROS 2 to SmolVLA, and makes it applicable for industrial-grade hardware. By this, we allow a lenient adoption into lab and industrial environments. We validate the functionality of SmolVLA for a Universal Robots UR10e using a pick-and-place task and give implementation guidelines. Our findings support that SmolVLA is a well-suited option for small-sized tasks that need to be computed on premise.",
+      "authors": [
+        "Nils Mandischer",
+        "Noah Böckmann",
+        "Ludwig Holl",
+        "Lars Mikelsons"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-08-24T14:36:52+00:00",
+      "link": "https://arxiv.org/pdf/2608.23320v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "Enables small VLA models on lightweight robots, addressing edge deployment for robotic systems",
+      "llm_evidence_cn": "面向轻量级机器人集成小模型，解决机器人边缘端部署问题",
+      "llm_evidence": "面向轻量级机器人集成小模型，解决机器人边缘端部署问题",
+      "canonical_evidence": "面向轻量级机器人集成小模型，解决机器人边缘端部署问题",
+      "llm_tldr_en": "This work adapts small Vision-Language-Action models for industrial-grade lightweight robots, enabling on-premise computation to satisfy compliance and security. It integrates open-source models into real robots, making adaptive automation feasible on the edge.",
+      "llm_tldr_cn": "针对工业小批量多品种生产需要灵活自适应机器人而大型VLA模型难以本地部署、实验室硬件不实用的问题，将开源小型视觉-语言-动作模型适配到工业级轻量机器人，支持本地计算以满足合规与安全要求。实验表明该方案能在真实工业环境中运行并响应流程变化，为机器人边缘端智能部署提供了可复用的路径。",
+      "llm_tldr": "针对工业小批量多品种生产需要灵活自适应机器人而大型VLA模型难以本地部署、实验室硬件不实用的问题，将开源小型视觉-语言-动作模型适配到工业级轻量机器人，支持本地计算以满足合规与安全要求。实验表明该方案能在真实工业环境中运行并响应流程变化，为机器人边缘端智能部署提供了可复用的路径。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "edge deployment for humanoid robots",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2608.24935v1",
+      "source": "arxiv",
+      "title": "A Lightweight Multimodal Vision-Language Framework for Early-Stage Anatomical Green Fruit Classification in Commercial Orchards",
+      "abstract": "Accurate identification of early-stage apple fruitlet anatomical structures, including the calyx, fruitlet body, and peduncle, is essential for robotic thinning, crop-load management, and other precision orchard operations. This study presents a lightweight multimodal vision-language framework that adapts TinyCLIP for fine-grained fruitlet anatomy classification in complex orchard environments. A dataset of 600 high-resolution RGB images collected from Scilate and Scifresh apple orchards was converted into 224 x 224 image patches and annotated for three anatomical classes. Domain-specific language prompts, such as ``a photo of a class,'' were used to guide multimodal alignment between orchard imagery and horticultural structures. A sliding-window inference strategy with a stride of 112 pixels aggregates patch-level predictions into spatial heatmaps, enabling interpretable whole-image localization of fruitlet components relevant to robotic thinning. Patch-level evaluation on an NVIDIA T4 GPU achieved F1-scores of 0.95 for calyx, 0.98 for fruitlet, and 0.85 for peduncle, with a macro-F1 score of 0.93. Deployment-oriented optimization using ONNX and TensorRT enabled efficient inference on NVIDIA Jetson hardware, preserved accuracy under INT8 quantization, and supported model sizes of approximately 127-137 MB with millisecond-level patch inference. These results demonstrate that lightweight vision-language models can provide interpretable and edge-deployable perception for automated fruitlet analysis and future robotic thinning systems. The source code and implementation details are publicly available at https://github.com/WilliamBu1/A-Lightweight-Vision-Language-Model-for-Early-Stage-Fruitlet-Classification-in-Apple-Orchards.",
+      "authors": [
+        "Ranjan Sapkota",
+        "William Bu",
+        "Chen Chen",
+        "Yunjun Xu",
+        "Manoj Karkee"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV",
+        "cs.AI"
+      ],
+      "published": "2026-08-23T20:26:14+00:00",
+      "link": "https://arxiv.org/pdf/2608.24935v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "constructs a 600-image RGB dataset for fruitlets classification",
+      "llm_evidence_cn": "构建了600张RGB图像的果实结构分类数据集",
+      "llm_evidence": "构建了600张RGB图像的果实结构分类数据集",
+      "canonical_evidence": "构建了600张RGB图像的果实结构分类数据集",
+      "llm_tldr_en": "Proposes a lightweight multimodal vision-language framework adapting TinyCLIP for fine-grained classification of early apple fruitlets, using a newly collected 600-image orchard dataset to support robotic thinning and crop-load management.",
+      "llm_tldr_cn": "针对早期苹果果实结构识别精度不足的问题，本文提出一种轻量级多模态视觉语言框架，通过TinyCLIP实现花萼、果体、果梗等结构的细粒度分类。研究构建了600张高分辨率RGB图像数据集，并利用领域提示进行多模态对齐。实验表明该方法在复杂果园环境中能有效分类，模型轻量适合部署。这为精细农业机器人提供了低成本视觉解决方案。",
+      "llm_tldr": "针对早期苹果果实结构识别精度不足的问题，本文提出一种轻量级多模态视觉语言框架，通过TinyCLIP实现花萼、果体、果梗等结构的细粒度分类。研究构建了600张高分辨率RGB图像数据集，并利用领域提示进行多模态对齐。实验表明该方法在复杂果园环境中能有效分类，模型轻量适合部署。这为精细农业机器人提供了低成本视觉解决方案。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2608.24937v1",
+      "source": "arxiv",
+      "title": "Multi-Modal Anomaly Detection: A Survey",
+      "abstract": "Multi-Modal Anomaly Detection (MMAD) detects rare abnormal events from heterogeneous data sources and is increasingly used in safety- and reliability-critical applications such as industrial inspection and cybersecurity. Yet the literature is fragmented across domains and modality combinations, and existing surveys usually group methods by architecture rather than by how abnormality is defined and separated in multi-modal settings. We survey MMAD from an assumption-driven perspective. We formalize the problem, identify five intrinsic characteristics underlying its core challenges, and organize prior work into two complementary paradigms. The first, normality-assumption methods, models regularity via representation learning, cross-modal alignment, and knowledge enhancement. The second, anomaly-assumption methods, sharpens decision boundaries through coarse-grained, structural, and semantic anomaly injection. We also investigate how foundation models are reshaping MMAD through scalable pretraining, flexible cross-modal transfer, and emerging reasoning capabilities. Finally, we compile representative benchmarks and evaluation protocols across domains and highlight open problems and future directions for robust, adaptive, and interpretable MMAD systems.",
+      "authors": [
+        "Xudong Mou",
+        "Zexin Wu",
+        "Chuan Luo",
+        "Shiru Chen",
+        "Xudong Liu",
+        "Chunming Hu",
+        "Renyu Yang"
+      ],
+      "primary_category": "cs.LG",
+      "categories": [
+        "cs.LG",
+        "cs.AI"
+      ],
+      "published": "2026-08-24T01:53:22+00:00",
+      "link": "https://arxiv.org/pdf/2608.24937v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "Multi-modal anomaly detection survey relevant to anomaly detection component of the composite humanoid-ood theme",
+      "llm_evidence_cn": "多模态异常检测综述，与复合需求中的异常检测部分相关",
+      "llm_evidence": "多模态异常检测综述，与复合需求中的异常检测部分相关",
+      "canonical_evidence": "多模态异常检测综述，与复合需求中的异常检测部分相关",
+      "llm_tldr_en": "A survey of multi-modal anomaly detection methods, organized by abnormality assumptions, covering representation learning, cross-modal alignment, and knowledge enhancement, relevant to safety-critical applications including robotics.",
+      "llm_tldr_cn": "该综述从异常假设出发系统梳理多模态异常检测研究，涵盖表征学习、跨模态对齐与知识增强等范式，并提炼出多模态异常检测的核心挑战。对于依赖异构传感器信号（如关节、视觉、力矩）的机器人异常检测与安全监测具有方法借鉴价值，可作为构建人形机器人异常检测框架的参考。",
+      "llm_tldr": "该综述从异常假设出发系统梳理多模态异常检测研究，涵盖表征学习、跨模态对齐与知识增强等范式，并提炼出多模态异常检测的核心挑战。对于依赖异构传感器信号（如关节、视觉、力矩）的机器人异常检测与安全监测具有方法借鉴价值，可作为构建人形机器人异常检测框架的参考。",
+      "llm_tags": [
+        "query:humanoid-ood:composite"
+      ],
+      "matched_query_tag": "query:humanoid-ood:composite",
+      "matched_query_text": "Papers central to 请帮我查找与人形机器人故障诊断、异常检测（OOD / Anomaly Detection）、自监督时序重建（VAE / GRU）、以及边缘部署相关的论文。重点关注：基于本体感受信号（关节位置/速度/力矩/IMU）的故障检测方法；用于时序数据的自监督异常检测（如 OmniAnomaly, USAD）；开放集识别 / OOD 检测在机器人安全中的应用；轻量化模型（LSTM/GRU）在嵌入式平台（RK3588）上的部署；受 RAPT (Munn 等, 2026) 启发的机器人故障诊断框架。另外，请补充一些关于仿人机器人（Unitree G1 等）仿真故障注入、数据集构建的文献。, especially work that connects or combines: humanoid robot fault diagnosis using proprioceptive signals; anomaly detection from joint position velocity torque IMU signals in humanoid robots; out-of-distribution detection for safe robot operation; lightweight LSTM or GRU models deployed on embedded platforms for anomaly detection; RAPT framework for robot fault diagnosis based on proprioception; fault injection simulation for humanoid robots in MuJoCo or similar environments; Anomaly detection in humanoid robot using proprioceptive signals; Self supervised time series anomaly detection for robot fault diagnosis; Open set recognition in robotics for safety and anomaly detection; Deploying lightweight LSTM GRU on RK3588 for time series anomaly detection.",
+      "matched_requirement_id": "req-composite-humanoid-ood",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2608.26239v1",
+      "source": "arxiv",
+      "title": "WALL-SS: Scaling Long-horizon World Models via Next-Scale Autoregression",
+      "abstract": "Generative world models provide robots with predictive models of how the world evolves under interaction, with growing potential for simulation, planning, policy evaluation, and robot learning. Beyond clip-level future prediction, a unified generative formulation should relate actions to consequences, support flexible horizons and continuous interaction, and enable reward-driven optimization. We introduce WALL-SS, a world model that generates visual futures through Scale-wise autoregressive Scaling, enabling action-controllable and long-horizon robotic simulation. WALL-SS represents embodied trajectories as causal sequences of temporally interleaved observations and actions, making action-dependent state transitions explicit while naturally supporting variable-length generation, streaming extension through reusable causal states, and direct optimization through sequence probabilities. To make this formulation effective over long horizons, we generate each future observation in a coarse-to-fine manner and develop three complementary components within the same hierarchy. Action-conditioned next-scale prediction injects scale-aligned action representations to improve action-future coupling and model both successful and failed behaviors. Scale-compressed long-horizon memory retains recent interactions at fine resolution while compressing distant observations and actions, with scale-wise dream forcing enhancing robustness to self-generated context. Finally, on-policy alignment optimizes autoregressive visual dynamics with action-following and long-term consistency rewards while preserving the pretrained visual distribution. Experiments show that WALL-SS improves action following and trajectory accuracy, supports coherent minute-long streaming rollout under bounded memory, and consistently benefits from on-policy alignment in reducing action drift and long-horizon inconsistency.",
+      "authors": [
+        "Maeve Zhang",
+        "Rain Sun",
+        "Xiang Wang",
+        "Cyril Zhang",
+        "Shalfun Li",
+        "Meng Cao",
+        "Howard Lu",
+        "Ethan Chen",
+        "Harry Jhou",
+        "KZ Zheng",
+        "Lights Shi",
+        "Regis Cheng",
+        "Lorenzin",
+        "Robert Wang",
+        "Victor Yao",
+        "Gody Li",
+        "Elise Mon",
+        "Yohann Tang",
+        "Ryan Yu",
+        "PS Zhang",
+        "Vincent Chen",
+        "Hang Su",
+        "Roy Gan",
+        "Hao Wang",
+        "Qian Wang"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-08-26T17:57:12+00:00",
+      "link": "https://arxiv.org/pdf/2608.26239v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "Generates synthetic embodied trajectories via world model, supporting dataset creation for robot learning",
+      "llm_evidence_cn": "通过世界模型生成合成具身轨迹，可支持机器人学习数据集构建",
+      "llm_evidence": "通过世界模型生成合成具身轨迹，可支持机器人学习数据集构建",
+      "canonical_evidence": "通过世界模型生成合成具身轨迹，可支持机器人学习数据集构建",
+      "llm_tldr_en": "WALL-SS uses scale-wise autoregression to generate long-horizon, action-controllable visual robot simulations by modeling embodied trajectories as causal observation-action sequences, offering a scalable source of synthetic robot data.",
+      "llm_tldr_cn": "机器人的视觉世界模型通常只能做片段级预测，难以支持长时程、动作可控的交互式仿真。WALL-SS提出尺度级自回归策略，将观测与动作交织的轨迹作为因果序列逐步生成视觉未来，从而在长时程仿真中保持连贯性。实验表明该方法能够生成动作可控的长期视觉仿真，为机器人规划、策略评估与数据集构建提供了可扩展的生成工具。",
+      "llm_tldr": "机器人的视觉世界模型通常只能做片段级预测，难以支持长时程、动作可控的交互式仿真。WALL-SS提出尺度级自回归策略，将观测与动作交织的轨迹作为因果序列逐步生成视觉未来，从而在长时程仿真中保持连贯性。实验表明该方法能够生成动作可控的长期视觉仿真，为机器人规划、策略评估与数据集构建提供了可扩展的生成工具。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    }
+  ]
+}

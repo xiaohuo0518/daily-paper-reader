@@ -1,0 +1,253 @@
+Title: Privileged Critic Training Enables Sensor-Free Thruster Fault Adaptation in End-to-End RL
+
+URL Source: https://arxiv.org/pdf/2608.22976v1
+
+Published Time: Tue, 25 Aug 2026 01:48:18 GMT
+
+Number of Pages: 7
+
+Markdown Content:
+# Privileged Critic Training Enables Sensor-Free Thruster Fault Adaptation in End-to-End RL 
+
+Ricard M. Castan 1, Miguel A. Olivarez-Mendez 1
+
+Abstract —Fault-tolerant navigation for thruster-actuated robots requires online adaptation to failures that are neither binary nor fully observable: thrusters may degrade continuously, fail dead, or jam stuck-open. Classical fault detection pipelines require dedicated sensors unavailable at deployment; oracle con-trollers that observe the true failure state are equally impractical. We show that privileged critic training is sufficient for sensor-free fault adaptation: giving the PPO value function access to the true degradation state Dgt during training, while the actor receives only standard task observations, shapes a policy that compensates for failures at deployment without any dedicated fault sensing. We propose RAFT (Recurrent Asymmetric Fault Tolerant), a policy with recurrent memory trained with a privileged asym-metric critic. Evaluated on a floating-platform robot (8 thrusters, 1 reaction wheel) under up to four simultaneous thruster failures, RAFT achieves 70.2 % success at four concurrent failures, closing 84 % of the gap from a failure-naive baseline (4.8 %) to an oracle policy that sees the full degradation state at deployment (82.4 %). All code, checkpoints, and data are open-source 2.
+
+I. I NTRODUCTION 
+
+Robots that rely on thrusters for force generation, under-water vehicles, aerial platforms, or free-floating space robots, must operate reliably despite hardware degradation. Real fail-ures rarely present as clean binary switches: a propeller may lose thrust gradually due to biofouling, a valve may jam partially open, or an actuator may fail dead mid-task. Robust operation thus requires online detection and compensation of continuous, multi-mode degradation acting simultaneously on multiple actuators. Classical fault-tolerant control handles this via an explicit fault-detection and isolation (FDI) module followed by aswitched recovery controller [1], [2]. This pipeline is brittle: each fault mode requires a dedicated FDI signature, and combinations of faults quickly overwhelm lookup-table ap-proaches. Data-driven FDI methods [3] relax the need for hand-crafted signatures but still require a second-stage com-pensator designed for each identified fault. End-to-end reinforcement learning sidesteps the modular pipeline by training a PPO [4] policy directly under failure distributions [5]. The two most common baselines are an oracle policy (Oracle) that injects the true degradation vector 
+
+Dgt directly into the actor (an upper bound requiring perfect fault sensing), and a vanilla policy (VAN) trained in failure-free environments. Neither is deployment-ready. We ask a different question: if the value function can observe Dgt during training, does the actor still need any fault information at 
+
+> 1University of Luxembourg
+> 2https://github.com/snt-spacer/RAFT.git
+
+deployment? In the asymmetric actor-critic framework [6], the PPO critic receives privileged access to Dgt while the actor sees only standard task observations. We show empirically that this critic-side privilege is the primary mechanism for sensor-free fault tolerance. 
+
+Contributions. (i) RAFT , a privileged-asymmetric-critic GRU policy achieving 70.2 % SR at four simultaneous failures (84 % of the VAN →oracle gap) without any fault sensors at de-ployment; (ii) an ablation study (E6) isolating the contribution of critic privilege from actor architecture, where a memory-less feedforward actor with the same critic (VAN-MLP-AC) already achieves 79 % gap closure, confirming the critic as the primary mechanism while compact recurrence adds a further 3.8 pp; (iii) the Observer architecture as an optional inter-pretability extension with a three-mode failure scheduler, and a quantified tradeoff showing OBS-MSE produces a human-readable fault estimate at a cost of 11 pp SR relative to RAFT; (iv) a qualitative discussion of where fault tolerance is encoded (policy weights vs. runtime state estimation) and the per-mode observability of Dgt from passive motion history. II. R ELATED WORK 
+
+Fault-tolerant control. Surveys of actuator fault-tolerant control [1], [2] categorize the field into passive approaches (fixed robust controllers) and active approaches (real-time fault detection and isolation followed by controller reconfiguration). Active approaches require an FDI module that reliably iden-tifies fault type and magnitude, which is difficult for simulta-neous or continuously degrading failures. Our work sidesteps the FDI module entirely: the asymmetric critic encodes fault-compensating behavior directly into the actor weights during training. 
+
+Asymmetric actor-critic with privileged information. The asymmetric actor-critic framework [6] shows that a critic with privileged simulation state can guide a deployment-ready actor trained on realistic observations. This idea has been scaled to massively parallel GPU simulation for legged locomotion [7], demonstrating that critic-privileged training yields robust poli-cies across diverse physical conditions. Work in [8] proves that conditioning the critic on arbitrary partial privileged signals still produces unbiased policy gradient estimates, directly justifying RAFT’s design of feeding only the degradation vector Dgt to the critic rather than the full environment state. Finite-time convergence analysis in [9] shows that asymmetric critics eliminate aliasing error terms arising from partial ob-servability, giving the first formal convergence guarantee for this training paradigm. Polynomial sample-complexity bounds arXiv:2608.22976v1 [cs.RO] 24 Aug 2026 under a filter stability condition are established in [10], which also shows that two-stage expert distillation provably fails in the general case, motivating the single-phase critic-privilege design over teacher-student pipelines. 
+
+History-conditioned adaptation. RMA [11] trains a priv-ileged extrinsics encoder in simulation, then distils it into a history-conditioned adaptation module via behaviour cloning. A teacher-student framework in [12] similarly distils a policy trained with privileged terrain information into one operating solely on proprioceptive history. RMA has been extended to robotic manipulation [13], demonstrating that hidden physical variables such as object mass and friction can be inferred from action and proprioceptive history without direct sensor access, establishing the generality of privileged-to-history distillation beyond locomotion. Our Observer architecture follows a sim-ilar spirit but trains history encoder and policy jointly end-to-end, without a separate distillation phase. LSTM [14] and GRU [15] policies can in principle detect failures implicitly through hidden state accumulation. Recurrent model-free RL has been shown [16] to match specialized POMDP algorithms across diverse benchmarks, establishing recurrent architectures as strong baselines. Our E5 ablation tests this directly in the fault-tolerance setting: four GRU/LSTM variants without privileged critic access all perform at or below VAN-MLP (best: GRU-64, 4.0 % at k=4 ). E6 shows that restoring critic privilege to a memory-less actor recovers 66.4 %, confirming that critic privilege, not recurrence or an explicit history buffer, is the primary mechanism. 
+
+Learning-based fault tolerance. Domain randomization over actuator effectiveness [5] trains policies robust to sampled failure parameters at training time, closely mirroring our VAN baseline; we show that without privileged critic access, such policies degrade rapidly as failure count grows. Recent work [17] demonstrates model-free DRL for thruster force reallocation on an AUV experiencing degradation or loss, without an explicit FDI system, showing the viability of end-to-end learning for continuous actuator faults in underwater vehicles. Our setting differs in that we study simultaneous multi-thruster failures across three distinct failure modes on a planar free-floating platform, and explicitly isolate the contri-bution of asymmetric critic training. 
+
+Underwater and space robotics. Fault-tolerant control for AUVs has been studied in classical [18] and model-predictive frameworks [19]. More recent work [20] demonstrates an RL-based fault-tolerant surfacing controller for underwater robots that operates without any explicit fault identification and transfers across three different AUV designs, achieving 85.7 % real-world success and establishing the feasibility of sensor-free RL on free-floating platforms closely analogous to ours. Our platform is representative of small free-floating robots used in microgravity laboratories and shallow-water inspection tasks, where sensor-free fault adaptation is critical due to the absence of reliable fault-sensing hardware. III. P ROBLEM FORMULATION 
+
+A. Robot and Task 
+
+We use a floating-platform robot controlled by eight independently-actuated thrusters plus one reaction wheel. Commands u ∈ [0 , 1] 9 specify normalized thruster openings and wheel torque. The task is Go-to-Position : navigate from a random spawn within a 3 m radius to a fixed goal and hold position within 5 cm for 50 consecutive steps. The nominal observation vector otask ∈ R15 contains relative goal position and orientation, body-frame velocity, and angular rate. 
+
+B. Failure Model 
+
+We model three independent failure modes acting on thruster i:
+
+uapplied  
+
+> i
+
+= si · ui + δi (1) where si ∈ [0 , 1] is a scale factor and δi ∈ [0 , 1] is an additive offset. The three modes and their parameterizations are:  
+
+> •
+
+DEG (continuous degradation): δi = 0 , si ∼ U (0 , 1) .Models biofouling or partial blockage.  
+
+> •
+
+DEAD (abrupt failure): δi = 0 , si = 0 . Models total actuator loss.  
+
+> •
+
+STK (stuck-on): si = 1 , δi ∼ U (0 , 1) . Models a jammed-open valve injecting constant thrust. The degradation state is the 16-dimensional vector Dgt =[s0, . . . , s 7, δ 0, . . . , δ 7] ∈ [0 , 1] 16 . At each episode reset, exactly k ∼ U{ 0, . . . , k max } thrusters are assigned a failure mode sampled from the per-mode probability vector pmode ;remaining thrusters have si = 1, δi = 0. A curriculum increases kmax from 0 to 4 over training. 
+
+C. Reinforcement Learning Formulation 
+
+We model the task as a Markov Decision Process 
+
+(S, A, P, r, γ ), where S is the state space, A is the action space, P is the transition model, r is the reward and γ is the discount factor. The per-step reward is: 
+
+rt = wp e−dt/α p + wh e−| θt|/α h − wlv clip( vt)
+
+− wav clip( ωt) − wb e−(dmax −dt)/α b
+
+(2) where dt=∥pt−p⋆∥2 is position error, θt is heading er-ror, vt and ωt are linear and angular speed, and dmax is the workspace boundary radius. Weights: wp=1 .0, wh=0 .25 ,
+
+wlv =0 .05 , wav =0 .1, wb=10 .0; scales αp=αh=αb=1 .0.An episode succeeds if ∥p−p⋆∥2 < 0.05 m for at least 50 consecutive steps. Two metrics are reported across 5 120 episodes per condition: the success rate (SR, fraction of episodes meeting the criterion above) and the final position error (FPE), the distance ∥pT −p⋆∥2 at the last step T of each successful episode (averaged over those episodes). SR captures whether the robot reaches the goal at all; FPE captures how precisely it settles once it does. Observer extension (optional, §IV-C) 
+
+> training only
+
+otask ∈ R15 Policy 
+
+πθ u ∈ [0 , 1] 9
+
+H ∈ R32 ×15 Observer fϕ 
+
+> ˆD,⊥
+
+MSE 
+
+∥ ˆD−Dgt ∥2
+
+Critic Vψ
+
+> [otask ∥Dgt ]
+
+Dgt ∈ [0 , 1] 16                
+
+> Fig. 1. Privileged actor-critic training setup. The asymmetric critic (orange, training only) receives [otask ∥Dgt ]; its fault-informed value estimates shape policy gradients that encode fault-compensating behaviour into the actor without any fault sensing at deployment. Base methods (VAN-MLP-AC, GRU/LSTM-AC): actor receives only otask .Observer extension (gray dashed, optional): actor additionally receives ˆDfrom a history-based MLP, either OBS ( λ=0 , random projection) or OBS-MSE ( λ=1 , red dashed, supervised at 11 pp cost).
+
+IV. M ETHOD : P RIVILEGED ACTOR -C RITIC FOR FAULT 
+
+ADAPTATION 
+
+A. Asymmetric Actor-Critic Setup 
+
+The core method is a PPO actor-critic in which the critic receives privileged access to the true degradation state Dgt 
+
+during training, while the actor receives only the standard task observation otask [6]. Figure 1 shows the full setup. 
+
+Actor. At every step the actor receives otask and outputs a Gaussian action distribution: 
+
+πθ (u | otask ) = N (μθ (otask ), Σ) (3) No fault information reaches the actor at any point, neither during training nor at deployment. All fault-compensating structure must emerge from the policy gradient signal alone. 
+
+Privileged critic. The PPO critic receives the concatenated privileged observation [otask ∥ Dgt ], including the ground-truth degradation state unavailable at deployment: 
+
+Vψ
+
+ [otask ∥ Dgt ] ∈ R (4) The critic’s fault-aware value estimates produce lower-variance advantages that shape the policy gradient to encode fault-compensating behaviour. Because only the actor is executed at test time, exposing Dgt to the critic carries no deployment cost: privileged fault access during training transfers to the actor as fault-tolerant policy structure, without the actor ever observing Dgt .
+
+B. Actor Architecture Variants 
+
+We propose RAFT (Recurrent Asymmetric Fault Tolerant), a GRU-64 actor trained with the privileged critic above, and study four ablation variants under the same critic setup:  
+
+> •
+
+VAN-MLP-AC : feedforward MLP with hidden dimen-sions [256 , 128 , 64] . memory-less; the simplest ablation isolating the pure privileged-critic effect without recur-rence.  
+
+> •
+
+GRU-256-AC / LSTM-64-AC / LSTM-256-AC : Larger GRU and LSTM variants ablating the effect of hidden-state size and gating type. All variants share the same privileged critic. The recurrent actors accumulate temporal failure signatures through their hidden state, without requiring an explicit history buffer. 
+
+Reference policies. Two non-RAFT policies frame the comparison: VAN , a standard MLP trained on a failure-free environment, serving as a failure-naive lower bound; and 
+
+Oracle , the same GRU-64 architecture as RAFT but the actor additionally receives Dgt at every step (concatenated to otask ). Oracle is trained on the same 3-mode failure curriculum as RAFT and serves as the per-mode upper bound, the SR achievable with perfect failure sensing at deployment. 
+
+C. Observer Extension for Interpretability 
+
+We additionally study the Observer (OBS) architecture as an optional interpretability extension motivated by explicit system identification. It has no effect on the privileged critic; the critic architecture is identical to the base method. 
+
+History buffer. The most recent L=32 observations otask 
+
+are stacked into H ∈ RL×15 , flattened to 480 features. 
+
+Observer MLP. A three-layer MLP maps the flattened history to a 16-dimensional latent: 
+
+ˆD = fϕ(H) ∈ [0 , 1] 16 (5) with hidden dimensions [128 , 64] , ELU activations, and a sigmoid output. The augmented actor receives oaug =[otask ∥ ˆD.detach ()] ; the detach operator prevents PPO gra-dients from updating fϕ.
+
+OBS ( λ=0 ). In the default configuration fϕ receives no supervised gradient; its weights stay at random initialisation, acting as a fixed random projection of the history buffer. Experiment E6 confirms that OBS performs comparably to VAN-MLP-AC (64.4 % vs. 66.4 %, p> 0.05 ), so the observer head’s primary value is as a foundation for the OBS-MSE interpretability variant. 
+
+OBS-MSE ( λ=1 ). Adding a supervised MSE loss: 
+
+L = LPPO (θ) + λ Lmse (ϕ), Lmse = ∥ ˆD − Dgt ∥22 (6) trains fϕ to estimate Dgt from observable motion history. The observer output becomes human-readable, allowing a practitioner to inspect the policy’s implicit fault belief at deployment, at a cost of 11 pp SR (see E1 results). 
+
+D. Training Protocol 
+
+All policies are trained in Isaac Lab [21] for 5 000 PPO iterations using 4 096 parallel environments and 24 steps per roll out ( ≈ 5 × 10 8 environment steps total). The failure curriculum linearly increases kmax from 0 to 4 over the first 
+
+5 × 10 7 steps. We use the Adam optimizer with a learning rate of 3 × 10 −4, 5 learning epochs per update, and 8 mini-batches. Three independent seeds (42, 7, 1337) are used; all results report mean ± std across seeds. V. E XPERIMENTS AND RESULTS 
+
+We address four research questions through six experiments. All evaluations use 512 environments × 10 episodes per condition. E1, E3: How close does RAFT approach the fault-oracle upper bound across failure count k and failure mode? E2: Is RAFT robust across the full continuous severity spectrum? E4: Can RAFT adapt online to failures injected mid-episode without reconfiguration? E5, E6: What is the contribution of recurrence and the asymmetric critic? 
+
+A. E1 — Main Comparison (Mixed Modes) 
+
+Five methods are compared under mixed-mode failures (k ∈ { 0, . . . , 4}): VAN, Oracle, RAFT, OBS, and OBS-MSE (defined in Section IV). VAN-MLP-AC is reported separately in E6.       
+
+> Fig. 2. E1 — Success rate vs. failure count k(mean ±std, 3 seeds). RAFT (purple); OBS ( λ=0 , orange) and OBS-MSE (indigo): interpretability variants; Oracle: upper bound (actor sees Dgt ); VAN: failure-naive baseline.
+
+RAFT achieves 70.2 % at k=4 , closing 84 % of the VAN →oracle gap (4.8 % →82.4 %), 12.2 pp below the Oracle. All privileged-critic variants hold 100 % SR at k≤1. VAN-MLP-AC (66.4 %, E6) shows the privileged critic alone closes 79 % of the gap; RAFT’s recurrence adds a further 3.8 pp SR on top. OBS (64.4 %) performs comparably to VAN-MLP-AC at no SR advantage. VAN collapses to 4.8 % at k=4 ,confirming that failure-curriculum training without privileged critic access is insufficient. 
+
+B. E2 — Failure Severity Sweep 
+
+With k = 1 fixed, the severity parameter is swept across the full range for each mode independently: scale ∈ {0.0, 0.1, 0.3, 0.5, 0.7, 0.9, 1.0} for DEG, offset ∈{0.0, 0.1, 0.2, 0.4, 0.6, 0.8, 1.0} for STK. Both RAFT and OBS ( λ=0 ) achieve 100 % SR across the full severity spectrum for both DEG and STK at k=1 (all 3 seeds). No severity cliff was observed for either method. Precision differs substantially: RAFT’s final position error (FPE, the settling distance to the goal at episode end on successful episodes) is consistently roughly half that of OBS across all severity levels (Table I). The single exception is STK severity 1.0, where RAFT’s mean rises to 0.107 ± 0.058 cm due to a single-seed outlier (median below 0.08 cm). GRU recurrence provides more precise failure compensation at any severity, even when SR is identical.               
+
+> TABLE I E2 — F INAL POSITION ERROR (CM )VS .SEVERITY AT k=1 (MEAN ,3SEEDS ). SR = 100 % FOR ALL METHODS AT EVERY LEVEL . DEG SCALE
+> s: 0 = DEAD , 1 = NOMINAL . STK OFFSET δ: 0 = NO EFFECT , 1 = FULLY STUCK OPEN .
+
+DEG (thrust scale s) STK (stuck offset δ)
+
+s RAFT (cm) OBS (cm) δ RAFT (cm) OBS (cm) 
+
+0.0 0.059 (±0.007 ) 0.114 (±0.017 ) 0.0 0.060 (±0.006 ) 0.114 (±0.016 )
+
+0.1 0.058 (±0.007 ) 0.111 (±0.017 ) 0.1 0.057 (±0.007 ) 0.105 (±0.014 )
+
+0.3 0.057 (±0.006 ) 0.107 (±0.015 ) 0.2 0.058 (±0.010 ) 0.099 (±0.014 )
+
+0.5 0.055 (±0.005 ) 0.102 (±0.016 ) 0.4 0.054 (±0.006 ) 0.095 (±0.012 )
+
+0.7 0.054 (±0.005 ) 0.097 (±0.013 ) 0.6 0.055 (±0.006 ) 0.099 (±0.011 )
+
+0.9 0.054 (±0.005 ) 0.093 (±0.009 ) 0.8 0.069 (±0.010 ) 0.108 (±0.013 )
+
+1.0 0.055 (±0.005 ) 0.094 (±0.010 ) 1.0 0.107 (±0.058 ) 0.129 (±0.018 )
+
+C. E3 — Multi-Failure Scalability 
+
+The failure mode is fixed per sub-experiment (DEG, DEAD, or STK) and k is swept 0 . . . 4 for RAFT, OBS ( λ=0 ), and the Oracle. All three policies share the same training distribution (3-mode mixed failure curriculum); Oracle differs only in that its actor receives the 16-dim Dgt at every step, providing a per-mode oracle upper bound. The mode hardness ranking is DEG < STK < DEAD 
+
+for all three policies, including the oracle: binary total loss is hardest to compensate even with full failure-state knowledge, because the disturbance is maximally abrupt and the remaining thrusters carry the entire control authority. At k=4 , Oracle reaches 98.8 % on DEG, 84.8 % on STK, and only 80.1 % on DEAD. RAFT consistently outperforms OBS across all modes and k values: at k=4 , RAFT leads OBS by +3 .0 pp on DEG (96.2 % vs. 93.2 %), +7 .9 pp on DEAD (52.2 % vs. 44.3 %), and +5 .4 pp on STK (72.7 % vs. 67.3 %). The RAFT-to-oracle gap is small on the easier modes (2.6 pp on DEG, 12.1 pp on STK) and widest on DEAD (27.9 pp), where privileged failure information is most valuable; this is the principal cost of operating without fault sensing at deployment.        
+
+> Fig. 3. E3 — SR vs. kper failure mode for RAFT (purple), OBS ( λ=0 ,orange), and the Oracle (grey dashed). All three policies are evaluated under mode pinning. Mode hardness: DEG <STK <DEAD, holding even for the oracle.
+
+D. E4 — Mid-Episode Failure Injection 
+
+Episodes begin failure-free, and at step 100 of 400, k
+
+thrusters are atomically degraded (no reset signal is given). Oracle receives the updated Dgt instantly; RAFT relies on its GRU hidden state; VAN-MLP-AC uses a memory-less actor; OBS uses a sliding history buffer; VAN has no information. The key finding: VAN-MLP-AC’s mid-episode drop nearly matches RAFT’s . VAN-MLP-AC drops 5.4 pp at k=4 
+
+(61 .0 % vs reset-time 66 .4 %); RAFT drops 5.5 pp ( 64 .7 % vs 
+
+70 .2 %). Because VAN-MLP-AC is memory-less, this parallel degradation confirms that the privileged critic’s fault-aware value shaping, not GRU recurrence, is the primary mechanism for online adaptation. RAFT’s GRU adds 3.7 pp on top, narrowing the Oracle gap to 10 .8 pp at k=4 (vs 14 .5 pp for VAN-MLP-AC and 26 .3 pp for OBS). VAN collapses imme-diately to 6.8 % at k=4 . OBS’s larger 15 .2 pp drop reflects its sliding history buffer needing more steps to accumulate a new failure signature; the Oracle itself drops only 6.9 pp from its reset-time SR ( 82 .4 % → 75 .5 %), establishing that mid-episode adaptation is intrinsically harder than reset-time even with perfect failure information.   
+
+> Fig. 4. E4 — Mid-episode failure injection at step 100. VAN-MLP-AC (sky blue) tracks RAFT (purple) closely, confirming the privileged critic, not recurrence, drives adaptation. Dashed light-purple: RAFT reset-time SR (E1) reference (5.5 pp drop at k=4 ). OBS (orange) lags 15.5 pp due to its slower history buffer.
+
+E. E5 — Recurrent Policy Ablation 
+
+Four recurrent policies (GRU and LSTM, hidden dims 64 and 256) are trained for 5 000 iterations on the same failure curriculum as RAFT, receiving only instantaneous otask (no asymmetric critic, no history buffer). This tests whether step-by-step recurrence alone can implicitly detect failures from the policy gradient signal. All four variants track VAN-MLP closely and collapse at high k (at k=4 : GRU-64 4.0 %, GRU-256 1.9 %, LSTM-64 3.3 %, LSTM-256 3.0 %, vs. VAN-MLP 4.8 %). Wide variance (> 13 pp at k=1 ) indicates seed-dependent local optima rather than reliable failure detection. Recurrence alone cannot achieve fault tolerance: the 65-pp gap to RAFT (70.2 %) is attributable entirely to the absent asymmetric critic, which E6 confirms by recovering 66.4 % with a memory-less actor under the same critic.     
+
+> Fig. 5. E5 — Recurrent baselines (GRU/LSTM, hidden dims 64/256) trained without the asymmetric critic all track VAN-MLP and collapse at high k.Wide variance ( >13 pp at k=1 ) indicates unstable local optima. Recurrence alone cannot substitute for privileged critic access.
+
+F. E6 — Asymmetric Critic Ablation 
+
+To isolate the asymmetric critic’s contribution from the observer head and history buffer, five variants (VAN-MLP-AC, RAFT/GRU-64-AC, GRU-256-AC, LSTM-64-AC, LSTM-256-AC) are trained with Dgt available to the critic but not to the actor. No observer head or history buffer is used. RAFT and VAN-MLP (no AC, from E1) serve as upper and lower references. The striking finding: VAN-MLP-AC (memory-less, no his-tory, no observer) achieves 66.4 ± 2.9 % at k=4 , a 61-pp jump over the same architecture without the asymmetric critic (VAN-MLP at 4.8 %, E1). The asymmetric critic alone is sufficient to recover most of the fault-tolerance signal: the value function’s privileged access to Dgt during training shapes policy gradients that generalize to failure scenarios at inference, without any explicit failure state in the actor.                
+
+> Fig. 6. E6 — Five AC variants share the same privileged critic; the actor differs only in architecture. VAN-MLP-AC (66.4 ±2.9 %) already recovers most of the gap; compact recurrent variants RAFT/GRU-64-AC (70.2 ±1.0 %) and LSTM-64-AC (69.5 ±0.9 %) add 3–4 pp; larger hidden dims (256) underperform dim-64 counterparts.
+
+Compact recurrent variants RAFT/GRU-64-AC (70.2 ± 1.0 %) and LSTM-64-AC (69.5 ± 0.9 %) exceed VAN-MLP-AC by 3–4 pp, plausibly through richer temporal context. Larger hidden dims (256) underperform their dim-64 counterparts in both families, consistent with E5. All AC variants vastly outperform E5’s best recurrent baseline (4.0 %), confirming the 65-pp gap was driven by the absent critic, not by actor architecture choices. VI. D ISCUSSION 
+
+Why does privileged critic training enable sensor-free fault adaptation? The value function’s access to Dgt pro-duces fault-aware advantage estimates: episodes where the policy fails to compensate for a specific failure pattern receive lower advantage, penalizing fault-naive behavior in the gradi-ent. The critic acts as a fault-informed teacher that shapes the actor through the gradient signal rather than through direct observation. E5 confirms this mechanism: removing the privileged critic collapses performance to VAN-level (best recurrent: 4.0 %), while restoring it (E6) recovers 66.4 % for a memory-less actor. 
+
+Recurrence adds modest gains on top of the critic. 
+
+Without privileged critic access, recurrence fails (best: 4.0 % at k = 4 ). With it, compact recurrent actors (RAFT: 70.2 %, LSTM-64-AC: 69.5 %) edge out memory-less VAN-MLP-AC (66.4 %) by 3–4 pp; larger hidden states (dim 256) hurt in both GRU and LSTM families, consistent with over-parameterization on this task. 
+
+Interpretability has a quantified cost. The MSE objec-tive imposes a representation constraint: the 16-dim observer output must align with Dgt , introducing a bottleneck wherever fault-adaptive control needs features not well-described by Dgt 
+
+directly. The result is a clear practitioner choice: RAFT for maximum performance, OBS for a competitive feedforward option, or OBS-MSE for a human-readable fault estimate at the cost of 11 pp SR. Task-motivated observer objectives (contrastive, reward-supervised) may recover OBS-MSE’s in-terpretability without the performance cost. 
+
+Mid-episode adaptation (E4). The near-identical mid-episode drops for memory-less VAN-MLP-AC (5.4 pp) and RAFT (5.5 pp) confirm that the privileged critic’s value shap-ing, not recurrence, is the dominant adaptation mechanism. RAFT’s GRU contributes a further 3.7 pp through richer temporal context; OBS’s 15.2 pp drop reflects its sliding buffer needing more steps to accumulate a new failure signature. 
+
+Where is fault tolerance encoded? RAFT’s actor never observes Dgt , yet compensates for failures at deployment. The mechanism is not runtime fault estimation: E5 shows that recurrence alone (which would in principle accumulate failure signatures into the hidden state) achieves only ≤ 4 % 
+
+SR at k=4 without the privileged critic. Instead, the gradient-shaped policy weights themselves encode fault-compensating behavior, and the GRU contributes temporal context for richer actuation rather than acting as a fault detector. A separate question is the per-mode observability of Dgt itself: DEG and DEAD induce visible changes in motion dynamics, but a stuck-open offset (STK) produces a constant thrust injection independent of the command and is plausibly unobservable from passive motion history alone. Closing such observability gaps likely requires active-excitation strategies. 
+
+Limitations. Experiments are conducted entirely in simu-lation; sim-to-real transfer is not evaluated. The task is 2D navigation; 6-DOF tasks with coupled pitch/roll failures may require longer history or recurrent observers. The Transformer history-encoder baseline (HIS) did not converge in our setting. VII. C ONCLUSION 
+
+Privileged critic training is sufficient for sensor-free thruster fault adaptation: RAFT achieves 70.2 % SR at k=4 , closing 84 % of the gap from a failure-naive baseline (4.8 %) to the Oracle (82.4 %) while its actor never observes Dgt at deployment. VAN-MLP-AC (memory-less, same critic) closes 79 % of the gap, isolating the critic as the primary mechanism; RAFT’s GRU adds a further 3.8 pp SR. Recurrent policies without privileged critic access reach at most 4.0 %, confirm-ing recurrence alone cannot substitute. The Observer extension adds interpretability without per-formance: OBS matches VAN-MLP-AC (64.4 %), and OBS-MSE makes the fault estimate human-readable at a cost of 11 pp SR, a quantified tradeoff for practitioners who require explainable estimates. The near-identical mid-episode drops for memory-less VAN-MLP-AC and recurrent RAFT (5.4 vs. 5.5 pp) suggest fault tolerance is encoded in the gradient-shaped policy weights rather than in a runtime state estimator. Future work will extend to 6-DOF platforms, evaluate sim-to-real transfer, and investigate task-motivated observer objectives to close the STK observability gap. REFERENCES [1] J. Jiang and X. Yu, “Fault-tolerant control systems: A comparative study between active and passive approaches,” Annual Reviews in Control ,vol. 36, no. 1, pp. 60–72, 2012. [2] Y. Zhang and J. Jiang, “Bibliographical review on reconfigurable fault-tolerant control systems,” Annual Reviews in Control , vol. 32, no. 2, pp. 229–252, 2008. [3] D. Miljkovic, “Fault detection methods: A literature survey,” in 34th International Convention MIPRO , 2011, pp. 750–755. [4] J. Schulman, F. Wolski, P. Dhariwal, A. Radford, and O. Klimov, “Proximal policy optimization algorithms,” in arXiv preprint arXiv:1707.06347 , 2017. [5] J. Tobin, R. Fong, A. Ray, J. Schneider, W. Zaremba, and P. Abbeel, “Domain randomization for transferring deep neural networks from simulation to the real world,” in IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS) , 2017, pp. 23–30. [6] L. Pinto, M. Andrychowicz, P. Welinder, W. Zaremba, and P. Abbeel, “Asymmetric actor critic for image-based robot learning,” in Robotics: Science and Systems (RSS) , 2018. [7] N. Rudin, D. Hoeller, P. Reist, and M. Hutter, “Learning to walk in minutes using massively parallel deep reinforcement learning,” in                    
+
+> IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS) , 2022, pp. 91–97. [8] D. Ebi, G. Lambrechts, D. Ernst, and K. B¨ ohm, “Informed asymmetric actor-critic: Leveraging privileged signals beyond full-state access,”
+> arXiv preprint arXiv:2509.26000 , 2025. [9] G. Lambrechts, D. Ernst, and A. Mahajan, “A theoretical justification for asymmetric actor-critic algorithms,” in International Conference on Machine Learning (ICML) , 2025. [10] Y. Cai, X. Liu, A. Oikonomou, and K. Zhang, “Provable partially observ-able reinforcement learning with privileged information,” in Advances in Neural Information Processing Systems (NeurIPS) , 2024. [11] A. Kumar, Z. Fu, D. Pathak, and J. Malik, “RMA: Rapid motor adaptation for legged robots,” in Robotics: Science and Systems (RSS) ,2021.
+
+[12] J. Lee, J. Hwangbo, L. Wellhausen, V. Koltun, and M. Hutter, “Learning quadrupedal locomotion over challenging terrain,” Science Robotics ,vol. 5, no. 47, p. eabc5986, 2020. [13] Y. Liang, K. Ellis, and J. Henriques, “Rapid motor adaptation for robotic manipulator arms,” in IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR) , 2024. [14] S. Hochreiter and J. Schmidhuber, “Long short-term memory,” Neural Computation , vol. 9, no. 8, pp. 1735–1780, 1997. [15] K. Cho, B. van Merri¨ enboer, C. G¨ ulc ¸ehre, D. Bahdanau, F. Bougares, H. Schwenk, and Y. Bengio, “Learning phrase representations using RNN encoder-decoder for statistical machine translation,” in Proceed-ings of the 2014 Conference on Empirical Methods in Natural Language Processing (EMNLP) , 2014, pp. 1724–1734. [16] T. Ni, B. Eysenbach, and R. Salakhutdinov, “Recurrent model-free RL can be a strong baseline for many POMDPs,” in International Conference on Machine Learning (ICML) , 2022. [17] K. Lagattu, E. Artusi, P. E. Santos, K. Sammut, G. Le Chenadec, and B. Clement, “Control reallocation using deep reinforcement learning for actuator fault recovery of an autonomous underwater vehicle,” in IEEE International Conference on Robotics and Automation (ICRA) , 2025, pp. 2291–2297. [18] R. Fierro and F. L. Lewis, “Control of a nonholonomic mobile robot using neural networks,” IEEE Transactions on Neural Networks , vol. 9, no. 4, pp. 589–600, 1998. [19] Y. Shen and N. Hovakimyan, “Model predictive control for fault-tolerant ocean vehicle navigation,” in MTS/IEEE OCEANS , 2018. [20] Y. Hamamatsu, W. Remmas, J. Rebane, M. Kruusmaa, and A. Risto-lainen, “Cross-platform learning-based fault tolerant surfacing controller for underwater robots,” in IEEE International Conference on Robotics and Automation (ICRA) , 2025. [21] M. Mittal, C. Yu, Q. Yu, J. Liu, N. Rudin, D. Hoeller, J. L. Yuan, R. Singh, Y. Guo, H. Mazhar, A. Mandlekar, B. Babich, G. State, M. Hutter, and A. Garg, “Orbit: A unified simulation framework for interactive robot learning environments,” in IEEE Robotics and Automa-tion Letters , vol. 8, no. 6, 2023, pp. 3740–3747.

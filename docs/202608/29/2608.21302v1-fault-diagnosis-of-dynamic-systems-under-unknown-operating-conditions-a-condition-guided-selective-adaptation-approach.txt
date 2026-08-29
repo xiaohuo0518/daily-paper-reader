@@ -1,0 +1,749 @@
+Title: Fault Diagnosis of Dynamic Systems Under Unknown Operating Conditions: A Condition-Guided Selective Adaptation Approach
+
+URL Source: https://arxiv.org/pdf/2608.21302v1
+
+Published Time: Mon, 24 Aug 2026 01:06:03 GMT
+
+Number of Pages: 11
+
+Markdown Content:
+> 1
+
+# Fault Diagnosis of Dynamic Systems Under Unknown Operating Conditions: A Condition-Guided Selective Adaptation Approach 
+
+Jiaming Liu, Zeyi Liu, Hongshuo Zhao, Pengyu Han, Xiao He, Senior Member, IEEE 
+
+Abstract —Fault diagnosis under unknown operating conditions remains challenging for dynamic industrial systems, as the distribution shift caused by changing operating conditions can significantly degrade the performance of diagnostic models in real-world applications. To address the problem, a condition-guided selective adaptation approach is proposed. Specifically, a novel continuous operating-condition adversarial learning strat-egy with progressive training is developed in the offline stage to enhance the generalization ability of the diagnostic model. During online deployment, residual operating-condition responses are exploited to identify reliable unlabeled samples from streaming data, which are then used to update the diagnostic model. Extensive experiments on real-world gearbox and motor datasets have demonstrated that the proposed framework outperforms state-of-the-art methods in diagnostic accuracy while maintain-ing relatively low test-time, showing its potential for practical industrial applications. 
+
+Index Terms —Fault diagnosis, unknown operating conditions, continuous operating conditions, data-driven, online test-time adaptation. 
+
+I. I NTRODUCTION 
+
+# WITH the advancement of modern technology, indus-trial systems are becoming increasingly complex and dynamic, while industrial equipment typically operates under constantly changing conditions, such as load and speed [1]– [4]. Such dynamic systems introduce complex nonlinear and non-stationary characteristics into signals [5], [6], increasing the difficulty of diagnosis [7], [8]. In this context, multi-condition fault diagnosis (MCFD) has become a promis-ing direction for facilitating the transition of fault diagnosis methods from controlled laboratory environments to practical deployment [9], with significant implications for maintaining system stability and reducing economic losses [10]–[13]. Specifically, traditional machine learning models usually rely on the independent and identically distributed (i.i.d.) assumption [14]–[16]. However, changes in operating condi-tions can cause a substantial distribution shift between training 
+
+This work was supported in part by National Natural Science Foundation of China under grants 62525308, 624B2087, 62473223, and 52172323, in part by Beijing Natural Science Foundation under grant L241016 ( Corresponding author: Xiao He. )Jiaming Liu is with the School of Computer Science and Engineering, Bei-hang University, Beijing 100191, P. R. China (email: 23371007@buaa.edu.cn). Zeyi Liu, Pengyu Han, and Xiao He are with the Department of Automa-tion, and the Institute for Embodied Intelligence and Robotics, Tsinghua University, Beijing 100084, China (emails: liuzy21@mails.tsinghua.edu.cn, hpy24@mails.tsinghua.edu.cn, hexiao@tsinghua.edu.cn). Hongshuo Zhao is with the MCC5 Group Shanghai Co. LTD 201900, ShangHai, China (email: zhaohongshuo@sh5mcc.com). 
+
+and deployment data, which significantly reduces the perfor-mance of diagnostic models in practical applications [17], [18]. Meanwhile, operating conditions in dynamic systems are continuously evolving and difficult to exhaustively cover through data collection in advance [19]–[22]. As a result, sufficient samples are usually unavailable for previously un-known operating conditions [23], [24]. To address these issues, MCFD aims to enable diagnostic models to maintain reliable performance when the data distribution changes, or even when the target operating conditions are previously unknown. Among existing MCFD methods, domain adaptation (DA) and domain generalization (DG) are two representative paradigms. DA methods are designed to mitigate distribu-tion shifts by aligning features between the labeled source domain and the unlabeled target domain [25]. DG methods go a step further by extracting domain-invariant features to improve generalization ability using only source-domain data, thus eliminating the dependence on target domain data [26]. However, most existing MCFD methods focus primarily on offline knowledge transfer, and their models remain fixed after deployment [27]–[30], which means that model perfor-mance mainly relies on prior data acquired during the training phase. Nevertheless, in real-world industrial scenarios, a large amount of streaming data under previously unknown operating conditions can be continuously collected during deployment. Although these online data usually lack labels, they still provide a valuable opportunity for the model to perceive target-distribution changes and perform adaptive updates. Therefore, the introduction of an online adaptation mechanism serves as an important way to enable the diagnostic model to dy-namically adjust itself using continuously arriving streaming data and ultimately enhance its robustness under unknown conditions [31], [32]. In this context, online test-time adaptation (OTTA) provides a promising paradigm [33], which focuses on dynamically updating a deployed model using only unlabeled online data streams without access to source-domain data [34]. Along this emerging direction, several recent studies have attempted to introduce OTTA into fault diagnosis scenarios [35]–[37]. The problem is that OTTA methods were originally proposed for test-time distribution shifts in computer vision tasks, such as style or weather changes, where category semantics and do-main variation factors are generally considered independent. In contrast, operating conditions in industrial systems are closely tied to the physical dynamics of the monitored equipment. Fault occurrence may perturb vibration patterns and transmis-arXiv:2608.21302v1 [eess.SY] 21 Aug 2026 2
+
+sion relationships, causing the actual operating conditions to ultimately deviate from the preset operating conditions [38]– [40]. As a result, fault-related and condition-related informa-tion can be naturally coupled in the feature space. Further-more, online data streams in industrial scenarios often exhibit distinct stage-wise structures, where the equipment usually operates in the healthy state before fault occurrence. Once a specific fault occurs, subsequent samples tend to remain within the same fault type until maintenance or shutdown, rather than alternating among healthy and different fault states. Nevertheless, current OTTA-based fault diagnosis methods still rarely consider these characteristics explicitly. Simply enforcing condition-invariant representations may distort fault-discriminative features [41]. Moreover, without mechanisms tailored to such stage-wise streams, the diagnostic model may gradually overfit to the currently dominant sample category, eventually leading to error accumulation and catastrophic forgetting. Therefore, it is necessary to develop an OTTA-based method that takes full account of the characteristics of industrial systems in order to better solve the problem of fault diagnosis under unknown operating conditions. In this paper, a Condition-Guided Selective Adaptation 
+
+(CGSA) framework is proposed to address the challenge of fault diagnosis under unknown operating conditions. CGSA explicitly considers the coupling between fault states and op-erating conditions in dynamic industrial systems. Specifically, a novel continuous operating-condition adversarial learning strategy with progressive training is developed in the of-fline stage to utilize labeled data from continuous operating conditions, thereby enhancing cross-condition generalization without overly suppressing fault-discriminative information. Because the inherent fault-condition coupling makes strict condition invariance difficult to achieve, the residual condition information is preserved, which is further considered as a reliability indicator for online sample selection. During de-ployment, the source pre-trained model is frozen to leverage coupling information to guide the student-model adaptation. The main contributions can be summarized as follows: 1) A continuous operating-condition adversarial learning strategy with progressive training is developed for the offline stage. By exploiting labeled data collected un-der continuous operating conditions, the cross-condition generalization of the model is enhanced. 2) An online adaptation mechanism is designed to provide reliable updates and mitigate error accumulation. The source pre-trained model generates residual condition responses and pseudo-labels for identifying reliable sam-ples, which are then used to update the student model. 3) Extensive experiments on real-world gearbox and mo-tor datasets demonstrate that the proposed approach achieves superior diagnostic performance and desirable test-time efficiency, showing its potential for practical industrial applications. II. T HE PROPOSED METHOD 
+
+A. Problem Formulation 
+
+For a dynamic system with constantly changing operating conditions, a fault diagnosis task with K diagnostic classes is considered, including the healthy state and multiple fault states. In the offline stage, a labeled training dataset T (0) =X(0) , y(0) , c(0) can be collected under continuously chang-ing operating conditions, where X(0) ∈ Rn0×d contains n0
+
+samples and d-dimensional features, y(0) ∈ { 1, 2, . . . , K }n0
+
+represents the corresponding K diagnostic classes, c(0) ∈ Rn0
+
+indicates the continuous operating condition index. In the online stage, neither class labels nor operating-condition infor-mation is available. The model can only access an unlabeled data stream S = {X(1) , X(2) , . . . , X(n)}, where each batch 
+
+X(t) ∈ RN ×d contains N samples. The objective of this work is to establish a robust fault diag-nosis framework for dynamic systems under unknown operat-ing conditions. The proposed method comprises two stages: an offline training stage and an online test-time adaptation stage. In the offline stage, the model exploits continuous operating-condition information to enhance its generalization ability. During the online test-time adaptation stage, the proposed method aims to update the diagnostic model effectively and timely, so as to adaptively improve its diagnostic performance under unknown operating conditions and meet the immediacy requirements of real-world scenarios. 
+
+B. Offline Stage 
+
+In the offline stage, a continuous operating-condition adver-sarial learning strategy with progressive training, inspired by continuously indexed domain adaptation [42], is adopted to improve the generalization ability of the diagnostic model. Let Foff , Goff , and Doff denote the feature extractor, the fault classifier, and the condition discriminator, respectively. Different from conventional domain-adversarial learning meth-ods that treat domain prediction as a discrete classification task, the condition discriminator is formulated as a proba-bilistic regressor with a dual-branch architecture. Specifically, the mean branch predicts the mean μd, while the log-variance branch predicts the log-variance log σ2 
+
+> d
+
+of a Gaussian distribu-tion from the extracted feature representation Foff (x). These two parameters are then used to characterize the continuous operating-condition information. The domain regression loss is defined based on the Gaussian negative log-likelihood, which encourages the discriminator to better fit the true continuous condition value by modeling its predictive distribution: 
+
+Ld = E(x,c )∼T (0) 
+
+ 12 log σ2 
+
+> d
+
++ (c − μd)2
+
+2σ2
+
+> d
+
+
+
+. (1) Meanwhile, the classification objective is formulated as: 
+
+Lcls = E(x,y )∼T (0) [Lce (Goff (Foff (x)) , y )] , (2) where Lce (·) denotes the cross-entropy loss. During adversarial optimization, the condition discrimina-tor is optimized to infer the continuous operating condition index from the learned representations, whereas the feature extractor is trained to confuse the condition discriminator. Accordingly, the feature extractor is encouraged to learn 3Offline Stage Online Stage    
+
+> Sliding Window Segmentation
+> Data Preprocessing
+> Feature Extractor Fault Classifier
+> Classification Loss Predicted Probability Predicted Gaussian Distribution
+> Condition Discriminator
+> Domain Regression Loss Progressive
+> Forward Propagation Backward Propagation
+> Enhanced Generalization Ability
+> Streaming Data
+> Compressed
+> Condition Discriminator
+> Raw Signals
+> Source Pre-trained Model
+> Feature Extractor Fault Classifier
+> Frozen Updated
+> Pseudo-label
+> Confidence
+> Residual Condition Response
+> For the i-th Sample in the t-th Mini-batch
+> First-in-first-out Queue
+> The i-th Sample Calculate the Mean Response
+> Reliable Sample Assessment Reliable
+> Unreliable
+> Classifier Extractor
+> Student Model
+> Diagnostic Results
+
+Fig. 1: The overall flowchart of the proposed CGSA approach. condition-insensitive representations while preserving fault-discriminative information. The offline adversarial optimiza-tion is formulated as: 
+
+Loff = min 
+
+θF ,θ G
+
+max 
+
+θD
+
+[Lcls − λLd] , (3) where θF , θG, and θD denote the parameters of the feature extractor, the fault classifier, and the condition discriminator, respectively. Considering the inherent coupling between fault-related and condition-related information, directly applying adversarial training may distort fault-discriminative features. Therefore, a progressive adversarial coefficient is adopted to gradually in-crease the adversarial intensity, thereby improving the stability of training. The coefficient is formulated as: 
+
+λ = 21 + exp( −γp ) − 1, (4) where p denotes the training progress, and γ controls the increasing rate. Overall, the offline training stage improves the cross-condition generalization ability of the diagnostic model and provides a foundational model for online adaptation. 
+
+C. Online Stage 
+
+Although offline training strategies improve model per-formance, offline domain generalization cannot fully guar-antee consistently reliable diagnostic performance under all unknown operating conditions, especially when severe distri-bution shifts occur. Therefore, an online test-time adaptation mechanism is introduced to further improve the adaptability of the diagnostic model during deployment. For the initial online setup, the source pre-trained model remains fixed throughout the online stage and is not involved in parameter updates, while an adaptive student model is initialized from it for online update. In detail, the fixed source pre-trained model consists of FP , GP , and DP , initialized from Foff , Goff , and the mean branch of Doff , respectively. Meanwhile, the student model consists of FS and GS , which are initialized from Foff and Goff , respectively. At time step t, the student model first generates diagnostic predictions for the current mini-batch X(t) before model adaptation to meet real-time requirements. The predicted prob-ability matrix is denoted by G(t)
+
+S = G(t−1) 
+
+S (F (t−1) 
+
+S (X(t))) ,where G(t)
+
+S ∈ RB×K . The diagnostic outputs of the current mini-batch are obtained as: 
+
+ˆy(t) = arg max 
+
+k∈{ 1,...,K }
+
+G(t)
+
+S [: , k ]. (5) Subsequently, the pre-trained model is used to provide stable reference predictions. For each sample x(t)
+
+i ∈ X(t), the pre-dicted probability vector of the pre-trained model is denoted as G(t)
+
+P,i = GP (FP (x(t)
+
+i )) , where G(t)
+
+P,i ∈ R1×K . Based on the prediction vector, the pseudo-label ˆy(t)
+
+P,i and its corresponding confidence ˆρ(t)
+
+P,i are obtained as: 
+
+ˆy(t)
+
+P,i = argmax 
+
+j∈{ 1,...,K }
+
+G(t)
+
+P,i (j), (6) and 
+
+ˆρ(t)
+
+P,i = max 
+
+j∈{ 1,...,K } G(t)
+
+P,i (j). (7) Furthermore, the pre-trained condition discriminator pro-duces a residual condition response for the same sample, 4
+
+which can be written as μ(t) 
+
+> P,i
+
+= DP (FP (x(t) 
+
+> i
+
+)) . It should be noted that μ(t) 
+
+> P,i
+
+should not be interpreted as a direct measurement of the physical operating condition. Instead, it is regarded as a compressed residual response that retains and reflects the inherent fault-condition coupling information after offline training. In fact, different residual condition response values can be associated with different specific faults. In order to support the online update mechanism, a dynamic queue is maintained to record the status of recent samples. Be-fore processing the i-th sample x(t) 
+
+> i
+
+in the t-th mini-batch X(t)
+
+in sequence, the queue is denoted by Q(t) 
+
+> i
+
+, which contains at most the W most recent residual condition responses generated by the pre-trained discriminator. At the beginning of an online stream, the queue is initialized as empty, and the residual responses of the first W samples are sequentially inserted to warm up the queue without sample evaluation or model updating. Once the queue reaches its capacity, the reliability of each subsequent sample is evaluated using the responses stored in the queue. After evaluation, μ(t) 
+
+> P,i
+
+is inserted into the queue in a first-in-first-out (FIFO) manner. The mean response of the current queue is used to charac-terize the recent residual condition information: 
+
+¯μ(t) 
+
+> P,i
+
+= 1
+
+W
+
+X
+
+> μ∈Q (t)
+> i
+
+μ, (8) where ¯μ(t) 
+
+> P,i
+
+is the mean of the latest W residual responses preceding x(t) 
+
+> i
+
+.To evaluate the reliability of each incoming sample, the deviation between its residual condition response and the mean response stored in the queue is calculated. Although μ(t) 
+
+> P,i
+
+is not a direct measurement of the physical operating condition, it preserves mild residual information induced by the inherent fault-condition coupling. Accordingly, for a locally continuous stream, a sample with a correct pseudo-label is generally more consistent with its corresponding fault-related feature region and is therefore more likely to produce a residual response compatible with this recent trajectory. In contrast, a misclas-sified sample may disrupt this local consistency because its features tend to fall into a feature-space regions associated with the incorrectly predicted fault classes, finally resulting in a larger residual deviation from ¯μ(t)
+
+> P,i
+
+. The queue mean serves as a local temporal reference rather than a direct measure of sample similarity. A sample with a sufficiently small deviation is considered consistent with the recent prediction trajectory and is therefore regarded as reliable for online adaptation. Based on the above criterion, the reliability deviation of the 
+
+i-th sample in the t-th mini-batch is defined as: 
+
+∆(t) 
+
+> i
+
+= μ(t) 
+
+> P,i
+
+− ¯μ(t) 
+
+> P,i
+
+. (9) A smaller ∆(t) 
+
+> i
+
+indicates that the sample is more consistent with the recent prediction results. To further improve the quality of selected samples, a confi-dence filtering criterion is introduced. By combining residual condition consistency with pseudo-label confidence filtering, the reliable sample set at time step t is constructed as: 
+
+R(t) =
+
+n
+
+x(t) 
+
+> i
+
+| ∆(t) 
+
+> i
+
+< τ μ, ˆρ(t) 
+
+> P,i
+
+> ϵ p
+
+o
+
+, (10) 
+
+Algorithm 1: Main Procedure of the Proposed Method. 
+
+Input: Offline dataset T (0) = {X(0) , y(0) , c(0) };online stream S = {X(t)}∞
+
+> t=1
+
+.
+
+Output: Prediction results ˆy(t) at time t.
+
+Offline initialization: Train Foff , Goff , and Doff with the offline objective in Eq. (3); Keep the source pre-trained model fixed and initialize an adaptive student model from it; 
+
+Online stage: for t = 1 , 2, . . . do 
+
+Receive an unlabeled mini-batch X(t);Initialize the reliable sample set R(t) = ∅;Output the prediction ˆy(t) using (5); 
+
+foreach x(t) 
+
+> i
+
+∈ X(t) do 
+
+Obtain the pseudo-label ˆy(t) 
+
+> P,i
+
+and confidence 
+
+ˆρ(t) 
+
+> P,i
+
+using (6) and (7); Obtain the residual condition response μ(t)
+
+> P,i
+
+;
+
+if |Q (t) 
+
+> i
+
+| = W then 
+
+Compute ¯μ(t) 
+
+> P,i
+
+via (8); Compute ∆(t) 
+
+> i
+
+via (9); 
+
+if ∆(t) 
+
+> i
+
+< τ μ and ˆρ(t) 
+
+> P,i
+
+> ϵ p then 
+
+Add x(t) 
+
+> i
+
+to R(t);
+
+end end 
+
+Update the queue in a FIFO manner; 
+
+end if |R (t)| > 0 then 
+
+Compute the online loss L(t)on via (11); Update F (t) 
+
+> S
+
+and G(t) 
+
+> S
+
+using (12); 
+
+end end 
+
+where τμ denotes the threshold for residual condition consis-tency, and ϵp denotes the pseudo-label confidence threshold. Only samples satisfying both criteria are regarded as reliable and used for online adaptation, while the others are rejected to avoid generating unreliable gradients. All reliable samples in the current mini-batch are used to update the student model. For each selected sample x(t) 
+
+> i
+
+∈R(t), the pseudo-label ˆy(t) 
+
+> P,i
+
+is used as the supervision signal. The online loss is defined as: 
+
+L(t)on = 1
+
+|R (t)|
+
+X 
+
+> x(t)
+> i∈R (t)
+
+Lce 
+
+
+
+G(t−1) 
+
+> S
+
+h
+
+F (t−1)  
+
+> S
+
+(x(t) 
+
+> i
+
+)
+
+i
+
+, ˆy(t)
+
+> P,i
+
+
+
+.
+
+(11) The student model is updated by online gradient descent: 
+
+( θ(t) 
+
+> FS
+
+= θ(t−1)  
+
+> FS
+
+− η∇θFS L(t)on ,θ(t) 
+
+> GS
+
+= θ(t−1)  
+
+> GS
+
+− η∇θGS L(t)on , (12) where η denotes the learning rate for online adaptation, and 
+
+θFS and θGS denote the parameters of the student feature extractor and student fault classifier, respectively. If no reliable sample is selected from the current mini-batch, i.e., |R (t)| = 0 ,the student model is not updated. 5Operating Time Operating Condition Health Fault   
+
+> Out-of-distribution scenarios In-distribution scenario
+> Switching #2
+> Switching #1 Fault-induced deviation from expected operating conditions
+
+Fig. 2: Illustration of the online data stream. Following this process, the model can be continuously updated. The overall procedure of CGSA is illustrated in Fig. 1, and the detailed steps are summarized in Algorithm 1. III. E XPERIMENTS 
+
+A. General Experimental Settings 1) Datasets: In this study, two self-collected datasets are employed to demonstrate the effectiveness of the proposed method in real-world dynamic systems, including the MCC5-THU Gearbox Dataset [43] and the MCC5-THU Motor Dataset [44]. Each dataset contains one healthy category and three fault categories, and the collected data cover diverse operating conditions to enable a comprehensive evaluation. 
+
+2) Evaluation Metrics: For metrics, in addition to average accuracy, the Expected Calibration Error (ECE) is adopted to evaluate the reliability of model predictions. ECE measures the discrepancy between prediction confidence and actual accuracy, reflecting the calibration quality of the model [45]. A lower ECE value indicates better calibration performance. Specifically, the prediction confidence interval [0 , 1] is divided into M equal bins, and the ECE is calculated as 
+
+ECE = 
+
+> M
+
+X
+
+> m=1
+
+|Bm|
+
+N |acc( Bm) − conf( Bm)| , (13) where N denotes the total number of samples, Bm denotes the set of samples whose prediction confidence falls into the 
+
+m-th bin, and |Bm| is the number of samples in Bm. The terms acc( Bm) and conf( Bm) represent the average accuracy and average confidence of samples in Bm, respectively. In this study, M is set to 10. TABLE I: C ONSTRUCTION OF THE OFFLINE DATASET .
+
+Dataset Type Segment T1 Segment T2 Segment T3
+
+Gearbox Torque 0–10 Nm 10 Nm 10 –15 Nm Speed 1000 rpm Motor Torque 0–20 Nm 20 Nm 20 –30 Nm Speed 2000 rpm 
+
+3) Implementation Details: For the offline setup, both datasets are collected under fixed-speed settings, and their continuous condition indices are derived from the measured torque across three concatenated segments, as summarized in Frequency Inverter Torque Sensor Three axis vibration acceleration sensor Data Acquisition System Motor Three axis vibration acceleration sensor Speed Sensor Epicyclic Gearbox Parallel Gearbox Magnetic Powder Brake 
+
+(a) MCC5-THU gearbox test rig [43]. 
+
+(b) MCC5-THU motor test rig [44]. 
+
+Fig. 3: Experimental test rigs. Table I. For each sample, the continuous condition label is de-rived from the corresponding measured torque and normalized as follows: 
+
+ci = Ti − Tmin 
+
+Tmax − Tmin 
+
+, (14) where Ti denotes the measured torque of the i-th sample, and 
+
+Tmin and Tmax are the minimum and maximum torque values used for normalization, respectively. To present a realistic operating scenario, each online data stream switches among three steady-state operating conditions, as reported in Table II, while the speed remains constant at the value used in the offline stage. The first two conditions ( C1 and 
+
+C2) are treated as out-of-distribution (OOD) scenarios, while the last condition ( C3) corresponds to an in-distribution (ID) scenario. The ID scenario provides an important test stage for online methods, since continuous updates may lead to catastrophic forgetting. In each online experiment, the data stream begins with healthy data, after which a specific fault is introduced at the midpoint of the stream, as illustrated in Fig. 2. TABLE II: D ETAILS OF ONLINE OPERATING CONDITIONS .
+
+Dataset OOD ID Condition C1 Condition C2 Condition C3
+
+Gearbox 20 Nm 15 Nm 5 Nm Motor 30 Nm 40 Nm 15 Nm 
+
+4) Comparison Methods: The 6-channel signals are first divided into mutually exclusive offline training and online test sets at the raw-data level to prevent data leakage. Sliding-window segmentation is then independently performed within each set using a window size of 1024 and a step size of 16. For DANN [46], the original three operating domains are directly used as discrete domain labels. For the proposed method, 6
+
+TABLE III: T HE COMPARISON RESULTS ON GEARBOX DATASET REGARDING AVERAGE ACC .( ↑) AND ECE( ↓). 
+
+Fault Type Stage Metric Methods 
+
+SupCon Tent-Full AdaContrast CoTTA DPLOT SURGEON OAFD Tri-Training CGSA *
+
+Gear Wear 
+
+C1 Acc. 0.735 ± 0.069 0.752 ± 0.070 0.800 ± 0.093 0.801 ± 0.077 0.791 ± 0.077 0.743 ± 0.070 0.746 ± 0.070 0.882 ± 0.040 0.891 ± 0.082 ECE 0.145 ± 0.019 0.143 ± 0.021 0.191 ± 0.024 0.185 ± 0.031 0.266 ± 0.055 0.145 ± 0.019 0.147 ± 0.021 0.207 ± 0.020 0.075 ± 0.070 
+
+C2 Acc. 0.700 ± 0.036 0.668 ± 0.037 0.728 ± 0.054 0.687 ± 0.032 0.691 ± 0.034 0.686 ± 0.037 0.688 ± 0.039 0.738 ± 0.018 0.889 ± 0.028 ECE 0.053 ± 0.023 0.088 ± 0.034 0.087 ± 0.029 0.056 ± 0.028 0.040 ± 0.012 0.068 ± 0.028 0.060 ± 0.024 0.053 ± 0.013 0.046 ± 0.019 
+
+C3 Acc. 0.996 ± 0.003 0.995 ± 0.004 0.995 ± 0.005 0.993 ± 0.005 0.996 ± 0.003 0.996 ± 0.004 0.995 ± 0.004 0.999 ± 0.000 0.997 ± 0.004 ECE 0.008 ± 0.004 0.007 ± 0.004 0.017 ± 0.011 0.020 ± 0.013 0.009 ± 0.005 0.007 ± 0.004 0.009 ± 0.005 0.006 ± 0.001 0.002 ± 0.002 
+
+Average Acc. 0.810 ± 0.029 0.805 ± 0.030 0.841 ± 0.038 0.827 ± 0.021 0.826 ± 0.030 0.808 ± 0.030 0.810 ± 0.030 0.873 ± 0.014 0.926 ± 0.035 ECE 0.048 ± 0.013 0.043 ± 0.018 0.080 ± 0.015 0.061 ± 0.019 0.094 ± 0.021 0.045 ± 0.015 0.044 ± 0.013 0.075 ± 0.008 0.040 ± 0.024 Teeth Break 
+
+C1 Acc. 0.735 ± 0.069 0.752 ± 0.070 0.800 ± 0.093 0.795 ± 0.070 0.791 ± 0.077 0.743 ± 0.070 0.746 ± 0.070 0.882 ± 0.040 0.891 ± 0.082 ECE 0.145 ± 0.019 0.143 ± 0.021 0.191 ± 0.024 0.185 ± 0.031 0.266 ± 0.055 0.145 ± 0.019 0.147 ± 0.021 0.207 ± 0.020 0.075 ± 0.070 
+
+C2 Acc. 0.747 ± 0.035 0.754 ± 0.043 0.708 ± 0.050 0.702 ± 0.046 0.735 ± 0.037 0.754 ± 0.039 0.742 ± 0.036 0.790 ± 0.032 0.916 ± 0.025 ECE 0.048 ± 0.025 0.062 ± 0.035 0.072 ± 0.037 0.056 ± 0.036 0.039 ± 0.022 0.054 ± 0.029 0.050 ± 0.028 0.036 ± 0.012 0.032 ± 0.011 
+
+C3 Acc. 0.941 ± 0.019 0.945 ± 0.018 0.906 ± 0.051 0.896 ± 0.056 0.930 ± 0.022 0.946 ± 0.017 0.935 ± 0.022 0.945 ± 0.011 0.986 ± 0.013 ECE 0.028 ± 0.010 0.029 ± 0.010 0.028 ± 0.020 0.036 ± 0.033 0.033 ± 0.012 0.027 ± 0.010 0.030 ± 0.012 0.021 ± 0.006 0.008 ± 0.007 
+
+Average Acc. 0.808 ± 0.021 0.817 ± 0.020 0.805 ± 0.019 0.798 ± 0.024 0.819 ± 0.024 0.814 ± 0.021 0.808 ± 0.020 0.872 ± 0.012 0.931 ± 0.038 ECE 0.058 ± 0.011 0.058 ± 0.012 0.059 ± 0.027 0.062 ± 0.014 0.103 ± 0.015 0.057 ± 0.011 0.056 ± 0.011 0.071 ± 0.009 0.034 ± 0.024 Teeth Crack 
+
+C1 Acc. 0.735 ± 0.069 0.752 ± 0.070 0.800 ± 0.093 0.799 ± 0.072 0.791 ± 0.077 0.743 ± 0.070 0.746 ± 0.070 0.882 ± 0.040 0.891 ± 0.082 ECE 0.145 ± 0.019 0.143 ± 0.021 0.191 ± 0.024 0.185 ± 0.032 0.266 ± 0.055 0.145 ± 0.019 0.147 ± 0.021 0.207 ± 0.020 0.075 ± 0.070 
+
+C2 Acc. 0.746 ± 0.016 0.740 ± 0.028 0.669 ± 0.050 0.711 ± 0.025 0.761 ± 0.016 0.745 ± 0.021 0.743 ± 0.020 0.810 ± 0.020 0.804 ± 0.040 ECE 0.056 ± 0.020 0.039 ± 0.016 0.130 ± 0.019 0.075 ± 0.031 0.094 ± 0.027 0.047 ± 0.017 0.054 ± 0.018 0.121 ± 0.017 0.103 ± 0.028 
+
+C3 Acc. 1.000 ± 0.000 1.000 ± 0.000 0.999 ± 0.001 1.000 ± 0.000 1.000 ± 0.000 1.000 ± 0.000 1.000 ± 0.000 1.000 ± 0.000 1.000 ± 0.001 ECE 0.002 ± 0.001 0.002 ± 0.001 0.014 ± 0.008 0.005 ± 0.003 0.002 ± 0.001 0.002 ± 0.001 0.002 ± 0.001 0.001 ± 0.000 0.002 ± 0.002 
+
+Average Acc. 0.827 ± 0.025 0.831 ± 0.027 0.823 ± 0.034 0.837 ± 0.023 0.850 ± 0.025 0.829 ± 0.026 0.830 ± 0.023 0.897 ± 0.012 0.898 ± 0.038 ECE 0.063 ± 0.012 0.053 ± 0.012 0.088 ± 0.019 0.076 ± 0.019 0.115 ± 0.025 0.059 ± 0.012 0.061 ± 0.012 0.107 ± 0.008 0.058 ± 0.025 
+
+Total Average 0.815 ± 0.025 0.818 ± 0.026 0.823 ± 0.030 0.820 ± 0.023 0.832 ± 0.026 0.817 ± 0.025 0.816 ± 0.024 0.881 ± 0.013 0.918 ± 0.037 
+
+Total Rank 9 6 4 5 3 7 8 2 1
+
+Notes: The best results are highlighted with gray shading. 0 5000 10000 15000 20000 0.60 0.65 0.70 0.75 0.80 0.85 0.90 0.95   
+
+> Accuracy
+> Fault Occurrence
+> C1C2C3
+> SupCon Tent-Full AdaContrast CoTTA DPLOT SURGEON OAFD Tri-Training CGSA
+
+(a) Gear wear, Cumulative 0 5000 10000 15000 20000 0.60 0.65 0.70 0.75 0.80 0.85 0.90 0.95    
+
+> Accuracy
+> Fault Occurrence
+> C1C2C3
+> SupCon Tent-Full AdaContrast CoTTA DPLOT SURGEON OAFD Tri-Training CGSA
+
+(b) Teeth break, Cumulative 0 5000 10000 15000 20000 0.60 0.65 0.70 0.75 0.80 0.85 0.90 0.95    
+
+> Accuracy
+> Fault Occurrence
+> C1C2C3
+> SupCon Tent-Full AdaContrast CoTTA DPLOT SURGEON OAFD Tri-Training CGSA
+
+(c) Teeth crack, Cumulative 0 5000 10000 15000 20000 0.0 0.2 0.4 0.6 0.8 1.0   
+
+> Real-time Accuracy
+> Fault Occurrence
+> C1C2C3
+> SupCon Tent-Full AdaContrast CoTTA DPLOT SURGEON OAFD Tri-Training CGSA
+
+(d) Gear wear, Real-time 0 5000 10000 15000 20000 0.0 0.2 0.4 0.6 0.8 1.0    
+
+> Real-time Accuracy
+> Fault Occurrence
+> C1C2C3
+> SupCon Tent-Full AdaContrast CoTTA DPLOT SURGEON OAFD Tri-Training CGSA
+
+(e) Teeth break, Real-time 0 5000 10000 15000 20000 0.0 0.2 0.4 0.6 0.8 1.0    
+
+> Real-time Accuracy
+> Fault Occurrence
+> C1C2C3
+> SupCon Tent-Full AdaContrast CoTTA DPLOT SURGEON OAFD Tri-Training CGSA
+
+(f) Teeth crack, Real-time 
+
+Fig. 4: Diagnostic performance of different methods on the gearbox dataset. the torque signal is normalized and used as the continuous operating condition label during offline adversarial training. All methods are evaluated over 10 independent random trials using the same data partitions described in Section. III, with the random seed initialized once to 10 for reproducibility. All experiments are conducted on a workstation equipped with 25 Intel Xeon Platinum 8470Q vCPUs and an NVIDIA GeForce RTX 5090 GPU. Moreover, all methods use a three-layer MLP as the feature extractor and a fully connected layer as the fault classifier. To enable adversarial learning, a domain discriminator is intro-duced. In DANN, the condition discriminator is implemented as a four-layer MLP. In contrast, the proposed regression discriminator adopts a dual-branch architecture, where each branch is also implemented as a four-layer MLP to estimate the mean and variance, respectively. In the offline stage, methods are trained for 200 epochs to ensure convergence. For the proposed method, the progressive increasing rate γ is set to 10. In the online stage, all methods are evaluated with an online batch size of Bon = 256 . For the proposed method, the Adam optimizer is adopted with a learning rate of 5 × 10 −4.The queue length W is set to 50. The residual condition consistency τμ is set to 0.05, and the pseudo-label confidence threshold ϵp is set to 0.9. The proposed method is compared with several representa-tive approaches from different perspectives, including super-vised learning, online test-time adaptation, and online semi-supervised learning. Specifically, SupCon [47] is adopted as 7
+
+TABLE IV: T HE COMPARISON RESULTS ON MOTOR DATASET REGARDING AVERAGE ACC .( ↑) AND ECE( ↓). 
+
+Fault Type Stage Metric Methods 
+
+SupCon Tent-Full AdaContrast CoTTA DPLOT SURGEON OAFD Tri-Training CGSA *
+
+Voltage Unbalance 
+
+C1 Acc. 0.760 ± 0.059 0.846 ± 0.080 0.760 ± 0.061 0.817 ± 0.053 0.850 ± 0.087 0.850 ± 0.079 0.788 ± 0.058 0.854 ± 0.039 0.881 ± 0.092 ECE 0.147 ± 0.055 0.100 ± 0.073 0.147 ± 0.056 0.089 ± 0.048 0.087 ± 0.074 0.097 ± 0.073 0.121 ± 0.052 0.062 ± 0.032 0.076 ± 0.075 
+
+C2 Acc. 0.371 ± 0.045 0.449 ± 0.069 0.372 ± 0.047 0.475 ± 0.026 0.457 ± 0.063 0.454 ± 0.066 0.419 ± 0.035 0.433 ± 0.022 0.718 ± 0.055 ECE 0.545 ± 0.047 0.535 ± 0.061 0.546 ± 0.050 0.472 ± 0.024 0.531 ± 0.057 0.531 ± 0.059 0.498 ± 0.036 0.495 ± 0.018 0.228 ± 0.058 
+
+C3 Acc. 1.000 ± 0.000 1.000 ± 0.000 1.000 ± 0.000 1.000 ± 0.000 1.000 ± 0.000 1.000 ± 0.000 1.000 ± 0.000 1.000 ± 0.000 0.997 ± 0.003 ECE 0.000 ± 0.000 0.000 ± 0.000 0.000 ± 0.000 0.000 ± 0.001 0.000 ± 0.000 0.000 ± 0.000 0.000 ± 0.001 0.000 ± 0.000 0.003 ± 0.003 
+
+Average Acc. 0.710 ± 0.032 0.765 ± 0.049 0.711 ± 0.034 0.764 ± 0.024 0.769 ± 0.049 0.768 ± 0.048 0.736 ± 0.029 0.762 ± 0.020 0.865 ± 0.044 ECE 0.231 ± 0.032 0.211 ± 0.044 0.231 ± 0.034 0.186 ± 0.023 0.205 ± 0.044 0.209 ± 0.043 0.206 ± 0.027 0.185 ± 0.017 0.101 ± 0.041 Static Eccentricity 
+
+C1 Acc. 0.760 ± 0.059 0.846 ± 0.080 0.760 ± 0.061 0.818 ± 0.054 0.850 ± 0.087 0.850 ± 0.079 0.788 ± 0.058 0.854 ± 0.039 0.881 ± 0.092 ECE 0.147 ± 0.055 0.100 ± 0.073 0.147 ± 0.056 0.089 ± 0.049 0.087 ± 0.074 0.097 ± 0.073 0.121 ± 0.052 0.062 ± 0.032 0.076 ± 0.075 
+
+C2 Acc. 0.843 ± 0.045 0.938 ± 0.072 0.843 ± 0.048 0.952 ± 0.030 0.947 ± 0.068 0.944 ± 0.069 0.894 ± 0.033 0.915 ± 0.024 0.926 ± 0.057 ECE 0.085 ± 0.049 0.052 ± 0.065 0.086 ± 0.052 0.023 ± 0.018 0.046 ± 0.063 0.047 ± 0.062 0.039 ± 0.030 0.024 ± 0.019 0.044 ± 0.047 
+
+C3 Acc. 1.000 ± 0.000 1.000 ± 0.000 1.000 ± 0.000 1.000 ± 0.000 1.000 ± 0.000 1.000 ± 0.000 1.000 ± 0.000 1.000 ± 0.000 1.000 ± 0.000 ECE 0.000 ± 0.000 0.000 ± 0.000 0.000 ± 0.000 0.000 ± 0.000 0.000 ± 0.000 0.000 ± 0.000 0.000 ± 0.000 0.000 ± 0.000 0.000 ± 0.000 
+
+Average Acc. 0.867 ± 0.033 0.928 ± 0.050 0.868 ± 0.034 0.923 ± 0.026 0.932 ± 0.051 0.932 ± 0.049 0.894 ± 0.029 0.923 ± 0.021 0.936 ± 0.032 ECE 0.077 ± 0.032 0.050 ± 0.046 0.077 ± 0.034 0.032 ± 0.024 0.044 ± 0.045 0.047 ± 0.045 0.052 ± 0.027 0.028 ± 0.018 0.040 ± 0.027 Bearing Ball Fault 
+
+C1 Acc. 0.760 ± 0.059 0.846 ± 0.080 0.760 ± 0.061 0.819 ± 0.054 0.850 ± 0.087 0.850 ± 0.079 0.788 ± 0.058 0.854 ± 0.039 0.881 ± 0.092 ECE 0.147 ± 0.055 0.100 ± 0.073 0.147 ± 0.056 0.089 ± 0.049 0.087 ± 0.074 0.097 ± 0.073 0.121 ± 0.052 0.062 ± 0.032 0.076 ± 0.075 
+
+C2 Acc. 0.793 ± 0.056 0.531 ± 0.040 0.791 ± 0.061 0.578 ± 0.029 0.528 ± 0.033 0.525 ± 0.033 0.769 ± 0.050 0.842 ± 0.031 0.877 ± 0.048 ECE 0.088 ± 0.078 0.448 ± 0.052 0.093 ± 0.084 0.303 ± 0.048 0.458 ± 0.045 0.456 ± 0.046 0.091 ± 0.068 0.039 ± 0.023 0.064 ± 0.045 
+
+C3 Acc. 1.000 ± 0.000 0.999 ± 0.004 1.000 ± 0.000 0.998 ± 0.007 0.998 ± 0.005 0.999 ± 0.004 1.000 ± 0.000 1.000 ± 0.000 1.000 ± 0.000 ECE 0.000 ± 0.000 0.002 ± 0.002 0.000 ± 0.000 0.004 ± 0.005 0.002 ± 0.003 0.002 ± 0.002 0.001 ± 0.001 0.000 ± 0.000 0.001 ± 0.001 
+
+Average Acc. 0.851 ± 0.034 0.792 ± 0.017 0.850 ± 0.036 0.798 ± 0.020 0.792 ± 0.023 0.791 ± 0.018 0.852 ± 0.032 0.899 ± 0.021 0.919 ± 0.033 ECE 0.078 ± 0.041 0.182 ± 0.015 0.079 ± 0.044 0.130 ± 0.023 0.181 ± 0.019 0.184 ± 0.015 0.066 ± 0.039 0.030 ± 0.021 0.046 ± 0.029 
+
+Total Average 0.810 ± 0.033 0.828 ± 0.039 0.810 ± 0.035 0.829 ± 0.023 0.831 ± 0.041 0.830 ± 0.038 0.827 ± 0.030 0.861 ± 0.021 0.907 ± 0.036 
+
+Total Rank 8 6 9 5 3 4 7 2 1
+
+Notes: The best results are highlighted with gray shading. 0 10000 20000 30000 40000 0.4 0.5 0.6 0.7 0.8 0.9 1.0   
+
+> Accuracy
+> Fault Occurrence
+> C1C2C3
+> SupCon Tent-Full AdaContrast CoTTA DPLOT SURGEON OAFD Tri-Training CGSA
+
+(a) Voltage Unbalance, Cumulative 0 10000 20000 30000 40000 0.60 0.65 0.70 0.75 0.80 0.85 0.90 0.95 1.00    
+
+> Accuracy
+> Fault Occurrence
+> C1C2C3
+> SupCon Tent-Full AdaContrast CoTTA DPLOT SURGEON OAFD Tri-Training CGSA
+
+(b) Static Eccentricity, Cumulative 0 10000 20000 30000 40000 0.5 0.6 0.7 0.8 0.9 1.0    
+
+> Accuracy
+> Fault Occurrence
+> C1C2C3
+> SupCon Tent-Full AdaContrast CoTTA DPLOT SURGEON OAFD Tri-Training CGSA
+
+(c) Bearing Ball Fault, Cumulative 0 10000 20000 30000 40000 0.0 0.2 0.4 0.6 0.8 1.0   
+
+> Real-time Accuracy
+> Fault Occurrence
+> C1C2C3
+> SupCon Tent-Full AdaContrast CoTTA DPLOT SURGEON OAFD Tri-Training CGSA
+
+(d) Voltage Unbalance, Real-time 0 10000 20000 30000 40000 0.0 0.2 0.4 0.6 0.8 1.0    
+
+> Real-time Accuracy
+> Fault Occurrence
+> C1C2C3
+> SupCon Tent-Full AdaContrast CoTTA DPLOT SURGEON OAFD Tri-Training CGSA
+
+(e) Static Eccentricity, Real-time 0 10000 20000 30000 40000 0.0 0.2 0.4 0.6 0.8 1.0    
+
+> Real-time Accuracy
+> Fault Occurrence
+> C1C2C3
+> SupCon Tent-Full AdaContrast CoTTA DPLOT SURGEON OAFD Tri-Training CGSA
+
+(f) Bearing Ball Fault, Real-time 
+
+Fig. 5: Diagnostic performance of different methods on the motor dataset. a representative supervised learning method, Tent-Full [48], AdaContrast [49], CoTTA [50], DPLOT [51], SURGEON [52], and OAFD [36] are selected as advanced online test-time adaptation methods; and Tri-Training [53] is selected as an online semi-supervised learning method. Here, Tent-Full denotes a variant of Tent that updates all parameters rather than only the BN layers. For a fair comparison, all online methods are initialized from the same source pre-trained model obtained by offline SupCon training, and the hyperparameters of all compared methods are tuned under the same validation protocol for each dataset to ensure optimal performance. The proposed CGSA, adopting a complete offline and online framework, is compared with all the methods mentioned above under the same experimental settings. 
+
+B. Case 1: Parallel Gearbox 1) Experimental Settings: The gearbox test rig (as illus-trated in Fig. 3a) is composed of a 2.2 kW three-phase asynchronous motor, a torque sensor, a two-stage parallel gearbox, a magnetic powder brake, a measurement and a control system. Two TES001V three-axis vibration sensors (sensitivity: 100 mV/g) were used to measure vibrations along the x-, y-, and z-axes of the motor and the gearbox shaft at a 12.8 kHz sampling frequency. 
+
+2) Comparison Study: The cumulative accuracy curves and real-time accuracy curves based on the MCC5-THU Gearbox dataset are presented in Fig. 4a–4c, Fig. 4d–4f, respectively. In Table III, the Acc. and ECE for each operating condition as well as the overall performance are reported. The proposed method significantly outperforms other comparative methods. 8
+
+Especially for teeth break fault, our method achieves a di-agnostic accuracy of 0.931, surpassing Tri-Training by 5.9 % and the compared OTTA methods by more than 11 %, and maintains stable performance in the in-distribution stage, demonstrating its robustness against catastrophic forgetting during online adaptation. 
+
+C. Case 2: Three-phase Asynchronous Motor 1) Experimental Settings: The motor test rig (as illustrated in Fig. 3b) consists of a 2.2 kW three-phase asynchronous motor, a torque sensor, a two-stage parallel gearbox and a magnetic powder brake. A tri-axial vibration acceleration sensor was mounted on the motor drive end. Vibration, three-phase current (measured using current clamps model Fluke-i30s with a sensitivity 100 mV/A), torque, and key-phase signals were acquired at a sampling frequency of 12.8 kHz via 8 synchronous channels. 
+
+2) Comparison Study: The cumulative accuracy curves and real-time accuracy curves based on the MCC5-THU Motor dataset are presented in Fig. 5a–5c, Fig. 5d–5f, respectively. In Table IV, the Acc. and ECE for each operating condition as well as the overall performance are reported. In this scenario, classification becomes more challenging due to the similar-ity between healthy and faulty samples and the significant distribution discrepancy across different operating conditions. Nevertheless, the proposed method still achieves the highest overall accuracy of 0.907. When the voltage unbalance fault and bearing ball fault are introduced, all comparison methods suffer from a significant accuracy degradation. By contrast, only the proposed CGSA can rapidly adjust to the changed data distribution and recover to a high accuracy level. 
+
+D. Discussion 1) Performance Comparison: The comparison results ver-ify the effectiveness of the proposed method from several aspects. Compared with the offline method SupCon, the proposed method can further adapt to the evolving online stream to enhance its performance. Compared with OTTA methods, which tend to suffer from error accumulation, the proposed online mechanism provides a more stable adaptation process and improves diagnostic accuracy. Tri-Training is additionally included as a source-available reference, since online semi-supervised methods are allowed to access source-domain data during the online stage. In contrast, the proposed CGSA strictly follows the source-free OTTA protocol and still outperforms Tri-Training, further verifying its effectiveness. 
+
+2) Online Mechanism Analysis: To further investigate the residual condition guidance mechanism in the online stage, the relationship between residual deviation and sample reliability is quantitatively analyzed by computing pseudo-label accuracy over different residual-deviation intervals. As shown in Fig. 6, the pseudo-label accuracy on the gearbox dataset exhibits a clear overall decreasing trend as the residual deviation increases, while a similar trend, although less pronounced, is observed on the motor dataset. These results provide empirical support for using residual deviation as a reliability indicator. [0.000, 0.025) [0.025, 0.050) [0.050, 0.075) [0.075, 0.100) [0.100, 0.150) [0.150, 0.200) 
+
+> Residual-deviation Interval
+> 0.70 0.75 0.80 0.85 0.90 0.95
+> Pseudo-label Accuracy
+> Gearbox Motor
+
+Fig. 6: Pseudo-label accuracy within different residual-deviation intervals. 
+
+3) Transition Stage Analysis: The FIFO queue may intro-duce a short-term lag after an operating-condition or fault transition, since its mean response still reflects the preceding state. Consequently, samples from the new state may be selected more conservatively, which helps reduce unreliable updates and error accumulation during the transition. As new responses progressively replace the old ones in the queue, the mean adapts to the current state and the selection behavior gradually recovers. TABLE V: E FFICIENCY COMPARISON ON GEARBOX .                                                   
+
+> Method Running Time ↓
+> (s) Throughput ↑
+> (samples/s) Peak GPU Mem. ↓
+> (MB) Fwd. Vol. ↓
+> (M/batch) Bwd. Vol. ↓
+> (M/batch) Tent-Full 1.14 21215 155 6.965 6.965
+> AdaContrast 10.85 2195 265 27.861 6.965
+> CoTTA 11.76 2032 391 36.154 6.965
+> DPLOT 1.48 16163 298 34.827 13.931
+> SURGEON 1.61 15397 242 20.896 13.931
+> OAFD 1.48 16366 235 13.931 6.965
+> Tri-Training 1.54 15588 406 63.811 0.225
+> CGSA 1.71 14001 216 13.972 6.965
+> CGSA (CPU) 4.79 4992 –13.972 6.965
+
+Notes: ↑ and ↓ indicate that higher and lower values are preferred, respectively. 
+
+4) Computational Efficiency Analysis: Computational ef-ficiency should also be considered in practical online fault diagnosis. Table V reports both hardware-dependent measure-ments, including the running time of a complete online stream, throughput, and peak GPU memory usage, and platform-independent indicators, including the cumulative parameter volumes involved in forward and backward propagation for each online batch. The proposed CGSA achieves higher diag-nostic accuracy while maintaining a favorable balance between diagnostic performance and computational overhead. The CPU result further provides a cross-platform reference for practical online deployment. 
+
+E. Ablation Study 
+
+To further verify the contribution of each component in the proposed framework, an ablation study is conducted by progressively adding different modules, as shown in Table VI. 
+
+Baseline denotes the MLP diagnostic model. Due to its lim-ited generalization ability, the overall accuracy is only 0.779. After introducing the continuous operating-condition adver-sarial learning strategy with progressive training in the offline stage, CAL consistently outperforms both Baseline and DANN ,improving the overall accuracy to 0.868. This result verifies 916 32 64 128 256 512 1024    
+
+> Bon
+> 0.7500 0.8125 0.8750 0.9375 1.0000
+> Overall Accuracy
+> 10 0
+> 10 1
+> Running Time (s)
+> Acc. of Gearbox Acc. of Motor RT of Gearbox RT of Motor
+
+(a) Effect of Bon 0.02 0.04 0.06 0.08 0.10 0.12 0.14 0.16  
+
+> 0.70 0.75 0.80 0.85 0.90 0.95
+> p
+> 0.915 0.917 0.919 0.921 0.923 0.924 0.926 0.928 0.930 0.932
+
+(b) Effect of τμ and ϵp0.02 0.04 0.06 0.08 0.10 0.12  
+
+> 35 40 45 50 55 60 65
+> W
+> 0.837 0.842 0.847 0.851 0.856 0.860 0.865 0.869 0.874 0.878
+
+(c) Effect of τμ and W
+
+Fig. 7: Hyperparameter study of the proposed CGSA. The results in (a) are obtained under the gear wear and voltage unbalance fault scenarios, while (b) and (c) are obtained under the gear wear and voltage unbalance fault scenarios, respectively. The color in (b) and (c) denotes the diagnostic accuracy. that modeling operating conditions in a continuous manner is more suitable than in a discrete manner for enhancing the generalization ability under time-varying operating conditions. In the online stage, CF updates the student model only with samples of sufficiently high pseudo-label confidence, leading to an improvement of 0.035 in overall accuracy over CAL . Fur-thermore, CAL+RCG performs online adaptation by selecting samples according to the residual condition guidance criterion. It achieves an overall accuracy of 0.910, demonstrating that the residual condition response provides more reliable information for online sample selection than confidence filtering alone. Finally, CGSA integrates confidence filtering and residual condition guidance into a complete mechanism, achieving the highest overall accuracy of 0.918. Therefore, although CAL 
+
+can improve the offline representation, the online adaptation stage still provides an obvious boost in accuracy, highlighting its effectiveness. Moreover, introducing the online adaptation mechanisms consistently reduces the ECE compared with 
+
+CAL alone. While confidence filtering may encourage sharper predictions and therefore result in a slightly higher ECE for the complete CGSA than for CAL+RCG , the complete framework still maintains a relatively low ECE of 4.4%. TABLE VI: E FFECTS OF COMPONENTS IN CGSA. 
+
+Strategy Offline Online Performance DAL CAL CF RCG Acc. (%) ECE (%) Baseline 77.9 21.0 
+
+DANN ✓ 86.2 10.5 
+
+CAL ✓ 86.8 (+0 .0) 9.5 (+0 .0) 
+
+CAL+CF ✓ ✓ 90.3 (+3 .5) 4.4 (−5.1) 
+
+CAL+RCG ✓ ✓ 91.0 (+4 .2) 3.7 (−5.8) 
+
+CGSA * ✓ ✓ ✓ 91.8 (+5 .0) 4.4 (−5.1) 
+
+Notes: The results are obtained on the MCC5-THU Gearbox Dataset. 
+
+DAL denotes discrete operating-condition adversarial learning imple-mented by DANN, CAL denotes continuous operating-condition ad-versarial learning with progressive training, CF denotes confidence filtering, and RCG denotes residual condition guidance for online sample selection. 
+
+In conclusion, the above results indicate that each compo-nent of the proposed framework makes a contribution the over-all performance. Combining the two online selection criteria improves the overall diagnostic accuracy and the reliability of model updates. 
+
+F. Hyperparameter Study 
+
+To investigate the robustness of the proposed CGSA, hyper-parameter experiments are conducted under the two represen-tative faults, gear wear and voltage unbalance, using the same settings as in the comparison experiments. As illustrated in Fig. 7a, small and moderate batch sizes gen-erally provide higher diagnostic accuracy because more fre-quent updates enable the model to respond more promptly to distribution changes. However, they also substantially increase the running time because they require more optimization steps. The resulting computational cost may limit continuous online processing. Fig. 7b shows the joint sensitivity to the residual condition consistency threshold τμ and the pseudo-label con-fidence threshold ϵp. An overly loose threshold combination may introduce unreliable pseudo-labels, whereas excessively strict thresholds reduce the number of samples available for online adaptation. Similarly, Fig. 7c shows the joint influence of τμ and the queue length W within a certain range, where a small W provides insufficient historical information, leading to a slight decrease in performance. Overall, the proposed CGSA maintains relatively robust di-agnostic performance over reasonable ranges of the evaluated hyperparameters, supporting its applicability. IV. C ONCLUSION 
+
+In this paper, a CGSA framework has been proposed to tackle the problem of fault diagnosis of dynamic systems under unknown operating conditions. In the offline stage, a continuous operating-condition adversarial learning strategy with progressive training has been developed to enhance cross-condition generalization. During online deployment, residual condition responses and pseudo-labels provided by the fixed source pre-trained model have been exploited to identify reliable streaming samples for student model updates. The 10 
+
+proposed mechanism has reduced error accumulation and improved the stability of online adaptation without requiring access to online ground-truth labels. Extensive experiments on realistic industrial gearbox and motor platforms have demon-strated that the proposed method achieves a favorable balance between diagnostic accuracy and test-time efficiency. Although the proposed method has demonstrated promising performance under unknown operating conditions, its capabil-ity to identify previously unknown fault categories requires further investigation. Future work will therefore focus on extending the proposed framework to unknown fault detec-tion and evaluating its robustness in more realistic industrial scenarios and more diverse operating environments. REFERENCES [1] Z. Liu, X. He, B. Huang, and D. Zhou, “Incremental learning-enabled fault diagnosis of dynamic systems: A comprehensive review,” IEEE Transactions on Cybernetics , vol. 55, no. 12, pp. 5633–5649, 2025. [2] J. Zhu, B. Long, L. Fei, Y. Xiao, B. Wang, and R. Cai, “Test-time domain adaptation with time-frequency consistency and instance-aware batch renormalization for online machinery fault diagnosis,” IEEE Transactions on Automation Science and Engineering , vol. 23, pp. 8762– 8775, 2026. [3] Z. Liu, J. Zhang, and X. He, “A discrimination-guided active learning method based on marginal representations for industrial compound fault diagnosis,” IEEE Transactions on Automation Science and Engineering ,vol. 21, no. 4, pp. 6411–6422, 2024. [4] Y. Wang, C. Wen, and X. Wu, “Fault detection and isolation of floating wind turbine pitch system based on kalman filter and multi-attention 1dcnn,” Systems Science & Control Engineering , vol. 12, no. 1, p. 2362169, 2024. [5] L. Wang, Y. Gao, X. Li, and L. Gao, “Self-supervised pseudo-label learning-enabled cross-domain fault diagnosis method under time-varying speeds,” IEEE Transactions on Systems, Man, and Cybernetics: Systems , vol. 55, no. 9, pp. 6203–6214, 2025. [6] P. Zhu, Y. Li, Y. Hu, S. Xiang, Q. Liu, D. Cheng, and Y. Liang, “Mci-gru: Stock prediction model based on multi-head cross-attention and improved gru,” Neurocomputing , vol. 638, p. 130168, 2025. [7] A. Dong, A. Starr, and Y. Zhao, “Neural network-based parametric sys-tem identification: A review,” International Journal of Systems Science ,vol. 54, no. 13, pp. 2676–2688, 2023. [8] P. Liang, L. Xu, H. Shuai, X. Yuan, B. Wang, and L. Zhang, “Semisu-pervised subdomain adaptation graph convolutional network for fault transfer diagnosis of rotating machinery under time-varying speeds,” 
+
+IEEE/ASME Transactions on Mechatronics , vol. 29, no. 1, pp. 730–741, 2024. [9] P. Han, Z. Liu, X. He, S. X. Ding, and D. Zhou, “Multi-condition fault diagnosis of dynamic systems: A survey, insights, and prospects,” 
+
+IEEE Transactions on Automation Science and Engineering , vol. 22, pp. 15 728–15 744, 2025. [10] S. Ma and Y. Li, “Adaptive fuzzy fault-tolerant control for active seat suspension systems with full-state constraints,” Systems Science & Control Engineering , vol. 11, no. 1, p. 2153391, 2023. [11] R. Huang, J. Li, Y. Liao, J. Chen, Z. Wang, and W. Li, “Deep adversarial capsule network for compound fault diagnosis of machinery toward multidomain generalization task,” IEEE Transactions on Instrumentation and Measurement , vol. 70, pp. 1–11, 2021. [12] M. Zhong, X. Zhu, T. Xue, and L. Zhang, “An overview of recent advances in model-based event-triggered fault detection and estimation,” 
+
+International Journal of Systems Science , vol. 54, no. 4, pp. 929–943, 2023. [13] J. Cen, B. Zhao, X. Liu, X. Li, F. Deng, and H. Huang, “Generalized zero-shot learning based on diffusion model and multilabel network for compound fault diagnosis,” IEEE Transactions on Industrial Informatics ,vol. 21, no. 9, pp. 6723–6734, 2025. [14] J. Li, R. Huang, G. He, Y. Liao, Z. Wang, and W. Li, “A two-stage transfer adversarial network for intelligent fault diagnosis of rotating machinery with multiple new faults,” IEEE/ASME Transactions on Mechatronics , vol. 26, no. 3, pp. 1591–1601, 2021. [15] J. Zhang, K. Zhang, Y. An, H. Luo, and S. Yin, “An integrated multitask-ing intelligent bearing fault diagnosis scheme based on representation learning under imbalanced sample condition,” IEEE Transactions on Neural Networks and Learning Systems , vol. 35, no. 5, pp. 6231–6242, 2024. [16] Z. Zhang, H. Chen, S. Li, Z. An, and J. Wang, “A novel geodesic flow kernel based domain adaptation approach for intelligent fault diagnosis under varying working condition,” Neurocomputing , vol. 376, pp. 54–64, Feb. 2020. [17] W. Li, R. Huang, J. Li, Y. Liao, Z. Chen, G. He, R. Yan, and K. Gryllias, “A perspective survey on deep transfer learning for fault diagnosis in industrial scenarios: Theories, applications and challenges,” Mechanical Systems and Signal Processing , vol. 167, p. 108487, 2022. [18] B. Chen, X. Zhang, C. Shen, Q. Li, and Z. Song, “Couda: Continual unsupervised domain adaptation for industrial fault diagnosis under dynamic working conditions,” IEEE Transactions on Industrial Infor-matics , vol. 21, no. 5, pp. 4072–4082, 2025. [19] R. Wang, W. Huang, J. Wang, C. Shen, and Z. Zhu, “Multisource domain feature adaptation network for bearing fault diagnosis under time-varying working conditions,” IEEE Transactions on Instrumentation and Measurement , vol. 71, pp. 1–10, 2022. [20] H. Wang, J. Lin, and Z. Zhang, “Semantics-consistent representation learning for industrial fault diagnosis in unseen domains,” IEEE Internet of Things Journal , vol. 12, no. 23, pp. 50 440–50 453, 2025. [21] L. Wang, Z. Wang, and Q. Liu, “Hybrid-driven state estimation with adaptive cross-coupled priors: Enhancing data representation and model robustness,” IEEE Transactions on Cybernetics , vol. 56, no. 3, pp. 1785– 1798, 2026. [22] W. Li, Z. Liu, P. Han, X. He, L. Wang, and T. Zhang, “A dynamic anchor-based online semi-supervised learning approach for fault diagnosis under variable operating conditions,” Neurocomputing , vol. 638, p. 130137, 2025. [23] B. Wang, L. Wen, X. Li, and L. Gao, “Adaptive class center generaliza-tion network: A sparse domain-regressive framework for bearing fault diagnosis under unknown working conditions,” IEEE Transactions on Instrumentation and Measurement , vol. 72, pp. 1–11, 2023. [24] G. Zhang, X. Kong, Q. Wang, J. Du, and H. Ma, “Balancing discrep-ancy and consistency: Adversarial single domain generalization in fault diagnosis,” IEEE Transactions on Industrial Informatics , vol. 21, no. 10, pp. 7923–7934, 2025. [25] J. Tian, H. Luo, S. Wu, P. Yan, and J. Zhang, “Source-free domain adap-tation for open-set cross-domain fault diagnosis,” IEEE Transactions on Industrial Informatics , vol. 21, no. 12, pp. 9341–9352, 2025. [26] Q. Huang, S. Lv, Y. Han, Y. Zhang, and M. Wei, “Cfdnet: An inter-pretable causal filtering disentanglement domain generalization network for fault diagnosis under unseen conditions,” IEEE Transactions on Industrial Informatics , vol. 22, no. 4, pp. 3204–3215, 2026. [27] Y. Chen, D. Zhang, R. Yan, and M. Xie, “Applications of domain generalization to machine fault diagnosis: A survey,” IEEE/CAA Journal of Automatica Sinica , vol. 12, no. 10, pp. 1963–1984, 2025. [28] C. Wang, L. Ma, J. Wang, R. Bao, H. Yu, and S. Wang, “Continuously indexed domain generalization for fault diagnosis under continuously varying working conditions,” IEEE Transactions on Instrumentation and Measurement , vol. 74, pp. 1–11, 2025. [29] Y. Sun, H. Tao, Y. Ni, and V. Stojanovic, “A generic single-source domain generalization framework for fault diagnosis via wavelet packet augmentation and pseudo-domain generation,” IEEE Internet of Things Journal , vol. 12, no. 15, pp. 31 629–31 642, 2025. [30] B. Song, Y. Liu, J. Fang, W. Liu, M. Zhong, and X. Liu, “An optimized CNN-BiLSTM network for bearing fault diagnosis under multiple work-ing conditions with limited training samples,” Neurocomputing , vol. 574, p. 127284, Mar. 2024. [31] Z. Liu, C. Li, and X. He, “Evidential ensemble preference-guided learning approach for real-time multimode fault diagnosis,” IEEE Trans-actions on Industrial Informatics , vol. 20, no. 4, pp. 5495–5504, 2024. [32] P. Han, S. Chen, Z. Liu, and X. He, “Imbalanced real-time fault diagnosis based on minority-prioritized online semi-supervised random vector functional link network,” IEEE Transactions on Instrumentation and Measurement , vol. 73, pp. 1–10, 2024. [33] J. Liang, R. He, and T. Tan, “A comprehensive survey on test-time adaptation under distribution shifts,” International Journal of Computer Vision , vol. 133, no. 1, pp. 31–64, 2025. [34] Z. Wang, Y. Luo, L. Zheng, Z. Chen, S. Wang, and Z. Huang, “In search of lost online test-time adaptation: A survey,” International Journal of Computer Vision , vol. 133, no. 3, pp. 1106–1139, 2025. [35] J. Tian, Y. Yu, H. R. Karimi, F. Gao, and J. Lin, “A continual test-time domain adaptation method for online machinery fault diagnosis under 11 
+
+dynamic operating conditions,” Neural Networks , vol. 194, p. 108192, 2026. [36] K. Wu, J. Li, L. Meng, F. Li, and K. Lu, “Online adaptive fault diagnosis with test-time domain adaptation,” IEEE Transactions on Industrial Informatics , vol. 21, no. 1, pp. 107–117, 2025. [37] B. Chen, J. Li, Q. Li, J. Qian, X. Zhang, C. Shen, and Z. Song, “Diagconta: Continual test-time domain adaptation for industrial fault diagnosis under dynamic working conditions,” IEEE Transactions on Industrial Informatics , pp. 1–12, 2026. [38] S. Zhang, B. Wang, M. Kanemaru, C. Lin, D. Liu, M. Miyoshi, K. H. Teo, and T. G. Habetler, “Model-based analysis and quantification of bearing faults in induction machines,” IEEE Transactions on Industry Applications , vol. 56, no. 3, pp. 2158–2170, 2020. [39] Q. Xiao, M. Yang, J. Yan, and W. Shi, “Feature decoupling integrated do-main generalization network for bearing fault diagnosis under unknown operating conditions,” Scientific Reports , vol. 14, 12 2024. [40] K. Severson, P. Chaiwatanodom, and R. D. Braatz, “Perspectives on process monitoring of industrial systems,” Annual Reviews in Control ,vol. 42, pp. 190–200, 2016. [41] P. Han, Z. Liu, S. Chen, D. Zou, and X. He, “Rethinking the role of operating conditions for learning-based multi-condition fault diagnosis,” 
+
+2025 CAA Symposium on Fault Detection, Supervision, and Safety for Technical Processes (SAFEPROCESS) , pp. 1–6, 2025. [42] H. Wang, H. He, and D. Katabi, “Continuously indexed domain adapta-tion,” in Proceedings of the 37th International Conference on Machine Learning , ser. Proceedings of Machine Learning Research, vol. 119. PMLR, 2020, pp. 9898–9907. [43] S. Chen, Z. Liu, X. He, D. Zou, and D. Zhou, “Multi-mode fault diagnosis datasets of gearbox under variable working conditions,” Data in brief , vol. 54, p. 110453, 2024. [44] S. Chen, Z. Liu, C. Li, D. Zou, X. He, and D. Zhou, “Multi-mode fault diagnosis datasets of three-phase asynchronous motor under variable working conditions,” Data in Brief , vol. 65, p. 112583, 2026. [45] M. Tan, G. Chen, J. Wu, Y. Zhang, Y. Chen, P. Zhao, and S. Niu, “Uncertainty-calibrated test-time model adaptation without forgetting,” 
+
+IEEE Transactions on Pattern Analysis and Machine Intelligence ,vol. 47, no. 8, pp. 6274–6289, 2025. [46] Y. Ganin, E. Ustinova, H. Ajakan, P. Germain, H. Larochelle, F. Lavi-olette, M. March, and V. Lempitsky, “Domain-adversarial training of neural networks,” Journal of machine learning research , vol. 17, no. 59, pp. 1–35, 2016. [47] P. Khosla, P. Teterwak, C. Wang, A. Sarna, Y. Tian, P. Isola, A. Maschinot, C. Liu, and D. Krishnan, “Supervised contrastive learning,” in Advances in Neural Information Processing Systems ,H. Larochelle, M. Ranzato, R. Hadsell, M. Balcan, and H. Lin, Eds., vol. 33. Curran Associates, Inc., 2020, pp. 18 661–18 673. [48] D. Wang, E. Shelhamer, S. Liu, B. Olshausen, and T. Darrell, “Tent: Fully test-time adaptation by entropy minimization,” in International Conference on Learning Representations , 2021. [49] D. Chen, D. Wang, T. Darrell, and S. Ebrahimi, “Contrastive test-time adaptation,” in 2022 IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR) , 2022, pp. 295–305. [50] Q. Wang, O. Fink, L. Van Gool, and D. Dai, “Continual test-time domain adaptation,” in 2022 IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR) , 2022, pp. 7191–7201. [51] Y. Yu, S. Shin, S. Back, M. Ko, S. Noh, and K. Lee, “Domain-specific block selection and paired-view pseudo-labeling for online test-time adaptation,” in 2024 IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR) , 2024, pp. 22 723–22 732. [52] K. Ma, J. Tang, B. Guo, F. Dang, S. Liu, Z. Zhu, L. Wu, C. Fang, Y.-C. Chen, Z. Yu, and Y. Liu, “Surgeon: Memory-adaptive fully test-time adaptation via dynamic activation sparsity,” in 2025 IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR) , 2025, pp. 30 514–30 523. [53] Y. Zhang, B. Gao, D. Yang, W. L. Woo, and H. Wen, “Online learning of wearable sensing for human activity recognition,” IEEE Internet of Things Journal , vol. 9, no. 23, pp. 24 315–24 327, 2022.
