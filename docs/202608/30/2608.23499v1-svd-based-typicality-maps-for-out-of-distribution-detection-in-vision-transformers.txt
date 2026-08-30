@@ -1,0 +1,258 @@
+Title: SVD-Based Typicality Maps for Out-of-Distribution Detection in Vision Transformers
+
+URL Source: https://arxiv.org/pdf/2608.23499v1
+
+Published Time: Tue, 25 Aug 2026 02:27:54 GMT
+
+Number of Pages: 5
+
+Markdown Content:
+# SVD-Based Typicality Maps for Out-of-Distribution Detection in Vision Transformers 
+
+Aldo Sean Sartor ∗, Leandro de Souza Rosa ∗, Andriy Enttsel ∗, Mauro Mangia ∗† , Riccardo Rovatti ∗† ∗DEI, †ARCES, University of Bologna, Italy; contact author: aldosean.sartor@unibo.it 
+
+Abstract —We present a method for analyzing the internal representations of Vision Transformers (ViTs) exploiting the geometry of their learned parameters. Each affine layer’s weight matrix is factored via Singular Value Decomposition (SVD), and activations are projected onto the leading right singular vectors to obtain compact, layer-intrinsic representations. A class-conditional density model is then fitted at each layer, producing per-class typicality scores that are stacked across depth into 
+
+typicality maps : two-dimensional summaries of how class-specific evidence evolves through the network. From these maps, we derive two post-hoc scores for Out-Of-Distribution (OOD) detec-tion: a Prototype Alignment Score (PAS), measuring agreement with class reference prototype patterns, and a Multi-Layer Soft Voting (MLSV) score, capturing cross-layer consensus without stored prototypes. On ViT-B/16 fine-tuned on CIFAR-100, the proposed scores achieve competitive detection performance with-out retraining or OOD exposure. 
+
+Index Terms —Singular Value Decomposition, Vision Trans-former, Out-of-Distribution Detection, Feature Geometry. 
+
+I. I NTRODUCTION 
+
+Deep neural networks construct high-dimensional internal representations through cascades of learned linear transfor-mations and nonlinearities. While these representations are central to a model’s performance, their geometry and evolution across depth remain difficult to characterize, especially for modern deep architectures. In this work, we focus on Vision Transformer (ViT) [1] classifiers, where information is pro-gressively transformed by alternating self-attention and multi-layer perceptron (MLP) blocks acting on token embeddings. A principled, layer-wise view of how class-relevant structure emerges is important both for interpretability and for reliability tasks such as detecting inputs that fall outside the training distribution [2]. An increasing number of post-hoc methods address these questions by analyzing intermediate activations of a frozen, pretrained network, rather than relying solely on the output-layer’s scores [3], [4]. Methods based on distances in activation space, such as Deep Mahalanobis Distance (DMD) [5] and Deep k-Nearest Neighbors ( k-NN) [6], capture distributional information beyond the logits. However, they typically operate on a single layer or require task-specific supervision, such as Out-Of-Distribution (OOD) validation data for the logistic-regression step in DMD. More recently, a multi-layer confidence framework called MACS (Multi-layer Analysis for Confidence Scoring) [7] has 
+
+> The work of Andriy Enttsel was done before joining Mitsubishi Electric R&D Centre Europe.
+
+shown that aggregating layer-wise evidence into structured 
+
+maps can unify confidence estimation, OOD detection, and adversarial-attack detection. Concretely, MACS probes the internal activations of a trained network via SVD-based pro-jections [8] and aggregates layer-wise information into struc-tured maps, which are then compared against class-specific prototypes. While MACS demonstrates the effectiveness of this representation for confidence and reliability assessment, it relies on unsupervised clustering in the projected activation space, followed by an empirical feature-label association step to obtain layer-wise class estimates. In this work, we propose a simpler and probabilistic al-ternative. We preserve the same geometric backbone: we interpret each affine layer as a linear operator, factorize its augmented weight matrix via Singular Value Decomposition (SVD) [9], and project activations onto the directions along which the layer maximally amplifies its input, to obtain com-pact, layer-intrinsic representations. However, instead of rely-ing on clustering and empirical feature-label association, we adopt class-conditional density modeling in the SVD-projected space. This yields per-layer, per-class typicality scores, which, when stacked across depth, form typicality maps that play the same structural role as MACS classification maps while reducing the number of processing stages and hyperparameters and providing scores with a direct probabilistic interpreta-tion. These maps reveal how class-specific evidence emerges through the network. From these maps, we then derive two scalar scores: the Prototype Alignment Score (PAS) , measuring agreement with class-specific reference maps analogous to MACS’s prototype-matching; and the Multi-Layer Soft Voting (MLSV) score, which captures cross-layer consensus without requiring any stored prototypes. Both scores are fully post-hoc and do not require access to OOD data. We validate the framework on ViT-B/16 fine-tuned on CIFAR-100. PAS and MLSV achieve competitive OOD de-tection against established baselines while providing a depth-resolved representation of the network’s internal dynamics. Our contributions can be summarized as follows:  
+
+> •
+
+Probabilistic reformulation : We replace MACS’s clus-tering and feature-label association with class-conditional density modeling in the SVD-projected space, yielding per-layer, per-class typicality scores with a direct proba-bilistic interpretation.  
+
+> •
+
+Simpler maps : We introduce typicality maps, which play the same role as MACS classification maps but with a simpler pipeline and fewer hyperparameters. arXiv:2608.23499v1 [cs.CV] 24 Aug 2026 ×12 
+
+> OFFLINE ONLINE
+
+ViT Encoder        
+
+> Input tokens LN →MHSA →Drop → ⊕
+> LayerNorm
+> 1CLS Linear Expansion GELU Dropout
+> 2
+> Linear Compression Dropout
+> MLP Block
+> +Output tokens LayerNorm
+> 3CLS emb. Linear Classifier Logits
+
+Activations Processing       
+
+> Truncated SVD Train Projection Density Model Reference Statistics Test Projection Typicality Maps Scores
+> Vkref. stats
+> test train
+> Wl, b l
+> activations (train and test) - - - - -weights (offline) stored quantities 12 ×2 + 1 =25 selected layers
+
+Fig. 1: Overview of the proposed pipeline. Left: schematic of a ViT encoder block (repeated ×12 ) with the classification head. Red dots mark the three hook types used to intercept CLS-token activations. Right: the activations processing pipeline, divided into an OFFLINE stage (teal, performed once per model) and an ONLINE stage (orange, applied to each test sample).  
+
+> •
+
+Novel scores : We derive two post-hoc scores: PAS, which simplifies MACS’s prototype-matching score, and MLSV, a new prototype-free score capturing cross-layer consensus. The remainder of this paper is organized as follows. Sec-tion II presents the mathematical models. Section III defines the experimental setup and describes the datasets. Section IV reports and discusses the empirical findings. Section V con-cludes the paper. II. M ATHEMATICAL MODEL 
+
+The proposed method consists of five stages: i) SVD-based projection of activations, ii ) class-conditional density modeling in the projected space, iii ) computation of per-layer typicality scores, iv ) aggregation of these scores into depth-resolved maps, and v) scalar score computation. 
+
+A. SVD-Based Projection of Internal Activations 
+
+Consider a neural network, out of which L affine candidate layers are selected. Focusing on the transformation performed by a specific layer ℓ ∈ { 1, . . . L }, given the input activation 
+
+xℓ ∈ Rdℓ , the output is 
+
+yℓ = Wℓxℓ + bℓ, Wℓ ∈ Rmℓ×dℓ , b ℓ ∈ Rmℓ . (1) As in MACS [7], we rewrite this affine transformation using an augmented input: 
+
+˜xℓ =
+
+xℓ
+
+1
+
+
+
+∈ Rdℓ+1 , Aℓ = [ Wℓ bℓ ] ∈ Rmℓ×(dℓ+1) , (2) so that yℓ = Aℓ ˜xℓ.We then compute the SVD [9, Ch. 2] of Aℓ:
+
+Aℓ = UℓΣℓV ⊤ 
+
+> ℓ
+
+, (3) where Uℓ ∈ Rmℓ×mℓ and Vℓ ∈ R(dℓ+1) ×(dℓ+1) are or-thonormal matrices, and Σℓ contains the singular values in non-increasing order. This allows us to define the projected representation at layer ℓ as 
+
+zℓ = V ⊤ 
+
+> ℓ,k
+
+˜xℓ ∈ Rk, (4) where Vℓ,k ∈ R(dℓ+1) ×k denotes the matrix formed by the first 
+
+k right singular vectors. The projection expresses the activation in a coordinate system induced by the layer’s parameters, aligned with the principal directions of the affine operator Aℓ.The dimensionality k is chosen such that k ≪ dℓ + 1 , yielding a compact, geometry-aware representation. 
+
+B. Class-Conditional Density Modeling 
+
+Let Dtrain = {(x(j), y (j))}Nj=1 be the training set, where 
+
+y(j) ∈ { 1, . . . , C } denotes the class label. For each selected layer ℓ, we compute the projected representations z(j) 
+
+> ℓ
+
+using (4). Then for each layer ℓ and class c, we fit a class-conditional probability density pℓ,c (z) to the set {z(j) 
+
+> ℓ
+
+| y(j) = c}.Each density is modeled using a Gaussian Mixture Model (GMM) [8, Ch. 9] with M components: 
+
+pℓ,c (z) = 
+
+> M
+
+X
+
+> m=1
+
+πℓ,c,m N (z; μℓ,c,m , Σℓ,c,m ), (5) where πℓ,c,m are the mixture weights and (μℓ,c,m , Σℓ,c,m ) are the mean and the covariance of each component. This replaces MACS’s clustering and association pipeline with a single density modeling step, yielding quantities that allow a direct likelihood-based interpretation. 
+
+C. Typicality Scores 
+
+Given a test sample x, we obtain its projected representation 
+
+zℓ(x) at each layer ℓ. For a class c, we first evaluate the negative log-likelihood: 
+
+sℓ,c (x) = − log pℓ,c (zℓ(x)) . (6) Then, to obtain a scale-independent and comparable measure across layers and classes, we normalize these scores using the Empirical Cumulative Distribution Function (ECDF) estimated on the training set for each (ℓ, c ) pair: 
+
+bFℓ,c (t) = 1
+
+Nc
+
+X
+
+> j:y(j)=c
+
+1sℓ,c (x(j)) ≤ t, (7) where Nc is the number of training samples of class c.With this, we define the typicality score as: 
+
+τℓ,c (x) = 1 − bFℓ,c 
+
+ sℓ,c (x) ∈ [0 , 1] . (8) High values of τℓ,c (x) indicate that the representation of x
+
+at layer ℓ is typical for class c, while low values indicate atypical or unlikely behavior. These scores play the same conceptual role as the layer-wise class estimates in MACS, but are obtained through probabilistic modeling and likelihood evaluation rather than clustering and association. 
+
+D. Typicality Maps and Class Prototypes 
+
+For a given input x, we collect all typicality scores into a matrix, called the typicality map: 
+
+T (x) ∈ [0 , 1] C×L, T (x)c,ℓ = τℓ,c (x). (9) Each row of T (x) quantifies how typical the sample is with respect to a fixed class across depth, while each column describes the class-wise typicality profile at a given layer. Structurally, T (x) is analogous to the classification-map in MACS: both encode a depth-resolved, class-wise summary of the network’s internal decision process. Similarly to MACS proto-maps, we define a prototype map 
+
+for each class c by averaging the typicality maps of correctly classified training samples: 
+
+T c = 1
+
+|P c|
+
+X
+
+> x∈P c
+
+T (x), (10) where 
+
+Pc = {x ∈ D train | y(x) = ˆ y(x) = c}. (11) These prototype maps represent the expected depth-wise typ-icality pattern for each class. 
+
+E. Scalar Scores 
+
+The map structure allows us to define two compact scalar scores: 
+
+a) Prototype Alignment Score (PAS): Given a test sam-ple x with predicted class ˆy(x), we measure the alignment between its map and the corresponding class prototype using the Frobenius scalar product: 
+
+SPAS (x) = ⟨T (x), T ˆy(x)⟩F
+
+∥T (x)∥F ∥T ˆy(x)∥F
+
+∈ [0 , 1] , (12) where ⟨A, B ⟩F = P 
+
+> i,j
+
+Ai,j Bi,j and ∥ · ∥ F denotes the Frobenius norm. High values indicate strong agreement with the typical class-specific pattern. This score is a probabilistic reformulation of the MACS scoring function, which compares a classification-map to a class proto-map using the cosine similarity. 
+
+b) Multi-Layer Soft Voting (MLSV): First, we normalize each column of T (x) with a softmax across classes: 
+
+˜τℓ,c (x) = exp( τℓ,c (x)) 
+
+PCc′=1 exp( τℓ,c ′ (x)) . (13) We then aggregate these normalized scores across layers and apply a second softmax: 
+
+sc(x) = exp 
+
+PLℓ=1 ˜τℓ,c (x)
+
+PCc′=1 exp 
+
+PLℓ=1 ˜τℓ,c ′ (x)
+
+ . (14) The MLSV score is defined as 
+
+SMLSV (x) = max  
+
+> c
+
+sc(x) ∈  1 
+
+> C
+
+, 1 . (15) High values indicate strong cross-layer consensus toward a single class, while low values indicate disagreement across layers. The overall five-stage pipeline is summarized in (Fig. 1, right), where we also distinguish between the offline and online phases. III. E XPERIMENTAL SETUP 
+
+A. Dataset and Model 
+
+We fine-tune a ViT-B/16 pretrained on ImageNet-1k [10] on the CIFAR-100 training set [11]. The resulting model achieves 
+
+86 .6% top-1 test accuracy. We apply the proposed framework to the MLP sub-blocks of each ViT encoder layer. Specifically, we intercept CLS-token activations at two points within each MLP: before the linear expansion and before the linear compression (Fig. 1, left), yielding 2 × 12 = 24 intermediate hook points. An additional hook is placed at the input of the classification head, for a total of L = 25 monitored layers. For each hooked layer, activations are projected onto the top-k right singular vectors of the corresponding weight matrix. The projection dimension is fixed to k = 200 for intermediate layers and k = 100 for the classification head, matching the number of classes. Class-conditional densities are modeled by GMMs with 
+
+M = 4 diagonal-covariance components per class and covari-ance regularization ϵ = 10 −4. Unlike MACS, which models the joint representation space, our approach operates in a class-conditional setting, allowing a significantly lower number of mixture components. All hyperparameters {k, M , ϵ} were selected empirically in preliminary experiments, the same configuration is used throughout and no task-specific tuning was performed. 
+
+B. Out-of-Distribution Datasets 
+
+Following [12] and [13], we evaluate on three datasets that are semantically disjoint from CIFAR-100 and cover different visual domains:  
+
+> •
+
+SVHN [14]: house-number photographs from Google Street View.  
+
+> •
+
+Places365 [15]: scene photographs depicting indoor and outdoor environments. Fig. 2: Typicality maps for the first correctly classified lion (green border), the first misclassified lion (red border) and the class prototype. Left sidebar indicates ground-truth and predicted labels, right sidebar lists the top-3 classes according to the prototype.  
+
+> •
+
+DTD [16]: the Describable Textures Dataset, with images of natural textures organized into perceptual attribute categories. IV. R ESULTS 
+
+A. Visualizing Maps 
+
+We illustrate the structure of the proposed maps T (x) on a few representative samples in Fig. 2. For correctly classified inputs, typicality tends to concentrate on the ground-truth class as depth increases, while in early layers typicality is spread across multiple classes (Fig. 2, green). By contrast, misclassi-fied samples do not exhibit the same pattern: typicality remains spread across competing classes or fluctuates across layers, even in the last layers (Fig. 2, red). Averaging maps over correctly classified training samples yields class prototypes that summarize a typical depth-wise profile; semantically related classes retain moderate typicality, reflecting inter-class similarity in the network’s representations (Fig. 2, blue). OOD inputs instead display diffuse, unstructured patterns across all classes and layers (Fig. 3), consistent with their representations falling outside the high-density regions of the class-conditional models. 
+
+B. Out-of-Distribution Detection 
+
+We evaluate PAS and MLSV on OOD detection, where test samples from unseen distributions are expected to produce less structured maps (cf. Fig. 3). We compare against the following post-hoc detectors: 
+
+MSP [3], the maximum softmax probability; MLS [17], the maximum logit; Energy [4], the log-sum-exp of logits; Re-Act [18], which clips penultimate-layer activations at the 
+
+Fig. 3: Typicality maps for the first samples of each OOD dataset (SVHN, Places365, DTD). Left sidebar indicates the predicted label. TABLE I: OOD detection performance reported as AUROC ↑
+
+(%) / FPR@95 ↓ (%). ID = CIFAR-100, backbone ViT-B/16.                                                          
+
+> Score SVHN Places365 DTD Mean
+> MSP 89.8 / 44.1 83.9 / 59.6 92.2 / 33.1 88.6 / 45.6 MLS 94.9 / 24.2 91.9 / 39.9 97.2 / 14.2 94.6 / 26.1 Energy 95.3 / 21.7 92.7 / 36.4 97.6 / 11.5 95.2 / 23.2 ReAct 95.1 / 22.4 93.3 / 33.3 97.6 / 11.2 95.3 / 22.3
+> k-NN 95.9 / 22.4 89.6 / 49.7 96.7 / 16.6 94.1 / 29.6 DMD-B 90.5 / 67.6 96.9 / 14.6 98.6 / 6.6 95.3 / 29.6 DMD-A †99.0 / 3.9 99.9 / 0.1 99.9 / 0.1 99.6 / 1.4 MACS 90.3 / 51.4 87.6 / 60.4 94.1 / 36.1 90.6 / 49.3 PAS (ours) 94.9 / 31.3 90.7 / 44.0 96.5 / 19.6 94.0 / 31.6 MLSV (ours) 92.3 / 31.4 99.4 /1.8 99.4 /2.4 97.0 /11.9
+> †DMD-A uses OOD validation data for LR; other methods are agnostic.
+
+90th training percentile before computing Energy; DMD-B [5], single-layer Mahalanobis distance computed on the penultimate-layer features, i.e., the input to the classification head; k-NN [6], the negative distance to the k-th nearest training feature ( k=50 ) in the ℓ2-normalised embedding space; and DMD-A [5] as an oracle upper bound, which aggregates per-layer Mahalanobis scores via a logistic regression (LR) fit on OOD validation data. Table I reports AUROC and FPR@95 for all methods. Among unsupervised detectors, MLSV achieves the highest mean AUROC 97 .0% and the lowest mean FPR@95 11 .9% ,outperforming the strongest baseline by 1.7 percentage points (pp) in AUROC and 10 .4 pp in FPR@95. This advantage is most pronounced on Places365 and DTD, where MLSV reaches 99 .4% AUROC with FPR@95 below 2.5% , closely approaching the supervised oracle DMD-A †.PAS attains a mean AUROC of 94 .0% , comparable to MLS 94 .6% and k-NN 94 .1% , while outperforming MACS (90 .6% ) by 3.4 pp in mean AUROC and 17 .7 pp in mean FPR@95, confirming that the simpler PAS formulation is a Fig. 4: Normalized score distributions: in-distribution (CIFAR-100 test, above axis) vs. OOD (SVHN, Places365, DTD, mirrored below) for all evaluated methods. more effective aggregation of the multi-layer information. The one exception is SVHN, where logit-based scores (Energy 95 .3% , ReAct 95 .3% , k-NN 95 .9% ) outperform both MLSV 92 .3% and PAS 94 .9% . On this dataset the large distri-butional gap between digit images and CIFAR-100 categories is captured by simple output statistics, leaving limited room for map-based methods. Across the remaining two shifts, however, the ranking reverses: MLSV improves over Energy by 6.7 pp on Places365 and 1.8 pp on DTD in AUROC, with FPR@95 reductions of 34 .6 pp and 9.1 pp, respectively. Fig. 4 provides a distributional view of all evaluated meth-ods after ECDF normalization and per-histogram rescaling to unit peak height. Logit-based scores (MSP, MLS, Energy, ReAct) show moderate overlap between the ID and OOD distributions, particularly on Places365 and DTD where the OOD mass shifts only partially away from the ID peak. DMD-B and k-NN improve separation on specific shifts but remain inconsistent across datasets. MACS, PAS, and MLSV progressively reduce this overlap: MLSV in particular pushes the OOD distributions towards the low-score tail on all three benchmarks, with the ID distribution concentrated at high scores, consistent with the AUROC and FPR@95 results of Table I. V. C ONCLUSIONS 
+
+Building on [7], we presented a framework for analysing the internal representations of Vision Transformers through SVD-based projections and class-conditional density modeling. The resulting typicality maps provide a depth-resolved view of how class-specific evidence consolidates across layers, and serve as the basis for two post-hoc OOD detection scores. PAS measures alignment with stored class prototype maps and outperforms the closely related MACS score while re-quiring significantly fewer parameters. MLSV discards stored prototypes entirely and instead leverages cross-layer con-sensus: by aggregating lightweight per-layer typicality votes without any stored reference, it achieves the best results among all unsupervised detectors considered across all three OOD benchmarks, and approaches the performance of the supervised oracle on two of them. The reliance on independent per-layer modelling suggests that representational consistency across depth is a strong reliability signal that existing single-layer or logit-based ap-proaches may not fully exploit. REFERENCES [1] A. Dosovitskiy, L. Beyer, A. Kolesnikov, D. Weissenborn, X. Zhai, T. Unterthiner, M. Dehghani, M. Minderer, G. Heigold, S. Gelly, J. Uszkoreit, and N. Houlsby, “An image is worth 16x16 words: Trans-formers for image recognition at scale,” in International Conference on Learning Representations (ICLR) , 2021. [2] J. Yang, K. Zhou, Y. Li, and Z. Liu, “Generalized out-of-distribution detection: A survey,” International Journal of Computer Vision , vol. 132, no. 12, pp. 5635–5662, 2024. [3] D. Hendrycks and K. Gimpel, “A baseline for detecting misclassified and out-of-distribution examples in neural networks,” in ICLR , 2017. [4] W. Liu, X. Wang, J. D. Owens, and Y. Li, “Energy-based out-of-distribution detection,” in NeurIPS , 2020. [5] K. Lee, K. Lee, H. Lee, and J. Shin, “A simple unified framework for detecting out-of-distribution samples and adversarial attacks,” in 
+
+NeurIPS , 2018. [6] Y. Sun, Y. Ming, X. Zhu, and Y. Li, “Out-of-distribution detection with deep nearest neighbors,” in International conference on machine learning . PMLR, 2022, pp. 20 827–20 840. [7] L. Capelli, L. de Souza Rosa, G. Setti, M. Mangia, and R. Rovatti, “Multi-layer confidence scoring for detection of out-of-distribution sam-ples, adversarial attacks, and in-distribution misclassifications,” arXiv preprint arXiv:2512.19472 , 2025. [8] C. M. Bishop, Pattern Recognition and Machine Learning . New York, NY, USA: Springer, 2006. [9] G. H. Golub and C. F. Van Loan, Matrix Computations , 4th ed. Johns Hopkins University Press, 2013. [10] J. Deng, W. Dong, R. Socher, L.-J. Li, K. Li, and L. Fei-Fei, “Imagenet: A large-scale hierarchical image database,” in 2009 IEEE conference on computer vision and pattern recognition . IEEE, 2009, pp. 248–255. [11] A. Krizhevsky, “Learning multiple layers of features from tiny images,” University of Toronto, Tech. Rep., 2009. [12] S. Fort, J. Ren, and B. Lakshminarayanan, “Exploring the limits of out-of-distribution detection,” Advances in Neural Information Processing Systems , vol. 34, pp. 7068–7081, 2021. [13] J. Winkens, R. Bunel, A. G. Roy, R. Stanforth, V. Natarajan, J. R. Led-sam, P. MacWilliams, P. Kohli, A. Karthikesalingam, S. Kohl, T. Cemgil, S. M. A. Eslami, and O. Ronneberger, “Contrastive training for improved out-of-distribution detection,” arXiv preprint arXiv:2007.05566 , 2020. [14] Y. Netzer, T. Wang, A. Coates, A. Bissacco, B. Wu, and A. Y. Ng, “Reading digits in natural images with unsupervised feature learning,” in 
+
+NIPS Workshop on Deep Learning and Unsupervised Feature Learning ,2011. [15] B. Zhou, A. Lapedriza, A. Khosla, A. Oliva, and A. Torralba, “Places: A 10 million image database for scene recognition,” IEEE Transactions on Pattern Analysis and Machine Intelligence , vol. 40, no. 6, pp. 1452– 1464, 2018. [16] M. Cimpoi, S. Maji, I. Kokkinos, S. Mohamed, and A. Vedaldi, “Describing textures in the wild,” in Proceedings of the IEEE Conf. on Computer Vision and Pattern Recognition (CVPR) , 2014. [17] D. Hendrycks, S. Basart, M. Mazeika, A. Zou, J. Kwon, M. Mostajabi, J. Steinhardt, and D. Song, “Scaling out-of-distribution detection for real-world settings,” in Proceedings of the 39th International Conference on Machine Learning , 2022, pp. 8759–8773. [18] Y. Sun, C. Guo, and Y. Li, “React: Out-of-distribution detection with rectified activations,” Advances in Neural Information Processing Sys-tems , vol. 34, pp. 144–157, 2021.

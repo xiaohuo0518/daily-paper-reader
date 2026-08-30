@@ -1,0 +1,69 @@
+{
+  "label": "2026-08-30",
+  "date": "2026-08-30",
+  "generated_at": "2026-08-30T22:27:27",
+  "count": 4,
+  "papers": [
+    {
+      "paper_id": "202608/30/2608.23499v1-svd-based-typicality-maps-for-out-of-distribution-detection-in-vision-transformers",
+      "section": "quick",
+      "title_en": "SVD-Based Typicality Maps for Out-of-Distribution Detection in Vision Transformers",
+      "authors": "Aldo Sean Sartor, Leandro de Souza Rosa, Andriy Enttsel, Mauro Mangia, Riccardo Rovatti",
+      "date": "2026-08-24",
+      "pdf": "https://arxiv.org/pdf/2608.23499v1",
+      "score": "7.0",
+      "evidence": "基于SVD的ViT典型性图OOD检测，直接相关于安全机器人操作中的分布外检测",
+      "tldr": "针对视觉Transformer内部表示难以解释的问题，提出基于SVD的典型性图方法。将每层仿射权重矩阵分解，激活投影到主右奇异向量，拟合类条件密度得到逐层典型性分数，堆叠为典型性图。据此设计原型对齐分数与多层软投票分数用于OOD检测，在CIFAR-100上无需重训练或OOD数据即达竞争性能。",
+      "tags": "query:humanoid-ood",
+      "abstract_en": "We present a method for analyzing the internal representations of Vision Transformers (ViTs) exploiting the geometry of their learned parameters. Each affine layer's weight matrix is factored via Singular Value Decomposition (SVD), and activations are projected onto the leading right singular vectors to obtain compact, layer-intrinsic representations. A class-conditional density model is then fitted at each layer, producing per-class \\emph{typicality scores} that are stacked across depth into \\emph{typicality maps}: two-dimensional summaries of how class-specific evidence evolves through the network. From these maps, we derive two post-hoc scores for Out-Of-Distribution (OOD) detection: a \\emph{Prototype Alignment Score} (PAS), measuring agreement with class reference prototype patterns, and a \\emph{Multi-Layer Soft Voting} (MLSV) score, capturing cross-layer consensus without stored prototypes. On ViT-B/16 fine-tuned on CIFAR-100, the proposed scores achieve competitive detection performance without retraining or OOD exposure.",
+      "source": "arxiv",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "paper_id": "202608/30/2608.24697v1-single-state-update-predictive-coding-training-for-time-series-forecasting-and-anomaly-detection",
+      "section": "quick",
+      "title_en": "Single State Update Predictive Coding training for Time Series Forecasting and Anomaly Detection",
+      "authors": "Matteo Cardoni, Sam Leroux",
+      "date": "2026-08-25",
+      "pdf": "https://arxiv.org/pdf/2608.24697v1",
+      "score": "7.0",
+      "evidence": "基于预测编码的时间序列预测与异常检测，匹配自监督时序异常检测需求",
+      "tldr": "预测编码（PC）是一种可并行更新网络层的神经学习范式，但受限于顺序反向误差传播。本文提出将生成式PCN与支持编码PCN配对训练，通过并行匹配神经激活，避免顺序传播。将该方法应用于时间序列异常检测，实现了更稳定、连续的在线学习，提升了训练效率与实用性。",
+      "tags": "query:humanoid-ood",
+      "abstract_en": "Predictive Coding (PC) is a neural learning paradigm that enables parallelizable neural network layer updates. However, the main bottleneck of PC Networks (PCN) is the sequential backwards error propagation. To tackle this, we introduce a training technique that pairs a Generative PCN with a support Encoding PCN. The two PCNs are trained in parallel to match their neural activations, without sequential propagation. We apply this to time series anomaly detection and show that our approach results in more stable, continuous, online learning.",
+      "source": "arxiv",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "paper_id": "202608/30/2608.21764v1-liteevent-ae-lightweight-autoencoder-for-event-based-vision-on-low-latency-energy-constrained-edge-devices",
+      "section": "quick",
+      "title_en": "LiteEvent-AE: Lightweight Autoencoder for Event-Based Vision on Low-Latency Energy-Constrained Edge Devices",
+      "authors": "Riadul Islam, Joey Mule, Dhandeep Challagundla, Shahmir Rizvi, Sean Carson, Rachit Saini",
+      "date": "2026-08-22",
+      "pdf": "https://arxiv.org/pdf/2608.21764v1",
+      "score": "6.0",
+      "evidence": "边缘设备上的轻量自编码器，与边缘部署相关",
+      "tldr": "事件相机数据在低功耗边缘设备上难以直接使用深度学习。本文提出LiteEvent-AE，一种紧凑可配置的事件驱动自编码器，通过轻量卷积编码压缩神经形态数据并保持关键时空结构。在低能耗嵌入式平台上实现了高效压缩，兼顾鲁棒性。该工作为边缘侧轻量模型设计提供了可迁移的方案。",
+      "tags": "query:ur",
+      "abstract_en": "Event-based vision has emerged as a promising paradigm for energy-aware artificial intelligence (AI), offering sparse, low-latency visual signals that reduce redundant data processing and support sustainable edge computing. However, the asynchronous and noise-prone nature of event streams creates challenges for conventional deep learning models, which are often too computationally intensive for low-power embedded platforms. This work presents a compact and configurable event-driven autoencoder that efficiently compresses neuromorphic data while preserving essential spatiotemporal structure for downstream inference. The architecture integrates lightweight convolutional encoding with robust performance under adaptive event thresholding and a minimal classifier head, enabling substantial reductions in computational cost without degrading recognition fidelity. Extensive evaluations on the Smart Event Face Dataset (SEFD) and Event-Based Crossing Dataset (EBCD) show that the proposed framework achieves competitive or superior accuracy compared to YOLOv9 while requiring up to 35.6$\\times$ fewer parameters. To assess real-world sustainability, the model is deployed on resource-constrained hardware: a Raspberry Pi 4B and a NVIDIA Jetson Nano. On NVIDIA Jetson Nano, it delivers real-time throughput of 44.8 FPS. On a Raspberry Pi 4B CPU, the 50\\% autoencoder classifier consumes 16.19 J for the evaluated inference workload, corresponding to approximately 726.3$\\times$ lower energy consumption than YOLOv9 under the same evaluation protocol. These results demonstrate the potential of compact event-driven models to advance environmentally conscious, low-power AI systems for high-speed perception in autonomous, mobile, and embedded computing environments.",
+      "source": "arxiv",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "paper_id": "202608/30/2608.22629v1-enhancing-sim2real-transfer-for-torque-controlled-robots-through-real2sim-dynamics-estimation-and-reinforcement-learning",
+      "section": "quick",
+      "title_en": "Enhancing Sim2Real Transfer for Torque-Controlled Robots through Real2Sim Dynamics Estimation and Reinforcement Learning",
+      "authors": "Davide Bargellini, Alex Pasquali, Andrea Govoni, Riccardo Zanella, Gianluca Palli",
+      "date": "2026-08-23",
+      "pdf": "https://arxiv.org/pdf/2608.22629v1",
+      "score": "6.0",
+      "evidence": "通过Real2Sim动力学估计和参数优化提升扭矩控制机器人的仿真保真度，有助于在仿真中注入故障并进行sim2real迁移。",
+      "tldr": "针对力矩控制机器人的Sim2Real迁移难题，本文提出Real2Sim2Real流程。通过轨迹匹配和遗传算法优化摩擦、惯性等动力学参数，结合域随机化训练TQC策略。在Franka Panda机器人上验证，参数校准显著提升跟踪精度与鲁棒性，策略平滑迁移至真实世界。表明精确物理建模对实现稳定可泛化的力矩控制RL策略至关重要。",
+      "tags": "query:humanoid-ood",
+      "abstract_en": "Transferring reinforcement learning policies from simulation to Real-World robots remains a major challenge, particularly when dealing with low-level torque control, where even small modelling inaccuracies can lead to unstable or unsafe behaviours. In this work, we propose a Real2Sim2Real pipeline that improves Sim2Real transfer for torque-controlled robotic arms by combining trajectory matching, parameter optimization via genetic algorithms, and domain randomization. Using the 7-DOF Franka Emika Panda robot, we first identify friction, inertia, and gravity compensation parameters by minimizing the error between real and simulated joint trajectories. These calibrated dynamics are then used to train a TQC-based reinforcement learning agent in simulation. The trained policy is evaluated in both Gazebo and MuJoCo environments, and finally deployed on the real robot. Our results demonstrate a significant improvement in tracking accuracy and policy robustness after parameter tuning, with smooth policy transfer from simulation to the Real-World across multiple target-reaching tasks. This work highlights the effectiveness of accurate physical modelling in enabling stable and generalizable torque-based reinforcement learning policies.",
+      "source": "arxiv",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "errors": []
+}

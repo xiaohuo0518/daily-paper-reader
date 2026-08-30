@@ -1,0 +1,181 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-08-30T22:25:20.259776+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 2,
+    "deep_divecandidates": 0,
+    "deep_cap": 7,
+    "deep_selected": 0,
+    "quick_candidates": 4,
+    "quick_skim_target": 12,
+    "quick_selected": 4
+  },
+  "deep_dive": [],
+  "quick_skim": [
+    {
+      "id": "2608.23499v1",
+      "source": "arxiv",
+      "title": "SVD-Based Typicality Maps for Out-of-Distribution Detection in Vision Transformers",
+      "abstract": "We present a method for analyzing the internal representations of Vision Transformers (ViTs) exploiting the geometry of their learned parameters. Each affine layer's weight matrix is factored via Singular Value Decomposition (SVD), and activations are projected onto the leading right singular vectors to obtain compact, layer-intrinsic representations. A class-conditional density model is then fitted at each layer, producing per-class \\emph{typicality scores} that are stacked across depth into \\emph{typicality maps}: two-dimensional summaries of how class-specific evidence evolves through the network. From these maps, we derive two post-hoc scores for Out-Of-Distribution (OOD) detection: a \\emph{Prototype Alignment Score} (PAS), measuring agreement with class reference prototype patterns, and a \\emph{Multi-Layer Soft Voting} (MLSV) score, capturing cross-layer consensus without stored prototypes. On ViT-B/16 fine-tuned on CIFAR-100, the proposed scores achieve competitive detection performance without retraining or OOD exposure.",
+      "authors": [
+        "Aldo Sean Sartor",
+        "Leandro de Souza Rosa",
+        "Andriy Enttsel",
+        "Mauro Mangia",
+        "Riccardo Rovatti"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV"
+      ],
+      "published": "2026-08-24T17:03:02+00:00",
+      "link": "https://arxiv.org/pdf/2608.23499v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "SVD-based typicality maps for OOD detection in ViTs; directly relevant to out-of-distribution detection for safe robot operation",
+      "llm_evidence_cn": "基于SVD的ViT典型性图OOD检测，直接相关于安全机器人操作中的分布外检测",
+      "llm_evidence": "基于SVD的ViT典型性图OOD检测，直接相关于安全机器人操作中的分布外检测",
+      "canonical_evidence": "基于SVD的ViT典型性图OOD检测，直接相关于安全机器人操作中的分布外检测",
+      "llm_tldr_en": "Introduces typicality maps from SVD of ViT weights and class-conditional density to derive post-hoc OOD scores, improving out-of-distribution detection.",
+      "llm_tldr_cn": "视觉Transformer的分布外检测通常缺乏对内部表示几何的利用。作者对每个仿射层权重矩阵做奇异值分解，将激活投影到主右奇异向量上得到紧凑表示，并逐层拟合类条件密度，形成典型性图。基于该图提出原型对齐分数等后验OOD分数，在多个OOD基准上取得优秀性能。该方法无需重新训练即可提升ViT的分布外检测能力，可服务于机器人等安全攸关系统中的开放集识别。",
+      "llm_tldr": "视觉Transformer的分布外检测通常缺乏对内部表示几何的利用。作者对每个仿射层权重矩阵做奇异值分解，将激活投影到主右奇异向量上得到紧凑表示，并逐层拟合类条件密度，形成典型性图。基于该图提出原型对齐分数等后验OOD分数，在多个OOD基准上取得优秀性能。该方法无需重新训练即可提升ViT的分布外检测能力，可服务于机器人等安全攸关系统中的开放集识别。",
+      "llm_tags": [
+        "query:humanoid-ood"
+      ],
+      "matched_query_tag": "query:humanoid-ood",
+      "matched_query_text": "out-of-distribution detection for safe robot operation",
+      "matched_requirement_id": "req-11",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2608.21764v1",
+      "source": "arxiv",
+      "title": "LiteEvent-AE: Lightweight Autoencoder for Event-Based Vision on Low-Latency Energy-Constrained Edge Devices",
+      "abstract": "Event-based vision has emerged as a promising paradigm for energy-aware artificial intelligence (AI), offering sparse, low-latency visual signals that reduce redundant data processing and support sustainable edge computing. However, the asynchronous and noise-prone nature of event streams creates challenges for conventional deep learning models, which are often too computationally intensive for low-power embedded platforms. This work presents a compact and configurable event-driven autoencoder that efficiently compresses neuromorphic data while preserving essential spatiotemporal structure for downstream inference. The architecture integrates lightweight convolutional encoding with robust performance under adaptive event thresholding and a minimal classifier head, enabling substantial reductions in computational cost without degrading recognition fidelity. Extensive evaluations on the Smart Event Face Dataset (SEFD) and Event-Based Crossing Dataset (EBCD) show that the proposed framework achieves competitive or superior accuracy compared to YOLOv9 while requiring up to 35.6$\\times$ fewer parameters. To assess real-world sustainability, the model is deployed on resource-constrained hardware: a Raspberry Pi 4B and a NVIDIA Jetson Nano. On NVIDIA Jetson Nano, it delivers real-time throughput of 44.8 FPS. On a Raspberry Pi 4B CPU, the 50\\% autoencoder classifier consumes 16.19 J for the evaluated inference workload, corresponding to approximately 726.3$\\times$ lower energy consumption than YOLOv9 under the same evaluation protocol. These results demonstrate the potential of compact event-driven models to advance environmentally conscious, low-power AI systems for high-speed perception in autonomous, mobile, and embedded computing environments.",
+      "authors": [
+        "Riadul Islam",
+        "Joey Mule",
+        "Dhandeep Challagundla",
+        "Shahmir Rizvi",
+        "Sean Carson",
+        "Rachit Saini"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV",
+        "cs.AI",
+        "eess.IV"
+      ],
+      "published": "2026-08-22T04:13:47+00:00",
+      "link": "https://arxiv.org/pdf/2608.21764v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "lightweight autoencoder for edge devices, relevant to edge deployment",
+      "llm_evidence_cn": "边缘设备上的轻量自编码器，与边缘部署相关",
+      "llm_evidence": "边缘设备上的轻量自编码器，与边缘部署相关",
+      "canonical_evidence": "边缘设备上的轻量自编码器，与边缘部署相关",
+      "llm_tldr_en": "LiteEvent-AE is a compact event-driven autoencoder that compresses neuromorphic data on low-power edge devices while preserving spatiotemporal structure.",
+      "llm_tldr_cn": "事件相机数据在低功耗边缘设备上难以直接使用深度学习。本文提出LiteEvent-AE，一种紧凑可配置的事件驱动自编码器，通过轻量卷积编码压缩神经形态数据并保持关键时空结构。在低能耗嵌入式平台上实现了高效压缩，兼顾鲁棒性。该工作为边缘侧轻量模型设计提供了可迁移的方案。",
+      "llm_tldr": "事件相机数据在低功耗边缘设备上难以直接使用深度学习。本文提出LiteEvent-AE，一种紧凑可配置的事件驱动自编码器，通过轻量卷积编码压缩神经形态数据并保持关键时空结构。在低能耗嵌入式平台上实现了高效压缩，兼顾鲁棒性。该工作为边缘侧轻量模型设计提供了可迁移的方案。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "edge deployment for humanoid robots",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2608.24697v1",
+      "source": "arxiv",
+      "title": "Single State Update Predictive Coding training for Time Series Forecasting and Anomaly Detection",
+      "abstract": "Predictive Coding (PC) is a neural learning paradigm that enables parallelizable neural network layer updates. However, the main bottleneck of PC Networks (PCN) is the sequential backwards error propagation. To tackle this, we introduce a training technique that pairs a Generative PCN with a support Encoding PCN. The two PCNs are trained in parallel to match their neural activations, without sequential propagation. We apply this to time series anomaly detection and show that our approach results in more stable, continuous, online learning.",
+      "authors": [
+        "Matteo Cardoni",
+        "Sam Leroux"
+      ],
+      "primary_category": "cs.LG",
+      "categories": [
+        "cs.LG",
+        "cs.NE"
+      ],
+      "published": "2026-08-25T15:21:23+00:00",
+      "link": "https://arxiv.org/pdf/2608.24697v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "query:humanoid-ood"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "Time series forecasting and anomaly detection with predictive coding; matches self-supervised time series anomaly detection requirement",
+      "llm_evidence_cn": "基于预测编码的时间序列预测与异常检测，匹配自监督时序异常检测需求",
+      "llm_evidence": "基于预测编码的时间序列预测与异常检测，匹配自监督时序异常检测需求",
+      "canonical_evidence": "基于预测编码的时间序列预测与异常检测，匹配自监督时序异常检测需求",
+      "llm_tldr_en": "Proposes a single-state-update predictive coding training that pairs generative and encoding PCNs for parallel updates, achieving stable online time series anomaly detection.",
+      "llm_tldr_cn": "预测编码网络虽然支持层并行更新，但反向误差传播的串行瓶颈限制了其效率。作者提出一种单状态更新训练技术，将生成式PCN与编码PCN配对并行训练，使网络激活匹配且无需顺序传播。将该方法用于时间序列异常检测，在多个数据集上表现出更稳定、连续和在线学习的特点。此方法可为机器人本体感受信号的时序异常检测提供高效自监督方案。",
+      "llm_tldr": "预测编码网络虽然支持层并行更新，但反向误差传播的串行瓶颈限制了其效率。作者提出一种单状态更新训练技术，将生成式PCN与编码PCN配对并行训练，使网络激活匹配且无需顺序传播。将该方法用于时间序列异常检测，在多个数据集上表现出更稳定、连续和在线学习的特点。此方法可为机器人本体感受信号的时序异常检测提供高效自监督方案。",
+      "llm_tags": [
+        "query:humanoid-ood"
+      ],
+      "matched_query_tag": "query:humanoid-ood",
+      "matched_query_text": "Self supervised time series anomaly detection for robot fault diagnosis",
+      "matched_requirement_id": "req-16",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2608.22629v1",
+      "source": "arxiv",
+      "title": "Enhancing Sim2Real Transfer for Torque-Controlled Robots through Real2Sim Dynamics Estimation and Reinforcement Learning",
+      "abstract": "Transferring reinforcement learning policies from simulation to Real-World robots remains a major challenge, particularly when dealing with low-level torque control, where even small modelling inaccuracies can lead to unstable or unsafe behaviours. In this work, we propose a Real2Sim2Real pipeline that improves Sim2Real transfer for torque-controlled robotic arms by combining trajectory matching, parameter optimization via genetic algorithms, and domain randomization. Using the 7-DOF Franka Emika Panda robot, we first identify friction, inertia, and gravity compensation parameters by minimizing the error between real and simulated joint trajectories. These calibrated dynamics are then used to train a TQC-based reinforcement learning agent in simulation. The trained policy is evaluated in both Gazebo and MuJoCo environments, and finally deployed on the real robot. Our results demonstrate a significant improvement in tracking accuracy and policy robustness after parameter tuning, with smooth policy transfer from simulation to the Real-World across multiple target-reaching tasks. This work highlights the effectiveness of accurate physical modelling in enabling stable and generalizable torque-based reinforcement learning policies.",
+      "authors": [
+        "Davide Bargellini",
+        "Alex Pasquali",
+        "Andrea Govoni",
+        "Riccardo Zanella",
+        "Gianluca Palli"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "eess.SY"
+      ],
+      "published": "2026-08-23T22:25:33+00:00",
+      "link": "https://arxiv.org/pdf/2608.22629v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "Real2Sim dynamics estimation and parameter optimization improve simulation fidelity for torque-controlled robots, enabling realistic fault injection and sim2real transfer.",
+      "llm_evidence_cn": "通过Real2Sim动力学估计和参数优化提升扭矩控制机器人的仿真保真度，有助于在仿真中注入故障并进行sim2real迁移。",
+      "llm_evidence": "通过Real2Sim动力学估计和参数优化提升扭矩控制机器人的仿真保真度，有助于在仿真中注入故障并进行sim2real迁移。",
+      "canonical_evidence": "通过Real2Sim动力学估计和参数优化提升扭矩控制机器人的仿真保真度，有助于在仿真中注入故障并进行sim2real迁移。",
+      "llm_tldr_en": "This paper presents a Real2Sim2Real pipeline for torque-controlled robots that calibrates friction, inertia, and gravity parameters via trajectory matching and genetic algorithms to improve simulation fidelity and RL sim2real transfer.",
+      "llm_tldr_cn": "针对扭矩控制机器人在仿真到现实迁移中的动力学失配问题，提出一种Real2Sim2Real流水线，通过轨迹匹配与遗传算法优化摩擦、惯量和重力补偿参数，并使用域随机化训练强化学习策略。在Franka Panda七自由度机械臂上的实验表明，所校准的仿真动力学显著提升了迁移成功率。该方法为机器人仿真故障注入和数据集生成提供了更可信的动力学基础，对仿人机器人的仿真研究具有借鉴意义。",
+      "llm_tldr": "针对扭矩控制机器人在仿真到现实迁移中的动力学失配问题，提出一种Real2Sim2Real流水线，通过轨迹匹配与遗传算法优化摩擦、惯量和重力补偿参数，并使用域随机化训练强化学习策略。在Franka Panda七自由度机械臂上的实验表明，所校准的仿真动力学显著提升了迁移成功率。该方法为机器人仿真故障注入和数据集生成提供了更可信的动力学基础，对仿人机器人的仿真研究具有借鉴意义。",
+      "llm_tags": [
+        "query:humanoid-ood"
+      ],
+      "matched_query_tag": "query:humanoid-ood",
+      "matched_query_text": "fault injection simulation for humanoid robots in MuJoCo or similar environments",
+      "matched_requirement_id": "req-14",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    }
+  ]
+}

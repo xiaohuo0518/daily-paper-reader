@@ -1,0 +1,408 @@
+Title: Single State Update Predictive Coding training for Time Series Forecasting and Anomaly Detection
+
+URL Source: https://arxiv.org/pdf/2608.24697v1
+
+Published Time: Wed, 26 Aug 2026 01:19:19 GMT
+
+Number of Pages: 9
+
+Markdown Content:
+# Single State Update Predictive Coding training for Time Series Forecasting and Anomaly Detection 
+
+Matteo Cardoni [0000 −0002 −2759 −5310] and Sam Leroux [0000 −0003 −3792 −5026] 
+
+IDLab, Department of Information and Technology, Ghent University—imec, 9052 Ghent, Belgium 
+
+matteo.cardoni@ugent.be (Corresponding author), 
+
+sam.leroux@ugent.be 
+
+Abstract. Predictive Coding (PC) is a neural learning paradigm that enables parallelizable neural network layer updates. However, the main bottleneck of PC Networks (PCN) is the sequential backwards error prop-agation. To tackle this, we introduce a training technique that pairs a Generative PCN with a support Encoding PCN. The two PCNs are trained in parallel to match their neural activations, without sequential propagation. We apply this to time series anomaly detection and show that our approach results in more stable, continuous, online learning. 
+
+Keywords: Predictive Coding · Online learning · Anomaly detection 
+
+Introduction and related work: Predictive coding (PC) [1–3] is a learn-ing paradigm that emerged in recent years as a low-complexity alternative for Backpropagation-based training [4]. Its main attraction is its parallelizable layer-wise updates which, in contrast to Backpropagation [5], requires no sequential layer updates. PC training pairs each layer’s activation with an additional state of the same dimension [6]. For each layer l, it involves the minimization of an energy function between the states hl and the activations μl [6, 7]. The min-imization is performed by iteratively optimizing the states and, subsequently, the weights. Despite PC’s parallelizable updates property, Predictive Coding Networks (PCN)’s layer updates require an error signal that propagates sequen-tially from the output throughout all the layers. Commonly, PCNs are initialized with feedforward initialization [6–8], which involves the states initialization with the activation values. Despite accelerating the convergence [8, 9], it requires at least as many inference steps as the network depth [8, 10] and causes a van-ishing update propagation [8]. To overcome the requirement for multiple state update iterations, we introduce a Guided PC training technique that pairs a Generative PCN (G-PCN) with an Encoding PCN (E-PCN), which guides and accelerates the states update by enforcing layer-wise activations matching.Unlike prior state-update acceleration methods [10–14], our solution provides parallel and hierarchical updates across the network depth, using batched data. arXiv:2608.24697v1 [cs.LG] 25 Aug 2026 2 Matteo Cardoni and Sam Leroux 
+
+Proposed solution: The goal for the G-PCN, of L layers, is to predict the next time-step data xt = htL with ˆxt = μtL. Taking inspiration from temporal Predictive Coding [15], the G-PCN uses ht−10 to predict the same state at time t
+
+(ht
+
+> 0
+
+), and xt from it. Training the G-PCN and the E-PCN to produce matching activations implies the minimization of two types of energies: the Internal Energy 
+
+I = 12
+
+P
+
+> l
+
+(hl −μl)2 between the states and the activations of the G-PCN, and the Guiding Energy G = 12
+
+P
+
+> l
+
+(μl − γ2 
+
+> l
+
+), between the activations of the two PCNs. For each time frame, our technique follows 4 steps. (i) First, both the G-PCN and the E-PCN perform feedforward initialization, as displayed in Figure 1. The G-PCN maps ht−10 to μt 
+
+> 0
+
+via the layer θ0, which performs temporal mapping. The subsequent layers have the role of a PC decoder [6], mapping the encoded data to ˆxt. In parallel, the E-PCN performs feedforward initialization taking xt
+
+as input, acting as an encoder. (ii) As depicted in Figure 2, the first part of the state update happens in the second step, where all the states of both the PCNs are updated in parallel to minimize the G and IL = (ˆ xt − xt)2. (iii) The third step involves, for every layer, the classic (Vanilla) PC state update with respect to I, displayed in Figure 3. It is performed only by the G-PCN as it uses xt as reference, ensuring that the E-PCN converges to the same representation. The second and third steps compose a unified, single-iteration state update for the G-PCN. (iv) The fourth step, that is the weight update of both the models, is displayed in Figure 4. The G-PCN weights are updated to minimize I, as in Vanilla PC. In parallel, the E-PCN weights are updated to minimize G.Overall, the E-PCN is trained to match the representation of the G-PCN, acting as support, similarly to a teacher model [16]. The G-PCN, instead, uses 
+
+xt as reference to propagate its updates with the help of the E-PCN, similarly to a student network. 
+
+Experiments and results: We apply this training technique to the task of con-tinuous, online learning for time series anomaly detection. We created a dataset of MNIST digits [17] moving on a black background. We train a 5-layer MLP to predict the next frame, while batching it with previous frames. We use the Mean Squared Error (MSE) between the predicted and the actual frame as anomaly score. Starting from the initial dynamics (diagonal movement of 1 pixel), differ-ent anomalies have been introduced in the form of abrupt changes in X and/or Y direction or digit value. After an anomaly occurs, the model needs to retrain to consider the new sequence dynamics as normal. Figure 5 shows the anomaly scores over time. We compare traditional (Vanilla) PC training, performing 5 in-ference steps, with G-PCN. As the model has no prior knowledge, the anomaly scores are high at the start of training. Both techniques are capable of quickly learning the initial dynamics. The periodic spikes are caused by bouncing against the wall and changing direction. After the anomaly is introduced, the Guided PC can quickly recover to treat the new behavior as normal while the vanilla PC diverges. This is probably due to a slower and vanishing error signal propagation of Vanilla PC [8]. 
+
+Conclusion: We introduced a PC training technique that relies two PC models to eliminate the sequential state update bottleneck, typical of PC, and enhances Single State Update Predictive Coding for Time Series Forecasting 3
+
+training stability. Using a single unified state update step, all layers states get updated in parallel. As PC usually requires a high number of inference steps, this technique is promising in terms of edge devices online learning. ht−10 ht
+
+> 0
+
+μt
+
+> 0
+
+γt
+
+> 0
+
+μt
+
+> 1
+
+γt
+
+> 1
+
+ht
+
+> 1
+
+kt
+
+> 1
+
+ˆxt
+
+xt
+
+> E-PCN States G-PCN Activations E-PCN Activations G-PCN States
+
+Copy Copy 
+
+θ0
+
+θ1
+
+θ2
+
+Copy 
+
+Ω2
+
+Ω1
+
+Activation comput. via layer weights (or copy) 
+
+Fig. 1: Guided PC training step 1. Parallel feedforward initialization of the G-PCN and the E-PCN. The initializations follow a sequential order: from ht−10 to 
+
+ˆxt for the G-PCN and form xt to γt 
+
+> 0
+
+for the E-PCN. The G-PCN maps ht−10 to 
+
+μt 
+
+> 0
+
+via the layer θ0, that acts as temporal mapping layer. ht−10 ht
+
+> 0
+
+μt
+
+> 0
+
+γt
+
+> 0
+
+μt
+
+> 1
+
+γt
+
+> 1
+
+ht
+
+> 1
+
+kt
+
+> 1
+
+ˆxt
+
+xt
+
+> E-PCN States G-PCN Activations E-PCN Activations G-PCN States
+
+G0 G1 I2
+
+Gradient update 
+
+Il Internal Energy 
+
+Gl
+
+Guiding Energy 
+
+Fig. 2: Guided PC training step 2. G-PCN and E-PCN parallel state update, to minimize the Guiding Energy G and the Inernal Energy I at the last layer. All the the states ht
+
+> 0
+
+, . . . , h tL−1 and ktL−1, . . . , k t 
+
+> 0
+
+receive a non-zero update. 4 Matteo Cardoni and Sam Leroux ht−10 ht
+
+> 0
+
+μt
+
+> 0
+
+γt
+
+> 0
+
+μt
+
+> 1
+
+γt
+
+> 1
+
+ht
+
+> 1
+
+kt
+
+> 1
+
+ˆxt
+
+xt
+
+> E-PCN States G-PCN Activations E-PCN Activations G-PCN States
+
+I0 I1
+
+I2
+
+Gradient update 
+
+Il Internal Energy 
+
+Fig. 3: Guided PC training step 3. G-PCN state update to minimize the Internal Energy I. The states ht
+
+> 0
+
+, . . . , h tL−1 already received a non-zero update from step 2 (Figure 2). Therefore, the update with respect to I will be non-zero for all 
+
+ht
+
+> 0
+
+, . . . , h tL−1.ht−10 ht
+
+> 0
+
+μt
+
+> 0
+
+γt
+
+> 0
+
+μt
+
+> 1
+
+γt
+
+> 1
+
+ht
+
+> 1
+
+kt
+
+> 1
+
+ˆxt
+
+xt
+
+> E-PCN States G-PCN Activations E-PCN Activations G-PCN States
+
+G0 G1 I2
+
+θ0
+
+θ1
+
+θ2
+
+Ω0
+
+Ω1
+
+I0 I1
+
+Gradient update 
+
+Il Internal Energy 
+
+Gl
+
+Guiding Energy Layer weights 
+
+Fig. 4: Guided PC training step 4. G-PCN and E-PCN parallel weight update. The G-PCN weights are updated to minimize I, while the E-PCN weights are updated to minimize G. In this way, the E-PCN is trained to match the G-PCN representation, acting as a support network. Single State Update Predictive Coding for Time Series Forecasting 50 635 1,000 0123 X and Y directions inversion Frame index Frame prediction MSE 
+
+## Inversion of X and Y direction 
+
+Vanilla PC Guided PC 
+
+(a) X and Y directions inversion at frame 635. The later MSE spikes that occur when the digit is close to that position demonstrate the adaptation to the new normality. 0 635 1,500 0123 Y direction inversion Frame index Frame prediction MSE 
+
+## Inversion of Y direction 
+
+Guided PC Vanilla PC 
+
+(b) Y direction inversion at frame 635. The bounces become more frequent after the anomaly as the contact on the vertical and horizontal borders are not synchronous anymore. 0 635 1,500 0123 Digit change Frame index Frame prediction MSE 
+
+## Digit change 
+
+Guided PC Vanilla PC 
+
+(c) Digit change at frame 635, while maintaining the same direction. 
+
+Fig. 5: Average accuracy expressed as Mean Squared Error between the ground truth images xt and the predicted images ˆxt, in sequences with three different anomaly types. 100 experiments have been averaged per each category. The semi-transparent area indicates the standard deviation per time frame. The Guided PC obtains better stability with respect to anomalies, despite performing only one unified state update step 6 Matteo Cardoni and Sam Leroux 
+
+## References 
+
+1. Rajesh Rao and Dana Ballard. Predictive coding in the visual cortex: a functional interpretation of some extra-classical receptive-field effects. Nature neuroscience ,2:79–87, 02 1999. 2. Karl Friston. A theory of cortical responses. Philosophical transactions of the Royal Society of London. Series B, Biological sciences , 360:815–36, 04 2005. 3. Karl Friston and Stefan Kiebel. Predictive coding under the free-energy principle. 
+
+Philosophical transactions of the Royal Society of London. Series B, Biological sciences , 364:1211–21, 05 2009. 4. Beren Millidge, Tommaso Salvatori, Yuhang Song, Rafal Bogacz, and Thomas Lukasiewicz. Predictive coding: Towards a future of deep learning beyond back-propagation? arXiv preprint arXiv:2202.09467 , 2022. 5. David E Rumelhart, Geoffrey E Hinton, and Ronald J Williams. Learning repre-sentations by back-propagating errors. nature , 323(6088):533–536, 1986. 6. Luca Pinchetti, Chang Qi, Oleh Lokshyn, Gaspard Olivers, Cornelius Emde, Mufeng Tang, Amine M’Charrak, Simon Frieder, Bayar Menzat, Rafal Bogacz, Thomas Lukasiewicz, and Tommaso Salvatori. Benchmarking predictive coding networks – made simple. arXiv preprint arXiv:2407.01163 , 2025. 7. Björn van Zwol, Ro Jefferson, and Egon L. van den Broek. Predictive cod-ing networks and inference learning: Tutorial and survey. arXiv preprint arXiv:2407.04117 , 2024. 8. Cédric Goemaere, Gaspard Oliviers, Rafal Bogacz, and Thomas Demeester. Er-ror optimization: Overcoming exponential signal decay in deep predictive coding networks. arXiv preprint arXiv:2505.20137 , 2025. 9. James C. R. Whittington and Rafal Bogacz. An approximation of the error back-propagation algorithm in a predictive coding network with local hebbian synaptic plasticity. Neural Computation , 29(5):1229–1262, 05 2017. 10. Luca Pinchetti, Simon Frieder, Thomas Lukasiewicz, and Tommaso Salvatori. Faster predictive coding networks via better initialization. arXiv preprint arXiv:2601.20895 , 2026. 11. Davide Casnici, Martin Lefebvre, Justin Dauwels, and Charlotte Frenkel. Acceler-ated predictive coding networks via direct kolen-pollack feedback alignment. arXiv preprint arXiv:2602.15571 , 2026. 12. Aleksandrs Baskakovs, Sylvain Estebe, Kenneth Enevoldsen, Kristoffer Nielbo, Chris Mathys, and Nicolas Legrand. Closed-form predictive coding via hierarchical gaussian filters. arXiv preprint arXiv:2605.20293 , 2026. 13. Nick Alonso, Jeff Krichmar, and Emre Neftci. Understanding and improving opti-mization in predictive coding networks. arXiv preprint arXiv:2305.13562 , 2023. 14. Tommaso Salvatori, Yuhang Song, Yordan Yordanov, Beren Millidge, Zhenghua Xu, Lei Sha, Cornelius Emde, Rafal Bogacz, and Thomas Lukasiewicz. A stable, fast, and fully automatic learning algorithm for predictive coding networks. arXiv preprint arXiv:2212.00720 , 2024. 15. Mufeng Tang, Helen Barron, and Rafal Bogacz. Sequential memory with temporal predictive coding. Advances in neural information processing systems , 36:44341– 44355, 2023. 16. Chengming Hu, Xuan Li, Dan Liu, Xi Chen, Ju Wang, and Xue Liu. Teacher-student architecture for knowledge learning: A survey. arXiv preprint arXiv:2210.17332 , 2022. Single State Update Predictive Coding for Time Series Forecasting 717. Li Deng. The mnist database of handwritten digit images for machine learning research [best of the web]. IEEE Signal Processing Magazine , 29(6):141–142, 2012. 18. Sung-Cheol Kim, Adith S. Arun, Mehmet Eren Ahsen, Robert Vogel, and Gus-tavo Stolovitzky. The fermi–dirac distribution provides a calibrated probabilistic output for binary classifiers. Proceedings of the National Academy of Sciences ,118(34):e2100761118, 2021. 19. Diederik P. Kingma and Jimmy Ba. Adam: A method for stochastic optimization. 
+
+arXiv preprint arXiv:1412.6980 , 2017. 
+
+## Appendix 
+
+Data batching: In order to provide the PCNs with sufficient examples, every input data was composed as a batch of 128 frames st = xt, x t−1, . . . x t−127 . The training began at t = 0 with s0 = x0, 0, . . . , 0. At each new time-step, every xt
+
+pushed of 1 time-step, xt−127 is discarded and the new frame is assigned to xt .As a consequence, the G-PCN state ht−10 also consists of a batch of 128 elements, each initialized to 0 at t = 0 .
+
+Training details: To avoid excessive updates when the G-PCN already learned a good forecasting capability, an additive gaussian noise with variance σ = 10 −4
+
+has been added to ht−10 . Moreover, the weights learning rates were modulated with respect to the ratio between the Average Mean Squared Error (MSE) between the generated frame and the input frame at time t (MSE t) and the same MSE at time 0 (MSE 0). Specifically, a Fermi-Dirac function [18] has been used, passing as x-value 1 − avg. MSE t
+
+avg. MSE 0 . A learning rate α is modulated as 
+
+αmod = α
+
+> exp
+
+ 1− avg. MSE t 
+
+> avg. MSE 0−μ
+
+/KT 
+
+
+
+> +1
+
+, using μ = 0 .9 and KT = 0 .05 . These pa-rameters allow the weights learning rates to stay close to their maximum value unless for a low MSE t, when the weights learning rates drop to avoid undue updates. All experiments have been performed using the PCX framework [6] 
+
+Architectural details: The architectural details for the G-PCN and the E-PCN are reported in Table 1. Both PCNs have MLP architectures. The Vanilla PCN shares the same architecture with the G-PCN. None of the models use biases in their Dense layers, to maximize the causality between ht−10 and ˆxt.tanh has been used as non-linearity to keep the neural activities in a contained range, helping convergence. 
+
+Hyperparameters details: Stochastic Gradient Descent was used for all the state optimizers. Adam [19] was used for all the weights optimizers PCs. Table 2 displays the hyperparameters used for grid search design space exploration. For the Vanilla PC, a higher number of hyperparameters was used, as only 8 Matteo Cardoni and Sam Leroux 
+
+Table 1: Architectural details for the G-PCN and the E-PCN. The G-PCN for-ward direction goes in increasing order, while the E-PCN one goes in decreasing direction (see Figure 1). Every cell of the table lists the Dense layers dimensions, the layer connections and the non-linearity applied to the activation. 
+
+G-PCN E-PCN 
+
+level −1
+
+(512, 512) 
+
+ht−10 → ht
+
+> 0
+
+tanh -levels 0–2
+
+(512, 512) 
+
+hti → μti+1 
+
+tanh (512, 512) 
+
+kti+1 → γti
+
+tanh level 3
+
+(512, 4096) 
+
+ht 
+
+> 3
+
+→ ˆxt
+
+linear (4096, 512) 
+
+xt → γt
+
+> 2
+
+tanh 
+
+Table 2: Hyperparameters used for design space grid search. The β1 and β2
+
+coefficient for the Adam optimizers have been explored in couples of the same value (using the same for both the Guided PC optimizers). 
+
+SGD learning rates Adam learning rates Adam β1, β 2
+
+Guided PC [1e-2, 5e-2, 1e-1] [1e-4, 2.5e-4, 5e-4] [(0, 0), (0.1, 0.1), (0.5, 0.5), (0.9, 0.9)] Vanilla PC [1e-4, 2.5e-4, 5e-4, 1e-3, 5e-3, 1e-2, 5e-2, 1e-1] [1e-3, 5e-3, 1e-2, 5e-2, 1e-1] Single State Update Predictive Coding for Time Series Forecasting 9
+
+Table 3: Learning rates used for Guided PC and Vanilla PC.                
+
+> Internal Energy learning rates Guiding Energy learning rates States Weights States Weights
+> G-PCN 5e-2 2.5e-4 1e-1 -E-PCN --1e-1 1e-4 Vanilla-PCN 5e-2 2.5e-4 --
+
+Table 4: Training time per frame averaged for 150.000 frames, from 100 experi-ments of 1500 frames each ( ± standard deviation). The required training times are similar for the two techniques because the Guided PC implementation cannot still leverage the parallelization potential.         
+
+> Guided PC Vanilla PC
+> 7.3±73 .4ms 7.2±85 .2ms
+
+two optimizers are used (instead of 5 for the Guided PC). Table 3 displays the learning rates that have were to produce the results we presented. To choose the best performing configuration for Guided PC and Vanilla PC, the explo-ration began performing one experiment per configuration and anomaly type, using the first image of the MNIST training set. The average MSE between xt
+
+and ˆxt was evaluated. Only configurations producing the last 100 frames with average MSE t <= 15% average MSE 0 were considered. They were subsequently ordered in order of increasing variance, as we wanted ˆxt to match xt without difference spikes. The configuration that provided the lower variance among the three anomaly types was selected and used for 100 experiments with different MNIST digits and initialization seeds, and is summarized in Table 3. Both the Adam optimizers β1 and β2 coefficient are 0, which signifies that an absence of momentum is favorable when learning abrupt changes, as are the anomalies and bouncing. Table 4 summarizes the training times, averaged for 150.000 training frames, from 100 experiments of 1500 frames each, on NVIDIA Tesla v100-SXM3-32gb GPU. The reason why the Guided PC is does not require less time than the Vanilla PC is that, at the moment, our implementation cannot leverage on the parallelizability potential.
