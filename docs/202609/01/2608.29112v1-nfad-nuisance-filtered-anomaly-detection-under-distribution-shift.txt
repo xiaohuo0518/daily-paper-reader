@@ -1,0 +1,711 @@
+Title: NFAD: Nuisance-Filtered Anomaly Detection Under Distribution Shift
+
+URL Source: https://arxiv.org/pdf/2608.29112v1
+
+Published Time: Tue, 01 Sep 2026 00:40:54 GMT
+
+Number of Pages: 21
+
+Markdown Content:
+# NFAD: Nuisance-Filtered Anomaly Detection Under Distribution Shift 
+
+## Dat Cao 1∗ Son Nghiem 1,2∗ Phan Nguyen 1∗ Jun Rekimoto 2,3 Jhih-Ciang Wu 4† 
+
+> 1
+
+## Korea Advanced Institute of Science and Technology (KAIST), South Korea  
+
+> 2
+
+## Sony Computer Science Laboratories (Sony CSL), Japan  
+
+> 3
+
+## The University of Tokyo, Japan  
+
+> 4
+
+## National Taiwan Normal University (NTNU), Taiwan 
+
+## Abstract 
+
+Recent advances in anomaly detection (AD) for industrial inspection have pushed performance on standard bench-marks toward saturation. However, strong benchmark per-formance does not necessarily translate to real-world de-ployment, as these benchmarks are primarily collected under controlled acquisition conditions. Changes in illumination, background, viewpoint, and other environmental factors can shift normal samples away from the learned normal distri-bution and cause false anomaly responses. We address AD under such distribution shifts by explicitly modeling nui-sance variation from changing imaging conditions in fea-ture space. Without anomaly labels or target-domain data, our Nuisance-Filtered Anomaly Detection (NFAD) frame-work estimates a nuisance subspace from matched feature displacements induced by content-preserving perturbations and suppresses its contribution to anomaly residuals at in-ference. The same subspace supports two complementary branches: full projection for image-level detection and se-lective suppression for pixel-level localization, preserving evidence of localized defects. On AeBAD-S, a benchmark specifically designed for AD under acquisition shifts, NFAD achieves 91.0% image-level AUROC, establishing a new state of the art. Notably, this robustness does not come at the expense of conventional AD performance: NFAD remains competitive on standard benchmarks that do not explicitly evaluate distribution shift, including VisA, Real-IAD, and MVTec AD. These results show that explicitly suppressing such nuisance variation improves AD under distribution shift while preserving strong performance in standard settings. 
+
+## 1. Introduction 
+
+Industrial anomaly detection (AD) has made remarkable progress in recent years. Rapid advances in visual back- 
+
+> ∗Equal contribution.
+> †Corresponding author: jcwu@csie.ntnu.edu.tw
+
+Figure 1. Residual–nuisance entanglement. Normal and defect residuals exhibit similar, above-chance alignment with the label-free nuisance subspace across datasets and backbones. 
+
+bones, feature representations, and anomaly modeling have pushed performance on established benchmarks such as MVTec AD and VisA toward saturation [3, 18, 40, 43]. These benchmarks provide a consistent setting for mea-suring progress and comparing methods. However, strong benchmark performance does not necessarily translate to real-world deployment, since most existing benchmarks are collected under relatively controlled acquisition conditions. As a result, these controlled evaluations offer only limited evidence of how detectors will behave when the imaging setup changes. In deployment, changes in illumination, background, viewpoint, and camera configuration can shift normal samples away from the learned normal distribution and cause false anomaly responses. Despite its practical im-portance, anomaly detection under such distribution shifts remains comparatively underexplored. The source of this gap becomes clearer when examin-ing how existing industrial AD benchmarks are constructed. MVTec AD and VisA use highly standardized setups with limited variation in pose and illumination [3, 43]. Recent datasets have begun to broaden the scale and diversity of evaluation. Real-IAD [35] extends this scope with substan-1arXiv:2608.29112v1 [cs.CV] 29 Aug 2026 tially more categories, higher-resolution images, and greater pose diversity through multiple views, yet still relies on fixed camera angles and controlled lighting. These protocols fa-cilitate reproducible evaluation and efficient data collection, but do not fully reflect the variability encountered in real-world deployment. This leads to a fundamental question: 
+
+How can anomaly detectors reliably detect defects under variable imaging conditions? 
+
+Recent domain-shift benchmarks demonstrate the practi-cal importance of this problem. AeBAD [41] evaluates nor-mal test images under shifted acquisition conditions and re-ports substantial degradation of existing anomaly detectors, while ADShift and FiCo [5, 9] demonstrate that standard methods struggle to perform under synthetic corruptions. These results show that strong performance under conven-tional settings does not necessarily translate to robustness in practice, motivating AD methods that are robust to nui-sance variations while remaining sensitive to defects .The challenge is particularly fundamental for feature-based anomaly detection, which detect defects as deviations from normal feature representations [1, 13, 37]. A domain shift displaces normal features, causing the shift itself to appear anomalous. We model such acquisition changes as structured nuisance variation that occupies a subspace of the feature space. A natural strategy follows: identify the nui-sance directions and remove them while preserving defect information. We show that nuisance projection works ex-ceptionally well for anomaly detection. Yet, we also find that nuisance and defects are entangled in feature space (Sec. 3). This motivates our dual read-out design: NFAD estimates a nuisance subspace label-free from controlled perturba-tions of normal images, a detection head removes the full nuisance subspace, and a localization head exploits spatial incidence to selectively remove global drift whilst preserv-ing local defect evidence. The result is a post-hoc operator that adds shift robustness without modifying or retraining the normal-only detector. To the best of our knowledge, NFAD is the first industrial anomaly detection framework to estimate an acquisition-nuisance subspace label-free from content-preserving fea-ture displacements and remove it post-hoc through task-specific dual-readouts. Our contributions are threefold: 
+
+• We show that nuisance and defect signals are entangled 
+
+in feature space, occupying the same directions, so feature direction alone cannot tell which part of the residual is nuisance and which is defect. 
+
+• We introduce NFAD , a label-free feature reconstruction framework that removes global nuisance variations while preserving anomaly signals for robust anomaly detection under domain shift. 
+
+• We validate NFAD under real and controlled acquisition shifts. It achieves state-of-the-art 91 .0% I-AUROC and 
+
+90 .8% AUPRO on AeBAD-S while remaining competitive on VisA, Real-IAD, and MVTec-AD. Under synthetic cor-ruptions, NFAD consistently improves robustness, with gains that transfer even to unmodeled shifts. 
+
+## 2. Related Work 
+
+2.1. Feature-Based Industrial Anomaly Detection 
+
+A common method of identifying anomalies is via de-viations from the learned representation of normal data. Such feature-reconstruction methods assume that a model trained only on normal data would reconstruct normal fea-tures more accurately than anomalous ones, making recon-struction discrepancies useful anomaly evidence. Student– teacher approaches, including Uninformed Students [4], STFPM [36], RD4AD [13], and EfficientAD [1], use the discrepancy between a frozen teacher and a learned stu-dent as the anomaly score. MMR [41] introduces masked multi-scale feature reconstruction, ReContrast [17] adopts contrastive reconstruction, and Dinomaly [18] relaxes layer-wise and point-wise reconstruction constraints. On the other hand, embedding-based methods instead character-ize normal feature structure directly: SPADE [10] and PatchCore [31] compare test patches with stored normal embeddings, PaDiM [12] models patch-wise feature distri-butions, CFA [25] learns compact normal representations, and CFLOW-AD [16] estimates normal feature likelihoods using normalizing flows. Recent methods extend these paradigms with frozen foundation-model representations: AnomalyDINO [11] performs training-free patch matching with DINOv2 [27] features, CLIP-based methods such as WinCLIP [23] and AnomalyCLIP [42] support zero- and few-shot detection, and RAD [40] employs DINOv3 [32] features in a training-free multi-level retrieval framework. However, neither reconstruction nor retrieval residuals are necessarily defect-specific, and changes in imaging condi-tions can also produce similarly large residuals. 
+
+2.2. Anomaly Detection under Distribution Shift 
+
+Conventional anomaly detectors often degrade substantially when conditions change. A recent line of distribution-shift methods explored ways to make anomaly detection more ro-bust: AeBAD [41] introduced a benchmark where the test set differs from the training set in background, illumination and viewpoint, and its accompanying MMR method improves robustness through masked multi-scale reconstruction. AD-Shift [5] learns distribution-invariant normality from aug-mented out-of-distribution views, while FiCo [9] builds upon this idea by filtering and compensating for distribution-specific information within a reverse-distillation framework. These methods alleviate distribution sensitivity through aug-mentation, invariant feature learning, or target-domain adap-tation. However, because the nuisance structure remains im-plicit in learned representations or training objectives rather 2Table 1. Residual alignment with the operator’s 32-dimensional nuisance subspace 𝑉 . 𝑓 def . and 𝑓 norm . are the mean per-patch energy fractions inside 𝑉 for defect and normal patches, and 𝑓 disc . is the overlap of the defect-vs-normal discriminative direction 𝜇 def −                                     
+
+> 𝜇 norm . Chance is the random-subspace floor 𝑘 /𝐶 .
+> (a) Reconstruction residual across datasets
+> Dataset 𝑓 def .𝑓 norm .𝑓 disc .Chance AeBAD-S [41] 0.420 0.421 0.581 0.042 MVTec-AD [3] 0.465 0.392 0.642 0.042 VisA [43] 0.365 0.315 0.485 0.042
+> (b) Nearest-normal residual across backbones
+> Backbone Family 𝑓 def .𝑓 norm .𝑓 disc .Chance DINOv3-B/16 [32] ViT 0.482 0.437 0.644 0.042 DINOv2-B/14 [27] ViT 0.389 0.336 0.657 0.042 WideResNet-50 [38] CNN 0.185 0.185 0.365 0.048
+
+than explicit in feature space, addressing nuisance requires retraining and cannot be controlled in strength or applied selectively across spatial regions. 
+
+2.3. Concept Erasure and Invariant Learning 
+
+Concept erasure and invariant learning methods provide broader mechanisms for controlling such information in learned representations. INLP [30] iteratively projects rep-resentations onto the null spaces of linear concept classi-fiers, whereas LEACE [2] derives a closed-form linear era-sure transformation. Domain-adversarial methods such as DANN [15] suppress domain-predictive information, while self-supervised methods such as SimCLR [8] encourage in-variance across paired augmented views. MAST [22] further factorizes representations into augmentation-induced sub-spaces, allowing different invariances to be represented sep-arately. These approaches extend nuisance handling beyond dataset-specific adaptation, but they typically modify back-bone representations globally, require concept or domain supervision, or enforce invariance without considering how nuisance and task-relevant signals are spatially expressed. In contrast, our method estimates nuisance-sensitive directions from label-free, content-preserving interventions in a frozen feature space and operates on anomaly residuals rather than backbone representations. 
+
+## 3. A Closer Look at Nuisance Entanglement 
+
+Feature-based anomaly detection identifies defects through residuals between test features and their expected normal counterparts. Under domain shift, each residual becomes 
+
+𝑟 ℓ (𝑥, 𝑝 ) = 𝑟 int  
+
+> ℓ
+
+(𝑥, 𝑝 ) + 𝑟 nui  
+
+> ℓ
+
+(𝑥, 𝑝 ) (1) where 𝑟 int captures intrinsic image deviations and 𝑟 nui arises from acquisition changes such as illumination or back-ground. Robust detection must suppress 𝑟 nui without dis-carding 𝑟 int .A natural strategy is to estimate a nuisance subspace 𝑉 
+
+and remove its component from every residual: 
+
+𝑟 ′ = 𝑟 − 𝑉𝑉 ⊤𝑟 (2) Nuisance can be cleanly removed only if nuisance and defect information are sufficiently separated in feature direction. We test this assumption using 𝑉 , estimated label-free from content-preserving interventions on normal images (Sec. 4), and measure its share of residual energy: 
+
+𝑓 = ∥𝑉𝑉 ⊤𝑟 ∥2
+
+∥𝑟 ∥2 ∈ [ 0, 1] (3) where 𝑓 chance = 𝑘 /𝐶 is the expectation for a random 𝑘 -dimensional subspace. We evaluate both the reconstruction residual 𝑟 ℓ (𝑥, 𝑝 ) =
+
+𝑧 𝑇 ℓ (𝑥, 𝑝 ) − 𝑧 𝑆 ℓ (𝑥, 𝑝 ) and a student-free nearest-normal resid-ual 𝑟 nn  
+
+> ℓ
+
+(𝑥, 𝑝 ) = 𝑧 𝑇 ℓ (𝑥, 𝑝 ) − 𝑧 𝑇 ℓ (𝑥 ∗ 
+
+> 𝑗
+
+, 𝑞 ∗), where (𝑥 ∗ 
+
+> 𝑗
+
+, 𝑞 ∗) is the nearest normal training patch in the same feature block. For both constructions, we compare patches inside ground-truth defect regions with normal patches. 
+
+Directional Entanglement. If defect evidence were di-rectionally separable from nuisance, defect residuals would overlap substantially less with 𝑉 than normal-patch residu-als. Instead, 𝑓 def . ≈ 𝑓 norm ., with both far above chance across datasets, backbones, and residual constructions (Tab. 1 and Fig. 1). On ViT backbones, 37–48% of defect-residual energy lies in the 32-dimensional 𝑉 , nine to eleven times the chance level. The same pattern holds for student-free nearest-normal residuals and a supervised ConvNet with un-related pretraining, so the overlap is neither reconstruction-specific nor backbone-specific. One might still attribute this equal alignment to the nuisance shared by both classes rather than to the defect signal itself. It is not: the discriminative direction 𝜇 def − 𝜇 norm , which cancels the shared nuisance, lies even deeper in 𝑉 ( 𝑓 disc . is about 13 × on the ViTs and still 7 .6× on the supervised ConvNet). The very axis that distinguishes a defect from a normal patch is thus itself a nuisance direction. Feature direction therefore cannot tell, at any patch, whether its residual is nuisance to remove or defect evidence to keep. A further experiment in the sup-plementary material shows that absolute overlap even grows with subspace rank. 
+
+Uniform Projection as the Detection Lever. Directional entanglement prevents patch-wise separation but still en-ables a powerful sample-level operator. Full projection re-moves the nuisance-aligned component from every residual, and because it shrinks defect and normal residuals by com-parable fractions, their contrast is preserved. We measure this defect-to-normal contrast as the ratio of the Root-Mean-Square (RMS) residual magnitude of defect patches to that 3of normal patches, the scale consistent with the energy frac-tion 𝑓 , and on AeBAD-S it changes by less than 5% after projection. Meanwhile, projection removes 52% and 44% of normal-patch residual energy in the modeled background and illumination domains, compared with 40% in the shift-free same domain. Detailed domain-wise and rank-wise results are provided in the supplement. At the image level, pre- and post-projection scores remain strongly rank-correlated (Spearman 0 .923 on AeBAD-S). When their ordering changes, projection corrects nuisance-inflated scores, maintaining detection while improving it under shift. Its effect is therefore self-scaling: strong when acquisition shift produces a large 𝑟 nui ., and limited when little nuisance remains. Detection can thus remove the full label-free nuisance subspace uniformly, making full projec-tion the load-bearing step. 
+
+Spatial Incidence Refines Localization. Full projection is too blunt where localization depends most on preserved ev-idence: the defect location itself. Because defect residuals can place slightly more energy in 𝑉 than normal residuals, uniform removal may erase evidence required by the pixel map. Spatial incidence provides the separating axis that di-rection could not. Acquisition shift induce coherent, field-wide drift, whereas defects are sparse and local [35, 41]. The localization read-out therefore removes only the glob-ally acting directions, sparing the locally acting ones, and attenuates this removal when the residual is already spa-tially concentrated. Both read-outs use the same label-free subspace: detection removes 𝑉 in full, while localization removes only its incidence-selected, gated component. The same residual property, read at two spatial scales, therefore secures robustness for both detection and localization. 
+
+## 4. Method 
+
+Starting from a normal-only teacher–student residual, we estimate a nuisance-sensitive subspace from matched inter-vention responses and separate its global and local directions by spatial incidence. At inference, detection removes the full subspace, whereas localization uses a gated global subset to suppress diffuse drift while preserving local defect evidence. 
+
+4.1. Normal-Only Feature Reconstruction 
+
+Teacher features and object prior. We use a frozen DI-NOv3 [32] ViT-B/16 teacher 𝑇 , tapping four intermediate blocks B = {2, 4, 6, 8} with equal weights 𝛽 ℓ = 1/4. Each block yields a 𝑔 × 𝑔 grid of 𝑃 = 𝑔 2 patch tokens. We de-note the channel-normalized teacher feature at token 𝑝 by 
+
+𝑧 𝑇 ℓ (𝑥, 𝑝 ) ∈ R𝐶 , where 𝐶 = 768 is the feature dimension. Aggregating several intermediate blocks lets the residual span scales, with earlier blocks preserving local detail for dense localization and later ones contributing semantic con-text. Blocks {9, 11 } additionally provide a label-free fore-ground prior 𝑀 (𝑥 ) ∈ [ 0, 1] 𝑃 from patch-to-CLS similarity, exploiting the emergent objectness of self-supervised ViT features [6, 32]. The prior weights the reconstruction loss and, thresholded at 0 .5, defines the foreground for the back-ground intervention (Sec. 4.2). The exact prior computation is given in the supplementary material. 
+
+Student and objective. An MAE [20] ViT-B student 𝑆 is trained on normal images only. The teacher sees the clean image 𝑥 while the student sees a token-masked view e𝑥 =
+
+Mask 𝑚 (𝑥 ) (𝑚 = 0.4 in training, 0 at test) and reconstructs the teacher features at every token. With a prior weight 
+
+𝑤 𝑝 (𝑥 ) = 𝜀 + ( 1 − 𝜀 )𝑀 𝑝 (𝑥 ) that keeps background tokens in the gradient, and both sides ℓ2-normalized, we minimize 
+
+L =∑︁  
+
+> ℓ∈ B
+
+𝛽 ℓ E𝑥, e𝑥 
+
+"
+
+1
+
+Í𝑝 𝑤 𝑝 (𝑥 )∑︁ 𝑝 
+
+𝑤 𝑝 (𝑥 )×
+
+
+
+1 − 𝑧 𝑇 ℓ (𝑥, 𝑝 ), 𝑧 𝑆 ℓ (e𝑥, 𝑝 )
+
+ # (4) At test the residual 𝑟 ℓ (𝑥, 𝑝 ) = 𝑧 𝑇 ℓ (𝑥, 𝑝 ) − 𝑧 𝑆 ℓ (𝑥, 𝑝 ), satisfying 
+
+∥𝑟 ℓ ∥22 = 2(1− ⟨ 𝑧 𝑇 ℓ , 𝑧 𝑆 ℓ ⟩) under unit norm, is the feature-space signal for the read-outs below. 
+
+4.2. Nuisance Subspace from Interventions 
+
+Raw feature scatter conflates nuisance with the content and defect variation that differs across images. We instead pair each normal image with approximately content-preserving interventions, so differencing cancels the static content. The two families emulate the acquisition factors that dominate real domain shift: photometric interventions F𝑝 (brightness, contrast, gamma, color temperature, shading) stand in for illumination and camera changes, and background interven-tions F𝑏 refill the region outside the thresholded foreground with alternative colors or noise, standing in for scene and background variation. Let F ∈ {F 𝑝 , F𝑏 } be a family and 𝐹 ∈ F a trans-form. For 𝑥 ′ = 𝐹 (𝑥 ), we proposes matched interven-tion response (MIR) Δ𝑧 𝑇 ℓ (𝑥, 𝐹, 𝑝 ) = 𝑧 𝑇 ℓ (𝑥 ′, 𝑝 ) − 𝑧 𝑇 ℓ (𝑥, 𝑝 )
+
+is the teacher’s feature displacement between an image and a content-preserving perturbation of itself . Because the two terms share identical content, their difference cancels it and isolates the nuisance response to first order, which a scatter over distinct images cannot do. Per block and family we take the uncentered second moment over normal images, transforms, and tokens: 
+
+𝑆 F 
+
+> ℓ
+
+= 1
+
+|D| |F | 𝑃 ∑︁ 𝑥,𝐹, 𝑝 
+
+Δ𝑧 𝑇 ℓ (𝑥, 𝐹, 𝑝 ) Δ𝑧 𝑇 ℓ (𝑥, 𝐹, 𝑝 )⊤ (5) whose scale is immaterial as only its eigenvectors are used, and whose mean is left in because it is itself intervention-induced. We retain the top 𝑑 = 16 eigenvectors per family and form 𝑉 ℓ = orth ([ 𝑈 𝑝 ℓ , 𝑈 𝑏 ℓ ]) ∈ R𝐶 ×𝑘 , where 𝑘 = 2𝑑 = 32. 4I. Input Module 
+
+> Normal Input
+
+II. Teacher-student Hierarchical Feature Learning ❄️ Frozen Teacher - DINOv3 ViT-B/16  Object Prior 
+
+... 
+
+III. Offline Nuisance Basis Construction 
+
+> Nuisance Generation
+> Normal Input
+
+IV. Nuisance Aware Dual- Readout     
+
+> Input
+> Teacher
+> Student
+> Transformed Input
+> Background
+> Prior Reweight
+> Weighted Feature Matching Loss
+> Illumination
+> Nuisance Estimation
+> Teacher
+> Participation Ratio Score
+> Global Nuisance Gated Projection
+> Training-median Normalization
+> cos
+> Residual
+> upscale
+> A. Detection Head score aggregate
+> Patchify  Matched Intervention
+> Response
+> Eigendecom-position
+> Full Projection
+> cos
+> Image anomaly score
+> Residual
+> B. Localization Head Anomaly Map
+> normal
+> anomalous
+> Defect-aligned
+
+🔥 Trainable Student - MAE ViT-B 
+
+> 1x1
+> heads
+> Token
+> Refill
+> Encoder
+> 40% Mask
+
+Figure 2. Overview of the proposed NFAD framework. A student reconstructs the hierarchical features of a frozen DINOv3 teacher, reconstruction residual scores anomalies patch by patch. Offline, content-preserving perturbations of normal images give a matched intervention response (MIR) whose leading directions form a label-free nuisance subspace 𝑉 . Detection head removes 𝑉 by full projection, while localization removes its globally acting directions through a participation-ratio gate, sparing the local evidence a defect map needs. 
+
+Estimated per category at 224 pixels, this channel-space basis transfers unchanged across resolutions. 
+
+4.3. Anomaly Scoring 
+
+Both read-outs score an image identically, differing only in the operator applied to the features. Detection uses the complementary projection Π𝑉 ℓ (𝑧 ) = 𝑧 − 𝑉 ℓ𝑉 ⊤ 
+
+> ℓ
+
+𝑧 , applied to the teacher and student features separately. By linear-ity this equals projecting the residual, so it suppresses the nuisance term 𝑟 nui .ℓ (Sec. 3). The token anomaly map is a block-weighted, 𝜀 -stabilized cosine distance between the transformed features, 
+
+e𝑎 ( 𝑝 ) =∑︁  
+
+> ℓ∈ B
+
+𝛽 ℓ
+
+h
+
+1 − cos 𝜀 
+
+
+
+¯𝑧 𝑇 ℓ ( 𝑝 ), ¯𝑧 𝑆 ℓ ( 𝑝 )
+
+i 
+
+(6) which is bilinearly upsampled, Gaussian-smoothed, and z-scored per read-out, each branch calibrated on its own normal-training maps. Exact stabilization constants and the z-scoring formula are in the supplementary material. 
+
+4.4. Dual Read-Out 
+
+Incidence-selected subset. Direction cannot separate de-fect from nuisance, but their spatial incidence can (Sec. 3). We quantify it per direction: for column 𝑣 ℓ 𝑗 of 𝑉 ℓ , we project unperturbed normal teacher features: 
+
+𝑐 (ℓ ) 
+
+> 𝑖 𝑝 𝑗
+
+= 𝑣 ⊤ 
+
+> ℓ 𝑗
+
+𝑧 𝑇 ℓ (𝑥 𝑖 , 𝑝 ),𝜌 ℓ 𝑗 =
+
+Var 𝑖 
+
+ 1
+
+> 𝑃
+
+Í𝑃 𝑝 =1 𝑐 (ℓ )
+
+> 𝑖 𝑝 𝑗
+
+
+
+Var 𝑖, 𝑝 
+
+
+
+𝑐 (ℓ )
+
+> 𝑖 𝑝 𝑗
+
+ . (7) A score near 1 indicates image-wide variation, whereas a score near 0 indicates localized variation. For each category, 
+
+𝑞 25 is the lower quartile of scores pooled across blocks. The localization basis 𝑉 𝑔,ℓ retains directions with 𝜌 ℓ 𝑗 > 𝑞 25 ,leaving the most localized quartile untouched. We compute incidence from unperturbed normal features because the im-posed support of synthetic interventions would bias it. All settings are fixed across datasets without test-time tuning. 
+
+Per-image gating. Localization should suppress diffuse drift more strongly than concentrated defect evidence. We first compute the non-negative, pre-projection discrepancy 
+
+𝑒 𝑝 (𝑥 ) =
+
+"∑︁  
+
+> ℓ∈ B
+
+𝛽 ℓ
+
+
+
+1 − 𝑧 𝑇 ℓ (𝑥, 𝑝 ), 𝑧 𝑆 ℓ (𝑥, 𝑝 )
+
+#
+
+> +
+
+(8) where [𝑡 ]+ = max (𝑡, 0). Its spatial concentration is mea-sured by the participation ratio (PR), defined by 
+
+𝜙 (𝑥 ) =
+
+Í𝑝 𝑒 𝑝 (𝑥 )
+
+2
+
+𝑃 ∗ max Í 𝑝 𝑒 𝑝 (𝑥 )2, 𝜀 PR 
+
+(9) 5Table 2. Comparison on AeBAD-S under real-world domain shifts. Best and second-best results are bold and underlined, respectively.                                                                                  
+
+> Method Venue Image-level Pixel-level AUROC AP 𝐹 1-max AUROC AP 𝐹 1-max AUPRO RD4AD[13] CVPR’22 81.1 91.3 87.6 91.1 8.9 13.0 84.8 PatchCore[31] CVPR’22 68.5 83.7 84.3 93.5 13.0 20.2 85.8 DeSTSeg[39] CVPR’23 57.3 73.1 83.7 86.7 4.7 9.5 59.3 MMR[41] Comput. Ind.’23 84.6 92.9 88.1 90.8 10.5 15.2 88.5 MambaAD[19] NeurIPS’24 77.9 89.0 86.7 93.0 10.0 13.7 89.0 FiCo[9] AAAI’25 75.7 87.2 86.4 91.3 7.8 12.3 84.0 Dinomaly[18] CVPR’25 80.3 89.6 88.8 90.9 10.2 16.7 86.3 RAD[40] ICML’26 74.8 87.1 86.0 92.8 14.8 18.9 90.4 NFAD (Ours) –91.0 96.0 91.3 94.9 11.7 20.0 90.8
+
+This value is high for diffuse responses and low for localized ones. The clamp only stabilizes near-zero maps; otherwise, 
+
+𝜙 is scale-invariant. Let 𝜏 PR = median 𝑥 ′ ∈ D 𝜙 (𝑥 ′) be the training-normal ref-erence. The gate and its attenuation operator are 
+
+𝛾 (𝑥 ) = min 
+
+
+
+1, 𝜙 (𝑥 )
+
+𝜏 PR 
+
+
+
+(10) 
+
+𝐴 𝛾 𝑉 𝑔,ℓ (𝑧 ) = 𝑧 − 𝛾 (𝑥 )𝑉 𝑔,ℓ 𝑉 ⊤ 
+
+> 𝑔,ℓ
+
+𝑧 (11) Responses at least as diffuse as the training median re-ceive full attenuation, whereas more concentrated responses are attenuated less to preserve local defect evidence. For 0 < 𝛾 < 1, the operator is a soft attenuation rather than an idempotent projection. Because 𝜙 measures spatial concen-tration rather than shift magnitude, no-regression on clean data remains an empirical result. 
+
+Inference and complexity. A test image passes once through the frozen teacher and student. The two low-rank read-outs add O  𝑃𝐶 (𝑘 + 𝑘 𝑔,ℓ ) operations per block, where 
+
+𝑘 𝑔,ℓ = dim 𝑉 𝑔,ℓ .
+
+## 5. Experiments 
+
+5.1. Experimental Settings 
+
+Dataset statistics. AeBAD-S [41] provides 521 source-domain normal training images of aero-engine blades and 1,639 test images partitioned into a shift-free same domain and three real acquisition-shift domains. MVTec-AD [3] has 15 categories (5 texture, 10 object) with 3,629 normal training and 1,725 test images. VisA [43] has 12 object categories under the standard split of 8,659 normal training and 2,162 test images. Real-IAD [35] has 30 categories with 36,465 training and 114,585 test images, evaluated under the official image-level multi-view split. 
+
+Metrics. Follow prior works [18, 19], we report image-level AUROC, AP, and F1-max for anomaly detection, and pixel-level AUROC, AP, F1-max, and AUPRO for anomaly localization. 
+
+Table 3. Per-domain performance of NFAD on AeBAD-S.                                            
+
+> Domain Image-level Pixel-level AUROC AP 𝐹 1-max AUROC AP 𝐹 1-max AUPRO Same 90.6 94.8 88.6 95.6 9.9 18.0 90.2 Background 95.6 98.0 93.3 95.4 11.4 21.5 91.9 Illumination 91.7 96.9 91.2 96.1 13.6 21.2 93.5 View 86.0 94.3 92.1 92.6 11.9 19.4 87.5
+> Mean 91.0 96.0 91.3 94.9 11.7 20.0 90.8
+
+Implementation details. Architecture, feature taps, basis dimension, and read-out settings follow Sec. 4. Each cate-gory is trained for 200 epochs with AdamW [26]. Inputs are center-cropped to 224 2 for AeBAD-S and MVTec-AD, and to 448 2 for VisA and Real-IAD. Except for input resolution, all settings are shared across datasets. Further implemen-tation details and sensitivity analyses are provided in the supplementary material. 
+
+5.2. Comparison with SOTAs on the Real-World Domain-Shift Benchmark AeBAD-S 
+
+Table 2 compares NFAD with eight SOTA methods that span reconstruction, memory-bank, segmentation, domain-shift, and foundation-model families. NFAD ranks first on five of seven metrics and second on a sixth. It leads the image level at 91.0/96.0/91.3 , a per-metric gain of 6.4↑/ 3.1↑/ 2.5↑
+
+over the best competing method per-metric . Against the backbone-matched RAD [40] and the powerful framework Dinomaly [18], the image-AUROC gap widens to 16 .2↑ and 
+
+10 .7↑, evidencing substantially greater robustness to real acquisition shift. The comparison also includes FiCo , the strongest detector developed for the ADShift distribution-shift setting, yet NFAD exceeds it by 15 .3↑ image AUROC (91 .0 vs. 75 .7): even a baseline purpose-built for acqui-sition shift trails by a wide margin. At the pixel level it reaches 94.9/11.7/20.0/90.8 , leading AUROC and AUPRO by 1.5↑ and 0.4↑ over the best per-metric . Pixel 𝐹 1-max is a close second ( 20 .0 vs. 20 .2) and only AP trails RAD and 6PatchCore, leaving room for finer pixel-wise precision on AeBAD’s small defects. Table 3 breaks performance down by acquisition domain. 
+
+Background and illumination are strongest (95 .6/91 .7 im-age AUROC, 91 .9/93 .5 AUPRO), matching the background and photometric interventions that estimate the nuisance subspace. View is hardest (86 .0 image AUROC, 87 .5 AU-PRO), as geometric and parallax variation lies outside the photometric and background families NFAD models. Nev-ertheless, NFAD remains robust under this unmodeled shift, suggesting that the learned operator generalizes beyond the nuisance families it explicitly models. 
+
+5.3. Comparison with SOTAs on AD datasets 
+
+Table 4 compares NFAD performance on VisA [43], MVTec-AD [3], and Real-IAD [35], using the same pipeline and hyperparameters across benchmarks. On VisA, NFAD reaches 98.9/98.6/95.8 (I-AUROC/P-AUROC/AUPRO), taking the joint-best image AUROC (level with Dino-maly, 1.4↑ point compare to RAD) and the best AUPRO (0.7↑). On the large-scale, multi-view dataset Real-IAD it reaches 91.5/99.1/96.1 , joint-best on both pixel AUROC and AUPRO and second on image AUROC. These results show that the nuisance-aware read-out stays highly competitive on clean benchmarks rather than trading standard performance for domain-shift robustness. 
+
+MVTec-AD is a saturated benchmark. Every competi-tive method sits within a narrow 98 .4–99 .7 image-AUROC band, leaving little headroom to separate detectors. NFAD’s 99 .0/97 .7/92 .7 is marginally below the leading methods. What this near-ceiling ranking does not capture is robust-ness: the methods that top MVTec-AD do not stay ahead once the distribution shifts. Dinomaly and RAD match or exceed NFAD on MVTec-AD, yet trail its AeBAD image AUROC by 10 .7 and 16 .2 points (Tab. 2). This contrast is the central advantage of NFAD. Rather than specializing to one benchmark, the framework is competitive on satu-rated standard datasets, posts the best or joint-best AUPRO on both VisA and Real-IAD, and delivers its largest advan-tage precisely in the domain-shift regime for which it was designed. 
+
+5.4. Ablation Study 
+
+Detection head. Projection, which removes the estimated nuisance subspace 𝑉 from the teacher–student feature resid-ual via Π𝑉 , provides the largest improvement under domain shift. It increases image AUROC by 3.8↑ on AeBAD-S (86 .7 → 90 .5), compared with 0 .7 on MVTec-AD and 0 .3on VisA. The larger gain on AeBAD-S indicates that the operator primarily suppresses acquisition nuisance, whose effect is pronounced only when the training and test distribu-tions differ, rather than adding generic capacity that would help every benchmark equally. Estimating the same sub-
+
+Table 4. Comparison on standard UAD benchmarks with single-class setting . Real-IAD is evaluated under the multi-view setting. Best and second-best results are bold and underlined, respectively.                                                                                                     
+
+> Method VisA [43] MVTec-AD [3] Real-IAD [35] I-AU P-AU PRO I-AU P-AU PRO I-AU P-AU PRO RD4AD cvpr’22 96.3 98.3 91.5 98.6 97.6 93.6 89.5 98.8 91.3 PatchCore cvpr’22 94.6 98.5 92.6 99.1 98.1 93.0 90.5 n/a 94.0 DeSTSeg cvpr’23 90.5 97.5 79.4 97.7 98.2 92.4 87.2 97.8 79.3 MMR comp. ind.’23 95.1 98.4 91.3 98.4 97.2 92.3 90.6 98.9 93.9 MambaAD neurips’24 95.3 98.8 91.9 98.7 97.8 94.0 86.3 98.5 90.5 FiCo aaai’25 88.9 98.9 93.3 97.7 97.7 93.3 89.1 98.9 93.1 Dinomaly cvpr’25 98.9 98.9 95.1 99.7 99.9 95.0 92.0 99.1 95.1 RAD icml’26 97.5 99.1 94.6 99.6 98.5 94.9 92.0 99.1 96.1
+> Ours 98.9 98.6 95.8 99.0 97.7 92.7 91.5 99.1 96.1
+
+space from Matched Intervention Response (MIR) , rather than from raw feature variance, further improves image AU-ROC by 0.5↑ on AeBAD-S and 0.4↑ on VisA. With the pro-jection held fixed, this isolates the basis: the MIR-based esti-mation recovers a more nuisance-specific, defect-orthogonal subspace than a variance-based one. 
+
+Localization head. Projection also consistently improves localization, increasing AU-PRO by 1.2↑ on AeBAD-S, 0.5↑
+
+on MVTec-AD, and 0.3↑ on VisA, with corresponding gains in pixel AUROC. Unlike the detection gain, this benefit ex-tends to the aligned benchmarks, because removing nuisance directions lowers residual-map variance even where the do-main gap is small. The gated 𝑉 𝑔 read-out then restricts the removal to the incidence-selected subset, sparing the locally acting directions that carry defect evidence, with a per-image safeguard that eases the removal on already-concentrated maps. This adds 0.5↑ P-AUROC on AeBAD-S over plain projection while staying within 0.4↑ AUPRO on the aligned benchmarks, so the refinement never regresses on the metric it targets. As in detection, switching the basis to the MIR-based estimate adds a further 0 .2 AU-PRO on AeBAD-S. The complete localization head reaches P-AUROC/AUPRO of 94 .9/90 .8 on AeBAD-S, 97 .7/92 .7 on MVTec-AD, and 98 .6/95 .8 on VisA. Overall, the complete model achieves 91 .0/94 .9/90 .8 in I-AUROC/P-AUROC/AUPRO on AeBAD-S, while retain-ing image AUROC scores of 99 .0 on MVTec-AD and 98 .9on VisA. These results show that the proposed operator im-proves robustness to domain shift without compromising performance on standard benchmarks. 
+
+Operator under controlled synthetic shift. Following ADShift, we adopt the four corruption families [21] (bright-ness, contrast, defocus blur, and Gaussian noise) to the VisA test set, denoted as VisA-C. Rather than evaluating only a single corruption strength, we vary the severity from 1 to 3 to characterize robustness as the distribution gap increases. As shown in Fig. 3, the operator is neutral on clean data but its advantage becomes substantial under stronger shifts, 7Table 5. Detection-head ablation. Entries report I-AUROC / I-AP / I-𝐹 1-max. Proj. projects out a variance-estimated nuisance subspace, and MIR-based replaces that basis with the matched-intervention-response estimate. Best results are shown in boldface.              
+
+> Components AeBAD-S [41] MVTec-AD [3] VisA [43] Proj. MIR-based
+> 86 .7/94 .2/87 .798 .3/99 .0/97 .298 .2/98 .4/96 .1
+> ✓90 .5/95 .8/90 .599 .0/99 .2/98 .098 .5/98 .7/96 .5
+> ✓✓91 .0/96 .0/91 .399 .0/99 .6/98 .098 .9/99 .0/96 .5
+
+Table 6. Localization-head ablation. Entries report P-AUROC / AUPRO. Same ablate components as Tab. 5, and 𝑉 𝑔 denotes the incidence-selected subset. Best results are shown in boldface.                        
+
+> Components AeBAD-S [41] MVTec-AD [3] VisA [43] Proj. Gated 𝑉 𝑔 MIR-based
+> 93 .6/89 .497 .1/92 .098 .0/95 .1
+> ✓94 .4/90 .697 .2/92 .598 .4/95 .4
+> ✓✓94 .9/90 .697 .6/92 .198 .6/95 .5
+> ✓✓✓94 .9/90 .897 .7/92 .798 .6/95 .80123
+> Corruption severity
+> 0246
+> ¢ Image AUROC
+> Contrast Gaussian noise Defocus blur Brightness
+
+Figure 3. Image-AUROC improvement of the operator on VisA-C with varying severity of the synthetic corruptions. 
+
+reaching 4.7↑ under contrast and 4.5↑ under Gaussian noise at severity 3, with a maximum gain of 5.9↑ under contrast at severity 2. Crucially, these gains extend from modeled photometric shifts (brightness and contrast) to held-out cor-ruptions (blur and Gaussian noise) not used to estimate 𝑉 .Together with AeBAD-S, this result confirms that the op-erator responds to acquisition shift and generalizes beyond the interventions used to construct the nuisance subspace. Detailed result is shown in the supplementary. 
+
+Teacher foundations. Our nuisance subspace is estimated from the teacher itself, label-free and in closed form, so it should in principle adapt to whatever feature geometry it is handed. We test this directly, swapping DINOv3 [32] for seven diverse ImageNet-scale ViT-B [14] foundations: DINOv2-R [24], DINOv2 [27], CLIP [29], BEiTv2 [28], 50 50 60 60 70 70 80 80 90 90         
+
+> I-AUROC on AeBAD-S
+> AugReg @224² DeiT @224² BEiTv2 @224² DINO @224² CLIP @224² DINOv2 @196² DINOv2-R @196² DINOv3 @224²
+> Sup. MIM CL VLM CL+MIM Pretrain Type:
+> Foundation: Input size:
+> +18.40 +9.74 +11.72 +0.34 +9.69 +20.05 +6.14 +4.29
+> Control With our operator
+
+Figure 4. Image-level AUROC of our operator equipped with various foundation backbones. MIM: Masked Image Modeling. CL: Contrastive Learning. VLM: Vision-Language Model. 
+
+DeiT [34], and AugReg [33]. It improves every one of the eight (Fig. 4), by 10 .04 ↑ image-level AUROC on aver-age. The gain scaling inversely with the control: largest on register-free DINOv2 (20 .05 ↑), smallest on DINO (0 .34 ↑). We therefore regard the operator as agnostic to the teacher’s pre-training objective. Detailed result and analysis are pro-vided in the supplementary material. 
+
+Plug-in on existing methods . Although this is not our central claim, the operator can transfer beyond teacher back-bone variation. Our additional plug-in on existing method RD4AD [13], ReContrast [17], PatchCore [31], GLASS [7], and UniAD [37] proves this argument. Detailed experiment is demonstrated in the supplementary. 
+
+## 6. Conclusion 
+
+Feature-based anomaly detectors flag any deviation from the learned normal distribution, which makes them brittle exactly where deployment departs from the lab: a change in illumination or background moves normal features and is read as a defect. We traced this failure to a concrete property of the residual. Acquisition nuisance and genuine defects occupy the same feature directions, so no directional test can separate them. NFAD turns that obstacle into its design. From normal images alone it estimates a nuisance subspace, label-free, from matched intervention responses, and removes it at inference, reading the same subspace in full for detection and by spatial incidence for localization. Because the removal shrinks defect and normal evidence in near-equal proportion, it cancels the shift while leaving de-tectability intact, so robustness is gained without measurable cost when there is no shift to remove. The takeaway is practical. Real-world robustness need not be built into training. It can be added to a frozen, normal-only detector as a operator, with no labels, no target-domain data, and no retraining. Two extensions follow naturally: ex-8tending the intervention family to geometric transformations that capture viewpoint changes, and re-estimating the nui-sance subspace online as the deployment distribution shift. 
+
+## References 
+
+[1] Kilian Batzner, Lars Heckler, and Rebecca K¨ onig. Efficien-tAD: Accurate visual anomaly detection at millisecond-level latencies. In Proceedings of the IEEE/CVF Winter Confer-ence on Applications of Computer Vision , pages 128–138, 2024. 2 [2] Nora Belrose, David Schneider-Joseph, Shauli Ravfogel, Ryan Cotterell, Edward Raff, and Stella Biderman. LEACE: Perfect linear concept erasure in closed form. In Advances in Neural Information Processing Systems , pages 66044–66063, 2023. 3 [3] Paul Bergmann, Michael Fauser, David Sattlegger, and Carsten Steger. MVTec AD: A comprehensive real-world dataset for unsupervised anomaly detection. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition , 2019. 1, 3, 6, 7, 8, 11, 12, 13 [4] Paul Bergmann, Michael Fauser, David Sattlegger, and Carsten Steger. Uninformed students: Student–teacher anomaly detection with discriminative latent embeddings. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition , pages 4183–4192, 2020. 2 [5] Tri Cao, Jiawen Zhu, and Guansong Pang. Anomaly detection under distribution shift. In Proceedings of the IEEE/CVF International Conference on Computer Vision , pages 6511– 6523, 2023. 2 [6] Mathilde Caron, Hugo Touvron, Ishan Misra, Herv´ e J´ egou, Julien Mairal, Piotr Bojanowski, and Armand Joulin. Emerg-ing properties in self-supervised vision transformers. In Pro-ceedings of the IEEE/CVF International Conference on Com-puter Vision , pages 9650–9660, 2021. 4, 14, 15 [7] Qiyu Chen, Huiyuan Luo, Chengkan Lv, and Zhengtao Zhang. A unified anomaly synthesis strategy with gradi-ent ascent for industrial anomaly detection and localization. In Proceedings of the European Conference on Computer Vision , pages 37–54, 2024. 8, 15, 17 [8] Ting Chen, Simon Kornblith, Mohammad Norouzi, and Ge-offrey Hinton. A simple framework for contrastive learning of visual representations. In Proceedings of the International Conference on Machine Learning , pages 1597–1607, 2020. 3[9] Zining Chen, Xingshuang Luo, Weiqiu Wang, Zhicheng Zhao, Fei Su, and Aidong Men. Filter or compensate: Towards invariant representation from distribution shift for anomaly detection. In Proceedings of the AAAI Conference on Artificial Intelligence , 2025. 2, 6 [10] Niv Cohen and Yedid Hoshen. Sub-image anomaly detec-tion with deep pyramid correspondences. arXiv preprint arXiv:2005.02357 , 2020. 2 [11] Simon Damm, Mike Laszkiewicz, Johannes Lederer, and Asja Fischer. AnomalyDINO: Boosting patch-based few-shot anomaly detection with DINOv2. In Proceedings of the IEEE/CVF Winter Conference on Applications of Computer Vision , pages 1319–1329, 2025. 2 [12] Thomas Defard, Aleksandr Setkov, Angelique Loesch, and Romaric Audigier. PaDiM: A patch distribution modeling framework for anomaly detection and localization. In Pat-tern Recognition: ICPR International Workshops and Chal-lenges , pages 475–489, 2021. 2 [13] Hanqiu Deng and Xingyu Li. Anomaly detection via reverse distillation from one-class embedding. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition , pages 9737–9746, 2022. 2, 6, 8, 15, 17 [14] Alexey Dosovitskiy, Lucas Beyer, Alexander Kolesnikov, Dirk Weissenborn, Xiaohua Zhai, Thomas Unterthiner, Mostafa Dehghani, Matthias Minderer, Georg Heigold, Syl-vain Gelly, Jakob Uszkoreit, and Neil Houlsby. An image is worth 16x16 words: Transformers for image recognition at scale. In Proceedings of the International Conference on Learning Representations , 2021. 8 [15] Yaroslav Ganin, Evgeniya Ustinova, Hana Ajakan, Pascal Germain, Hugo Larochelle, Franc ¸ois Laviolette, Mario Marc-hand, and Victor Lempitsky. Domain-adversarial training of neural networks. Journal of Machine Learning Research , 17 (59):1–35, 2016. 3 [16] Denis Gudovskiy, Shun Ishizaka, and Kazuki Kozuka. CFLOW-AD: Real-time unsupervised anomaly detection with localization via conditional normalizing flows. In Pro-ceedings of the IEEE/CVF Winter Conference on Applica-tions of Computer Vision , pages 98–107, 2022. 2 [17] Jia Guo, Shuai Lu, Lize Jia, Weihang Zhang, and Huiqi Li. ReContrast: Domain-specific anomaly detection via con-trastive reconstruction. In Advances in Neural Information Processing Systems , pages 10721–10740, 2023. 2, 8, 15, 17 [18] Jia Guo, Shuai Lu, Weihang Zhang, Fang Chen, Huiqi Li, and Hongen Liao. Dinomaly: The less is more philosophy in multi-class unsupervised anomaly detection. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition , pages 20405–20415, 2025. 1, 2, 6 [19] Haoyang He, Yuhu Bai, Jiangning Zhang, Qingdong He, Hongxu Chen, Zhenye Gan, Chengjie Wang, Xiangtai Li, Guanzhong Tian, and Lei Xie. MambaAD: Exploring state space models for multi-class unsupervised anomaly detec-tion. In Advances in Neural Information Processing Systems ,pages 71162–71187, 2024. 6 [20] Kaiming He, Xinlei Chen, Saining Xie, Yanghao Li, Piotr Doll´ ar, and Ross Girshick. Masked autoencoders are scalable vision learners. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition , 2022. 4, 11 [21] Dan Hendrycks and Thomas Dietterich. Benchmarking neu-ral network robustness to common corruptions and pertur-bations. In Proceedings of the International Conference on Learning Representations , 2019. 7 [22] Chen Huang, Hanlin Goh, Jiatao Gu, and Josh Susskind. MAST: Masked augmentation subspace training for general-izable self-supervised priors. In Proceedings of the Interna-tional Conference on Learning Representations , 2023. 3 [23] Jongheon Jeong, Yang Zou, Taewan Kim, Dongqing Zhang, Avinash Ravichandran, and Onkar Dabeer. WinCLIP: Zero-/few-shot anomaly classification and segmentation. In Pro-ceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition , pages 19606–19616, 2023. 2 
+
+9[24] Cijo Jose, Th´ eo Moutakanni, Dahyun Kang, Federico Baldas-sarre, Timoth´ ee Darcet, Hu Xu, Daniel Li, Marc Szafraniec, Micha¨ el Ramamonjisoa, Maxime Oquab, Oriane Sim´ eoni, Huy V. Vo, Patrick Labatut, and Piotr Bojanowski. Dinov2 meets text: A unified framework for image- and pixel-level vision-language alignment. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition ,pages 24905–24916, 2025. 8, 14, 15 [25] Sungwook Lee, Seunghyun Lee, and Byung Cheol Song. CFA: Coupled-hypersphere-based feature adaptation for target-oriented anomaly localization. IEEE Access , 10: 78446–78454, 2022. 2 [26] Ilya Loshchilov and Frank Hutter. Decoupled weight decay regularization. In Proceedings of the International Confer-ence on Learning Representations , 2019. 6 [27] Maxime Oquab, Timoth´ ee Darcet, Th´ eo Moutakanni, Huy V. Vo, Marc Szafraniec, Vasil Khalidov, Pierre Fernandez, et al. DINOv2: Learning robust visual features without supervi-sion. Transactions on Machine Learning Research , 2024. 2, 3, 8, 12, 14, 15 [28] Zhiliang Peng, Li Dong, Hangbo Bao, Qixiang Ye, and Furu Wei. Beit v2: Masked image modeling with vector-quantized visual tokenizers, 2022. 8, 14, 15 [29] Alec Radford, Jong Wook Kim, Chris Hallacy, Aditya Ramesh, Gabriel Goh, Sandhini Agarwal, Girish Sastry, Amanda Askell, Pamela Mishkin, Jack Clark, Gretchen Krueger, and Ilya Sutskever. Learning transferable visual models from natural language supervision. In Proceedings of the 38th International Conference on Machine Learning ,pages 8748–8763. PMLR, 2021. 8, 14, 15 [30] Shauli Ravfogel, Yanai Elazar, Hila Gonen, Michael Twiton, and Yoav Goldberg. Null it out: Guarding protected at-tributes by iterative nullspace projection. In Proceedings of the Annual Meeting of the Association for Computational Linguistics , pages 7237–7256, 2020. 3 [31] Karsten Roth, Latha Pemula, Joaquin Zepeda, Bernhard Sch¨ olkopf, Thomas Brox, and Peter Gehler. Towards total recall in industrial anomaly detection. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition , pages 14318–14328, 2022. 2, 6, 8, 15, 17 [32] Oriane Sim´ eoni, Huy V. Vo, Maximilian Seitzer, Federico Baldassarre, Maxime Oquab, Cijo Jose, Vasil Khalidov, Marc Szafraniec, Seungeun Yi, Micha¨ el Ramamonjisoa, Francisco Massa, Daniel Haziza, Luca Wehrstedt, Jianyuan Wang, Timoth´ ee Darcet, Th´ eo Moutakanni, Leonel Sentana, Claire Roberts, Andrea Vedaldi, Jamie Tolan, John Brandt, Camille Couprie, Julien Mairal, Herv´ e J´ egou, Patrick Labatut, and Piotr Bojanowski. Dinov3, 2025. 2, 3, 4, 8, 11, 12, 14, 15 [33] Andreas Peter Steiner, Alexander Kolesnikov, Xiaohua Zhai, Ross Wightman, Jakob Uszkoreit, and Lucas Beyer. How to train your vit? data, augmentation, and regularization in vision transformers. Transactions on Machine Learning Research , 2022. 8, 14, 15 [34] Hugo Touvron, Matthieu Cord, Matthijs Douze, Francisco Massa, Alexandre Sablayrolles, and Herv´ e J´ egou. Training data-efficient image transformers & distillation through at-tention. In Proceedings of the International Conference on Machine Learning , 2021. 8, 14, 15 [35] Chengjie Wang, Wenbing Zhu, Bin-Bin Gao, Zhenye Gan, Jiangning Zhang, Zhihao Gu, Shuguang Qian, Mingang Chen, and Lizhuang Ma. Real-IAD: A real-world multi-view dataset for benchmarking versatile industrial anomaly detec-tion. In Proceedings of the IEEE/CVF Conference on Com-puter Vision and Pattern Recognition , pages 22883–22892, 2024. 1, 4, 6, 7, 11, 12 [36] Guodong Wang, Shumin Han, Errui Ding, and Di Huang. Student–teacher feature pyramid matching for anomaly de-tection. In Proceedings of the British Machine Vision Con-ference , 2021. 2 [37] Zhiyuan You, Lei Cui, Yujun Shen, Kai Yang, Xin Lu, Yu Zheng, and Xinyi Le. A unified model for multi-class anomaly detection. In Advances in Neural Information Pro-cessing Systems , pages 4571–4584, 2022. 2, 8, 16, 17 [38] Sergey Zagoruyko and Nikos Komodakis. Wide residual networks. In Proceedings of the British Machine Vision Con-ference , pages 87.1–87.12, 2016. 3, 12 [39] Xuan Zhang, Shiyu Li, Xi Li, Ping Huang, Jiulong Shan, and Ting Chen. DeSTSeg: Segmentation guided denoising student-teacher for anomaly detection. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition , pages 3914–3923, 2023. 6 [40] Xingwu Zhang, Guanxuan Li, Paul Henderson, Gerardo Aragon-Camarasa, and Zijun Long. Is task-specific train-ing necessary for anomaly detection? In Proceedings of the International Conference on Machine Learning , 2026. 1, 2, 6[41] Zilong Zhang, Zhibin Zhao, Xingwu Zhang, Chuang Sun, and Xuefeng Chen. Industrial anomaly detection with do-main shift: A real-world dataset and masked multi-scale re-construction. Computers in Industry , 151:103990, 2023. 2, 3, 4, 6, 8, 11, 12, 13 [42] Qihang Zhou, Guansong Pang, Yu Tian, Shibo He, and Jim-ing Chen. AnomalyCLIP: Object-agnostic prompt learning for zero-shot anomaly detection. In Proceedings of the In-ternational Conference on Learning Representations , 2024. 2[43] Yang Zou, Jongheon Jeong, Latha Pemula, Dongqing Zhang, and Onkar Dabeer. SPot-the-Difference self-supervised pre-training for anomaly detection and segmentation. In Proceed-ings of the European Conference on Computer Vision , 2022. 1, 3, 6, 7, 8, 11, 12, 13 
+
+10 NFAD: Nuisance-Filtered Anomaly Detection Under Distribution Shift 
+
+# Supplementary Material 
+
+Overview This supplement complements the main paper along three axes: reproducibility, analytical validation, and experimental breadth. Sections A and B provide com-plete implementation details, configurations, dataset statis-tics, and evaluation splits. Section C validates the observa-tions underlying our analysis. Section D presents exhaus-tive per-category and per-domain results, together with the remaining ablations, while Section E provides qualitative result and visualization. These materials provide compre-hensive support for the claims deferred from the main paper. Unless stated otherwise, all datasets use the same settings, with no per-object or test-time tuning. 
+
+## A. Full Implementation Details 
+
+Backbones and features. The teacher is a frozen DINOv3 [32] ViT-B/16 with patch size 16 and embedding dimension 768. We take features from four intermediate blocks B =
+
+{2, 4, 6, 8}, weighted equally ( 𝛽 ℓ = 1/4), and ℓ2-normalize each token along the channel dimension. The student is an MAE [20] ViT-B that predicts the teacher features of every token through one 1 × 1 convolutional head per target block. A label-free foreground prior 𝑀 ∈ [ 0, 1] 𝑃 is read from two deeper blocks {9, 11 }: at each we take the cosine similarity between every patch token and the CLS token, clamp it to 
+
+[0, ∞) , min–max normalize it per image, and average the two maps. Thresholding 𝑀 at 0 .5 gives the foreground used by the background intervention. 
+
+Training. Each category is trained on its normal images only, for 200 epochs with seed 54 and batch size 16, us-ing AdamW (learning rate 10 −3, 𝛽 = (0.9, 0.95 ), weight decay 0 .05) with a 50-epoch warm-up and step decay at 60% and 80% of training. Inputs are resized to 256 and center-cropped to 224 2 for AeBAD-S [41] and MVTec-AD [3], and resized to 512 and cropped to 448 2 for VisA [43] and Real-IAD [35]. The teacher observes the clean image while the student observes a copy with a random, indepen-dent 40% of its tokens masked, and no masking at test. The objective is a prior-weighted cosine loss between the 
+
+ℓ2-normalized teacher and student features, with per-token weight 𝑤 𝑝 = 𝜀 + ( 1 − 𝜀 )𝑀 𝑝 and floor 𝜀 = 0.1 so that back-ground tokens stay in the gradient. No anomalies or labels are used at any stage. 
+
+Intervention families. The nuisance basis is estimated from two families of content-preserving interventions in 
+
+[0, 1] image space. Photometric interventions F𝑝 ap-ply brightness scaling by 1 .40 and 0 .65, mean-centered contrast ×1.5, gamma 1.6, color-temperature scaling 
+
+(1.15 , 1.0, 0.85 ) across RGB, and horizontal and vertical shading ramps over [0.6, 1.4]. Background interventions 
+
+F𝑏 refill the region outside the thresholded foreground with the fills {0, 0.5, (0.25 , 0.45 , 0.75 ), 0.9} and uniform noise. On texture categories the prior always leaves a region above 0.5, so F𝑏 acts as a generic scene perturbation rather than a literal background swap. 
+
+Nuisance basis. For each block and family we accumulate the uncentered second moment of the matched intervention response Δ𝑧 𝑇 ℓ = 𝑧 𝑇 ℓ (𝐹 (𝑥 )) − 𝑧 𝑇 ℓ (𝑥 ) over up to 4000 displace-ments, keep its top 𝑑 = 16 eigenvectors (eigendecompo-sition in double precision), and QR-orthogonalize the two families’ bases in a fixed order into 𝑉 ℓ ∈ R768 ×32 . The mean displacement is itself intervention-induced and is not sub-tracted. Only the eigenvectors of the moment are used, so its scalar normalization is immaterial. The basis is estimated once per category at 224 pixels and, acting along channels, transfers unchanged to higher-resolution grids. 
+
+Incidence subset and gate. For each column 𝑣 ℓ 𝑗 of 𝑉 ℓ we project unperturbed normal teacher features and compute the incidence ratio 𝜌 ℓ 𝑗 = Var 𝑖 (mean 𝑝 𝑐 )/ Var 𝑖, 𝑝 (𝑐 ), near 1 for globally acting directions and near 0 for local ones. The globally acting sub-basis 𝑉 𝑔,ℓ keeps the columns with 
+
+𝜌 above the pooled lower quartile 𝑞 25 .The per-image localization gate is 𝛾 (𝑥 ) =
+
+min {1, 𝜙 (𝑥 )/ 𝜏 PR }, where the participation ratio 
+
+𝜙 = (Í𝑝 𝑒 𝑝 )2/[ 𝑃 ∗ max (Í𝑝 𝑒 2 
+
+> 𝑝
+
+, 𝜀 PR )] of the clamped pre-projection anomaly 𝑒 𝑝 = [Íℓ 𝛽 ℓ (1 − ⟨ 𝑧 𝑇 ℓ , 𝑧 𝑆 ℓ ⟩)] +
+
+measures spatial concentration, with 𝜀 PR = 10 −12 ,
+
+𝜏 PR = median 𝑥 ′ ∈ D 𝜙 (𝑥 ′).
+
+Scoring and read-out. Both read-outs apply the comple-mentary projection Π𝑈 (𝑧 ) = 𝑧 − 𝑈𝑈 ⊤𝑧 to the teacher and student features and compare them with an 𝜀 -stabilized co-sine, cos 𝜀 (𝑢, 𝑣 ) = 𝑢 ⊤𝑣 /[ max (∥ 𝑢 ∥2, 𝜀 cos ) max (∥ 𝑣 ∥2, 𝜀 cos )] ,
+
+𝜀 cos = 10 −8. The token map ˜𝑎 ( 𝑝 ) = Íℓ ∈ B 𝛽 ℓ [1 −
+
+cos 𝜀 ( ¯𝑧 𝑇 ℓ ( 𝑝 ), ¯𝑧 𝑆 ℓ ( 𝑝 ))] is bilinearly upsampled to 224, Gaussian-smoothed with 𝜎 = 4, and z-scored by the mean and standard deviation of that read-out’s smoothed normal-training maps. Detection removes the full sub-space ( 𝑈 = 𝑉 ℓ ) and scores an image by the mean of its top 1% pixels. Localization applies the gated attenuation 
+
+𝐴 𝛾 𝑉 𝑔,ℓ (𝑧 ) = 𝑧 − 𝛾 𝑉 𝑔,ℓ 𝑉 ⊤ 
+
+> 𝑔,ℓ
+
+𝑧 and reports the pixel map. 11 Table 7. Dataset statistics, verified from the released splits. Test counts are given as total (normal / anomalous). AeBAD-S trains on the source domain only. Dataset Category Train Test (norm. / anom.) AeBAD-S [41] 1 521 1,639 (490 / 1 ,149) MVTec-AD [3] 15 3,629 1,725 (467 / 1 ,258) VisA [43] 12 8,659 2,162 (962 / 1 ,200) Real-IAD [35] 30 36 ,465 114 ,585 (63 ,256 / 51 ,329) 
+
+Inference and software. At test an image passes once through the frozen teacher and student. The two low-rank read-outs add O( 𝑃 · 768 · ( 𝑘 ℓ + 𝑘 𝑔,ℓ )) operations per block and no gradients. All settings above are shared across datasets, with no per-object or test-time tuning. Experiments use Python 3.12 and PyTorch 2.11.0 with CUDA 12.8 on NVIDIA RTX PRO 6000 Blackwell Server Edition (96GB) GPUs. 
+
+## B. Dataset Statistic 
+
+We evaluate on four industrial anomaly-detection bench-marks under the class-separated setting, training one de-tector per object category. Tab. 7 lists the counts, verified from the released splits. Our primary domain-shift bench-mark is AeBAD-S [41], a single object (aero-engine turbine blade) whose 521 source-domain normal training images are generous per object, exceeding the per-category aver-age of MVTec-AD [3] (about 242) and VisA [43] (about 722). Its 1 ,639 test images span four capture conditions: a shift-free same domain and three real acquisition shifts (background , illumination , view ), over four defect types (ab-lation, breakdown, fracture, groove). By domain the test set holds 689 same , 305 background , 273 illumination , and 372 view images. Because training uses the source domain only, a detector is trained on one condition and evaluated across four. MVTec-AD, VisA, and the large-scale multi-view Real-IAD [35] are fixed-acquisition benchmarks, with Real-IAD evaluated under its official image-level split over all views. 
+
+## C. Extended Analysis 
+
+This section quantifies the claims made in Section “A Closer Look at Nuisance Entanglement” of the main manuscript, providing the details per-category and per-condition sum-marized in the main text. 
+
+C.1. Entanglement across subspace rank 
+
+The main analysis fixes the subspace at the operator’s rank dim (𝑉 ) = 32. Tab. 8 adds the same overlap at dim (𝑉 ) = 64. Absolute overlap grows with rank, but so does the chance floor, and at either rank the defect and normal residuals stay                    
+
+> Table 8. Overlap 𝑓 def ./𝑓 norm .at two subspace ranks. Chance is 0.042 (dim 32) and 0 .083 (dim 64) for the 768-dimensional ViT features, and 0 .048 /0.096 for WideResNet-50. Setting dim (𝑉 )=32 dim (𝑉 )=64
+> Reconstruction residual, DINOv3-B/16
+> AeBAD-S [41] 0.420 / 0.421 0.585 / 0.568 MVTec-AD [3] 0.465 / 0.392 0.623 / 0.550 VisA [43] 0.365 / 0.315 0.530 / 0.466
+> Nearest-normal residual, cross-backbone
+> DINOv3-B/16 [32] 0.482 / 0.437 0.647 / 0.606 DINOv2-B/14 [27] 0.389 / 0.336 0.530 / 0.482 WideResNet-50 [38] 0.185 / 0.185 0.318 / 0.336
+
+near-equally aligned ( 𝑓 def . ≈ 𝑓 norm .) and far above chance, about 10 × at dim 32 and 7 × at dim 64. The entanglement is therefore not an artifact of the chosen dimension. 
+
+C.2. Discriminative-direction overlap, per category 
+
+The discriminative direction 𝑑 = 𝜇 def − 𝜇 norm cancels the nuisance shared by defect and normal patches and keeps only what separates them, so its overlap 𝑓 disc . = ∥𝑉 ⊤ 𝑑 ∥2/∥ 𝑑 ∥2
+
+probes the defect signal itself. Tab. 9 breaks the per-dataset means of the main text into per-category values. Every category lies well above the chance floor (0 .042 for ViT features). On AeBAD-S the per-domain values are 0 .605 (same), 0 .594 (background), 0 .517 (illumination), and 0 .525 (view), mean 0 .581; under the student-free nearest-normal residual the direction stays inside 𝑉 across backbones, with 
+
+𝑓 disc . of 0 .644 (DINOv3 [32]), 0 .657 (DINOv2 [27]), and 0.365 (WideResNet-50 [38], chance 0 .048). The defect-discriminative direction thus lies inside the nuisance sub-space for each object individually, not only on average. 
+
+C.3. Projection mechanism 
+
+Two measurements substantiate the detection lever, both on AeBAD-S with the operator’s 32-dim 𝑉 applied to the same patches before and after projection. At the patch level, pro-jection removes more normal-patch residual energy on the modeled background and illumination domains (52% and 44%) than on the shift-free same domain (40%) or the un-modeled view (39%), so it targets the shift-induced term, while the defect-to-normal contrast changes by under 5%, so defect and normal shrink in near-equal proportion. At the image level , pre- and post-projection scores stay strongly rank-correlated (Spearman 𝜌 ≈ 0.92 pooled), so the pro-jection preserves the relative ordering of images rather than re-scoring them arbitrarily. Together with the near-constant patch-level contrast, this points to a between-image cor-rection that removes per-image nuisance drift rather than a within-image separation. 12 Table 9. Per-category 𝑓 disc . for the reconstruction residual with DINOv3-B/16. Chance = 0.042. MVTec-AD [3] 𝑓 disc . VisA [43] 𝑓 disc .                                                                           
+
+> bottle 0.761 candle 0.663 cable 0.549 capsules 0.375 capsule 0.638 cashew 0.468 carpet 0.643 chewinggum 0.599 grid 0.821 fryum 0.523 hazelnut 0.655 macaroni1 0.499 leather 0.682 macaroni2 0.598 metal nut 0.667 pcb1 0.474 pill 0.640 pcb2 0.335 screw 0.544 pcb3 0.402 tile 0.624 pcb4 0.391 toothbrush 0.527 pipe fryum 0.500 transistor 0.496 wood 0.699 zipper 0.682
+> mean 0.642 mean 0.485
+> Table 10. Per-domain projection mechanism on AeBAD-S, before →after Π𝑉 .RMS is the root-mean-square residual mag-nitude over each patch group; contrast =RMS def /RMS norm ; Spear-man 𝜌 is between the per-image scores before and after projection (pooled 𝜌 =0.923). Domain normal RMS energy removed contrast Spearman 𝜌
+> same 0.426 →0.331 39.5% 2.11 →2.01 0.925 background 0.526 →0.364 52.2% 1.85 →1.95 0.925 illumination 0.511 →0.383 43.8% 1.85 →1.81 0.887 view 0.467 →0.363 39.4% 1.91 →1.84 0.917
+
+C.4. Cross-backbone retrieval diagnostic 
+
+The nearest-normal residual 𝑟 nn  
+
+> ℓ
+
+(𝑥, 𝑝 ) = 𝑧 𝑇 ℓ (𝑥, 𝑝 ) − 
+
+𝑧 𝑇 ℓ (𝑥 ∗ 
+
+> 𝑗
+
+, 𝑞 ∗) replaces the trained student with the nearest nor-mal training token in the same block (L2, bank cap 4000), so it depends on neither our student nor any training. The cross-backbone rows above use this residual on MVTec-AD across DINOv3, DINOv2 (patch 14), and a supervised WideResNet-50 (layer-2 and layer-3 features resized to a common 28 × 28 grid). That the same entanglement and discriminative-overlap pattern appears here confirms it is a property of the feature space. 
+
+## D. Addtional Ablations and Experiments 
+
+D.1. Seed variance 
+
+To quantify run-to-run variability we retrain the full model with five seeds on AeBAD-S. Tab. 11 shows the model is stable, with an image-AUROC standard deviation of 0 .15 and AUPRO within 0 .12. 
+
+D.2. Nuisance-basis source 
+
+The operator estimates the nuisance subspace from the matched intervention response (MIR), the second moment of Δ𝑧 = 𝑧 𝑇 (𝐹 (𝑥 )) − 𝑧 𝑇 (𝑥 ). We compare it against three alternatives that all feed the same downstream operator, so only the basis changes: (i) the top-variance eigenvectors of the within-image feature scatter, a variance-driven basis that can absorb object content, (ii) a generalized-eigen ba-sis that maximizes movement under intervention relative to clean-normal scatter ( 𝑆 nui 𝑣 = 𝜆𝑆 norm 𝑣 ), and (iii) a ratio-selection basis that keeps the scatter directions with the highest nuisance-to-normal energy ratio. Tab. 12 reports the result. MIR is best on all three metrics, improving image AUROC by 0 .6 over the variance basis. The more elab-orate selection schemes are worse rather than better: the generalized-eigen and ratio-selection bases each lose more than a point of image AUROC. Selecting directions by how strongly they move under a matched, content-preserving in-tervention is therefore more reliable than selecting them by raw variance or by a normal-referenced energy ratio. 
+
+D.3. Incidence subset and gate 
+
+The localization read-out removes only a globally acting sub-basis 𝑉 𝑔 of the nuisance subspace and attenuates that removal with a per-image gate. Both choices affect local-ization alone, since detection always removes the full 𝑉 .We test two alternatives on the AeBAD-S [41]. First, in place of the column-split selection that keeps the columns of 𝑉 whose activation is field-wide (incidence 𝜌 > 𝑞 25 ), we form a rotation-invariant sub-basis from a generalized eigen problem that mixes columns. Second, in place of the scale-invariant participation-ratio gate, we use a magnitude-aware gate. Tab. 13 shows that both alternatives are worse. The rotation-invariant sub-basis loses 5 .3 P-AUROC and 6.3 AUPRO, because mixing columns discards the per-direction incidence signal that the selection depends on. The magnitude-aware gate costs 0 .4 P-AUROC and 0 .1 AUPRO. The simple column-split selection with a scale-invariant gate is therefore both the simplest and the strongest. 
+
+D.4. Subspace-rank sensitivity 
+
+We vary the per-family subspace rank 𝑑 on the AeBAD-S student (Tab. 14). It sets a detection-localization trade-off: a larger 𝑑 removes more nuisance and raises detection I-AUROC, from 89 .8 at 𝑑 = 8 to 91 .4 at 𝑑 = 32, but it also strips more of the defect-aligned energy and lowers AUPRO, from 91 .1 to 90 .0. The default 𝑑 = 16 sits at this balance, within 0 .4 of the best value on either metric, and its row matches the main result. We therefore keep 𝑑 = 16 for every dataset. 13 Table 11. Seed variance of the full model on AeBAD-S. Results over five seeds are followed by their mean and standard deviation. Image-level Pixel-level Seed AUROC AP 𝐹 1 AUROC AP 𝐹 1 AUPRO 54 (Our reported number) 90.96 96.03 91.30 94.91 11.69 20.02 90.75 1 90.87 95.94 90.88 95.12 12.09 20.53 91.03 42 90.77 95.90 90.99 95.02 11.85 19.82 90.95 123 90.72 95.87 90.77 95.07 11.88 19.95 91.01 2025 90.58 95.85 90.85 95.01 12.10 20.39 91.05                                                              
+
+> Mean 90.78 95.92 90.96 95.03 11.92 20.14 90.96
+> Std 0.15 0.07 0.21 0.08 0.17 0.30 0.12 Table 12. Nuisance-basis construction on AeBAD-S (mean over four domains), all with the shipped dual read-out and dim 16 per family. Detection I-AUROC, localization P-AUROC and AUPRO. Best in bold. Basis construction I-AUROC P-AUROC AUPRO Within-image scatter 90.5 94.9 90.6 Generalized eigen ( 𝑆 nui /𝑆 norm )89.2 93.6 89.8 Ratio-selection 87.4 94.4 90.0 MIR ( Δ𝑧 , ours) 91.0 94.9 90.8
+> Table 13. Localization design on AeBAD-S. The detection head is fixed and removes the full 𝑉 ; only the localization read-out varies. Best results are shown in bold. Localization variant P-AUROC AUPRO Rotation-invariant incidence 89.6 84.5 Magnitude-aware gate 94.5 90.7 Ours 94.9 90.8
+> Table 14. Sensitivity to the per-family subspace rank 𝑑 on AeBAD-S. Detection I-AUROC and localization AUPRO. The default set-ting is marked ours .
+> 𝑑 per family I-AUROC AUPRO
+> 𝑑 =889.8 91.1
+> 𝑑 =16 (ours) 91.0 90.8
+> 𝑑 =32 91.4 90.0
+> 𝑑 =64 91.2 90.3
+
+D.5. Operator across foundation models 
+
+To test whether the operator depends on a particular teacher, we apply a single fixed configuration on top of eight backbones spanning supervised (AugReg [33], DeiT [34]), masked-image modelling (BEiTv2 [28]), self-distillation (DINO [6]), vision-language (CLIP [29]), and hybrid self-supervised (DINOv2 [27], DINOv2-R [24], DINOv3 [32]) pretraining, with no per-backbone tuning (Tab. 15). The op-erator raises detection I-AUROC on every backbone, and the gain is largest exactly where the teacher is weakest, reach-ing +20 .1 on DINOv2 (63 .0 → 83 .1) and +18 .4 on su-pervised AugReg (55 .2 → 73 .6). It stays clearly positive on already strong teachers, adding +6.1 on DINOv2-R (to 91 .2) and +4.3 on our DINOv3 teacher (to 91 .0), and is near-flat only on DINO ( +0.3), whose control is already saturated on this benchmark. Localization moves little in either direction, remaining within about a point of the con-trol across backbones. The operator therefore suppresses acquisition nuisance across pretraining objectives without any per-backbone adjustment, recovering robustness where the backbone is fragile while still sharpening the strongest one. 
+
+D.6. Corruption test with VisA-C 
+
+Ablation in the main manuscript summarizes the operator under controlled corruption. Tab. 16 gives the underlying absolute image AUROC for the base detector (Control) and the operator (Ours) at three severities of four ImageNet-C corruptions on VisA at 448 pixels. On clean data both arms score 98 .8, and the gain grows with the shift, reaching +4.7under contrast and +4.5 under held-out Gaussian noise at severity 3, with a peak of +5.9 under contrast at severity 2 (85 .1 → 91 .0). The benefit extends to the two out-of-family corruptions (defocus blur and Gaussian noise) that were not used to build the intervention families, so the operator responds to the induced shift rather than memorizing specific corruptions. 
+
+D.7. Operator as a model-agnostic plug-in 
+
+Our primary evidence for generality is the backbone study of Tab. 15, where the operator improves every teacher within our framework. Here we probe a more demanding and more exploratory question, swapping the entire base detec-tor rather than only the teacher. This is a secondary observa-14 Table 15. Per-foundation results on AeBAD-S. Δ denotes Ours − Control. Pre-train Foundation Method I-AUROC P-AUROC AUPRO Sup. AugReg @224 2 [33] Control 55.17 82.24 70.02                                                                                                                        
+
+> Ours 73.57 87.06 75.17
+> Δ+18.40 +4.82 +5.15
+> DeiT @224 2[34] Control 57.82 83.60 65.79
+> Ours 67.56 84.62 66.03
+> Δ+9.74 +1.02 +0.24
+> MIM BEiTv2 @224 2[28] Control 58.80 79.13 58.19
+> Ours 70.52 79.45 56.43
+> Δ+11.72 +0.32 -1.76
+> CL DINO @224 2[6] Control 80.00 91.48 83.95
+> Ours 80.34 91.46 83.50
+> Δ+0.34 -0.02 -0.45
+> VLM CLIP @224 2[29] Control 72.46 87.72 75.60
+> Ours 82.15 88.42 75.16
+> Δ+9.69 +0.70 -0.44
+> CL+MIM DINOv2 @196 2[27] Control 63.00 89.65 82.31
+> Ours 83.05 91.49 83.45
+> Δ+20.05 +1.84 +1.14
+> DINOv2-R @196 2[24] Control 85.06 93.52 89.72
+> Ours 91.20 94.75 90.43
+> Δ+6.14 +1.23 +0.71
+> DINOv3 @224 2[32] Control 86.67 93.62 89.41
+> Ours 90.96 94.91 90.75
+> Δ+4.29 +1.29 +1.34
+> Table 16. Controlled corruption on VisA (448 pixels), measured by image AUROC. Control denotes the base detector, while Ours adds the proposed operator. Severities range from 1 to 3 for four ImageNet-C corruptions. The better result is shown in bold. Corruption Method 𝑠 =1𝑠 =2𝑠 =3
+> In-family (photometric)
+> Brightness Control 97.70 92.78 86.22 Ours 97.72 93.65 87.58
+> Contrast Control 91.86 85.12 70.96 Ours 95.49 90.97 75.63 Out-of-family (held out)
+> Defocus blur Control 98.45 97.63 94.69 Ours 98.67 98.23 95.70
+> Gaussian noise Control 95.30 89.35 80.64 Ours 96.64 92.38 85.12
+
+tion rather than a central claim, since the operator is defined for our teacher-student residual and the paper’s results rest on the within-framework evaluations. Its value is to delin-eate where the mechanism transfers and why. The operator assumes that a detector’s per-patch residual carries a low-rank nuisance component that a small set of clean-normal interventions can estimate, and this assumption predicts the outcome across detectors. We apply the same projection to the features of five established methods, with 𝑑 =0 the unmodified detector evaluated in our pipeline so that the control and operated arms are directly comparable. Tab. 17 reports the full seven-metric sweep. On the two reconstruction detectors, whose residual is ex-actly of this form, the operator helps cleanly and monotoni-cally: ReContrast[17] improves on all seven metrics at 𝑑 =64 (image AUROC +1.2, AUPRO +3.5), and RD4AD[13] im-proves six of seven (image AUROC +1.8, image 𝐹 1-max flat). The remaining detectors depart from the assump-tion in specific, identifiable ways, and the results track those departures rather than contradicting the mechanism. PatchCore[31] scores by nearest-normal distance rather than a reconstruction residual, so its already-strong pixel maps carry little low-rank nuisance structure to remove: detection still improves at a moderate rank (image AUROC +1.5 at 
+
+𝑑 =16) while the pixel scores erode as 𝑑 grows, so a mod-erate 𝑑 is preferable. GLASS[7] is trained against synthetic outliers, so its features encode a learned decision boundary rather than clean-normal statistics, which our clean-normal interventions only partially match, giving a non-monotone 15 sweep whose pixel metrics still improve (pixel AUROC 
+
++4.3, pixel AP +2.6 at 𝑑 =32). UniAD[37] is trained jointly over all classes and therefore does not expose a per-object nuisance subspace at all, so our per-object estimate is mis-applied and removal degrades it monotonically (image AU-ROC 56 .0 → 51 .9). This last case is a structural mismatch anticipated by the mechanism, not a counterexample to it. Taken together with the backbone study, these results indi-cate that the nuisance-subspace idea transfers to detectors whose residual reflects per-object clean-normal statistics. 
+
+## E. Full Qualitative Result and Visualization 
+
+Tables 18 to 20 provide the full per-category results un-derlying the main-text means for the complete model with top-1% image aggregation. Each row reports image-level AUROC, AP, and 𝐹 1-max, and pixel-level AUROC, AP, 
+
+𝐹 1-max, and AUPRO. MVTec-AD uses the 224-pixel con-figuration; Real-IAD uses 448 pixels; and VisA estimates the basis at 224 and evaluates at 448. MVTec-AD detection is near-saturated, with eight of fifteen categories reaching perfect image AUROC; variation instead appears in pixel metrics, particularly for thin or low-contrast defects in screw, grid, and toothbrush. VisA shows a similar pattern, with the small-defect macaroni categories remaining hardest. Real-IAD is substantially harder: multi-view acquisition lowers mean image AUROC to 91 .5, while high pixel AUROC in-dicates that defects remain localizable once detected. Figure 5 visualizes the operator on AeBAD-S under real illumination (left) and background shifts (right). These are genuine capture conditions rather than applied perturbations, and the same subspace, estimated once from both inter-vention families, is used throughout. The top half shows anomalous examples from the four defect classes—ablation, breakdown, fracture, and groove. The bottom half shows normal images scored near or above the control population mean; projection suppresses their acquisition-induced re-sponse so they are no longer flagged. Each triplet contains the input, control map without projection, and our full-𝑉 
+
+projection. Jet overlays mark anomaly intensity, with green contours indicating defects. The same behavior persists under controlled synthetic shifts. Figure 6 applies brightness, contrast, defocus blur, and Gaussian noise to VisA at severity 3, following the defects-over-normals layout of Fig. 5. Because corruptions are test-only and both the basis and normalization come from clean training data, this setting isolates acquisition shift. On anomalies, corruption drives the control response across the object and collapses localization — the operator removes this response and recovers the defect. On normals, it suppresses false activations and returns image-level score toward the normal population. Brightness and contrast are in-family, whereas defocus blur and Gaussian noise are held out, confirming generalization beyond modeled shifts. 16 Table 17. Operator as a plug-in on five base detectors on AeBAD-S (mean over four domains). The operator projects out a 𝑑 -per-family nuisance subspace from each detector, with 𝑑 =0 denoting the unmodified detector. 𝐹 1 denotes 𝐹 1-max. The best value for each detector and metric is shown in bold. Image-level Pixel-level Detector 𝑑 I-AUROC I-AP I-𝐹 1 P-AUROC P-AP P-𝐹 1 AUPRO RD4AD [13] 0 81.08 91.27 87.60 91.13 8.94 13.04 84.76 8 81.97 91.51 87.85 90.79 8.62 13.30 82.38 16 82.52 91.80 88.09 91.29 9.04 13.43 84.01 32 82.67 91.91 87.67 91.47 9.36 13.50 84.77 64 82.84 92.04 87.65 91.66 9.41 13.48 85.14 
+
+ReContrast [17] 0 76.25 88.70 86.10 90.66 8.06 12.98 83.78 8 76.69 88.64 86.59 90.33 8.40 13.76 80.56 16 76.86 88.72 86.28 90.83 8.41 13.46 82.71 32 76.97 88.71 86.61 91.62 8.88 13.60 85.23 64 77.48 89.02 86.88 92.30 9.28 13.52 87.24 
+
+PatchCore [31] 0 68.52 83.70 84.29 93.49 12.96 20.18 85.82 
+
+8 69.39 84.26 84.46 93.50 12.38 18.91 85.56 16 70.02 84.69 84.49 93.40 11.78 18.08 85.38 32 69.54 84.31 84.36 93.32 10.83 16.82 84.88 64 67.72 83.65 84.49 92.93 9.78 15.15 83.71 GLASS [7] 0 64.84 80.52 83.55 89.71 10.31 18.55 82.51 8 66.23 82.16 84.31 88.50 10.89 17.82 76.39 16 66.38 81.58 84.20 93.26 12.47 18.96 78.39 32 61.62 80.20 83.78 93.99 12.89 18.79 83.05 64 61.99 80.49 83.25 92.27 9.64 15.20 83.95 
+
+UniAD [37] 0 56.02 74.51 83.37 94.77 8.29 14.63 83.80 
+
+8 56.48 74.95 83.29 94.24 8.06 14.55 83.69 16 55.98 74.11 83.26 94.15 7.76 14.33 83.26 32 54.65 73.14 83.28 93.83 6.94 13.17 82.77 64 51.94 71.43 83.17 93.48 6.43 11.89 82.30 
+
+17 Table 18. Per-category results on MVTec-AD. Mean in bold. Image-level Pixel-level Category AUROC AP 𝐹 1 AUROC AP 𝐹 1 AUPRO bottle 100.00 100.00 100.00 98.50 80.88 76.44 95.72 cable 97.86 98.81 94.51 96.42 53.29 60.37 87.91 capsule 97.17 99.44 96.33 98.44 43.66 47.15 95.01 carpet 100.00 100.00 100.00 99.28 69.66 66.88 97.46 grid 99.84 99.94 99.12 98.59 33.31 38.52 94.41 hazelnut 100.00 100.00 100.00 98.66 57.86 64.15 94.38 leather 100.00 100.00 100.00 99.04 42.96 44.49 98.56 metal nut 100.00 100.00 100.00 97.25 79.22 81.61 88.55 pill 97.41 99.55 96.75 97.68 70.50 64.79 96.01 screw 96.84 98.83 95.76 99.17 31.07 38.74 96.90 tile 99.06 99.70 98.20 96.61 63.13 67.14 89.71 toothbrush 100.00 100.00 100.00 98.18 36.00 51.26 89.74 transistor 98.67 97.94 93.98 92.81 59.29 55.93 80.49 wood 98.86 99.66 96.67 95.86 60.49 60.95 90.45 zipper 99.87 99.97 99.16 98.40 58.99 60.08 94.86 
+
+Mean 99.04 99.59 98.03 97.66 56.02 58.57 92.68 
+
+Table 19. Per-category results on VisA. Mean in bold. Image-level Pixel-level Category AUROC AP 𝐹 1 AUROC AP 𝐹 1 AUPRO candle 98.73 98.96 94.63 99.45 33.97 43.99 97.08 capsules 99.27 99.51 98.10 98.43 43.55 49.47 96.67 cashew 98.20 99.15 96.32 97.56 47.64 50.38 97.06 chewinggum 99.20 99.63 97.26 99.54 64.06 64.90 95.63 fryum 99.72 99.88 99.50 95.56 39.61 47.01 94.65 macaroni1 98.41 98.15 94.83 99.78 26.28 31.87 97.64 macaroni2 95.41 94.94 89.20 99.68 14.01 21.39 98.12 pcb1 98.91 98.94 96.55 99.63 76.10 74.11 95.97 pcb2 98.93 98.96 95.68 98.57 27.41 37.25 92.82 pcb3 99.80 99.77 97.98 98.49 43.24 50.16 95.65 pcb4 99.90 99.90 98.62 97.54 39.35 44.99 90.57 pipe fryum 99.88 99.94 99.00 98.86 48.12 56.93 97.81 
+
+Mean 98.86 98.98 96.47 98.59 41.94 47.70 95.81 
+
+18 Table 20. Per-category results on Real-IAD. Mean in bold. Image-level Pixel-level Category AUROC AP 𝐹 1 AUROC AP 𝐹 1 AUPRO audiojack 88.73 84.96 73.82 99.39 50.77 53.37 94.39 bottle cap 90.82 88.62 81.14 99.84 38.22 41.64 98.87 button battery 85.65 88.84 80.57 99.14 51.08 53.11 94.28 end cap 85.22 86.81 82.34 98.77 20.56 27.94 95.39 eraser 94.08 92.64 83.72 99.82 47.18 49.41 98.68 fire hood 92.40 88.17 80.48 99.69 47.05 50.08 97.87 mint 84.19 85.08 75.35 98.84 25.39 33.22 91.34 mounts 86.54 70.33 77.11 99.56 35.49 38.81 97.28 pcb 92.96 95.64 88.16 99.61 55.80 57.69 96.36 phone battery 94.23 92.72 84.57 99.79 53.60 54.55 98.00 plastic nut 92.07 86.73 78.04 99.78 41.37 43.55 98.53 plastic plug 91.80 88.92 79.74 99.68 33.78 38.02 98.63 porcelain doll 92.17 87.09 78.51 99.69 37.57 42.16 98.16 regulator 89.11 81.69 72.19 99.51 33.20 43.45 96.15 rolled strip base 99.07 99.48 97.37 99.86 48.05 55.96 99.61 sim card set 97.79 98.07 93.36 99.73 61.06 57.83 97.06 switch 96.96 97.64 91.66 97.60 54.56 59.25 95.79 tape 97.63 96.45 90.35 99.79 48.75 51.72 98.55 terminalblock 96.86 97.60 90.95 99.86 51.84 52.79 99.46 toothbrush 86.17 89.33 79.64 96.45 28.08 35.39 87.92 toy 87.74 91.49 82.73 93.34 25.29 34.31 89.13 toy brick 82.98 80.65 71.59 97.90 35.42 42.19 90.06 transistor1 96.73 97.79 92.12 99.49 43.74 49.83 97.41 u block 92.45 89.78 80.53 99.71 51.44 55.28 97.56 usb 94.87 94.22 87.63 99.58 39.77 43.51 98.43 usb adaptor 86.52 81.93 75.58 99.69 26.98 33.08 97.57 vcpill 93.82 92.97 84.42 99.24 64.73 66.31 94.59 wooden beads 90.43 89.65 80.40 99.32 46.79 49.96 94.07 woodstick 86.76 76.74 70.04 99.31 52.49 54.12 93.40 zipper 99.41 99.66 96.93 99.27 53.39 58.74 97.55 
+
+Mean 91.54 89.72 82.70 99.11 43.45 47.58 96.07 
+
+19 ablation PRO 0.78  → 0.90 P-AUROC 0.93  → 0.96  Input Control Ours 
+
+> ablation PRO 0.63  → 0.72 P-AUROC 0.92  → 0.93
+
+Input Control Ours 
+
+> breakdown PRO 0.74  → 0.77 P-AUROC 0.92  → 0.93
+> breakdown PRO 0.96  → 0.98 P-AUROC 0.99  → 0.99
+> fracture PRO 0.58  → 0.80 P-AUROC 0.88  → 0.94
+> fracture PRO 0.64  → 0.82 P-AUROC 0.89  → 0.94
+> groove PRO 0.75  → 0.86 P-AUROC 0.96  → 0.97
+> groove PRO 0.78  → 0.86 P-AUROC 0.94  → 0.96
+> normal
+> normal
+> normal
+> normal
+> normal
+> normal
+> normal
+> normal
+> defects normals
+
+Figure 5. Qualitative results on AeBAD-S under real illumination (left three) and background shifts (right three). Defective (top) and normal (bottom) examples are separated by the dotted line. Each triplet shows the input, control map without projection, and our map after full-𝑉 projection. Maps are overlaid using the jet colormap; green contours mark ground-truth defects, and annotations report per-example metrics from control to ours. On defective images, our operator suppresses shift-induced responses and concentrates activation on the true defect, improving PRO and pixel AUROC. On normal images, where any activation is a false positive, it produces cooler maps and moves the image-level 𝑧 -score back toward the normal population, preventing false alarms. 
+
+20 brightness: pcb3 PRO 0.32  → 0.80 P-AUROC 0.87  → 0.98  Input Control Ours 
+
+> brightness: pcb2 PRO 0.26  → 0.64 P-AUROC 0.79  → 0.90
+
+Input Control Ours 
+
+> contrast: pcb1 PRO 0.01  → 0.74 P-AUROC 0.68  → 0.93
+> contrast: candle PRO 0.29  → 0.90 P-AUROC 0.78  → 0.97
+> defocus_blur: cashew PRO 0.00  → 0.52 P-AUROC 0.46  → 0.86
+> defocus_blur: pcb2 PRO 0.41  → 0.82 P-AUROC 0.99  → 1.00
+> gaussian_noise: pcb1 PRO 0.01  → 0.48 P-AUROC 0.54  → 0.84
+> gaussian_noise: cashew PRO 0.34  → 0.81 P-AUROC 0.80  → 0.94
+> brightness: macaroni2
+> brightness: pcb3
+> contrast: candle
+> contrast: cashew
+> defocus_blur: macaroni1
+> defocus_blur: pcb1
+> gaussian_noise: pcb2
+> gaussian_noise: capsules
+> defects normals
+
+Figure 6. Anomaly maps on corrupted VisA (VisA-C) under four ImageNet-C corruptions at severity 3, using the defects-over-normals layout of Fig. 5. On defects (top, green contour), the corruptions make the control respond across the object and collapse localization, whereas our operator recovers the defect and improves per-image PRO and pixel AUROC. On normals (bottom), the control fires without defects, while the annotated image-level 𝑧 -score shows our operator returning each false alarm toward normal. Gains on in-family brightness and contrast and held-out defocus blur and Gaussian noise confirm generalization beyond the modeled shifts. 
+
+21

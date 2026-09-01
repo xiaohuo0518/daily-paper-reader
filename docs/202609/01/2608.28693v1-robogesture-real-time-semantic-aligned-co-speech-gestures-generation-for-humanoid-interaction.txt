@@ -1,0 +1,927 @@
+Title: RoboGesture: Real-Time Semantic-aligned Co-Speech Gestures Generation for Humanoid Interaction
+
+URL Source: https://arxiv.org/pdf/2608.28693v1
+
+Published Time: Tue, 01 Sep 2026 00:04:14 GMT
+
+Number of Pages: 27
+
+Markdown Content:
+# RoboGesture: Real-Time Semantic-aligned Co-Speech Gestures Generation for Humanoid Interaction 
+
+Zifan Wang 1,2,∗, Ziang Ren 2,3,∗, Pengyang Shi 1,2,∗, Zirui Wang 4, Chenghuai Lin 2, Tianze Wang 2, Zekun Qi 1,2,
+
+Liangliang Zhao 4, He Wang 2,5, Li Yi 1,2,6,†
+
+> 1
+
+Tsinghua University 2Galbot Inc. 3Beijing Institute of Technology 4Harbin Institute of Technology 5Peking University 6Shanghai Qi Zhi Institute 
+
+> ∗
+
+Equal contribution , †Corresponding author Enabling humanoid robots to respond to human speech with synchronized and semantically meaningful gestures is fundamental to natural human-robot interaction. However, this task faces three critical barriers: the scarcity of semantically rich datasets, the “modality eclipse” where models ignore audio cues in favor of kinematic inertia, and the sim-to-real gap regarding physical safety. We propose RoboGesture, a robot-centric framework that co-designs data, modeling, and control to power a complete interactive human–humanoid system in which the robot listens, responds, and gestures in real time. We first establish the RoboGesture dataset featuring over 300 gesture categories and develop an automated pipeline to synthesize large-scale collision-free, robot-specific audio–motion pairs. Our architecture features a Hierarchical Semantic-Acoustic Aligner that extracts multi-granular prosodic and semantic cues directly from raw audio tokens. These cues drive a Streaming Conditional Motion Generator based on a diffusion transformer with conditional flow matching. To ensure high responsiveness, we introduce Anti-Inertia CFG Masking, which prevents the model from collapsing into repetitive historical patterns by compelling it to proactively mine control signals from the audio modality. Finally, an MPC-based safety filter ensures real-time, collision-free execution on physical hardware. Experiments on a Unitree G1 humanoid demonstrate that RoboGesture generates safer, more rhythmic, and more semantically appropriate responses compared to state-of-the-art baselines. 
+
+Date: September 1, 2026 
+
+Project Page: https://RoboGesture.github.io RoboGesture 
+
+Motion  
+
+> Semantic-Acoustic Aligner Motion Generator
+
+··· 
+
+> Speech Tokenizer
+
+Speech-LLM 
+
+User Speech 
+
+Co-Speech Generation 
+
+Social Interaction 
+
+Figure 1 RoboGesture generates expressive, semantically aligned, and safety-aware humanoid co-speech gestures from streaming speech for real-time social interaction. arXiv:2608.28693v1 [cs.RO] 27 Aug 2026 1 Introduction 
+
+The ability of a humanoid robot to listen to human speech and respond with synchronized, semantically meaningful audio and body motion lies at the heart of natural human-robot interaction (HRI). Such ca-pability elevates robots from mere tools to genuine partners in assistive care, education, and collabo-ration. This work pursues a complete system that endows a humanoid with expressive, embodiment-safe, and real-time audio-motion responses—making face-to-face conversation with machines not only pos-sible but intuitive and engaging. Realizing this vision, however, confronts three en-trenched barriers. First, the scarcity of large-scale, semantically rich audio-motion datasets with fine-grained annotations [23, 15] limits models’ capac-ity to establish semantic alignment between speech and gestures. Existing methods therefore resort to post-processing heuristics or text-based intermediate representations [45, 50, 51], yet these compromises inherently sacrifice semantic and temporal coherence in the generated motion. Second, these limitations become critically exacerbated in online generation settings: without explicit modeling of audio seman-tics and controllable generation mechanisms, models tend to collapse into motion shortcuts—excessively replicating historical motion patterns rather than responding to incoming acoustic cues. Third, the sim-to-real gap between virtual avatars and physical humanoids remains substantial. Directly retargeting generated human motions to humanoid robots via online retargeting and PD control often yields un-stable, unsafe behaviors, including jerky trajectories and self-collisions. In this work, we aim to design a robot-centric, data-model co-designed framework by tackling the above challenges. As shown in Figure 1, we present a com-prehensive solution that enables real-time , semanti-cally aligned , and safety-aware humanoid co-speech gesture synthesis in an end-to-end manner , and serves as the motion core of a complete interactive hu-man–humanoid system in which the robot listens, responds, and gestures. To address the scarcity of large-scale, tightly aligned audio-motion data, we build a large-scale, semanti-cally rich dataset by capturing a library of expressive body and hand gestures guided by an established gesture taxonomy. We then develop an automatic synthesis pipeline to generate vast quantities of paired audio and motion sequences. Critically, this pipeline incorporates an offline motion retargeting step to map all human motions to our target humanoid’s kinemat-ics, followed by an MPC-based filter that vets the entire dataset to remove any potential self-collisions. This process yields a clean, extensive, and inherently safe training corpus of robot-specific motions. To better capture temporal alignment between raw audio and semantics, we develop a hierarchical semantic-acoustic aligner. Unlike text-based meth-ods that lose vital prosodic cues like intonation and emphasis, our aligner processes raw audio through a multi-level transformer architecture. By decoupling audio into streaming low-level rhythmic pulses and high-level semantic labels, the aligner is able to ex-tract "pre-phonetic" anticipatory signals—such as the body’s energy accumulation before a shout—ensuring the robot’s movements are synchronized with both the beat and the intent of the speech. To ensure these cues effectively drive the robot and prevent it from collapsing into history motion short-cut, we develop a streaming conditional motion gen-erator. We observe that models often "cheat" by relying excessively on past kinematic inertia, effec-tively ignoring the weaker audio and semantic guid-ance. To break this dependency, we introduce a two-stage training strategy with anti-inertia masking, which randomly masks historical context to compel the diffusion-based motion generator to proactively mine control signals from the audio modality. By integrating FiLM for global semantic tone and Cross-Attention for local rhythmic alignment, our frame-work enables seamless, end-to-end streaming from raw audio to safe, high-fidelity robot trajectories. We validate our framework through extensive quan-titative metrics and qualitative user studies focus-ing on motion quality, synchrony, naturalness, and safety. Furthermore, we demonstrate the system’s efficacy through real-world social interactions on a physical humanoid robot. Our approach consis-tently generates behaviors with superior semantic and rhythmic alignment compared to existing base-lines. Our contributions are:(1) A robot-centric, data-model co-designed framework for an interac-tive human–humanoid system that enables end-to-end, streaming generation of real-time, semantically aligned, and safety-aware co-speech gestures, and that we deploy as a complete listen–respond–gesture loop on a physical humanoid. (2) A robust data synthe-sis pipeline that produces a large-scale, semantically rich, and collision-free training corpus by mapping expressive human gestures to robot-specific kinemat-ics. (3) A continuous audio-driven motion policy to ensure tight temporal synchronization and prevent the model from collapsing into repetitive historical motion patterns. 2 Related Works 
+
+2.1 Human-Humanoid Social Interaction 
+
+Social interactions between humans and humanoid robots have gained increasing attention [26, 12, 14, 36, 38, 37, 8], driven by advances in both robotic embodiment and social intelligence modeling. Many works [17, 6, 3, 41] have addressed social interaction problems through virtual avatars. For instance, SO-LAMI [17] enables immersive interaction with 3D autonomous characters and aspires to bridge toward robotic embodiments. However, a significant domain gap exists between avatar environments and real robots. From the embodiment perspective, physi-cal humanoids face hardware, safety, and real-time constraints, whereas virtual-avatar environments do not suffer from these limitations. A core challenge in this direction is retargeting human motions to humanoid robots: classical pipelines [42] first learn models in human representation and then retarget to the robot, or learns human-to-robot mappings directly [25]. Despite progress in high-fidelity retar-geting [4, 40], balancing real-time performance, fine-grained gesture detail, and safety remains difficult in social scenarios. Motivated by these limitations, we instead learn directly in the robot’s representa-tion, addressing cross-embodiment alignment as a pre-processing rather than post-processing problem. For social intelligence modeling on real-world robots, traditional systems rely on rule-based or policy-structured controllers, including behavior trees and hand-crafted preconditions [5, 34, 35]. While inter-pretable, such pipelines struggle to capture the open-ended complexity of real social behavior, and often decouple modalities—such as speech and gesture that humans naturally coordinate. In contrast, we develop a multimodal end-to-end model trained directly in robot space, enabling natural, coherent social inter-action on a real humanoid platform. 
+
+2.2 Co-speech Gesture Generation 
+
+Gestures are integral nonverbal and non-manipulative body movements that enhance human communica-tion [27]. Research in co-speech gesture generation has transitioned from early rule-based [18] and statis-tical machine learning methods [19] to modern deep learning frameworks [24, 9, 43, 46, 48, 47, 10], fu-eled by the availability of large-scale audio-gesture datasets [23, 15]. As summarized in Table 1, re-cent efforts prioritize bridging gestures with lin-guistic content through diverse alignment strategies. LivelySpeaker [51] utilizes CLIP [33] to fuse rhyth-mic and semantic cues, yet it often fails to maintain semantic consistency. DiffSHEG [9] employs global semantic descriptors for alignment but lacks the pre-cision required for fine-grained contexts. While Se-mantic Gesticulator [50] achieves high-fidelity seman-tic correspondence via LLM-based retrieval, its de-pendence on post-hoc alignment hinders real-time streaming applications. Similarly, SemGes [24] in-troduces coherence and relevance losses to ground semantics; however, its performance is constrained by sparse semantic annotations. SemTalk [45] attempts to decouple general and sparse motions, but its re-liance on text-based features makes capturing precise temporal alignment with audio cues challenging. To address these limitations, we propose an automatic, semi-synthetic data generation pipeline coupled with a two-stage training strategy. Our approach enables end-to-end synchronization between speech and ex-pressive gestures by learning semantic cues directly from audio. This text-free design inherently supports low-latency streaming settings while ensuring robust cross-modal alignment. 
+
+# 3 Method 
+
+The primary objective of this work is to achieve  
+
+> real-time, semantically aligned, and safety-aware
+
+co-speech gesture generation that drives an interactive human–humanoid system on physical hardware. Our framework operates within a streaming-to-streaming paradigm: it processes incoming audio chunks and generates corresponding motions in real-time. This architecture ensures seamless integration with high-performance streaming Large Language Models and audio feeds, thereby facilitating natural human-robot social interaction. For the physical embodiment, we employ the Unitree G1 humanoid robot integrated with BrainCo dexterous hands. Our motion gener-ation focuses on upper-body dynamics, utilizing a kinematic state space of 41 degrees of freedom (DoFs): 17 DoFs for the upper torso and arms, and 24 DoFs for the dexterous hands. This configuration provides the requisite mechanical flexibility for generating ex-pressive, human-like gestures. Our solution is a two-stage training framework struc-tured into three core modules as shown in Figure 2: (i) a hierarchical semantic-acoustic aligner, (ii) a streaming conditional motion generator, and (iii) an MPC-based kinematic safety filter. Once trained, the framework enables seamless, end-to-end streaming from raw audio to robot trajectories. Section 3.1, 3.2 and 3.3 describe the architectural details, while Section 3.4 outlines the training objectives. Table 1 Comparison with related methods. Streaming : whether the model has a design for streaming support. Semantics :whether the model focuses on modeling special semantic gestures. Text-free : whether the model works without text as input or intermediate modality. Hand : whether hand modeling is considered. Motion : motion generation approach.                               
+
+> Model Streaming? Semantics? Text-free? Hand? Motion?
+> LivelySpeaker [51] ✗✓✗✗Continuous DiffSHEG [9] ✓✗✓✓Continuous Semantic Gesticulator [50] ✗✓✗✓Discrete SemTalk [45] ✗✓✗✓Discrete
+> Ours ✓✓✓✓Continuous
+
+3.1 Hierarchical Semantic-Acoustic Aligner 
+
+While recent approaches attempt to extract se-mantic cues from intermediate modalities such as text [45, 50, 51], they often struggle to achieve pre-cise temporal alignment between motion and subtle acoustic nuances. On one hand, converting audio to text inevitably leads to the loss of essential prosodic information, such as intonation and emphasis. For example, the word ’Really’ conveys skepticism with a rising intonation but confirmation with a falling one—crucial distinctions embedded in raw audio that text-based methods fail to capture. On the other hand, co-speech gestures often exhibit pre-phonetic anticipation; for example, before articulating an em-phatic verb like ’Stop!’, the body typically initiates energy accumulation, such as leaning back or rais-ing a hand. Such preparatory signals are hidden in the subtle acoustic precursors immediately preceding vocalization. To address these limitations, we pro-pose to fully leverage multi-granular audio features through a semantic-acoustic aligner. To get multi-level acoustic features, we utilize the Mimi codec [13] to tokenize the streaming audio. Unlike traditional codecs, Mimi explicitly decouples audio chunks into a hierarchical representation: the first quantizer provides high-level semantic tokens; while the subsequent residual quantizers capture fine-grained acoustic details such as prosody and intona-tion. To harness these multi-granular cues, we introduce a transformer-based semantic-acoustic aligner opti-mized via multi-task auxiliary learning. Shallow lay-ers are designed to capture rapid acoustic energy transients. We extract low-level features from these layers and route them to a beat head for auxiliary rhythmic supervision. This ensures the generated motion is precisely synchronized with acoustic onsets. Conversely, deep layers distill macroscopic semantics via a 300-class discrete classification task powered by RoboGesture dataset in Section 4. By process-ing high-level features through a semantic head, the architecture acts as an information bottleneck, com-pressing acoustic nuances into actionable tokens that retain prosodic accuracy often lost in raw text. Ultimately, this hierarchical disentanglement allows the aligner to provide distinct yet complementary control signals. The low-level rhythmic pulses and high-level semantic labels work in tandem to guide the downstream motion generator. 
+
+3.2 Streaming Conditional Motion Generator 
+
+Existing Motion Tokenizer + Autoregressive (AR) 
+
+frameworks often struggle to capture high-fidelity kinematics, as discrete tokens lack the precision re-quired for expressive hand gestures. Furthermore, AR models are prone to recursive error accumula-tion, compromising long-term semantic coherence. To overcome these limitations, we employ a Diffusion Transformer (DiT)[30] operating in a continuous state space, parameterized by Conditional Flow Matching (CFM)[22]. However, a critical challenge in this pipeline is the modality eclipse: the generator may rely excessively on historical kinematic inertia, producing motions that are plausible but audio-unaware. To ensure the gestures remain strictly driven by the streaming au-dio while maintaining physical continuity, we propose a dual condition injection mechanism: (1) Framewise Micro-alignment: We utilize cross-attention to fuse multi-scale acoustic cues with historical motion con-text. In this process, the shallow features that capture rhythmic transients and the deep features that pro-vide local semantic guidance are extracted from the aligner. These multi-level sequences, alongside the 
+
+Past Motion chunk, are projected as Key-Value pairs. By explicitly injecting the historical kinematic state and granular acoustic signals through the attention mechanism, the model ensures seamless transitions and precise temporal synchronization across consecu-tive generation windows. (2) Global Macro-modulation: 
+
+In contrast, the highly compressed semantic instruc-tions derived from the aligner serve as macroscopic behavioral baselines. To prevent these global intents from being overshadowed by local kinematic noise, we employ Feature-wise Linear Modulation (FiLM) [31]. FiLM applies affine transformations to the DiT’s in-Audio Tokenizer 
+
+> Speech Signal
+> RVQ Audio Tokens
+> Shallow Features
+> Deep Features
+
+Motion Generator   
+
+> History Motion
+> FiLM
+> Cross
+> attention
+> Cross
+> attention
+> Noisy
+> Latent
+> Motion
+> Semantic Classification Loss
+> ℒBEAT
+> ℋlow
+> ℋhigh
+> 𝑣 𝜃 𝑋 𝑡 , 𝑡, 𝑐 ℒCE
+> ⨂
+> Auxiliary Rhythmic Loss
+> ℒkin
+> Past Context Curren Context
+
+Semantic-Acoustic 
+
+Aligner 
+
+> Shallow Features
+> Deep Features
+
+Semantic-Acoustic 
+
+Aligner     
+
+> ℒvel
+> ℒCE
+> ℒCE
+> ℒBEAT
+> Kinetic-Aware Flow Matching Loss ℒvel ℒkin
+> Beat Head
+> Semantic Head Semantic Head
+> (a) Hierarchical Aligner Pre-training (b) Joint Audio-to-Motion Training (c) Streaming Real-World Deployment
+> TTS
+> MPC Safety Filter
+> Human
+> Speech
+> ASR
+> Humanoid Robot + Dexterous Hands
+> Response
+> Audio Chunks
+> RoboGesture streaming policy
+> LLM
+> Audio Tokenizer
+> MPC filter
+> Aligner Generator
+
+Figure 2 Overview of RoboGesture. (a) The Semantic-Acoustic Aligner is pre-trained to decouple multi-granular audio cues from streaming tokens. (b) The Motion Generator synthesizes motions via Conditional Flow Matching, jointly conditioned on hierarchical audio features and historical motion to maintain autoregressive consistency. (c) During inference, the pipeline seamlessly integrates with upstream Speech-LLMs and employs a safety filter to drive physical humanoid robots in real-time. 
+
+termediate feature maps, robustly establishing the overarching emotional and semantic tone without interfering with intricate local alignments. 
+
+3.3 MPC-based Collision-avoidance Filter 
+
+While training our framework directly within the robot’s action space significantly mitigates the arti-facts typical of manual retargeting, the stochastic nature of generative models cannot inherently guar-antee absolute physical safety. To ensure collision-free and physically feasible deploy-ment, we pass the synthesized motion chunks through an MPC-based optimization module in the inference time. This module acts as a safety filter by solving a constrained optimization problem in real-time. It enforces collision constraints together with velocity and position tracking constraints, which we cast as a convex quadratic program with velocity, trajectory-tracking, and smoothing costs, solved per frame with OSQP in a streaming manner. This filter reduces the self-collision frame ratio of the generated motions from 4.16% to 0.13%. We provide the full formulation and statistics in the supplementary material. 
+
+3.4 Training Recipes and Objectives 
+
+To develop a robust aligner and a highly responsive motion generator, we adopt a hierarchical two-stage training strategy as shown in Figure 2(a)(b). Specifi-cally, we define a temporal horizon of T = 30 frames for each one-second action chunk, operating in a robot action space of D = 41 dimensions. To incorporate sufficient context, we introduce a historical window of Thist = 2 T frames. 
+
+3.4.1 Stage 1: Representation Disentanglement Pre-training 
+
+In the initial stage, the DiT generator remains frozen. We exclusively optimize the aligner using 1,000 hours of semantic-annotated chunk-level semi-synthetic data, as detailed in Section 4. To cap-ture temporal context, the input consists of a 3T -frame audio window, comprising the current chunk and a historical window. Intermediate features from the shallow layers are routed to a beat head. The rhythmic target Btarget ∈ RT ×2 is a concatenation of the normalized physical velocity magnitude from the ground-truth motion and the acoustic onset strength: 
+
+Btarget = Norm (Resample (∥ ˙q∥2)); 
+
+Norm (Onset (wav ))  (1) where ˙q represents the joint velocities. The deep lay-ers are routed to a semantic head to predict discrete action categories Ytarget . The Stage 1 objective is: 
+
+LStage 1 = λbeat MSE ( ˆB, B target )+ CE ( ˆY , Y target ) (2) where λbeat balances the regression and classification gradients.   
+
+> 3.4.2 Stage 2: Joint Generative Training with CFG Masking
+
+In the second stage, we unfreeze the DiT to jointly optimize motion synthesis and semantic preservation. To balance expressive semantics with rhythmic align-ment, we utilize a composite dataset blending the 1000-hour semantic-centric semi-synthetic data with an upsampled (3 ×) beat-centric dataset (BEAT [23], about 76 hours). To break the “modality eclipse”, we introduce Anti-Inertia CFG Masking: the Past Motion condition is randomly masked with a 15% probability, compelling the network to perform “cold-starts” driven by aligner features. To prevent fine-grained hand kinematics from be-ing submerged, we define a spatial weight Ws ∈ RD
+
+(whand = 4 .0 for hand joints) and a temporal weight 
+
+Wt ∈ RT (wf rame ∈ { 5, 10 } for frames within se-mantic intervals). The core generative process is supervised by a spatio-temporally weighted Velocity Matching Loss: 
+
+Lvel = Eτ,M 1,M 0
+
+" TX
+
+> t=1
+> D
+
+X
+
+> d=1
+
+W (t) 
+
+> t
+
+W (d)
+
+> s
+
+·
+
+
+
+vθ (Mτ , τ, C )(t,d ) − (M1 − M0)(t,d )2
+
+#
+
+(3) where τ ∼ U (0 , 1) is the flow matching time step, 
+
+M0 ∼ N (0 , I ) is the standard Gaussian noise, M1
+
+is the target motion, and Mτ = (1 − τ )M0 + τ M 1
+
+is the intermediate interpolated state. To suppress high-frequency jittering, we explicitly penalize the first-order temporal difference. Using a single-step Euler approximation ˆM1 = Mτ + (1 − τ )vθ (Mτ , τ, C ),we introduce a Kinetic Consistency Loss ( Lkin ): 
+
+Lkin = Eτ,M 1,M 0
+
+" T −1X
+
+> t=1
+> D
+
+X
+
+> d=1
+
+¯W (t) 
+
+> t
+
+W (d)
+
+> s
+
+·
+
+
+
+∆ ˆM (t,d )1 − ∆M (t,d )1
+
+2
+
+# (4) where ∆M (t) = M (t+1) − M (t) denotes the inter-frame displacement, and ¯W (t) 
+
+> t
+
+is the averaged tempo-ral weight of adjacent frames. Ultimately, the final joint objective for Stage 2 is: 
+
+LStage 2 = Lvel + λkin Lkin 
+
++ λsem CE ( ˆY , Y target ) (5) where λkin and λsem are hyper-parameters that bal-ance the trade-off. 
+
+# 4 Automatic Semi-Synthetic Data Generation 
+
+The size and quality of paired audio-motion data are critical for training multimodal models. Re-cent studies [50, 24, 9] typically rely on the BEAT dataset [23] which contains about 76 h of motion-capture recordings. While BEAT is excellent for rhythm-synchronous learning, gestures that convey explicit semantics are extremely sparse, lying in the long-tail of natural human motion. Semantic Ges-ticulator [50] alleviates this issue through the SeG dataset, a curated collection of more than 200 seman-tic gesture classes. However, SeG still omits many everyday scenarios and contains interpenetration arti-facts, which limits its suitability for real-world robot motion synthesis. To address these limitations, we introduce an auto-matic semi-synthetic data generation pipeline that expands the scale and improves the quality of seman-tic gesture data paired with speech and text. Notably, the whole data generation pipeline is designed on hu-manoid motion representations, generating smooth and collision-free humanoid motions for native sup-port of humanoid control. 
+
+4.1 Retargeting and Collision-Avoidance 
+
+To obtain robot data that is feasible in the real world, two issues are central: transferring human motion to the robot while preserving accurate human-likeness, and ensuring that the transferred motions remain collision-free and executable for safe operation. For accuracy, we use enhanced GMR [44] and Dex-Retargeting [32] to retarget body and hand mo-tions to a G1 humanoid equipped with a customized BrainCo hand. We can handle human motions origi-nating from different skeletal structures and enable accurate transfer of full-body and hand kinematics. For collision avoidance, we adopt the MPC-based filter in Section 3.3 to clean the data. 
+
+4.2 RoboGesture Dataset 
+
+As shown in Figure 3, we build RoboGesture, a high-quality semantic gesture dataset for humanoid robots comprising over 300 gesture categories. The class list is derived from SeG [50] and EgoGesture [49, 7] templates and expanded through user questionnaires. Each gesture is recorded with a marker-based motion capture system to preserve fine-grained kinematics, and manually annotated with detailed motion de-scriptions and its possible meanings across different scenarios. Each gesture is retargeted and optimized, and then replayed on the physical robot to verify reachabil-ity and control fidelity. The resulting RoboGesture dataset preserves human-like expressiveness while re-maining fully executable on the robot, providing a reliable foundation for downstream gesture synthesis. 
+
+4.3 Semi-Synthetic Data Generation Pipeline 
+
+Based on RoboGesture, our retargeting pipeline and collision-avoidance tools, we generate audio–motion data enriched with semantic gestures. Our synthesis pipeline comprises five stages: (1) Sce-nario Generation: We leverage LLMs [11, 28] to pro-duce diverse daily scenarios and narrative scripts enriched with emotional descriptions. (2) Gesture Tagging: LLMs select semantically appropriate ges-tures from RoboGesture and determine their optimal insertion points, adjusting the wording to ensure nat-ural linguistic integration. (3) Multimodal Synthesis: We generate emotion-aware TTS audio with word-level timestamps alongside rhythmic beat gestures via a model trained on the BEAT dataset. (4) Tem-poral Blending: Following [50, 16], semantic gestures are scheduled to initiate 0.4s before their correspond-ing spoken keywords—mimicking human anticipatory behavior—and are then fused with rhythmic motions using fifth-order interpolation. (5) Safety Optimiza-tion: Finally, we apply collision-avoidance refinement to the blended trajectories. This automated, low-cost pipeline enables the generation of millions of high-quality, semi-synthetic audio-motion pairs across di-verse conversational contexts by simply varying the input prompts or text libraries. 
+
+# 5 Experiments 
+
+To assess gesture quality, we first evaluate on the standard co-speech gesture generation task. This task, typically conducted in simulation, requires the model to produce natural and synchronized gesture motions conditioned on speech and serves as a widely-used benchmark with established metrics. To further evaluate the model’s interactive capabil-ities and potential for real-world deployment, we conduct experiments on a social interaction task in a physical setting. In this task, given an audio in-put, the model is required to generate expressive and physically safe multimodal responses that encompass both audio and motion in a streaming manner. 1. SeG Template 3. New Collection 2. EgoGesture Template     
+
+> Name: ARMS FORM HEART OVERHEAD 3 Details: Both arms are raised above the head with the elbows opened.... Semantics: Affection or fondness (expressing liking, appreciation...), fan interaction (commonly used on... .) ... Duration: 3.533s
+> Annotations
+> Figure 3 Visualization of RoboGesture Dataset.
+
+RoboGes-ture refines the SeG dataset by correcting motion penetra-tion issues (e.g., avoiding arm–body collisions), augments the EgoGesture dataset with full-body motion, and addi-tionally incorporates newly collected ones. Each sample is annotated with detailed semantic labels. 
+
+5.1 Evaluating on Co-speech Gesture Gener-ation 
+
+Datasets. (1) BEAT. The BEAT dataset [23] comprises 76 hours of multimodal recordings from 30 partic-ipants, encompassing speech audio, transcriptions, and high-quality motion capture data. It serves as a standard benchmark for training and evaluating co-speech gesture generation models and includes se-mantic labels for quantitative evaluation. (2) Seman-ticBEAT. The BEAT dataset exhibits limited domain coverage, and its semantic gesture annotations are often vague. These factors render it insufficient for the rigorous evaluation of semantic-aware co-speech gesture generation. To address these limitations, we introduce SemanticBEAT , a new test set comprising 1,000 speech videos compiled from online sources and user surveys. For this dataset, we performed manual temporal annotation of semantic gestures, precisely marking the intervals during which speakers should perform meaningful gestures. 
+
+Baselines. We compare our method with recent state-of-the-art baselines that provide pretrained checkpoints (trained on BEAT). (1) LivelySpeaker 
+
+(ICCV 2023) [51]: generates semantically and rhyth-mically aware gestures using an MLP-based diffusion model. Since it produces fixed-length motion clips (34 frames), we follow the authors’ strategy to smoothly concatenate consecutive clips. (2) Diffsheg (CVPR 2024) [9]: aligns gestures with audio/text using global semantic cues. (3) SemTalk (ICCV 2025) [45]: sepa-rately learn general motions and sparse motions with adaptive fusion. (4) Semantic Gesticulator(SG) (SIG-GRAPH 2024) [50]: first produces rhythmic gestures and then refines semantic gestures via an LLM-based retrieval module. All baseline outputs are originally human motions; thus, we apply meticulous retarget-ing tuned to the robot to ensure a fair comparison of motion quality. We further verify in the supplemen-tary material that re-training representative baselines directly in the robot joint space yields nearly identi-cal results, confirming that our gains stem from the model rather than from retargeting artifacts.   
+
+> 5.1.1 Quantitative Evaluation Metrics.
+
+Following [50, 51, 9, 24], we evaluate our method using five key metrics: (1) Fréchet Gesture Distance (FGD) [43] evaluates the fidelity of generated gestures to the real motion distribution by embed-ding sequences into a latent space via a pre-trained autoencoder. (2) Beat Consistency (BC) [21] quanti-fies speech-motion synchronization by measuring the alignment between audio onsets and motion beats (velocity minima in upper-body joints). (3) Diversity (DIV) [20] assesses the variability of generated motions, computed as the average L1 distance between pairs of 
+
+N generated clips. (4) Collision Rate (Col.) measures the physical plausibility of the motion; we employ GMR [44] to detect self-collisions between the robot’s mesh components. (5) Mean Squared Error (MSE) [41] calculates the average Euclidean distance between the generated joint positions and the ground-truth sequences to measure structural reconstruction accu-racy. Metrics (1)(5) were omitted for SemanticBeat as it is an out-of-domain test set lacking ground truth.  
+
+> Results.
+
+Table 2 demonstrates that our method out-performs baselines across most metrics. We achieve state-of-the-art FGD/BC/MSE on the BEAT bench-mark, indicating superior alignment with the ground-truth distribution and accurate structural recon-struction. Furthermore, our model ensures strict physical plausibility with a near-zero Collision Rate (0.88%/0.13%). While SG yields higher DIV scores, numerical diversity can be artificially inflated by un-stable or jittery motions [9]. Overall, our approach strikes an optimal balance between kinematic real-ism, speech-motion synchronization, and safe gesture diversity. Figure 4 provides the corresponding quali-tative comparison.  
+
+> 5.1.2 Human Evaluation.
+
+To achieve a more comprehensive assessment of semantic-aligned, safe, and human-like motion qual-ities, we conducted a subjective user study based on pairwise comparisons. Following [29, 1, 50], We randomly sampled 20 generated gesture clips for each baseline, yielding a total of 200 comparison pairs. Par-ticipants were asked to evaluate the paired motions across four key dimensions: Rhythmic Alignment, Semantic Accuracy, Physical & Hand Consistency, and Overall Preference . The pairwise responses were then aggregated into merit scores to reflect rela-tive performance. Further details regarding the user study setup and score calculation are provided in the supplementary material.  
+
+> Results.
+
+The subjective evaluation results are sum-marized in Table 3. Our method consistently outper-forms all baselines across all dimensions. Specifically, our model achieves the highest scores in Physical & Hand Consistency, verifying that our approach successfully suppresses high-frequency jittering and generates safer, physically plausible motions. Further-more, our substantial lead in Rhythmic Alignment and Semantic Accuracy demonstrates that our frame-work produces gestures that are not only temporally synchronized with audio beats but also highly con-textually appropriate. Consequently, our method secures the highest Overall Preference, confirming that the generated trajectories are perceived as sig-nificantly more natural and human-like compared to existing baselines. 
+
+5.2 Ablation Study  
+
+> Experimental Setup.
+
+To thoroughly evaluate the con-tribution of each proposed component in our frame-work, we conduct a comprehensive ablation study. We recruited 200 participants to evaluate the gener-ated motions across four key dimensions: Semantic Action Score, Hand Detail Score, Human-likeness & Naturalness, and Beat Matching Score. The quan-titative results of these configurations are reported in Table 4. We group our analysis into three main perspectives: data scale, architecture and strategy, and loss refinement.  
+
+> Data Scale:
+
+The semi-synthetic dataset plays a vi-tal role in our system. Removing it entirely ( Ours w/o Semi-data ) causes a catastrophic drop in SA and HD, as the model loses the ability to generate rich, directionally explicit semantic hand gestures, de-grading to producing merely rhythmic beat motions. Even when trained on a subset ( Ours 1/4 Semi-data ,approx. 250 hours), the overall expressiveness and semantic richness remain noticeably sub-optimal.  
+
+> Architecture & Strategy:
+
+Discarding the past motion context in the cross-attention module ( Ours w/o Con-text Motion ) leads to severe motion discontinuities and jumps, reflected in the lowest HN and BM scores. Removing the FiLM injection ( Ours w/o FiLM Injec-tion ) impairs the model’s expressiveness and semantic accuracy. Furthermore, omitting the semantic clas-sification task ( Ours w/o Semantic Classification )prevents the masked model from explicitly learning semantic cues from audio tokens, resulting in a signif-icant accuracy drop. Classifier-Free Guidance ( Ours w/o CFG ) is also crucial; without it, the model tends to infer motions solely from past states rather than maintaining a balanced integration of cross-modal features. Table 2 Quantitative comparison of our model with other methods on the BEAT and SemanticBEAT datasets. Since the SemanticBEAT dataset does not provide ground-truth motion or semantic annotations, we omit FGD and MSE for this dataset. Best results are shown in bold , and second-best results are underlined.                                                          
+
+> BEAT SemanticBEAT Method FGD ↓BC ↑MSE ↓DIV ↑Col. ↓BC ↑DIV ↑Col. ↓
+> LivelySpeaker [51] 3.0350 0.1811 0.1861 0.1485 21.41 0.2852 0.1384 13.36 DiffSHEG [9] 2.2316 0.1851 0.1753 0.1218 0.85 0.2859 0.1209 1.20 SemTalk [45] 7.9328 0.1828 0.3931 0.1781 52.82 0.2913 0.1440 42.65 Semantic Gesticulator [50] 3.0147 0.1771 0.2375 0.2818 13.11 0.2906 0.2831 13.84 Ours 0.8452 0.1866 0.1347 0.2075 0.88 0.2950 0.2041 0.13
+
+Table 3 Human Evaluation on BEAT and SemanticBEAT datasets. We evaluate models across four key dimensions: Rhythmic Alignment (RA), Semantic Accuracy (SA), Physical & Hand Consistency (PHC), and Overall Preference (OP). All values are reported as mean ± standard error. Higher values indicate better performance.                                                  
+
+> BEAT SemanticBEAT Model RA ↑SA ↑PHC ↑OP ↑RA ↑SA ↑PHC ↑OP ↑
+> LivelySpeaker [51] -0.2223 -0.3994 -0.4304 -0.3064 -0.2126 -0.3015 -0.3466 -0.3497 Diffsheg [9] -0.0058 -0.2691 -0.1440 -0.0992 -0.0090 -0.0817 -0.0458 -0.0626 SemTalk [45] 0.0128 0.0151 0.1679 -0.0132 0.0650 -0.0012 0.1207 0.0970 SemanticGesticulator [50] 0.0819 0.2264 -0.0273 0.1137 0.0296 0.1605 -0.0347 0.0640
+> Ours 0.1334 0.4270 0.4338 0.3050 0.1269 0.2239 0.3066 0.2514
+
+Table 4 Ablation study on the key components of our method. SA: Semantic Action Score, HD: Hand Detail Score, HN: Human-likeness & Naturalness, BM: Beat Matching Score. Bold indicates the best performance among all configurations.                                                 
+
+> Configuration SA ↑HD ↑HN ↑BM ↑
+> Data Scale
+> Ours w/o Semi-data 4.281 2.321 4.945 4.628 Ours (1/4 Semi-data) 6.316 5.980 6.882 6.892
+> Architecture & Strategy
+> Ours w/o Context Motion 4.237 4.263 2.192 1.928 Ours w/o FiLM Injection 5.181 4.389 4.506 4.589 Ours w/o Semantic Classification 5.007 4.747 4.750 5.268 Ours w/o CFG 4.628 4.885 6.453 6.212 AR Strategy 4.843 5.031 5.358 6.850
+> Loss & Refinement
+> Ours w/o Kinetic-Aware (KA) Loss 5.573 3.947 4.763 5.587 Ours w/o Filter 6.541 6.913 6.891 7.387
+> Ours (Full Model) 7.175 7.203 7.394 7.529
+
+Loss & Refinement: The Kinetic-Aware Loss provides essential supervision. Removing it ( Ours w/o KA Loss ) weakens the constraints on hand movements, se-mantic intervals, and kinematic smoothness, leading to a profound degradation in expressiveness. Finally, disabling the post-processing filter ( Ours w/o Fil-ter ) results in a slight but noticeable penalty in HN, confirming its necessity for ensuring ultimate motion smoothness. 
+
+5.3 Evaluating Real-world Social Interaction 
+
+Beyond gesture generation alone, we instantiate a complete interactive human–humanoid system in which the robot listens, responds, and gestures in real time. As detailed in the supplementary mate-rial, the deployed system comprises three modules: a language interaction module (ASR, a LoRA-tuned LLM, and TTS), our streaming speech-to-motion module (the audio aligner and motion generator), and a robot execution module. By leveraging our streaming aligner and motion generator, this pipeline achieves low-latency, end-to-end social interaction between humans and humanoid robots, as shown in Figure 2(c), which is then processed by our model to generate synchronized motion chunks. The total system latency is primarily determined by the duration of the first generated audio chunk (typically < 1.5 s) and the first-chunk inference time (≈ 0.25 s). Crucially, the motion stack itself runs well above real time: the streaming motion generator sus-tains ≈ 120 FPS ( ≈ 0.25 s per 1-second chunk) and the MPC safety filter adds only 5.6 ms per frame, both comfortably exceeding the 30 Hz robot control rate. The dominant latency therefore stems from the upstream speech pipeline (ASR, LLM, and TTS) rather than from our motion model; a full per-module latency breakdown is provided in the supplementary material. Our experimental platform consists of a Unitree G1 robot equipped with dual BrainCo dexter-ous hands, utilizing a Proportional-Derivative (PD) control scheme to translate high-level trajectories into low-level motor commands. As illustrated in Figure 1, the experimental results validate the frame-work’s capability to generate semantically coherent Semantic    
+
+> Gesticulator
+> SemTalk
+> Ours
+> ...We’ve finished
+> the test...
+> ...OK, I’ll finish it as…
+> ...We will seize the chance… Figure 4 Qualitative comparison of generated co-speech gestures.
+
+We present three representative scenarios to highlight the advantages of our method. Left: Baseline methods (e.g., SG) occasionally suffer from severe self-penetration (highlighted by the orange box), whereas our model ensures physical safety and strictly avoids self-collisions. Middle: 
+
+Given the explicit semantic cue “OK”, our model successfully synthesizes the precise, fine-grained “OK” hand gesture, while baselines fail to capture this specific semantic alignment. Right: For emphatic speech contexts (“seize the chance”), our model generates highly expressive body language, such as confidently patting the chest, demonstrating superior contextual richness and overall expressiveness. 
+
+and safety-constrained gestures. 
+
+# 6 Conclusion 
+
+In this work, we present a robot-centric framework for enabling humanoid robots to engage in natural, real-time multimodal interaction through synchronized speech and expressive gestures. Our approach co-designs data curation, model architecture, and safety mechanisms with three main contributions: (1) a holistic framework integrating data, modeling, and control; (2) a data synthesis pipeline that produces a large-scale, semantically rich training corpus by mapping expressive human gestures to robot-specific kinematics; and (3) A continuous audio-driven motion policy to ensure tight temporal synchronization and prevent the model from collapsing into repetitive historical motion patterns. Through experiments on a humanoid robot, we demonstrate that our system generates more semantically appropriate and safety-aware responses compared to baselines. 
+
+# 7 Acknowledgments 
+
+We thank Galbot for its generous support of this project. We are also grateful to Benhao Qin and colleagues for their assistance with the hardware de-ployment. 
+
+# References 
+
+[1] Simon Alexanderson, Rajmund Nagy, Jonas Beskow, and Gustav Eje Henter. Listen, denoise, action! audio-driven motion synthesis with diffusion models. 
+
+ACM Transactions on Graphics (TOG) , 42(4):1–20, 2023. [2] Philip Anastassiou, Jiawei Chen, Jitong Chen, Yuzhou Chen, Zhenyu Liu, Jialong Gu, Shuai Gao, Zhe Zhang, Changli Li, Zengqiang Yang, Zhiqi He, Rui Zhang, Yuancheng Qi, Weiran Li, Jian Chen, Hangting Zhao, Yi Yuan, Zehua Chen, Liyang Zhao, Jianjun Li, Shulin Liu, Zhiyuan Li, Ming Chen, Xinyuan Zhang, Qiushi Wu, Zhiyong Xie, Zheng-tao Wang, Li Yan, Tao He, Kai Chen, Zilong Zhang, Baoxing Huai, Zhifu Zhang, Chong He, Yongqi Lv, Andi Liu, Wen Wang, Yuxuan Chen, Xiang Zhang, Yuhang Leng, Kai Zhou, Yuxiang Zhu, Huaming Li, Chengyi Zou, Yingjie Wang, Wenchao Wang, Bin Xiao, Tao Wang, Zhizheng Wu, and Yan Qin. Seed-tts: A family of high-quality versatile speech genera-tion models. https://arxiv.org/abs/2406.02430 ,2024. arXiv:2406.02430 [eess.AS]. [3] Tenglong Ao, Zeyi Zhang, and Libin Liu. Gestured-iffuclip: Gesture diffusion model with clip latents. 
+
+ACM Trans. Graph. , 2023. doi: 10.1145/3592097. [4] Joao Pedro Araujo, Yanjie Ze, Pei Xu, Jiajun Wu, and C. Karen Liu. Retargeting matters: General motion retargeting for humanoid motion tracking. 
+
+arXiv preprint arXiv:2510.02252 , 2025. [5] Carl Bettosi, Lynne Baillie, Martin K Ross, and Frank Broz. A systematic approach to modeling structured behavior in social robots. In Proceedings of the 2024 International Symposium on Technolog-ical Advances in Human-Robot Interaction , pages 29–37, 2024. [6] Zhongang Cai, Jianping Jiang, Zhongfei Qing, Xiny-ing Guo, Mingyuan Zhang, Zhengyu Lin, Haiyi Mei, Chen Wei, Ruisi Wang, Wanqi Yin, Liang Pan, Xi-angyu Fan, Han Du, Peng Gao, Zhitao Yang, Yang Gao, Jiaqi Li, Tianxiang Ren, Yukun Wei, Xiaogang Wang, Chen Change Loy, Lei Yang, and Ziwei Liu. Digital life project: Autonomous 3d characters with social intelligence. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recog-nition (CVPR) , pages 582–592, June 2024. [7] Congqi Cao, Yifan Zhang, Yi Wu, Hanqing Lu, and Jian Cheng. Egocentric gesture recognition using recurrent 3d convolutional neural networks with spa-tiotemporal transformer modules. In Proceedings of the IEEE international conference on computer vision , pages 3763–3771, 2017. [8] Longbing Cao. Ai robots and humanoid ai: Re-view, perspectives and directions. arXiv preprint arXiv:2405.15775 , 2024. [9] Junming Chen, Yunfei Liu, Jianan Wang, Ailing Zeng, Yu Li, and Qifeng Chen. Diffsheg: A diffusion-based approach for real-time speech-driven holistic 3d expression and gesture generation. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition , pages 7352–7361, 2024. [10] Yongkang Cheng and Shaoli Huang. Holegest: De-coupled diffusion and motion priors for generating holisticly expressive co-speech gestures. In 2025 In-ternational Conference on 3D Vision (3DV) , pages 748–757. IEEE, 2025. [11] Gheorghe Comanici, Eric Bieber, Mike Schaek-ermann, Ice Pasupat, Noveen Sachdeva, Inderjit Dhillon, Marcel Blistein, Ori Ram, Dan Zhang, Evan Rosen, et al. Gemini 2.5: Pushing the frontier with advanced reasoning, multimodality, long con-text, and next generation agentic capabilities. arXiv preprint arXiv:2507.06261 , 2025. [12] Stefano Dafarra, Ugo Pattacini, Giulio Romualdi, Lorenzo Rapetti, Riccardo Grieco, Kourosh Darvish, Gianluca Milani, Enrico Valli, Ines Sorrentino, Paolo Maria Viceconte, et al. icub3 avatar system: Enabling remote fully immersive embodiment of hu-manoid robots. Science Robotics , 9(86):eadh3834, 2024. [13] Alexandre Défossez, Laurent Mazaré, Manu Orsini, Amélie Royer, Patrick Pérez, Hervé Jégou, Edouard Grave, and Neil Zeghidour. Moshi: a speech-text foundation model for real-time dialogue, 2024. https: //arxiv.org/abs/2410.00037 .[14] Alessio Galatolo and Katie Winkle. Simultaneous text and gesture generation for social robots with small language models. Frontiers in Robotics and AI , 12:1581024, 2025. [15] Saeed Ghorbani, Ylva Ferstl, Daniel Holden, Niko-laus F Troje, and Marc-André Carbonneau. Zeroeggs: Zero-shot example-based gesture generation from speech. Computer Graphics Forum , 42(1):206–216, 2023. [16] Peter Indefrey and Willem JM Levelt. The spatial and temporal signatures of word production compo-nents. Cognition , 92(1-2):101–144, 2004. [17] Jianping Jiang, Weiye Xiao, Zhengyu Lin, Huaizhong Zhang, Tianxiang Ren, Yang Gao, Zhiqian Lin, Zhon-gang Cai, Lei Yang, and Ziwei Liu. Solami: Social vision-language-action modeling for immersive inter-action with 3d autonomous characters. In Proceed-ings of the Computer Vision and Pattern Recognition Conference , pages 26887–26898, 2025. [18] Michael Kipp. Gesture generation by imitation: From human behavior to computer character ani-mation . Universal-Publishers, 2005. [19] Sergey Levine, Philipp Krähenbühl, Sebastian Thrun, and Vladlen Koltun. Gesture controllers. In Acm siggraph 2010 papers , pages 1–11. ACM, 2010. [20] Jing Li, Di Kang, Wenjie Pei, Xuefei Zhe, Ying Zhang, Zhenyu He, and Linchao Bao. Au-dio2gestures: Generating diverse gestures from speech audio with conditional variational autoen-coders. In Proceedings of the IEEE/CVF Interna-tional Conference on Computer Vision , pages 11293– 11302, 2021. [21] Ruilong Li, Shan Yang, David A. Ross, and Angjoo Kanazawa. Ai choreographer: Music conditioned 3d dance generation with aist++, 2021. [22] Yaron Lipman, Ricky T. Q. Chen, Heli Ben-Hamu, Maximilian Nickel, and Matt Le. Flow matching for generative modeling, 2023. https://arxiv.org/ abs/2210.02747 .[23] Haiyang Liu, Zihao Zhu, Naoya Iwamoto, Yichen Peng, Zhengqing Li, You Zhou, Elif Bozkurt, and Bo Zheng. Beat: A large-scale semantic and emo-tional multi-modal dataset for conversational ges-tures synthesis. In European conference on computer vision , pages 612–630. Springer, 2022. [24] Lanmiao Liu, Esam Ghaleb, Asli Ozyurek, and Zer-rin Yumak. Semges: Semantics-aware co-speech gesture generation using semantic coherence and rel-evance learning. In Proceedings of the IEEE/CVF International Conference on Computer Vision , pages 13963–13973, 2025. [25] Esteve Valls Mascaro, Yashuai Yan, and Dongheui Lee. Robot interaction behavior generation based on social motion forecasting for human-robot in-teraction. In 2024 IEEE International Conference on Robotics and Automation (ICRA) , pages 17264– 17271. IEEE, 2024. [26] Kayla Matheus, Rebecca Ramnauth, Brian Scassel-lati, and Nicole Salomons. Long-term interactions with social robots: Trends, insights, and recommen-dations. ACM Transactions on Human-Robot Inter-action , 14(3):1–42, 2025. [27] David McNeill. Hand and mind: What gestures reveal about thought . University of Chicago press, 1992. [28] OpenAI. Gpt-4 technical report. arXiv preprint arXiv:2303.08774 , 2023. [29] Etienne Parizet, Nacer Hamzaoui, and Guillaume Sabatie. Comparison of some listening test methods: a case study. Acta Acustica united with Acustica , 91: 356–364, 2005. [30] William Peebles and Saining Xie. Scalable diffusion models with transformers. In Proceedings of the IEEE/CVF international conference on computer vision , pages 4195–4205, 2023. [31] Ethan Perez, Florian Strub, Harm De Vries, Vincent Dumoulin, and Aaron Courville. Film: Visual reason-ing with a general conditioning layer. In Proceedings of the AAAI Conference on Artificial Intelligence ,volume 32, 2018. [32] Yuzhe Qin, Wei Yang, Binghao Huang, Karl Van Wyk, Hao Su, Xiaolong Wang, Yu-Wei Chao, and Dieter Fox. Anyteleop: A general vision-based dexterous robot arm-hand teleoperation system. In 
+
+Robotics: Science and Systems , 2023. [33] Alec Radford, Jong Wook Kim, Chris Hallacy, Aditya Ramesh, Gabriel Goh, Sandhini Agarwal, Girish Sas-try, Amanda Askell, Pamela Mishkin, Jack Clark, et al. Learning transferable visual models from natu-ral language supervision. In International conference on machine learning , pages 8748–8763. PmLR, 2021. [34] Lisa Scherf, Kevin Fröhlich, and Dorothea Koert. Learning action conditions for automatic behavior tree generation from human demonstrations. In 
+
+Companion of the 2024 ACM/IEEE International Conference on Human-Robot Interaction , pages 950– 954, 2024. [35] Christian Tagliamonte, Daniel Maccaline, Gregory LeMasurier, and Holly A Yanco. A generalizable ar-chitecture for explaining robot failures using behavior trees and large language models. In Companion of the 2024 ACM/IEEE International Conference on Human-Robot Interaction , pages 1038–1042, 2024. [36] Esteve Valls Mascaro and Dongheui Lee. Robot be-havior generation for social human-robot interaction. 
+
+International Journal of Social Robotics , pages 1–20, 2025. [37] Zifan Wang, Junyu Chen, Ziqing Chen, Pengwei Xie, Rui Chen, and Li Yi. Genh2r: Learning generalizable human-to-robot handover via scalable simulation demonstration and imitation. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition , pages 16362–16372, 2024. [38] Zifan Wang, Ziqing Chen, Junyu Chen, Jilong Wang, Yuxin Yang, Yunze Liu, Xueyi Liu, He Wang, and Li Yi. Mobileh2r: Learning generalizable human to mobile robot handover exclusively from scalable and diverse synthetic data. In Proceedings of the Com-puter Vision and Pattern Recognition Conference ,pages 17315–17325, 2025. [39] An Yang, Anfeng Li, Baosong Yang, Beichen Zhang, Binyuan Hui, Bo Zheng, Bowen Yu, Chang Gao, Chengen Huang, Chenxu Lv, Chujie Zheng, Dayi-heng Liu, Fan Zhou, Fei Huang, Feng Hu, Hao Ge, Haoran Wei, Huan Lin, Jialong Tang, Jian Yang, Jianhong Tu, Jianwei Zhang, Jianxin Yang, Jiaxi Yang, Jing Zhou, Jingren Zhou, Junyang Lin, Kai Dang, Keqin Bao, Kexin Yang, Le Yu, Lianghao Deng, Mei Li, Mingfeng Xue, Mingze Li, Pei Zhang, Peng Wang, Qin Zhu, Rui Men, Ruize Gao, Shixuan Liu, Shuang Luo, Tianhao Li, Tianyi Tang, Wenbiao Yin, Xingzhang Ren, Xinyu Wang, Xinyu Zhang, Xu-ancheng Ren, Yang Fan, Yang Su, Yichang Zhang, Yinger Zhang, Yu Wan, Yuqiong Liu, Zekun Wang, Zeyu Cui, Zhenru Zhang, Zhipeng Zhou, and Zi-han Qiu. Qwen3 technical report. arXiv preprint arXiv:2505.09388 , 2025. [40] Lujie Yang, Xiaoyu Huang, Zhen Wu, Angjoo Kanazawa, Pieter Abbeel, Carmelo Sferrazza, C Karen Liu, Rocky Duan, and Guanya Shi. Omnire-target: Interaction-preserving data generation for humanoid whole-body loco-manipulation and scene interaction. arXiv preprint arXiv:2509.26633 , 2025. [41] Sicheng Yang, Zhiyong Wu, Minglei Li, Zhensong Zhang, Lei Hao, Weihong Bao, Ming Cheng, and Long Xiao. Diffusestylegesture: Stylized audio-driven co-speech gesture generation with diffusion models. In Proceedings of the Thirty-Second In-ternational Joint Conference on Artificial Intelli-gence, IJCAI-23 , pages 5860–5868. International Joint Conferences on Artificial Intelligence Orga-nization, 8 2023. doi: 10.24963/ijcai.2023/650. 
+
+https://doi.org/10.24963/ijcai.2023/650 .[42] Youngwoo Yoon, Woo-Ri Ko, Minsu Jang, Jaeyeon Lee, Jaehong Kim, and Geehyuk Lee. Robots learn social skills: End-to-end learning of co-speech ges-ture generation for humanoid robots. In 2019 In-ternational Conference on Robotics and Automation (ICRA) , pages 4303–4309. IEEE, 2019. [43] Youngwoo Yoon, Bok Cha, Joo-Haeng Lee, Minsu Jang, Jaeyeon Lee, Jaehong Kim, and Geehyuk Lee. Speech gesture generation from the trimodal context of text, audio, and speaker identity. ACM Transac-tions on Graphics (TOG) , 39(6):1–16, 2020. [44] Yanjie Ze, João Pedro Araújo, Jiajun Wu, and C. Karen Liu. Gmr: General motion retargeting, 2025. https://github.com/YanjieZe/GMR . GitHub repository. [45] Xiangyue Zhang, Jianfang Li, Jiaxu Zhang, Ziqiang Dang, Jianqiang Ren, Liefeng Bo, and Zhigang Tu. Semtalk: Holistic co-speech motion generation with frame-level semantic emphasis. In Proceedings of the IEEE/CVF International Conference on Computer Vision , pages 13761–13771, 2025. [46] Xiangyue Zhang, Jianfang Li, Jiaxu Zhang, Jian-qiang Ren, Liefeng Bo, and Zhigang Tu. Echomask: Speech-queried attention-based mask modeling for holistic co-speech motion generation. In Proceed-ings of the 33rd ACM International Conference on Multimedia , pages 10827–10836, 2025. [47] Xiangyue Zhang, Yiyi Cai, Kunhang Li, Kaixing Yang, You Zhou, Zhengqing Li, Xuangeng Chu, Jiaxu Zhang, and Haiyang Liu. Personagesture: Single-reference co-speech gesture personalization for unseen speakers. arXiv preprint arXiv:2605.06064 ,2026. [48] Xiangyue Zhang, Jianfang Li, Jianqiang Ren, and Jiaxu Zhang. Mitigating error accumulation in co-speech motion generation via global rotation dif-fusion and multi-level constraints. In Proceedings of the AAAI Conference on Artificial Intelligence ,volume 40, pages 12834–12842, 2026. [49] Yifan Zhang, Congqi Cao, Jian Cheng, and Hanqing Lu. Egogesture: A new dataset and benchmark for egocentric hand gesture recognition. IEEE Transac-tions on Multimedia , 20(5):1038–1050, 2018. [50] Zeyi Zhang, Tenglong Ao, Yuyao Zhang, Qingzhe Gao, Chuan Lin, Baoquan Chen, and Libin Liu. Semantic gesticulator: Semantics-aware co-speech gesture synthesis. ACM Transactions on Graphics (TOG) , 43(4):1–17, 2024. [51] Yihao Zhi, Xiaodong Cun, Xuelin Chen, Xi Shen, Wen Guo, Shaoli Huang, and Shenghua Gao. Livelyspeaker: Towards semantic-aware co-speech gesture generation. In Proceedings of the IEEE/CVF International Conference on Computer Vision (ICCV) , pages 20807–20817, October 2023. Supplementary Material A Motivation, Task Definition, and Contribution Clarification 
+
+In our manuscript, we formalize the primary objec-tive as achieving real-time, semantically aligned, and safety-guaranteed co-speech gesture generation for humanoid robots, thereby establishing a robust foun-dation for interactive human-humanoid social engage-ment .To further substantiate the technical necessity and the methodological value of our framework, this sup-plementary material elucidates the core rationales behind our design through three pivotal pillars: (1) the distinct requirements of physical humanoid in-teraction in Section A.1, (2) the intrinsic advantages of robot-space learning in Section A.2, and (3) a granular structural breakdown of our methodological contributions in Section A.3. 
+
+A.1 Physical Humanoid Interaction vs. Vir-tual Avatar Animation 
+
+Human-Robot Interaction (HRI) stands at the fore-front of Embodied AI, fundamentally branching into physical HRI (pHRI) and social HRI (sHRI). While pHRI traditionally focuses on contact-based manipu-lation and functional task execution, sHRI demands that robots engage with humans through social intel-ligence—comforting individuals in distress, providing intuitive gestural guidance, or maintaining interac-tive companionship. As a physical embodiment, ahumanoid robot offers a more immersive and multi-modal interaction experience compared to text-based chatbots or screen-bound virtual avatars. However, this same embodiment introduces significant techni-cal hurdles that our work addresses: specifically the rigorous requirements for real-time streaming, seman-tic alignment, high-fidelity hand modeling, and, most critically, kinematic executability and safety during physical deployment. 
+
+• Kinematic Safety and Executability. Unlike virtual avatar animations that prioritize visual aesthetics without regard for physical constraints, humanoid deployment must strictly adhere to kinematic safety. In real-world scenarios, self-collisions (e.g., the hand striking the torso) or high-frequency jerk (sudden, violent joint accelerations) are not merely visual arti-facts but are potentially catastrophic for the robot’s hardware and the surrounding human environment. Our framework ensures that every generated gesture is kinematically feasible and physically safe. 
+
+• Low-Latency Streaming Inference. While many prior co-speech gesture works rely on offline generation or heavy post-processing, natural Human-Robot In-teraction (HRI) demands streaming responsiveness. Excessive latency—where the robot responds only after a significant delay—breaks the social presence and may lead the user to perceive the agent as unre-sponsive or "broken." Real-time performance is not an elective feature but a fundamental necessity for seamless social engagement. 
+
+• Temporal Semantic Alignment. Humans naturally place high cognitive value on semantic gestures (e.g., deictic or iconic motions). When a robot executes the appropriate semantic action at precisely the right temporal onset, it significantly enhances the user’s perception of the robot as a truly intelligent social agent. This sense of "agency" is far more profound in the physical world, where the robot’s tangible presence amplifies the impact of its communicative intent compared to a screen-bound avatar. 
+
+• High-Fidelity Hand Modeling. In social interaction, the hands are the primary instruments of non-verbal communication, conveying nuances that far exceed the expressive capacity of coarse torso or arm move-ments . Therefore, we prioritize high-fidelity hand modeling to capture intricate finger articulations, en-abling the robot to perform complex social cues and fine-grained semantic gestures that are essential for meaningful human-centric interaction. 
+
+A.2 Why Robot-space Learning is Essential 
+
+A common paradigm in co-speech gesture generation involves generating motions in human skeleton space (Human-space) and subsequently mapping them to robotic hardware via online retargeting and PD con-trol. However, this decoupled approach introduces significant bottlenecks in physical deployment. We argue that learning directly in robot-space is not a matter of experimental convenience, but a fundamen-tal requirement for achieving safe, low-latency, and high-fidelity humanoid interaction. 
+
+• The Problem Chain of Human-space Paradigms. Tra-ditional pipelines suffer from a "risk chain" that com-promises real-world deployment. First, the Avatar-to-Humanoid Gap arises from fundamental differences in joint limits and link lengths; motions generated for human skeletons often fall into singular configurations or exceed the physical torque limits of robot motors. Second, Latency Amplification occurs because online retargeting relies on iterative optimization, adding a heavy computational layer that induces perceptible lag. Finally, since human-space models are oblivious to the robot’s physical volume, the resulting trajec-tories frequently lead to self-collisions and numerical "jerk". 
+
+•Benefit of Robot-space Learning. While our mo-tion data originates from human data, RoboGes-ture internalizes the retargeting process into an of-fline preprocessing pipeline. It allows for meticu-lous, optimization-based refinement of joint trajec-tories—especially for high-dimensional hand articu-lations—without the stringent temporal constraints of real-time inference. Consequently, this approach yields several advantages: first, it ensures that the evaluation space is perfectly aligned with the deploy-ment space, meaning the model learns a distribution of motions that are natively "robot-aware." By gen-erating robot-specific joint commands end-to-end, we eliminate the need for computationally expen-sive inference-time retargeting or inverse kinematics, thereby significantly reducing latency. Second, Robot-space learning effectively bypasses the "risk chain" associated with online mapping, such as self-collisions, joint limit violations. 
+
+• Baseline Choice. Since the field of co-speech ges-ture generation tailored specifically for robot-space is currently uncharted, we benchmark against state-of-the-art human-space models. The objective of this comparison is not merely to compete on virtual ani-mation metrics, but to evaluate which paradigm more effectively approaches the requirements of a physical humanoid target setting. In this context, metrics such as collision rate and executability are treated as primary objectives rather than secondary constraints. By demonstrating the performance gap, we highlight that the shift to robot-space is not a matter of experi-mental convenience, but a necessary prerequisite for moving beyond animation toward robust, real-world embodied intelligence. 
+
+A.3 Structural Breakdown of Methodological Contributions 
+
+To further clarify the positioning of our work, we categorize the methodological contributions of Robo-Gesture into three distinct hierarchical levels: 
+
+• Task-level: Streaming Semantic Co-speech Interac-tion for Humanoids. Unlike existing works that focus on offline animation or virtual avatar motion syn-thesis, our task is specifically defined as real-time, streaming, and semantically-aligned interaction on physical humanoid hardware. This shifts the objec-tive from merely generating "human-like" joints to producing "robot-feasible" actions that respond dy-namically to human speech. By centering the task on the unique constraints of humanoid robots, we address the practical requirements of low-latency and semantic consistency in physical environments. 
+
+• System-level: Data-Model-Control Co-design. A key innovation of RoboGesture is the departure from de-coupled pipelines. We propose a co-design framework that bridges data, modeling, and control to solve the fragmentation problem inherent in traditional meth-ods. Specifically, we build a robot-centric dataset pre-optimized for physical feasibility, which is used to train a transformer-based generator that inherently understands robot-space joint distributions. This is coupled with a direct-command execution strategy that bypasses risky online retargeting. This holis-tic integration ensures that the learned features are naturally compatible with the hardware execution layer. 
+
+• Method-level: Safety-aware and Safe Motion Genera-tion. At the algorithmic level, we introduce three core modules to tackle long-standing technical challenges. First, we address the "modality eclipse"—where mod-els rely too heavily on kinematic history—through an anti-inertia training strategy that forces the model to attend to live audio cues. Second, we design a semantic-acoustic aligner to ensure that generated gestures match both the rhythmic acoustic features and the high-level semantic intent of the speech. Fi-nally, our safety-aware motion generation embeds physical priors directly into the robot-space genera-tion process, enabling the model to natively produce executable trajectories, thereby minimizing the sim-to-real gap. 
+
+# B Real-world Social Interaction De-ployment 
+
+This section provides additional details on our real-world deployment pipeline. Unlike offline gesture-generation systems that only output animation tra-jectories, our method is designed as an end-to-end interactive system for a physical humanoid platform. Accordingly, the deployment pipeline must satisfy three practical requirements simultaneously: (i) so-cial responsiveness , namely producing colloquial and emotionally expressive verbal responses; (ii) stream-ing motion generation , namely converting incoming speech into aligned co-speech gestures with low la-tency; and (iii) physical safety , namely ensuring that the final motion is executable on the robot without severe self-collision or unstable artifacts. Human Audio Input 
+
+Audio Tokenizer 
+
+> MPC Safety Filter
+
+Unitree G1 + BrainCo Hands  
+
+> Aligner Generator
+
+ASR TTS Qwen (LoRA-tuned )
+
+## Server Streaming Figure 5 Real-world deployment pipeline of our humanoid co-speech interaction system. Human speech is first processed by an interaction pipeline including ASR, a LoRA-tuned Qwen module, and TTS. The synthesized speech is then fed into the audio tokenizer, semantic-acoustic aligner, and motion generator in a streaming manner. The generated motion is further refined by an MPC-based safety filter before being executed on the deployed humanoid platform, i.e., Unitree G1 equipped with BrainCo dexterous hands. 
+
+B.1 System Overview 
+
+As illustrated in Figure 5, the deployed system con-sists of a language interaction module, a streaming speech-to-motion module, and a robot execution mod-ule.  
+
+> Language interaction module.
+
+Given human speech input, we first perform automatic speech recogni-tion (ASR), then feed the recognized content into a LoRA-tuned Qwen3-4B-Instruct model [39], and finally synthesize the textual response into speech through TTS. This design serves two purposes. First, it enables open-ended, conversational interaction be-yond fixed command-response templates. Second, and more importantly for our setting, it allows us to generate socially expressive responses whose tone and communicative intent are beneficial for downstream co-speech gesture generation.  
+
+> Streaming speech-to-motion module.
+
+The synthesized speech and generated motion commands are then pro-cessed by the streaming motion stack. At this stage, the system performs audio tokenization, semantic-acoustic alignment, streaming motion generation, and safety-aware filtering. The resulting motion com-mands are then executed on the Unitree G1 humanoid robot equipped with BrainCo dexterous hands. 
+
+B.2 LLM-driven Social Response Generation 
+
+A practical challenge in real-world humanoid interac-tion is that literal text responses are often insufficient for generating expressive body motion. Purely factual language tends to produce limited communicative cues, whereas co-speech gestures are more naturally triggered when the response contains clearer social attitude, affective tone, or interpersonal intent. For this reason, we fine-tune Qwen3-4B-Instruct with LoRA so that it produces conversational responses with explicit affective style tags. Specifically, the model is trained to prepend each response with an emotion/action tag, such as [chat] ,
+
+[excited] , or [warm] , followed by the verbal content. A representative instruction example is shown below:  
+
+> You are an expressive humanoid robot companion. You must respond to the user colloquially with rich emotions. CRITICAL: You MUST begin every response with an emotion/action tag enclosed in brackets (e.g., [chat], [excited], [warm], [angry]), followed by your verbal reply.
+
+For example, given the user query:  
+
+> I’m trying to find the small, red book on the top shelf. Do you see it among the others?
+
+the fine-tuned model may generate: [chat] Let me check. Ah, yes! If you look closely, it’s the third one from the left, right next to the blue binder. 
+
+This design is useful for deployment for two reasons. First, the emotion/action tag provides an explicit high-level cue for speech style and downstream be-havior modulation. Second, the response style itself becomes more colloquial and socially grounded, which better matches the intended use case of expressive humanoid companionship. In practice, we feed the generated text into TTS, so that the downstream motion stack receives speech that is not only linguisti-cally meaningful but also socially expressive, thereby improving the natural coupling between language, prosody, and gesture. 
+
+B.3 Runtime Latency Breakdown 
+
+For real-world streaming deployment, the most rele-vant latency is the time required for each module to produce its first usable output , rather than the full completion time of the entire sequence. Therefore, we report the practical online latency of each key component in Table 5. These numbers should be interpreted as module-level streaming latency mea-surements rather than a strict end-to-end system latency, since practical response time also depends on streaming overlap, chunk availability, and commu-nication overhead.  
+
+> ASR latency.
+
+The ASR module processes the audio stream in a streaming fashion. While the compu-tational overhead to finalize an utterance is only 
+
+0.157 s on average, the actual latency is governed by the endpoint detection threshold Tidle , which is re-quired to determine if the user has finished speaking. In our implementation, Tidle is set to 0.5 s. Conse-quently, the effective latency to finalize a query is 
+
+max(0 .157 s, T idle ) ≈ 0.5 s, after which the text is passed to the LLM.  
+
+> LLM latency.
+
+The LoRA-tuned Qwen3-4B-Instruct model occupies approximately 8430 MB memory in our setup. When the model is kept resident in GPU memory (warm start), it achieves an average time-to-first-token (TTFT) of 0.142 s, measured over 100 
+
+runs after excluding the initial loading overhead. This indicates that the language module can provide an interactive response cue with sub-second delay.  
+
+> TTS latency.
+
+A streaming TTS module (Seed-TTS [2]) converts the LLM response into the first emotional speech chunk in 0.414 s on average.  
+
+> Streaming audio tokenization latency.
+
+For the Mimi           
+
+> Table 5 Runtime latency of the major modules in the deployed system. For streaming interaction, we focus on the latency to the first usable output. The motion generator operates on 1-second chunks. Module Online Latency ASR max(0 .157 s, T idle )
+> Qwen3-4B-Instruct (LoRA-tuned) 0.142 s TTS 0.414 s Mimi Audio Tokenizer 0.161 s Motion Generator 0.250 s per chunk Filter 0.170 s per chunk
+
+audio tokenizer [13], we measure the streaming la-tency under batch size 1 with the model kept resident in memory. Over 100 runs after excluding first-load overhead, the average latency to the first stream-ing token is 0.161 s. This is the relevant delay for our pipeline, since it determines how quickly the downstream motion stack can begin processing the generated speech signal.  
+
+> Motion chunk inference latency.
+
+The motion generator runs in a chunk-wise streaming manner. For 1-second motion chunks, we evaluate 240 chunks in total and obtain an average inference latency of 249.78 ms per chunk. Equivalently, this corresponds to an effective throughput of 120.11 fps when counting 30 frames per chunk. Therefore, once a valid chunk is available, the motion generator itself runs substantially faster than real time. We note that the 1-second chunk size is an algorithmic context window rather than a fixed additional wall-clock delay; in practice, the time required to obtain the first valid chunk depends on the upstream streaming rate of speech synthesis and tokenization.  
+
+> MPC-based filter latency.
+
+Regarding motion control, we implement a streaming MPC-based filter, with detailed formulations provided in Section D.3. The fil-ter processes the motion stream frame-by-frame with an average execution time of 0.0056 s per frame. For a standard 30 fps stream, the total processing time for a 1 s chunk is approximately 0.1695 s, ensuring low-latency, safety-aware gesture execution.  
+
+> System-level interpretation.
+
+Taken together, these measurements indicate that the deployed system is practical for streaming humanoid interaction. The language module and tokenizer provide low-latency first outputs, while the motion generator remains faster than real time under chunk-wise inference. As a result, the practical interaction delay is primarily governed by the speech pipeline and streaming chunk availability, rather than by the motion model itself. B.4 Deployment Safety and Scope 
+
+Our deployment scope is stationary upper-body co-speech gesturing : the model outputs arm and dexterous-hand motions only, not locomotion, and lower-body balance is maintained by the built-in Unitree G1 standing controller. Within this scope, we did not observe instability in practice: across 200 real-world deployment trials, we recorded 0 falls and 0 emergency stops . We note that reinforcement-learning-based whole-body control is important for locomotion-coupled gestures (e.g., gestures that shift the support polygon), and we regard it as a com-plementary direction for future work rather than a requirement for the upper-body social-gesture setting studied here. 
+
+# C Empirical Study on Modality Eclipse and Anti-Inertia Mecha-nism 
+
+In the main paper, we describe modality eclipse as a practical failure mode in streaming gesture gener-ation: because past motion provides a strong kine-matic prior, the generator may over-rely on motion continuity and under-utilize newly arriving semantic-acoustic cues. Our full framework addresses this issue from multiple aspects, including semantic-acoustic conditioning, Anti-Inertia CFG masking, and an ar-chitectural design that delays the dominance of his-tory features in the DiT generator. This supplemen-tary section provides additional evidence from both a controlled perturbation study and architecture-level ablations. 
+
+C.1 Controlled Perturbation Analysis of History-Dominant Bias  
+
+> Diagnostic protocol.
+
+To directly probe whether the generator is dominated by history or responds to incoming audio, we conduct a controlled perturbation analysis on 50 validation samples. For each sample, we construct two perturbation settings: 1. Fixed history, swap audio : the past-motion con-text is kept unchanged while the input audio is replaced by another sample. 2. Fixed audio, swap history : the audio is fixed while the past-motion context is replaced. We then compute the mean squared error (MSE) between the resulting generated motion sequences. If swapping history causes a much larger output change than swapping audio, the model exhibits a stronger 
+
+history-dominant bias , indicating shortcut reliance on past motion.  
+
+> Compared variants.
+
+We compare the Full Model 
+
+against an Only-DiT variant that removes the semantic-acoustic conditioning pathway and retains only the generative backbone. This comparison is intended to isolate whether semantic-acoustic condi-tioning helps prevent the generator from collapsing into inertial continuation dominated by motion his-tory.  
+
+> Results.
+
+Table 7 shows that both variants are more sensitive to history perturbations than to audio per-turbations, confirming that past motion is indeed a dominant control signal in streaming generation. However, this imbalance is substantially stronger for Only-DiT: its history-to-audio sensitivity ratio reaches 4.57 , compared with 2.04 for the Full Model. This indicates that, without semantic-acoustic condi-tioning, the generator is much more prone to collapse into a history-dominated shortcut, i.e., simply ex-tending prior motion inertia rather than responding to newly arriving audio cues. Importantly, the Full Model does not eliminate his-tory dependence altogether; instead, it reduces the severity of this bias. This is consistent with the intended role of our conditioning pathway: motion history remains necessary for temporal continuity, but semantic-acoustic cues provide an additional control source that counterbalances inertial dominance. 
+
+C.2 Audio-Shuffle and Gradient-Magnitude Analysis 
+
+The perturbation study above probes output sensi-tivity; here we provide two more direct diagnostics on BEAT across three variants— Only-DiT , w/o CFG ,and the Full model. 1. Audio-shuffle FGD. At inference, we randomly shuffle the input audio against the motion. A model that genuinely relies on audio should degrade sharply (large positive ∆), whereas a model that eclipses audio—or uses it only unstably—changes little. 2. Gradient-magnitude analysis. We compare 
+
+Ghist = |∂L/∂E hist | against Gaudio =
+
+|∂L/∂E audio |. An audio-responsive model should yield a low Ghist /G audio ratio with a high absolute Gaudio .Table 8 supports our claim from both angles. Under audio shuffling, the Full model’s FGD jumps from 
+
+0.624 to 9.151 (∆ = +8 .53 ), confirming that its Table 6 Ablation study on the key components of our method. SA: Semantic Action Score, HD: Hand Detail Score, HN: Human-likeness & Naturalness, BM: Beat Matching Score. Bold indicates the best performance among all configurations.                                                      
+
+> Configuration SA ↑HD ↑HN ↑BM ↑
+> Data Scale
+> Ours w/o Semi-data 4.281 2.321 4.945 4.628 Ours (1/4 Semi-data) 6.316 5.980 6.882 6.892
+> Architecture & Strategy
+> Ours w/o Context Motion 4.237 4.263 2.192 1.928 Ours w/o FiLM Injection 5.181 4.389 4.506 4.589 Ours w/o Semantic Classification 5.007 4.747 4.750 5.268 Ours w/o CFG 4.628 4.885 6.453 6.212 Ours w/ Reversed History Injection 5.376 5.136 6.094 6.100 AR Strategy 4.843 5.031 5.358 6.850
+> Loss & Refinement
+> Ours w/o Kinetic-Aware (KA) Loss 5.573 3.947 4.763 5.587 Ours w/o Filter 6.541 6.913 6.891 7.387
+> Ours (Full Model) 7.175 7.203 7.394 7.529
+> Table 7
+
+Controlled perturbation analysis on 50 validation samples. We report the output MSE when swapping the incoming audio while fixing past motion, or swapping past motion while fixing the audio. A larger History/Audio ratio indicates a stronger tendency to rely on historical motion rather than incoming audio cues. Model Audio-swap MSE History-swap MSE Hist./Audio Ratio Full Model 0.0619 0.1261 2.04 
+
+Only-DiT 0.0312 0.1428 4.57 
+
+output is genuinely driven by the audio; in contrast, Only-DiT barely reacts ( ∆ = +0 .11 ) and w/o CFG 
+
+even improves slightly ( ∆ = −0.33 ), the signature of a model that ignores or only unstably uses audio. The gradient analysis tells the same story: the Full model attains the lowest Ghist /G audio ratio ( 0.55 )together with the highest absolute audio gradient (Gaudio = 0 .245 ), whereas Only-DiT is dominated by history ( Ghist /G audio = 4 .88 ). 
+
+Drift and the kinetic-aware loss. These diagnostics also clarify two design choices. First, our 15% past-motion masking is precisely an explicit history per-turbation: coupled with Anti-Inertia CFG, it drives the gradient ratio from 4.88 (Only-DiT) down to 
+
+0.55 (Full), grounding rollouts in audio/semantic cues and mitigating drift. Second, our kinetic-consistency loss is applied to the predicted clean motion ˆx1 = xt + (1 − t) vθ rather than to the raw noise x0; gating it to t ≥ 0.3 (i.e., applying it only at low-to-moderate noise) changes test FGD by less than 1% , confirming that it is not a source of over-smoothing. 
+
+C.3 Delayed History Injection 
+
+Beyond training-time masking, our architecture also incorporates a simple yet important anti-eclipse de-sign: Delayed History Injection . Instead of allowing past-motion features to dominate the generator from the very beginning, we inject motion-history condi-tioning only in the later DiT blocks, while the earlier blocks are primarily driven by audio and semantic cues. Intuitively, this encourages the generator to first establish a response to the current acoustic-semantic input, and only then refine the motion using historical context for temporal continuity. Concretely, in our DiT generator, the early blocks mainly attend to the audio-conditioned features, while history-conditioned features are introduced in the later stage. We additionally inject first-layer audio features into the initial block to strengthen the influence of newly arriving audio cues at the be-ginning of generation. This design is intended to prevent past motion from prematurely overwhelm-ing the generator, which would otherwise encourage inertial continuation. To verify that the injection order matters, we perform an additional ablation named Ours w/ Reversed His-tory Injection , where the order is inverted so that past-motion conditioning dominates earlier while audio-guided refinement is pushed later. As shown in Table 6, reversing the injection order degrades all evaluation metrics, with especially clear drops in se-mantic action accuracy ( 7.175 → 5.376 ), hand detail (7.203 → 5.136 ), and beat matching ( 7.529 → 6.100 ). This observation supports our hypothesis that prema-ture dominance of motion-history features aggravates modality eclipse. Table 8 Direct evidence for modality eclipse on BEAT. Audio-shuffle FGD measures how much performance degrades when the input audio is shuffled ( ∆ = Shuffled − Normal; larger is better). The gradient analysis reports the sensitivity of the loss to the history vs. audio conditions. Audio-shuffle FGD Gradient Variant Normal Shuffled ∆ ↑ Ghist Gaudio Ghist /G audio ↓                  
+
+> Only-DiT 1.325 1.440 +0 .11 0.365 0.075 4.88 w/o CFG 1.504 1.170 −0.33 0.042 0.074 0.57 Full 0.624 9.151 +8.53 0.134 0.245 0.55
+
+C.4 Connection to the Main-Paper Ablations 
+
+The perturbation analysis above should be inter-preted as a diagnostic study of conditioning bias rather than a standalone quality evaluation. Its con-clusions are complementary to the ablation study in Table 6. Several observations are particularly rele-vant. First, removing semantic-acoustic components con-sistently harms generation quality: w/o FiLM In-jection , w/o Semantic Classification , and Only-DiT 
+
+all show substantial drops in semantic action accu-racy, hand detail, and naturalness. Second, removing Anti-Inertia CFG masking ( w/o CFG ) also degrades all four metrics, indicating that training-time miti-gation of over-reliance on past motion is beneficial in practice. Third, reversing the injection order ( w/ Reversed History Injection ) further confirms that not only what information is injected, but also when it is injected, matters for preventing eclipse by motion history. Taken together, these results support a coherent pic-ture: 1. Streaming gesture generation naturally exhibits a history-dominant bias. 2. Without semantic-acoustic conditioning, this bias becomes much stronger, as shown by the perturbation study. 3. Both training-time and architecture-level designs are useful for mitigating this effect: Anti-Inertia CFG masking regularizes shortcut reliance dur-ing optimization, while Delayed History Injection prevents past motion from dominating too early inside the generator. 4. The full design achieves the best overall per-ceptual and semantic performance because it balances two competing requirements: respon-siveness to new semantic-acoustic cues and con-tinuity with historical motion. We emphasize that the perturbation metric mea-sures conditioning sensitivity , rather than whether the model’s response to audio is semantically correct in every instance. For this reason, we use it only as supplementary evidence for the existence of modality eclipse and for the role of semantic-acoustic condition-ing in reducing history-dominant shortcut reliance. The ablation results in Table 6 provide the com-plementary performance-level evidence that the full design not only changes conditioning dynamics, but also improves generation quality in terms of seman-tic action accuracy, hand expressiveness, naturalness, and beat alignment. 
+
+# D RoboGesture Dataset and Semi-synthetic Data Generation 
+
+We briefly described our RoboGesture dataset and semi-synthetic data generation process in Section 4 of the manuscript. In the supplementary material, we provide a detailed explanation of our dataset com-position as well as the full data generation pipeline. 
+
+D.1 Data Composition 
+
+In Semantic Gesticulator [50], the SeG dataset pro-vides a rich collection of mocap data, covering a wide range of daily gestures with clear semantics. The downloadable repository includes 544 mocap clips spanning more than 200 semantic gesture classes. We have benefited greatly from this dataset due to its broad coverage and ease of use. However, it also presents several limitations: (1)Quality Issues. High motion quality is crucial in robotics, where humanoid actions must be safe and collision-free. In SeG, some mocap clips exhibit severe self-collisions—for exam-ple, ARMS_FOLD and FIST_CLASP —or contain mismatches between the gesture and its semantic label, such as FACE_COVER and HAND_FAN. (2)Embodiment Gap. There remains a significant gap between human motion and what a humanoid robot can perform. Some gestures in SeG rely heavily on head movements that cannot be faithfully repro-duced on humanoid robots due to their limited head Semantic Gesticulator EgoGesture New Collection Figure 6 Visualization of RoboGesture Dataset. RoboGesture is a comprehensive full-body gesture dataset comprising over 300 high-quality motion classes collected from EgoGesture, SeG, full-body mocap recordings, online sources, and user surveys. All gestures are retargeted, optimized for physical feasibility, and validated on a real humanoid robot, ensuring human-like expressiveness while remaining fully executable on hardware. 
+
+mobility. (3)Coverage Limitations. Although SeG includes many daily and culturally relevant gestures, it still lacks coverage of certain gestures required in specific scenarios. To address this gap, we addi-tionally collected new gestures from online sources and user surveys. To address these limitations, we first filter out motion clips that humanoid robots are fundamentally incapable of performing. We then identify motions with severe physical inconsistencies that cannot be corrected by our MPC-based filters and re-record those clips through motion capture. The EgoGesture dataset [49] contains a wide range of hand gestures, defining 83 classes of static and dynamic interactions. It is well-suited for semantic expression tasks due to its rich annotations; however, it focuses solely on hand motion and does not include upper-body or full-body movements. To address this limitation, we re-captured all gesture classes using full-body motion capture, enabling downstream applications that require whole-body expressiveness. In addition, we collected supplementary gesture data from questionnaires and online sources to cover a broader set of everyday scenarios. These three sources together form our RoboGesture dataset, which con-tains over 300 high-quality gesture classes, as shown in Figure 6. Each gesture is retargeted to the humanoid model, optimized by our MPC-based filters for physical fea-sibility, and then replayed on the real robot to verify reachability and control fidelity. The resulting Robo-Gesture dataset maintains human-like expressiveness while remaining fully executable on the physical robot, providing a robust foundation for downstream gesture synthesis and real-world deployment.  
+
+> On the gesture taxonomy and data quality.
+
+The 300+ class list is not defined arbitrarily: it is seeded from the established SeG [50] and EgoGesture [49] tax-onomies and then expanded with everyday-scenario gestures collected from user surveys, with semanti-cally duplicated or robot-infeasible classes merged or removed during curation. For quality control, ev-ery class is verified at the motion level rather than only at the label level: each clip is retargeted, passed through the MPC-based feasibility filter, and replayed on the physical robot, and clips that cannot be made collision-free or reachable are re-recorded via motion capture. This ensures that the resulting motions are physically plausible and executable at scale, rather than merely correct in label. 
+
+D.2 Human-to-Humanoid Retargeting 
+
+• Body Motion Retargeting: We applied the General Motion Retargeting(GMR) [44] codebase to re-target the human body motion to the robot, with some minor changes. For example, we changed the rotation matrices in the bvh _to _g1.json file according to the reset pose of the robot. • Hand Motion Retargeting: We used the dex-retargeting [32] codebase, which maps the finger-tip position to the hand joint angle by solving an optimization problem. In our implementa-tion, we did two improvements: (1) Non-uniform scaling. For each finger, we calculate a unique scaling factor, which is the ratio of robot finger length to the human finger length. (2) Cartesian Space Alignment. Dex-retargeting codebase uses the vector from wrist to fingertip. However, the wrist length of the dexterous hand is usually different from that of human hand, resulting in inaccurate mapping. We move the initial point of the vector from the wrist to the MCP point of each finger, thus removing the influence of wrist length. 
+
+D.3 MPC-based collision filter 
+
+Given the generated data prepared for our model and the actions predicted by the model, the MPC-based collision filter is applied to prevent self-collision and to smooth the resulting trajectories. We provide the implementation details below. • Define the Collison Group: To save the compu-tation time, we can pick the bodies that re-quire collision check into one collision group. Assuming that there are M bodies in the xml model, and N bodies are selected into one col-lision pair. In the collison checking process, we only need to do C2 
+
+> N
+
+distance calculation, while without collision pair there is C2 
+
+> M
+
+cal-culation needed. In our implementation, we set three collision groups: FINGER_FINGER_PAIR ,
+
+FINGER_HAND_PAIR , OTHER_CHECK_PAIR , in or-der to filter out the collision between fingers, between fingers and hands, and between hands and bodies. • Set the Collison Avoidance Constraint: Given two bodies in Mujoco Platform, their minimum distance can be easily obtained. Assume that 
+
+dist (q) represents the minimum distance be-tween bodies within one collision pair. The col-lision avoidance constraint can be formulated as: 
+
+dist (q) ≥ dist th 
+
+where dist th is the collision distance threshold. • Linearize the Constraint: We used Taylor expan-sion to convert the non-linear expression into linear one: 
+
+dist (q) ≈ dist (q0) + ∂dist (q)
+
+∂q q=q0
+
+· ∆q
+
+where q0 is the last angle, ∂dist (q) 
+
+> ∂q
+
+is the Jacobian matrix, and ∆q = q − q0. The contact Jacobian matrix can be obtained by the mujoco.mj_jac 
+
+API. • MPC Modeling: Finally, we formulated this prob-lem as a convex quadratic programming problem: 
+
+min  
+
+> ∆q
+
+J(∆ q)
+
+subject to ∂dist (q)
+
+∂q q=q0
+
+· ∆q
+
+≥ dist th + dist (q0)
+
+J(∆ q) = J1(∆ q) + J2(∆ q)+ J3(∆ q)
+
+where J1(∆ q) denotes the velocity cost, J2(∆ q)
+
+denotes the trajectory tracking cost, and J3(∆ q)
+
+denotes the smoothing cost: 
+
+J1(∆ q) = W1∥∆q∥22,J2(∆ q) = W2∥q0 + ∆ q − qref ∥22,J3(∆ q) = W3∥q0 + ∆ q − qprev ∥22.
+
+OSQP Python binding is applied to solve this problem. Notably, our MPC-based collision filter operates on a per-frame basis in a rapid way, inherently supporting streaming processing. This design ensures its utility not only for offline data generation (to curate collision-free training datasets) but also for real-time inference. 
+
+# E Details on Evaluation Metrics 
+
+In this section, we provide additional details on the evaluation protocols used in the main paper, includ-ing both quantitative metrics and human studies. Compared with our earlier internal versions, the ECCV submission uses a revised evaluation suite: for quantitative evaluation, we report FGD , BC , DIV , MSE ,Table 9 Upper-body collision statistics before and af-ter applying the MPC-based safety filter. We report the percentage of frames containing self-collisions in the upper-body kinematic chain over the generated motion sequences. The safety filter significantly reduces collision occurrences during real-robot execution. Method Collision Frame Ratio (%) Ours (w/o Safety Filter) 4.16 Ours (with Safety Filter) 0.13 
+
+and Col ; for human evaluation, we report Rhythm Alignment , Semantic Accuracy , Physical Accuracy & Hand Consistency , and Overall Preference .
+
+E.1 Details on Quantitative Evaluation   
+
+> E.1.1 Fréchet Gesture Distance (FGD) FGD
+
+(Fréchet Gesture Distance) evaluates the dis-tributional fidelity between generated motions and reference motions. It is computed in the latent space of a pre-trained motion autoencoder, following the standard Fréchet distance formulation: 
+
+FGD( g, ˆg) = ∥μr − μg ∥22
+
++ Tr 
+
+
+
+Σr + Σ g − 2(Σ r Σg )1/2
+
+,
+
+where (g, ˆg) denote real and generated gesture se-quences, respectively, and (μr , Σr) and (μg , Σg ) are the mean and covariance of the latent features ex-tracted from the real and generated motion sets.  
+
+> Implementation Details.
+
+We use a dedicated temporal autoencoder as the feature extractor. The input mo-tion is represented in the 60-DoF robot joint space. Following the protocol in the main paper, all baseline outputs are first retargeted to our robot morphology before evaluation. Consistent with our upper-body-focused setting, the first 19 dimensions are excluded during evaluation, and only the remaining 41 dimen-sions are used to characterize the upper-body gesture quality. The encoder features are extracted from tem-porally aligned motion clips, and FGD is computed from the resulting latent distributions.   
+
+> E.1.2 Beat Consistency (BC) BC
+
+(Beat Consistency) measures the temporal syn-chronization between generated motion and input speech. Audio beats Ba are extracted from speech onsets, and motion beats Bm are detected as local minima of motion velocity. The score is defined as: 
+
+BC = 1
+
+|Bm|
+
+X 
+
+> bmi∈Bm
+
+exp − min baj ∈Ba |bmi − baj |2
+
+2σ2
+
+!
+
+,
+
+where σ controls the temporal tolerance. 
+
+> Implementation Details.
+
+• Audio Beat Extraction. We use the onset detection function from Librosa to detect speech onsets, which serve as audio beats Ba.• Motion Beat Extraction. Motion beats are com-puted from the velocity of the 41-dimensional upper-body subset, obtained after excluding the first 19 dimensions from the 60-DoF robot rep-resentation. We first compute the frame-wise velocity norm, and then identify local minima as motion beat candidates. • Tolerance Parameter. We set σ = 0 .1 seconds for all methods.   
+
+> E.1.3 Diversity (DIV) DIV
+
+measures the diversity of generated motions by computing the average pairwise distance among gen-erated motion clips: 
+
+DIV = 1
+
+ N
+
+> 2
+
+
+
+> N
+
+X
+
+> i=1
+> N
+
+X
+
+> j=i+1
+
+1
+
+T × D
+
+> T
+
+X
+
+> t=1
+> D
+
+X
+
+> d=1
+
+|pit,d − pjt,d |
+
+!
+
+,
+
+where N is the number of sampled clips, T is the aligned frame length, and D is the motion dimension. 
+
+> Implementation Details.
+
+• Representation. DIV is computed directly in the 60-DoF robot joint space. • Sampling. We randomly sample a fixed num-ber of generated clips from the full test set for efficiency. • Temporal Alignment. All sampled clips are aligned to a fixed temporal length before pair-wise comparison; shorter clips are zero-padded and longer clips are truncated. • Distance. We use the mean absolute error (MAE) over the full T × D matrix for each pair.   
+
+> E.1.4 Mean Squared Error (MSE) MSE
+
+measures the frame-wise reconstruction error between generated motion and the reference motion: 
+
+MSE( p, ˆp) = 1
+
+T × D
+
+> T
+
+X
+
+> t=1
+> D
+
+X
+
+> d=1
+
+(pt,d − ˆpt,d )2,
+
+where p denotes the reference motion and ˆp denotes the generated motion. 
+
+> Implementation Details.
+
+• Evaluation Space. MSE is computed in the robot joint space after retargeting all compared meth-ods to the same robot morphology. • Upper-body Focus. Consistent with the other motion-quality metrics, we exclude the first 19 dimensions and compute MSE on the remaining 41 upper-body dimensions. • Temporal Alignment. The generated motion is temporally aligned with the reference sequence before evaluation. • Scope. MSE is only reported on datasets where paired reference motion is available; for datasets without motion ground truth, only distributional and human evaluation metrics are reported.   
+
+> E.1.5 Collision Rate (Col) Col
+
+measures the physical plausibility of generated motion by quantifying the proportion of frames with self-collision. Unlike purely kinematic metrics, Col explicitly reflects whether the generated motion is safe for robot execution.  
+
+> Implementation Details.
+
+We compute Col using the collision-enabled robot model provided by the GMR/MuJoCo simulation environment. For each generated motion sequence, we replay the joint tra-jectory frame by frame in MuJoCo and detect self-contacts using the simulator’s built-in collision en-gine. • Collision Geometry. We use the collision-enabled robot XML corresponding to our humanoid plat-form, which contains simplified collision primi-tives for physical contact detection. • Upper-body Self-collision Only. Since the paper focuses on co-speech upper-body gesture gener-ation, we only count collisions between upper-body parts. Contacts involving lower-body bod-ies (e.g., thigh, calf, ankle, foot) are excluded. • Collision Criterion. For each contact reported by MuJoCo, we treat it as a collision if the contact distance satisfies dist < τ , where τ is a small negative threshold (set to −0.01 in our implementation) to suppress marginal numerical contacts. • Frame-level Statistic. A frame is marked as col-lided if at least one valid upper-body self-contact is detected. The final collision rate is computed as: 
+
+Col = Ncollided _frames 
+
+Ntotal _frames 
+
+,
+
+where Ncollided _frames is the number of frames with at least one valid upper-body self-collision and 
+
+Ntotal _frames is the total number of evaluated frames.  
+
+> Interpretation.
+
+A lower Col score indicates better physical plausibility and safer deployment behavior. This metric is particularly important for our setting, since motions that appear visually plausible in an-imation space may still contain severe upper-body penetrations or unsafe hand–torso interactions after retargeting to a physical humanoid robot. 
+
+E.2 Details on Human Evaluation 
+
+In addition to automatic metrics, we conduct human evaluation to assess perceptual and communicative qualities that cannot be fully captured by distribu-tional or geometric metrics.  
+
+> E.2.1 Pairwise Human Evaluation for Main Compar-isons
+
+For the main comparison with baselines, we adopt a pairwise two-alternative forced choice (2AFC) pro-tocol. We randomly select 20 audio clips from each benchmark, and evaluate our method against the com-pared baselines under identical audio inputs. With 5 candidate methods in total (our method plus 4 base-lines), each benchmark yields  52
+
+ × 20 = 200 pairwise comparison items.  
+
+> Participants.
+
+We recruit 100 participants. To reduce fatigue, each participant evaluates 40 randomly as-signed pairwise items. Under this design, each pair receives approximately 20 independent ratings on average.  
+
+> Human Metrics.
+
+Participants are asked to compare the two videos under the following four criteria: • Rhythm Alignment : whether the motion accents, starts, and pauses better match the prosody of the speech. • Semantic Accuracy : whether the gesture con-tent better matches the semantic meaning of the speech. • Physical Accuracy & Hand Consistency : whether the motion appears physically plausible, free of obvious penetration/jitter, and whether the hand/finger articulation is coherent with the upper-body movement. • Overall Preference : the participant’s overall sub-jective preference.  
+
+> Score Aggregation.
+
+For each criterion, we convert binary pairwise comparisons into a centered merit score. Let Vi be the number of pairwise wins for method i, and Ni be the number of times it appears in comparisons. We define: 
+
+mi = 2 Vi
+
+Ni
+
+− 1,
+
+so that mi ∈ [−1, 1] , where positive values indicate better-than-average preference and negative values indicate worse-than-average preference. We report the mean merit score together with its standard error across the collected ratings. 
+
+Full Results with Uncertainty. The complete human-study results used in the main paper are listed below. 
+
+Table 10 Results on the BEAT Benchmark                                                                 
+
+> Method Rhythm Align. Semantic Acc. Physical Acc. & Cons. Overall Pref.
+> Ours 0.1334 ±0.0624 0.4270 ±0.0702 0.4338 ±0.0693 0.3050 ±0.0673
+> SemanticGesticulator 0.0819 ±0.1693 0.2264 ±0.1834 −0.0273 ±0.1708 0.1137 ±0.1751
+> SemTalk 0.0128 ±0.1659 0.0151 ±0.1741 0.1679 ±0.1827 −0.0132 ±0.1624
+> DiffSHEG −0.0058 ±0.1526 −0.2691 ±0.1972 −0.1440 ±0.1943 −0.0992 ±0.1885
+> LivelySpeaker −0.2223 ±0.1632 −0.3994 ±0.1846 −0.4304 ±0.1836 −0.3064 ±0.1737
+
+Table 11 Results on the SemanticBEAT Benchmark                                                                 
+
+> Method Rhythm Align. Semantic Acc. Physical Acc. & Cons. Overall Pref.
+> Ours 0.1269 ±0.0875 0.2239 ±0.0880 0.3066 ±0.0917 0.2514 ±0.0913
+> SemanticGesticulator 0.0296 ±0.0869 0.1605 ±0.0873 −0.0347 ±0.0922 0.0640 ±0.0360
+> SemTalk 0.0650 ±0.0348 −0.0012 ±0.0348 0.1207 ±0.0903 0.0970 ±0.0901
+> DiffSHEG −0.0090 ±0.0888 −0.0817 ±0.0890 −0.0458 ±0.0360 −0.0626 ±0.0922
+> LivelySpeaker −0.2126 ±0.0878 −0.3015 ±0.0883 −0.3466 ±0.0913 −0.3497 ±0.0915
+
+E.2.2 Human Evaluation for Ablation Study 
+
+For the ablation study, the goal is different from the baseline comparison. Here we aim to evaluate fine-grained design choices under the same input audio 
+
+and within a controlled set of model variants. Instead of pairwise 2AFC, we therefore adopt a direct scoring protocol. 
+
+Protocol. For each evaluation batch, participants watch all ablation variants generated from the same audio clip and assign a score from 0 to 10 for each dimension. To reduce inter-rater scale bias, we fur-ther normalize the scores within each batch : the top-ranked video is assigned 9 points, the second-ranked video 8 points, and so on. The normalized scores are then averaged across participants and clips to obtain the final ablation-study scores reported in the main paper. 
+
+Ablation Metrics. The ablation study uses the same four human dimensions as the main paper: • SA : Semantic Action Score, evaluating whether the performed gesture matches the intended se-mantic content. • HD : Hand Detail Score, evaluating the richness and clarity of hand/finger articulation. • HN : Human-likeness & Naturalness, evaluating motion fluency, continuity, and human-like ex-pressiveness. • BM : Beat Matching Score, evaluating the tempo-ral synchronization between gesture rhythm and speech prosody. 
+
+Rationale. This batch-wise ranking protocol is more suitable for ablation analysis than independent ab-solute scoring, because many ablation variants differ only subtly. The within-batch normalization sup-presses differences in personal score scales and makes the final averaged scores more comparable across participants. 
+
+E.3 Robot-space Baseline Re-training 
+
+Our baselines were originally designed for the human skeleton, so comparing them on our setting requires retargeting their outputs to the robot. A natural concern is that this retargeting step – rather than the model itself – may account for the observed per-formance gap. To isolate this factor, we re-train two representative baselines, DiffSHEG [9] and Seman-tic Gesticulator (SG) [50], directly in the robot joint space (i.e., on our robot-space data, with no inference-time retargeting), and compare them against their retargeted counterparts under identical evaluation. Here Sem. BC and Sem. DIV denote BC and DIV measured on SemanticBEAT. As shown in Table 12, the directly-trained and re-targeted variants of each baseline produce nearly identical scores across all metrics (e.g., FGD 2.195 
+
+vs. 2.232 for DiffSHEG; 2.781 vs. 3.015 for SG), and both remain far behind RoboGesture (FGD 0.845 ). This confirms that the retargeting step does not ma-terially affect the comparison, and that our improve-ments stem from the proposed robot-centric frame-work rather than from retargeting fidelity. 
+
+E.4 Semantic Head Accuracy 
+
+We expect to figure out how discriminative the audio features used by our hierarchical semantic-acoustic aligner are. We first clarify that Mimi [13] is not a purely acoustic codec: Moshi distills WavLM rep-resentations into Mimi’s first (semantic) quantizer, which improves phonetic/linguistic discriminability while preserving streaming audio tokens. On the 300-class gesture-semantic classification task, the se-mantic head of our aligner reaches 88.72% /64.71% 
+
+train/test top-1 accuracy. Importantly, this 300-class head is only auxiliary supervision ; the generator fi-nally operates in a continuous DiT latent rather than Table 12 Retargeting is not a confounder. For each baseline we compare the retargeted variant against a variant re-trained directly in robot joint space. The two setups yield nearly identical scores, and both trail RoboGesture, indicating that our gains are not attributable to retargeting artifacts. Method FGD ↓ BC ↑ DIV ↑ Sem. BC ↑ Sem. DIV ↑                         
+
+> DiffSHEG (retargeted) 2.232 0.185 0.122 0.286 0.121 DiffSHEG (direct-trained) 2.195 0.179 0.164 0.290 0.167 SG (retargeted) 3.015 0.177 0.282 0.291 0.283 SG (direct-trained) 2.781 0.165 0.258 0.291 0.259 RoboGesture (robot-space) 0.845 0.187 0.208 0.295 0.204
+
+a 300-way discrete action space. Because many ges-ture classes are semantically interchangeable (e.g., different “greeting” variants), we additionally report a semantic-equivalent accuracy that credits semanti-cally equivalent predictions. 
+
+E.5 Text Conditioning and Diversity Analysis  
+
+> Is text a better semantic interface?
+
+A reasonable alter-native to our finite semantic head is to condition the generator on open-vocabulary text embeddings. To test this, we replace our aligner with text encoders (Qwen and T5) under the same two-stage protocol, and on 100 SemanticBEAT videos we count the num-ber of identifiable semantic gestures and judge their contextual reasonableness. As shown in Table 14, our aligner produces more reasonable semantic gestures than the text-encoder variants, indicating that the finite semantic head does not reduce the generator to a fixed set of actions.  
+
+> On the lower diversity (DIV).
+
+Our method does not attain the highest global DIV. We note, however, that SG attains the highest DIV yet a low reasonable ratio, showing that global DIV can be inflated by semantically mismatched motions. This reframes our lower-but-appropriate DIV as semantically grounded selectivity rather than mode collapse: conditioned on a fixed semantic intent, our generation still ex-hibits healthy variation while avoiding contextually inappropriate gestures that would otherwise raise the global DIV. 
+
+# F Limitations and Ethical Considera-tions 
+
+We conclude by briefly clarifying the scope of the current system, together with several representative failure cases and deployment-related considerations. Our goal here is not to weaken the main claims of the paper, but to better contextualize what the current                                
+
+> Table 13 Accuracy of the 300-class semantic head of our aligner on the test set. “Strict” requires the exact class, while “Semantic-equivalent” credits semantically inter-changeable classes. Top-1 ↑Top-5 ↑F1 ↑
+> Strict 64.71 87.00 70.31 Semantic-equivalent 72.76 95.67 –
+> Table 14 Text-conditioning ablation and diversity analysis on 100 SemanticBEAT videos. We report the number of identifiable semantic gestures and the ratio judged contextually reasonable. Qwen/T5 replace our aligner with text encoders; SG and DiffSHEG are baselines. Ours Qwen T5 SG DiffSHEG Semantic gestures ↑249 145 73 94 73 Reasonable ratio ↑79.0% 21.4% 57.0% 42.6% 41.1%
+
+system is designed for and where future extensions may be most valuable. 
+
+F.1 Scope and Limitations  
+
+> Interaction scope.
+
+The present work focuses on upper-body co-speech gesture generation for humanoid in-teraction. Accordingly, the system is designed for speech-aligned expressive motion, rather than full-body long-horizon embodied behavior such as loco-motion, object manipulation, or scene-level decision making. We view this as an important but still scoped step toward broader humanoid social intelligence.  
+
+> History-conditioned generation.
+
+Our perturbation analysis shows that past motion remains an impor-tant control signal in streaming generation. The pro-posed semantic-acoustic conditioning, Anti-Inertia CFG masking, and delayed history injection reduce excessive history dominance, but do not entirely re-move the need for motion continuity priors. This is expected in practice: good co-speech motion must balance responsiveness to new audio cues with tem-poral smoothness across consecutive chunks.  
+
+> Data and generalization.
+
+A substantial part of our training pipeline relies on robot-space semi-synthetic data construction. This design is helpful for improv-ing semantic coverage and deployment consistency, but the resulting model is still influenced by the di-versity of the constructed data distribution. Further scaling with richer real-world interactive recordings would likely improve robustness in broader social scenarios.  
+
+> System latency.
+
+As discussed in the deployment sec-tion, the motion model itself runs faster than real time once chunked audio is available. In the current prototype, the dominant delay comes from the overall interaction pipeline, including language generation, speech synthesis, and chunked streaming. Reducing such system-level latency is an important direction for future deployment-oriented work.  
+
+> Representative examples.
+
+Representative examples of successful deployment and typical failure cases are included in the supplementary video. 
+
+F.2 Ethical Notes  
+
+> Real-world deployment.
+
+Since the generated motion is executed on a physical humanoid robot, real-world use should always be accompanied by standard safety measures such as conservative control bounds, moni-toring, and emergency stop mechanisms. Our safety filter improves executability, but it should be under-stood as part of a broader deployment stack rather than a complete substitute for system-level safety practice.  
+
+> Expressive social interaction.
+
+The purpose of this work is to improve the naturalness and communica-tive quality of humanoid interaction. At the same time, more expressive robot behavior can shape user expectations more strongly than purely functional systems. We therefore believe that practical deploy-ment should remain transparent about the system’s generated nature and intended application scope.  
+
+> Future outlook.
+
+We hope this work can serve as a use-ful step toward expressive and deployable humanoid interaction, while also motivating future research on richer real-world data, lower-latency system integra-tion, and stronger deployment-time safeguards.
