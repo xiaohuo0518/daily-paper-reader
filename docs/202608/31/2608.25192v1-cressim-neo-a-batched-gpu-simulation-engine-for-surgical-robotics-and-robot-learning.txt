@@ -1,0 +1,245 @@
+Title: CRESSim-Neo: A Batched GPU Simulation Engine for Surgical Robotics and Robot Learning
+
+URL Source: https://arxiv.org/pdf/2608.25192v1
+
+Published Time: Thu, 27 Aug 2026 00:16:48 GMT
+
+Number of Pages: 8
+
+Markdown Content:
+# CRESSim-Neo: A Batched GPU Simulation Engine for Surgical Robotics and Robot Learning 
+
+Yafei Ou 1,∗, Ahnaf Naheen 1, Tleukhan Mussin 1, Hans Jarales 1, Melwin Moncy 2, and Mahdi Tavakoli 1,2
+
+> This work has been submitted to the IEEE for possible publication. Copyright may be transferred without notice, after which this version may no longer be accessible.
+
+Abstract — We introduce CRESSim-Neo, a batched GPU simulation engine for surgical robotics and robot learning. CRESSim-Neo combines position-based simulation of rigid bodies, deformable tissues, fluids, and strands with batched rendering, surgery-specific sensing, and a GPU-resident data pipeline. The engine supports applications including tissue manipulation, fluid suction, suturing, cable-driven robots, and ultrasound image synthesis. Direct access to physics and render-ing buffers enables GPU-resident robot learning and zero-copy PyTorch integration using DLPack. We demonstrate CRESSim-Neo across rigid-body, deformable-body, and fluid simulation tasks, including vision-based and surgical robot-learning sce-narios. On an NVIDIA RTX 4090, the engine achieves up to 2.03 million environment steps per second for 8192 parallel CartPole environments, and scales to batched surgical scenarios involving tissue deformation, fluid interaction, and ultrasound sensing. Overall, CRESSim-Neo provides a unified and scalable platform for surgical simulation, synthetic data generation, and surgical robot learning. 
+
+I. I NTRODUCTION 
+
+Recent advances in robotics research have driven growing demand for high-performance, high-fidelity simulators that can serve both as testbeds for robotics control and automation algorithms, and as platforms for generating synthetic training data and experiences. Despite the availability of numerous robotics simulation platforms, surgical robotics simulation remains particularly challenging because it must capture interactions between various types of objects, including rigid surgical instruments, deformable soft tissues, and fluids. Typically, a surgical simulator requires one or more physics engines that can solve rigid body, cloth, rod- and thread-like structures, fluids (liquid and gas), and deformable soft body, as well as surgery-specific manipulations such as cutting, cauterization, and fluid suctioning. Coupling be-tween different simulated objects, such as fluid-rigid body contact, introduces further complexity. These factors lead to the demand for specific designs and flexibility in both physics and rendering implementations. Therefore, simulators built on existing physics and/or rendering engines, such as Unity or Isaac Sim, often require additional engineering effort to support missing physics or rendering functionality. Although this is common practice, integrating new features (e.g., 
+
+adding fluid suctioning support) is usually non-trivial and  
+
+> This research was supported by the Canada Foundation for Innovation (CFI), the Natural Sciences and Engineering Research Council (NSERC) of Canada, the Canadian Institutes of Health Research (CIHR), and the Government of Alberta Major Innovation Fund A-MEDICO.
+> 1Department of Electrical and Computer Engineering; 2Department of Biomedical Engineering, University of Alberta, Edmonton, Alberta, Canada.
+> ∗Corresponding author: yafei.ou@ualberta.ca
+
+can sometimes require workarounds that conflict with the engine’s default assumptions. Among physics-based simulation methods, the position-based dynamics (PBD) family of methods [1]–[4] is a strong candidate for real-time surgical simulation as it provides a unified and efficient physics framework for diverse materials, including rigid bodies, soft bodies, fluids, and cloth. Exisiting studies have explored the application of PBD methods to surgical simulation, including cutting [5], [6], thread and suturing [7]–[9], soft-tissue deformation [10], [11], and fluid irrigation-suction [12]. iMSTK is an open-source software toolkit for real-time surgical simulations built with PBD [13]. In contrast, surgical simulators based on the finite element method (FEM), ( e.g., SOFA [14], [15]) and the material point method (MPM) ( e.g., CRESSim-MPM [16]) are often too computationally expensive for robotics applica-tions. Nevertheless, despite their advantages, existing PBD-based surgical simulation platforms are mostly designed for surgeon training and typically support only single-scene sim-ulation on the CPU. Therefore, they lack the scalability and robotics interfaces required for large-scale data generation and learning-based surgical robotics. In parallel, GPU-accelerated robotics simulators have re-cently emerged to support large-scale robot learning, syn-thetic data generation, and high-throughput policy evalua-tion. Examples such as Isaac Sim, SAPIEN [17], MuJoCo Playground [18], Genesis World [19] have demonstrated the potential of scalable simulation for generating high-quality robot locomotion and manipulation data. They are enabled by GPU-accelerated physics, massively parallel environment execution, GPU-resident learning pipelines, and scalable rendering pipelines, including batched rasterization in some systems and ray-tracing or hybrid renderers in others. Nevertheless, these systems are generally not designed around the unique physical requirements of surgical scenes. For example, Isaac Sim and SAPIEN use PhysX, a physics engine focused on rigid-body dynamics with limited soft-body support. Recent attempts to develop surgical robotics environments on top of such engines therefore often involve trade-offs in physical fidelity or surgical relevance [20], [21]. Genesis World is a notable exception, offering a unified multiphysics framework written in Taichi Lang. Isaac Sim is also experimenting with a similar physics backend named Newton, written in Nvidia Warp 1. However, adapting such general-purpose multiphysics capabilities to surgical simu-
+
+> 1https://docs.isaacsim.omniverse.nvidia.com/6.0.1 /physics/newton_physics.html arXiv:2608.25192v1 [cs.RO] 25 Aug 2026
+
+GPU Layer (Shaders and Buffers) C++ Engine (Standalone) Python Module CUDA Extensions                                         
+
+> HLSL Shaders GPU Resident Memory
+> Physics Buffers (Rigid/Particle/Constraints) Render Targets (Color/Segmentation/Depth/US) Visual & Computational Sensors Custom Task Kernels Entity Pose Buffers PBD Physics Solver C++ API Python API Vector Environments PyTorch CUDA Tensors GPU Device & Resource Mgr Custom Compute Service CRESSim-Ultrasound ...... CUDA Interop Service
+> Physics Update Read pybind11 Calls Dispatch DLPack Bindings Read/Write Render Output Pose Update
+> Shared Exportable Buffers
+> ;.(); =.(); .(); .(); (){.(); .(); .(); .(); .(); .(); .(); }// One-time authoring // register entities, components, // constraints, and sensors // Steady-state frame loop // Simulated sensors, e.g., ultrasound // Visual sensors, e.g., color/depth // Optional custom compute pass // End-frame synchronize Runtime World runtime runtime config world runtime runtime runtime running runtime runtime runtime frame runtime frame runtime frame runtime pass runtime frame &while initialize getWorld prepare uploadWorld prepare uploadWorld stepPhysics stepSimulationSensors stepVisualSensors executeCustomComputePass endFrame 12345678910 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 39 31 32
+> Execution Pipeline Example C++
+
+Fig. 1. Framework overview of CRESSim-Neo and example code. 
+
+lation still requires substantial domain-specific modification, such as for tissue cutting and ultrasound image synthesis. Thus, existing GPU-accelerated simulators do not yet provide an off-the-shelf solution for surgical robot simulation. To address this gap, we present CRESSim-Neo , a surgery-oriented robotics simulation engine that combines the mod-eling flexibility of surgical simulators with the scalability needed for robot learning and data generation. The main contributions of this work are as follows: 
+
+• A GPU-accelerated runtime for surgical robotics simu-lation, supporting rigid bodies, deformable soft bodies, fluids, and strands through a PBD-based physics module and a batched rasterization-based rendering pipeline. 
+
+• Surgery-centric features, including suturing-style inter-actions, cauterization, cable constraints for continuum and cable-driven robots, and ultrasound image synthesis. 
+
+• A GPU-resident simulation pipeline for high-throughput robot learning and data generation, with customizable compute passes that provide direct access to simulation buffers and CUDA-interoperable outputs. II. S YSTEM OVERVIEW 
+
+A. Design Objectives 
+
+The system design is motivated by two core objectives. 
+
+Multi-Domain Physics and Sensing: Surgical workloads require the simulation of rigid instruments, deformable tis-sues, fluids, and strand-like structures. Furthermore, the sim-ulator should unify these physical domains with multi-modal observation, including color, depth, semantic segmentation, and simulated ultrasound. 
+
+GPU-Resident Dataflow: Most computational stages should remain GPU-resident. This includes not only the physics solver and graphics renderer, but also user-defined computations such as observation generation, reward cal-culation, and post-processing or randomization. Therefore, interfaces for custom GPU compute, as well as access to internal physics and render-state buffers, must be included. Additional considerations include (1) cross-operating-system and cross-GPU support, (2) modern graphics API usage, (3) cross-API shading language portability, and (4) graphics and compute API interoperability. 
+
+B. System Architecture 
+
+CRESSim-Neo is implemented as a standalone C++ sim-ulation engine with a low-level GPU execution layer and a high-level Python binding layer (Fig. 1). 
+
+C++ Engine Orchestration: This foundational run-time implements the public scene-authoring API, manages the entity-component registry, schedules resource uploads (meshes, textures, sensors), and generates Vulkan compute and graphics commands. The C++ runtime is fully standalone and can execute independently of any Python bindings. 
+
+GPU Execution: The computational backend is built with Diligent Engine 2 and performs all heavy physics and rendering calculations on the GPU. Vulkan and Direct3D 12 (D3D12) are the two supported graphics API backends. The PBD solvers, rendering pipelines, and visual/simulation sensors are implemented in HLSL and compiled to compute and graphics shaders. Custom task logic, such as reward calculation, runs in dispatchable HLSL compute kernels so that performance-critical work also stays on the device. 
+
+Python Extension: A lightweight interface layer built on top of the C++ API using pybind11 . It exposes the engine 
+
+> 2
+
+https://diligentgraphics.com/diligent-engine/ runtime API to Python scripts and integrates a Vulkan-CUDA (or D3D12-CUDA, depending on the backend choice) in-terop layer using DLPack. This allows Python-based learning frameworks, such as PyTorch, to acquire direct, zero-copy access to GPU-resident simulation and sensor buffers. 
+
+C. Pipeline Overview 
+
+The engine executes in a staged runtime model with two phases: authoring and stepping. 
+
+Scene Authoring: A scene is configured by registering entities, components, and physics constraints through the C++ or Python API. The engine compiles the required HLSL shaders, allocates device memory, and generates structural layout mapping caches (Section IV-A). 
+
+Frame Stepping: Once initialized, the runtime steps through a steady-state frame execution loop: (1) data upload 
+
+writes dynamic updates (such as kinematic target trans-forms or user inputs) into device buffers. (2) physics step 
+
+dispatches the HLSL PBD physics solvers for rigid-body, deformable constraints, collisions, etc , on the GPU. (3) sen-sor and rendering step processes cameras and simulation sensors ( e.g., ultrasound synthesis), outputing to GPU render targets. (4) optional user-defined custom compute passes 
+
+are dispatched for custom tasks, such as post-processing, data packaging, and post-physics calculations. These passes can be inserted between any stages of the frame loop. (5) 
+
+frame finalization synchronizes the GPU and completes any requested data readbacks. Fig. 1 includes an example code block of the full execution pipeline. This design makes synchronization boundaries ex-plicit and allows custom GPU computations to be interleaved with simulation in a straightforward manner. III. CRESS IM -N EO SIMULATION ENGINE 
+
+A. Batched Multi-Environment Scene Representation 
+
+CRESSim-Neo packs multiple environments into one batched scene. The scene-layout descriptor defines the num-ber of environments and per-environment capacities for ren-derable objects, lights, and cameras. An entity is created with an environment index that determines its simulation and rendering state associated with that environment. On the host side, the scene is authored through a unified entity-component 3 world. Entities may carry transforms, mesh renderers, rigid bodies, colliders, soft bodies, fluids, strands, cameras, lights, or ultrasound-related components. During prepare() and uploadWorld() , this authored state is converted into GPU-resident scene and physics lay-outs together with mappings that preserve entity ownership and environment membership. For renderables, cameras, and lights, the runtime allocates fixed-capacity per-environment slots. For physics objects, including rigid bodies, colliders, soft bodies, fluids, and strands, the runtime stores environ-ment indices and owner-to-buffer mappings rather than using the same fixed slot scheme as rendering.                                  
+
+> 3We use the term descriptively; the implementation is not an ECS. 22 23 20 21 17 18 19 28 24 25 26 27 29 ... 6745
+> Particle pool and ownership Per-environment render arrays Shared entity pose buffers
+> env 0 env 2
+> Shared physics SoA buffers
+> renderables[env * R + slot] positions[] / orientations[] / scales[] rigidBodies[] / colliders[] / particles[] particles[]
+> slot 0 ... slot 2slot 1 032147... 865032147... 865012314 15 12 13 89 10 11 slot 0... slot 2 slot 1...
+> env 0 env 0 env 0 env 0 env 1 env 1 env 1 env 1 env 2
+> softBody i -> [offset, offset+count) fluid j -> [offset, offset+count) strand k -> [offset, offset+count)
+> 16
+> Fig. 2. Batched scene data layout.
+
+This representation separates shared resources from per-environment state. Mesh, texture, material, and shader re-sources are shared, while dynamic simulation state, per-environment lighting, camera state, environment fluid and IBL settings, and sensor execution are environment-specific. Fig. 2 provides an overview of the batched scene data layout. 
+
+B. GPU Physics Using PBD 
+
+The physics solver is based on position-based dynam-ics (PBD), with compliant XPBD-style constraints where needed. It supports both rigid collider and particle-based dynamics. Rigid-body simulation supports sphere, box, cap-sule, and proxy particle colliders, as well as ball, spherical, hinge, and slider joints. Soft bodies can be represented either by tetrahedral particle models with distance and volumetric constraints, or by meshfree particle models with k-nearest-neighbor distance constraints. Fluids are handled within the same particle framework using density constraints and viscosity, cohesion, surface tension, and vorticity terms. The implementations are based largely on the existing CPU-based PBD codebase PositionBasedDynamics 4. Strands are mod-eled using segment, distance, bend, and twist constraints, en-abling cable- and thread-like behavior following the method described in [22]. The engine also supports user-authored constraints for surgical task-specific simulations. Routed cable constraints enforce a path length across guide points attached to rigid bodies, which can be used to simulate cable-driven robots. Rigid-particle and rigid-strand attachment constraints can connect surgical tools, needles, and threads. We further support suturing simulation following the method discussed in [8], where strand and rigid proxy particles are coupled with soft tissue through path-following constraints.  
+
+> 4https://animation.rwth-aachen.de/software/positi on-based-dynamics/ (a) (d) (c) (b) (e) Fig. 3. Representative physics scenes: (a) large-scale rigid-body simulation; (b) soft bodies; (c) joints, from left to right: drivable spherical joints, ball joints, hinge joints, and slider joints; (d) fluids; and (e) suturing with a needle, thread, and soft body.
+
+Because these features share the same parallel prediction, neighborhood and contact generation, and iterative constraint projection pipeline, the physics solver scales well to batched many-environment simulation. Fig. 3 shows example scenes that simulate rigid bodies, soft bodies, fluids, and suturing. 
+
+C. GPU Sensing and Rendering 
+
+After authored state is uploaded and physics is stepped, device-side copies are dispatched to update the entity poses based on the physical state. Visual sensors can then be produced from the current GPU scene state with 
+
+stepVisualSensors() , and computational sensors such as ultrasound are executed in a separate sensor stage 
+
+stepSimulationSensors() .For visual sensing, cameras support three output products: RGB-D, depth-only, and segmentation-with-depth. Cameras can render either to renderer-managed targets for presentation to screen, or to explicitly defined render targets. The latter enables cameras with matched configurations to be grouped and rendered in batches into layered array textures spanning multiple environments. GPU-side camera preparation and indirect drawing further reduce the cost. Deformable soft-body surfaces and strands are rendered directly from physics-updated GPU buffers, while fluids are composited through dedicated depth, filtering, and color passes, using the method discussed in [23]. Ultrasound image synthesis using the COLE algo-rithm [24] is the supported computational sensor through an external CUDA extension, CRESSim-Ultrasound. Probe geometry, scanline layout, and image dimensions are defined by the user, and RF data are generated from the current scatterer position. The scatterers deform together with the underlying soft-body particles, allowing the ultrasound image to respond in real time to tissue deformation. The integration of the CUDA extension is discussed in the following section.  
+
+> Fig. 4. Example sensor outputs. Left: camera RGB rendering with corre-sponding segmentation and depth products below. Middle: RGB rendering of the ultrasound probe scene. Right: synthesized ultrasound image.
+
+Sensor outputs can be consumed either through render-target readback to the host or directly on GPU, enabling downstream custom compute, CUDA/Torch interop, and learning loops without unnecessary host transfers. Fig. 4 shows example render outputs. 
+
+D. Platform Support and CUDA Interoperability 
+
+The runtime currently targets the Vulkan and D3D12 backends provided by Diligent Engine. Vulkan is the default cross-platform path and is used on all supported builds, while D3D12 is available on Windows builds. On macOS, Vulkan support is provided through MoltenVK. CUDA interoperability can be optionally enabled at build time. When available, the engine allocates exportable GPU buffers for shared structured data, exposing device pointers for downstream CUDA/PyTorch use. Synchronization be-tween the graphics/compute backend and CUDA is handled with external timeline semaphores/fences. If exportable allo-cation is unavailable, the same APIs fall back to engine-only GPU buffers without interop. IV. B ATCHED DATA SYNTHESIS AND LEARNING 
+
+INTERFACE 
+
+A. Resource Exposure and PyTorch Interoperability 
+
+Simulation data is exposed through prepared layout map-pings, internal GPU resources, and user-allocated shared buffers. The layout mappings provide the information needed to interpret packed GPU buffers, such as ids, environment indices, per-object particle offsets and counts. Internal simulation buffers and render targets can be read in custom compute passes. User-allocated shared buffers can be bound in custom compute passes and, when CUDA in-terop is enabled, exported through DLPack. Using the layout mappings, users can interpret simulation state and set up TABLE I REPRESENTATIVE GPU RESOURCES EXPOSED BY THE RUNTIME .Resource Exposed information Prepared rigid layout mapping Rigid-body and collider indexing Prepared joint layout mapping Joint indexing and body associations Prepared particle layout mapping Particle ownership and object ranges Prepared constraint layout mapping Constraint associations and routed-cable layout Internal simulation buffers Rigid, joint, particle, and related GPU state Render targets RGB, depth, segmentation, and ultrasound outputs User-allocated shared buffers Custom compute inputs, outputs, with DLPack-exportable data 
+
+custom compute passes that read internal simulation buffers and render targets, such as RGB outputs, and write task-specific results into user-allocated shared buffers. Python-side code can then construct torch.Tensor views over those shared buffers. Table I summarizes the main GPU resource categories exposed by the runtime. 
+
+B. Custom GPU Task Computation 
+
+Custom GPU task computation is supported through user-defined HLSL compute passes. These passes are dispatched through executeCustomComputePass() and can be inserted at any point in the staged frame loop, binding internal simulation buffers, shader-readable render targets, and user-allocated shared buffers discussed in Section IV-A. For robot learning environments, this allows actions, observations, rewards, reset masks, and termination flags to be produced and consumed on GPU. Custom GPU compute is supported independently of CUDA interop (Section III-D). When CUDA interop is disabled, custom compute path remains available, but the user-allocated buffers cannot be exported through DLPack. 
+
+C. Example RL Task Instantiations 
+
+To showcase the interface described above, we present four simple yet representative batched RL tasks that vary in physics and observation modality: a rigid-body control task, two particle-based manipulation tasks, and an image-based visuomotor task, as shown in Fig. 5. 
+
+Rigid-body control: CartPole . As a minimal rigid-body control example, we implement a batched CartPole 
+
+task where each environment contains a cart constrained by a slider joint and a pole connected through a hinge joint. A scalar action specifies the cart actuation target velocity. Before each physics step, a custom compute pass writes the action into the slider-joint target velocity. After physics integration, a second pass reads the rigid-body and hinge-joint buffers to construct observations from the cart and pole states and to evaluate reward and termination conditions. 
+
+Particle-based manipulation: SoftBodyPush and 
+
+FluidPour . To demonstrate tasks that depend on particle state, we introduce two batched manipulation environments where a rigid kinematic actuator interacts with either a soft body or a fluid. In SoftBodyPush , a 2D action controls the planar motion of a pusher. After each physics step, the task reads the soft-body particle state to compute observations and rewards, such as the object centroid and how much of        
+
+> (a) CartPole .(b) SoftBodyPush .
+> (c) FluidPour .(d) TargetCenter .Fig. 5. Representative screenshots of the example RL tasks.
+
+the object lies within a target region. In FluidPour , the action controls the source container’s lateral position and tilt. It then computes observations and rewards from fluid particle statistics, including the fraction of fluid captured by the target container and the fraction spilled outside the workspace. 
+
+Image-based task: TargetCenter . As an example of a visual RL task, we implement a batched TargetCenter 
+
+environment where the yaw and pitch of a camera is controlled to keep a target near the image center. A 2-dimensional action updates the camera pose, after which the environment produces RGB outputs into layered render targets. The observation is the RGB image itself, exported as a GPU tensor. Reward and termination are computed on GPU from the camera and target poses by evaluating the target’s projected displacement from the image center. V. E VALUATION 
+
+A. Surgical Robotics Capability Demonstrations 
+
+To show the engine’s ability to support realistic surgical scenes and robot learning workflows, we present 3 ex-ample RL tasks for surgical robotics: TissueRetract ,
+
+BloodSuction , and UltrasoundScan .(a) (b) (c) Fig. 6. Simulated PSM robot from the dVRK: (a) full robot; (b) Large Needle Driver; (c) Suction/Irrigator. 
+
+With the physics capabilities, we can simulate the patient side manipulator (PSM) from the da Vinci Research Kit [25], as shown in Fig. 6. In the TissueRetract task (Fig. 7), the PSM tool approaches a selected target location on a de-formable tissue patch, establishes a particle-rigid attachment, and lifts the tissue to a target height. In the BloodSuction 
+
+task (Fig. 8), a PSM with a suction-irrigator tool interacts with fluid particles inside a deformable container, drawing nearby particles toward the tool and removing particles that reach the suction region. We further demonstrate a batched 
+
+UltrasoundScan environment (Fig. 9), where a linear ultrasound probe is moved over a deformable tissue to center a target dark area in the ultrasound image.   
+
+> Fig. 7. TissueRetract .
+> Fig. 8. BloodSuction .
+
+Beyond these RL environments, we also present additional surgery-relevant scenes, including suturing with a curved needle and thread passing through deformable tissue, cable-driven continuum robot (CDCR) demonstrations based on  
+
+> Fig. 9. UltrasoundScan .
+
+routed cable constraints, and thermal coagulation with vary-ing tissue properties under heat transfer, as shown in Fig. 10.            
+
+> (a) (b) (c) Fig. 10. Additional surgical scenes: (a) soft-body suturing; (b) an approximated CDCR with spherical joints modeling the backbone; and (c) thermal coagulation with varying tissue properties and appearance under heat transfer.
+
+B. Simulation and RL Throughput 
+
+We evaluate throughput on the four simple RL en-vironments, CartPole , SoftBodyPush , FluidPour ,and TargetCenter , and the three surgical RL en-vironments, TissueRetract , BloodSuction , and 
+
+UltrasoundScan . For each task, we report throughput as a function of the number of parallel environments on a single GPU. Two settings are considered: (1) pure environment-stepping throughput, measured by repeatedly advancing each batched environment with zero actions and no policy updates; and (2) end-to-end RL throughput during training, which includes rollout collection and policy optimization. Table II summarizes the benchmark setup, including hardware and other configurations, and the results are shown in Fig. 11. As shown in the figure, throughput increases strongly with the number of parallel environments before reaching task-dependent saturation points. The largest gains are seen in lighter rigid-body tasks. For example, in pure stepping, the rigid-body CartPole task reaches 2.03M env-steps/s at 8192 environments, whereas SoftBodyPush reaches only 8.86k env-steps/s and saturates at around 512 environments. In general, tasks achieve higher env-steps/s and scale to larger environment counts when their per-environment workload is low. The saturation point is typically determined by the dominant per-environment bottleneck, whether in physics, rendering, sensing, or GPU memory usage. For in-stance, TargetCenter saturates relatively early compared 1 8 32 64 128 256 512 1024 2048 4096 8192 # Environments 10 2     
+
+> 10 3
+> 10 4
+> 10 5
+> 10 6
+> Environment steps/s
+> Simple Tasks
+> CartPole SoftBodyPush FluidPour TargetCenter 1832 64 128 256 # Environments 10 2
+> 10 3
+> 10 4
+> Environment steps/s
+> Surgical Tasks
+> TissueRetract BloodSuction UltrasoundScan
+
+(a) 1 8 32 64 128 256 512 1024 2048 4096 8192 # Environments 10 2      
+
+> 10 3
+> 10 4
+> 10 5
+> Environment steps/s
+> Simple Tasks
+> CartPole SoftBodyPush FluidPour TargetCenter 1832 64 128 256 # Environments 10 2
+> 10 3
+> 10 4
+> Environment steps/s
+> Surgical Tasks
+> TissueRetract BloodSuction UltrasoundScan
+
+(b) Fig. 11. Throughput scaling with the number of parallel environments on a single GPU: (a) pure simulation stepping throughput; and (b) end-to-end RL training throughput. TABLE II BENCHMARK SETUP FOR THROUGHPUT EVALUATION .Item Value CPU Intel Core i9-14900K GPU NVIDIA GeForce RTX 4090 Host memory 29 GiB Operating system EndeavourOS (Linux 7.1.8-arch1-3 ) Graphics backend Vulkan CUDA version 13.3 PyTorch version 2.13.0 Sim. warm-up 64 env steps Sim. measurement horizon 256 env steps PPO warm-up 5 updates PPO measurement horizon 10 updates (128 steps/update) RGB observation size 64 × 64 Ultrasound image size 130 × 160 Ultrasound probe scanlines 96 Ultrasound scanline length 0.7 Ultrasound scanline spacing 0.006 RL policy optimizer Proximal policy optimization (PPO) 
+
+to BloodSuction , although both use RGB image obser-vations. One possible explanation is that TargetCenter 
+
+already achieves relatively high throughput at small batch sizes. As a result, image generation and image-space pro-cessing may become bottlenecks relatively early. In contrast, 
+
+BloodSuction has much lower overall throughput, so additional parallelism may continue to amortize parts of the fluid and particle computation, including per-particle suction logic, before performance begins to saturate. End-to-end PPO throughput follows the same overall pat-tern. Notably, PPO throughput remains close to pure stepping throughput for most of the heavier particle-based and surgical tasks, indicating that simulation dominates the runtime once physics and sensing become sufficiently expensive. VI. D ISCUSSION 
+
+A. Position of CRESSim-Neo 
+
+One might ask why another simulation engine is needed when hundreds of robotics simulators and platforms already exist 5. Even in the surgical domain, a number of recent stud-ies have introduced simulation platforms, including ORBIT-Surgical [20], Surgical Gym [21], FF-SRL [26], LapGym 
+
+> 5
+
+https://github.com/knmcguire/best-of-robot-simul ators 
+
+[15], AMBF-RL [27], SurRoL [28], dVRL [29], many of which focus on machine-learning applications. Instead of proposing another high-level platform built on an existing engine such as SOFA, Isaac Sim, or Unity, CRESSim-Neo is intended to provide a foundational simulation engine, on which surgical scenes and applications can be built. At the same time, it is not intended to serve as a general-purpose replacement for existing engines, such as Isaac Sim. Instead, it has a more focused position: a GPU-accelerated engine designed around the physical interactions and computational workflows particularly relevant to surgical robotics. The engine deliberately emphasizes PBD-based simula-tion of rigid bodies, deformable tissues, fluids, strands, and manipulation-oriented interactions. This differs from plat-forms that prioritize highly accurate rigid-body dynamics, differentiable simulation, or runtime GPU kernel generation through systems such as NVIDIA Warp or Taichi Lang. Al-though these features are valuable for many general robotics applications, they are not central to CRESSim-Neo’s design goals. Therefore, the engine is better suited to manipulation-oriented surgical tasks than to general applications such as locomotion or navigation. Conceptually, CRESSim-Neo can be viewed as a GPU-oriented extension of the simulation approach used by iM-STK and PositionBasedDynamics, augmented with batched rendering, multi-environment execution, and interfaces for robot learning. Its strength is therefore not broad coverage of robotics domain, but a simple PBD framework that includes a wide range of capabilities for surgical simulation. 
+
+B. Limitations 
+
+CRESSim-Neo inherits limitations from both its under-lying simulation method and its current architecture. As discussed in Section VI-A, the use of PBD makes the engine less suited to applications requiring accurate rigid-body contact dynamics. In particular, rigid contacts and joints are less physically faithful than those provided by rigid-body engines ( e.g., MuJoCo), which can affect tasks such as rigid-object grasping or dynamical joint control. In the current task setup, CartPole is included mainly as a benchmarking scene rather than as a practical target application. At the implementation level, memory usage scales roughly linearly with the number of environments because many buffers are allocated according to the per-environment ca-pacity multiplied by the environment count. Additionally, topology-changing operations, such as adding particles or objects, still require buffer reallocation, scene rebuilding, or a re-upload of the simulation state. In some applications, this can be mitigated by pre-allocating potentially required objects and keeping them disabled until needed, at the cost of additional memory consumption. There are also known limitations that are planned to be addressed or mitigated as part of the release roadmap. Custom compute passes can access a fixed set of exposed GPU buffers and render targets, instead of arbitrary simulator internals. Some resources, including render-target textures, are currently exposed only for read access. Cross-platform validation remains incomplete. The actively supported graph-ics backends are Vulkan and D3D12. CUDA interoper-ability is optional for the core engine but is currently re-quired by ultrasound simulation. Validation on AMD GPUs, MoltenVK/macOS, and systems without CUDA remains lim-ited. Finally, the rendering system uses a rasterized forward pipeline and does not support ray tracing. Custom pipelines and graphics shaders are not yet supported. Note that the RL examples are intended to demonstrate the learning interface and its computational performance, rather than RL policy performance. Task-specific learning and transfer are outside the scope of this work. VII. C ONCLUSION 
+
+This paper presents CRESSim-Neo, a GPU simulation engine for surgical robotics and robot learning. By combining PBD/XPBD with surgery-specific sensing and interactions, batched rendering, and GPU-resident data pipelines, the engine enables scalable simulation of surgical scenes. The presented benchmarks and surgical task demonstrations show its potential for high-throughput learning and synthetic data generation in surgical robotics. REFERENCES [1] M. Müller, B. Heidelberger, M. Hennix, and J. Ratcliff, “Position based dynamics,” Journal of Visual Communication and Image Representa-tion , vol. 18, no. 2, pp. 109–118, Apr. 2007. [2] M. Macklin and M. Müller, “Position based fluids,” ACM Transactions on Graphics , vol. 32, no. 4, pp. 1–12, Jul. 2013. [3] J. Bender, M. Müller, and M. Macklin, “Position-Based Simulation Methods in Computer Graphics,” in Eurographics (Tutorials) , 2015, pp. 1–32. [4] M. Macklin, M. Müller, and N. Chentanez, “XPBD: Position-based simulation of compliant constrained dynamics,” in Proceedings of the 9th International Conference on Motion in Games . Burlingame California: ACM, Oct. 2016, pp. 49–54. [5] I. Berndt, R. Torchelsen, and A. Maciel, “Efficient Surgical Cutting with Position-Based Dynamics,” IEEE Computer Graphics and Appli-cations , vol. 37, no. 3, pp. 24–31, May 2017. [6] M. Haiderbhai, R. Gondokaryono, A. Wu, and L. A. Kahrs, “Sim2Real Rope Cutting With a Surgical Robot Using Vision-Based Reinforce-ment Learning,” IEEE Transactions on Automation Science and En-gineering , vol. 22, pp. 4354–4365, 2025. [7] L. Xu and Q. Liu, “Real-time inextensible surgical thread simulation,” 
+
+International Journal of Computer Assisted Radiology and Surgery ,vol. 13, no. 7, pp. 1019–1035, Jul. 2018. [8] P. Yu, J. Pan, H. Qin, A. Hao, and H. Wang, “Real-time suturing simulation for virtual reality medical training,” Computer Animation and Virtual Worlds , vol. 31, no. 4-5, p. e1940, 2020. [9] G. Westergaard et al. , “Real-time haptic-based soft body suturing in virtual open surgery simulations,” Computers & Graphics , vol. 134, p. 104507, Feb. 2026. [10] M. Camara, E. Mayer, A. Darzi, and P. Pratt, “Soft tissue deformation for surgical simulation: A position-based dynamics approach,” Inter-national Journal of Computer Assisted Radiology and Surgery , vol. 11, no. 6, pp. 919–928, Jun. 2016. [11] E. Tagliabue, A. Pore, D. Dall’Alba, E. Magnabosco, M. Piccinelli, and P. Fiorini, “Soft Tissue Simulation Environment to Learn Manip-ulation Tasks in Autonomous Robotic Surgery,” in 2020 IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS) .Las Vegas, NV, USA: IEEE, Oct. 2020, pp. 3261–3266. [12] Y. Ou and M. Tavakoli, “Learning Autonomous Surgical Irrigation and Suction with the da Vinci Research Kit Using Reinforcement Learning,” Nov. 2024. [13] J. Moore et al. , “The interactive medical simulation toolkit (iMSTK): An open source platform for surgical simulation,” Frontiers in Virtual Reality , vol. 4, Jun. 2023. [14] F. Faure et al. , “SOFA: A Multi-Model Framework for Interactive Physical Simulation,” in Soft Tissue Biomechanical Modeling for Computer Assisted Surgery , Y. Payan, Ed. Berlin, Heidelberg: Springer Berlin Heidelberg, 2012, vol. 11, pp. 283–321. [15] P. M. Scheikl et al. , “LapGym - An Open Source Framework for Reinforcement Learning in Robot-Assisted Laparoscopic Surgery,” 
+
+Journal of Machine Learning Research , vol. 24, no. 368, pp. 1–42, 2023. [16] Y. Ou and M. Tavakoli, “CRESSim–MPM: A Material Point Method Library for Surgical Soft Body Simulation with Cutting and Suturing,” in 2025 IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS) , Oct. 2025, pp. 11 247–11 254. [17] F. Xiang et al. , “SAPIEN: A SimulAted Part-Based Interactive ENvi-ronment,” in Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition , 2020, pp. 11 097–11 107. [18] K. Zakka et al. , “MuJoCo Playground,” Feb. 2025. [19] G. A. Team, “The Role of Simulation in Scalable Robotics, Genesis World 1.0, and the Path Forward,” Genesis AI Blog , May 2026. [20] Q. Yu et al. , “Orbit-Surgical: An Open-Simulation Framework for Learning Surgical Augmented Dexterity,” in 2024 IEEE International Conference on Robotics and Automation (ICRA) , May 2024, pp. 15 509–15 516. [21] S. Schmidgall, A. Krieger, and J. Eshraghian, “Surgical Gym: A high-performance GPU-based platform for reinforcement learning with surgical robots,” in 2024 IEEE International Conference on Robotics and Automation (ICRA) , May 2024, pp. 13 354–13 361. [22] F. Liu, E. Su, J. Lu, M. Li, and M. C. Yip, “Robotic Manipulation of Deformable Rope-Like Objects Using Differentiable Compliant Position-Based Dynamics,” IEEE Robotics and Automation Letters ,vol. 8, no. 7, pp. 3964–3971, Jul. 2023. [23] Y. Xu et al. , “Anisotropic screen space rendering for particle-based fluid simulation,” Computers & Graphics , vol. 110, pp. 118–124, Feb. 2023. [24] S. Storve and H. Torp, “Fast Simulation of Dynamic Ultrasound Images Using the GPU,” IEEE Transactions on Ultrasonics, Ferro-electrics, and Frequency Control , vol. 64, no. 10, pp. 1465–1477, Oct. 2017. [25] P. Kazanzides, Z. Chen, A. Deguet, G. S. Fischer, R. H. Taylor, and S. P. DiMaio, “An open-source research kit for the da Vinci® Surgical System,” in 2014 IEEE International Conference on Robotics and Automation (ICRA) . Hong Kong: IEEE, May 2014, pp. 6434–6439. [26] D. Dall’Alba, M. Naskr˛ et, S. Kami´ nska, and P. Korzeniowski, “FF-SRL: High Performance GPU-Based Surgical Simulation For Robot Learning,” in 2024 IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS) , Oct. 2024, pp. 8378–8384. [27] V. M. Varier, D. K. Rajamani, F. Tavakkolmoghaddam, A. Munawar, and G. S. Fischer, “AMBF-RL: A real-time simulation based Rein-forcement Learning toolkit for Medical Robotics,” in 2022 Interna-tional Symposium on Medical Robotics (ISMR) , Apr. 2022, pp. 1–8. [28] J. Xu, B. Li, B. Lu, Y.-H. Liu, Q. Dou, and P.-A. Heng, “SurRoL: An Open-source Reinforcement Learning Centered and dVRK Compatible Platform for Surgical Robot Learning,” in 2021 IEEE/RSJ Interna-tional Conference on Intelligent Robots and Systems (IROS) . Prague, Czech Republic: IEEE, Sep. 2021, pp. 1821–1828. [29] F. Richter, R. K. Orosco, and M. C. Yip, “Open-Sourced Reinforce-ment Learning Environments for Surgical Robotics,” Jan. 2020.

@@ -1,0 +1,250 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-09-01T00:39:52.231660+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 2,
+    "deep_divecandidates": 0,
+    "deep_cap": 7,
+    "deep_selected": 0,
+    "quick_candidates": 5,
+    "quick_skim_target": 12,
+    "quick_selected": 5
+  },
+  "deep_dive": [],
+  "quick_skim": [
+    {
+      "id": "2608.24937v1",
+      "source": "arxiv",
+      "title": "Multi-Modal Anomaly Detection: A Survey",
+      "abstract": "Multi-Modal Anomaly Detection (MMAD) detects rare abnormal events from heterogeneous data sources and is increasingly used in safety- and reliability-critical applications such as industrial inspection and cybersecurity. Yet the literature is fragmented across domains and modality combinations, and existing surveys usually group methods by architecture rather than by how abnormality is defined and separated in multi-modal settings. We survey MMAD from an assumption-driven perspective. We formalize the problem, identify five intrinsic characteristics underlying its core challenges, and organize prior work into two complementary paradigms. The first, normality-assumption methods, models regularity via representation learning, cross-modal alignment, and knowledge enhancement. The second, anomaly-assumption methods, sharpens decision boundaries through coarse-grained, structural, and semantic anomaly injection. We also investigate how foundation models are reshaping MMAD through scalable pretraining, flexible cross-modal transfer, and emerging reasoning capabilities. Finally, we compile representative benchmarks and evaluation protocols across domains and highlight open problems and future directions for robust, adaptive, and interpretable MMAD systems.",
+      "authors": [
+        "Xudong Mou",
+        "Zexin Wu",
+        "Chuan Luo",
+        "Shiru Chen",
+        "Xudong Liu",
+        "Chunming Hu",
+        "Renyu Yang"
+      ],
+      "primary_category": "cs.LG",
+      "categories": [
+        "cs.LG",
+        "cs.AI"
+      ],
+      "published": "2026-08-24T01:53:22+00:00",
+      "link": "https://arxiv.org/pdf/2608.24937v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "Survey of multi-modal anomaly detection methods with representation learning and cross-modal alignment",
+      "llm_evidence_cn": "多模态异常检测方法综述，涵盖表示学习和跨模态对齐",
+      "llm_evidence": "多模态异常检测方法综述，涵盖表示学习和跨模态对齐",
+      "canonical_evidence": "多模态异常检测方法综述，涵盖表示学习和跨模态对齐",
+      "llm_tldr_en": "A survey organizing multi-modal anomaly detection methods by assumption-driven paradigms, covering representation learning, cross-modal alignment, and knowledge enhancement, with implications for safety-critical applications such as robot fault diagnosis.",
+      "llm_tldr_cn": "多模态异常检测（MMAD）旨在从异构数据源中检测罕见异常事件，在工业检测和网络安全等安全关键应用中日益重要。本综述从假设驱动的视角出发，形式化问题并识别五大核心挑战，将现有工作分为正态性假设方法和互补范式，系统梳理了表示学习、跨模态对齐和知识增强等路线。该综述为机器人故障诊断特别是基于关节位置/速度/力矩/IMU等本体感受信号的异常检测提供了方法学参考。",
+      "llm_tldr": "多模态异常检测（MMAD）旨在从异构数据源中检测罕见异常事件，在工业检测和网络安全等安全关键应用中日益重要。本综述从假设驱动的视角出发，形式化问题并识别五大核心挑战，将现有工作分为正态性假设方法和互补范式，系统梳理了表示学习、跨模态对齐和知识增强等路线。该综述为机器人故障诊断特别是基于关节位置/速度/力矩/IMU等本体感受信号的异常检测提供了方法学参考。",
+      "llm_tags": [
+        "query:humanoid-ood"
+      ],
+      "matched_query_tag": "query:humanoid-ood",
+      "matched_query_text": "Self supervised time series anomaly detection for robot fault diagnosis",
+      "matched_requirement_id": "req-16",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2608.22637v1",
+      "source": "arxiv",
+      "title": "OmniCAD: A Large-Scale Benchmark for 3D Spatial Reasoning in Robotics Assemblies",
+      "abstract": "Recent vision-language models (VLMs) show strong capabilities in robotic perception and spatial reasoning, yet their ability to reason about complex mechanical assemblies remains underexplored. We introduce OmniCAD, a large-scale benchmark for assembly-aware 3D spatial reasoning across diverse industrial systems, including robotic mechanisms, automotive components, aerospace structures, and agricultural machinery. OmniCAD contains 25k mechanical assemblies, with an average of 12 parts per assembly and 21 types of mate relationships. Each assembly includes a human-verified ground-truth 3D model and renderings from 20 viewpoints. The benchmark evaluates three capabilities: (1) component-level 3D spatial reasoning, requiring prediction of part positions and orientations; (2) part-to-part relational reasoning, requiring identification of mating relationships and assembly constraints; and (3) tool-augmented agentic reasoning, where models iteratively select viewpoints, inspect visual evidence, and refine predictions. Experiments show that current VLMs struggle with industrial assembly reasoning, often producing inaccurate poses, invalid mating relationships, part interpenetration, and degraded performance as assembly complexity increases. We will open-source the benchmark, evaluation code, and tool interfaces to support research on accurate, physically valid, and scalable 3D assembly reasoning.",
+      "authors": [
+        "Mingjia Wang",
+        "Taiting Lu",
+        "Ziwei Dong",
+        "Sisong Bei",
+        "Jingying Zeng",
+        "Runze Liu",
+        "Kaiyuan Lin",
+        "Hongxing Pan",
+        "Kai Zhang",
+        "Yizheng Hou",
+        "Yangshoudu Zheng",
+        "Chenchen Guo",
+        "Weiyuan Meng",
+        "Shubin Lyu",
+        "Zhijun Zheng",
+        "Dexu Wang",
+        "Xinyu Bai",
+        "Shurui Qian",
+        "Zhangzixin",
+        "Mengyu Pan",
+        "Guoliang Shi",
+        "Ling Ma",
+        "Yifan Yang",
+        "Qi He",
+        "Yi-Chao Chen",
+        "Yincheng Jin",
+        "Sung-Liang Chen",
+        "Mahanth Gowda"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV"
+      ],
+      "published": "2026-08-23T22:42:28+00:00",
+      "link": "https://arxiv.org/pdf/2608.22637v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "large-scale robotics assembly dataset; dataset construction for robotics",
+      "llm_evidence_cn": "大规模机器人装配数据集；面向机器人的数据集构建",
+      "llm_evidence": "大规模机器人装配数据集；面向机器人的数据集构建",
+      "canonical_evidence": "大规模机器人装配数据集；面向机器人的数据集构建",
+      "llm_tldr_en": "Presents OmniCAD, a large-scale benchmark with 25k mechanical assemblies and viewpoint renderings for evaluating VLM spatial reasoning in robotics, contributing a construction pipeline for robot-related datasets.",
+      "llm_tldr_cn": "现有视觉语言模型在机器人感知上表现良好，但缺乏对复杂机械装配空间推理的评估基准。OmniCAD 构建了一个包含 2.5 万个机械装配体、平均 12 个零件和 21 种配合关系的大规模基准，每个装配提供人工验证的三维模型和 20 视点渲染图。该基准用于评测部件级三维空间推理等三类能力。其大规模数据构建流程对机器人领域（包括人形机器人）的数据集建设具有方法论参考价值。",
+      "llm_tldr": "现有视觉语言模型在机器人感知上表现良好，但缺乏对复杂机械装配空间推理的评估基准。OmniCAD 构建了一个包含 2.5 万个机械装配体、平均 12 个零件和 21 种配合关系的大规模基准，每个装配提供人工验证的三维模型和 20 视点渲染图。该基准用于评测部件级三维空间推理等三类能力。其大规模数据构建流程对机器人领域（包括人形机器人）的数据集建设具有方法论参考价值。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2608.26645v1",
+      "source": "arxiv",
+      "title": "FLARE: A Failure-Aware Framework for Autonomous Correction and Recovery in Visual-Language Robotic Manipulation",
+      "abstract": "Vision-Language-Action Models~(VLAs) have demonstrated significant promise in generalizing to complex, long-horizon robotic manipulation tasks. However, their performance remains brittle, as they are typically trained on trajectory-monotonic, failure-free demonstrations. This reliance on ``perfect\" data leaves them unable to recover from common execution errors, such as a missed grasp, a dropped object, or an unexpected collision. In this paper, we propose FLARE, a novel framework that endows VLAs with robust error recovery capabilities through a ``Retry\" and ``Reset\" paradigm. First, we introduce a ``Retry\" mechanism by injecting perturbation and bridging segments that decouple robot pose from environment state into demonstrations, enabling the policy to autonomously handle execution deviations. Second, to address critical, state-breaking (OOD) failures, we introduce a ``Reset\" pipeline. We leverage an MLLM for offline failure analysis to automatically identify OOD states from execution videos. This analysis enables the efficient, targeted collection of a small library of object-centric ``Reset\" skills, which are trained to restore the environment to a task-valid state. Our full framework integrates these learned policies. At inference, an online MLLM monitor arbitrates between task execution and ``Reset\" skills. Experiments on challenging, contact-rich manipulation tasks show our approach significantly improves task success and robustness.",
+      "authors": [
+        "Ganlong Zhao",
+        "Zijia Tang",
+        "Xingping Chen",
+        "Zhanghui Kuang",
+        "Ye Tian",
+        "Guanbin Li"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-08-27T05:58:06+00:00",
+      "link": "https://arxiv.org/pdf/2608.26645v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "failure-aware framework for detecting and recovering from execution errors in robotic manipulation",
+      "llm_evidence_cn": "面向机器人操作执行错误的失败感知与自动纠错恢复框架，适合错误分析",
+      "llm_evidence": "面向机器人操作执行错误的失败感知与自动纠错恢复框架，适合错误分析",
+      "canonical_evidence": "面向机器人操作执行错误的失败感知与自动纠错恢复框架，适合错误分析",
+      "llm_tldr_en": "Introduces FLARE, a failure-aware framework that equips Vision-Language-Action models with Retry and Reset mechanisms to detect and recover from execution errors such as missed grasps and collisions.",
+      "llm_tldr_cn": "视觉-语言-动作模型通常只在无失败示范上训练，难以从抓取失败、物体掉落或意外碰撞等执行错误中恢复。为此提出FLARE框架，通过注入扰动与桥接片段解耦机器人位姿与环境状态，从而实现重试和重置两种纠错恢复机制。实验表明FLARE能显著提升长时程操作任务的成功率，为机器人错误分析与自主纠错提供通用框架。",
+      "llm_tldr": "视觉-语言-动作模型通常只在无失败示范上训练，难以从抓取失败、物体掉落或意外碰撞等执行错误中恢复。为此提出FLARE框架，通过注入扰动与桥接片段解耦机器人位姿与环境状态，从而实现重试和重置两种纠错恢复机制。实验表明FLARE能显著提升长时程操作任务的成功率，为机器人错误分析与自主纠错提供通用框架。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "fault diagnosis and error analysis for humanoid robots",
+      "matched_requirement_id": "req-7",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2608.23723v1",
+      "source": "arxiv",
+      "title": "DriftAD: Visually-Guided Text Drift for Few-Shot Industrial Anomaly Detection",
+      "abstract": "Few-shot anomaly detection (FSAD) has recently benefited from vision-language models such as CLIP, which enable anomaly de?tection by aligning visual features with text descriptions of normal and abnormal states. However, existing methods typically rely on static text prompts that are applied uniformly across the entire feature hierarchy and spatial dimensions. This rigid global-to-local matching fails to capture the highly localized and scale-dependent physical variations of industrial defects. To address this, we propose DriftAD, a FSAD framework built on three key modules. First, an Anomaly Signal Amplification (ASA) module enhances subtle defect signals through spatial and frequency branches before text-visual matching. Second, Visually-Guided Text Drift (VGTD) dynamically transforms frozen CLIP text embeddings, steering them into layer?wise, spatially-adaptive anomaly descriptors conditioned on local visual context at each encoder depth. Third, Drift-Guided Spatial Gating (DGSG) uses the drifted abnormal descriptor as a spatial probe to selectively enhance anomaly-relevant visual features. Addi?tionally, a drift separation loss prevents representational collapse of the drifted descriptors, and a gate supervision loss enforces spatially discriminative gating in DGSG. Extensive experiments on MVTec?AD and VisA demonstrate state-of-the-art performance across all 1-, 2-, and 4-shot settings on both image-level and pixel-level metrics. Code is available at https://github.com/wenyang001/DriftAD.",
+      "authors": [
+        "Wenyang Liu",
+        "Tianyi Liu",
+        "Dongshuo Zhang",
+        "Kejun Wu",
+        "Adams Wai-Kin Kong"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV"
+      ],
+      "published": "2026-08-24T18:09:46+00:00",
+      "link": "https://arxiv.org/pdf/2608.23723v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "few-shot industrial anomaly detection method transferable to robot fault diagnosis",
+      "llm_evidence_cn": "可迁移至机器人故障诊断的少样本工业异常检测方法",
+      "llm_evidence": "可迁移至机器人故障诊断的少样本工业异常检测方法",
+      "canonical_evidence": "可迁移至机器人故障诊断的少样本工业异常检测方法",
+      "llm_tldr_en": "DriftAD: Few-shot industrial anomaly detection via visually-guided text drift with CLIP, using anomaly signal amplification and text drift to localize defects; transferable to visual fault detection in robotics.",
+      "llm_tldr_cn": "该文提出DriftAD，一种基于视觉引导文本漂移的少样本工业异常检测框架。它通过异常信号放大模块增强细微缺陷，再利用视觉引导的文本漂移机制使文本提示自适应不同特征层级与空间区域，从而更精确地匹配局部缺陷。在标准异常检测基准上取得了优越性能，证明其能有效检测未见过的缺陷类型。该方法可迁移至机器人视觉故障检测与安全监测中。",
+      "llm_tldr": "该文提出DriftAD，一种基于视觉引导文本漂移的少样本工业异常检测框架。它通过异常信号放大模块增强细微缺陷，再利用视觉引导的文本漂移机制使文本提示自适应不同特征层级与空间区域，从而更精确地匹配局部缺陷。在标准异常检测基准上取得了优越性能，证明其能有效检测未见过的缺陷类型。该方法可迁移至机器人视觉故障检测与安全监测中。",
+      "llm_tags": [
+        "query:humanoid-ood"
+      ],
+      "matched_query_tag": "query:humanoid-ood",
+      "matched_query_text": "Open set recognition in robotics for safety and anomaly detection",
+      "matched_requirement_id": "req-17",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2608.25192v1",
+      "source": "arxiv",
+      "title": "CRESSim-Neo: A Batched GPU Simulation Engine for Surgical Robotics and Robot Learning",
+      "abstract": "We introduce CRESSim-Neo, a batched GPU simulation engine for surgical robotics and robot learning. CRESSim-Neo combines position-based simulation of rigid bodies, deformable tissues, fluids, and strands with batched rendering, surgery-specific sensing, and a GPU-resident data pipeline. The engine supports applications including tissue manipulation, fluid suction, suturing, cable-driven robots, and ultrasound image synthesis. Direct access to physics and rendering buffers enables GPU-resident robot learning and zero-copy PyTorch integration using DLPack. We demonstrate CRESSim-Neo across rigid-body, deformable-body, and fluid simulation tasks, including vision-based and surgical robot-learning scenarios. On an NVIDIA RTX 4090, the engine achieves up to 2.03 million environment steps per second for 8192 parallel CartPole environments, and scales to batched surgical scenarios involving tissue deformation, fluid interaction, and ultrasound sensing. Overall, CRESSim-Neo provides a unified and scalable platform for surgical simulation, synthetic data generation, and surgical robot learning.",
+      "authors": [
+        "Yafei Ou",
+        "Ahnaf Naheen",
+        "Tleukhan Mussin",
+        "Hans Jarales",
+        "Melwin Moncy",
+        "Mahdi Tavakoli"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-08-25T22:17:00+00:00",
+      "link": "https://arxiv.org/pdf/2608.25192v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "GPU simulation engine with data pipeline for generating robot learning datasets",
+      "llm_evidence_cn": "具有数据管线的GPU仿真引擎，用于生成机器人学习数据集",
+      "llm_evidence": "具有数据管线的GPU仿真引擎，用于生成机器人学习数据集",
+      "canonical_evidence": "具有数据管线的GPU仿真引擎，用于生成机器人学习数据集",
+      "llm_tldr_en": "CRESSim-Neo is a batched GPU simulation engine for surgical robotics and robot learning, combining physics simulation, rendering, sensing, and a GPU-resident data pipeline to enable efficient generation of diverse training datasets.",
+      "llm_tldr_cn": "CRESSim-Neo是一个面向手术机器人和机器人学习的批处理GPU仿真引擎，它统一模拟刚体、变形体、流体等物理对象，并提供批渲染、手术传感和GPU常驻数据管线。通过直接暴露物理与渲染缓冲区，它支持零拷贝PyTorch集成，从而为机器人学习快速生成大规模多样化数据集，缓解真实机器人数据收集成本高的问题。",
+      "llm_tldr": "CRESSim-Neo是一个面向手术机器人和机器人学习的批处理GPU仿真引擎，它统一模拟刚体、变形体、流体等物理对象，并提供批渲染、手术传感和GPU常驻数据管线。通过直接暴露物理与渲染缓冲区，它支持零拷贝PyTorch集成，从而为机器人学习快速生成大规模多样化数据集，缓解真实机器人数据收集成本高的问题。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    }
+  ]
+}
