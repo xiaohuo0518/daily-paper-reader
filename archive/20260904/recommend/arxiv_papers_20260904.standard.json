@@ -1,0 +1,407 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-09-04T22:36:01.579937+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 2,
+    "deep_divecandidates": 3,
+    "deep_cap": 7,
+    "deep_selected": 3,
+    "quick_candidates": 6,
+    "quick_skim_target": 12,
+    "quick_selected": 6
+  },
+  "deep_dive": [
+    {
+      "id": "2609.02134v1",
+      "source": "arxiv",
+      "title": "Unified Motion Retargeting for Humanoids with Learned Point Cloud Correspondence",
+      "abstract": "Humanoid learning increasingly relies on transforming vast and diverse human motion data into high-quality robot reference trajectories. However, retargeting human motion to humanoid robots is challenging due to substantial differences in morphology, degrees of freedom, joint ranges, and kinematic constraints between humans and robots. Existing retargeting methods typically address these differences by defining human-robot correspondence through hand-crafted sparse keypoints or body-part pairs. As a result, retargeting quality depends heavily on manual semantic design, limiting scalability across motion sources and robot morphologies and providing only sparse guidance for reproducing detailed poses and interactions. In this paper, we present Unified Motion Retargeting (UMR), a framework that learns dense point cloud correspondence without requiring manually designed human-robot mappings. By treating exterior point clouds as a unified interface between human motion and humanoid robots, UMR decouples retargeting from source-specific skeletal semantics and robot-specific topology. The learned dense correspondence provides fine-grained geometric anchors for constrained point cloud matching optimization, enabling surface-level pose alignment and direct transfer of interaction contacts. Experiments demonstrate that UMR unifies retargeting across heterogeneous motion sources, robot embodiments, and downstream scenarios ranging from locomotion to interaction, while achieving higher motion fidelity and plausibility than state-of-the-art methods. UMR therefore provides a scalable foundation for transforming large-scale human motion references into robot-ready training data.",
+      "authors": [
+        "Hanyang Cao",
+        "Yuetong Fang",
+        "Taesoo Kwon",
+        "Runyi Yu",
+        "Ji Ma",
+        "Jing Tan",
+        "Yangchen Zhou",
+        "Baoze Du",
+        "Yi Gu",
+        "Yukang Gao",
+        "Ruoli Dai",
+        "Lei Han",
+        "Renjing Xu"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.GR"
+      ],
+      "published": "2026-09-02T05:43:19+00:00",
+      "link": "https://arxiv.org/pdf/2609.02134v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "Unified human motion retargeting produces robot reference trajectories, core to humanoid robot dataset construction.",
+      "llm_evidence_cn": "统一人体运动重定向生成机器人参考轨迹，是人形机器人数据集构建的核心环节。",
+      "llm_evidence": "统一人体运动重定向生成机器人参考轨迹，是人形机器人数据集构建的核心环节。",
+      "canonical_evidence": "统一人体运动重定向生成机器人参考轨迹，是人形机器人数据集构建的核心环节。",
+      "llm_tldr_en": "This paper presents unified motion retargeting using learned point-cloud correspondence to convert human motion into humanoid robot reference trajectories, removing hand-crafted keypoint design and enabling scalable humanoid robot dataset construction.",
+      "llm_tldr_cn": "人形机器人学习日益依赖将大规模人体运动数据重定向为高质量机器人参考轨迹，但人体与人形机器人在形态、自由度与关节范围上的差异使该过程困难，手工稀疏关键点设计限制了可扩展性。本文提出一种统一运动重定向方法，通过学习人体与机器人点云对应关系自动建立几何映射，避免人工语义对应。实验显示该方法在多种动作源与机器人形态下提升重定向质量与泛化性，为构建人形机器人数据集提供关键工具。",
+      "llm_tldr": "人形机器人学习日益依赖将大规模人体运动数据重定向为高质量机器人参考轨迹，但人体与人形机器人在形态、自由度与关节范围上的差异使该过程困难，手工稀疏关键点设计限制了可扩展性。本文提出一种统一运动重定向方法，通过学习人体与机器人点云对应关系自动建立几何映射，避免人工语义对应。实验显示该方法在多种动作源与机器人形态下提升重定向质量与泛化性，为构建人形机器人数据集提供关键工具。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "humanoid robot dataset construction",
+      "matched_requirement_id": "req-2",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2608.31002v2",
+      "source": "arxiv",
+      "title": "DARP: A Calibrated Dual-Arm RGB-D-IR Dataset for Multi-View Robotic Perception",
+      "abstract": "Robotic perception from a single viewpoint is often limited by self-occlusion and incomplete surface visibility. This paper presents DARP(Dual-Arm Robotic Perception) https://doi.org/10.21227/rmv3-be47, a calibrated dual-arm RGB-D-IR dataset for object-centered robotic perception using two independently moving eye-in-hand manipulators positioned on opposite sides of a shared tabletop workspace. Each arm carries an Intel RealSense sensor that continuously records RGB, depth, and stereo infrared data while synchronized robot joint states are logged for pose recovery. Objects are placed without fixed poses or marked locations, and the acquisition procedure performs automatic localization, cross-arm confirmation, adaptive viewpoint generation, and continuous multimodal recording. DARP contains ten unique tabletop objects and preserves the original sensor recordings, robot-state logs, object-level metadata, and calibration information required to reconstruct camera trajectories in a shared metric frame. To evaluate the geometric consistency of the acquisition, we implement a deterministic multi-view fusion pipeline that converts calibrated RGB-D observations into complementary partial point clouds and measured surface meshes without using learned or generative completion methods. Evaluation on 224 held-out RGB-D keyframes comprising 1,563,466 three-dimensional query points yields a median point-to-mesh distance of 2.13~mm and an RMSE of 4.04~mm, with 96.56\\% of points within 10~mm of the measured-surface mesh. DARP is intended as a reusable resource for multi-view reconstruction, collaborative robotic perception, multimodal fusion, active perception, and future learning-based reasoning over partial object observations.",
+      "authors": [
+        "Manish Kansana",
+        "Mohammed Yusuf Mujawar",
+        "Sudip Mittal",
+        "Shahram Rahimi",
+        "Noorbakhsh Amiri Golilarz"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.CV"
+      ],
+      "published": "2026-08-31T15:53:41+00:00",
+      "link": "https://arxiv.org/pdf/2608.31002v2",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "presents a calibrated dual-arm RGB-D-IR dataset with synchronized robot joint states, directly serving robotics dataset construction",
+      "llm_evidence_cn": "发布带关节状态同步的双臂RGB-D-IR校准数据集，直接服务于机器人数据集构建研究",
+      "llm_evidence": "发布带关节状态同步的双臂RGB-D-IR校准数据集，直接服务于机器人数据集构建研究",
+      "canonical_evidence": "发布带关节状态同步的双臂RGB-D-IR校准数据集，直接服务于机器人数据集构建研究",
+      "llm_tldr_en": "DARP is a calibrated dual-arm eye-in-hand RGB-D-IR dataset with synchronized joint states for object-centered multi-view robotic perception, enabling automatic localization, cross-arm confirmation, and adaptive viewpoint generation.",
+      "llm_tldr_cn": "单视角机器人感知受自遮挡和物体表面不完整的限制，缺乏双机械臂多视角基准。DARP 提出一个带有两只独立机械臂和各自RealSense传感器的校准RGB-D-IR数据集，在共享桌面上从对侧同步记录RGB、深度、红外和机器人关节状态。对象无需固定，采集流程包含自动定位、跨臂确认和自适应视角生成。该数据集为多视角机器人感知和相关学习任务提供了高质量基准。",
+      "llm_tldr": "单视角机器人感知受自遮挡和物体表面不完整的限制，缺乏双机械臂多视角基准。DARP 提出一个带有两只独立机械臂和各自RealSense传感器的校准RGB-D-IR数据集，在共享桌面上从对侧同步记录RGB、深度、红外和机器人关节状态。对象无需固定，采集流程包含自动定位、跨臂确认和自适应视角生成。该数据集为多视角机器人感知和相关学习任务提供了高质量基准。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2609.03199v1",
+      "source": "arxiv",
+      "title": "RoboTok: An Internet-Scale Data Engine for Human Demonstration Retrieval and Dexterous Manipulation Learning",
+      "abstract": "Robot learning increasingly depends on broad and diverse demonstrations, yet collecting robot data remains expensive and poorly suited to covering the long tail of real-world tasks. To address this bottleneck, we introduce RoboTok, an internet-scale data engine that, given a query human manipulation video, retrieves manipulation-relevant human demonstrations from web videos for training dexterous robot policies. Specifically, we learn a latent motion space from 3D hand trajectories expressed in estimated actor-centered reference frames. This representation enables manipulation behaviors to be compared across variations in camera viewpoint, scene appearance, and actor occlusions, while remaining compact enough for efficient search and continual indexing over internet-scale video collections. We evaluate RoboTok against existing robot-data retrieval approaches on retrieval benchmarks and downstream robot policy performance. Our results show that RoboTok retrieves more relevant manipulation demonstrations and improves downstream task success, establishing hand-pose trajectory-aware retrieval as a way to make web video a scalable and continuously growing source of supervision for robot learning.",
+      "authors": [
+        "Howard Qian",
+        "Yiting Chen",
+        "Yunfei Xie",
+        "Kejia Ren",
+        "Podshara Chanrungmaneekul",
+        "Gaotian Wang",
+        "Bowen Wen",
+        "Chen Wei",
+        "Kaiyu Hang"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV",
+        "cs.RO"
+      ],
+      "published": "2026-09-02T22:31:43+00:00",
+      "link": "https://arxiv.org/pdf/2609.03199v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "internet-scale data engine to construct robot training datasets by retrieving human demonstrations from videos",
+      "llm_evidence_cn": "通过检索视频人类示范构建机器人训练数据的互联网规模数据引擎",
+      "llm_evidence": "通过检索视频人类示范构建机器人训练数据的互联网规模数据引擎",
+      "canonical_evidence": "通过检索视频人类示范构建机器人训练数据的互联网规模数据引擎",
+      "llm_tldr_en": "RoboTok is an internet-scale data engine that retrieves task-relevant human manipulation videos from the web and learns a latent 3D-hand-trajectory motion space, enabling low-cost construction of diverse robot training datasets.",
+      "llm_tldr_cn": "机器人学习依赖多样化示范数据，而真实机器人采集成本高且难以覆盖长尾任务。RoboTok提出互联网规模的数据引擎，给定查询视频即可从海量网页视频中检索操作相关的人类示范。其核心是在以演员为中心的参考系中学习3D手部轨迹的潜在运动空间，从而跨视角、外观与遮挡比较操作行为，并为灵巧操作策略生成训练数据。该方法有望大幅降低机器人数据获取成本，扩展技能覆盖面。",
+      "llm_tldr": "机器人学习依赖多样化示范数据，而真实机器人采集成本高且难以覆盖长尾任务。RoboTok提出互联网规模的数据引擎，给定查询视频即可从海量网页视频中检索操作相关的人类示范。其核心是在以演员为中心的参考系中学习3D手部轨迹的潜在运动空间，从而跨视角、外观与遮挡比较操作行为，并为灵巧操作策略生成训练数据。该方法有望大幅降低机器人数据获取成本，扩展技能覆盖面。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "quick_skim": [
+    {
+      "id": "2608.29242v2",
+      "source": "arxiv",
+      "title": "AnyWorld: Factorized Egocentric World Models for Cross-Embodiment Generalization",
+      "abstract": "Collecting contact-rich robot experiences at scale remains a major bottleneck for generalizable manipulation. Beyond data quantity, robot learning also requires diverse experiences across embodiments, viewpoints, and scenes. Human egocentric videos provide abundant physical interactions, but each video captures only a narrow slice of experience under a single body, camera trajectory, and environment. We propose AnyWorld, a cross-embodiment world modeling framework that expands a single human interaction into diverse robot-native rollouts without paired human-robot demonstrations. Our model factorizes an interaction into action, camera, and embodiment: action controls capture the motion structure, camera controls specify viewpoint evolution, and the target embodiment context defines the acting body and its interaction geometry. This formulation enables independent recomposition of embodiment, viewpoint, and scene factors, allowing a single model to generate many robot-domain experiences while preserving the underlying dynamics and object interactions. We train the model with large-scale human interaction pretraining followed by mixed-embodiment fine-tuning. Experiments show that our model supports controllable recomposition across embodiments, viewpoints, and scenes, and we further demonstrate that the generated data can improve manipulation performance on the RoboCasa GR1 tabletop benchmark and a real IRON humanoid robot. Beyond aggregate gains, we test whether unpaired human experience can be recomposed into robot-native video-action pairs that target a policy gap. Controlled IRON interventions correct a spurious completion prior and establish language-grounded spatial target selection; an action-only counterfactual intervention fails to learn the latter reliably, showing that both action calibration and visual recomposition are necessary.",
+      "authors": [
+        "Cheng Chen",
+        "Jerry Bai",
+        "Jiacheng Wei",
+        "Boyu Chen",
+        "Xiaoji Zheng",
+        "Fan Wu",
+        "Minghao Yang",
+        "Tianrun Chen",
+        "Ruibo Li",
+        "Xiaoyu Yue",
+        "Xiaoyang Guo",
+        "Yixiao Ge",
+        "Guosheng Lin",
+        "Fayao Liu"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-08-29T12:55:15+00:00",
+      "link": "https://arxiv.org/pdf/2608.29242v2",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "factorized world models expand a single human interaction into diverse robot-native rollouts, addressing the data bottleneck in robot learning and dataset construction",
+      "llm_evidence_cn": "分解式世界模型将单个人类交互扩展为多种机器人原生轨迹，缓解机器人经验采集瓶颈，支持机器人数据集的构建",
+      "llm_evidence": "分解式世界模型将单个人类交互扩展为多种机器人原生轨迹，缓解机器人经验采集瓶颈，支持机器人数据集的构建",
+      "canonical_evidence": "分解式世界模型将单个人类交互扩展为多种机器人原生轨迹，缓解机器人经验采集瓶颈，支持机器人数据集的构建",
+      "llm_tldr_en": "AnyWorld factorizes an interaction into action, camera and embodiment, expanding a single human egocentric video into diverse robot-native rollouts without paired demos, enabling scalable synthetic dataset construction for cross-embodiment robot learning.",
+      "llm_tldr_cn": "机器人学习的一大瓶颈是接触丰富的经验难以规模化采集，且跨本体、多视角的数据多样性不足。AnyWorld 将一次人类交互分解为动作、相机与本体三个因子，在没有成对人机演示的情况下把单条人类视频扩展成多种机器人本体可用的轨迹。该机制能生成高多样性的机器人原生数据，为机器人数据集的低成本构建和数据增强提供了新路径，有助于提升跨本体操纵的泛化能力。",
+      "llm_tldr": "机器人学习的一大瓶颈是接触丰富的经验难以规模化采集，且跨本体、多视角的数据多样性不足。AnyWorld 将一次人类交互分解为动作、相机与本体三个因子，在没有成对人机演示的情况下把单条人类视频扩展成多种机器人本体可用的轨迹。该机制能生成高多样性的机器人原生数据，为机器人数据集的低成本构建和数据增强提供了新路径，有助于提升跨本体操纵的泛化能力。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2608.29768v1",
+      "source": "arxiv",
+      "title": "SmoothRL: Online Reinforcement Learning During Asynchronous Execution",
+      "abstract": "Deploying robot policies in the physical world requires satisfying two fundamental desiderata: reliability and smooth real-time execution. However, deploying state-of-the-art generalist models presents challenges on both fronts. Achieving the precision and robustness required for real-world deployment necessitates sample-efficient online reinforcement learning (RL) to adapt pretrained models. Meanwhile, the increasing scale of robot foundation models has led to higher inference latency. To satisfy real-time constraints under high latency, modern systems adopt asynchronous inference with action chunking, overlapping policy computation with chunk execution to hide latency and enable smooth control. Despite their complementary roles, integrating asynchronous execution with gradient-based online RL remains underexplored. We present SmoothRL, an online RL framework that fine-tunes a pretrained policy within an asynchronous inference loop. SmoothRL follows a value-gradient paradigm, directly updating policy parameters using gradients of the action-value function with respect to policy actions. To enable correct optimization under asynchronous execution, SmoothRL explicitly models the asynchronous inference process during training. Specifically, each generated action chunk is partitioned by frame index into three regions: a committed region, consisting of actions committed by the previous inference cycle; an execution region, containing newly generated actions executed by the robot; and a discarded region, containing actions superseded by the next inference cycle. Gradients are propagated only through the execution region, ensuring policy optimization aligns with the trajectory distribution induced by asynchronous execution. We evaluate SmoothRL on real-world robotic tasks requiring high precision, as well as highly dynamic tasks that necessitate asynchronous execution.",
+      "authors": [
+        "Guang Gao",
+        "Yuxuan Nong",
+        "Baifu Huang",
+        "Jianan Wang"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-08-30T12:56:09+00:00",
+      "link": "https://arxiv.org/pdf/2608.29768v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "addresses reliable real-time deployment of robot policies under high inference latency using asynchronous inference and action chunking",
+      "llm_evidence_cn": "面向机器人策略物理世界部署，用异步推理和动作分块满足实时约束",
+      "llm_evidence": "面向机器人策略物理世界部署，用异步推理和动作分块满足实时约束",
+      "canonical_evidence": "面向机器人策略物理世界部署，用异步推理和动作分块满足实时约束",
+      "llm_tldr_en": "Deploying large robot policies in the physical world must satisfy reliability and real-time execution under inference latency. SmoothRL integrates online RL with asynchronous inference/action chunking to adapt pretrained models while preserving smooth control.",
+      "llm_tldr_cn": "机器人策略真实部署需要在推理延迟高的情况下兼顾可靠性与平滑实时执行。SmoothRL提出在异步执行期间进行在线强化学习，将策略计算与动作块执行重叠以隐藏延迟。该方法能在保持控制平稳的同时，对预训练策略进行样本高效的在线自适应，缓解了大规模基础模型部署时的延迟与鲁棒性矛盾。这为边缘实时机器人控制提供了重要系统设计思路。",
+      "llm_tldr": "机器人策略真实部署需要在推理延迟高的情况下兼顾可靠性与平滑实时执行。SmoothRL提出在异步执行期间进行在线强化学习，将策略计算与动作块执行重叠以隐藏延迟。该方法能在保持控制平稳的同时，对预训练策略进行样本高效的在线自适应，缓解了大规模基础模型部署时的延迟与鲁棒性矛盾。这为边缘实时机器人控制提供了重要系统设计思路。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "edge deployment for humanoid robots",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2609.03255v1",
+      "source": "arxiv",
+      "title": "Establishing a Dynamic Multimodal HRI Dataset for Engagement Analysis with a Humanoid Robot",
+      "abstract": "This paper presents an experimental design for constructing a multimodal dataset to analyze user engagement in human-robot interaction (HRI). Prior studies have mainly relied on observable behavioral cues, with limited frameworks integrating physiological signals. We therefore propose a structured data-collection protocol to build a multimodal dataset that includes wearable physiological signals, behavioral data, and self-report measures under different levels of task complexity defined in this experiment.",
+      "authors": [
+        "Buwan Kim",
+        "Wonse Jo"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-09-03T01:29:44+00:00",
+      "link": "https://arxiv.org/pdf/2609.03255v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "Multimodal dataset construction with a humanoid robot for engagement analysis",
+      "llm_evidence_cn": "使用人形机器人构建用于参与度分析的多模态数据集",
+      "llm_evidence": "使用人形机器人构建用于参与度分析的多模态数据集",
+      "canonical_evidence": "使用人形机器人构建用于参与度分析的多模态数据集",
+      "llm_tldr_en": "This paper proposes a structured data-collection protocol for building a multimodal HRI dataset, combining wearable physiological signals, behavior, and self-reports under varying task complexity, to study user engagement with a humanoid robot.",
+      "llm_tldr_cn": "为弥补人机交互参与度研究在使用人形机器人场景下缺少同时整合生理信号与行为数据的公开数据集问题，本文提出结构化数据采集实验设计与协议。协议在不同任务复杂度条件下同步采集可穿戴生理信号、行为数据和自评报告，形成动态多模态HRI数据集。该设计可支撑人形机器人上用户参与度的分析与机器人交互行为优化，为相关领域提供了可复用的数据集构建流程。",
+      "llm_tldr": "为弥补人机交互参与度研究在使用人形机器人场景下缺少同时整合生理信号与行为数据的公开数据集问题，本文提出结构化数据采集实验设计与协议。协议在不同任务复杂度条件下同步采集可穿戴生理信号、行为数据和自评报告，形成动态多模态HRI数据集。该设计可支撑人形机器人上用户参与度的分析与机器人交互行为优化，为相关领域提供了可复用的数据集构建流程。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "humanoid robot dataset construction",
+      "matched_requirement_id": "req-2",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2609.02219v1",
+      "source": "arxiv",
+      "title": "Hardware-Accelerated Instance Segmentation for Resource-Constrained Space Robotics with Criticality Analysis",
+      "abstract": "Autonomous lunar missions require real-time per- ception under three coupled constraints: extreme low-light conditions, limited onboard compute, and radiation-induced hardware faults that can silently corrupt inference. We present a deployment-oriented instance segmentation framework for resource-constrained lunar robotics that jointly addresses quan- tization calibration and system-level fault exposure under strict compute constraints. First, we introduce Activation Variance Informative Sampling (AVIS), a label-free calibration strategy that deterministically selects calibration samples based on activation variance statistics. Second, we deploy a YOLO-based segmentation model on a Deep Learning Processor Unit (DPU) with architectural modifications that reduce CPU fallback paths and enable statically compiled execution with bounded latency in low-lighting conditions. We further introduce a software-level criticality analysis to estimate fault exposure and guide mitigation under radiation-constrained operation. On a lunar micro-rover platform, AVIS with bias correction recovers 69.8% of quantization-induced accuracy loss while achieving 309 ms inference latency and 5.7 W power consumption. Targeted mitigation reduces global criticality by 31.7%. The results demonstrate an integrated approach and a blueprint for a reliable and safe AI perception framework under space deployment constraints.",
+      "authors": [
+        "Siddhant Shete",
+        "Hilmi Dogu Kücüker",
+        "Udo Frese",
+        "Frank Kirchner"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.AR",
+        "cs.CV",
+        "cs.LG"
+      ],
+      "published": "2026-09-02T07:33:27+00:00",
+      "link": "https://arxiv.org/pdf/2609.02219v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "Presents deployment-oriented segmentation on resource-constrained robot hardware with fault exposure analysis; transferable to humanoid robot edge deployment.",
+      "llm_evidence_cn": "提出资源受限机器人硬件上的部署导向分割与故障暴露分析，可迁移至人形机器人边缘部署。",
+      "llm_evidence": "提出资源受限机器人硬件上的部署导向分割与故障暴露分析，可迁移至人形机器人边缘部署。",
+      "canonical_evidence": "提出资源受限机器人硬件上的部署导向分割与故障暴露分析，可迁移至人形机器人边缘部署。",
+      "llm_tldr_en": "Deployment-oriented instance segmentation framework uses AVIS calibration and YOLO on DPU to handle resource-constrained robotics, jointly analyzing hardware fault exposure; offers transferable edge deployment methods for humanoid robots.",
+      "llm_tldr_cn": "资源受限的月球机器人边缘部署需同时应对低光照、有限算力和硬件故障。该文提出面向部署的实例分割框架，通过激活方差信息采样（AVIS）进行无标签量化校准，并将YOLO分割模型部署于深度学习处理器，同时评估系统级故障暴露。该方法在严格算力约束下实现了可靠感知，为包括人形机器人在内的嵌入式机器人边缘端推理提供了可借鉴的实践方案。",
+      "llm_tldr": "资源受限的月球机器人边缘部署需同时应对低光照、有限算力和硬件故障。该文提出面向部署的实例分割框架，通过激活方差信息采样（AVIS）进行无标签量化校准，并将YOLO分割模型部署于深度学习处理器，同时评估系统级故障暴露。该方法在严格算力约束下实现了可靠感知，为包括人形机器人在内的嵌入式机器人边缘端推理提供了可借鉴的实践方案。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "edge deployment for humanoid robots",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2609.03505v1",
+      "source": "arxiv",
+      "title": "An Adversarial Zero-Shot Learning Approach for Anomaly Detection in Multivariate IoT Traffic Data",
+      "abstract": "Anomaly detection in Internet of Things (IoT) networks presents unique challenges due to the diversity of devices, lack of labeled data, and domain variability across environments. In this paper, we propose a novel framework for multivariate time-series anomaly detection that leverages adversarial learning and contrastive loss within a sequence-based Variational Autoencoder (VAE) architecture. Our method enables zero-shot domain adaptation by jointly optimizing domain-invariant latent representations and semantically structured embedding spaces, without requiring labeled data or raw feature transfer. To address the heterogeneity of IoT deployments, we introduce encoder and decoder adaptor layers that align feature distributions across domains while preserving contextual semantics. Additionally, we propose a destination-based segmentation strategy to better model real-world communication structures in IoT traffic. Our framework is comprehensively evaluated on six distinct datasets spanning industrial, enterprise, general-purpose, smart home, and military automation domains across 44 transfer scenarios. Experimental results demonstrate strong zero-shot generalization in several cross-domain settings and competitive performance against a contrastive domain-adaptation baseline under realistic, heterogeneous, and privacy-constrained IoT conditions.",
+      "authors": [
+        "Mahshid Rezakhani",
+        "Tolunay Seyfi",
+        "Fatemeh Afghah"
+      ],
+      "primary_category": "cs.LG",
+      "categories": [
+        "cs.LG",
+        "cs.NI"
+      ],
+      "published": "2026-09-03T08:07:06+00:00",
+      "link": "https://arxiv.org/pdf/2609.03505v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "Multivariate time-series VAE anomaly detection with adversarial and contrastive self-supervised learning; approach is transferable to proprioceptive sensory fault diagnosis",
+      "llm_evidence_cn": "面向多元时序数据的可迁移自监督异常检测方法，与基于本体感受信号的机器人故障诊断需求相符",
+      "llm_evidence": "面向多元时序数据的可迁移自监督异常检测方法，与基于本体感受信号的机器人故障诊断需求相符",
+      "canonical_evidence": "面向多元时序数据的可迁移自监督异常检测方法，与基于本体感受信号的机器人故障诊断需求相符",
+      "llm_tldr_en": "Proposes a sequence-based VAE with adversarial training and contrastive loss for zero-shot anomaly detection in multivariate time series, using encoder/decoder adapters to transfer across IoT domains without labeled data.",
+      "llm_tldr_cn": "针对物联网多元时序数据缺乏标注且环境差异大、难以跨域迁移的问题，提出基于序列变分自编码器的对抗零样本异常检测框架。通过结合对抗学习与对比损失优化域不变潜表示，并引入编码器/解码器适配层对齐特征分布。实验表明无需标签数据和原始特征迁移即可完成多变量时序异常检测。该自监督方案可为人形机器人本体感受信号的故障与异常检测提供借鉴。",
+      "llm_tldr": "针对物联网多元时序数据缺乏标注且环境差异大、难以跨域迁移的问题，提出基于序列变分自编码器的对抗零样本异常检测框架。通过结合对抗学习与对比损失优化域不变潜表示，并引入编码器/解码器适配层对齐特征分布。实验表明无需标签数据和原始特征迁移即可完成多变量时序异常检测。该自监督方案可为人形机器人本体感受信号的故障与异常检测提供借鉴。",
+      "llm_tags": [
+        "query:humanoid-ood"
+      ],
+      "matched_query_tag": "query:humanoid-ood",
+      "matched_query_text": "Self supervised time series anomaly detection for robot fault diagnosis",
+      "matched_requirement_id": "req-16",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2609.02222v1",
+      "source": "arxiv",
+      "title": "FOCUS: Foot Observation Confidence for Robust Humanoid Proprioceptive Odometry",
+      "abstract": "Foot forward kinematics (FK) is widely used to improve proprioceptive legged odometry by providing reliable velocity constraints during foot support. Existing contact-aided estimators generally rely on binary contact decisions to determine whether the FK measurements of an entire foot should be trusted. However, contact does not necessarily imply FK reliability. Dynamic locomotion often involves partial support, toe dragging, and foot slip, causing binary contact decisions to accumulate significant drift over long trajectories. To address this limitation, we propose FOCUS (Foot Observation Confidence from Unannotated Simulation), which predicts a continuous FK reliability weight for each foot instead of estimating binary foot contact. Rather than replacing the model-based estimator, the predicted reliability weights are used to blend FK velocity observations with IMU-propagated body velocity and to adapt the observation covariance of an extended Kalman filter (EKF), enabling smooth reliability-aware fusion without hard contact switching. The network is trained from automatically generated simulation signals using an FK-weighted velocity consistency loss with lightweight simulator-contact regularization, without manually annotated continuous FK-reliability labels. The deployed model relies only on IMU and joint kinematic measurements, making it suitable for hardware platforms with unreliable torque sensing. Experiments demonstrate that FOCUS reduces absolute trajectory error (ATE) by 83.7% on simulated walking episodes, preserves simulated dynamic-motion fidelity in motion scale and spectral energy, reduces ATE by 70.8% across 19 real walking segments, and reduces mean ATE by 42.7% across four real dynamic-motion routines.",
+      "authors": [
+        "Kaixin Feng",
+        "Angsong Li",
+        "Shaopeng Zhang",
+        "Enyu Li",
+        "Peiwen Lin",
+        "Chuang Wang",
+        "You Li",
+        "Haiyu Lan"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-09-02T07:34:55+00:00",
+      "link": "https://arxiv.org/pdf/2609.02222v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "predicts continuous foot forward-kinematics reliability weight from humanoid proprioception to flag slip, toe dragging, and partial support, matching anomaly detection from joint/robot signals in humanoid robots",
+      "llm_evidence_cn": "利用人形机器人本体感觉预测足部前向运动学连续置信度，对滑动、拖趾和部分支撑等异常状态进行感知，关联基于关节信号的异常检测",
+      "llm_evidence": "利用人形机器人本体感觉预测足部前向运动学连续置信度，对滑动、拖趾和部分支撑等异常状态进行感知，关联基于关节信号的异常检测",
+      "canonical_evidence": "利用人形机器人本体感觉预测足部前向运动学连续置信度，对滑动、拖趾和部分支撑等异常状态进行感知，关联基于关节信号的异常检测",
+      "llm_tldr_en": "FOCUS replaces binary foot contact decisions with continuous FK reliability weights learned from unannotated simulation, making humanoid proprioceptive odometry robust to foot slip, toe dragging, and partial support.",
+      "llm_tldr_cn": "在动态行走中，足部接触并不等于前向运动学观测可靠，部分支撑、拖趾和足底滑动会让二元接触判断在长轨迹上积累漂移。FOCUS 使用未标注仿真预测每个脚足的连续前向运动学置信度，以替代二元接触决策。该方法显著提高人形机器人本体感觉里程计对这些异常足部状态的鲁棒性。所预测的连续可信度也可视为基于本体感觉信号的异常检测置信度指示，有助于保障人形机器人的安全运行。",
+      "llm_tldr": "在动态行走中，足部接触并不等于前向运动学观测可靠，部分支撑、拖趾和足底滑动会让二元接触判断在长轨迹上积累漂移。FOCUS 使用未标注仿真预测每个脚足的连续前向运动学置信度，以替代二元接触决策。该方法显著提高人形机器人本体感觉里程计对这些异常足部状态的鲁棒性。所预测的连续可信度也可视为基于本体感觉信号的异常检测置信度指示，有助于保障人形机器人的安全运行。",
+      "llm_tags": [
+        "query:humanoid-ood"
+      ],
+      "matched_query_tag": "query:humanoid-ood",
+      "matched_query_text": "anomaly detection from joint position velocity torque IMU signals in humanoid robots",
+      "matched_requirement_id": "req-10",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    }
+  ]
+}

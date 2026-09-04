@@ -1,0 +1,258 @@
+Title: FOCUS: Foot Observation Confidence for Robust Humanoid Proprioceptive Odometry
+
+URL Source: https://arxiv.org/pdf/2609.02222v1
+
+Published Time: Thu, 03 Sep 2026 00:49:05 GMT
+
+Number of Pages: 8
+
+Markdown Content:
+# FOCUS: Foot Observation Confidence for Robust Humanoid Proprioceptive Odometry 
+
+Kaixin Feng 1, Angsong Li 2, Shaopeng Zhang 2, Enyu Li 2, Peiwen Lin 2, Chuang Wang 2,You Li 1, and Haiyu Lan 2, †
+
+> 1
+
+Wuhan University 
+
+> 2
+
+AgiBot 
+
+Abstract —Foot forward kinematics (FK) is widely used to improve proprioceptive legged odometry by providing reliable velocity constraints during foot support. Existing contact-aided estimators generally rely on binary contact decisions to deter-mine whether the FK measurements of an entire foot should be trusted. However, contact does not necessarily imply FK reliability. Dynamic locomotion often involves partial support, toe dragging, and foot slip, causing binary contact decisions to accumulate significant drift over long trajectories. To address this limitation, we propose FOCUS (Foot Observation Confidence from Unannotated Simulation), which predicts a continuous FK reliability weight for each foot instead of estimating binary foot contact. Rather than replacing the model-based estimator, the predicted reliability weights are used to blend FK velocity observations with IMU-propagated body velocity and to adapt the observation covariance of an extended Kalman filter (EKF), enabling smooth reliability-aware fusion without hard contact switching. The network is trained from automatically generated simulation signals using an FK-weighted velocity consistency loss with lightweight simulator-contact regularization, without man-ually annotated continuous FK-reliability labels. The deployed model relies only on IMU and joint kinematic measurements, making it suitable for hardware platforms with unreliable torque sensing. Experiments demonstrate that FOCUS reduces absolute trajectory error (ATE) by 83.7% on simulated walking episodes, preserves simulated dynamic-motion fidelity in motion scale and spectral energy, reduces ATE by 70.8% across 19 real walking segments, and reduces mean ATE by 42.7% across four real dynamic-motion routines. 
+
+Index Terms —Legged odometry, humanoid robot, propriocep-tive odometry, state estimation, EKF, forward kinematics, contact reliability, Transformer 
+
+I. I NTRODUCTION 
+
+Reliable proprioceptive odometry is essential for legged robots operating without external localization. A widely used approach is to fuse inertial measurements with foot forward kinematics (FK) in an extended Kalman filter (EKF) [1]– [3]. This contact-aided formulation is simple, interpretable, and real-time: when a foot is stationary with respect to the ground, the kinematic chain provides a strong constraint on body motion. The difficulty is deciding when FK should be trusted. Existing systems typically infer binary contact from force, estimated torque, or learned classifiers and then gate the entire FK observation [4]–[6]. However, long walking sequences amplify contact errors, while dynamic motions introduce toe scraping, partial support, fast swings, and slip. Because FK requires a rigid, stationary-foot constraint, a contacting foot 
+
+Fig. 1. Motivation of FOCUS. Dynamic humanoid motion breaks binary contact gating: high torque or apparent contact does not necessarily imply reliable FK. FOCUS instead estimates continuous per-foot FK reliability weights for the left and right feet. 
+
+may still provide an unreliable observation, which binary gating cannot express. FOCUS (Foot Observation Confidence from Unannotated Simulation), illustrated in Fig. 1, reformulates contact handling as continuous FK reliability estimation. It predicts continuous per-foot weights that blend FK velocity observations with IMU-propagated body velocity and modulate the EKF obser-vation covariance, while preserving the model-based FK-EKF structure. The reliability estimator is a lightweight causal Transformer that uses a short history of IMU, joint position, and joint velocity measurements. It is trained from automatically gener-ated simulation signals without manually annotated continuous reliability labels. The deployed model is sensor-only and does not use torque input, reducing sensitivity to actuator-current-based torque estimates. Experiments show that FOCUS reduces mean ATE by 83.7% in simulated walking, by 70.8% across 19 real walking segments, and by 42.7% across four real dynamic-motion routines. 1) We construct a simulation data-collection pipeline for FK reliability learning. A humanoid motion-tracking control policy is trained in Isaac Lab and then replayed over diverse motion clips, producing executed robot motions with domain randomization, tracking error, and contact variation for training. arXiv:2609.02222v1 [cs.RO] 2 Sep 2026 2) We train a causal Transformer to estimate two continu-ous per-foot FK reliability weights in [0 , 1] from sensor-only proprioception. The continuous reliability output reduces sim-to-real brittleness compared with hard con-tact labels, and the FK-weighted velocity consistency objective removes the need for manually annotated con-tinuous FK-reliability labels. 3) We evaluate the learned estimator on simulation, a 19-segment real walking set collected from five A3 Ultra humanoid units, and 18 real dynamic-motion sequences across four dance types, against threshold-based and representative proprioceptive odometry baselines. II. R ELATED WORK 
+
+A. Threshold-Based Contact-Aided Odometry 
+
+Classical contact-aided odometry uses the fact that a stance foot provides a kinematic constraint on body motion. EKF and invariant EKF formulations fuse IMU measurements with leg kinematics under this assumption [1], [3], [7]. In practical systems, the foot constraint is usually enabled or disabled by hand-designed thresholds on force, estimated torque, or contact-state logic [4], [6]. Recent proprioceptive and multi-sensor odometry systems further combine leg kinematics with vision, light detection and ranging (LiDAR), or additional IMUs [8]–[14], showing that leg kinematics remains useful even in richer sensor pipelines. The common bottleneck is contact quality: FK is useful only when the foot-ground constraint is valid. Threshold-based gating is interpretable and efficient, but it makes a hard whole-foot decision and is coarse for toe contact, slip, or partial support. FOCUS targets this bottleneck directly by replacing binary threshold gating with continuous FK reliability. 
+
+B. Learned Contact Estimation 
+
+To reduce the brittleness of hand thresholds, learning has been used to estimate contact-related quantities from pro-prioception. Lin et al. [5] used learned contact events with an invariant Kalman filter. Youm et al. [15] integrated a neural measurement network (NMM) with an invariant EKF to predict measurement quantities such as contact probability and base velocity. Concurrent estimator–controller training and Transformer-based state estimation further show the benefit of temporal proprioceptive models for agile locomotion [16], [17]. More recently, CoCo-InEKF [18] learned continuous contact covariances for an invariant EKF, avoiding hand-designed binary contact thresholds in contact-rich locomotion. These approaches differ in their learning target, training signal, and coupling to the filter. The NMM predicts a re-placement measurement, such as base velocity, together with contact-related outputs, and is optimized through an EKF state-estimation objective. Its predicted measurement is inserted into the filter rather than used to assess an existing FK measure-ment. CoCo-InEKF predicts a per-foot contact covariance and adapts the filter covariance, while leaving the FK measurement itself unchanged. Neither formulation explicitly trains a foot-specific reliability signal to select between FK-derived body-velocity observations according to their consistency. FOCUS learns a per-foot FK-velocity reliability weight tied to the FK-derived body-velocity observation used by the EKF. Its primary training signal is the FK-weighted velocity-consistency loss against simulated body velocity, with only lightweight binary-contact BCE regularization; it does not re-quire manually annotated continuous reliability or covariance labels. At deployment, the weight changes the confidence assigned to FK and blends the FK velocity observation with the IMU-propagated velocity before the EKF update. Contact probability, learned contact covariance, learned replacement measurement, and FK reliability are distinct quantities: afoot can be in contact while toe scraping, partial support, or slipping makes its FK velocity unreliable. 
+
+C. End-to-End Proprioceptive Odometry 
+
+Another line of work bypasses explicit contact modeling and learns odometry or displacement directly from proprioceptive signals. Buchanan et al. [19] learned inertial odometry for dynamic legged state estimation, and Legolas [20] learned deep leg-inertial odometry from robot proprioception. Related recent work also learns leg-kinematic motion factors or un-certainty inside larger factor-graph systems [21]. These end-to-end approaches can capture complex contact effects, but the learned module often carries more of the metric odometry burden. Our approach keeps the metric FK computation and EKF update explicit. The network only estimates how much each foot should be trusted. This bounded reliability output is easier to interpret than direct displacement prediction and can be integrated conservatively by blending FK velocity observations and inflating measurement noise. The result is a middle ground between threshold-based contact gating, learned contact esti-mation, and pure end-to-end proprioceptive odometry: FOCUS retains a real-time model-based estimator while learning the dynamic reliability of its FK observations. III. M ETHODOLOGY 
+
+A. System Overview 
+
+We combine a model-based EKF with a learned FK re-liability estimator, as shown in Fig. 2. The EKF maintains body position, body velocity, and foot positions using IMU propagation and FK-derived foot observations. The learned module does not output odometry states. It outputs two re-liability weights that determine how much the EKF should trust the left and right foot FK observations. At each estimator update, joint positions and velocities are used to compute foot positions and velocities through Pinocchio forward kinematics [22]. A causal Transformer processes a short history of proprioceptive measurements and predicts two reliability weights wL, w R ∈ [0 , 1] . The EKF uses these weights to blend the FK velocity observation with the IMU-propagated body velocity and inflate FK observation noise. Fig. 2. Per-foot FK Reliability Weighting. A causal Transformer predicts left/right FK reliability weights from a 50-frame proprioceptive history. The weights blend FK and IMU-propagated velocity observations and modulate EKF noise; training uses FK-weighted velocity consistency with lightweight contact regularization. 
+
+B. EKF State and Observation Model 
+
+The filter uses a 12-dimensional state: 
+
+x =
+
+ pGB
+
+⊤  vGB
+
+⊤ 
+
+pGfL
+
+⊤ 
+
+pGfR
+
+⊤⊤
+
+∈ R12 (1) where body and foot positions and body velocity are expressed in the global frame. We use pAC and vAC for quantities of 
+
+C expressed in A, and RAB maps vectors from B to A.Orientation is not part of the 12-dimensional translational state: at each update, RGB is obtained directly from the normalized pelvis-IMU quaternion and treated as a measured input, while ωBB is obtained from the gyroscope. The body position and velocity are propagated with gravity-compensated IMU acceleration; the filter does not estimate attitude or IMU biases, and foot-state process noise increases for unreliable feet. The 14-dimensional observation used in all experiments comprises body-relative FK positions and FK-derived body velocities for both feet, together with two scalar foot-height constraints. For foot i ∈ { L, R }, Pinocchio provides the body-frame position pBfi,FK and Jacobian velocity vBfi,FK . Under the stationary-foot constraint, the resulting body-velocity observa-tion is 
+
+vG, FK  
+
+> B,i
+
+= −RGB 
+
+ ωBB × pBfi,FK + vBfi,FK 
+
+ . (2) This observation requires a valid non-slipping ground con-straint, whose reliability is estimated continuously by FOCUS. 
+
+C. Per-Foot FK Reliability Modulation 
+
+For foot i ∈ { L, R }, FOCUS replaces binary contact gating with continuous modulation. The FK velocity observation covariance is 
+
+Rvel ,i = Rvel ,0 [1 + (1 − wi)Svel ] (3) where Rvel ,0 is nominal FK velocity noise and Svel is the maximum amplification. The same modulation is applied to foot-position covariance, foot-height covariance, and foot-state process noise: 
+
+Rp,i = Rp, 0 [1 + (1 − wi)Sp] ,Rh,i = Rh, 0 [1 + (1 − wi)Sh] ,Qf,i = Qf, 0 [1 + (1 − wi)Sq ] ,
+
+(4) For all reported experiments, Svel = 100 , Sp = 1000 , and 
+
+Sh = Sq = 100 . The corresponding nominal diagonal noise blocks are Rvel ,0 = 0 .01 I3, Rp, 0 = 0 .1I3, Rh, 0 = 0 .1, and 
+
+Qf, 0 = 0 .002∆ tI3 for each foot. The weight also modulates the velocity observation. A saturated ramp ϕ(·) maps wi to the trust coefficient τi =
+
+ϕ(wi) ∈ [0 , 1] :
+
+τi = ϕ(wi) = clip 
+
+ wi
+
+wsat 
+
+, 0, 1
+
+
+
+, wsat = 0 .4 (5) which is equivalent to τi = min(1 , 2.5wi) because wi ∈ [0 , 1] .The velocity observation supplied to the EKF is 
+
+zv,i = (1 − τi) ˆ vGB,k |k−1 + τi vG, FK  
+
+> B,i
+
++ nv,i (6) Here ˆvGB,k |k−1 is the pre-update IMU velocity and vG, FK  
+
+> B,i
+
+is from Eq. 2. Low reliability favors IMU propagation, whereas high reliability relies on FK; raw wi controls covariance scaling and ϕ(wi) controls velocity trust. 
+
+D. Causal Transformer Reliability Estimator 1) Input Features: The reliability network uses a 30-dimensional sensor-only proprioceptive input at each frame: 
+
+st = a⊤ 
+
+> t
+
+ω⊤ 
+
+> t
+
+q⊤ 
+
+> t
+
+˙q⊤
+
+> t
+
+⊤ ∈ R30 (7) where at ∈ R3 is IMU linear acceleration, ωt ∈ R3 is IMU angular velocity, and qt ∈ R12 and ˙qt ∈ R12 are lower-limb joint positions and velocities. The final model removes joint torque input because estimated torque is sensitive to current-to-torque calibration and hardware bias. The model processes a temporal window of T = 50 frames, corresponding to one second at the 50 Hz training frequency. All channels are normalized using training-set mean and standard deviation. The normalized 30-dimensional sequence is fed directly to the reliability network without additional finite-difference augmentation. 
+
+2) Layer Structure: The model projects each frame to a 128-dimensional token, adds fixed sinusoidal positional encod-ing, and processes the sequence with four causal Transformer encoder layers [23] using 4-head self-attention. A two-layer reliability head matching the deployed Open Neural Network Exchange (ONNX) model maps the final token to two sigmoid weights [wL, w R].
+
+E. FK-Weighted Training Objective 
+
+Continuous FK reliability is intrinsically ambiguous and difficult to annotate. We therefore train the network using automatically generated simulation signals, without manually annotated continuous FK-reliability labels, based on the princi-ple that reliable FK velocity should agree with the ground-truth (GT) body velocity. Let vFK  
+
+> L
+
+and vFK  
+
+> R
+
+be the body velocity vectors inferred from the left and right feet. The network weights these two estimates as 
+
+ˆv = wLvFK  
+
+> L
+
++ wRvFK 
+
+> R
+
+wL + wR + ϵ (8) where ϵ avoids division by zero. The primary loss is 
+
+LFK = ˆv − vGT 22
+
+ 1 + 5 ∥vGT ∥1
+
+ . (9) The speed-dependent factor emphasizes high-speed motions, where incorrect FK reliability produces larger odometry drift. We also use binary cross-entropy (BCE) for lightweight contact regularization: 
+
+LBCE = BCE( wL, c L) + BCE( wR, c R) (10) with 
+
+BCE( w, c ) = −c log w − (1 − c) log(1 − w) (11) where cL, c R ∈ { 0, 1} are simulator contact states. The total loss is 
+
+L = LFK + 0 .3LBCE (12) 
+
+> Fig. 3. Isaac Lab simulation data collection pipeline. A reinforcement-learning (RL) policy trained with proximal policy optimization (PPO) tracks retargeted motions, is frozen for replay-based recording, and is post-processed with a Unified Robot Description Format (URDF) model to produce per-foot FK velocity supervision before motion-wise dataset splitting.
+
+The FK-weighted velocity loss provides the main task supervi-sion, while the simulator-contact BCE term serves only as an auxiliary regularizer that prevents degenerate weights. Neither term requires manually annotated continuous FK-reliability labels. 
+
+F. Simulation Data Collection 
+
+The motion library combines clips from open-source motion datasets with motions captured by a real motion-capture (Mo-Cap) system. We collect training data with the Isaac Lab/Orbit motion-tracking pipeline [24] in Fig. 3, rather than with ran-dom velocity commands. Following recent humanoid motion-tracking work [25], a proximal policy optimization (PPO) controller tracks retargeted clips. We freeze the policy, replay it over the combined motion library, and record executed states instead of reference motions to retain tracking errors, imperfect contacts, actuator effects, and randomized dynamics. Four domain-randomized repeats cover walking, jumping, standing, running, and martial-arts motions. The splits contain 5420 training episodes and 1151 validation episodes; training spans about 51.65 h at 50 Hz. The recorder stores IMU, body-orientation, joint-state, torque, and motion-phase signals, together with body-velocity, root-pose, and contact labels; FOCUS uses only the IMU and joint channels in Sec. III-D. Randomization covers friction, mass, joint properties, pose offsets, torso center of mass, external pushes, Gaussian sensor noise, and episode bias, while labels remain clean. We generate FK velocity supervision offline after recording. The smoothed joint states are processed with the robot URDF Fig. 4. A3 Ultra humanoid platform used for hardware evaluation. The left panel summarizes onboard sensors, including LiDAR, surround-view cameras, dual depth cameras, an IMU, and leg joint encoders; the right panel shows the lower-limb URDF kinematic structure used for FK. FOCUS uses only the proprioceptive IMU and lower-limb joint-encoder measurements, while exteroceptive sensors are not used by the odometry estimator. 
+
+model and Pinocchio; the two foot Jacobians provide body-velocity estimates according to Eq. 2. These velocities are training signals only. Batches are split by motion identity so that repeated executions of one reference motion do not cross partitions. IV. E XPERIMENTS 
+
+We evaluate FOCUS on simulated walking and dynamic motions, 19 real walking segments, and real dynamic-motion sequences covering four routines: Charleston, Chaosha dance, Zero-Frame Start, and Cyberwalk. The comparisons include the original torque-threshold contact-gating baseline and three external proprioceptive odometry methods. 
+
+A. Experimental Setup 
+
+Hardware experiments use the A3 Ultra humanoid platform shown in Fig. 4, a full-size robot with 174 cm height and 60 kg mass. It carries LiDAR, surround cameras, dual depth cameras, a pelvis IMU, lower-limb encoders, and a calibrated leg model for FK odometry. Although exteroceptive sensors are available, FOCUS uses only proprioception. The data come from five A3 Ultra units sharing the same kinematic model and sensor interface. The deployed model uses the 30-dimensional input described in Section III-D. Trajectory errors are reported on the horizontal XY plane after timestamp matching. Simulation ground truth is obtained directly from the simulator. For the real-robot experiments, a LiDAR-based reference trajectory serves as ground truth for walking, whereas a motion-capture (MoCap) system provides ground truth for dynamic motions; both are used only for offline evaluation and are not supplied to any estimator. Simulated walking uses XY start-point alignment; simulated dynamic motions and real dynamic motions use normalized-time interpolation with best-fit yaw alignment; real walking uses per-segment yaw-and-translation alignment. No scale correction is applied. For timestamp-wise horizontal errors et,ATE is the root-mean-square error 
+
+q
+
+N −1 PNt=1 e2 
+
+> t
+
+; MAE,                                    
+
+> TABLE I SIMULATED WALKING COMPARISON OVER 20 EPISODES . E RRORS ARE IN METERS EXCEPT DRIFT (%); LOWER IS BETTER .Method ATE MAE MED STD Drift (%) Threshold 1.016 0.950 1.067 0.363 5.47 Pronto [7] 0.517 0.469 0.452 0.214 1.59 CoCo-InEKF [18] 1.283 1.190 1.255 0.479 9.13 Legolas [20] 1.324 1.208 1.314 0.539 8.55
+> FOCUS 0.166 0.156 0.168 0.056 0.73
+
+MED, and STD are respectively the mean, median, and standard deviation of et, and Drift is the ATE normalized by ground-truth path length. Results spanning multiple sequences are reported as arithmetic means of their per-sequence metrics. We compare FOCUS with the original torque-threshold estimator, which uses estimated joint torque to gate whole-foot FK observations, and with Pronto [7], CoCo-InEKF [18], and Legolas [20]. All methods use the same A3 Ultra URDF, Pinocchio FK implementation, ankle-roll foot frame, times-tamp synchronization, and no external localization input, while retaining their original estimator formulations and proprio-ceptive inputs. When original checkpoints were incompatible, learning-based baselines were retrained or adapted only on the Isaac Lab training split; no real evaluation sequence was used. Legolas was originally designed for quadrupeds, creating a morphology and motion-domain mismatch on A3 Ultra. FOCUS is the per-foot sensor-only model trained exclusively on the simulation data in Section III-F. The real benchmark contains 19 walking segments from five robots (1.51 km, 54.1 min) and dynamic sequences from four routines. 
+
+B. Simulation Evaluation 
+
+The simulation evaluation uses 20 Isaac Lab evaluation episodes each for walking and dynamic motions, exposing accumulated contact errors across varied motion patterns. On simulated walking, the proposed weighting gives the lowest ATE and drift, reducing mean ATE from 1.016 m to 0.166 m relative to torque-threshold gating (Table I). Contin-uous FK reliability limits drift from persistent contact errors. Dynamic motions can have small net displacement, so ATE alone may understate trajectory fidelity. We report amplitude fidelity, the estimated-to-ground-truth XY motion-extent ratio (with 1 indicating perfect agreement, below 1 indicating shrinkage, and above 1 indicating over-amplification); discrete Fr´ echet distance, a curve-shape error in meters (lower is better); and spectral ratio, the 0.5–3 Hz motion-band position-energy ratio, with 1 indicating perfect agreement. For the simulated dynamic set, FOCUS best preserves motion extent and spectral energy, while Threshold obtains the lowest ATE and Fr´ echet distance (Table II). The comple-mentary metrics are useful because these motions can have small net displacement and ATE alone may not reflect motion fidelity. Fig. 5. Real-robot trajectory comparisons across representative walking and dynamic-motion sequences. The first two rows show walking examples selected from the 19-segment set. The last two rows show dynamic motions spanning Charleston, Chaosha dance, Zero-Frame Start, and Cyberwalk. The plot compares ground truth, Threshold, Pronto, CoCo-InEKF, Legolas, and FOCUS. TABLE II SIMULATED DYNAMIC -MOTION RESULTS OVER 20 EPISODES . ATE AND 
+
+FR ´ECHET DISTANCE ARE IN METERS ; FOR THE AMP . AND SPEC . RATIOS , 1 
+
+> INDICATES PERFECT AGREEMENT
+
+.Method ATE ↓ Amp. ( → 1) Fr´ echet ↓ Spec. ( → 1)Threshold 0.382 3.113 1.117 0.804 Pronto [7] 0.932 1.294 1.620 0.673 CoCo-InEKF [18] 0.761 5.972 2.018 0.813 Legolas [20] 2.426 10.157 3.523 0.711 
+
+FOCUS 0.711 1.251 1.239 0.875 
+
+C. Real Walking Evaluation 
+
+Fig. 5 visualizes 12 representative segments from the 19-segment real-walking set. All methods are evaluated on the same 19 segments (Ta-ble III). Across this set, the proposed method reduces mean ATE from 2.634 m to 0.768 m, a 70.8% reduction, and outper-forms threshold gating on every segment. On the paired 19-segment set, a two-sided Wilcoxon signed-rank test gives p < 10 −5, indicating a consistent reduction across segments. 
+
+TABLE III REAL -WALKING COMPARISON ON THE SAME 19 SEGMENTS . E RRORS ARE IN METERS EXCEPT DRIFT (%); LOWER IS BETTER .Method ATE MAE MED STD Drift (%) Threshold 2.634 2.371 2.281 1.100 3.85 Pronto [7] 2.898 2.589 2.464 1.286 3.75 CoCo-InEKF [18] 3.290 2.931 2.896 1.477 4.47 Legolas [20] 8.235 7.466 7.020 3.405 9.64 
+
+FOCUS 0.768 0.695 0.677 0.319 0.92 
+
+This transfer benefits from the sim-to-real design of FO-CUS. Domain-randomized simulation covers friction, mass, joint properties, sensor noise, and disturbances, while the network outputs weights in [0 , 1] rather than hard contact labels. The EKF can partially trust FK under ambiguous support, reducing sensitivity to threshold mismatch, actuator compliance, encoder noise, and torque-estimation error. 
+
+D. Real Dance Evaluation 
+
+As a complementary dynamic-motion benchmark, we eval-uate four routines on the A3 Ultra: Charleston, Chaosha TABLE IV REAL DYNAMIC -MOTION RESULTS ACROSS FOUR ROUTINES :CHARLESTON , C HAOSHA DANCE , Z ERO -F RAME START , AND                                     
+
+> CYBERWALK . ATE AND FR´ECHET DISTANCE ARE IN METERS ;FOR THE
+> AMP .AND SPEC .RATIOS , 1 INDICATES PERFECT AGREEMENT .Method ATE ↓Amp. ( →1)Fr´ echet ↓Spec. ( →1)Threshold 0.947 1.537 1.744 3.804 Pronto [7] 0.605 1.090 1.210 2.572 CoCo-InEKF [18] 0.847 1.312 1.450 2.430 Legolas [20] 1.956 2.229 3.148 7.888
+> FOCUS 0.542 0.953 0.777 1.327
+
+dance, Zero-Frame Start, and Cyberwalk. The sequences are evaluated against motion-capture references and include non-periodic kicks, fast swings, partial support, toe contacts, and lateral motion, but little net displacement. Table IV reports the aggregated metrics across the four routines. FOCUS achieves the lowest aggregate ATE among all compared methods, reducing mean ATE from 0.947 m for Threshold to 0.542 m; the next-best method, Pronto, reaches 0.605 m. FOCUS also remains closest to perfect agreement in amplitude and spectral ratio while obtaining the lowest Fr´ echet distance. The expanded benchmark complements the long-displacement walking evaluation with a broader set of dynamic motions. 
+
+E. FK Reliability Versus Contact 
+
+Contact serves only as an indirect cue for FK quality. We therefore analyze the output using torque-independent kinematic signals over 139,013 frames of the real Charleston sequence. For each foot, the Spearman correlations between reliability and FK foot height and six-joint speed magnitude are −0.608 and −0.663 , respectively, consistent with reduced FK reliability during foot lift and rapid motion. Fig. 6 shows a representative 4-s interval containing contact transitions and intermediate reliability values. In (a), the blue solid curve is left-foot reliability; in (b), the red solid curve is right-foot reliability. Gray shading marks torque-based contact. Panel (c) shows the relative FK foot heights ∆z for both feet, while panel (d) shows leg-joint speed; ∆z is referenced to each foot’s minimum height in the interval. The torque gate is a comparison cue, not a reliability label. As described in Section III-C, low reliability reduces FK velocity trust and increases the corresponding FK noise. 
+
+F. Ablation Study 
+
+We compare five deployment choices on the same 19-segment real-walking set: hand thresholding, learned binary contact, thresholded continuous reliability, covariance-only modulation, and full FOCUS. Learned variants share the 30-dimensional input and training data. NN-binary outputs hard 0/1 contact; Hard FOCUS thresholds the learned weights at 0.5; FOCUS cov.-only disables Eq. 6 and is the closest ablation to learned contact-covariance filtering such as CoCo-InEKF [18].                        
+
+> Fig. 6. Qualitative evidence that continuous FK reliability differs from binary contact in a representative 4-s Charleston window. Blue and red identify the left and right feet, respectively. Solid curves in (a) and (b) are the corresponding FOCUS reliability weights; gray shading denotes torque-based contact. Solid curves in (c) are relative FK foot heights ∆z, while solid curves in (d) are leg-joint speeds. TABLE V ABLATION ON THE SAME 19 REAL WALKING SEGMENTS . V ALUES ARE MEAN ATE IN METERS . R EDUCTIONS ARE RELATIVE TO TORQUE -THRESHOLD CONTACT GATING .Method Mode ATE Red. Threshold hand bin. 2.634 –NN-binary learned bin. 6.125 -132.5% Hard FOCUS thresh. cont. 0.802 69.5% FOCUS cov.-only cov. only 0.902 65.7%
+> FOCUS cov.+blend 0.768 70.8%
+
+Continuous per-foot reliability is the strongest design (Ta-ble V). NN-binary performs worse than hand thresholding, while hard-thresholding FOCUS and removing the velocity blend also degrade performance. The result supports both continuous modulation and the blend in Eq. 6. On the paired set, two-sided Wilcoxon tests give p < 10 −5 for Threshold versus FOCUS and covariance-only versus full FOCUS. The 693,768-parameter ONNX model requires 1.62 ms CPU time per inference on one Intel i7-13700K thread, using 8.1% of one core at 50 Hz and thus supporting real-time deployment. V. C ONCLUSION 
+
+FOCUS replaces binary contact gating with sensor-only, continuous per-foot FK reliability weights for EKF velocity blending and covariance modulation. It reduces ATE by 83.7% in simulated walking, reduces mean ATE by 70.8% across 19 real walking segments (from 2.634 m to 0.768 m), and reduces mean ATE by 42.7% across four real dynamic-motion routines (from 0.947 m to 0.542 m). Future work will extend FOCUS to additional motions and develop online adaptation to previously unseen terrain and contact conditions. During deployment, EKF innovations and short-horizon consistency between FK and IMU prop-agation could provide self-supervised update signals, while uncertainty-gated updates and regularization toward the pre-trained model would help prevent unstable adaptation and catastrophic forgetting. REFERENCES [1] M. Bloesch, M. Hutter, M. A. Hoepflinger, S. Leutenegger, C. Gehring, C. D. Remy, and R. Siegwart, “State estimation for legged robots– consistent fusion of leg kinematics and IMU,” in Robotics: Science and Systems (RSS) , 2013. [2] N. Rotella, M. Bloesch, L. Righetti, and S. Schaal, “State estimation for a humanoid robot,” in Proc. IEEE/RSJ Int. Conf. Intell. Robots Syst. (IROS) , 2014, pp. 952–958. [3] R. Hartley, M. Ghaffari, R. M. Eustice, and J. W. Grizzle, “Contact-aided invariant extended Kalman filtering for robot state estimation,” 
+
+Int. J. Robot. Res. , vol. 39, no. 4, pp. 402–430, 2020. [4] J. Hwangbo, C. D. Bellicoso, P. Fankhauser, and M. Hutter, “Proba-bilistic foot contact estimation by fusing information from dynamics and differential/forward kinematics,” in Proc. IEEE/RSJ Int. Conf. Intell. Robots Syst. (IROS) , 2016, pp. 3872–3878. [5] T.-Y. Lin, R. Zhang, J. Yu, and M. Ghaffari, “Legged robot state estimation using invariant Kalman filtering and learned contact events,” in Proc. Conf. Robot Learning (CoRL) , ser. Proceedings of Machine Learning Research, vol. 164, 2022, pp. 1057–1066. [6] D. Kim, T. Carballo, J. Di Carlo, B. Katz, G. Bledt, and S. Kim, “Legged robot state estimation with dynamic contact event information,” in Proc. IEEE Int. Conf. Robot. Autom. (ICRA) , 2021, pp. 4305–4311. [7] M. Camurri, M. Ramezani, S. Nobili, and M. Fallon, “Pronto: Amulti-sensor state estimator for legged robots in real-world scenarios,” 
+
+Frontiers in Robotics and AI , vol. 7, p. 68, 2020. [8] D. Wisth, M. Camurri, and M. Fallon, “VILENS: Visual, inertial, lidar, and leg odometry for all-terrain legged robots,” IEEE Trans. Robot. ,vol. 39, no. 1, pp. 309–326, 2023. [9] S. Yang, Z. Zhang, Z. Fu, and Z. Manchester, “Cerberus: Low-drift visual-inertial-leg odometry for agile locomotion,” in Proc. IEEE Int. Conf. Robot. Autom. (ICRA) , 2023, pp. 4193–4199. [10] G. Ou, D. Li, and H. Li, “Leg-KILO: Robust kinematic-inertial-lidar odometry for dynamic legged robots,” IEEE Robot. Autom. Lett. , vol. 9, no. 10, pp. 8194–8201, 2024. [11] S. Yang, Z. Zhang, B. Bokser, and Z. Manchester, “Multi-IMU proprio-ceptive odometry for legged robots,” in Proc. IEEE/RSJ Int. Conf. Intell. Robots Syst. (IROS) , 2023, pp. 774–779. [12] T. Shan, B. Englot, C. Ratti, and D. Rus, “LVI-SAM: Tightly-coupled lidar-visual-inertial odometry via smoothing and mapping,” in Proc. IEEE Int. Conf. Robot. Autom. (ICRA) , 2021, pp. 5692–5698. [13] W. Xu, Y. Cai, D. He, J. Lin, and F. Zhang, “FAST-LIO2: Fast direct LiDAR-inertial odometry,” IEEE Trans. Robot. , vol. 38, no. 4, pp. 2053– 2073, 2022. [14] C. Zheng, W. Xu, Z. Zou, T. Hua, C. Yuan, D. He, B. Zhou, Z. Liu, J. Lin, F. Zhu, Y. Ren, R. Wang, F. Meng, and F. Zhang, “FAST-LIVO2: Fast, direct LiDAR-inertial-visual odometry,” IEEE Trans. Robot. , vol. 41, pp. 326–346, 2025. [15] D. Youm, H. Oh, S. Choi, H. Kim, S. Jeon, and J. Hwangbo, “Legged robot state estimation with invariant extended Kalman filter using neural measurement network,” in Proc. IEEE Int. Conf. Robot. Autom. (ICRA) ,2025, pp. 670–676. [16] G. Ji, J. Mun, H. Kim, and J. Hwangbo, “Concurrent training of a control policy and a state estimator for dynamic and robust legged locomotion,” 
+
+IEEE Robot. Autom. Lett. , vol. 7, no. 2, pp. 4630–4637, 2022. [17] C. Yu, Y. Yang, T. Liu, Y. You, M. Zhou, and D. Xiang, “State estimation transformers for agile legged locomotion,” in Proc. IEEE/RSJ Int. Conf. Intell. Robots Syst. (IROS) , 2024. [18] M. Baumgartner, D. M¨ uller, A. Serifi, R. Grandia, E. Knoop, M. Gross, and M. B¨ acher, “CoCo-InEKF: State estimation with learned con-tact covariances in dynamic, contact-rich scenarios,” arXiv preprint arXiv:2605.15122 , 2026. [19] R. Buchanan, M. Camurri, F. Dellaert, and M. Fallon, “Learning inertial odometry for dynamic legged robot state estimation,” in Proc. Conf. Robot Learning (CoRL) , ser. Proceedings of Machine Learning Research, vol. 164, 2022, pp. 1575–1584. [20] J. Wasserman, A. Agarwal, R. Jangir, G. Chowdhary, D. Pathak, and A. Gupta, “Legolas: Deep leg-inertial odometry,” in Proc. Conf. Robot Learning (CoRL) , ser. Proceedings of Machine Learning Research, vol. 270, 2025, pp. 2928–2947. [21] T. Okawara, K. Koide, A. Takanose, S. Oishi, M. Yokozuka, K. Uno, and K. Yoshida, “Tightly-coupled LiDAR-IMU-leg odometry with online learned leg kinematics incorporating foot tactile information,” IEEE Robot. Autom. Lett. , vol. 10, no. 8, pp. 7947–7954, 2025. [22] J. Carpentier, G. Saurel, G. Buondonno, J. Mirabel, F. Lamiraux, O. Stasse, and N. Mansard, “The Pinocchio C++ library: A fast and flexible implementation of rigid body dynamics algorithms and their analytical derivatives,” in Proc. IEEE/SICE Int. Symp. System Integration (SII) , 2019, pp. 614–619. [23] A. Vaswani, N. Shazeer, N. Parmar, J. Uszkoreit, L. Jones, A. N. Gomez, L. Kaiser, and I. Polosukhin, “Attention is all you need,” in Advances in Neural Information Processing Systems (NeurIPS) , 2017, pp. 5998– 6008. [24] M. Mittal, C. Yu, Q. Yu, J. Liu, N. Rudin, D. Hoeller, J. L. Yuan, R. Singh, Y. Guo, H. Mazhar, A. Mandlekar, B. Babich, G. State, M. Hutter, and A. Garg, “Orbit: A unified simulation framework for interactive robot learning environments,” IEEE Robot. Autom. Lett. ,vol. 8, no. 6, pp. 3740–3747, 2023. [25] Z. Luo, Y. Yuan, T. Wang, C. Li, F. Casta˜ neda, S. Chen, Z.-A. Cao, J. Li, D. Minor, Q. Ben, J. Park, D. Sami, Z. Wang, X. Da, R. Ding, C. Hogg, L. Song, E. Lim, E. Jeong, T. He, H. Xue, W. Xiao, S. Yuen, J. Kautz, Y. Chang, U. Iqbal, L. Fan, and Y. Zhu, “SONIC: Supersizing motion tracking for natural humanoid whole-body control,” arXiv preprint arXiv:2511.07820 , 2025.

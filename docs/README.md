@@ -6,50 +6,47 @@
 </div>
 
 ## 每次日报
-- 最新运行日期：2026-09-01
-- 运行时间：2026-09-01 22:26:51 UTC
+- 最新运行日期：2026-09-04
+- 运行时间：2026-09-04 22:41:15 UTC
 - 运行状态：成功
-- 本次总论文数：10
-- 精读区：4
+- 本次总论文数：9
+- 精读区：3
 - 速读区：6
 
 ### 今日简报（AI）
-今日精读聚焦人机交互的实时手势生成与触觉智能，另有地面机器人实时学习和仿真部署等速读补充；最值得关注的是《RoboGesture》的动作语义对齐及《N₀-Foundation》的触觉大模型方向；普通读者可从手势生成和触觉感知两条路线入手，留意仿真到真实部署的适配问题。
-- 详情：[/202609/01/README](/202609/01/README)
+今日共筛读9篇论文，精读聚焦于机器人运动重定向与双机械臂感知数据集。最值得关注的是基于点云对应的人形运动重定向方法，以及高精度双机械臂RGB-D-IR多视角数据的构建。若想入门，建议优先精读这两篇，理解跨形态运动迁移与多模态数据采集的价值。
+- 详情：[/202609/04/README](/202609/04/README)
 
 ### 精读区论文标签
-1. [RoboGesture: Real-Time Semantic-aligned Co-Speech Gestures Generation for Humanoid Interaction](/202609/01/2608.28693v1-robogesture-real-time-semantic-aligned-co-speech-gestures-generation-for-humanoid-interaction)  
+1. [Unified Motion Retargeting for Humanoids with Learned Point Cloud Correspondence](/202609/04/2609.02134v1-unified-motion-retargeting-for-humanoids-with-learned-point-cloud-correspondence)  
+   标签：评分：9.0/10、query:ur
+   evidence：统一人体运动重定向生成机器人参考轨迹，是人形机器人数据集构建的核心环节。
+2. [DARP: A Calibrated Dual-Arm RGB-D-IR Dataset for Multi-View Robotic Perception](/202609/04/2608.31002v2-darp-a-calibrated-dual-arm-rgb-d-ir-dataset-for-multi-view-robotic-perception)  
    标签：评分：8.0/10、query:ur
-   evidence：面向人形机器人的手势数据集构建及自动化合成流程
-2. [$\mathcal{N}_0$-Foundation: Towards the Age of Tactile Intelligence](/202609/01/2608.29601v1-mathcaln0-foundation-towards-the-age-of-tactile-intelligence)  
+   evidence：发布带关节状态同步的双臂RGB-D-IR校准数据集，直接服务于机器人数据集构建研究
+3. [RoboTok: An Internet-Scale Data Engine for Human Demonstration Retrieval and Dexterous Manipulation Learning](/202609/04/2609.03199v1-robotok-an-internet-scale-data-engine-for-human-demonstration-retrieval-and-dexterous-manipulation-learning)  
    标签：评分：8.0/10、query:ur
-   evidence：大规模多模态机器人数据集构建，包含可扩展采集基础设施
-3. [Geometric Attractor Monitoring: A Robust and Frugal Framework for Multi-modal Industrial Robotic Cycles](/202609/01/2608.30804v1-geometric-attractor-monitoring-a-robust-and-frugal-framework-for-multi-modal-industrial-robotic-cycles)  
-   标签：评分：8.0/10、query:ur
-   evidence：基于几何吸引子的机器人健康状态监测与传感器数据故障检测
-4. [DARP: A Calibrated Dual-Arm RGB-D-IR Dataset for Multi-View Robotic Perception](/202609/01/2608.31002v1-darp-a-calibrated-dual-arm-rgb-d-ir-dataset-for-multi-view-robotic-perception)  
-   标签：评分：8.0/10、query:ur
-   evidence：带关节状态的多视角机器人感知数据集构建
+   evidence：通过检索视频人类示范构建机器人训练数据的互联网规模数据引擎
 
 ### 速读区论文标签
-1. [Cognitively-Grounded On-Device Runtime Learning for Ground Robots in Unknown Physical Environments](/202609/01/2608.28677v1-cognitively-grounded-on-device-runtime-learning-for-ground-robots-in-unknown-physical-environments)  
+1. [AnyWorld: Factorized Egocentric World Models for Cross-Embodiment Generalization](/202609/04/2608.29242v2-anyworld-factorized-egocentric-world-models-for-cross-embodiment-generalization)  
    标签：评分：7.0/10、query:ur
-   evidence：在边缘AI设备上面向安全关键地面机器人的设备端运行时学习，直接涉及机器人边缘部署
-2. [DREAM: Deployment-Time Demonstration Generation via Real-to-Sim for Scalable Policy Adaptation](/202609/01/2608.29078v1-dream-deployment-time-demonstration-generation-via-real-to-sim-for-scalable-policy-adaptation)  
+   evidence：分解式世界模型将单个人类交互扩展为多种机器人原生轨迹，缓解机器人经验采集瓶颈，支持机器人数据集的构建
+2. [Establishing a Dynamic Multimodal HRI Dataset for Engagement Analysis with a Humanoid Robot](/202609/04/2609.03255v1-establishing-a-dynamic-multimodal-hri-dataset-for-engagement-analysis-with-a-humanoid-robot)  
    标签：评分：7.0/10、query:ur
-   evidence：自动生成机器人策略微调演示数据
-3. [Robustness of Anomaly Detection Models for Industrial Control Systems under Training-Time Data Contamination](/202609/01/2608.23547v1-robustness-of-anomaly-detection-models-for-industrial-control-systems-under-training-time-data-contamination)  
-   标签：评分：6.0/10、query:humanoid-ood
-   evidence：控制系统时序异常检测鲁棒性研究，与机器人故障诊断中的自监督时序异常检测相关
-4. [NFAD: Nuisance-Filtered Anomaly Detection Under Distribution Shift](/202609/01/2608.29112v1-nfad-nuisance-filtered-anomaly-detection-under-distribution-shift)  
-   标签：评分：6.0/10、query:humanoid-ood
-   evidence：分布偏移下异常检测，可迁移到机器人安全运行中的OOD检测
-5. [AnyWorld: Factorized Egocentric World Models for Cross-Embodiment Generalization](/202609/01/2608.29242v1-anyworld-factorized-egocentric-world-models-for-cross-embodiment-generalization)  
+   evidence：使用人形机器人构建用于参与度分析的多模态数据集
+3. [An Adversarial Zero-Shot Learning Approach for Anomaly Detection in Multivariate IoT Traffic Data](/202609/04/2609.03505v1-an-adversarial-zero-shot-learning-approach-for-anomaly-detection-in-multivariate-iot-traffic-data)  
+   标签：评分：7.0/10、query:humanoid-ood
+   evidence：面向多元时序数据的可迁移自监督异常检测方法，与基于本体感受信号的机器人故障诊断需求相符
+4. [SmoothRL: Online Reinforcement Learning During Asynchronous Execution](/202609/04/2608.29768v1-smoothrl-online-reinforcement-learning-during-asynchronous-execution)  
    标签：评分：6.0/10、query:ur
-   evidence：将单条人类视频扩展为多样化机器人轨迹，用于机器人数据构建.
-6. [CometVLA: Co-Training on an Embodied Data Pyramid towards Physical Understanding](/202609/01/2608.30289v1-cometvla-co-training-on-an-embodied-data-pyramid-towards-physical-understanding)  
+   evidence：面向机器人策略物理世界部署，用异步推理和动作分块满足实时约束
+5. [Hardware-Accelerated Instance Segmentation for Resource-Constrained Space Robotics with Criticality Analysis](/202609/04/2609.02219v1-hardware-accelerated-instance-segmentation-for-resource-constrained-space-robotics-with-criticality-analysis)  
    标签：评分：6.0/10、query:ur
-   evidence：构建了与机器人动作数据对齐的具身物理VQA数据集与基准
+   evidence：提出资源受限机器人硬件上的部署导向分割与故障暴露分析，可迁移至人形机器人边缘部署。
+6. [FOCUS: Foot Observation Confidence for Robust Humanoid Proprioceptive Odometry](/202609/04/2609.02222v1-focus-foot-observation-confidence-for-robust-humanoid-proprioceptive-odometry)  
+   标签：评分：6.0/10、query:humanoid-ood
+   evidence：利用人形机器人本体感觉预测足部前向运动学连续置信度，对滑动、拖趾和部分支撑等异常状态进行感知，关联基于关节信号的异常检测
 
 
 <div class="dpr-home-promo-card">
