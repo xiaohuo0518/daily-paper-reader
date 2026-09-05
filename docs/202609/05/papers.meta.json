@@ -1,0 +1,54 @@
+{
+  "label": "2026-09-05",
+  "date": "2026-09-05",
+  "generated_at": "2026-09-05T22:30:51",
+  "count": 3,
+  "papers": [
+    {
+      "paper_id": "202609/05/2608.28718v1-robophys-3d-a-comprehensive-embodied-world-model-evaluation-via-3d-reconstruction",
+      "section": "deep",
+      "title_en": "RoboPhys-3D: A Comprehensive Embodied World Model Evaluation via 3D Reconstruction",
+      "authors": "Tianyi Wang, Jiazhou Chen, Yiming Xu, Xiangyu Li, Tianyi Zeng, Chih-Hsien Chou, Ning Lu, Liang Peng, Junfeng Jiao, Christian Claudel",
+      "date": "2026-08-28",
+      "pdf": "https://arxiv.org/pdf/2608.28718v1",
+      "score": "8.0",
+      "evidence": "构建了包含25000段多视角视频的具身机器人评测数据集",
+      "tldr": "视频世界模型在具身智能中日益重要，但现有基准缺乏3D接地协议，难以判断生成视频是否保持三维状态或可转化为动作。为此，RoboPhys-3D基于RoboTwin 2.0构建含50任务、5000片段的多视图数据集，并让生成视频与真实视频经相同3D重建管线以分离两类误差。其评估体系涵盖50个指标和4个层级，实验显示Cosmos 3的RoboPhyscore最高（0.6330），而感知类评测往往忽略状态与执行层面的失败。该基准实现了细致的3D接地与执行感知评估，且分数与人类评价高度一致。",
+      "tags": "query:ur",
+      "abstract_en": "Video world models increasingly serve as data engines, action planners, and simulators for embodied AI, but conventional embodied world model (EWM) benchmarks lack a unified 3D-grounded protocol for establishing whether generated rollouts preserve the underlying 3D scene state or translate into executable actions. We introduce RoboPhys-3D, a 3D-grounded EWM benchmark built on RoboTwin 2.0, covering 50 manipulation tasks across four regimes, with 5,000 episodes and 25,000 multi-view ground-truth videos. A defining feature of RoboPhys-3D is that generated and ground-truth videos are processed through the same 3D reconstruction pipeline, enabling reconstruction-induced error to be distinguished from generation-induced error. The RoboPhys-3D benchmark organizes 50 complementary metrics into 18 sub-dimensions across four levels: pixel-level fidelity, 3D geometry consistency, state-level understanding, and task-level completeness. We further introduce Average Full Score, a hierarchical score averaging all 50 metrics for comprehensive evaluation, and RoboPhyscore, a compact task-aligned score averaging the metrics most strongly correlated with task success. Among the four representative video world models, Cosmos 3 achieves the highest RoboPhyscore (0.6330, 92.7% of ground truth), while state- and execution-grounded metrics reveal substantial failures that perceptual and vision-language model-based judgments fail to capture. RoboPhyscore further exhibits strong agreement with human evaluation (Pearson r = 0.9761 and Spearman \\r{ho} = 0.8962), demonstrating the importance of grounded, execution-aware evaluation for EWM capability.",
+      "source": "arxiv",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "paper_id": "202609/05/2609.03591v1-scaling-bimanual-household-manipulation-from-1500-hours-of-demonstrations-to-on-policy-corrections",
+      "section": "deep",
+      "title_en": "Scaling Bimanual Household Manipulation from 1,500 hours of Demonstrations to On-Policy Corrections",
+      "authors": "Jiafeng Xu, Qi Li, Yan Shen, Yiyu Ren, Travis Davies, Shaowen He, Ze Wang, Yifan Yang, Ran Cheng, Hao Dong",
+      "date": "2026-09-03",
+      "pdf": "https://arxiv.org/pdf/2609.03591v1",
+      "score": "8.0",
+      "evidence": "发布1500小时机器人演示数据与数据流水线",
+      "tldr": "双人操作泛化策略受限于高质量人类演示数据稀缺。为此发布1500小时多样化家庭双人操作演示，并训练XR-2视觉语言动作模型，采用高吞吐数据流水线与多阶段训练范式。系统实验显示，在增加专家数据和DAgger矫正数据时任务成功率持续提升，呈现一致缩放趋势。数据集与模型已开源，支持可复现的双人操作学习研究。",
+      "tags": "query:ur",
+      "abstract_en": "Learning generalist policies for robust bimanual manipulation is bottlenecked by the scarcity of high quality large scale human demonstration data. In this work, we release 1,500 hours of diverse bimanual manipulation demonstrations covering everyday household tasks, and use this comprehensive corpus to train XR-2, a powerful vision-language-action (VLA) model. Enabled by a purpose built high throughput data pipeline and a carefully designed multi stage training paradigm, XR-2 attains strong manipulation performance in our systematic experiments while retaining favorable training efficiency and high data utilization. We further study two critical scaling axes: varying the amount of expert demonstration data, and post training on DAgger correction data from real time human interventions. In both settings, task success rate improves steadily over the data ranges we probe, exhibiting a clear consistent scaling trend at our current data scale. These results validate both the learning capacity of XR-2 and the promising scaling properties of the released dataset, which we open source to support reproducible research on bimanual robot manipulation learning.",
+      "source": "arxiv",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "paper_id": "202609/05/2609.00188v1-zimablue-evolving-generalizable-world-action-models-through-scalable-video-pre-training",
+      "section": "quick",
+      "title_en": "ZimaBlue: Evolving Generalizable World Action Models through Scalable Video Pre-training",
+      "authors": "Xionghao Wu, Yijun Yang, Shiyang Zhou, Haoze Sun, Jianhui Liu, Songsong Yu, Jiyao Zhang, Wenbo Li, Bo Wang, Guoqing Ma, Lin Song, Renjie Liao, Shenghe Zheng, Wei Tang, Xiaojuan Qi, Yanwei Li, Yuan Zhang, Zhuotao Tian, Haoyang Huang, Nan Duan",
+      "date": "2026-08-31",
+      "pdf": "https://arxiv.org/pdf/2609.00188v1",
+      "score": "6.0",
+      "evidence": "利用自我中心视频预训练缓解机器人数据昂贵问题，对机器人数据集构建有方法价值",
+      "tldr": "机器人操作泛化受限于昂贵的动作标注数据。ZimaBlue利用海量第一人称视频，通过三阶段课程（视频预训练、动作中训练、目标特化）学习世界动作模型，并设计异步Slow-Fast架构实现30Hz实时预测。在真实机器人零样本评测中，从仅目标数据扩展到12万小时视频使成功率由36.1%升至77.8%，展示了视频预训练的扩展价值。",
+      "tags": "query:ur",
+      "abstract_en": "Robotic manipulation faces a fundamental scaling challenge: robust generalization demands broad physical experience, yet action-labeled robot trajectories are expensive to collect and inherently limited in diversity. Egocentric videos offer a far more scalable source of embodied experience, capturing object interactions, contact dynamics, tool use, and long-horizon behaviors across diverse environments. The central challenge is how to convert this abundant but action-free experience into effective robot control. We introduce ZimaBlue, a scalable framework for learning generalizable World Action Models (WAMs) from large-scale video. ZimaBlue follows a three-stage training curriculum: it first performs causal embodied video pre-training on large-scale human and robot egocentric videos, then grounds the learned visual dynamics in heterogeneous robot trajectories through video-action mid-training with a unified action representation, and finally specializes the model to a target robot for deployment. To make generative WAMs practical for real-time control, ZimaBluefurther adopts an asynchronous Slow-Fast dual-system architecture, where a high-capacity Slow world model provides generalizable spatiotemporal representations and a lightweight Fast branch enables 30 Hz action prediction on NVIDIA RTX 4090. On real-robot zero-shot evaluations, scaling from target-robot data alone to over 120,000 hours of embodied video improves success from 36.1% to 77.8%. ZimaBlue further delivers strong performance across multiple benchmarks, with particularly pronounced gains on unseen tasks.",
+      "source": "arxiv",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "errors": []
+}
