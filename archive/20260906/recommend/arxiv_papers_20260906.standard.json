@@ -1,0 +1,56 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-09-06T22:19:06.630573+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 2,
+    "deep_divecandidates": 1,
+    "deep_cap": 7,
+    "deep_selected": 1,
+    "quick_candidates": 0,
+    "quick_skim_target": 12,
+    "quick_selected": 0
+  },
+  "deep_dive": [
+    {
+      "id": "2609.03611v1",
+      "source": "arxiv",
+      "title": "FailBench: How Reliable are VLMs at Judging Robot Task Success?",
+      "abstract": "Vision-Language Models (VLMs) are increasingly used to evaluate robot manipulation outcomes, but existing benchmarks offer limited evidence of cross-domain generalization. We introduce FailBench, a benchmark for robot failure detection comprising 2,197 manipulation attempts across 14 public sources (12 real-world, 2 simulated). In FailBench, 75% of failures occur naturally, and six real-world sources come from non-failure-detection datasets. Evaluating 13 VLM-based detectors, we find the best model achieves only 0.77 mean balanced accuracy. Notably, models fine-tuned for failure detection consistently underperform general-purpose VLMs and their own pretrained baselines. Performance depends heavily on required visual evidence: models approach saturation when outcomes depend on observable object motion, but degrade to near-chance (<0.60 balanced accuracy) on contact-intensive assembly tasks. Error analysis reveals a systematic bias toward predicting success under ambiguous evidence, which persists even with increased reasoning effort. Finally, we show that input-level intervention--spatially localizing and cropping outcome-relevant regions--improves the top detector by 2.4 percentage points without extra training.",
+      "authors": [
+        "Zaruhi Navasardyan",
+        "Tatul Danielyan",
+        "Hrant Davtyan"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.AI"
+      ],
+      "published": "2026-09-03T09:58:55+00:00",
+      "link": "https://arxiv.org/pdf/2609.03611v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "Introduces FailBench, a robot failure detection dataset/benchmark for robotics dataset construction; supports error analysis.",
+      "llm_evidence_cn": "构建FailBench机器人失败检测基准，属于机器人数据集构建并支持错误分析。",
+      "llm_evidence": "构建FailBench机器人失败检测基准，属于机器人数据集构建并支持错误分析。",
+      "canonical_evidence": "构建FailBench机器人失败检测基准，属于机器人数据集构建并支持错误分析。",
+      "llm_tldr_en": "Introduces FailBench, a 2,197-trial robot manipulation benchmark drawn from 14 sources, evaluates 13 VLM detectors, best balanced accuracy 0.77, and fine-tuning often hurts performance.",
+      "llm_tldr_cn": "现有机器人失败检测基准缺乏跨域泛化证据。文章提出FailBench，汇集14个公开来源的2197次机器人操作尝试，其中75%为自然失败，并评估13种VLM检测器，发现最佳模型平均平衡准确率仅0.77；专门微调的失败检测模型反而不如通用VLM，性能高度依赖所需视觉证据类型。该基准为机器人操作错误分析和失败检测提供了统一的评测资源。",
+      "llm_tldr": "现有机器人失败检测基准缺乏跨域泛化证据。文章提出FailBench，汇集14个公开来源的2197次机器人操作尝试，其中75%为自然失败，并评估13种VLM检测器，发现最佳模型平均平衡准确率仅0.77；专门微调的失败检测模型反而不如通用VLM，性能高度依赖所需视觉证据类型。该基准为机器人操作错误分析和失败检测提供了统一的评测资源。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "quick_skim": []
+}

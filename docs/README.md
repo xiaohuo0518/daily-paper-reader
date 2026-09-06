@@ -6,31 +6,26 @@
 </div>
 
 ## 每次日报
-- 最新运行日期：2026-09-05
-- 运行时间：2026-09-05 22:30:47 UTC
+- 最新运行日期：2026-09-06
+- 运行时间：2026-09-06 22:20:26 UTC
 - 运行状态：成功
-- 本次总论文数：3
-- 精读区：2
-- 速读区：1
+- 本次总论文数：1
+- 精读区：1
+- 速读区：0
 
 ### 今日简报（AI）
-今日聚焦具身智能：3篇论文涵盖世界模型评估与双臂操作学习。
-最值得看：RoboPhys-3D提出3D重建评测世界模型，另有一项基于1500小时演示的双臂操作研究（均8.0分）。
-建议优先精读这两篇高分论文，速读可稍后补充。
-- 详情：[/202609/05/README](/202609/05/README)
+今日精读1篇论文，聚焦视觉语言模型评估机器人任务成功率的可靠性问题。  
+核心方向是《FailBench》基准测试，值得关注：VLM在判断机器人任务成败时并不可靠，需谨慎依赖其自动评估。  
+建议读者后续可对比不同VLM在该基准上的表现，并关注如何设计更稳健的失败检测方法。
+- 详情：[/202609/06/README](/202609/06/README)
 
 ### 精读区论文标签
-1. [RoboPhys-3D: A Comprehensive Embodied World Model Evaluation via 3D Reconstruction](/202609/05/2608.28718v1-robophys-3d-a-comprehensive-embodied-world-model-evaluation-via-3d-reconstruction)  
+1. [FailBench: How Reliable are VLMs at Judging Robot Task Success?](/202609/06/2609.03611v1-failbench-how-reliable-are-vlms-at-judging-robot-task-success)  
    标签：评分：8.0/10、query:ur
-   evidence：构建了包含25000段多视角视频的具身机器人评测数据集
-2. [Scaling Bimanual Household Manipulation from 1,500 hours of Demonstrations to On-Policy Corrections](/202609/05/2609.03591v1-scaling-bimanual-household-manipulation-from-1500-hours-of-demonstrations-to-on-policy-corrections)  
-   标签：评分：8.0/10、query:ur
-   evidence：发布1500小时机器人演示数据与数据流水线
+   evidence：构建FailBench机器人失败检测基准，属于机器人数据集构建并支持错误分析。
 
 ### 速读区论文标签
-1. [ZimaBlue: Evolving Generalizable World Action Models through Scalable Video Pre-training](/202609/05/2609.00188v1-zimablue-evolving-generalizable-world-action-models-through-scalable-video-pre-training)  
-   标签：评分：6.0/10、query:ur
-   evidence：利用自我中心视频预训练缓解机器人数据昂贵问题，对机器人数据集构建有方法价值
+- 本次无速读推荐。
 
 
 <div class="dpr-home-promo-card">

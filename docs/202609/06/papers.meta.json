@@ -1,0 +1,24 @@
+{
+  "label": "2026-09-06",
+  "date": "2026-09-06",
+  "generated_at": "2026-09-06T22:20:30",
+  "count": 1,
+  "papers": [
+    {
+      "paper_id": "202609/06/2609.03611v1-failbench-how-reliable-are-vlms-at-judging-robot-task-success",
+      "section": "deep",
+      "title_en": "FailBench: How Reliable are VLMs at Judging Robot Task Success?",
+      "authors": "Zaruhi Navasardyan, Tatul Danielyan, Hrant Davtyan",
+      "date": "2026-09-03",
+      "pdf": "https://arxiv.org/pdf/2609.03611v1",
+      "score": "8.0",
+      "evidence": "构建FailBench机器人失败检测基准，属于机器人数据集构建并支持错误分析。",
+      "tldr": "当前视觉语言模型在机器人任务成功评估上缺乏跨域泛化验证，可靠性存疑。为此提出FailBench，汇集14个来源的2197次操作尝试，其中75%为自然失败，并评估13个VLM检测器。结果发现最佳模型平均平衡准确率仅0.77，微调模型劣于通用VLM，接触密集任务准确率接近随机，且存在系统性成功偏见。输入级空间裁剪干预可提升检测器2.4个百分点，无需额外训练。",
+      "tags": "query:ur",
+      "abstract_en": "Vision-Language Models (VLMs) are increasingly used to evaluate robot manipulation outcomes, but existing benchmarks offer limited evidence of cross-domain generalization. We introduce FailBench, a benchmark for robot failure detection comprising 2,197 manipulation attempts across 14 public sources (12 real-world, 2 simulated). In FailBench, 75% of failures occur naturally, and six real-world sources come from non-failure-detection datasets. Evaluating 13 VLM-based detectors, we find the best model achieves only 0.77 mean balanced accuracy. Notably, models fine-tuned for failure detection consistently underperform general-purpose VLMs and their own pretrained baselines. Performance depends heavily on required visual evidence: models approach saturation when outcomes depend on observable object motion, but degrade to near-chance (<0.60 balanced accuracy) on contact-intensive assembly tasks. Error analysis reveals a systematic bias toward predicting success under ambiguous evidence, which persists even with increased reasoning effort. Finally, we show that input-level intervention--spatially localizing and cropping outcome-relevant regions--improves the top detector by 2.4 percentage points without extra training.",
+      "source": "arxiv",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "errors": []
+}
