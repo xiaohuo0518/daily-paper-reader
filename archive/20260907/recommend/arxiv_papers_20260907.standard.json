@@ -1,0 +1,364 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-09-07T23:26:18.000886+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 2,
+    "deep_divecandidates": 1,
+    "deep_cap": 7,
+    "deep_selected": 1,
+    "quick_candidates": 7,
+    "quick_skim_target": 12,
+    "quick_selected": 7
+  },
+  "deep_dive": [
+    {
+      "id": "2609.05361v1",
+      "source": "arxiv",
+      "title": "Development of a Humanoid Robot Prototype for Multimodal Human-Robot Interaction",
+      "abstract": "Human-robot interaction (HRI) enables intuitive and intelligent collaboration between humans and robots in real-world environments. This paper introduces a humanoid robot prototype designed as a flexible testbed for developing and integrating artificial intelligence (AI) modules in HRI tasks. The system features a 12 degree-of-freedom (DOFs) dual-arm mechanism and a 2 DOFs head with an expressive LCD screen to express facial emotions. All hardware components are controlled by a custom-designed controller board with real-time AI processing supported by an onboard Jetson module. The system incorporates three AI modules: (1) gesture recognition using MediaPipe Pose and an LSTM classifier, (2) object detection with YOLO and 3D localization, and (3) voice-command processing through speech recognition and large language model(LLM)-based semantic parsing. The platform is validated through experiments on positioning accuracy, with results showing average manipulation errors of approximately 1.83 cm. To demonstrate its versatility, experimental results show over 90% task accuracy, with gesture recognition reaching 96%, speech recognition reaching 92%. The results confirm the effectiveness of the proposed system as a reproducible and accessible humanoid platform for research and prototyping in HRI.",
+      "authors": [
+        "Thang Tran Viet",
+        "Thanh Nguyen Canh",
+        "Huy Uong Gia",
+        "Phuc Dinh Van",
+        "Son Tran Duc",
+        "Ngoc Minh Do",
+        "Xiem HoangVan"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-09-04T17:06:47+00:00",
+      "link": "https://arxiv.org/pdf/2609.05361v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "humanoid robot testbed with onboard Jetson for real-time edge AI processing",
+      "llm_evidence_cn": "带机载Jetson的人形机器人测试平台，用于实时边缘AI处理",
+      "llm_evidence": "带机载Jetson的人形机器人测试平台，用于实时边缘AI处理",
+      "canonical_evidence": "带机载Jetson的人形机器人测试平台，用于实时边缘AI处理",
+      "llm_tldr_en": "A humanoid robot prototype integrates 12-DOF arms, an expressive 2-DOF head, and an onboard Jetson module, running real-time AI modules such as LSTM gesture recognition and object detection for multimodal human-robot interaction.",
+      "llm_tldr_cn": "论文针对多模态人机交互对灵活AI测试平台的需求，开发了一款人形机器人原型。它采用12自由度双臂和2自由度表情头，由定制控制板和机载Jetson模块实现实时AI处理；系统搭载了基于MediaPipe与LSTM的手势识别、YOLO目标检测与3D定位等模块。该原型为在真实人形机器人上集成和验证边缘AI交互应用提供了可复用的硬件软件基础。",
+      "llm_tldr": "论文针对多模态人机交互对灵活AI测试平台的需求，开发了一款人形机器人原型。它采用12自由度双臂和2自由度表情头，由定制控制板和机载Jetson模块实现实时AI处理；系统搭载了基于MediaPipe与LSTM的手势识别、YOLO目标检测与3D定位等模块。该原型为在真实人形机器人上集成和验证边缘AI交互应用提供了可复用的硬件软件基础。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "edge deployment for humanoid robots",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "quick_skim": [
+    {
+      "id": "2609.04893v1",
+      "source": "arxiv",
+      "title": "Reasoning Without Inference Cost: Latent Semantic Scaffolding for Robot VLA Policies",
+      "abstract": "Vision-language-action (VLA) models are trained by imitation and capture what action to take but not why; adding causal reasoning improves manipulation, but current methods pay for it at inference time - generating reasoning tokens or rolling out predicted future states at every step, a cost that compounds over long horizons. We ask whether this benefit can instead be captured during training and discarded before deployment. We introduce Latent Semantic Scaffolding (LSS), an auxiliary loss applied during human-demonstration pretraining that aligns a VLA's action-token representations to text embeddings of physical-reasoning rationales through a small projection head. The head is dropped at inference, leaving the unmodified base policy with zero added cost. Our central finding concerns alignment granularity: aligning each action token to the rationale of its own manipulation phase (Dense LSS) rather than to a single pooled episode-level embedding (Pooled LSS) yields representations that transfer markedly better to held-out tasks. Dense LSS attains both the best in-distribution success and the best transfer to tasks unseen during alignment, whereas pooled alignment over-specializes to the training task. A representational probe shows Dense LSS induces roughly twice the per-phase separability in the backbone, supporting that phase-local alignment is the operative mechanism.",
+      "authors": [
+        "Andrew Ting Yan Li",
+        "Zhuo Li",
+        "Zhelin Yang",
+        "Zhipeng Dong",
+        "Quentin Rouxel",
+        "Fei Chen"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-09-04T08:49:31+00:00",
+      "link": "https://arxiv.org/pdf/2609.04893v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "removes inference-time reasoning cost in robot VLA policies, enabling efficient edge/embedded deployment",
+      "llm_evidence_cn": "通过训练阶段语义脚手架去除VLA推理期开销，支持边缘高效部署",
+      "llm_evidence": "通过训练阶段语义脚手架去除VLA推理期开销，支持边缘高效部署",
+      "canonical_evidence": "通过训练阶段语义脚手架去除VLA推理期开销，支持边缘高效部署",
+      "llm_tldr_en": "Latent Semantic Scaffolding applies an auxiliary loss during pretraining to align VLA action tokens with reasoning rationale embeddings, then drops the projection head so inference stays cheap.",
+      "llm_tldr_cn": "针对视觉-语言-动作策略为获得推理能力而在推理阶段生成额外token、造成长时间开销的问题，提出潜在语义脚手架LSS辅助损失。该方法在人类示教预训练阶段将动作token表示对齐到物理推理文本嵌入，并通过小型投影头完成对齐，部署推理前丢弃该投影头。这样基础策略在不增加推理成本的情况下仍能保留因果推理带来的操控收益。该工作为机器人策略的高效边缘部署提供了减少运行时计算的新思路。",
+      "llm_tldr": "针对视觉-语言-动作策略为获得推理能力而在推理阶段生成额外token、造成长时间开销的问题，提出潜在语义脚手架LSS辅助损失。该方法在人类示教预训练阶段将动作token表示对齐到物理推理文本嵌入，并通过小型投影头完成对齐，部署推理前丢弃该投影头。这样基础策略在不增加推理成本的情况下仍能保留因果推理带来的操控收益。该工作为机器人策略的高效边缘部署提供了减少运行时计算的新思路。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "edge deployment for humanoid robots",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2609.02306v1",
+      "source": "arxiv",
+      "title": "Contact-Constrained Lower-Limb Joint-Offset Calibration for Humanoid Robots",
+      "abstract": "Accurate joint encoder offsets are essential for kinematic consistency in humanoid lower limbs, yet existing calibration methods typically require external motion-capture systems or fiducial targets. We present a self-contained calibration framework exploiting only onboard joint encoders and a pelvis-mounted IMU during static double-support contact. The inter-foot transform from forward kinematics must stay constant when both feet are fixed; minimizing its posture-dependent dispersion yields a nonlinear least-squares problem over the 12-dimensional offset vector. A Hessian eigenstructure analysis shows that parallel pitch axes induce a rotational coupling. Orientation residuals then observe only the pitch-offset sum, while translation and posture diversity set the remaining numerical observability. For the A3 pitch-to-roll-to-yaw ordering, hip-roll and hip-yaw excitation reduce hip-pitch coupling. A standing-posture knee prior then anchors the remaining weak pitch-chain decomposition. Simulation and real-machine injection tests show consistent recovery, and on held-out recordings calibration reduces foot-height RMS residuals from 4.26 to 2.20 mm on A3 and from 8.03 to 1.43 mm on A2. An independent LiDAR-inertial reference checks the pitch-coupled channel. Removing an injected pitch offset moves the leg-odometry vertical drift back toward the LiDAR trajectory. A few static double-support stances thus provide contact-consistent corrections for well-excited directions. Individual offsets in the weak pitch chain remain prior-dependent.",
+      "authors": [
+        "Kaixiang Lu",
+        "Haiyu Lan",
+        "Chunxiao Qiao",
+        "You Li",
+        "Chengyuan Luo",
+        "Enyu Li",
+        "Peiwen Lin",
+        "Chuang Wang"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-09-02T08:51:37+00:00",
+      "link": "https://arxiv.org/pdf/2609.02306v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "Self-contained lower-limb joint-offset calibration for humanoid robots using onboard joint encoders and a pelvis IMU; relevant to error analysis in humanoid proprioceptive systems",
+      "llm_evidence_cn": "利用机载关节编码器和腰部IMU对人形机器人下肢关节偏移进行自标定，与本体感知误差分析相关",
+      "llm_evidence": "利用机载关节编码器和腰部IMU对人形机器人下肢关节偏移进行自标定，与本体感知误差分析相关",
+      "canonical_evidence": "利用机载关节编码器和腰部IMU对人形机器人下肢关节偏移进行自标定，与本体感知误差分析相关",
+      "llm_tldr_en": "Proposes a self-contained calibration framework for humanoid lower-limb joint offsets using onboard joint encoders and a pelvis-mounted IMU. It minimizes forward-kinematics dispersion of the inter-foot transform under static double support to estimate a 12-D offset vector without external motion capture.",
+      "llm_tldr_cn": "人形机器人下肢关节编码器偏移会影响运动学一致性，且现有标定常依赖外部动捕或靶标。本文提出仅利用机载关节编码器与腰部IMU、在静态双足支撑接触下完成自标定的框架，通过最小化双足间前向运动学变换随姿态的离散度求解12维偏移向量。Hessian特征分析揭示平行俯仰轴引起的旋转耦合，为无外部设备的人形机器人下肢误差标定与本体感知误差分析提供了新途径。",
+      "llm_tldr": "人形机器人下肢关节编码器偏移会影响运动学一致性，且现有标定常依赖外部动捕或靶标。本文提出仅利用机载关节编码器与腰部IMU、在静态双足支撑接触下完成自标定的框架，通过最小化双足间前向运动学变换随姿态的离散度求解12维偏移向量。Hessian特征分析揭示平行俯仰轴引起的旋转耦合，为无外部设备的人形机器人下肢误差标定与本体感知误差分析提供了新途径。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "fault diagnosis and error analysis for humanoid robots",
+      "matched_requirement_id": "req-7",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2609.05324v1",
+      "source": "arxiv",
+      "title": "RoboSPA: Can VLA Models Go Beyond Simple Scenes and Short-Horizon Tasks?",
+      "abstract": "Vision-Language-Action (VLA) models have shown promising progress in language-conditioned robotic manipulation. However, existing datasets and benchmarks mainly evaluate task completion under predefined settings, offering limited insight into model reasoning under increasing spatial and procedural complexity. We introduce \\textbf{RoboSPA} (\\textbf{Robo}t \\textbf{S}patial-\\textbf{P}rocedural \\textbf{A}ssessment), a large-scale robotic manipulation dataset and benchmark for diagnosing embodied reasoning in VLA models. \\texttt{RoboSPA} focuses on two core dimensions, Fine-Grained Spatial Reasoning and Long-Horizon Procedural Planning, covering 10 task categories and 56 base tasks. Each task is instantiated across five difficulty levels, yielding 280 variants with increasing spatial ambiguity and procedural complexity. We collect 527K trajectories across multiple embodiments and diverse scenes. Beyond binary success rate, \\texttt{RoboSPA} introduces diagnostic metrics for more detailed evaluation. Experiments on representative VLA models show that current systems still struggle with complex spatial relations, precise low-level execution, and memory-intensive planning. These results establish \\texttt{RoboSPA} as a challenging diagnostic benchmark for developing more capable, reliable, and generalizable embodied agents. Our data and code are available at https://github.com/fanzhenxuan/RoboSPA.",
+      "authors": [
+        "Zhenxuan Fan",
+        "Bo Zhang",
+        "Yutong Lin",
+        "Yuqian Yuan",
+        "Juekai Lin",
+        "Liang Liang",
+        "Zhuoyi Huang",
+        "Wenqiao Zhang",
+        "Juncheng Li",
+        "Siliang Tang",
+        "Jun Xiao",
+        "Yueting Zhuang"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.AI",
+        "cs.CV"
+      ],
+      "published": "2026-09-04T16:19:01+00:00",
+      "link": "https://arxiv.org/pdf/2609.05324v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "Large-scale robotic manipulation dataset and benchmark for diagnosing VLA reasoning; fits robotics dataset construction requirement.",
+      "llm_evidence_cn": "构建大规模机器人操作数据集与基准以诊断VLA推理能力，符合广义机器人数据集构建需求",
+      "llm_evidence": "构建大规模机器人操作数据集与基准以诊断VLA推理能力，符合广义机器人数据集构建需求",
+      "canonical_evidence": "构建大规模机器人操作数据集与基准以诊断VLA推理能力，符合广义机器人数据集构建需求",
+      "llm_tldr_en": "RoboSPA builds a large-scale manipulation dataset/benchmark with 10 task categories, 56 tasks and 280 difficulty-scaled variants to diagnose VLA spatial and procedural reasoning beyond current simple benchmarks.",
+      "llm_tldr_cn": "现有VLA评测大多在简单预设场景和短时任务上完成，难以反映空间与程序复杂度增加时的推理缺陷。为此构造RoboSPA大规模机器人操作数据集与基准，围绕细粒度空间推理和长时程程序规划两个核心维度，覆盖10类任务、56个基础任务，并以五级难度扩展得到280个变体实例。该基准能够对VLA模型的具身空间和程序推理能力进行诊断，为机器人学习数据构建与能力评估提供新工具。",
+      "llm_tldr": "现有VLA评测大多在简单预设场景和短时任务上完成，难以反映空间与程序复杂度增加时的推理缺陷。为此构造RoboSPA大规模机器人操作数据集与基准，围绕细粒度空间推理和长时程程序规划两个核心维度，覆盖10类任务、56个基础任务，并以五级难度扩展得到280个变体实例。该基准能够对VLA模型的具身空间和程序推理能力进行诊断，为机器人学习数据构建与能力评估提供新工具。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2609.03406v1",
+      "source": "arxiv",
+      "title": "Neural-Collapse-guided Task-Free Continual Anomaly Detection",
+      "abstract": "Recent years have witnessed growing interest in continual anomaly detection for industrial visual inspection. However, real-world manufacturing environments exhibit unpredictable shifts in data distributions, rendering task-dependent continual learning assumptions impractical. To address this limitation, we formulate industrial anomaly detection as a task-free continual learning problem and propose NC-TFAD, a neural-collapse-inspired, geometry-driven framework for learning from non-stationary data streams without task boundaries. NC-TFAD freezes a pretrained backbone and aligns streaming features to a simplex Equiangular Tight Frame (ETF) prototype space to stabilize representation geometry under non-stationary streams. To satisfy the NC-inspired geometric construction in the absence of real anomalies, we generate synthetic anomaly samples as auxiliary anchors during training. Building on this geometry, we further introduce inter- and intra-class regularization together with a Focal Neural Collapse Contrastive (FNCC) loss to suppress representation drift and improve normal-anomaly separability. Finally, a normal-patch-prototype-guided localization branch constructs calibrated patch-wise deviation maps from normal training samples and fuses them with a weak self-attention prior, producing anomaly heatmaps without pixel-level annotations. Extensive experiments on MVTec AD and VisA show that NC-TFAD consistently outperforms representative task-free continual learning methods adapted from general vision, as well as unified anomaly detection baselines, in both image-level detection and pixel-level localization under the task-free continual learning protocol. These results highlight that geometry-driven modeling offers an effective and robust solution for task-free continual anomaly detection in real-world industrial applications.",
+      "authors": [
+        "Xiaotong Kong",
+        "Chaoyang Song",
+        "Ziai Zhou",
+        "Jinxia Zhang",
+        "Kanjian Zhang",
+        "Haikun Wei"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV"
+      ],
+      "published": "2026-09-03T06:04:21+00:00",
+      "link": "https://arxiv.org/pdf/2609.03406v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "continuous anomaly detection under non-stationary data streams; transferable OOD and anomaly detection approach",
+      "llm_evidence_cn": "非平稳数据流上的持续异常检测方法，可作为OOD与异常检测技术参考",
+      "llm_evidence": "非平稳数据流上的持续异常检测方法，可作为OOD与异常检测技术参考",
+      "canonical_evidence": "非平稳数据流上的持续异常检测方法，可作为OOD与异常检测技术参考",
+      "llm_tldr_en": "NC-TFAD solves task-free continual anomaly detection in industrial visual inspection by freezing a pretrained backbone and aligning streaming features to an ETF prototype space to stabilize representation geometry.",
+      "llm_tldr_cn": "针对工业视觉质检中数据分布漂移且无任务边界的持续异常检测问题，提出神经坍缩启发的NC-TFAD框架。方法冻结预训练主干，将流式特征对齐到单纯形等角紧帧原型空间，以稳定非平稳数据下的表示几何，并在任务无关的流式场景中保持异常识别能力。这项工作为分布漂移条件下的OOD与异常检测提供了可借鉴的几何学习方法，对机器人安全监控亦有参考价值。",
+      "llm_tldr": "针对工业视觉质检中数据分布漂移且无任务边界的持续异常检测问题，提出神经坍缩启发的NC-TFAD框架。方法冻结预训练主干，将流式特征对齐到单纯形等角紧帧原型空间，以稳定非平稳数据下的表示几何，并在任务无关的流式场景中保持异常识别能力。这项工作为分布漂移条件下的OOD与异常检测提供了可借鉴的几何学习方法，对机器人安全监控亦有参考价值。",
+      "llm_tags": [
+        "query:humanoid-ood:composite"
+      ],
+      "matched_query_tag": "query:humanoid-ood:composite",
+      "matched_query_text": "Papers central to 请帮我查找与人形机器人故障诊断、异常检测（OOD / Anomaly Detection）、自监督时序重建（VAE / GRU）、以及边缘部署相关的论文。重点关注：基于本体感受信号（关节位置/速度/力矩/IMU）的故障检测方法；用于时序数据的自监督异常检测（如 OmniAnomaly, USAD）；开放集识别 / OOD 检测在机器人安全中的应用；轻量化模型（LSTM/GRU）在嵌入式平台（RK3588）上的部署；受 RAPT (Munn 等, 2026) 启发的机器人故障诊断框架。另外，请补充一些关于仿人机器人（Unitree G1 等）仿真故障注入、数据集构建的文献。, especially work that connects or combines: humanoid robot fault diagnosis using proprioceptive signals; anomaly detection from joint position velocity torque IMU signals in humanoid robots; out-of-distribution detection for safe robot operation; lightweight LSTM or GRU models deployed on embedded platforms for anomaly detection; RAPT framework for robot fault diagnosis based on proprioception; fault injection simulation for humanoid robots in MuJoCo or similar environments; Anomaly detection in humanoid robot using proprioceptive signals; Self supervised time series anomaly detection for robot fault diagnosis; Open set recognition in robotics for safety and anomaly detection; Deploying lightweight LSTM GRU on RK3588 for time series anomaly detection.",
+      "matched_requirement_id": "req-composite-humanoid-ood",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2609.04545v1",
+      "source": "arxiv",
+      "title": "SocioGesture: Real-Time and Adaptive Social Gesture Perception for Human-Robot Interaction",
+      "abstract": "Robots interacting with people must recognize not only explicit commands, but also social cues such as invitations, refusals, and unavailability. In real deployments, these cues must be inferred from noisy onboard perception under partial occlusion, changing viewpoints, and strict latency constraints. We present SocioGesture, a real-time adaptive social gesture perception system for human-robot interaction (HRI). SocioGesture uses a compact confidence-aware body-hand skeleton representation and a lightweight dual-stream model that fuses body motion with hand articulation for low-latency onboard recognition. To improve deployment robustness, we train the model with occlusion-aware skeleton corruption, exposing it to missing hands, occluded arms, and temporally unstable keypoints without increasing the inference cost. On a social gesture dataset collected in mixed indoor-outdoor HRI scenarios, SocioGesture achieves strong held-out-subject recognition, substantially improves robustness under structured joint occlusion, and runs in real time on a robot-mounted edge device. During deployment, uncertain interaction segments are saved for offline labeling and adaptation, enabling SocioGesture to expand its gesture vocabulary while preserving performance in the original classes. These results demonstrate a practical path toward robust, efficient, and adaptive social perception for interactive robots.",
+      "authors": [
+        "Wenjin Fu",
+        "Li-Fan Wu",
+        "Jerin Peter",
+        "Chip Huyen",
+        "Boyuan Chen",
+        "Jan Liphardt"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.CV"
+      ],
+      "published": "2026-09-03T23:03:43+00:00",
+      "link": "https://arxiv.org/pdf/2609.04545v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "Presents a lightweight dual-stream onboard model for low-latency social gesture recognition in human-robot interaction",
+      "llm_evidence_cn": "提出轻量级双流端侧模型，用于实时低延迟人机交互手势感知",
+      "llm_evidence": "提出轻量级双流端侧模型，用于实时低延迟人机交互手势感知",
+      "canonical_evidence": "提出轻量级双流端侧模型，用于实时低延迟人机交互手势感知",
+      "llm_tldr_en": "Presents SocioGesture, a lightweight confidence-aware body-hand skeleton and dual-stream model fusing body motion with hand articulation for low-latency onboard social gesture perception under occlusion and viewpoint changes in HRI.",
+      "llm_tldr_cn": "针对真实人机交互中手势识别受遮挡、视角变化和延迟约束的问题，本文提出SocioGesture系统。它采用紧凑的置信度感知骨架表示和轻量双流模型，在机器人端侧融合身体运动与手部姿态完成低延迟手势识别。通过遮挡感知的骨架损坏训练提升缺失手部和遮挡下的鲁棒性。该工作展示了面向人机交互的边缘端轻量化模型设计思路。",
+      "llm_tldr": "针对真实人机交互中手势识别受遮挡、视角变化和延迟约束的问题，本文提出SocioGesture系统。它采用紧凑的置信度感知骨架表示和轻量双流模型，在机器人端侧融合身体运动与手部姿态完成低延迟手势识别。通过遮挡感知的骨架损坏训练提升缺失手部和遮挡下的鲁棒性。该工作展示了面向人机交互的边缘端轻量化模型设计思路。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "edge deployment for humanoid robots",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2609.05161v1",
+      "source": "arxiv",
+      "title": "APEX-RBD: Mixed-Precision Exploration Framework for Hardware-Efficient Robot Dynamics Accelerator Design",
+      "abstract": "Rigid Body Dynamics (RBD) forms the computational core of real-time robotic control, but its immense computational complexity creates a performance bottleneck that necessitates dedicated hardware accelerators. However, the substantial hardware resource and power costs of these accelerators make their deployment on resource-constrained edge platforms highly challenging. While quantization offers a promising path to optimize RBD hardware for edge computing, existing uniform-precision approaches remain inefficient by ignoring the diverse quantization sensitivities of different variables. Although mixed-precision offers a superior alternative, its exploration is intractable due to a vast search space and the prohibitive cost of closed-loop simulation for motion accuracy evaluation.   To address these challenges, we introduce APEX-RBD, an automated framework that makes mixed-precision exploration computationally tractable while effectively identifying hardware-efficient configurations. Specifically, it performs physics-driven search space pruning via variable grouping and sensitivity analysis, and employs a data-efficient, prior-informed surrogate model to enable rapid trajectory error prediction. This formulation guides a hybrid optimizer to identify area- and power-efficient designs under user-defined accuracy and performance constraints. Experimental results demonstrate that APEX-RBD discovers designs achieving up to 1.9$\\times$ area reduction and 1.8$\\times$ power savings compared to uniform-precision baselines across diverse robotic platforms.",
+      "authors": [
+        "Xingyu Liu",
+        "Hanwei Fan",
+        "Chaofang Ma",
+        "Jiawei Liang",
+        "Guangyu Hu",
+        "Jiang Xu",
+        "Wei Zhang"
+      ],
+      "primary_category": "cs.AR",
+      "categories": [
+        "cs.AR",
+        "cs.RO"
+      ],
+      "published": "2026-09-04T14:02:44+00:00",
+      "link": "https://arxiv.org/pdf/2609.05161v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "mixed-precision accelerator design for robot dynamics on resource-constrained edge platforms",
+      "llm_evidence_cn": "面向资源受限边缘平台的混合精度机器人动力学加速器设计",
+      "llm_evidence": "面向资源受限边缘平台的混合精度机器人动力学加速器设计",
+      "canonical_evidence": "面向资源受限边缘平台的混合精度机器人动力学加速器设计",
+      "llm_tldr_en": "APEX-RBD explores mixed-precision configurations to reduce hardware resource and power costs of rigid-body-dynamics accelerators, addressing an edge deployment bottleneck for robotic control.",
+      "llm_tldr_cn": "该论文针对刚体动力学（RBD）是实时机器人控制核心计算但对边缘平台部署成本过高的问题，提出硬件加速器设计空间探索框架APEX-RBD。现有统一精度量化忽视不同变量的量化敏感度，而混合精度设计搜索空间巨大。作者提出混合精度探索方法来在精度与硬件资源间取得平衡。该研究直接面向机器人控制计算的边缘部署，虽然用于动力学加速器而非神经网络推理，但对边缘端人形机器人系统设计具有参考价值。",
+      "llm_tldr": "该论文针对刚体动力学（RBD）是实时机器人控制核心计算但对边缘平台部署成本过高的问题，提出硬件加速器设计空间探索框架APEX-RBD。现有统一精度量化忽视不同变量的量化敏感度，而混合精度设计搜索空间巨大。作者提出混合精度探索方法来在精度与硬件资源间取得平衡。该研究直接面向机器人控制计算的边缘部署，虽然用于动力学加速器而非神经网络推理，但对边缘端人形机器人系统设计具有参考价值。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "edge deployment for humanoid robots",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2609.05260v1",
+      "source": "arxiv",
+      "title": "One Word, Different Action: A Real-Robot Benchmark for Language-Conditioned Embodied Reasoning",
+      "abstract": "Natural-language instruction changes can directly alter robot behavior. A reliable embodied system should preserve its action when the task is unchanged and update it correctly when the task itself changes. We introduce One Word, Different Action, a real-robot benchmark built on physical decision states and executable actions, using task-preserving and task-changing instruction pairs to jointly evaluate Decision Invariance and Decision Sensitivity, with further evaluation under multi-constraint reasoning and real-RGB grounding. Experiments show that modern models are near saturation on single-constraint instruction changes, yet several models degrade noticeably when multiple task constraints must be integrated into one executable decision. These results suggest that the more salient remaining challenge is no longer recognizing an isolated instruction change, but reliably composing multiple task requirements into a correct robot action decision.",
+      "authors": [
+        "Yiwei Liu",
+        "Luwei Yang",
+        "Shunbo Lei"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-09-04T15:21:58+00:00",
+      "link": "https://arxiv.org/pdf/2609.05260v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "constructs a real-robot benchmark dataset with executable actions and paired instruction sets",
+      "llm_evidence_cn": "构建了包含可执行动作与成对任务保持和任务改变指令的真实机器人基准数据集",
+      "llm_evidence": "构建了包含可执行动作与成对任务保持和任务改变指令的真实机器人基准数据集",
+      "canonical_evidence": "构建了包含可执行动作与成对任务保持和任务改变指令的真实机器人基准数据集",
+      "llm_tldr_en": "Real-robot benchmark with task-preserving and task-changing instruction pairs, executable actions and RGB grounding for evaluating decision invariance/sensitivity. Experiments show models are near-saturated on single-constraint changes but degrade on combined-constraint reasoning.",
+      "llm_tldr_cn": "针对语言指令变化时具身系统应正确保持或更新动作的可靠性评估问题，提出一词异动真实机器人基准，利用保持任务与改变任务的成对指令和可执行动作评估决策不变性与敏感性。实验表明现代模型在单约束指令变化上接近饱和，但在多约束推理与真实RGB条件下性能显著下降。该基准为语言条件机器人策略提供细粒度评测数据集。",
+      "llm_tldr": "针对语言指令变化时具身系统应正确保持或更新动作的可靠性评估问题，提出一词异动真实机器人基准，利用保持任务与改变任务的成对指令和可执行动作评估决策不变性与敏感性。实验表明现代模型在单约束指令变化上接近饱和，但在多约束推理与真实RGB条件下性能显著下降。该基准为语言条件机器人策略提供细粒度评测数据集。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    }
+  ]
+}

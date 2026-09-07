@@ -1,0 +1,549 @@
+Title: Contact-Constrained Lower-Limb Joint-Offset Calibration for Humanoid Robots
+
+URL Source: https://arxiv.org/pdf/2609.02306v1
+
+Published Time: Thu, 03 Sep 2026 00:47:56 GMT
+
+Number of Pages: 10
+
+Markdown Content:
+# Contact-Constrained Lower-Limb Joint-Offset Calibration for Humanoid Robots 
+
+Kaixiang Lu, Haiyu Lan ∗, Chunxiao Qiao, You Li, Chengyuan Luo, Enyu Li, Peiwen Lin, Chuang Wang 
+
+Abstract — Accurate joint encoder offsets are es-sential for kinematic consistency in humanoid lower limbs, yet existing calibration methods typically require external motion-capture systems or fidu-cial targets. We present a self-contained calibration framework exploiting only onboard joint encoders and a pelvis-mounted IMU during static double-support contact. The inter-foot transform from for-ward kinematics must stay constant when both feet are fixed; minimizing its posture-dependent disper-sion yields a nonlinear least-squares problem over the 12-dimensional offset vector. A Hessian eigenstruc-ture analysis shows that parallel pitch axes induce a rotational coupling. Orientation residuals then observe only the pitch-offset sum, while translation and posture diversity set the remaining numerical observability. For the A3 pitch →roll →yaw ordering, hip-roll and hip-yaw excitation reduce hip-pitch coupling. A standing-posture knee prior then an-chors the remaining weak pitch-chain decomposition. Simulation and real-machine injection tests show consistent recovery, and on held-out recordings cali-bration reduces foot-height RMS residuals from 4.26 
+
+to 2.20 mm on A3 and from 8.03 to 1.43 mm on A2. An independent LiDAR-inertial reference checks the pitch-coupled channel. Removing an injected pitch offset moves the leg-odometry vertical drift back toward the LiDAR trajectory. A few static double-support stances thus provide contact-consistent cor-rections for well-excited directions. Individual offsets in the weak pitch chain remain prior-dependent. 
+
+I. INTRODUCTION Humanoid robots depend on accurate kinematic mod-els for locomotion, whole-body control, and contact planning [1], [2]. Joint encoder offsets, the persistent biases between encoder and true mechanical zero, ac-cumulate along serial chains and cause foot-placement errors and degraded balance [3]. Even sub-degree per-joint offsets can generate centimeter-level distal errors at the foot sole. Classical calibration identifies kinematic parameters by minimizing discrepancies between model predictions and external measurements from laser trackers, motion-IMU gg  
+
+> ����
+> CONST ��
+
+Fig. 1. Calibration principle. Upright and squat postures share the same fixed-foot transform Ck; the pelvis IMU provides gravity g.capture systems, or fiducial targets [3], [4]. Such setups are impractical for repeated in-field recalibration. A vision-based alternative observes onboard fiducial markers with onboard cameras [5], [6]. For the legs, however, the feet rarely enter the head-camera field of view during normal stances, making foot markers unreliable. This motivates a calibration signal that needs no external view of the limb. The key physical constraint available to legged robots is contact : during stable double support, both feet remain fixed relative to the ground, and the inter-foot transform must be constant across all postures. If joint offsets are incorrect, this transform varies with posture, and minimizing its dispersion yields offset estimates. This idea has appeared implicitly in legged state estima-tion [7]–[9], and Liu and Tang [10] applied double-support constraints to offline humanoid calibration on the NAO platform. What remains less explicit is how the resulting batch optimization is conditioned by lower-limb joint ordering, especially under the parallel pitch axes common in humanoid legs. The AGIBOT A2 uses a roll–yaw–pitch proximal or-dering. The AGIBOT A3 uses a pitch–roll–yaw ordering. Yamane [11] demonstrated practical kinematic cali-bration for humanoid robots using joint encoders, an IMU, and flat-foot contact constraints. However, the inherent coupling among the parallel pitch axes of hip-arXiv:2609.02306v1 [cs.RO] 2 Sep 2026 Contact Diversity Shared-Offset Constraints                              
+
+> (b) Contact-constrained estimation
+> Observable Calibration
+> (c) Optimization and conditioning
+> Fixed Contact Fixed feet, varied postures
+> Varied feet, shared offsets
+> (a) Multi-stance contact data
+> k=1 k=2 k=3 k=4
+> Constant inter-foot transform C ₁*
+> Varying Contact
+> Stand
+> C1*
+> Left lunge
+> C2*
+> Right lunge
+> C3*
+> Wide
+> C4*Static double support using only encoders and pelvis IMU
+> Shared Offset Model
+> Left FK Right FK
+> PRYKPRPRYKPR
+> Update Contact Mean Solve Joint Offsets
+> Alternating loop
+> Estimated Offsets
+> Uncertainty and Conditioning
+> A3: well-conditioned A2: pitch-coupled
+> PA3 RYKPRKnee prior
+> A2 RYPKPR
+> Hessian eigenstructure reveals pitch-axis coupling
+> Contact Residual Contact Pose Mean Contact Transform Planarity Residual Observability Matrix Relative Contact Pose Joint Calibration Objective
+> Pitch coupling
+
+Fig. 2. Calibration pipeline: collect multi-stance double-support data, form contact and flat-ground residuals, and alternate contact-mean updates with offset optimization. P/R/Y/K denote pitch/roll/yaw/knee; red, blue, and green boxes encode pitch, roll, and yaw, and dashed outlines mark pitch coupling. pitch, knee, and ankle-pitch was not formally charac-terized. Because consecutive pitch joints rotate about aligned Y -axes, their offsets produce collinear rotational Jacobian columns, so only their sum is observable from orientation. We provide a formal Hessian-eigenvector characterization of this coupling and develop decoupling strategies tailored to different kinematic orderings. The contributions are: 1) A self-contained lower-limb calibration frame-work combining inter-foot contact consistency, IMU-aided flat-ground constraints, and Tikhonov regularization with mechanical priors, requiring only onboard joint encoders and a pelvis IMU. 2) A formal Hessian-based analysis of pitch-axis coupling. The analysis separates information in the data from curvature added by regularization and mechanical priors. 3) Validation on A3 simulation and on both real plat-forms. A same-geometry MuJoCo study isolates the effect of joint ordering. External LiDAR and registered motion-capture tests check the pitch– vertical channel and inter-foot orientation, and a free-standing MuJoCo deployment tests closed-loop locomotion under persistent offsets. II. RELATED WORK 
+
+A. Robot Kinematic Calibration 
+
+Classical manipulator calibration estimates geometric parameters by comparing measured and predicted end-effector poses under Denavit–Hartenberg [4], [12] or product-of-exponentials [13] parameterizations. Closed-chain formulations exploit loop constraints for self-calibration without absolute pose measurements [14]– [16]. These works address fixed-base serial chains. Humanoid legs add a floating-base, contact-dependent, parallel-pitch structure with distinct observability chal-lenges [17]. 
+
+B. Contact-Based Constraints for Legged Robots 
+
+Contact assumptions are central to legged state es-timation. Bloesch et al. [7] fuse IMU, encoder, and foot-contact information for real-time pose estimation; Hartley et al. [8] formulate contact-aided invariant EKF; Camurri et al. [18] extend this to multi-sensor estima-tors; Rotella et al. [9] incorporate leg kinematics into humanoid state estimation. These works use contact constraints for online state estimation , not offline cali-bration. Our work applies the same physical assumption, foot fixity during double support, to a fundamentally different purpose: estimating persistent joint encoder offsets by dispersion minimization over batch data. 
+
+C. Humanoid Calibration 
+
+Yamane [11] demonstrated practical kinematic cali-bration for force-controlled humanoid robots using only joint encoders and an IMU under flat-foot contact; the same work also performed dynamic parameter identi-fication using torque sensors. Ogawa et al. [19] added dynamic parameter identification from joint torque sen-sors and contact forces. Birbach et al. [5] and Pradeep et al. [20] self-calibrate the upper body and multi-sensor arms with onboard cameras. Our work differs from Ya-mane in three respects. First, we formulate the constraint on SE(3) through inter-foot transform dispersion. We also compare it with Yamane’s sole-height method under matched simulated data. The comparison does not show a universal winner. Second, we give a formal Hessian-eigenvector analysis of the pitch-axis coupling. Third, we show how kinematic ordering shapes this coupling, an aspect not analyzed in prior contact-based humanoid calibration. 
+
+D. Excitation Design and Observability 
+
+Ayusawa et al. [21] optimize excitation trajectories for inertial parameter identification based on condition-number criteria. Venture et al. [22] numerically design motions for biped dynamics identification. Maier et al. [6] automatically select calibration configurations by maximizing SVD-based observability indices of the identification Jacobian, achieving accurate whole-body calibration with few measurements. We extend observ-ability analysis beyond condition numbers and singular-value rankings to explicit eigenvector characterization of the Hessian near-nullspace. This reveals the geometric origin of weak directions and ties them to the kinematic chain. III. METHOD 
+
+A. Kinematic Model and Offset Parameterization 
+
+Consider a humanoid with a 6-DoF lower-limb serial chain per leg. The two platforms studied are the AGIBOT A2 and A3 humanoid robots, which differ in joint ordering: A3 uses pitch →roll →yaw →knee →ankle-pitch →ankle-roll; A2 uses roll →yaw →pitch →knee →ankle-pitch →ankle-roll. Let qenc  
+
+> k
+
+∈ R12 denote the encoder readings of both legs at time step k, and δq ∈ R12 the constant offset vector. The corrected joint angles are qk = qenc  
+
+> k
+
++δq . The forward kinematics from the base to the left and right feet are TBF L (qk) and TBF R (qk). They are computed from the robot’s URDF model. 
+
+B. Inter-Foot Consistency Constraint 
+
+We use active transforms. TAB maps coordinates from frame B to frame A. During stable double support, the inter-foot transform: 
+
+Ck(δq ) = TBF L (qk)−1 TBF R (qk) (1) must be constant within a contact segment. It is the pose of the right foot in the left-foot frame. For a segment of 
+
+N retained frames, let C∗ be the intrinsic mean inter-foot transform on SE(3) [23], [24]: 
+
+C∗ = arg min 
+
+> C∈SE(3)
+> N
+
+X
+
+> k=1
+
+Log  C−1Ck(δq ) 2 , (2) The implementation initializes C∗ with 
+
+Exp( 1
+
+> N
+
+P 
+
+> k
+
+Log Ck) and refines it by iterative Log–Exp updates after each outer solve. The contact-consistency residual is: 
+
+rfeet  
+
+> k
+
+(δq ) = Log  (C∗)−1Ck(δq ) ∈ R6. (3) This residual measures deviation from the segment mean. For multiple segments, S is their count, 
+
+Cs the frame set, and Ns = |C s|. Frames are time samples; retained joint-angle cluster representa-tives are distinct configurations. Ordering: Log( T ) = [ρx, ρ y , ρ z , ϕ x, ϕ y , ϕ z ]⊤ (translation, then rotation). 
+
+Jdata stacks weighted feet-then-flat rows by segment and time; columns are left/right offsets in the platform order above. 
+
+C. IMU-Aided Flat-Ground Constraint 
+
+A pelvis-mounted IMU provides the gravity direction 
+
+g(k)imu in base frame [25]. The world frame W uses the opposite gravity direction as its vertical axis. Its yaw is arbitrary. Transforming foot positions and normals to the world frame yields a flat-ground residual: 
+
+rflat  
+
+> k
+
+=
+
+
+
+pWL,z − pWR,z 
+
+zWL,x 
+
+zWL,y 
+
+zWR,x 
+
+zWR,y 
+
+ ∈ R5, (4) where the first row enforces equal foot heights, and rows 2–5 penalize deviations of each foot normal from the gravity direction. A common yaw rotation leaves these terms unchanged. IMU tilt error changes the inferred vertical direction and can bias the result. Uneven or non-coplanar contact can also cause bias. 
+
+D. Optimization Objective 
+
+The calibration objective combines contact consis-tency, flat-ground constraints, and Tikhonov regulariza-tion [26]: 
+
+min 
+
+> δq N
+
+X
+
+> k=1
+
+λf ∥rfeet  
+
+> k
+
+∥2 + λg ∥rflat  
+
+> k
+
+∥2+λq ∥Wq⊙δq ∥2, (5) where λf , λg , λq are scalar weights, Wq ∈ R12 is a per-joint weight vector, and ⊙ denotes element-wise multiplication. For multiple stances sharing a single δq :
+
+min 
+
+> δq S
+
+X
+
+> s=1
+
+X
+
+> k∈C s
+
+λf ∥rfeet  
+
+> s,k
+
+∥2 + λg ∥rflat  
+
+> s,k
+
+∥2 + λq ∥Wq⊙δq ∥2.
+
+(6) Under the platform-specific operating settings, A3 additionally includes a quadratic knee-prior term 
+
+λknee ∥δq knee − δq prior knee ∥2 based on (10), with λknee =100 ; A2 uses λknee = 0. The matched compar-isons below use no mechanical prior. The numerical weights for the platform-specific operating settings are: A3: (λf , λ g , λ q , λ knee ) = (2 , 10 , 0.01 , 100) , Wq =[1 , 1, 1, 1.5, 1.5, 1.5] per leg; A2: (λf , λ g , λ q , λ knee ) = (1 , 100 , 1, 0) , Wq = [0 .5, 0.5, 0.5, 1, 1.5, 1.5] per leg. Here Wq follows the platform-specific joint order de-fined above. The two-order-of-magnitude difference in AGIBOT A2 AGIBOT A3   
+
+> (a) Normal Squat (e) Normal Squat (d) Wide Squat (h) Wide Squat (b) Left Lunge (c) Right Lunge (f) Left Lunge (g) Right Lunge
+
+Real-Machine Experimental Platforms and Multi-Stance Protocol HIP ROLL HIP YAW HIP PITCH KNEE ANKLE PITCH ANKLE ROLL HIP PITCH HIP ROLL HIP YAW KNEE ANKLE PITCH ANKLE ROLL Fig. 3. Real-machine A2 and A3 platforms and the four-stance protocol. Only onboard encoders and a pelvis IMU are used. 
+
+λq reflects the stronger ridge regularization used on A2 to bound its pitch-axis near-nullspace. The real-data solver retains metres and radians in the residual vector. The scalar weights therefore affect the numerical condition number. 
+
+E. Alternating Optimization 
+
+Since C∗ 
+
+> s
+
+depends on δq through (2), we adopt an alternating scheme (Fig. 2). At each outer iteration, 
+
+C∗ 
+
+> s
+
+is recomputed from the current δq estimate; Ceres Solver [27] then updates δq with C∗ 
+
+> s
+
+held fixed using DENSE QR [28]. Convergence occurs within 3–4 outer iterations for all experiments reported. We initialize δq at zero and bound each component to ±0.08 rad. The inner solve uses at most 200 iterations and a function tolerance of 10 −8. The outer loop uses at most 15 iterations. 
+
+F. Data Preprocessing 
+
+A contact-consistency filter rejects frames violating the fixed-contact assumption. For each frame k, a lo-cal Fr´ echet mean Clocal  
+
+> k
+
+is computed over a temporal window of Tw = 2 .5 s; frames with rotation residual 
+
+sk > 5◦ are discarded. The 0.5 rad/s gyroscope threshold is a permissive rejection guard. Raw-encoder frames are joint-angle clustered and subsampled to Nmax = 500 
+
+per stance; the first solve then removes the largest 10%, leaving 450 distinct configurations. Filtering is not repeated after correction. IV. OBSERVABILITY ANALYSIS AND DECOUPLING We distinguish structural observability , determined solely by the kinematic topology, from numerical ob-servability , which depends on posture diversity and data volume. 
+
+A. Hessian Eigenstructure 
+
+Let Jdata be the Jacobian of the contact and flat-ground residuals. We distinguish the data information matrix from the regularized Hessian: 
+
+Hdata = J⊤
+
+> data
+
+Jdata ,Hreg = Hdata + λq diag( W 2 
+
+> q
+
+) + Hmech . (7) 
+
+Hmech is the curvature from mechanical priors. It is zero when no such prior is used. Regularization changes 
+
+Hreg but does not add information to Jdata . We report 
+
+κ(Jdata ), κ(Hdata ), and κ(Hreg ) as numerical condi-tioning measures. They are not posterior uncertainties. For N retained frames, rdata ∈ R11 N and Jdata ∈
+
+R11 N ×12 . The matched four-stance Jacobians have nu-merical rank 12. Eigenvectors corresponding to small eigenvalues identify offset combinations that cannot be reliably estimated. 
+
+B. Inherent Pitch-Axis Coupling Proposition 1 (Rotational pitch-axis coupling): 
+
+Consider a serial-chain segment containing n ≥ 2
+
+consecutive revolute joints whose axes remain parallel when expressed in the same residual frame, with common unit direction a. For the rotational component of the inter-foot residual, the corresponding angular-Jacobian columns are collinear. The orientation residual therefore observes only one linear combination, proportional to P 
+
+> i
+
+δq i; the individual offsets span an 
+
+(n−1) -dimensional nullspace of the rotational Jacobian. 
+
+Proof: Let Jω denote the angular Jacobian of the rotational residual with all joint axes expressed in the same residual frame. For the consecutive parallel-axis segment, each joint contributes Jω,i = a up to the same sign convention, so the first-order orientation perturbation is 
+
+δϕ = Jω δq = a
+
+> n
+
+X
+
+> i=1
+
+δq i. (8) Thus every vector v satisfying P 
+
+> i
+
+vi = 0 lies in the orientation-only nullspace. For the hip-pitch, knee, and ankle-pitch triplet, one convenient basis is: 
+
+v1 ∝ ekn − eap , v2 ∝ ehp − ekn . (9) 
+
+Remark: translational terms and the full SE(3) residual. The translational Jacobian columns ˆy×(pfoot −
+
+pi) differ in magnitude due to distinct lever arms, theoretically breaking the rotational degeneracy. Com-pact humanoid geometry limits lever-arm diversity. The recorded stances are also dominated by sagittal-plane motion. The positional information can therefore be weak relative to measurement noise. This produces a 
+
+near -nullspace rather than an exact one in the full SE(3) Hessian. Millimeter-scale lateral offsets for wiring routing and structure further perturb the ideal coupling. Fig. 4 quantifies this effect. On A2, the weakest eigen-values remain separated from the dominant modes. On A3, the spectrum is more compact. The real platforms also differ in geometry, excitation, and sensor placement. The physical comparison alone cannot isolate joint or-dering. 
+
+C. Effect of Kinematic Ordering 
+
+The coupling structure can depend on the kinematic ordering. 
+
+A3, pitch →roll →yaw: Hip-pitch is the first joint and is attached to the base. When hip roll and hip yaw are nonzero, the hip-pitch axis is no longer parallel to the knee and ankle-pitch axes in the foot frame. 
+
+A2, roll →yaw →pitch: Hip-pitch, knee, and ankle-pitch are consecutive joints. There is no intervening nonparallel axis. Translational lever arms provide only weak additional information in the recorded stances. 
+
+D. Decoupling and Resolution Strategies 
+
+We distinguish two mechanisms: geometric decou-pling , which breaks axis parallelism through posture di-versity, and algebraic resolution , which injects external prior information to constrain the remaining nullspace. 
+
+Fig. 4. Matched four-stance real data. Top: Hdata 
+
+eigenvalues, the squared singular values of Jdata . Bot-tom: pitch components of its three weakest eigenvectors, D1–D3. The physical-platform gap is not ordering-only. 
+
+1) Geometric Decoupling via Roll and Yaw Excita-tion: Applying nonzero hip-roll and hip-yaw during data collection rotates the hip-pitch axis out of align-ment with knee and ankle-pitch. The flat-ground con-straint (4) uses the IMU-derived orientation. It provides independent information about hip-pitch. This reduces the nullspace from 2D to the knee–ankle-pitch coupling. 
+
+2) Algebraic Resolution via Knee Prior: A brief straight-leg standing phase of roughly 5 s provides a knee prior: 
+
+δq knee ≈ qmech knee − ¯qenc knee , (10) incorporated as a quadratic penalty with weight λknee .Once the knee is anchored, the pitch-sum constraint determines the remaining coupled pitch component. The knee prior does not make the individual offsets observ-able. It only selects one decomposition in the coupled subspace. The mechanical zero qmech knee is obtained from the URDF and CAD model. Any model error propagates into the selected individual offsets. The method assumes the initial offset is already small enough for the robot to reach a near-straight-leg posture; this matches commer-cial humanoid practice, where factory residual offsets are typically small. 
+
+3) Strengthened Regularization for A2: On A2, three consecutive parallel-axis joints preclude geometric de-coupling. Tikhonov regularization with joint weights suppresses near-nullspace drift. It can bias any individual estimate. Its weights and centers must therefore be reported and tested. For each leg, the orientation residual directly con-strains the pitch sum s = δq hp + δq knee + δq ap . We report sL, sR, and sR −sL separately from the individual offsets. V. EXPERIMENTS 
+
+A. Experimental Setup 
+
+A3 Simulation. The AGIBOT A3 humanoid with 12 lower-limb DoF is simulated in MuJoCo [29] with weld constraints fixing both feet. The A3 simulation uses one natural double-support squat MuJoCo bag with con-tinuous posture variation and retains 450 frames. This single stance has κ(Hreg ) ≈ 1.1 × 10 4. A known multi-degree offset pattern is injected symmetrically across joint pairs. This injection is intentionally large enough to rise above sensor noise and session variability, yet small enough to remain in the feasible static-contact regime. It is therefore a conservative but physically plausible recovery test. The contact, gravity, offset, and knee-prior weights are selected on a separate pilot tuning set and then kept fixed for each platform. 
+
+A2 Real Machine. The AGIBOT A2 humanoid uses four recordings: Stance I a normal squat, II a left lunge, III a right lunge, and IV a wide squat, with several hundred static frames retained per stance. The feet re-main fixed while the posture changes continuously. Each stance contributes 450 retained frames. Four stances are used as a conservative operating point: testing showed that the first few diverse postures close the dominant ob-servability gaps, while additional poses mainly increase collection time with little numerical gain. Stronger offset regularization is used on A2 to suppress its pitch-axis near-nullspace. The real-machine platforms and stance protocol are shown in Fig. 3. 
+
+A3 Real Machine. The A3 real-machine experiments use the same four-stance protocol. The same weight-selection procedure is used, with milder offset regular-ization because the A3 ordering gives better geometric decoupling. The platform-specific A3 operating run and the repeatability sessions use a knee prior from an initial straight-leg phase; the matched comparison is prior-free. 
+
+Controlled MuJoCo comparison. We also build two models with the same geometry, masses, feet, IMU, actuators, gains, targets, and noise. Both models use four stances, scaling translation by 1 mm and rotation/normal by 1 mrad. Only the proximal R-Y-P or P-R-Y ordering changes. This experiment isolates the ordering effect. 
+
+Metrics. The signed per-joint injection error is ei =ˆδq i − δq inject ,i and its magnitude is ϵi = |ei|. For real recordings, we use the paired error ∆i. It subtracts the no-injection estimate from the injected estimate before removing the known injection. This metric tests estimator consistency. It does not measure the native mechanical zero. We report data-only and regularized condition numbers separately. 
+
+B. A3 Simulation Results 
+
+Table I presents the injection-recovery results. The recovery error peaks at 0.27 ◦ on hip-pitch. It con-centrates along the weakly-observed pitch directions of Proposition 1. The contact residual constrains the pitch sum, while the anchored knee fixes the selected decomposition within the weak pitch chain. This test shows response to an injected offset under the declared TABLE I A3 SIMULATION INJECTION RECOVERY FOR ONE DOUBLE -SUPPORT SQUAT MUJOCO BAG WITH CONTINUOUS POSTURE VARIATION . T HE TABLE REPORTS SIGNED ERROR ei = ˆδq i − δq inject ,i ; RMS  
+
+> AND MAXIMUM ROWS USE
+
+|ei|.Joint Injected [ ◦] Estimated [ ◦] Error [ ◦]L hip pitch +1 .719 +1 .993 +0 .274 
+
+L hip roll +2 .292 +2 .216 −0.076 
+
+L hip yaw −1.146 −1.094 +0 .052 
+
+L knee −2.292 −2.227 +0 .065 
+
+L ankle pitch +1 .146 +1 .147 +0 .001 
+
+L ankle roll −1.719 −1.671 +0 .047 
+
+R hip pitch +1 .719 +1 .459 −0.260 
+
+R hip roll +2 .292 +2 .220 −0.072 
+
+R hip yaw −1.146 −1.206 −0.061 
+
+R knee −2.292 −2.231 +0 .061 
+
+R ankle pitch +1 .146 +1 .146 +0 .000 
+
+R ankle roll −1.719 −1.755 −0.036 
+
+RMS error 0.120 
+
+Maximum absolute error 0.274 
+
+κ(Hreg ) 1.11 × 10 4
+
+objective. It does not prove that every individual offset is data-observable. In matched A2-like/A3-like MuJoCo models, ideal zero-noise recovery is below 1.2 × 10 −13 degrees; weld and settling give RMS floors of 0.092 ◦ and 0.121 ◦,respectively. 
+
+C. A2 and A3 Real-Machine Results 
+
+Table II retains the platform-specific operating set-tings; its A3 run uses the knee prior with λknee =100 . Its value κ(Hreg ) = 72 .27 is therefore prior-assisted. These settings use different residual weights, joint weights, and ridge strengths. The two condition numbers in this table are therefore not a controlled test of joint ordering. The paired error ∆i can also cancel a shared regularization bias. A small ∆i does not prove that an individual offset is accurate. We repeated the comparison with common weights and no mechanical prior. The data-only condition num-ber κ(Hdata ) is 4340 .79 on A2 and 333 .23 on A3. When the segment mean is recomputed during differ-entiation, the values are 6254 .53 and 771 .61 . This is only platform-level evidence. The robots still differ in geometry, excitation, IMU mounting, and model error. The controlled MuJoCo pair isolates the proximal ordering. For R-Y-P, κ(Jdata ) is 348 .90 and κ(Hdata ) is 
+
+121728 .69 . For P-R-Y, the values are 90 .69 and 8224 .49 .This result supports an ordering effect for the tested geometry and excitation. TABLE II REAL -MACHINE INJECTION RECOVERY UNDER THE PLATFORM -SPECIFIC OPERATING SETTINGS . A LL JOINT VALUES ARE IN DEGREES . ∆i MEASURES PAIRED INJECTION CONSISTENCY . I T DOES NOT MEASURE NATIVE MECHANICAL -ZERO ACCURACY .A2 real robot A3 real robot Joint Base Injected Estimated ∆ Base Injected Estimated ∆
+
+L hip pitch +0.430 +1.719 +2.132 −0.016 +1.035 +1.719 +2.904 +0.150 
+
+L hip roll −1.127 +2 .292 +1 .157 −0.008 +0 .495 +2 .292 +2 .802 +0 .016 
+
+L hip yaw +0 .244 −1.146 −0.894 +0 .008 +0 .273 −1.146 −0.887 −0.015 
+
+L knee +1.154 −2.292 −1.111 +0.027 −0.208 −2.292 −2.506 −0.006 
+
+L ankle pitch −0.450 +1.146 +0.685 −0.011 −0.850 +1.146 +0.290 −0.006 
+
+L ankle roll +0 .020 −1.719 −1.699 +0 .000 +0 .340 −1.719 −1.347 +0 .032 
+
+R hip pitch +0.521 +1.719 +2.232 −0.007 +1.001 +1.719 +2.583 −0.137 
+
+R hip roll +1 .115 +2 .292 +3 .402 −0.005 −0.588 +2 .292 +1 .712 +0 .008 
+
+R hip yaw +0 .735 −1.146 −0.408 +0 .003 −0.194 −1.146 −1.321 +0 .019 
+
+R knee +0.380 −2.292 −1.893 +0.019 −0.090 −2.292 −2.388 −0.006 
+
+R ankle pitch −0.858 +1.146 +0.276 −0.011 +0.024 +1.146 +1.164 −0.006 
+
+R ankle roll −1.386 −1.719 −3.103 +0 .001 +0 .427 −1.719 −1.321 −0.030 
+
+RMS |∆| [◦] 0.012 0.061 
+
+κ(Hreg ) 5.03 × 10 3 7.22 × 10 1
+
+In the matched data-only A2 run, the six individual pitch errors have an RMS value of 0.366 ◦, while the errors in sL, sR, and sR − sL are −0.0053 ◦, +0 .0165 ◦,and +0 .0218 ◦. Moving both knee-prior centers from 
+
+−1◦ to +1 ◦ changes individual estimates by 0.59 ◦ to 
+
+1.90 ◦, but the three pitch combinations by at most 
+
+0.0071 ◦.
+
+D. Comparison with the Closest Method 
+
+We implemented the kinematic objective in Eqs. (1)– (5) of Yamane [11]. The implementation estimates one root orientation for each frame and one shared offset vector. It uses the IMU orientation term and the variance of eight sole-vertex heights. We use the same simulated states, noise, and data split for both methods. Over ten noise seeds, the proposed method and Yamane’s method give similar results on A2. Yamane’s method gives a lower individual-offset RMS value on A3. Held-out foot-pose results also depend on the platform. The results do not support a claim of universal superiority. The proposed objective directly adds inter-foot x, y, and yaw channels. 
+
+E. Non-Injection Held-Out Validation 
+
+To complement injection-recovery, we evaluate flat-ground consistency on held-out bags without artificial offset injection. Offsets are estimated from a four-stance set and validated on a separate batch: for A3 from an independent session, and for A2 from excluded recordings with measurable baseline mismatch. Fig. 5 shows per-frame held-out foot-height residuals before and after calibration. On A3, pooled RMS foot-050 100 150          
+
+> Count
+> (a) A3 RMS: 4.26 -> 2.20 mm 0246810 12
+> Foot-height mismatch [mm]
+> 0200 400
+> Count
+> (b) A2 RMS: 8.03 -> 1.43 mm Before After
+
+Fig. 5. Held-out flat-ground validation without injected offsets. Histograms show per-frame foot-height residu-als before and after calibration, pooled over validation recordings not used for optimization. Each platform contributes 1500 held-out frames. Dashed lines denote RMS values. height residual decreases from 4.26 to 2.20 mm; on A2, from 8.03 to 1.43 mm; sole-normal residuals change in the same direction on both platforms. This is not external ground truth, but it tests whether the calibrated offsets improve excluded data under the method’s own flat-ground assumptions. Each platform uses three held-out sessions with 500 frames per session. 
+
+F. External Validation 
+
+The tests above share the FK and flat-ground model of the calibration objective. They measure internal consis-0 20 40 60 80 100            
+
+> Distance (m)
+> −4 −2 0
+> Vertical drift (m)
+> -4.7 m -1.6 m
+> recovered 3.1 m
+> (a) A3 before and after calibration
+> LiDAR reference A3 before calibration (+3° pitch) A3 after calibration
+> −4 −2 024
+> Injected hip-pitch offset (deg)
+> −5.0 −2.5 0.0 2.5 5.0
+> End drift (m)
+> actual offsets (< ° )
+> vertical slope
+> ≈1.04 m/° horizontal
+> ≈28× smaller
+> (b) A3 pitch-offset sensitivity
+> vertical
+> forward
+> lateral
+
+Fig. 6. A3 validation against LiDAR-inertial odometry. The left panel shows a held-out walk with a +3 ◦ pitch offset. The right panel shows a vertical sensitivity of 
+
+1.04 m per degree. tency rather than absolute external accuracy. We there-fore retain the LiDAR-inertial cross-check as an external test of the pitch–vertical channel. Leg kinematic–inertial odometry fuses pelvis-IMU propagation with stance-foot forward kinematics [7]–[9]. During contact, the stance foot is fixed. The base pose is 
+
+T WB (t) = T WF TBF 
+
+ qenc (t) + δq −1, (11) Here T WF is the fixed stance-foot pose in the world frame. LiDAR-inertial odometry uses FAST-LIO2 [30]. It uses neither leg encoders nor FK. Large physical offsets could cause a fall. We therefore add known offsets to two recorded walks. A symmetric hip-pitch offset produces vertical drift that is linear in the offset. The sensitivity is 1.04 m per degree. Calibration moves the trajectory toward the LiDAR reference in Fig. 6. Table III reports 16 held-out segments. The vertical RMS error decreases by 25 .5% .This test checks only the pitch–vertical channel and not absolute zeros. On a separate A3, we register bilat-eral optical rigid bodies in a flat, parallel-foot reference recording and evaluate a second placement without fitting FK or offsets. The held-out inter-foot orientation error decreases from 5.223 ◦ to 4.085 ◦ (21.8%). 
+
+G. Closed-Loop Simulation 
+
+We deploy the same installed A3 walking policy in free-standing MuJoCo before and after applying corrections estimated from independent static data and frozen before locomotion. Across 35 trials, the policy, gains, model, and commands remain fixed, with paired TABLE III A3 LEG -ODOMETRY RMS ERROR AGAINST LIDAR 
+
+> BEFORE AND AFTER CORRECTION
+
+. V ALUES ARE THE MEAN AND STANDARD DEVIATION OVER 16 
+
+> HELD
+
+-OUT SEGMENTS .RMS error [mm] Before After Reduction Vertical z 319 ± 258 238 ± 137 25 .5%
+
+Forward x 287 ± 205 285 ± 204 ≈ 0
+
+Lateral y 287 ± 179 288 ± 180 ≈ 0
+
+Total 3-D 576 ± 274 494 ± 263 14 .2% 
+
+TABLE IV REAL -A2 STANCE DIVERSITY ; I–IV DENOTES THE FOUR STANCE SETS . E IG . 0–2 AND κ ARE FROM Hreg .Stances Poses Eig. 0 Eig. 1 Eig. 2 κ
+
+1 I only 1.1 2.4 16.3 1.27 × 10 5
+
+2 I + II 44.4 76.8 387.8 6.19 × 10 3
+
+3 I + II + III 91.4 177.5 753.4 4.52 × 10 3
+
+4 I–IV 109.8 558.9 1050.6 5.03 × 10 31 2 3 4   
+
+> Number of stances
+> 10 0
+> 10 1
+> 10 2
+> 10 3
+> Eigenvalue  
+> 
+> 10 4
+> 10 5
+> Condition number  
+
+Fig. 7. A2 stance diversity for Hreg : three smallest eigenvalues and κ(Hreg ).noise seeds. At 3◦, foot-strike and pelvis-trajectory RMS deviations fall from 1190 .61 to 26 .57 mm and from 
+
+1224 .10 to 27 .16 mm. All trials remain upright; torque and power do not improve consistently. This supports nominal tracking, not expanded stability, energy, or hardware claims. 
+
+H. Stance Diversity and Saturation 
+
+Table IV and Fig. 7 show that most A2 conditioning gain comes from the first added diverse stance, with 
+
+κ(Hreg ) dropping from 1.27 × 10 5 to 6.19 × 10 3.Further stances saturate, as added contact geometries introduce stance-dependent contact and flatness errors. This supports a compact four-stance protocol rather than a larger calibration set. 
+
+I. Ablation: Regularization, Constraints, and Priors 
+
+On A2, varying λq barely changes the data fit but moves weak pitch offsets: it selects a stable solution without creating observability. Removing the flat-ground term shifts frontal and transverse hip offsets by 2◦ to 
+
+5◦, confirming its out-of-plane information. Under the platform-specific operating setting, the A3 knee prior improves κ(Hreg ) from approximately 333 to 72 .27 .This change is prior curvature in Hreg ; it does not add information to Hdata .
+
+J. A3 Multi-Trial Repeatability 
+
+TABLE V A3 REAL -MACHINE CORRECTION REPEATABILITY OVER THREE RERUN SESSIONS . V ALUES ARE IN DEGREES ; THEY ARE NOT MECHANICAL -ZERO ERRORS .Joint Mean δq Standard deviation Left hip pitch −0.014 0.291 
+
+Right hip pitch −0.716 0.597 
+
+Left hip roll −0.044 0.165 
+
+Right hip roll +0 .150 0.418 
+
+Left hip yaw +0 .193 0.238 
+
+Right hip yaw +0 .805 1.050 
+
+Left knee −0.235 0.114 
+
+Right knee −0.258 0.185 
+
+Left ankle pitch −0.895 0.104 
+
+Right ankle pitch −0.131 0.190 
+
+Left ankle roll +0 .465 0.329 
+
+Right ankle roll −0.038 0.764 
+
+VI. CONCLUSION We presented a self-contained lower-limb joint-offset calibration framework exploiting inter-foot contact con-sistency, IMU-aided flat-ground constraints, and me-chanical priors. The Hessian analysis shows that parallel pitch axes create weak directions. Matched physical-platform data show better conditioning on A3. A same-geometry simulation supports an ordering effect. A2 pitch sums are more stable than their individual decom-position. Experiments on simulation and real humanoid platforms show that static double-support stances im-prove contact consistency using only onboard sensing. 
+
+Limitations and future work. The method assumes fixed, approximately coplanar double support, and in-dividual pitch offsets can remain prior-dependent. We interpret the estimates as contact-consistent corrections. LiDAR checks pitch–vertical, while registered motion capture independently validates held-out inter-foot ori-entation; the closed-loop test is A3 simulation. Indi-vidual mechanical zeros, translation accuracy, and real-machine locomotion deployment remain future work. REFERENCES 
+
+[1] S. Kuindersma, R. Deits, M. Fallon, A. Valenzuela, H. Dai, F. Permenter, T. Koolen, P. Marion, and R. Tedrake, “Optimization-based locomotion plan-ning, estimation, and control design for the Atlas humanoid robot,” Autonomous Robots , vol. 40, no. 3, pp. 429–455, 2016. [2] M. Hutter, C. Gehring, D. Jud, A. Lauber, C. D. Bellicoso, V. Tsounis, J. Hwangbo, K. Bodie, P. Fankhauser, M. Bloesch, R. Diethelm, S. Bach-mann, A. Melzer, and M. Hoepflinger, “ANYmal – a highly mobile and dynamic quadrupedal robot,” in Proc. IEEE/RSJ Int. Conf. Intelligent Robots and Systems (IROS) , 2016, pp. 38–44. [3] J. M. Hollerbach and C. W. Wampler, “The cal-ibration index and taxonomy for robot kinematic calibration methods,” The International Journal of Robotics Research , vol. 15, no. 6, pp. 573–591, 1996. [4] B. W. Mooring, Z. S. Roth, and M. R. Driels, 
+
+Fundamentals of Manipulator Calibration . Wiley, 1991. [5] O. Birbach, B. B¨ auml, and U. Frese, “Automatic and self-contained calibration of a multi-sensorial humanoid’s upper body,” in Proc. IEEE Int. Conf. Robotics and Automation (ICRA) , 2012, pp. 3103– 3108. [6] D. Maier, S. Wrobel, and M. Bennewitz, “Whole-body self-calibration via graph-optimization and automatic configuration selection,” in Proc. IEEE Int. Conf. Robotics and Automation (ICRA) , 2015, pp. 5662–5668. [7] M. Bloesch, M. Hutter, M. A. Hoepflinger, S. Leutenegger, C. Gehring, C. D. Remy, and R. Siegwart, “State estimation for legged robots: Consistent fusion of leg kinematics and IMU,” in 
+
+Robotics: Science and Systems , 2012. [8] R. Hartley, M. Ghaffari, R. M. Eustice, and J. W. Grizzle, “Contact-aided invariant extended Kalman filtering for robot state estimation,” The Interna-tional Journal of Robotics Research , vol. 39, no. 4, pp. 402–430, 2020. [9] N. Rotella, M. Bloesch, L. Righetti, and S. Schaal, “State estimation for a humanoid robot,” in Proc. IEEE/RSJ Int. Conf. Intelligent Robots and Systems (IROS) , 2014, pp. 952–958. [10] F. Liu and L. Tang, “The calibration method of humanoid robot based on double support con-straints,” in Proc. Int. Conf. Intelligent Robotics and Applications (ICIRA) , ser. LNAI, vol. 10462, 2017, pp. 3–10. [11] K. Yamane, “Practical kinematic and dynamic cal-ibration methods for force-controlled humanoid robots,” in Proc. IEEE-RAS Int. Conf. Humanoid Robots , 2011, pp. 269–275. [12] J. J. Craig, Introduction to Robotics: Mechanics and Control , 3rd ed. Pearson Prentice Hall, 2005. [13] K. Okamura and F. C. Park, “Kinematic calibration using the product of exponentials formula,” Robot-ica , vol. 14, no. 4, pp. 415–421, 1996. [14] C. W. Wampler, J. M. Hollerbach, and T. Arai, “An implicit loop method for kinematic calibration and its application to closed-chain mechanisms,” IEEE Transactions on Robotics and Automation , vol. 11, no. 5, pp. 710–724, 1995. [15] W. Khalil and S. Besnard, “Self calibration of St¨ aubli RX-90 robot using a novel method of kine-matic calibration based on distance measurement,” 
+
+Robotica , vol. 20, no. 2, pp. 203–212, 2002. [16] D. J. Bennett and J. M. Hollerbach, “Autonomous calibration of single-loop closed kinematic chains formed by manipulators with passive endpoint constraints,” IEEE Transactions on Robotics and Automation , vol. 7, no. 5, pp. 597–606, 1991. [17] W. Khalil and E. Dombre, Modeling, Identification and Control of Robots . Butterworth-Heinemann, 2004. [18] M. Camurri, M. Ramezani, S. Nobili, and M. Fal-lon, “Pronto: A multi-sensor state estimator for legged robots in real-world scenarios,” Frontiers in Robotics and AI , vol. 7, p. 68, 2020. [19] Y. Ogawa, G. Venture, and C. Ott, “Dynamic pa-rameters identification of a humanoid robot using joint torque sensors and/or contact forces,” in Proc. IEEE-RAS Int. Conf. Humanoid Robots , 2014, pp. 457–462. [20] V. Pradeep, K. Konolige, and E. Berger, “Cali-brating a multi-arm multi-sensor robot: A bundle adjustment approach,” in Proc. Int. Symp. Experi-mental Robotics (ISER) , 2014, pp. 211–225. [21] K. Ayusawa, A. Rioux, E. Yoshida, G. Venture, and M. Gautier, “Generating persistently exciting tra-jectory based on condition number optimization,” in Proc. IEEE Int. Conf. Robotics and Automation (ICRA) , 2017, pp. 6518–6524. [22] G. Venture, K. Ayusawa, and Y. Nakamura, “A numerical method for choosing motions with opti-mal excitation properties for identification of biped dynamics,” in Proc. IEEE Int. Conf. Robotics and Automation (ICRA) , 2009, pp. 1616–1621. [23] X. Pennec, “Intrinsic statistics on Riemannian manifolds: Basic tools for geometric measure-ments,” Journal of Mathematical Imaging and Vi-sion , vol. 25, no. 1, pp. 127–154, 2006. [24] J. Sol` a, J. Deray, and D. Atchuthan, “A mi-cro Lie theory for state estimation in robotics,” arXiv:1812.01537, 2018. [25] R. Mahony, T. Hamel, and J.-M. Pflimlin, “Nonlin-ear complementary filters on the special orthogonal group,” IEEE Transactions on Automatic Control ,vol. 53, no. 5, pp. 1203–1218, 2008. [26] P. C. Hansen, Rank-Deficient and Discrete Ill-Posed Problems: Numerical Aspects of Linear In-version . SIAM, 1998. [27] S. Agarwal, K. Mierle, and The Ceres Solver Team, “Ceres solver,” https://ceres-solver.org, 2022, ver-sion 2.1. [28] J. Nocedal and S. J. Wright, Numerical Optimiza-tion , 2nd ed. Springer, 2006. [29] E. Todorov, T. Erez, and Y. Tassa, “MuJoCo: A physics engine for model-based control,” in Proc. IEEE/RSJ Int. Conf. Intelligent Robots and Systems (IROS) , 2012, pp. 5026–5033. [30] W. Xu, Y. Cai, D. He, J. Lin, and F. Zhang, “FAST-LIO2: Fast direct LiDAR-inertial odometry,” IEEE Transactions on Robotics , vol. 38, no. 4, pp. 2053– 2073, 2022.

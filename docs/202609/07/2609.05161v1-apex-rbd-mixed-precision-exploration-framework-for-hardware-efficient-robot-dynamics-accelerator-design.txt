@@ -1,0 +1,467 @@
+Title: APEX-RBD: Mixed-Precision Exploration Framework for Hardware-Efficient Robot Dynamics Accelerator Design
+
+URL Source: https://arxiv.org/pdf/2609.05161v1
+
+Published Time: Mon, 07 Sep 2026 01:01:49 GMT
+
+Number of Pages: 9
+
+Markdown Content:
+# APEX-RBD: Mixed-Precision Exploration Framework for Hardware-Efficient Robot Dynamics Accelerator Design 
+
+# Xingyu Liu 
+
+xliugu@connect.ust.hk The Hong Kong University of Science and Technology Kowloon, Hong Kong 
+
+# Hanwei Fan 
+
+hfanah@connect.ust.hk The Hong Kong University of Science and Technology Kowloon, Hong Kong 
+
+# Chaofang Ma 
+
+cmaaw@connect.ust.hk The Hong Kong University of Science and Technology Kowloon, Hong Kong 
+
+# Jiawei Liang 
+
+jliangbr@connect.ust.hk The Hong Kong University of Science and Technology Kowloon, Hong Kong 
+
+# Guangyu Hu 
+
+ghuae@connect.ust.hk The Hong Kong University of Science and Technology Kowloon, Hong Kong 
+
+# Jiang Xu 
+
+jiang.xu@hkust-gz.edu.cn The Hong Kong University of Science and Technology (Guangzhou) Guangzhou, China 
+
+# Wei Zhang ∗
+
+wei.zhang@ust.hk The Hong Kong University of Science and Technology Kowloon, Hong Kong 
+
+## Abstract 
+
+Rigid Body Dynamics (RBD) forms the computational core of real-time robotic control, but its immense computational complexity cre-ates a performance bottleneck that necessitates dedicated hardware accelerators. However, the substantial hardware resource and power costs of these accelerators make their deployment on resource-constrained edge platforms highly challenging. While quantization offers a promising path to optimize RBD hardware for edge comput-ing, existing uniform-precision approaches remain inefficient by ignoring the diverse quantization sensitivities of different variables. Although mixed-precision offers a superior alternative, its explo-ration is intractable due to a vast search space and the prohibitive cost of closed-loop simulation for motion accuracy evaluation. To address these challenges, we introduce APEX-RBD, an auto-mated framework that makes mixed-precision exploration compu-tationally tractable while effectively identifying hardware-efficient configurations. Specifically, it performs physics-driven search space pruning via variable grouping and sensitivity analysis, and em-ploys a data-efficient, prior-informed surrogate model to enable rapid trajectory error prediction. This formulation guides a hy-brid optimizer to identify area- and power-efficient designs under user-defined accuracy and performance constraints. Experimental results demonstrate that APEX-RBD discovers designs achieving up to 1.9 × area reduction and 1.8 × power savings compared to uniform-precision baselines across diverse robotic platforms. 
+
+> ∗Corresponding Author.
+> This work is licensed under a Creative Commons Attribution 4.0 International License.
+> ICCAD ’26, San Jose, CA, USA
+> © 2026 Copyright held by the owner/author(s). ACM ISBN 979-8-4007-2873-0/2026/11 https://doi.org/10.1145/3831252.3834075
+
+## CCS Concepts 
+
+• Hardware → Electronic design automation .
+
+## Keywords 
+
+Robot Rigid Body Dynamics, Mixed-Precision Quantization 
+
+ACM Reference Format: 
+
+Xingyu Liu, Hanwei Fan, Chaofang Ma, Jiawei Liang, Guangyu Hu, Jiang Xu, and Wei Zhang. 2026. APEX-RBD: Mixed-Precision Exploration Framework for Hardware-Efficient Robot Dynamics Accelerator Design. In IEEE/ACM International Conference on Computer-Aided Design (ICCAD ’26), November 08–12, 2026, San Jose, CA, USA. ACM, New York, NY, USA, 9 pages. https: //doi.org/10.1145/3831252.3834075 
+
+## 1 Introduction 
+
+The demand for autonomous robots necessitates kHz-level real-time control on edge devices [25, 30]. Central to this control loop are Rigid Body Dynamics (RBD) computations [35], which must be executed at every time step. However, their high computational cost makes them a critical performance bottleneck, as they are dominated by serial multiply-accumulate (MAC) operations and consume up to 90% of a controller’s runtime [9, 33]. While dedicated RBD accelerators are limited by finite on-chip resources [29, 40], quantization offers a promising path to boost performance [25]. It allows shrinking the physical size of MAC units, enabling more of them to operate in parallel within the same hardware footprint, thereby increasing throughput. While quantization has achieved widespread success in optimiz-ing deep neural networks (DNNs) for robotic perception [31, 32, 41], applying this technique to RBD within the control loop introduces different and more severe challenges. Unlike perception-oriented DNNs, which possess inherent statistical robustness to numerical noise and typically process open-loop data frame-by-frame, RBD computations dictate physical actions within a continuous feedback arXiv:2609.05161v1 [cs.AR] 4 Sep 2026 ICCAD ’26, November 08–12, 2026, San Jose, CA, USA Xingyu Liu, Hanwei Fan, Chaofang Ma, Jiawei Liang, Guangyu Hu, Jiang Xu, and Wei Zhang 
+
+loop [35]. A minor quantization inaccuracy in calculating a joint torque physically alters the robot’s actual trajectory. This creates an erroneous state that is fed back into the controller’s highly non-linear equations (e.g., recursive trigonometric chains and matrix inversions [8]). Consequently, these errors iteratively compound and amplify over time, leading to trajectory drift and system insta-bility [25]. This complex, system-level error propagation presents a major barrier to applying quantization in robotic control. The recent work, DRACO [25], represents a pioneering effort in RBD quantization. However, its quantization framework is specifi-cally designed for FPGA deployment. Although FPGAs can support heterogeneous bit-width arithmetic, MAC-dominated RBD acceler-ators rely heavily on pre-fabricated Digital Signal Processing (DSP) slices [4, 23, 24] for performance and energy efficiency. Because these DSP slices have fixed native multiplier dimensions, arbitrary mixed-precision assignments may underutilize DSP resources or spill into LUTs, making hardware savings non-proportional to re-duced bit-widths. Therefore, DRACO adopts a uniform-precision approach, where all variables share the same bit-width. For the strict power and throughput requirements of real-time edge con-trol, Application-Specific Integrated Circuits (ASICs) remain a com-pelling target platform [30, 38]. At design time, ASICs can instanti-ate arithmetic units with customized bit-widths, enabling efficient specialization for a defined deployment workload envelope. Apply-ing a uniform-precision approach on such an ASIC is inherently inefficient. This "one-size-fits-all" strategy squanders the ASIC’s capability for bit-level customization, resulting in unnecessarily oversized data paths. Furthermore, it fails to exploit a crucial fact in RBD: a variable’s sensitivity to motion accuracy loss and its hard-ware cost are independent factors. For instance, a frequently-used, low-sensitivity variable can be aggressively quantized for major hardware savings, while a sensitive but rarely-used one can retain high precision with minimal overhead. This principle directly motivates mixed-precision quantiza-tion , a strategy that tailors the bit-width to each variable’s charac-teristics. Importantly, our goal is not to identify a universal datatype set for all RBD scenarios; robot dynamics, workloads, and accuracy requirements vary across platforms. Instead, APEX-RBD searches for an efficient mixed-precision configuration within a user-defined deployment workload envelope, which may include multiple rep-resentative tasks or operating conditions. While this fine-grained approach avoids the significant resource waste of uniform quanti-zation designs, it transforms the design problem into a vast com-binatorial search. This leads to the core problem addressed in this work: how to navigate this massive search space to find the opti-mal mixed-precision configuration that minimizes hardware area and power consumption . Crucially, this selected configuration must satisfy two constraints over the specified workload envelope: the robotic system’s physical requirement for motion accuracy (i.e., maintaining trajectory fidelity without control instability) and the RBD accelerator’s performance requirement for high throughput. Finding the optimal configuration poses a significant challenge due to two factors. First , the search space is exponentially vast; for key RBD algorithms [34, 35], quantizing over 50 different variables with a range of 12 bit-widths yields a space exceeding 12 50 . Second ,evaluating the motion accuracy of each configuration requires end-to-end closed-loop simulation [25] to explicitly model the robot’s Hierarchical Prediction Framework   
+
+> End-to-End Validation (Sec.3.4.4)
+> Sub-stage 1
+> Bit-Width
+> Candidate Pool
+> INPUTS
+> Robot (.urdf), Precision Requirements, Application Workloads
+> OUTPUTS
+> Optimal Integer Bit-Widths Optimal Fractional Bit-Widths
+> OUTPUTS
+> Stage 1: Variable Grouping and Sensitivity Analysis for Search Space Pruning
+> Pruned Search Space
+> Sensitivity Analysis (Sec.3.2.2)
+> No Overflow
+> Module-level Priors
+> Bayesian Optimization (Sec.3.4.2)
+> Local Refinements (Sec.3.4.3)
+> Surrogate Model Training
+> (Sec.3.3)
+> Group Merging (Sec.3.2.3)
+> Initial Grouping (Sec.3.2.1)
+> Sensitivity Curve
+> Error
+> Trajectory Error Predictor
+> Hardware Cost
+> Estimator (Sec.3.4.1)
+> LUT Analytical Model
+> Hierarchical Feature Engineering
+> (Sec.3.3.2)
+> Small Dataset
+> Stage 3: Hardware-Aware Searching
+> Complex Monolithic
+> End-to-End
+> Prediction Task
+> Sub-stage 2
+> Module-Level Outputs
+> Stage 2: Surrogate Model for Rapid Trajectory Error Prediction
+
+Figure 1: Overview of the APEX-RBD framework. It auto-mates mixed-precision exploration across three stages. Stage 1 uses physics-driven grouping and sensitivity analysis to prune the search space and determine optimal integer bit-widths, preventing overflow. Stage 2 trains a hierarchical, data-efficient surrogate model to serve as a trajectory error predictor. Guided by this predictor and an analytical cost estimator, Stage 3 leverages Bayesian Optimization and local refinements to identify optimal fractional bit-widths. 
+
+physical dynamics and verify whether the accumulated trajectory error satisfies the required precision constraints. However, this process is prohibitively time-consuming. To illustrate, even with 8-thread parallelization, verifying 100 candidates takes 8.5 hours. This severe evaluation cost renders conventional search methods and data-hungry strategies like Reinforcement Learning [16, 22] impractical for exploring the vast design space, as they often require thousands of simulation-based samples for convergence. In this paper, we propose APEX-RBD, a framework to address these challenges. Our methodology tames this complexity in three stages. First , to prune the vast search space, APEX-RBD performs a two-step reduction, combining physics-based variable grouping with a sensitivity analysis to merge dimensions while preserv-ing critical information. Second , to overcome the time-consuming evaluation bottleneck, we develop a surrogate model that predicts trajectory error in milliseconds, enabled by a novel hierarchical feature engineering approach. Instead of learning the complex end-to-end mapping directly, we decompose the problem into simpler, physically-grounded sub-problems and leverage the sensitivity pri-ors gained from our first step. Finally , armed with this fast predictor APEX-RBD: Mixed-Precision Exploration Framework for Hardware-Efficient Robot Dynamics Accelerator Design ICCAD ’26, November 08–12, 2026, San Jose, CA, USA 
+
+and a hardware cost estimator, we employ a hybrid search strategy. It synergizes Bayesian Optimization for global exploration with hardware- and sensitivity-aware local heuristics for fine-tuning, efficiently identifying the near-optimal configuration under user-defined constraints. Our contributions are summarized as follows: 
+
+• We propose the first mixed-precision quantization frame-work for RBD computations (Fig. 1) to find area- and power-efficient fixed-point configurations for deployment on ASICs, subject to user-defined motion accuracy and accelerator per-formance constraints. 
+
+• To make the vast search space tractable, we introduce a novel methodology that combines physics-driven variable grouping and sensitivity analysis for space pruning, with a few-shot, prior-informed surrogate model that accurately predicts trajectory error in milliseconds. 
+
+• To facilitate an efficient, hardware-aware search, we develop a cell-library-based analytical model for hardware cost es-timation. This model guides a constraint-aware hybrid op-timizer that combines Bayesian Optimization for global ex-ploration with a heuristic local search for fine-tuning. Experimental results demonstrate that APEX-RBD discovers de-signs with area and power reductions of up to 1.9 × and 1.8 × over uniform-precision baselines under identical accuracy constraints. 
+
+## 2 Preliminaries 2.1 RBD Algorithms and Accelerator 
+
+RBD computations are central to robotic control. Key algorithms, such as the Recursive Newton-Euler Algorithm (RNEA) [35] and Minv algorithm [8, 25, 40], operate on a model of the robot as a kinematic tree (Fig. 2(a)). A notable computational pattern of these algorithms is the bidirectional data traversal (i.e., forward and backward passes), exemplified by RNEA’s dual-loop structure (Fig. 2(b)). This dataflow is well-suited for hardware acceleration and is often mapped onto efficient pipeline architectures (Fig. 2(c)) composed of parallel MAC units [25, 40]. 
+
+## 2.2 Optimization Objective 
+
+Hardware accelerator design inherently involves trade-offs between performance, power, and area. For practical robotic systems, perfor-mance (i.e., throughput and latency) is not an optimization variable but a hard constraint dictated by the control frequency required for system stability [40]. To meet this performance target, the accelera-tor must employ a specific degree of parallelism, which translates to a fixed number of MAC units and thus a solidified high-level architecture [25]. As these computations are increasingly deployed on resource-constrained edge devices [20], minimizing power and area becomes the paramount optimization objective. Consequently, the design challenge becomes a constrained opti-mization problem: minimizing the hardware cost (area and power) of MAC units by optimizing their data bit-widths (i.e., quantizing the variables in the RBD algorithm) while satisfying the user-defined motion accuracy and hardware performance requirements. In this work, we focus on the fixed-point data format as it allows for ef-ficient hardware implementation using integer arithmetic units, making it the standard choice in related works [25, 30, 40]. 
+
+## 2.3 Motivation 
+
+Prior work [25] employs a uniform-precision quantization frame-work (Fig. 2(d)), which applies a single fixed-point data format to all variables, meaning they share the same integer (determining range) and fractional (determining precision) bit-widths. This simplicity permits an exhaustive search, using time-consuming end-to-end simulations to evaluate the robot’s trajectory error. However, this one-size-fits-all approach is inherently suboptimal. The core reason is that internal variables within RBD computations exhibit widely varying sensitivities to quantization; reducing their precision im-pacts the final motion accuracy to different extents. This observation motivates a mixed-precision approach, where a tailored bit-width is assigned to each variable. Such a fine-grained strategy promises significant gains in area and power efficiency by allocating precision only where it is needed. However, breaking away from uniform precision transforms the design problem into a vast search space. For a space of this magnitude, the brute-force, simulation-based methods used in uniform-precision quantization become computationally intractable, necessitating the intelligent and efficient exploration methodology proposed in this work. 
+
+## 3 Mixed-Precision Quantization Framework 3.1 Application Workload Characterization 
+
+To achieve optimal hardware efficiency, our framework generates a customized quantization scheme tailored to the specific robot and its target application. Consequently, this design-space exploration serves as an offline, one-time process for each new deployment scenario. The procedure initializes by constructing an application-centric profiling dataset. This dataset comprises representative mo-tion workloads, such as trajectory-tracking paths for a manipula-tor [5], alongside stress tests like high-velocity maneuvers. This tailored benchmark directly drives all downstream stages, including sensitivity analysis and surrogate model training, to guarantee that the resulting hardware configuration is strictly optimized for its intended real-world operating conditions. 
+
+## 3.2 Variable Grouping and Sensitivity Analysis 
+
+The vast number of variables within RBD computations creates a combinatorially explosive search space for quantization. To make this tractable, Stage 1 of our framework is dedicated to search space pruning (Fig. 1). We achieve this by introducing a methodology to group variables and analyze their quantization sensitivity. This approach reduces the search complexity by focusing on groups rather than individual parameters, while preserving precision for critical computations. Additionally, this stage utilizes module-level simulations to determine the dynamic range, thereby defining the required integer bit-width for each group to prevent overflow. 
+
+3.2.1 Initial Grouping. 
+
+The core RBD algorithms involve numerous variables (intermediate variables) that are candidates for quantization. To make the search space manageable, we first apply a heuristic grouping based on their physical and algorithmic roles. This step is performed offline at design-time as the underlying physical and algorithmic principles are fundamental to RBD and thus universally applicable [35]. This ICCAD ’26, November 08–12, 2026, San Jose, CA, USA Xingyu Liu, Hanwei Fan, Chaofang Ma, Jiawei Liang, Guangyu Hu, Jiang Xu, and Wei Zhang MAC             
+
+> (a) (b)
+> for Joint i= 1 : N do
+> RNEA Algorithm
+> 1:
+> 2:
+> 3:
+> 4:
+> for Joint i=N:1do
+> 5:
+> 6:
+> 7:
+> 8:
+
+arm 
+
+base 
+
+: joint  : link 
+
+Modeling         
+
+> input 1input 2input N
+> joint 1 joint 2 joint N
+> FIFO
+> output 1output 2output N
+> Sf1
+> Sb1
+> Sf2 SfN
+> Sb2
+> SbN
+> forward
+> backward
+> MAC MAC MAC
+> Number of Parallel MAC Units
+> INPUTS
+> Yes
+> Quantization
+> Method
+> Meet Req? No
+> Adjust quantization
+> method
+> End-to-End Control and Motion Simulation
+> Quantization Error Analyzer
+> OUTPUTS
+> （time-consuming ）
+> (c) (d)
+> Performance of the
+> Accelerator
+> determines
+
+Figure 2: Overview of RBD concepts, RBD accelerator architecture, and quantization framework. (a) A robot arm modeled as a kinematic tree of links and joints. (b) The bidirectional traversal structure in the RNEA algorithm, consisting of a forward pass (joints 1 to N) and a backward pass (joints N to 1). (c) Accelerator architecture mapping the bidirectional dataflow, with performance determined by the number of parallel MAC units. (d) Uniform-precision quantization framework in DRACO. 
+
+Figure 3: Sensitivity curves of all variable groups in RNEA. 
+
+initial grouping reduces the number of entities to be quantized, shrinking the search space from over 12 50 to a more tractable 12 27 .
+
+3.2.2 Module-level Sensitivity Analysis. 
+
+The next step is to quantify each group’s quantization sensitivity, a foundational analysis for subsequent optimization. In this context, sensitivity measures how variations in a group’s bit-width impact the robot’s final motion trajectory. Accurately evaluating this im-pact requires computationally prohibitive end-to-end closed-loop simulations [25]. To bypass this bottleneck, we perform a rapid, module-level analysis, utilizing a module’s output error (e.g., torque error from RNEA) as a reliable proxy for the final trajectory error. A critical challenge in this analysis is error coupling: a group’s sensitivity is not static, but rather fluctuates depending on the quan-tization states of all other groups. To account for this interplay, we avoid evaluating any group in a vacuum. Instead, we sweep a target group’s fractional bit-width across its valid range while locking other groups into a fixed "background" configuration. To ensure robustness, we repeat this targeted sweep across multiple distinct background configurations systematically generated via Latin Hy-percube Sampling [28]. This approach guarantees broad coverage of the high-dimensional parameter space, ultimately yielding a comprehensive family of error-versus-bit-width sensitivity curves for each group. Fig. 3 illustrates one such set of curves generated under a single background configuration. To achieve scenario-adaptivity, we perform this sensitivity analy-sis on the specific workloads of the target application. As illustrated in Fig. 1, this stage yields three key outputs. First, we extract each group’s sensitivity curves, which guide subsequent group merg-ing, as well as local refinement heuristics (Sec. 3.4.3, blue dotted arrow in Fig. 1). Second, the process generates module-level error datasets that serve as essential prior features for surrogate model training (Sec. 3.3, orange dotted arrow in Fig. 1). Third, we deter-mine each group’s required integer bit-width to prevent numerical overflow. Because the integer portion dictates the representable range in fixed-point arithmetic, we derive this width by captur-ing the maximum dynamic range during module-level simulations and expanding it with a predefined safety margin to accommodate unseen runtime dynamics. 
+
+3.2.3 Group Merging and Validation. 
+
+To further simplify the problem, we merge variable groups that exhibit similar sensitivity profiles, quantified using metrics such as Mean Squared Error on their sensitivity curves. By constraining all variables within a newly merged group to share a uniform bit-width, this aggregation inevitably introduces slight precision degradation. Consequently, each potential merge must be rigorously validated; it is only accepted if the resulting module-level error remains below an empirically determined threshold [25], ensuring the merge does not create a new error bottleneck. This process also defines a viable fractional bit-width search range for each group by pruning any lower-precision configurations that exceed predefined module-level error thresholds. After group merging, the search space is further compressed to approximately 7 13 , with minor variations depending on the specific workload. In summary, this stage transforms the problem by grouping and merging variables to reduce search dimensionality. It establishes the required integer bit-width for each group and prunes their fractional bit-width ranges. This creates a compact search problem and generates essential data-driven priors for the subsequent stages. 
+
+## 3.3 Surrogate Model for Trajectory Error Prediction 
+
+As analyzed in Sec. 1, the prohibitive computational cost of end-to-end closed-loop simulations constitutes the primary bottleneck for extensive design space exploration. To bypass this limitation, we introduce an efficient surrogate model designed to map the quantized bit-width configurations across all groups directly to the final trajectory error. By replacing costly physical simulations with rapid algorithmic predictions, this surrogate forms the cornerstone of our hardware-aware search strategy. APEX-RBD: Mixed-Precision Exploration Framework for Hardware-Efficient Robot Dynamics Accelerator Design ICCAD ’26, November 08–12, 2026, San Jose, CA, USA 
+
+3.3.1 Model Selection. 
+
+A universal surrogate model is impractical, as the characteristics of trajectory error are highly workload-dependent. Specifically, the mechanisms of error propagation and dynamic responses vary dras-tically across different robotic platforms (e.g., varying degrees of freedom, joint types, and link morphologies) and diverse application scenarios (e.g., high-speed locomotion versus high-precision manip-ulation) [30, 39]. Consequently, training a "one-size-fits-all" model would require a large dataset encompassing the combinatorial ex-plosion of all possible robots and tasks. However, acquiring such comprehensive, high-fidelity robotic data is notoriously difficult and resource-intensive in the robotics community [11, 14]. Furthermore, even if such an exhaustive dataset could be curated, the continuous emergence of novel robotic designs and operational environments would quickly render a static generalized model obsolete. Therefore, in practice, the surrogate model must be workload-specific—trained uniquely at runtime for each new scenario. Establishing a scenario-specific surrogate model requires ground-truth training data, consisting of mixed-precision configurations and their corresponding trajectory errors. However, acquiring each sample necessitates full end-to-end closed-loop simulations, a pro-cess that is highly computationally expensive. While this explo-ration represents a one-time cost for a finalized application, the robotic hardware-software co-design process [20, 36] is inherently iterative. System specifications, such as workload definitions, con-trol parameters, and robot kinematics, frequently evolve during development. Consequently, allocating thousands of simulation hours to collect extensive training datasets would bottleneck this rapid prototyping cycle. Constrained by a practical time budget, the framework can only afford to evaluate a minimal number of config-urations, inevitably resulting in severe data scarcity for surrogate model training. Such scarcity renders data-hungry models like DNNs impracti-cal, establishing our first requirement for extreme data efficiency. Furthermore, because the optimization engine must query the surro-gate model thousands of times to evaluate candidate configurations during the exploration phase, the model must provide low infer-ence latency to maintain overall search efficiency. These combined constraints define our core requirement: an accurate model that is both data-efficient and computationally lightweight . Our goal, therefore, is not to achieve global predictive perfection across all domains, but to deploy a model that serves as a data-efficient, locally-accurate guide for the optimizer within the target workload. For this specific priority on local guidance under data scarcity, Random Forest (RF) [17] emerges as an ideal choice. While any model trained on a small dataset risks overfitting, RF’s ensemble nature provides inherent robustness against this issue [7]. To fur-ther mitigate overfitting on our deliberately small training set, we strictly regularize the RF hyperparameters, limiting the maximum tree depth to 8 ∼10 and enforcing a minimum of 3 ∼5 samples per leaf node. Furthermore, its ensemble of decision trees is empirically proven to be highly effective on limited tabular data, generally ex-hibiting superior performance compared to deep learning models on small datasets [17]. This structure is particularly adept at captur-ing the complex non-linearities and high-order interaction effects that link bit-width assignments to final trajectory error. 
+
+3.3.2 Hierarchical Feature Engineering. 
+
+Hierarchical Framework. A direct mapping from bit-width as-signments to final trajectory error presents a significant learning challenge. This relationship is obscured by complex, non-linear error propagation through the robotic control stack [25]. To allevi-ate this, rather than treating the entire control loop as a complex, monolithic end-to-end prediction task, our approach decomposes the learning task into two modular sub-stages. In the RBD computa-tion flow, computations are executed sequentially through distinct core modules [40]. For instance, the RNEA module calculates the required joint torques [9], while the Minv module computes the inverse of the joint-space mass matrix [8]. Therefore, our first sub-stage constructs an array of independent predictors. Each predictor explicitly models the output error of a specific core RBD module (e.g., the torque error generated by the RNEA) based exclusively on its local bit-width assignments. These intermediate, physically meaningful error predictions then serve as the principal features for the second sub-stage, which evaluates their combined impact on the final trajectory error. This module-guided decomposition allows the framework to learn from crucial intermediate states rather than attempting to infer them from raw bit-widths alone. 
+
+Sub-stage 1: Module-Level Error Characterization. We train a set of lightweight RF models dedicated to individual core RBD modules, utilizing the error datasets generated during the sensitivity analysis of Stage 1 (Fig. 1). Instead of targeting the final trajectory, these independent predictors exclusively map bit-width assignments to localized output errors (e.g., 𝑒 𝑅𝑁 𝐸𝐴 , 𝑒 𝑀𝑖𝑛𝑣 ). 
+
+Sub-stage 2: System-Level Error Prediction. The second sub-stage predicts the final trajectory error. Moving beyond raw bit-widths, we construct a comprehensive, physically-grounded feature space for this final predictor by integrating the outputs from Sub-stage 1 with domain-specific heuristics: 
+
+➊ Module-Level Error Priors: The localized output errors pre-dicted in Sub-stage 1 are directly incorporated as foundational prior features to explicitly represent the quantization impact within each individual module. 
+
+➋ Derived Error Metrics: We engineer features from the Sub-stage 1 priors to capture the controller’s response to relative inac-curacies between dynamic components. For example, we utilize the module error ratio ( 𝑒 𝑅𝑁 𝐸𝐴 /𝑒 𝑀𝑖𝑛𝑣 ) and the normalized error imbal-ance ( |𝑒 𝑅𝑁 𝐸𝐴 − 𝑒 𝑀𝑖𝑛𝑣 |/( 𝑒 𝑅𝑁 𝐸𝐴 + 𝑒 𝑀𝑖𝑛𝑣 )) to quantify the distribution and severity of these intermediate inaccuracies. 
+
+➌ Domain-Specific Dependencies: We incorporate structural knowledge from robotics and control theory. These features abstract key concepts, such as computational bottlenecks and precision imbalances, providing insights difficult to learn from raw bit-widths alone. For instance, in the RNEA forward pass, where joint 𝑖 ’s velocity depends on joint 𝑖 −1’s [25], we create a feature representing the minimum bit-width within this recursive chain. This reflects the control principle that a cascaded system’s accuracy is limited by its weakest link [35]. 
+
+➍ Base and Interaction Terms: Finally, the bit-width of each group and their pairwise products are included to capture any remaining linear and second-order quantization effects. 
+
+Feature Selection. To mitigate overfitting within the result-ing high-dimensional feature space, we embed feature selection ICCAD ’26, November 08–12, 2026, San Jose, CA, USA Xingyu Liu, Hanwei Fan, Chaofang Ma, Jiawei Liang, Guangyu Hu, Jiang Xu, and Wei Zhang 
+
+Algorithm 1 Cost-Driven Greedy Refinement  
+
+> 1:
+
+Input: Candidate Pool 𝑃 , Hardware Impact Map 𝐻  
+
+> 2:
+
+Output: Candidate Pool 𝑃  
+
+> 3:
+
+𝐺 𝑠𝑜𝑟𝑡𝑒𝑑 ← Sort groups 𝑔 based on descending 𝐻 [𝑔 ] 
+
+> 4:
+
+for each configuration 𝐵 ∈ 𝑃 do  
+
+> 5:
+
+for each group 𝑔 𝑖 ∈ 𝐺 𝑠𝑜𝑟𝑡𝑒𝑑 do  
+
+> 6:
+
+𝐵 ′ ← ReduceBitwidth (𝐵, 𝑔 𝑖 ) 
+
+> 7:
+
+if 𝐸𝑟𝑟𝑜𝑟 𝑝𝑟𝑒𝑑 (𝐵 ′) > 1.1 · 𝜖 max then  
+
+> 8:
+
+𝐵 ′ ← Compensate (𝐵 ′, 𝐺 𝑠𝑜𝑟𝑡𝑒𝑑 [𝑖 + 1 : ])  
+
+> 9:
+
+end if  
+
+> 10:
+
+UpdatePoolIfBetter (𝑃, 𝐵 ′) 
+
+> 11:
+
+end for  
+
+> 12:
+
+end for 
+
+directly into the model training phase. Rather than employing iso-lated preprocessing filters [18], we leverage the intrinsic feature im-portance mechanism of RF [26]. This tree-based approach evaluates the quantitative importance of each candidate based on its overall contribution to error reduction, which is particularly well-suited for our methodology: it naturally captures the complex, non-linear interactions among variables that simple linear methods (e.g., Pear-son correlation) fail to detect [19]. Furthermore, its scale-invariance ensures an unbiased evaluation across features exhibiting vastly different dynamic ranges. We rank all feature candidates by importance scores, selecting the top 20 most salient features to train the final surrogate model. 
+
+## 3.4 Hardware-Aware Searching 
+
+With the surrogate model for trajectory error prediction, our ob-jective is to find the optimal fractional bit-width assignments that minimize hardware cost while satisfying a user-defined error toler-ance. To solve this constrained optimization problem, we employ a hybrid search strategy that synergizes global exploration with local refinement, guided by a fast analytical cost estimator. 
+
+3.4.1 Analytical Hardware Cost Estimator. 
+
+To guide the search, we develop a fast, cell-library-based analytical model that maps a quantization configuration to a hardware cost (area and power) estimate, grounded in a state-of-the-art (SOTA) RBD accelerator architecture [25]. The model’s logic is straightfor-ward: for a given bit-width assignment 𝐵 , it first counts the required instances ( 𝑁 𝑢 ) of each unique arithmetic operator 𝑢 from the set of all operator instances 𝑈 , where uniqueness is defined by the opera-tor’s function and operand bit-widths (e.g., a 12 ×8-bit multiplier). The cost for each operator type, 𝐶 (𝑢 ), is pre-characterized via a one-time synthesis of multipliers and adders with various bit-widths, and stored in a look-up table (LUT). The total hardware cost is then computed by summing the costs of all operator instances: Cost (𝐵 ) =∑︁  
+
+> 𝑢 ∈𝑈
+
+𝑁 𝑢 · 𝐶 (𝑢 ) . (1) This approach focuses on arithmetic logic. While quantization also affects FIFOs, control logic, and routing congestion, our post-layout analysis confirms these secondary effects are negligible compared to the cost variation of arithmetic units. 
+
+3.4.2 Bayesian Optimization. 
+
+For global exploration, we employ Bayesian Optimization (BO), a 
+
+Algorithm 2 Sensitivity-Guided Tuning  
+
+> 1:
+
+Input: Candidate Pool 𝑃 , Sensitivity Map 𝑆  
+
+> 2:
+
+Output: Candidate Pool 𝑃  
+
+> 3:
+
+𝐺 ℎ𝑖𝑔ℎ , 𝐺 𝑙𝑜𝑤 , 𝐺 𝑜𝑡ℎ𝑒𝑟 ← Partition groups based on 𝑆 [𝑔 ] 
+
+> 4:
+
+for each configuration 𝐵 ∈ 𝑃 do  
+
+> 5:
+
+𝐵 ′ ← ReduceBitwidth (𝐵, 𝐺 𝑙𝑜𝑤 ) 
+
+> 6:
+
+𝐵 ′ ← IncreaseBitwidth (𝐵 ′, 𝐺 ℎ𝑖𝑔ℎ ) 
+
+> 7:
+
+if 𝐸𝑟𝑟𝑜𝑟 𝑝𝑟𝑒𝑑 (𝐵 ′) ≤ 1.1 · 𝜖 max then  
+
+> 8:
+
+𝐵 ′′ ← ReduceBitwidth (𝐵 ′, 𝐺 𝑜𝑡ℎ𝑒𝑟 ) 
+
+> 9:
+
+UpdatePoolIfBetter (𝑃, 𝐵 ′′ ) 
+
+> 10:
+
+end if  
+
+> 11:
+
+end for 
+
+sample-efficient method ideal for finding the global optimum of a black-box function under complex constraints [27, 37]. Guided by the analytical cost estimator and the surrogate trajectory er-ror predictor (Sec. 3.3), BO is tasked with finding the bit-width configuration 𝐵 that solves the following optimization problem: minimize  
+
+> 𝐵
+
+Cost (𝐵 ) = Area (𝐵 ) + 𝜆 · Power (𝐵 )
+
+subject to Error predict (𝐵 ) ≤ 1.1 · 𝜖 max 
+
+The objective function, Cost (𝐵 ), is the weighted hardware cost from our analytical estimator. The factor 𝜆 is used to balance the trade-off between area and power. The surrogate’s prediction must satisfy the user-defined tolerance ( 𝜖 max ). We relax this boundary by 10% to offset potential surrogate underestimation, empirically balancing solution feasibility and search efficiency. The search concludes by identifying the top 30 configurations that satisfy the constraint, creating a candidate pool for final validation. 
+
+3.4.3 Local Refinements. 
+
+While BO effectively identifies promising regions, it is not designed for finding precise local minima [15]. We therefore sequentially ap-ply two complementary local refinement heuristics. These greedy-based algorithms are computationally efficient and leverage domain-specific knowledge for targeted fine-tuning where BO cannot. The first, Cost-Driven Greedy Refinement (Alg. 1), takes a cost-first approach. It ranks variable groups in descending order of their hardware impact (i.e., the aggregate hardware cost of the arithmetic units they affect). Traversing this sorted list, the algorithm greedily reduces the bit-width of high-impact groups to maximize hardware savings. If reducing the bit-width of the current group causes the trajectory error to exceed the predefined threshold, the framework initiates a compensation mechanism. To recover system accuracy, this step selectively allocates higher bit-widths to the remaining, less sensitive groups within the processing queue. The second, Sensitivity-Guided Tuning, shown as Alg. 2, adopts an accuracy-first strategy by leveraging the sensitivity analysis from Sec. 3.2.2. To systematically adjust the configurations, the algorithm first partitions all variable groups into three classes: high-sensitivity, low-sensitivity, and others. It then initiates a precision trade-off by reducing the bit-widths of low-sensitivity groups, then boosting the high-sensitivity ones. Building on this trade-off, if the configuration still meets the required error bound, the algorithm then proceeds to cautiously reduce the bit-widths of the remaining "other" groups to further maximize hardware efficiency. APEX-RBD: Mixed-Precision Exploration Framework for Hardware-Efficient Robot Dynamics Accelerator Design ICCAD ’26, November 08–12, 2026, San Jose, CA, USA Perfect Prediction        
+
+> True Trajectory Error (mm)
+> 00.5 1.0 1.5 2.0 2.5 3.0
+> 0
+> 0.5
+> 1.0
+> 1.5
+> 2.0
+> 2.5
+> 3.0
+> Predicted Trajectory Error (mm)
+> 3.5 4.0
+> 3.5
+> 4.0
+
+Figure 4: Predicted versus true trajectory error. 
+
+In both heuristics, any newly discovered configuration with a lower hardware cost updates the candidate pool, effectively explor-ing the local neighborhood for a better solution. 
+
+3.4.4 End-to-End Validation. 
+
+The final step is to validate the pool of 30 candidate configurations produced by our search framework. Each candidate undergoes a rigorous end-to-end simulation to determine its true trajectory error. From the candidates in this pool that verifiably satisfy the user-defined tolerance, we select the one with the minimum hardware cost as the final solution. 
+
+## 4 Evaluation 4.1 Experimental Setup 
+
+To demonstrate the generalizability and scalability of our frame-work, we conduct comprehensive evaluations across three diverse robotic platforms: the 7-Degree-of-Freedom (DoF) iiwa manipu-lator [2], the 12-DoF HyQ quadruped [1], and the 29-DoF Atlas humanoid [3]. For each robot, we curate a domain-specific appli-cation workload comprising 40 representative trajectories. Specif-ically, the iiwa workload covers trajectory tracking and common manipulation tasks [5, 20]; the HyQ workload features locomotion profiles [6, 13] such as walking, trotting, and climbing; and the Atlas workload encompasses complex whole-body motions [12, 21], including walking, squatting, and dynamic balancing. These tra-jectory sets serve as our primary test cases; notably, the frame-work’s search time scales proportionally with the workload size, ensuring tractability for even more extensive applications. The con-trol and motion simulation environment utilizes the Pinocchio li-brary [10] and a model predictive controller [5], mirroring the setup in DRACO [25] to ensure a fair comparison. Finally, all hardware metrics are derived from post-layout results using the Synopsys IC Compiler under the TSMC 28-nm CMOS technology library. 
+
+## 4.2 Surrogate Model Effectiveness 
+
+We evaluate the effectiveness of our trajectory error predictor and quantify the benefit of feature engineering. Given that data col-lection via end-to-end simulation is the dominant cost in the ex-ploration process, the predictor (surrogate model) is trained on a deliberately small training dataset of 100 samples. Specifically, each sample represents a distinct mixed-precision bit-width con-figuration, and its corresponding label is the real trajectory error 
+
+Figure 5: Comparison of search results under different trajec-tory error constraints with proposed APEX-RBD and various search algorithms (random search, pure Bayesian Optimiza-tion, annealing algorithm, and grid search). Table 1: Ablation Study on Feature Engineering.                 
+
+> Feature Set 𝑅 2RMSE Spearman Kendall Bit-widths only 0.879 0.398 0.89 0.71 + Module-Level Priors 0.922 0.332 0.93 0.79 All Features 0.937 0.307 0.95 0.81
+
+evaluated through end-to-end closed-loop simulation. As plotted in Fig. 4, the predicted versus true trajectory errors on a separate 80-sample test set exhibit a strong linear correlation. Quantitatively, the model achieves excellent predictive accuracy, evidenced by a high coefficient of determination ( 𝑅 2) of 0.937 and a low Root Mean Square Error (RMSE) of 0.307 (Table 1). More critically for the opti-mization objective, where correct ranking is paramount, the model exhibits strong rank fidelity, achieving a Spearman’s correlation of 0.95 and a Kendall’s Tau of 0.81. This confirms its capability to guide the optimization process by correctly ordering design candidates. Conversely, models relying exclusively on raw bit-width features converge to suboptimal design points, incurring an average area overhead of 12% and a power penalty of 10%. 
+
+## 4.3 Search Strategy Performance 
+
+We evaluate the effectiveness of our search strategy by comparing APEX-RBD against other baseline algorithms [22]. The optimization objective is to minimize the hardware cost (Sec. 3.4.2), where the weighting factor 𝜆 is set to 10 4 to normalize the different orders of magnitude between area ( 𝜇 m2) and power (mW). To ensure a fair assessment, all compared algorithms utilize the same surrogate model and hardware cost estimator in our framework. As illustrated in Fig. 5, APEX-RBD discovers superior configura-tions that define a performance envelope of lower hardware cost for any given error threshold. While pure BO identifies promising regions, our proposed local refinements (Sec. 3.4.3) provide a signif-icant advantage. This is visually confirmed near the 1.0 mm error threshold, where APEX-RBD finds a candidate with lower cost than pure BO (pink arrow). This demonstrates that our heuristics effec-tively conduct fine-grained exploration around the configurations identified by BO to uncover superior designs, creating a powerful synergy between global exploration and local search. ICCAD ’26, November 08–12, 2026, San Jose, CA, USA Xingyu Liu, Hanwei Fan, Chaofang Ma, Jiawei Liang, Guangyu Hu, Jiang Xu, and Wei Zhang Area ( μm2)   
+
+> 4
+> 3
+> 2
+> 1
+> 0
+> Power (mW)
+> ×10 7
+> 0
+> 1000
+> 2000
+> Uniform Precision Mixed-Precision Uniform Precision Mixed-Precision
+> iiwa
+> HyQ
+> Atlas
+
+(a) Hardware Area Comparison  (b) Power Consumption Comparison 
+
+1.3 ~1.5× ↓
+
+1.7 ~1.9× ↓
+
+1.3× ↓
+
+1.7 ~1.8× ↓
+
+Figure 6: Hardware area and power cost comparison through different quantization methods, using Synopsys IC Compiler based on TSMC 28-nm CMOS technology. Total Runtime: 38737.9s (10.8 hours) 
+
+> 4.05%
+> 78.95%
+> 15.80%
+> 1.09%
+> 0.09%
+> 0.02%
+> Sensitivity Analysis
+> Group Merging & Validation
+> Training Data Collection
+> Surrogate Model Training
+> Bayesian Optimization
+> Local Refinements
+> End-to-End Validation
+
+Figure 7: Runtime breakdown of APEX-RBD for iiwa. 
+
+## 4.4 End-to-End Hardware Gains 
+
+We evaluate the end-to-end hardware gains of our framework on iiwa, HyQ, and Atlas robots, to align with the evaluation setups of existing robotic works [25, 29, 40]. To ensure a fair and comprehen-sive comparison, we benchmark APEX-RBD against two categories of baselines. The first category comprises uniform-precision base-lines, specifically 32-bit [40] and 24-bit [25], which represent the configurations of SOTA RBD accelerators [25, 40]. The second cate-gory evaluates the search efficacy within the mixed-precision space. Since we propose the first mixed-precision quantization framework for this domain, we compare APEX-RBD against hardware designs derived from other common search algorithms, including Simu-lated Annealing, Random Search, and Pure BO. Notably, Pure BO represents the search outcome without the two local refinement algorithms proposed in Sec. 3.4.3. All comparisons are conducted under an identical throughput constraint, which is enforced by matching the number of parallel MAC units. To facilitate this hardware evaluation, we develop a compiler to generate RTL from any given bit-width configuration, based on the architecture of [25]. The resulting hardware costs are then derived from post-layout results. Furthermore, the motion accuracy of all mixed-precision configurations evaluated is constrained to be on par with the uniform 24-bit baseline. Prior works [20, 25] have confirmed that this precision level has a negligible impact on task success rates, thereby preserving overall system stability. As illustrated in Fig. 6, APEX-RBD achieves up to 1.9 × area re-duction and 1.8 × power savings compared to the 24-bit uniform baseline, while delivering the same motion accuracy. Moreover, within the mixed-precision category, APEX-RBD consistently dis-covers more area- and power-efficient designs than other search algorithms. Specifically, compared to the configuration found by Pure BO, APEX-RBD achieves up to 1.5 × area and 1.3 × power sav-ings. This performance gap highlights the effectiveness of the local refinement heuristics for escaping local optima. Finally, the hard-ware benefits are more pronounced when compared against the conservative 32-bit baseline, where APEX-RBD realizes up to 3.1 ×
+
+savings in both area and power. 
+
+## 4.5 Framework Runtime Analysis 
+
+We evaluate APEX-RBD’s runtime by performing mixed-precision exploration for an iiwa robot. For a given application, this explo-ration is a practical one-time cost. In our evaluation, the entire process completed in 10.8 hours on a single commodity worksta-tion (Intel i9 CPU, 32GB RAM). This result is highly competitive compared to DRACO [25], which requires 8 hours to search for a much simpler uniform-precision configuration. As detailed in Fig. 7, the process is dominated by simulation-based data collec-tion (78.95%), making data acquisition the primary bottleneck. The overall efficiency of APEX-RBD stems from two key strategies. First, the group merging stage drastically reduces the problem’s complexity by shrinking the search space. This step has a negligible runtime (1.09%) but is essential as it directly reduces the required training samples for surrogate model. Second, our use of a data-efficient RF surrogate replaces costly simulations and requires only 100 samples. This choice stands in stark contrast to a DNN-based alternative, which our experiments show would need over 300 samples to achieve comparable accuracy, extending the search by 18 hours. Together, these strategies make the dominant data collection phase tractable and enable the framework’s overall efficiency. 
+
+## 5 Conclusion 
+
+We propose APEX-RBD, the first framework to automate mixed-precision quantization for RBD computations. It makes the search space tractable by integrating physics-aware space pruning with a surrogate-guided hybrid optimizer. APEX-RBD discovers designs achieving up to 1.9 × area and 1.8 × power reductions over uniform-precision baselines while satisfying accuracy constraints. 
+
+## Acknowledgments 
+
+This work was partially supported by the CRF C5032-23G and ACCESS — AI Chip Center for Emerging Smart Systems, the InnoHK initiative of ITC. APEX-RBD: Mixed-Precision Exploration Framework for Hardware-Efficient Robot Dynamics Accelerator Design ICCAD ’26, November 08–12, 2026, San Jose, CA, USA 
+
+## References 
+
+[1] 2013. HyQ - Dynamic Legged Systems - IIT . https://dls.iit.it/hyq [2] 2014. KUKA iiwa . https://www.kuka.com/en-de/products/robot-systems/ industrial-robots/lbr-iiwa [3] 2021. Atlas . https://bostondynamics.com/atlas/ [4] 2021. Vitis Model Composer User Guide-DSP48E . https://docs.amd.com/r/2021.2-English/ug1483-model-composer-sys-gen-user-guide/DSP48E [5] Emre Adabag, Miloni Atal, William Gerard, and Brian Plancher. 2024. MPCGPU: Real-Time Nonlinear Model Predictive Control through Preconditioned Conju-gate Gradient on the GPU. In 2024 IEEE International Conference on Robotics and Automation (ICRA) .[6] Gerardo Bledt, Matthew J. Powell, Benjamin Katz, Jared Di Carlo, Patrick M. Wensing, and Sangbae Kim. 2018. MIT Cheetah 3: Design and Control of a Robust, Dynamic Quadruped Robot. In 2018 IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS) .[7] Leo Breiman. 2001. Random forests. Machine learning (2001). [8] Justin Carpentier. 2020. Analytical Inverse of the Joint Space Inertia Matrix. (2020). [9] Justin Carpentier and Nicolas Mansard. 2018. Analytical Derivatives of Rigid Body Dynamics Algorithms. In Robotics: Science and Systems .[10] Justin Carpentier, Guilhem Saurel, Gabriele Buondonno, Joseph Mirabel, Florent Lamiraux, Olivier Stasse, and Nicolas Mansard. 2019. The Pinocchio C++ Library : A Fast and Flexible Implementation of Rigid Body Dynamics Algorithms and Their Analytical Derivatives. In 2019 IEEE/SICE International Symposium on System Integration (SII) .[11] Embodiment Collaboration, Abby O’Neill, Abdul Rehman, et al. 2023. Open X-Embodiment: Robotic Learning Datasets and RT-X Models. arXiv:2310.08864 [cs.RO] [12] Ewen Dantec, Maximilien Naveau, Pierre Fernbach, Nahuel Villa, Guilhem Saurel, Olivier Stasse, Michel Taix, and Nicolas Mansard. 2022. Whole-Body Model Pre-dictive Control for Biped Locomotion on a Torque-Controlled Humanoid Robot. In 2022 IEEE-RAS 21st International Conference on Humanoid Robots (Humanoids) .[13] Jared Di Carlo, Patrick M. Wensing, Benjamin Katz, Gerardo Bledt, and Sangbae Kim. 2018. Dynamic Locomotion in the MIT Cheetah 3 Through Convex Model-Predictive Control. In 2018 IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS) .[14] Gabriel Dulac-Arnold, Daniel Mankowitz, and Todd Hester. 2019. Challenges of Real-World Reinforcement Learning. arXiv:1904.12901 [cs.LG] [15] David Eriksson, Michael Pearce, Jacob R Gardner, Ryan Turner, and Matthias Poloczek. 2019. Scalable global optimization via local Bayesian optimization. In 
+
+Proceedings of the 33rd International Conference on Neural Information Processing Systems .[16] Hanwei Fan, Ya Wang, Sicheng Li, Tingyuan Liang, and Wei Zhang. 2024. Ex-plainable Fuzzy Neural Network with Multi-Fidelity Reinforcement Learning for Micro-Architecture Design Space Exploration. In Proceedings of the 61st ACM/IEEE Design Automation Conference (DAC ’24) .[17] Léo Grinsztajn, Edouard Oyallon, and Gaël Varoquaux. 2022. Why do tree-based models still outperform deep learning on typical tabular data?. In Advances in Neural Information Processing Systems (NeurIPS) .[18] Isabelle Guyon and André Elisseeff. 2003. An introduction to variable and feature selection. Journal of machine learning research (2003). [19] Trevor Hastie, Robert Tibshirani, and Jerome Friedman. 2009. The Elements of Statistical Learning: Data Mining, Inference, and Prediction (2nd ed.). Springer Science & Business Media. [20] Yiyang Huang, Yuhui Hao, Bo Yu, Feng Yan, Yuxin Yang, Feng Min, Yinhe Han, Lin Ma, Shaoshan Liu, Qiang Liu, and Yiming Gan. 2025. Dadu-Corki: Algorithm-Architecture Co-Design for Embodied AI-powered Robotic Manipulation. In 
+
+Proceedings of the 52nd Annual International Symposium on Computer Architecture .[21] Scott Kuindersma, Robin Deits, Maurice Fallon, Andrés Valenzuela, Hongkai Dai, Frank Permenter, Twan Koolen, Pat Marion, and Russ Tedrake. 2016. Optimization-based locomotion planning, estimation, and control design for the atlas humanoid robot. Auton. Robots (2016). [22] Eunji Kwon, Minxuan Zhou, Weihong Xu, Tajana Rosing, and Seokhyeong Kang. 2024. RL-PTQ: RL-based Mixed Precision Quantization for Hybrid Vision Trans-formers. In Proceedings of the 61st ACM/IEEE Design Automation Conference .[23] Jiawei Liang, Haotong Qin, Linfeng Du, Xingyu Liu, Shangkun Li, Hui Yu, Michele Magno, Xinyu Chen, Jiang Xu, and Wei Zhang. 2026. FPGN: Redefining Ultra-Fast Programmable Gate-based Neural Acceleration with Differentiable LUTs. arXiv:2607.08427 [cs.AR] https://arxiv.org/abs/2607.08427 [24] Xingyu Liu, Jiawei Liang, Linfeng Du, Yipu Zhang, Chaofang Ma, Hanwei Fan, Jiang Xu, and Wei Zhang. 2025. FLEX: Leveraging FPGA-CPU Synergy for Mixed-Cell-Height Legalization Acceleration. In Proceedings of the 54th International Conference on Parallel Processing (ICPP) .[25] Xingyu Liu, Jiawei Liang, Yipu Zhang, Linfeng Du, Chaofang Ma, Hui Yu, Jiang Xu, and Wei Zhang. 2026. DRACO: A Hardware-Efficient Robot Rigid Body Dy-namics Accelerator with Precision-Aware Quantization Framework. In 2026 IEEE International Symposium on High Performance Computer Architecture (HPCA) .[26] Gilles Louppe, Louis Wehenkel, Antonio Sutera, and Pierre Geurts. 2013. Under-standing variable importances in forests of randomized trees. In Proceedings of the 27th International Conference on Neural Information Processing Systems .[27] Yuzhe Ma, Ziyang Yu, and Bei Yu. 2019. CAD Tool Design Space Exploration via Bayesian Optimization. In ACM/IEEE Workshop on Machine Learning for CAD (MLCAD) .[28] M. D. McKay, R. J. Beckman, and W. J. Conover. 1979. A Comparison of Three Methods for Selecting Values of Input Variables in the Analysis of Output from a Computer Code. Technometrics 21, 2 (1979). [29] Sabrina M. Neuman, Radhika Ghosal, Thomas Bourgeat, Brian Plancher, and Vijay Janapa Reddi. 2023. RoboShape: Using Topology Patterns to Scalably and Flexibly Deploy Accelerators Across Robots. In Proceedings of the 50th Annual International Symposium on Computer Architecture .[30] Sabrina M. Neuman, Brian Plancher, Thomas Bourgeat, Thierry Tambe, Srinivas Devadas, and Vijay Janapa Reddi. 2021. Robomorphic Computing: A Design Methodology for Domain-Specific Accelerators Parameterized by Robot Mor-phology. In Proceedings of the 26th ACM International Conference on Architectural Support for Programming Languages and Operating Systems .[31] Sergio Paniego, Nikhil Paliwal, and JoséMaría Cañas. 2024. Model Optimization in Deep Learning Based Robot Control for Autonomous Driving. IEEE Robotics and Automation Letters 9, 1 (2024). [32] Seongmin Park, Hyungmin Kim, Sangwoo Kim, Wonseok Jeon, Juyoung Yang, Byeongwook Jeon, Yoonseon Oh, and Jungwook Choi. 2025. Saliency-Aware Quantized Imitation Learning for Efficient Robotic Control. In Proceedings of the IEEE/CVF International Conference on Computer Vision .[33] Brian Plancher and Scott Kuindersma. 2020. A Performance Analysis of Parallel Differential Dynamic Programming on a GPU. In Algorithmic Foundations of Robotics XIII , Marco Morales, Lydia Tapia, Gildardo Sánchez-Ante, and Seth Hutchinson (Eds.). Vol. 14. [34] Brian Plancher, Sabrina M. Neuman, Radhika Ghosal, Scott Kuindersma, and Vijay Janapa Reddi. 2022. GRiD: GPU-Accelerated Rigid Body Dynamics with Analytical Gradients. In 2022 International Conference on Robotics and Automation (ICRA) .[35] Featherstone Roy. 2008. Rigid Body Dynamics Algorithms .[36] Jacob Sacks, Divya Mahajan, Richard C. Lawson, Behnam Khaleghi, and Hadi Esmaeilzadeh. 2018. RoboX: An End-to-End Solution to Accelerate Autonomous Control in Robotics. In 2018 ACM/IEEE 45th Annual International Symposium on Computer Architecture (ISCA) .[37] Jindong Tu, Yapeng Li, Peng Xu, Tuo Li, Guoqing Li, Zushuai Xie, Bei Yu, and Tinghuan Chen. 2025. RSizing: Robust Bayesian Optimization for Analog Circuit Sizing Under Process Variations. In 2025 IEEE/ACM International Conference On Computer Aided Design (ICCAD) .[38] Zishen Wan, Ashwin Lele, Bo Yu, Shaoshan Liu, Yu Wang, Vijay Janapa Reddi, Cong Hao, and Arijit Raychowdhury. 2022. Robotic Computing on FPGAs: Current Progress, Research Challenges, and Opportunities. In 2022 IEEE 4th International Conference on Artificial Intelligence Circuits and Systems (AICAS) .[39] Shengnan Yang, Wenping Jiang, and Lin Long. 2025. Data-Driven Method for Robotic Trajectory Error Prediction and Compensation Based on Digital Twin. 
+
+Machines (2025). [40] Yuxin Yang, Xiaoming Chen, and Yinhe Han. 2023. Dadu-RBD: Robot Rigid Body Dynamics Accelerator with Multifunctional Pipelines. In Proceedings of the 56th Annual IEEE/ACM International Symposium on Microarchitecture (MICRO) ’23 .[41] Yipu Zhang, Jintao Cheng, Xingyu Liu, Zeyu Li, Carol Jingyi Li, Jin Wu, Lin Jiang, Ceyu Xu, Yuan Xie, Jiang Xu, and Wei Zhang. 2026. VersaQ-3D: Architecture Support for Visual Geometry Grounded Transformers via Versatile Quantization. arXiv:2601.20317 [cs.AR] https://arxiv.org/abs/2601.20317
