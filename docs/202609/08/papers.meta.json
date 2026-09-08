@@ -1,0 +1,54 @@
+{
+  "label": "2026-09-08",
+  "date": "2026-09-08",
+  "generated_at": "2026-09-08T22:57:25",
+  "count": 3,
+  "papers": [
+    {
+      "paper_id": "202609/08/2609.00478v1-beyond-object-selectionmarkerless-gaze-based-robot-placement-at-arbitrary-position",
+      "section": "quick",
+      "title_en": "Beyond Object Selection:Markerless Gaze-based Robot Placement at Arbitrary Position",
+      "authors": "Yuzhi Lai, William Marx, Shenghai Yuan, Peizheng Li, Zhuoyu Ran, Andreas Zell",
+      "date": "2026-08-31",
+      "pdf": "https://arxiv.org/pdf/2609.00478v1",
+      "score": "7.0",
+      "evidence": "为视线机器人任意位置放置构建专用跨设备数据集并提供评测基准，属于机器人数据集构建的直接工作",
+      "tldr": "基于凝视的辅助操作通常局限于物体选择，实现任意位置放置需头显与机器人精确空间对齐，但凝视操作中位姿精度并不必然带来任务精度，因平移与旋转误差会沿凝视射线相互补偿。为此提出无标记交互框架和跨设备数据集，使用图参考选择应对机器人参考稀疏，并制定多种任务特定对齐流程，引入凝视-表面交点误差GSIE衡量目标空间误差。实验显示按传统位姿指标排名靠前的方法在GSIE下不占优，表明任务级评估必不可少。",
+      "tags": "query:ur",
+      "abstract_en": "Gaze-based assistive manipulation typically supports object selection, while arbitrary-position placement requires accurate spatial alignment between the headset and robot. However, for gaze-based manipulation, pose accuracy does not necessarily translate into task accuracy: translational and rotational errors jointly affect the transformed gaze ray and may compensate for each other. To study cross-device alignment from this task-oriented perspective, we present a markerless interaction framework and a dedicated cross-device dataset. We propose Graph-based Reference Selection to address sparse robot references. We further develop and benchmark multiple task-specific alignment pipelines under a unified protocol. Specifically, we introduce Gaze--Surface Intersection Error (GSIE), which directly measures the spatial error of the gaze-specified target. Experiments show that alignment methods ranked highly by conventional pose metrics are not always optimal in GSIE, demonstrating the importance of evaluating gaze-based manipulation at the task level.",
+      "source": "arxiv",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "paper_id": "202609/08/2609.04277v1-failurespot-label-efficient-timestamp-level-failure-detection-for-vision-language-action-models",
+      "section": "quick",
+      "title_en": "FailureSpot: Label-Efficient Timestamp-Level Failure Detection for Vision-Language-Action Models",
+      "authors": "Jie Ma, Zongxi Liu, Yi Zhu",
+      "date": "2026-09-03",
+      "pdf": "https://arxiv.org/pdf/2609.04277v1",
+      "score": "7.0",
+      "evidence": "基于VLA内部表示的时间戳级机器人故障检测，标签高效，直接面向策略失效发现",
+      "tldr": "VLA策略在长时程执行中会不可预测地失败，现有检测方法多用轨迹级标签，导致失败前正常行为被误标。FailureSpot先从无标注动作块提取弱监督信号，捕捉不一致连续块、冻结或空闲动作等异常模式；再用主动学习只标注最不确定的轨迹进行时间戳级微调。在多个VLA策略上同时提升了时间戳级与轨迹级失败检测性能。",
+      "tags": "query:ur",
+      "abstract_en": "Vision-language-action (VLA) policies have shown strong potential for general-purpose robotic manipulation, but they can still fail unpredictably during long-horizon execution, making reliable failure detection essential for safe deployment. Existing methods either rely on visual models that typically detect failures only after erroneous actions have occurred, or use lightweight proactive detectors trained on VLA internal representations. However, these proactive methods are often supervised with trajectory-level labels, causing normal pre-failure behavior in unsuccessful trajectories to be incorrectly labeled as failure. This supervision mismatch introduces label noise and limits both trajectory-level detection accuracy and precise timestamp-level failure localization. In this work, we study fine-grained timestamp-level VLA failure detection while addressing the cost of dense annotation. We propose a data-efficient framework that first leverages unlabeled VLA action chunks to construct action-derived weak supervision signals, capturing abnormal patterns such as inconsistent consecutive chunks, frozen or idle actions, and aggressive random motions. We then use active learning to select only the most uncertain trajectories for timestamp-level annotation and fine-tune the detector with these informative labels. Experiments across multiple VLA policies show that our method improves both timestamp-level and trajectory-level failure detection performance.",
+      "source": "arxiv",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "paper_id": "202609/08/2608.30709v1-railsyn-diagnosis-guided-image-generation-for-traceable-data-completion-in-railway-foreign-object-detection",
+      "section": "quick",
+      "title_en": "RailSyn: Diagnosis-Guided Image Generation for Traceable Data Completion in Railway Foreign Object Detection",
+      "authors": "Quan Hao, Chenxi Zhang, Ziyang Tao, Yuyuan Zhou, Yudong Wang, Rui Shi, Lechuan Xu, Changhao Liu, Liguo Zhang",
+      "date": "2026-08-31",
+      "pdf": "https://arxiv.org/pdf/2608.30709v1",
+      "score": "6.0",
+      "evidence": "诊断引导的合成数据补全方法，利用有限真实样本构造更完整数据集，可迁移至机器人感知数据集构建",
+      "tldr": "铁路异物检测中真实正样本稀缺，难以覆盖物体尺度、场景与天气等变化。RailSyn由真实参照的检查器定位待补全区域，并用需求对齐的生成器按缺口生成合成样本，使生成数据具有可追溯性。实验显示该方法能高效补充任务相关数据，对机器人感知数据集的构建与数据补齐具有良好借鉴意义。",
+      "tags": "query:ur",
+      "abstract_en": "Railway foreign object detection (RFOD) is critical to safe railway operation, yet scarce real positive samples incompletely represent task-relevant variations in object scale, intrusion relation, railway scene, illumination, and adverse weather. Existing synthetic augmentation can improve RFOD detection, but its gains lack an explicit account of the task-relevant deficiencies complemented by the generated data. We therefore introduce RailSyn, a diagnosis-guided framework comprising a real-referenced Inspector and a requirement-aligned Generator. The Inspector constructs a variable-radius empirical cover from finite real observations to localize candidate completion regions and profile synthetic pools. The resulting audit identifies railway-context, intrusion-semantic, and visual-consistency requirements; the Generator addresses them through domain adaptation, agent-planned placement and physical contact relations, and plan-consistent conditional refinement. Using the Inspector, we further trace representation-space changes across generation variants; the complete system attains a local-shell occupation of $C_{gap}$ to 13.64%, which measures generated coverage of real-derived completion regions. Extensive experiments show AP50--95 gains of up to 4.9 points and consistent improvements across nine mainstream detectors, demonstrating broad cross-architecture utility.",
+      "source": "arxiv",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "errors": []
+}

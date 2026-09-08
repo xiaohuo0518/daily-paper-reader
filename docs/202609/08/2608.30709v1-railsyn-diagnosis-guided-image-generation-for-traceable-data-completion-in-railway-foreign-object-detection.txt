@@ -1,0 +1,309 @@
+Title: RailSyn: Diagnosis-Guided Image Generation for Traceable Data Completion in Railway Foreign Object Detection
+
+URL Source: https://arxiv.org/pdf/2608.30709v1
+
+Published Time: Tue, 01 Sep 2026 02:35:34 GMT
+
+Number of Pages: 10
+
+Markdown Content:
+# RailSyn: Diagnosis-Guided Image Generation for Traceable Data Completion in Railway Foreign Object Detection 
+
+# Quan Hao 1, Chenxi Zhang 1, Ziyang Tao 2, Yuyuan Zhou 3,4 , Yudong Wang 6, Rui Shi 1, Lechuan Xu 5,Liu Changhao 1, Liguo Zhang 1
+
+> 1
+
+The School of Information Science and Technology, Beijing University of Technology 
+
+> 2
+
+Pratt School of Engineering, Duke University 
+
+> 3
+
+Academy of Mathematics and Systems Science, Chinese Academy of Sciences 
+
+> 4
+
+School of Mathematical Sciences, University of Chinese Academy of Sciences 
+
+> 5
+
+Industrial Systems Engineering and Management, National University of Singapore 
+
+> 6
+
+Institute of Automation, Chinese Academy of Sciences haoquan@emails.bjut.edu.cn, zcx20041004@emails.bjut.edu.cn, ziyang.tao@duke.edu, zhouyuyuan@amss.ac.cn, luke.xu@u.nus.edu, yudong.wang@ia.ac.cn, ruishi@bjut.edu.cn, liu20050126@emails.bjut.edu.cn, zhangliguo@bjut.edu.cn 
+
+Abstract 
+
+Railway foreign object detection (RFOD) is critical to safe railway operation, yet scarce real positive samples incom-pletely represent task-relevant variations in object scale, intru-sion relation, railway scene, illumination, and adverse weather. Existing synthetic augmentation can improve RFOD detec-tion, but its gains lack an explicit account of the task-relevant deficiencies complemented by the generated data. We there-fore introduce RailSyn, a diagnosis-guided framework com-prising a real-referenced Inspector and a requirement-aligned Generator. The Inspector constructs a variable-radius em-pirical cover from finite real observations to localize can-didate completion regions and profile synthetic pools. The resulting audit identifies railway-context, intrusion-semantic, and visual-consistency requirements; the Generator addresses them through domain adaptation, agent-planned placement and physical contact relations, and plan-consistent condi-tional refinement. Using the Inspector, we further trace representation-space changes across generation variants; the complete system attains a local-shell occupation of Cgap to 13.64%, which measures generated coverage of real-derived completion regions. Extensive experiments show AP50– 95 gains of up to 4.9 points and consistent improvements across nine mainstream detectors, demonstrating broad cross-architecture utility. 
+
+# Introduction 
+
+Railway foreign object detection (RFOD) is critical to the safe operation of high-speed rail systems (Hao et al. 2026; Chen et al. 2024). Reliable detection requires examples that jointly represent railway structures, environmental condi-tions, object scales, and the physical relations by which foreign objects intrude into operational space (Hao et al. 2026; Chen et al. 2024, 2025; Oza et al. 2024). Such posi-tive samples are scarce and costly to annotate, while small targets further concentrate task evidence in limited image regions (Hao et al. 2026; Chen et al. 2024; Cheng et al. 2023; Shi et al. 2025). Consequently, finite RFOD datasets incompletely capture not only visual appearance, but also the context, intrusion semantics, and local object–background 
+
+Copyright © 2027, Association for the Advancement of Artificial Intelligence (www.aaai.org). All rights reserved. 
+
+effects that determine whether synthetic samples are useful for detection. Existing augmentation and generation methods produce additional training samples (Hao et al. 2026; Feng et al. 2024; Wang et al. 2024). Conventional operations are con-fined to observed objects and contexts (Ghiasi et al. 2021; Trabucco et al. 2024), whereas advanced approaches such as SVDDD, RegionDiffusion, and broader grounded gener-ation frameworks prioritize realism, diversity, or controlla-bility (Wang, Pan, and Wen 2025; Li, Luo, and Tseng 2025; Li et al. 2023). However, none of these objectives explicitly identify which task-relevant regions remain weakly comple-mented relative to real RFOD observations; consequently, method selection is decoupled from a concrete completion demand. As a result, generated pools may repeat existing pat-terns, misalign object–scene intrusion semantics, or exhibit anomalous injection effects (Somepalli et al. 2023; Wu et al. 2024; Song et al. 2024). Their detection gains are likewise difficult to attribute: global similarity metrics are dominated by railway backgrounds, while AP provides a standardized measure of overall detector performance but still falls short of characterizing the contextual, relational, or localized con-tributions introduced by generated data (Jayasumana et al. 2024; Ghosh, Hajishirzi, and Schmidt 2023; Hu et al. 2023; Lee et al. 2023; Bolya et al. 2020). The outstanding gap, therefore, is a unified framework that diagnoses deficient information prior to synthesis, translates that evidence into explicit generation requirements, and evaluates whether the resulting pool effectively complements the specified regions. We address this gap with RailSyn, an Inspector–Generator framework in which inspection explicitly guides generation. The Inspector builds a variable-radius empirical cover from our collected high-quality real RFOD reference and evalu-ates synthetic pools using reliable-support coverage ( Crel ), local-gap completion ( Cgap ), and nonredundant volume ef-ficiency ( ηvol ). It applies the real-derived local-shell crite-rion underlying Cgap to the SD-based(Rombach et al. 2022) RFOD23 AIGC pool and retrieves representative samples from the high-uncertainty regions induced by the finite real reference, followed by inspection of nearby RFOD23 sam-arXiv:2608.30709v1 [cs.CV] 31 Aug 2026 Figure 1: RailSyn overview. (a) Inspector identifies high-uncertainty regions from the finite real reference and inspects nearby SD-based RFOD23 AIGC samples, revealing three recurring patterns. (b) Generator addresses them through railway scene preparation, relation-aware intrusion planning, and intrusion-pattern refinement. Right: generated samples and feature-space completion ( Cgap ). ples. As shown on the left of Figure 1, these samples reveal gaps in railway-background fidelity, object–scene intrusion semantics, and anomalous edge effects around injected ob-jects. Guided by this diagnosis, the Generator aligns one process with each gap: railway-domain low-rank adaptation prepares structural backgrounds (Hu et al. 2022); a multi-modal Agent produces executable background-conditioned placement and physical-contact plans; and plan-consistent conditional refinement translates spatial and relation meta-data into a unified control condition with mask-aware com-position. RailSyn thus turns Inspector-localized deficiencies into explicit generation requirements for complementing the diagnosed regions and improving detection. RailSyn data improve AP50–95 across all nine tested mainstream detectors, with an average best observed gain of 3.03 points and a maximum gain of 4.9 points. We fur-ther evaluate matched Generator ablations with DEIM and YOLO11, and reapply the Inspector to every ablated pool to trace representation-space changes. The complete Gener-ator attains Cgap = 13 .64% , and the Inspector diagnostics exhibit trends broadly consistent with the AP changes in the ablation study. This descriptive alignment links detector gains with greater occupation of the real-derived completion regions without treating Cgap as an AP predictor. External-pool experiments further distinguish empirical completion from downstream utilization. Our main contributions are: 
+
+• We introduce RailSyn, an Inspector–Generator frame-work that connects real-referenced deficiency analysis, guided synthesis, and representation-space assessment for traceable RFOD data completion. 
+
+• We develop a diagnosis-guided Generator that aligns railway-domain adaptation, Agent-planned intrusion se-mantics, and plan-consistent conditional refinement with the context, relation, and boundary gaps exposed by the Inspector. 
+
+• We demonstrate cross-architecture utility across nine heterogeneous detectors and conduct controlled DEIM/YOLO11 ablations with Inspector profiles to trace component-level effects on detection performance and local-gap completion. 
+
+# Related Work 
+
+Railway Foreign-Object Detection and Data Scarcity 
+
+Railway foreign object detection (RFOD) localizes debris and intrusions on or near railway tracks (Hao et al. 2026; Chen et al. 2024), where missed objects can obstruct op-eration and threaten safety (Hao et al. 2026; Chen et al. 2024). Current detectors mainly follow YOLO-style dense prediction or DETR-style end-to-end set prediction (Red-mon et al. 2016; Carion et al. 2020): YOLO prioritizes effi-cient multi-scale detection (Chen et al. 2025), whereas DETR exploits global context through transformer-based matching (Carion et al. 2020). Despite this progress, RFOD remains a small-sample problem: rare intrusions and costly acqui-sition limit positive examples, weakening detector learning across scale, illumination, weather, and intrusion relations (Hao et al. 2026; Chen et al. 2024; Cheng et al. 2023; Oza et al. 2024; Kang et al. 2019). Data-centric augmentation and generation therefore offer a practical route to supple-ment scarce RFOD training samples (Feng et al. 2024; Wang et al. 2024; Islam et al. 2024). Conventional transformations and copy–paste reuse observed content and provide limited control over scale, placement, and intrusion relations (Ghiasi et al. 2021; Trabucco et al. 2024), motivating more flexible generative augmentation for the small-sample setting. 
+
+Generative Augmentation and Traceable Completion 
+
+Latent diffusion enables high-resolution synthesis in com-pressed spaces and supports data augmentation under limited observations (Rombach et al. 2022; Trabucco et al. 2024; Is-lam et al. 2024). More recently, flow matching and FLUX have established a rectified-flow Transformer paradigm for high-quality generation (Lipman et al. 2023; Esser et al. 2024); spatial controls improve placement and structure preservation (Li et al. 2023; Zhang, Rao, and Agrawala 2023; Jia et al. 2024), while low-rank adaptation enables efficient domain specialization (Hu et al. 2022). These ad-vances expand the potential of controllable generation for small-sample detection, complementing few-shot learning, rebalancing, domain adaptation, active selection, and focal reweighting (Kang et al. 2019; Lin et al. 2017; Oza et al. 2024; Wan et al. 2024). However, realism and controllability do not establish whether generated data complement detection-relevant information (Ghosh, Hajishirzi, and Schmidt 2023; Hu et al. 2023; Lee et al. 2023; Huang et al. 2025a), espe-cially for rare RFOD scenes, scales, weather, and intrusion relations (Hao et al. 2026; Chen et al. 2024; Cheng et al. 2023; Oza et al. 2024). Existing evaluation offers limited traceabil-ity from generation to detection accuracy (Jayasumana et al. 2024; Lee et al. 2023; Bolya et al. 2020): global distribution metrics such as FID and KID can be dominated by railway backgrounds and underweight the small foreign-object re-gions that carry detection evidence (Jayasumana et al. 2024; Cheng et al. 2023; Ghosh, Hajishirzi, and Schmidt 2023), whereas AP aggregates utility without identifying the con-tributions of scene coverage, object attributes, intrusion re-lations, or detector optimization (Bolya et al. 2020; Huang et al. 2025a). The remaining gap is therefore traceable genera-tion that links observed data deficiencies, generation choices, synthetic-pool completion, and downstream detection gains. 
+
+# Method 
+
+RailSyn formulates synthetic RFOD augmentation as the traceable completion of a finite real training set. The In-spector constructs real-referenced empirical completion re-gions, retrieves existing synthetic candidates for analysis, and profiles the generated pools. The Generator then fulfills the resulting railway-context, intrusion-relation, and visual-integration requirements through three dedicated generation modules. We first define completion quality and real-scene detection utility as separate evaluation targets, and subse-quently present the Inspector and the requirement-aligned Generator. 
+
+Problem Formulation 
+
+Let DR = {xi}Ni=1 denote a finite real RFOD training set, 
+
+DG = {gj }Mj=1 a generated pool, and DV a disjoint real-scene evaluation set. We study whether DG complements task-relevant information insufficiently represented by DR,such that a detector trained on DR ∪ D G generalizes better to 
+
+DV than one trained on DR alone. This objective entails two distinct questions: what information DG contributes relative to the finite real observations, and whether a downstream detector can exploit that contribution. Accordingly, we assess information completion with the Inspector and real-scene utility with detector AP under a fixed training and evaluation protocol. 
+
+Inspector: Real-Referenced Data Completion Analysis 
+
+The Inspector instantiates the completion objective in a task-relevant representation space. We adopt the recent large-scale Qwen3-VL-Embedding-8B (Li et al. 2026) as the primary encoder because its visual-semantic modeling capacity and 4096-dimensional representation support fine-grained dis-tinctions among railway context, foreign-object appearance, and object–scene intrusion relations. CLIP and DINOv2 serve as established auxiliary encoders for cross-encoder validation. Within each encoder, ℓ2-normalized embeddings are analyzed with spherical distance in the complete native space. To estimate spatially varying support, let R = {zi}Ni=1 de-note the normalized real embeddings. We assign each anchor a radius given by its spherical distance to a fixed-order near-est real neighbor, producing a cover that contracts in densely observed regions and expands across sparse ones. A local intrinsic dimension estimated from real–real neighborhoods then specifies the corresponding volume law while the orig-inal embedding coordinates remain intact. This construction captures the nonuniform geometry of finite RFOD obser-vations and provides the real-only reference for subsequent completion analysis. The anchor radii characterize observed neighborhoods but leave the regions between real samples unresolved. We there-fore augment the anchor set with deterministic spherical mid-points of edges connecting neighboring real samples and fit a real-only Matérn-5/2 Gaussian process to the log-radius field, f (z) = log r(z). For each query point q, the poste-rior mean μf (q) estimates the local reach, while the poste-rior standard deviation σf (q) quantifies interpolation uncer-tainty: 
+
+μf (q) = ¯f + k⊤
+
+> q
+
+ K + σ2
+
+> n
+
+I−1 ·  f − ¯f ),σ2 
+
+> f
+
+(q) = K(q, q ) − k⊤
+
+> q
+
+ K + σ2
+
+> n
+
+I−1 · kq ,r−(q) = exp  μf (q) − τ σ f (q),
+
+br(q) = exp  μf (q),r+(q) = exp  μf (q) + τ σ f (q).
+
+(1) The Gram matrix K is generated by the positive-definite Matérn-5/2 kernel: 
+
+K(z, z′) = σ2
+
+> f
+
+
+
+1 + ξ + ξ2
+
+3
+
+
+
+e−ξ ,ξ =
+
+√5 dc(z, z′)
+
+ℓ ,dc(z, z′) = ∥z − z′∥2.
+
+(2) The interpolated radii define a lower reliable support and an upper plausible boundary, while the interval between them exposes localized completion opportunities induced by fi-nite observations. We retain these intervals as query-indexed shells so that overlap between neighboring balls does not erase local demand. After freezing the real construction, each generated sample receives a radius from the posterior mean field: 
+
+S− = [
+
+> q∈Q
+
+BS(q, r −(q)) ,
+
+S+ = [
+
+> q∈Q
+
+BS(q, r +(q)) ,
+
+Gq = BS(q, r +(q)) \ B S(q, r −(q)) ,
+
+SG = [
+
+> g∈G
+
+BS(g, br(g)) .
+
+(3) Together, S−, the indexed family {G q }q∈Q, and SG provide the set relations needed to assess how generated data retain established support, occupy real-derived gaps, and expand without redundancy. Let μ bm denote the local mass induced by the real-only intrinsic-dimensional volume law. The completion profile is defined as 
+
+Crel = μ bm(SG ∩ S −)
+
+μ bm(S−) ,Cgap =
+
+P 
+
+> q∈Q
+
+μ bm(SG ∩ G q )
+
+P 
+
+> q∈Q
+
+μ bm(Gq ) ,ηvol = μ bm(SG)
+
+P 
+
+> g∈G
+
+μ bm(BS(g, br(g))) .
+
+(4) Here Crel quantifies reliable-support reach, Cgap quantifies the mass-weighted occupation of indexed local shells, and 
+
+ηvol quantifies generated-cover nonredundancy. Since exact integration over high-dimensional ball unions is intractable, we estimate these masses by native-spherical Monte Carlo: samples are drawn from the local tangent volume law, mapped back to the unit sphere, and weighted by inverse cover multiplicity to avoid double-counting overlaps. We apply the Inspector to the real reference set to identify regions where finite observations induce the largest empirical uncertainty. For each query q, the corresponding shell is ranked by the intrinsic-dimensional mass proxy 
+
+g(q) ∝  r+(q) bm −  r−(q) bm. (5) High-mass shells define the audit regions, around which spherical nearest-neighbor retrieval collects a real reference and SD-based RFOD23 AIGC candidates. This real-only ranking converts abstract uncertainty regions into directly inspectable image groups while keeping the audit indepen-dent of downstream generation choices. We use the Inspector to analyze high-uncertainty regions induced by the finite real reference, followed by inspection of nearby RFOD23 samples. As shown in Figure 1(a), the first representative group contains disordered backgrounds that bear little correspondence to authentic railway scenes, indicating a pronounced railway-context deficiency. In the second group, foreign objects occupy implausible positions relative to the track infrastructure, revealing a deficiency in intrusion semantics. In the third group, inserted objects ex-hibit abnormally sharp contours, conflicting with the weak object–background contrast typical of small foreign objects and exposing a deficiency in intrusion appearance. These three observations motivate the Generator’s scene prepara-tion, relation-aware planning, and boundary-aware injection, respectively. 
+
+Generator: Targeted Synthetic Data Generation 
+
+The Generator translates the three diagnosed deficiencies into a coupled synthesis process. Railway scene prepara-tion addresses context deficiency by injecting railway-scene and foreign-object priors; relation-aware intrusion planning addresses semantic deficiency by conditioning placement on scene geometry and physical relations; and diagnosed intrusion-pattern refinement reconciles object contours with local background appearance. These stages preserve a one-to-one correspondence between Inspector diagnosis and tar-geted synthesis. 
+
+Railway Scene Preparation The context deficiency re-quires both recognizable railway environments and faithful foreign-object appearance. We therefore learn two low-rank adaptations (LoRAs) (Hu et al. 2022; Black Forest Labs 2024): a scene adapter captures track layout, viewpoint, sur-rounding environment, and illumination, while an object adapter captures category-specific shape, texture, and appear-ance. During synthesis, the two adapters inject complemen-tary scene and object features into the generation process, providing domain-specific visual priors for high-quality rail-way composition before spatial and relational constraints are imposed. 
+
+Relation-Aware Intrusion Planning The semantic defi-ciency arises when foreign-object category and position are specified independently of the selected railway scene. Given a prepared background Ib and a candidate object, a multi-modal Agent produces a structured intrusion plan 
+
+Y = A(Ib, I o) = {c, b o, r, u, θ }, (6) where c is the object category, bo its placement box, r its physical relation to railway infrastructure, u the associated contact region, and θ an applicable tilt. The plan explicitly couples placement with rails, sleepers, ballast, or catenary and is deterministically normalized to valid image coordi-nates and scale ranges. Its accepted box initializes the detec-tor annotation, while its relation and contact fields are prop-agated to conditional realization. Thus, the Agent converts background–object compatibility into an executable interface between scene preparation and image synthesis. 
+
+Diagnosed Intrusion-Pattern Refinement The diagnosed intrusion-pattern deficiency requires the generated bound-ary to remain consistent with the planned physical intrusion mode and surrounding railway structure. We first transform the object and its mask according to Y and form a softened-mask composite If . The structured intrusion conditions are then fused into a single control map 
+
+CY = Fuse( Cedge (If ), C box (bo), C contact (r, u )) , (7) which jointly encodes background geometry, planned object extent, and relation-specific contact evidence. Let Hs denote the denoising feature at scale s and Zs a zero-initialized 1×1
+
+projection. Intrusion-pattern conditioning is injected at four spatial scales as 
+
+eHs = Hs + αsZs(Φ s(CY )) (8) where Φs extracts scale-specific condition features and αs
+
+controls their contribution. Zero initialization preserves the pretrained generation path at the outset, while multiscale fusion transfers the diagnosed intrusion pattern from global object extent to local contact and contour structure. A final softened alpha composition maintains object visibility while suppressing anomalous boundaries that are inconsistent with the planned intrusion mode. 
+
+# Experiments 
+
+Datasets 
+
+All detection experiments share the same leakage-free bench-mark: 398 real RFOD images for training and a fixed disjoint set of 102 real images for validation. Augmen-tation pools (500 images each) include RailSyn (ours, full diagnosis-guided pipeline), RFOD23 (official training pool (Chen et al. 2024)), SD (railway-domain images from Stable Diffusion (Rombach et al. 2022)), and Nano500 (im-ages from Nano Banana). As non-railway baselines, STL500 
+
+and SODA500 contain 500 randomly sampled images from STL-10 (Coates, Ng, and Lee 2011) and SODA-10M (Han et al. 2021), respectively, and serve to test whether generic natural images alone can improve RFOD. All methods aug-ment the same real training set; only the appended synthetic pool varies. The Inspector leverages both the training im-ages and extra real RFOD images, with all data being strictly disjoint from the validation set. 
+
+Evaluation Metrics 
+
+We evaluate downstream detection using AP50 and COCO-style AP50–95. Our primary detectors are the widely vali-dated state-of-the-art YOLO11 (Jocher, Chaurasia, and Qiu 2023) and DEIM (Huang et al. 2025b): YOLO11 represents efficient one-stage dense prediction with multiscale features, whereas DEIM represents end-to-end Transformer detection with global query-based reasoning. Their complementary local and global modeling tests whether synthetic data sup-port both small-object appearance and object–scene intru-sion relations. To assess broader cross-architecture utility, we further include YOLO12, YOLO13, and YOLO26 as re-cent dense-prediction variants, Gold-YOLO with cross-scale feature aggregation, DETR with global set prediction, RT-DETR with efficient multiscale Transformer encoding, and DINO with denoising-enhanced query learning (Tian, Ye, and Doermann 2025; Lei et al. 2025; Jocher et al. 2026; Wang et al. 2023; Carion et al. 2020; Zhao et al. 2024; Zhang et al. 2023). Inspector diagnostics characterize reliable-support reach, local-gap occupation, and nonredundant expansion, while FID and KID are introduced as reference metrics in the ablation study. 
+
+Cross-Architecture Evaluation of RailSyn under Synthetic-Data Scaling 
+
+Table 1 evaluates whether RailSyn provides broadly useful detection data across nine architectures by varying the num-ber of synthetic samples added to the fixed real training set. Every one of the nine detectors exceeds its real-only AP50– 95 baseline at an appropriate synthetic-data scale. Their best gains average 3.03 points and range from +1 .9 points for YOLO13 to +4 .9 points for YOLO12. The primary detec-tors show the same benefit: YOLO11 rises from 39.6 to 42.4 AP50–95 at +300 , while DEIM rises from 46.2 to 49.1 at 
+
++500 . Improvements across dense one-stage detectors and query-based Transformer detectors demonstrate that RailSyn supplies detection-relevant railway context, intrusion rela-tions, and object–background cues that are usable across heterogeneous architectures rather than tailored to one de-tector. The optimal amount of generated data is architecture de-pendent: AP50–95 peaks at +500 for DEIM and DETR, 
+
++300 for YOLO11, +100 for YOLO12, and +400 for RT-DETR and DINO. This variation shows that detectors absorb the supplemented information at different rates, but does not alter the central result: each architecture benefits from Rail-Syn at a suitable augmentation scale. The scaling study there-fore establishes the broad utility of the Generator before the following controlled experiments analyze where these gains arise and how the Inspector traces changes among generated pools. 
+
+Ablation Study: Detection Performance and Data Completion 
+
+Table 2 reports detector performance and Inspector diagnos-tics for six controlled RailSyn variants. 
+
+Stage ablation and detection performance. Rows 1–4 of Table 2 isolate the three Generator stages: Scene Prep. (Rail-way Scene Preparation), Relation Plan. (Relation-Aware In-trusion Planning), and Pattern Ref. (Diagnosed Intrusion-Pattern Refinement). Scene preparation alone improves YOLO11 but leaves DEIM close to real-only training. Adding Table 1: Cross-architecture detection performance with increasing numbers of RailSyn samples (AP50/AP50–95, %).                                                             
+
+> Detector Real +100 +200 +300 +400 +500 DEIM 72.0/46.2 75.4/48.3 78.2/48.6 75.2/47.1 77.0/48.0 77.1 /49.1
+> YOLO11 62.6/39.6 65.1/39.8 63.7/40.7 66.6/ 42.4 62.2/40.4 67.3 /41.6 YOLO12 59.9/37.6 70.4 /42.5 64.9/40.0 61.6/39.7 58.1/36.0 59.7/39.0 YOLO13 60.5/35.2 57.0/35.2 59.3/36.7 60.9 /37.1 59.4/34.4 58.4/35.5 YOLO26 70.3/45.0 70.7/47.4 73.2/47.7 73.9/45.9 74.7 /47.4 73.5/ 49.3
+> Gold-YOLO 63.4/37.6 67.2/40.3 67.2/ 41.9 71.0 /41.9 69.6/41.6 69.9/41.5 DETR 75.3/47.1 74.6/47.0 71.2/47.3 74.4/46.8 74.2/47.1 78.7 /49.1
+> RT-DETR 73.2/47.1 74.3/47.7 75.0/47.6 76.0/48.8 76.8/ 49.3 77.2 /48.9 DINO 66.8/42.2 67.7/42.4 66.5/41.7 69.9/42.1 69.3/ 44.2 71.6 /43.3
+
+Table 2: RailSyn ablation with detector metrics, real-reference Inspector diagnostics (%), and generation quality. During object insertion, we optionally resize the foreign object relative to its planned bounding box: zoom-in enlarges the object by 10%, 
+
+zoom-out reduces it by 10%, and the default configuration keeps the original Agent-planned size.                                                                                                            
+
+> RailSyn stages and scale YOLO11 DEIM Inspector analysis Generation ID Scene Prep. Relation Plan. Pattern Ref. Zoom AP50 AP50–95 AP50 AP50–95 Cgap Crel ηvol FID ↓KID ×10 3↓
+> Real ––––62.6 39.6 72.0 46.2 –––––1✓–––66.6 40.4 71.7 46.3 11.88 2.77 75.90 208.79 121 .02 ±8.66
+> 2✓✓––61.6 37.4 75.9 48.7 11.16 2.46 78.95 252.22 211 .24 ±10 .56
+> 3✓–✓–61.1 39.8 74.5 45.4 12.82 2.73 77.13 207.12 124 .80 ±8.59
+> 4✓✓✓–67.3 41.6 77.1 49.1 13.64 2.47 80.81 231.41 178 .89 ±9.79
+> 5✓✓✓in 66.6 40.4 75.9 47.2 13.37 2.45 80.01 223.15 164 .12 ±10 .76
+> 6✓✓✓out 65.2 41.0 75.8 46.4 13.44 2.62 79.81 253.33 217 .58 ±10 .56
+
+relation-aware planning without intrusion-pattern refine-ment benefits DEIM (75.9/48.7) but reduces YOLO11 to 61.6/37.4, whereas adding intrusion-pattern refinement with-out relation-aware planning reaches 74.5 AP50 on DEIM but does not consistently improve the stricter AP50–95 results. Only the complete configuration combines the three stages to improve all four primary AP entries, raising AP50/AP50–95 by 4.7/2.0 points for YOLO11 and 5.1/2.9 points for DEIM. These controlled results establish distinct roles for the stages and show that relation-aware planning and intrusion-pattern refinement must operate together to convert prepared railway scenes into consistently useful detection samples. 
+
+Inspector traceability under stage and stage changes. 
+
+The Inspector assigns a distinct completion profile to ev-ery controlled variant. Adding intrusion-pattern refinement to scene preparation (ID3 vs. ID1) raises Cgap from 11.88% to 12.82% and ηvol from 75.90% to 77.13%, while Crel 
+
+edges down slightly (2.77% to 2.73%), indicating that finer injection improves local-gap coverage and volume efficiency without expanding reliable-support reach. Coupling all three stages (ID4) further lifts Cgap to a best 13.64% and ηvol 
+
+to a best 80.81%, alongside the strongest detector results, while Crel settles at 2.47%. Rows 5–6 alter only foreign-object scale under the full Generator. Zoom-in (ID5) and zoom-out (ID6) both reduce Cgap and ηvol relative to the default scale, with Crel varying modestly. The Inspector thus captures fine-grained scale perturbations as well as coarse stage interventions, isolating how each configuration shifts the completion profile. Notably, configurations with higher 
+
+Cgap (ID4, ID6, ID5) correspond to the best overall AP on both detectors, consistent with the notion that local-gap occu-pation traces detector-relevant completion. By contrast, FID and KID favor incomplete configurations (ID1 and ID3) and fail to reflect these stage- and scale-specific shifts in data utility. 
+
+Comparison with External Pools 
+
+Table 3 compares RailSyn with five external augmenta-tion pools under DEIM and YOLO11. RailSyn achieves the best results in all four AP columns: 77.1/49.1 on DEIM and 67.3/41.6 on YOLO11, with the largest mean improve-ment of +3 .7 points over real-only training. In contrast, SD, Nano500, RFOD23, SODA500, and STL500 yield smaller or even negative gains, confirming that effective augmentation requires more than generic imagery. To understand which semantic dimensions are actually complemented, we further probe the generated samples with a Inspector-based token-level semantic analysis. The right-most columns of Table 3 report the density of four repre-sentative concepts: Railway , Balloon , Track , and Industry .All pools except STL500 consistently complete Railway and 
+
+Track , while Balloon remains a common deficit. Crucially, RailSyn is the only pool that exhibits a moderate presence of Industry (+), indicating that our generation pipeline sup-plements railway-related industrial surroundings that are ab-sent from other synthetic sources. This fine-grained semantic view explains why RailSyn provides stronger detection gains: Table 3: Comparison of different augmentation data. The semantic profile summarizes Qwen semantic-focus probes over four English concepts: ++ denotes high token density (completion), + denotes moderate density (present but not dominant), and −
+
+denotes a deficit. ∆Avg is the gain of the mean of the four AP entries over the real-only mean (55.1).                                                                           
+
+> DEIM YOLO11 Semantic profile Dataset AP50 AP50–95 AP50 AP50–95 ∆Avg Railway Balloon Track Industry Real 72.0 46.2 62.6 39.6 0.0 ––––Nano500 74.9 48.6 66.1 37.5 +1.7 ++ −++ −
+> SD 75.9 48.0 64.9 40.3 +2.2 ++ −++ −
+> RFOD23 73.7 46.3 66.2 39.7 +1.4 ++ −++ −
+> STL500 76.4 47.7 58.6 35.9 −0.4−++ −−
+> SODA500 75.7 46.8 61.0 36.5 −0.1++ −++ −
+> RailSyn (Ours) 77.1 49.1 67.3 41.6 +3.7 ++ −++ +
+
+it not only reinforces core railway elements but also expands the contextual diversity along an extra task-relevant dimen-sion. Token-level analysis thus offers an orthogonal lens for tracing which task dimensions are complemented, without relying on aggregate AP alone. 
+
+Inspector Diagnostics and Detection Performance 
+
+We next examine whether the Inspector profiles are related to detector utility across the six controlled variants in Table 2. As shown in Table 4, Crel and Cgap correlate positively with all four AP measures. Crel has the strongest association with DEIM AP50 ( ρ = .735 ), while Cgap has the strongest asso-ciation with YOLO11 AP50–95 ( ρ = .667 ). In contrast, ηvol 
+
+is weakly related to AP and is negative for DEIM AP50– 95 ( ρ = −.200 ), confirming that nonredundant expansion captures a complementary property rather than detection performance itself. Together with the stage and scale con-trols, these directional associations support the Inspector’s ability to trace detector-relevant differences among gener-ated variants; with n = 6 , they are not treated as statistical significance or an AP predictor. Table 4: Spearman ρ between Qwen Inspector diagnostics and detector AP.                      
+
+> DEIM YOLO11 Metric AP50 AP50–95 AP50 AP50–95
+> Crel -.812 -.714 -.174 .058
+> Cgap .464 .314 .551 .899
+> ηvol .899 .771 .551 .609
+> ηvol .899 .771 .551 .609
+
+Table 5 further tests whether the Inspector’s pool rankings persist across Qwen, CLIP, and DINOv2. Cgap maintains strong pairwise agreement, with correlations from 0.771 to 0.943 and a mean of 0.848. ηvol is even more stable, with correlations from 0.943 to 1.000 and a mean of 0.962. Crel 
+
+is more representation-sensitive, with a mean correlation of 0.505. The high agreement for local-gap occupation and nonredundant expansion shows that the main relative patterns Table 5: Cross-encoder rank stability over the six pools in Table 3. Values are Spearman rank correlations ρ between within-encoder pool rankings. Q–C, Q–D, and C–D denote Qwen–CLIP, Qwen–DINOv2, and CLIP–DINOv2, respec-tively. Absolute metric values are not compared across em-bedding spaces.                     
+
+> Metric Q–C Q–D C–D Avg. Min.
+> Crel 0.771 0.429 0.314 0.505 0.314
+> Cgap 0.829 0.943 0.771 0.848 0.771
+> ηvol 0.943 0.943 1.000 0.962 0.943
+
+are not specific to one embedding model. Combined with the controlled ablations and the positive AP associations, this cross-embedding consistency provides complementary evi-dence that the Inspector offers a stable, traceable analysis of generated-pool differences. 
+
+Adverse-Weather Robustness 
+
+We extend RailSyn to adverse weather via RailSynWeather, a branch that generates 200 weather-specific images while preserving layout and annotations. On the same 398-image real training set, RailSynWeather raises DEIM AP50 from 72.6%, obtained with a filter-based augmentation baseline, to 73.1% on the clean validation split, confirming the gener-ator’s extensibility to underrepresented weather conditions. 
+
+# Conclusion 
+
+We presented RailSyn, an Inspector–Generator framework that diagnoses high-uncertainty regions from real RFOD observations and generates synthetic data through scene preparation, relation-aware planning, and intrusion-pattern refinement. Across nine detectors, RailSyn improves AP50– 95 over real-only training, with an best gain of 4.9 points, and outperforms five external augmentation pools in con-trolled comparisons. In the module ablation study, the In-spector traces how each generation stage and scale choice alters the completion profile, with the full configuration achieving the highest local-gap occupation at 13.64%, pro-viding a component-level view of what different modules contribute. Current limitations include the difficulty of char-acterizing cross-dataset effectiveness and the need for fur-ther improvement in generation quality. Future work in-cludes developing quantitative metrics from token-level se-mantic probes to enable cross-dataset evaluation, extend-ing Inspector-guided completion to other safety-critical do-mains, and enhancing generation fidelity under adverse weather and for small-object details. References 
+
+Black Forest Labs. 2024. FLUX.1: Flow Matching for Text-to-Image Generation. Technical Report .Bolya, D.; Foley, S.; Hays, J.; and Hoffman, J. 2020. TIDE: A General Toolbox for Identifying Object Detection Errors. In Computer Vision – ECCV 2020 , volume 12348 of Lecture Notes in Computer Science , 558–573. Springer. Carion, N.; Massa, F.; Synnaeve, G.; Usunier, N.; Kirillov, A.; and Zagoruyko, S. 2020. End-to-End Object Detection with Transformers. In European Conference on Computer Vision (ECCV) , 213–229. Chen, Y.; Yuan, X.; Wang, J.; Wu, R.; Li, X.; Hou, Q.; and Cheng, M.-M. 2025. YOLO-MS: Rethinking Multi-Scale Representation Learning for Real-Time Object Detection. 
+
+IEEE Transactions on Pattern Analysis and Machine Intelli-gence , 47(6): 4240–4252. Chen, Z.; Yang, J.; Feng, Z.; and Zhu, H. 2024. RailFOD23: A dataset for foreign object detection on railroad transmis-sion lines. Scientific Data , 11(1): 72. Cheng, G.; Yuan, X.; Yao, X.; Yan, K.; Zeng, Q.; Xie, X.; and Han, J. 2023. Towards Large-Scale Small Object Detec-tion: Survey and Benchmarks. IEEE Transactions on Pattern Analysis and Machine Intelligence , 45(11): 13467–13488. Coates, A.; Ng, A.; and Lee, H. 2011. An Analysis of Single-Layer Networks in Unsupervised Feature Learning. In Gor-don, G.; Dunson, D.; and Dudík, M., eds., Proceedings of the Fourteenth International Conference on Artificial Intel-ligence and Statistics , volume 15 of Proceedings of Machine Learning Research , 215–223. Fort Lauderdale, FL, USA: PMLR. Esser, P.; Kulal, S.; Blattmann, A.; Entezari, R.; Müller, J.; Saini, H.; Levi, Y.; Lorenz, D.; Sauer, A.; Boesel, F.; Podell, D.; Dockhorn, T.; English, Z.; and Rombach, R. 2024. Scal-ing Rectified Flow Transformers for High-Resolution Image Synthesis. In Proceedings of the 41st International Confer-ence on Machine Learning , volume 235 of Proceedings of Machine Learning Research , 12606–12633. PMLR. Feng, C.; Zhong, Y.; Jie, Z.; Xie, W.; and Ma, L. 2024. Insta-Gen: Enhancing Object Detection by Training on Synthetic Dataset. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition , 14121–14130. Ghiasi, G.; Cui, Y.; Srinivas, A.; Qian, R.; Lin, T.-Y.; Cubuk, E. D.; Le, Q. V.; and Zoph, B. 2021. Simple Copy-Paste Is a Strong Data Augmentation Method for Instance Seg-mentation. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition , 2918–2928. Ghosh, D.; Hajishirzi, H.; and Schmidt, L. 2023. GenEval: An Object-Focused Framework for Evaluating Text-to-Image Alignment. In Advances in Neural Information Processing Systems , volume 36, 52132–52152. Han, J.; Liang, X.; Xu, H.; Chen, K.; Hong, L.; Mao, J.; Ye, C.; Zhang, W.; Li, Z.; Liang, X.; and Xu, C. 2021. SODA10M: A Large-Scale 2D Self/Semi-Supervised Ob-ject Detection Dataset for Autonomous Driving. In Proceed-ings of the Neural Information Processing Systems Track on Datasets and Benchmarks , volume 1. Hao, Q.; Shi, R.; Li, J.; and Zhang, L. 2026. Generative Approach for Detecting Small Intrusive Foreign Objects in High-Speed Railway Scenario. IEEE Transactions on Intel-ligent Transportation Systems , 27(1): 1471–1484. Hu, E. J.; Shen, Y.; Wallis, P.; Allen-Zhu, Z.; Li, Y.; Wang, S.; Wang, L.; and Chen, W. 2022. LoRA: Low-Rank Adaptation of Large Language Models. In International Conference on Learning Representations (ICLR) .Hu, Y.; Liu, B.; Kasai, J.; Wang, Y.; Ostendorf, M.; Krishna, R.; and Smith, N. A. 2023. TIFA: Accurate and Interpretable Text-to-Image Faithfulness Evaluation with Question An-swering. In Proceedings of the IEEE/CVF International Conference on Computer Vision , 20406–20417. Huang, K.; Duan, C.; Sun, K.; Xie, E.; Li, Z.; and Liu, X. 2025a. T2I-CompBench++: An Enhanced and Comprehen-sive Benchmark for Compositional Text-to-Image Genera-tion. IEEE Transactions on Pattern Analysis and Machine Intelligence , 47(5): 3563–3579. Huang, S.; Lu, Z.; Cun, X.; Yu, Y.; Zhou, X.; and Shen, X. 2025b. DEIM: DETR with Improved Matching for Fast Con-vergence. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR) , 15162– 15171. Islam, K.; Zaheer, M. Z.; Mahmood, A.; and Nandakumar, K. 2024. DiffuseMix: Label-Preserving Data Augmentation with Diffusion Models. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition ,27621–27630. Jayasumana, S.; Ramalingam, S.; Veit, A.; Glasner, D.; Chakrabarti, A.; and Kumar, S. 2024. Rethinking FID: To-wards a Better Evaluation Metric for Image Generation. In 
+
+Proceedings of the IEEE/CVF Conference on Computer Vi-sion and Pattern Recognition , 9307–9315. Jia, C.; Luo, M.; Dang, Z.; Dai, G.; Chang, X.; Wang, M.; and Wang, J. 2024. SSMG: Spatial-Semantic Map Guided Diffusion Model for Free-Form Layout-to-Image Generation. In Proceedings of the AAAI Conference on Artificial Intelli-gence , volume 38, 2480–2488. Jocher, G.; Chaurasia, A.; and Qiu, J. 2023. Ultralytics YOLO. https://github.com/ultralytics/ultralytics. Jocher, G.; Qiu, J.; Liu, M.; Lyu, S.; Akyon, F. C.; and Kalfaoglu, M. E. 2026. Ultralytics YOLO26: Unified Real-Time End-to-End Vision Models. Official Ultralytics arXiv preprint, arXiv:2606.03748. Kang, B.; Liu, Z.; Yan, X.; Holtz, C.; and Feng, J. 2019. Few-shot Object Detection via Feature Reweighting. In Proceed-ings of the IEEE/CVF International Conference on Computer Vision (ICCV) , 8420–8429. Lee, T.; Yasunaga, M.; Meng, C.; Mai, Y.; Park, J. S.; Gupta, A.; Zhang, Y.; Narayanan, D.; Teufel, H.; Bellagente, M.; Kang, M.; Park, T.; Leskovec, J.; Zhu, J.-Y.; Li, F.-F.; Wu, J.; Ermon, S.; and Liang, P. 2023. Holistic Evaluation of Text-to-Image Models. In Advances in Neural Information Processing Systems , volume 36. Lei, M.; Li, S.; Wu, Y.; Hu, H.; Zhou, Y.; Zheng, X.; Ding, G.; Du, S.; Wu, Z.; and Gao, Y. 2025. YOLOv13: Real-Time Ob-ject Detection with Hypergraph-Enhanced Adaptive Visual Perception. ArXiv preprint; no peer-reviewed proceedings version was located as of 2026-07-21, arXiv:2506.17733. Li, K.; Luo, S.; and Tseng, K.-K. 2025. RegionDiffusion: Generative data augmentation for object detection with dif-fusion models. Neurocomputing , 654: 131115. Li, M.; Zhang, Y.; Long, D.; Chen, K.; Song, S.; Bai, S.; Yang, Z.; Xie, P.; Yang, A.; Liu, D.; Zhou, J.; and Lin, J. 2026. Qwen3-VL-Embedding and Qwen3-VL-Reranker: A Unified Framework for State-of-the-Art Multimodal Retrieval and Ranking. arXiv:2601.04720. Li, Y.; Liu, H.; Wu, Q.; Mu, F.; Yang, J.; Gao, J.; Chandra, R.; et al. 2023. GLIGEN: Open-Set Grounded Text-to-Image Generation. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR) , 22511– 22521. Lin, T.-Y.; Goyal, P.; Girshick, R.; He, K.; and Dollár, P. 2017. Focal Loss for Dense Object Detection. In Proceedings of the IEEE International Conference on Computer Vision , 2980– 2988. Lipman, Y.; Chen, R. T. Q.; Ben-Hamu, H.; Nickel, M.; and Le, M. 2023. Flow Matching for Generative Modeling. In 
+
+The Eleventh International Conference on Learning Repre-sentations .Oza, P.; Sindagi, V. A.; VS, V.; and Patel, V. M. 2024. Unsu-pervised Domain Adaptation of Object Detectors: A Survey. 
+
+IEEE Transactions on Pattern Analysis and Machine Intelli-gence , 46(6): 4018–4040. Redmon, J.; Divvala, S.; Girshick, R.; and Farhadi, A. 2016. You Only Look Once: Unified, Real-Time Object Detection. In Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition , 779–788. Rombach, R.; Blattmann, A.; Lorenz, D.; Esser, P.; and Om-mer, B. 2022. High-Resolution Image Synthesis with Latent Diffusion Models. In Proceedings of the IEEE/CVF Confer-ence on Computer Vision and Pattern Recognition (CVPR) ,10684–10695. Shi, Z.; Hu, J.; Ren, J.; Ye, H.; Yuan, X.; Ouyang, Y.; He, J.; Ji, B.; and Guo, J. 2025. HS-FPN: High Frequency and Spatial Perception FPN for Tiny Object Detection. In Proceedings of the AAAI Conference on Artificial Intelligence , volume 39, 6896–6904. Somepalli, G.; Singla, V.; Goldblum, M.; Geiping, J.; and Goldstein, T. 2023. Diffusion Art or Digital Forgery? Inves-tigating Data Replication in Diffusion Models. In Proceed-ings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition , 6048–6058. Song, Y.; Zhang, Z.; Lin, Z.; Cohen, S.; Price, B.; Zhang, J.; Kim, S. Y.; Zhang, H.; Xiong, W.; and Aliaga, D. 2024. IMPRINT: Generative Object Compositing by Learn-ing Identity-Preserving Representation. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition , 8048–8058. Tian, Y.; Ye, Q.; and Doermann, D. 2025. YOLOv12: Attention-Centric Real-Time Object Detectors. In Advances in Neural Information Processing Systems , volume 38. Trabucco, B.; Doherty, K.; Gurinas, M. A.; and Salakhutdi-nov, R. 2024. Effective Data Augmentation With Diffusion Models. In The Twelfth International Conference on Learn-ing Representations .Wan, Z.; Wang, Z.; Chung, C.; and Wang, Z. 2024. A Sur-vey of Dataset Refinement for Problems in Computer Vision Datasets. ACM Computing Surveys , 56(7): 172. Wang, C.; He, W.; Nie, Y.; Guo, J.; Liu, C.; Wang, Y.; and Han, K. 2023. Gold-YOLO: Efficient Object Detector via Gather-and-Distribute Mechanism. In Advances in Neural Information Processing Systems , volume 36. Wang, K.; Pan, Z.; and Wen, Z. 2025. SVDDD: SAR Vehicle Target Detection Dataset Augmentation Based on Diffusion Model. Remote Sensing , 17(2): 286. Wang, Y.; Gao, R.; Chen, K.; Zhou, K.; Cai, Y.; Hong, L.; Li, Z.; Jiang, L.; Yeung, D.-Y.; Xu, Q.; and Zhang, K. 2024. DetDiffusion: Synergizing Generative and Perceptive Mod-els for Enhanced Data Generation and Perception. In Pro-ceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition , 7246–7255. Wu, T.-H.; Lian, L.; Gonzalez, J. E.; Li, B.; and Darrell, T. 2024. Self-Correcting LLM-Controlled Diffusion Models. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition , 6327–6336. Zhang, H.; Li, F.; Liu, S.; Zhang, L.; Su, H.; Zhu, J.; Ni, L. M.; and Shum, H.-Y. 2023. DINO: DETR with Improved DeNoising Anchor Boxes for End-to-End Object Detection. In The Eleventh International Conference on Learning Rep-resentations .Zhang, L.; Rao, A.; and Agrawala, M. 2023. Adding Con-ditional Control to Text-to-Image Diffusion Models. In Pro-ceedings of the IEEE/CVF International Conference on Com-puter Vision (ICCV) , 3836–3847. Zhao, Y.; Lv, W.; Xu, S.; Wei, J.; Wang, G.; Dang, Q.; Liu, Y.; and Chen, J. 2024. DETRs Beat YOLOs on Real-Time Object Detection. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR) , 16965– 16974.

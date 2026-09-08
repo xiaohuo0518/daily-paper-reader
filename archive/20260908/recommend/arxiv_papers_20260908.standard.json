@@ -1,0 +1,145 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-09-08T22:55:34.890056+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 2,
+    "deep_divecandidates": 0,
+    "deep_cap": 7,
+    "deep_selected": 0,
+    "quick_candidates": 3,
+    "quick_skim_target": 12,
+    "quick_selected": 3
+  },
+  "deep_dive": [],
+  "quick_skim": [
+    {
+      "id": "2609.00478v1",
+      "source": "arxiv",
+      "title": "Beyond Object Selection:Markerless Gaze-based Robot Placement at Arbitrary Position",
+      "abstract": "Gaze-based assistive manipulation typically supports object selection, while arbitrary-position placement requires accurate spatial alignment between the headset and robot. However, for gaze-based manipulation, pose accuracy does not necessarily translate into task accuracy: translational and rotational errors jointly affect the transformed gaze ray and may compensate for each other. To study cross-device alignment from this task-oriented perspective, we present a markerless interaction framework and a dedicated cross-device dataset. We propose Graph-based Reference Selection to address sparse robot references. We further develop and benchmark multiple task-specific alignment pipelines under a unified protocol. Specifically, we introduce Gaze--Surface Intersection Error (GSIE), which directly measures the spatial error of the gaze-specified target. Experiments show that alignment methods ranked highly by conventional pose metrics are not always optimal in GSIE, demonstrating the importance of evaluating gaze-based manipulation at the task level.",
+      "authors": [
+        "Yuzhi Lai",
+        "William Marx",
+        "Shenghai Yuan",
+        "Peizheng Li",
+        "Zhuoyu Ran",
+        "Andreas Zell"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-08-31T23:27:14+00:00",
+      "link": "https://arxiv.org/pdf/2609.00478v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "Introduces a dedicated cross-device dataset for gaze-based robot placement and benchmarks alignment pipelines, directly relevant to robotics dataset construction",
+      "llm_evidence_cn": "为视线机器人任意位置放置构建专用跨设备数据集并提供评测基准，属于机器人数据集构建的直接工作",
+      "llm_evidence": "为视线机器人任意位置放置构建专用跨设备数据集并提供评测基准，属于机器人数据集构建的直接工作",
+      "canonical_evidence": "为视线机器人任意位置放置构建专用跨设备数据集并提供评测基准，属于机器人数据集构建的直接工作",
+      "llm_tldr_en": "For arbitrary-position gaze-based robot placement, introduces a markerless interaction framework, a dedicated cross-device dataset, and graph-based reference selection; develops task-specific alignment pipelines benchmarked under a unified protocol.",
+      "llm_tldr_cn": "视线辅助操控通常只支持物体选择，任意位置放置需要头显与机器人间精确对齐，而位姿精度不等于任务效果。为此作者提出无标记交互框架，并构建专用跨设备数据集以研究任务导向的设备对齐。他们提出基于图的参考选择缓解稀疏参考问题，并在统一协议下评测多种对齐流程。这项工作为视线交互机器人提供了真实数据集与评测基线，属于面向具体机器人任务的数据集构建研究。",
+      "llm_tldr": "视线辅助操控通常只支持物体选择，任意位置放置需要头显与机器人间精确对齐，而位姿精度不等于任务效果。为此作者提出无标记交互框架，并构建专用跨设备数据集以研究任务导向的设备对齐。他们提出基于图的参考选择缓解稀疏参考问题，并在统一协议下评测多种对齐流程。这项工作为视线交互机器人提供了真实数据集与评测基线，属于面向具体机器人任务的数据集构建研究。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2608.30709v1",
+      "source": "arxiv",
+      "title": "RailSyn: Diagnosis-Guided Image Generation for Traceable Data Completion in Railway Foreign Object Detection",
+      "abstract": "Railway foreign object detection (RFOD) is critical to safe railway operation, yet scarce real positive samples incompletely represent task-relevant variations in object scale, intrusion relation, railway scene, illumination, and adverse weather. Existing synthetic augmentation can improve RFOD detection, but its gains lack an explicit account of the task-relevant deficiencies complemented by the generated data. We therefore introduce RailSyn, a diagnosis-guided framework comprising a real-referenced Inspector and a requirement-aligned Generator. The Inspector constructs a variable-radius empirical cover from finite real observations to localize candidate completion regions and profile synthetic pools. The resulting audit identifies railway-context, intrusion-semantic, and visual-consistency requirements; the Generator addresses them through domain adaptation, agent-planned placement and physical contact relations, and plan-consistent conditional refinement. Using the Inspector, we further trace representation-space changes across generation variants; the complete system attains a local-shell occupation of $C_{gap}$ to 13.64%, which measures generated coverage of real-derived completion regions. Extensive experiments show AP50--95 gains of up to 4.9 points and consistent improvements across nine mainstream detectors, demonstrating broad cross-architecture utility.",
+      "authors": [
+        "Quan Hao",
+        "Chenxi Zhang",
+        "Ziyang Tao",
+        "Yuyuan Zhou",
+        "Yudong Wang",
+        "Rui Shi",
+        "Lechuan Xu",
+        "Changhao Liu",
+        "Liguo Zhang"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV",
+        "cs.AI"
+      ],
+      "published": "2026-08-31T12:47:28+00:00",
+      "link": "https://arxiv.org/pdf/2608.30709v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "Diagnosis-guided synthetic data completion for scarce positive samples; transferable to robot perception dataset construction",
+      "llm_evidence_cn": "诊断引导的合成数据补全方法，利用有限真实样本构造更完整数据集，可迁移至机器人感知数据集构建",
+      "llm_evidence": "诊断引导的合成数据补全方法，利用有限真实样本构造更完整数据集，可迁移至机器人感知数据集构建",
+      "canonical_evidence": "诊断引导的合成数据补全方法，利用有限真实样本构造更完整数据集，可迁移至机器人感知数据集构建",
+      "llm_tldr_en": "Railway foreign object detection suffers from scarce real positives and incomplete coverage. RailSyn uses a diagnosis-guided generator to produce synthetic images that explicitly fill diagnosed gaps, enabling traceable data completion and improving detector robustness.",
+      "llm_tldr_cn": "铁路异物检测中真实正样本稀缺，难以覆盖物体尺度、场景与天气等变化。RailSyn由真实参照的检查器定位待补全区域，并用需求对齐的生成器按缺口生成合成样本，使生成数据具有可追溯性。实验显示该方法能高效补充任务相关数据，对机器人感知数据集的构建与数据补齐具有良好借鉴意义。",
+      "llm_tldr": "铁路异物检测中真实正样本稀缺，难以覆盖物体尺度、场景与天气等变化。RailSyn由真实参照的检查器定位待补全区域，并用需求对齐的生成器按缺口生成合成样本，使生成数据具有可追溯性。实验显示该方法能高效补充任务相关数据，对机器人感知数据集的构建与数据补齐具有良好借鉴意义。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2609.04277v1",
+      "source": "arxiv",
+      "title": "FailureSpot: Label-Efficient Timestamp-Level Failure Detection for Vision-Language-Action Models",
+      "abstract": "Vision-language-action (VLA) policies have shown strong potential for general-purpose robotic manipulation, but they can still fail unpredictably during long-horizon execution, making reliable failure detection essential for safe deployment. Existing methods either rely on visual models that typically detect failures only after erroneous actions have occurred, or use lightweight proactive detectors trained on VLA internal representations. However, these proactive methods are often supervised with trajectory-level labels, causing normal pre-failure behavior in unsuccessful trajectories to be incorrectly labeled as failure. This supervision mismatch introduces label noise and limits both trajectory-level detection accuracy and precise timestamp-level failure localization. In this work, we study fine-grained timestamp-level VLA failure detection while addressing the cost of dense annotation. We propose a data-efficient framework that first leverages unlabeled VLA action chunks to construct action-derived weak supervision signals, capturing abnormal patterns such as inconsistent consecutive chunks, frozen or idle actions, and aggressive random motions. We then use active learning to select only the most uncertain trajectories for timestamp-level annotation and fine-tune the detector with these informative labels. Experiments across multiple VLA policies show that our method improves both timestamp-level and trajectory-level failure detection performance.",
+      "authors": [
+        "Jie Ma",
+        "Zongxi Liu",
+        "Yi Zhu"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.CV"
+      ],
+      "published": "2026-09-03T00:04:06+00:00",
+      "link": "https://arxiv.org/pdf/2609.04277v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "Timestamp-level failure detection for VLA policies using internal representations; label-efficient robot fault detection",
+      "llm_evidence_cn": "基于VLA内部表示的时间戳级机器人故障检测，标签高效，直接面向策略失效发现",
+      "llm_evidence": "基于VLA内部表示的时间戳级机器人故障检测，标签高效，直接面向策略失效发现",
+      "canonical_evidence": "基于VLA内部表示的时间戳级机器人故障检测，标签高效，直接面向策略失效发现",
+      "llm_tldr_en": "VLA policies fail unexpectedly long-horizon, yet trajectory-level supervision mislabels normal pre-failure behavior. FailureSpot does timestamp-level detection using VLA internal representations, cutting label noise and boosting detection accuracy with few labels.",
+      "llm_tldr_cn": "VLA策略在长程操作中可能意外失败，而现有时常采用轨迹级标签的做法会把失败轨迹中的正常行为误判为故障。FailureSpot通过VLA内部表征进行时间戳级故障检测，缓解轨迹级监督不匹配带来的标签噪声，并降低标注成本。实验结果表明它在轨迹级和时间戳级检测上都更准确，可为VLA机器人提供有效的部署时故障预警。",
+      "llm_tldr": "VLA策略在长程操作中可能意外失败，而现有时常采用轨迹级标签的做法会把失败轨迹中的正常行为误判为故障。FailureSpot通过VLA内部表征进行时间戳级故障检测，缓解轨迹级监督不匹配带来的标签噪声，并降低标注成本。实验结果表明它在轨迹级和时间戳级检测上都更准确，可为VLA机器人提供有效的部署时故障预警。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "fault detection in humanoid robots",
+      "matched_requirement_id": "req-6",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    }
+  ]
+}
