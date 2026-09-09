@@ -1,0 +1,479 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-09-09T21:23:58.627866+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 2,
+    "deep_divecandidates": 3,
+    "deep_cap": 7,
+    "deep_selected": 3,
+    "quick_candidates": 8,
+    "quick_skim_target": 12,
+    "quick_selected": 8
+  },
+  "deep_dive": [
+    {
+      "id": "2609.07933v1",
+      "source": "arxiv",
+      "title": "SPOT: Spatial Perception-Oriented Long-Horizon Humanoid Teleoperation",
+      "abstract": "High-quality demonstration data is becoming a central bottleneck for training general-purpose humanoid robots. While recent humanoid teleoperation systems have made substantial progress in retargeting human motion to robot motion, long-horizon loco-manipulation requires another capability: operators must maintain task-relevant spatial awareness over time, e.g., object locations, surrounding environments, the robot's pose. We call the extent of this awareness the operator's perceptual horizon. However, existing methods often shorten this: narrow views miss peripheral events, robot-mounted cameras become unstable during locomotion, and coupled head-view control makes looking around interfere with robot motion. We present SPOT, a Spatial Perception-Oriented VR Teleoperation system for collecting long-horizon humanoid demonstration data by providing extended perceptual horizon. SPOT combines a robot-mounted binocular fisheye camera, a wide-field stereoscopic display, viewpoint-decoupled free-looking, and visual stabilization to provide a robot-centric view that is wide, stable, and actively inspectable. Unlike conventional egocentric interfaces, SPOT decouples visual exploration from robot actuation: the egocentric stereo observation is rendered on a virtual hemisphere around the operator, so natural head rotations change where the operator looks within the wide-field view rather than commanding the robot head, camera, or torso. We evaluate SPOT on perception-critical humanoid data-collection tasks spanning drop recovery, peripheral retrieval, large-workspace bimanual manipulation, fine alignment, and dynamic interaction. SPOT improves efficiency, accuracy, and recovery speed, demonstrating its effectiveness for user-friendly and scalable long-horizon humanoid data collection.",
+      "authors": [
+        "Lixing Fang",
+        "Ziyan Xiong",
+        "Sunli Chen",
+        "Zhiyang Dou",
+        "Chuang Gan"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-09-07T19:46:56+00:00",
+      "link": "https://arxiv.org/pdf/2609.07933v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "Presents teleoperation system for collecting high-quality humanoid robot demonstration data, directly relevant to humanoid dataset construction",
+      "llm_evidence_cn": "面向人形机器人高质量示范数据采集的空间感知遥操作系统",
+      "llm_evidence": "面向人形机器人高质量示范数据采集的空间感知遥操作系统",
+      "canonical_evidence": "面向人形机器人高质量示范数据采集的空间感知遥操作系统",
+      "llm_tldr_en": "SPOT improves long-horizon humanoid teleoperation by preserving operator spatial awareness, countering narrow views and unstable robot cameras, and thereby supports collection of high-quality demonstration data for training general-purpose humanoid policies.",
+      "llm_tldr_cn": "高质量示范数据是通用人形机器人训练的关键瓶颈，但长时程移动操作遥操作中操作者的空间感知容易被窄视野和不稳相机破坏。SPOT 提出面向空间感知的遥操作系统，在长时间跨度内维持操作者对目标位置、环境和机器人位姿的感知，从而改进示范数据采集。结果表明该方法能帮助操作者采集更完整、更稳定的长程操作数据，为人形机器人数据集构建和后续策略训练提供支撑。",
+      "llm_tldr": "高质量示范数据是通用人形机器人训练的关键瓶颈，但长时程移动操作遥操作中操作者的空间感知容易被窄视野和不稳相机破坏。SPOT 提出面向空间感知的遥操作系统，在长时间跨度内维持操作者对目标位置、环境和机器人位姿的感知，从而改进示范数据采集。结果表明该方法能帮助操作者采集更完整、更稳定的长程操作数据，为人形机器人数据集构建和后续策略训练提供支撑。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "humanoid robot dataset construction",
+      "matched_requirement_id": "req-2",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2609.02134v2",
+      "source": "arxiv",
+      "title": "Unified Motion Retargeting for Humanoids with Learned Point Cloud Correspondence",
+      "abstract": "Humanoid learning increasingly relies on transforming vast and diverse human motion data into high-quality robot reference trajectories. However, retargeting human motion to humanoid robots is challenging due to substantial differences in morphology, degrees of freedom, joint ranges, and kinematic constraints between humans and robots. Existing retargeting methods typically address these differences by defining human-robot correspondence through hand-crafted sparse keypoints or body-part pairs. As a result, retargeting quality depends heavily on manual semantic design, limiting scalability across motion sources and robot morphologies and providing only sparse guidance for reproducing detailed poses and interactions. In this paper, we present Unified Motion Retargeting (UMR), a framework that learns dense point cloud correspondence without requiring manually designed human-robot mappings. By treating exterior point clouds as a unified interface between human motion and humanoid robots, UMR decouples retargeting from source-specific skeletal semantics and robot-specific topology. The learned dense correspondence provides fine-grained geometric anchors for constrained point cloud matching optimization, enabling surface-level pose alignment and direct transfer of interaction contacts. Experiments demonstrate that UMR unifies retargeting across heterogeneous motion sources, robot embodiments, and downstream scenarios ranging from locomotion to interaction, while achieving higher motion fidelity and plausibility than state-of-the-art methods. UMR therefore provides a scalable foundation for transforming large-scale human motion references into robot-ready training data.",
+      "authors": [
+        "Hanyang Cao",
+        "Yuetong Fang",
+        "Taesoo Kwon",
+        "Runyi Yu",
+        "Ji Ma",
+        "Jing Tan",
+        "Yangchen Zhou",
+        "Baoze Du",
+        "Yi Gu",
+        "Yukang Gao",
+        "Ruoli Dai",
+        "Lei Han",
+        "Renjing Xu"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.GR"
+      ],
+      "published": "2026-09-02T05:43:19+00:00",
+      "link": "https://arxiv.org/pdf/2609.02134v2",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "Learned point-cloud correspondence maps human motion to humanoid robot trajectories, directly enabling scalable construction of humanoid robot training data",
+      "llm_evidence_cn": "通过学习点云对应将人体运动映射为人形机器人轨迹，为构建人形训练数据集提供通用方法",
+      "llm_evidence": "通过学习点云对应将人体运动映射为人形机器人轨迹，为构建人形训练数据集提供通用方法",
+      "canonical_evidence": "通过学习点云对应将人体运动映射为人形机器人轨迹，为构建人形训练数据集提供通用方法",
+      "llm_tldr_en": "Presents a unified motion retargeting framework for humanoids that replaces hand-crafted sparse keypoints with learned point cloud correspondence, enabling scalable and high-quality transformation of diverse human motion data into robot reference trajectories for humanoid learning datasets.",
+      "llm_tldr_cn": "将海量多样化人体运动数据转换为高质量人形机器人参考轨迹是人形学习的关键，但手工关键点对应难以扩展。本文提出统一运动重定向框架，通过学习点云对应关系代替稀疏手工语义对应，自动适应不同人物形态并保留姿态和交互细节。该方法可提升转标质量与跨形态扩展性，为人形机器人训练数据集的构建提供重要支撑，也可能应用于G1等具体平台的轨迹生成。",
+      "llm_tldr": "将海量多样化人体运动数据转换为高质量人形机器人参考轨迹是人形学习的关键，但手工关键点对应难以扩展。本文提出统一运动重定向框架，通过学习点云对应关系代替稀疏手工语义对应，自动适应不同人物形态并保留姿态和交互细节。该方法可提升转标质量与跨形态扩展性，为人形机器人训练数据集的构建提供重要支撑，也可能应用于G1等具体平台的轨迹生成。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "humanoid robot dataset construction",
+      "matched_requirement_id": "req-2",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2609.07498v1",
+      "source": "arxiv",
+      "title": "CosmoH2G: A Hand-to-Gripper Transfer Dataset and Baseline Method for Object Manipulation with Complex Spatial Movements",
+      "abstract": "Transferring human hand demonstrations to robotic grippers has recently emerged as a cost-effective solution for robot learning. However, existing methods are largely confined to simple, planar tasks and fail to handle complex spatial movements (e.g., intricate trajectories involving rotations or flips) that are essential for robot manipulation. Motivated by this gap, we adopt an implicit, data-driven approach guided by fine-grained hand-pose motions. To this end, we introduce a scalable acquisition pipeline to collect hand-gripper paired demonstrations, governed by a rigorous protocol that prioritizes motion complexity and leverages a handheld gripper for seamless action mimicry. This yields a large-scale paired dataset comprising 6,189 episodes across 1,254 unique objects, exhibiting significantly higher spatial complexity than existing benchmarks. However, learning such complex mappings remains challenging. We observe that naive end-to-end generation of full gripper pose sequences is insufficient, as minor trajectory deviations compound rapidly under intricate dynamics. To address this, we propose a two-stage framework: Stage I predicts sparse gripper keyframes (initial and terminal) to simplify the mapping objective, while Stage II generates the full continuous action sequence conditioned on these keyframes. Furthermore, to mitigate cumulative drift, we keep the gripper's orientation being learned while post-optimizing its translation based on the grasping heuristic and kinematic consistency. In both simulation and real-robot experiments, our framework enables stable and precise hand-to-gripper transfer of complex spatial manipulations, significantly outperforming traditional baselines. Project page: https://cosmoh2g.github.io.",
+      "authors": [
+        "Hongxiang Zhao",
+        "Mutian Xu",
+        "Zeyu Jin",
+        "Yiming Hao",
+        "Shuguang Cui",
+        "Xiaoguang Han"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.CV"
+      ],
+      "published": "2026-09-07T13:47:22+00:00",
+      "link": "https://arxiv.org/pdf/2609.07498v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "scalable robotics dataset acquisition pipeline and large-scale dataset for manipulation",
+      "llm_evidence_cn": "面向机器人操作的可扩展数据集采集流程与大规模数据集",
+      "llm_evidence": "面向机器人操作的可扩展数据集采集流程与大规模数据集",
+      "canonical_evidence": "面向机器人操作的可扩展数据集采集流程与大规模数据集",
+      "llm_tldr_en": "Introduces a scalable pipeline and large-scale dataset enabling transfer of human hand demonstrations to grippers for complex spatial manipulation, moving beyond simple planar tasks.",
+      "llm_tldr_cn": "论文指出既有手部演示到夹爪迁移局限于简单平面任务，无法应对旋转、翻转等复杂空间轨迹。为此提出一套可扩展的数据采集流程，并用手持夹爪模拟动作，构建大规模手-夹爪配对演示数据集和基线方法。实验验证该数据集能有效支持复杂空间操作学习，为灵巧操作研究提供数据基础设施。",
+      "llm_tldr": "论文指出既有手部演示到夹爪迁移局限于简单平面任务，无法应对旋转、翻转等复杂空间轨迹。为此提出一套可扩展的数据采集流程，并用手持夹爪模拟动作，构建大规模手-夹爪配对演示数据集和基线方法。实验验证该数据集能有效支持复杂空间操作学习，为灵巧操作研究提供数据基础设施。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "quick_skim": [
+    {
+      "id": "2609.08339v1",
+      "source": "arxiv",
+      "title": "RoboCousin: Build Your Own Simulation Playground for Robust Bimanual Robotic Manipulation",
+      "abstract": "Bimanual manipulation policies require large and diverse training datasets, yet collecting demonstrations on physical robots is expensive and difficult to scale. Simulation can generate data efficiently, but existing pipelines typically operate within closed asset libraries and predefined scenes: adding a newly observed object or environment still requires substantial effort to reconstruct geometry, specify physical and semantic properties, annotate interactions, and integrate the result into executable tasks. We present RoboCousin, an extensible simulation-based data-generation platform that turns user-provided observations into reusable assets, scenes, and expert trajectories for bimanual manipulation. Built on RoboTwin~2.0, RoboCousin converts object images into simulation-ready assets with visual and collision geometry, semantic and physical metadata, and automatically generated grasp-contact candidates. It further constructs digital cousins that vary compatible objects, backgrounds, layouts, and language instructions while preserving task-relevant affordances and spatial relations. The same asset system supports tabletop and room-level scene construction, with collision-aware base control for interaction beyond a fixed workspace. We release RoboCousin-OBD, containing more than 3,000 annotated object instances and 50 background environments, and use RoboCousin to generate over one million expert trajectories across 50 tasks. Simulation and real-robot experiments show that the automatically generated interaction annotations are comparable to curated annotations, generated assets provide effective sim-to-real supervision, and tabletop cousins can improve transfer beyond training on a single reconstructed scene. RoboCousin therefore provides a practical path for expanding both the scale and coverage of synthetic bimanual manipulation data.",
+      "authors": [
+        "Jingxuan Zhu",
+        "Jingyi Li",
+        "LiangLiang Chen",
+        "Zhiyuan Jing",
+        "Jidong Zhang",
+        "Hongming Li"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.AI"
+      ],
+      "published": "2026-09-08T07:13:07+00:00",
+      "link": "https://arxiv.org/pdf/2609.08339v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "Simulation-based data generation platform for turning observations into assets, scenes, and trajectories; directly addresses robotics dataset construction.",
+      "llm_evidence_cn": "基于仿真的数据生成平台可将用户观测转成可复用资产、场景和专家轨迹，直接服务于机器人数据集构建。",
+      "llm_evidence": "基于仿真的数据生成平台可将用户观测转成可复用资产、场景和专家轨迹，直接服务于机器人数据集构建。",
+      "canonical_evidence": "基于仿真的数据生成平台可将用户观测转成可复用资产、场景和专家轨迹，直接服务于机器人数据集构建。",
+      "llm_tldr_en": "RoboCousin is an extensible simulation data-generation platform that turns user-provided observations into reusable assets, scenes, and expert trajectories for bimanual manipulation, dramatically reducing dataset collection effort.",
+      "llm_tldr_cn": "在现实机器人上收集双臂操控示范成本高、难以扩展，而现有仿真管线往往依赖封闭资产库和预设场景。本文提出RoboCousin，一个基于RoboTwin 2.0构建的可扩展仿真数据生成平台：用户只需提供对新物体/环境的观测，系统即可重建几何、赋予物理与语义属性、标注交互并生成可执行任务和专家轨迹。该工具显著降低为新增目标构建仿真训练集的门槛，为机器人操控策略提供大规模、多样化合成数据，是机器人数据集构建领域的重要基础工具。",
+      "llm_tldr": "在现实机器人上收集双臂操控示范成本高、难以扩展，而现有仿真管线往往依赖封闭资产库和预设场景。本文提出RoboCousin，一个基于RoboTwin 2.0构建的可扩展仿真数据生成平台：用户只需提供对新物体/环境的观测，系统即可重建几何、赋予物理与语义属性、标注交互并生成可执行任务和专家轨迹。该工具显著降低为新增目标构建仿真训练集的门槛，为机器人操控策略提供大规模、多样化合成数据，是机器人数据集构建领域的重要基础工具。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2609.03715v1",
+      "source": "arxiv",
+      "title": "MINERVA: How Small Can a Manipulation Policy Be and Still Solve LIBERO?",
+      "abstract": "Vision-language-action (VLA) models with billions of parameters now dominate the LIBERO manipulation benchmark, but the model capacity actually required by the benchmark remains unclear. We introduce MINERVA (MINimal Efficient Robotic Vision-Action policy), a family of deliberately compact visuomotor policies designed to measure this task-specific capacity floor. A 0.54M-parameter policy achieves 95.1% average success over 2,000 rollouts on the four standard LIBERO suites, only 2.4 points below the reported LeRobot $π_{0.5}$ result despite using 7,700$\\times$ fewer parameters. Performance saturates near 1M parameters and collapses below 0.25M. Across broad architectural, training, and inference sweeps, only action-chunk length and vision capacity consistently exceed a $\\pm$1-point training-seed band. Flow matching provides no detectable advantage over direct L1 regression across three seeds, while regression is up to 3.8$\\times$ faster on GPU. A task-ID permutation probe shows that standard LIBERO instruction conditioning primarily selects among memorized tasks: changing only the task-ID mapping reduces success to near chance. The same recipe achieves 94.6% success across 89 LIBERO-90 tasks, while LIBERO-Plus perturbations reduce performance to 46--56%, with near-zero robustness to photometric shifts. The 0.54M policy replans every control step in 5--9 ms per chunk on a laptop CPU, 113$\\times$ faster than SmolVLA and 1,400$\\times$ faster than $π_{0.5}$, without a GPU. These results establish a first empirical estimate of LIBERO's task-specific capacity floor and motivate capacity-aware design and distillation for deployment-efficient robot policies.",
+      "authors": [
+        "Kohei Sendai",
+        "Tatsuya Matsushima",
+        "Yusuke Iwasawa"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-09-03T11:51:10+00:00",
+      "link": "https://arxiv.org/pdf/2609.03715v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "Shows compact 0.54M-parameter policy approaches billion-parameter VLA performance, supporting lightweight models for edge deployment on robots.",
+      "llm_evidence_cn": "极紧凑的54万参数操控策略即可接近大模型性能，为机器人边缘端部署轻量化策略提供了实证支持。",
+      "llm_evidence": "极紧凑的54万参数操控策略即可接近大模型性能，为机器人边缘端部署轻量化策略提供了实证支持。",
+      "canonical_evidence": "极紧凑的54万参数操控策略即可接近大模型性能，为机器人边缘端部署轻量化策略提供了实证支持。",
+      "llm_tldr_en": "MINERVA shows a 0.54M-parameter visuomotor policy reaches 95.1% success on LIBERO, close to a 7,700x larger model, establishing a capacity floor with clear implications for edge deployment.",
+      "llm_tldr_cn": "尽管数十亿参数的视觉-语言-动作模型主导LIBERO基准，但其真正所需的最小容量一直不清楚。作者提出极紧凑的MINERVA策略族来测量该容量下限：仅0.54M参数的策略在4个标准LIBERO套件中经过2000次rollout取得95.1%平均成功率，仅比千亿参数模型低2.4个百分点且参数量少7700倍。结果表明性能在约1M参数附近饱和、低于0.25M则崩溃，这对在嵌入式平台上部署机器人操控策略具有直接启发。",
+      "llm_tldr": "尽管数十亿参数的视觉-语言-动作模型主导LIBERO基准，但其真正所需的最小容量一直不清楚。作者提出极紧凑的MINERVA策略族来测量该容量下限：仅0.54M参数的策略在4个标准LIBERO套件中经过2000次rollout取得95.1%平均成功率，仅比千亿参数模型低2.4个百分点且参数量少7700倍。结果表明性能在约1M参数附近饱和、低于0.25M则崩溃，这对在嵌入式平台上部署机器人操控策略具有直接启发。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "edge deployment for humanoid robots",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2609.08804v1",
+      "source": "arxiv",
+      "title": "Real-time Puncture Detection and Recovery for Pneumatic Soft Actuators",
+      "abstract": "Soft robots offer safe and adaptive interaction with humans and unstructured environments through their inherent ability to deform and comply. Pneumatic actuators are one way to build soft robots. They are typically made from soft silicone materials and are especially effective for driving such systems, enabling smooth and adaptable motion. However, their compliant nature also makes them vulnerable to mechanical failures like punctures and tears, limiting practical deployment. To address this, we propose a puncture detection system for soft actuators using motion data from a single inertial measurement unit. Extracted features are used to train anomaly detectors for puncture detection and non-linear models to estimate severity. We also introduce a multi-chamber pneumatic soft bending actuator capable of diverse configurations via selective chamber inflation. Our algorithm identifies the punctured chamber and provides a severity score using a chamber perturbation scheme. Anomaly detectors are trained on normal operation data and detect damage through reconstruction errors, while severity is estimated by a separate model trained under slightly modified conditions. Finally, we demonstrate a failure recovery strategy to maintain actuation force post-failure. This approach enhances the reliability and safety of soft robotic systems through real-time, data-driven damage detection.",
+      "authors": [
+        "Tejonidhi R. Deshpande",
+        "Tingyu Cheng",
+        "Josiah Hester"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-09-08T14:31:59+00:00",
+      "link": "https://arxiv.org/pdf/2609.08804v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "Uses IMU motion features with anomaly detectors for real-time puncture fault detection and recovery in robots, a transferable proprioceptive-based anomaly diagnosis method",
+      "llm_evidence_cn": "基于IMU运动数据训练异常检测器实现软体机器人刺穿故障检测，是本体感受信号用于机器人故障诊断的可迁移方法",
+      "llm_evidence": "基于IMU运动数据训练异常检测器实现软体机器人刺穿故障检测，是本体感受信号用于机器人故障诊断的可迁移方法",
+      "canonical_evidence": "基于IMU运动数据训练异常检测器实现软体机器人刺穿故障检测，是本体感受信号用于机器人故障诊断的可迁移方法",
+      "llm_tldr_en": "Proposes a real-time puncture detection and recovery system for pneumatic soft actuators, using features from a single IMU to train anomaly detectors and nonlinear severity models; demonstrates that proprioceptive motion data can catch mechanical faults in soft robots, which can inform other robot anomaly diagnosis.",
+      "llm_tldr_cn": "软体气动执行器易受刺穿等机械失效影响，制约实际部署。论文提出仅利用单个惯性测量单元的运动数据，提取特征训练异常检测器以实时识别刺穿，并用非线性模型估计故障严重程度，同时引入多级恢复策略。在软执行器上的实验表明该方案能够有效检测故障并提升可用性。该方法为基于本体感受信号的机器人故障诊断提供了可迁移思路，不过并非人形机器人领域。",
+      "llm_tldr": "软体气动执行器易受刺穿等机械失效影响，制约实际部署。论文提出仅利用单个惯性测量单元的运动数据，提取特征训练异常检测器以实时识别刺穿，并用非线性模型估计故障严重程度，同时引入多级恢复策略。在软执行器上的实验表明该方案能够有效检测故障并提升可用性。该方法为基于本体感受信号的机器人故障诊断提供了可迁移思路，不过并非人形机器人领域。",
+      "llm_tags": [
+        "query:humanoid-ood"
+      ],
+      "matched_query_tag": "query:humanoid-ood",
+      "matched_query_text": "humanoid robot fault diagnosis using proprioceptive signals",
+      "matched_requirement_id": "req-9",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2609.05927v1",
+      "source": "arxiv",
+      "title": "GIF: Agentic Generation of Interactive and Functional Object Compositions for Robot Learning",
+      "abstract": "Robot manipulation foundation models require scalable evaluation and data generation across diverse scenarios, with simulation providing an environment for both. Automated scene generation offers a promising path, yet prior work has largely emphasized coarse-grained scene layouts rather than fine-grained functional object compositions. Motivated by this gap, we present GIF, an agentic Generation framework for Interactive and Functional object compositions. In this framework, we recast this problem as disentangled reconstruction followed by relative pose recovery. CoGen produces instance-disentangled meshes with coarse initial poses leveraging complementary strengths of 2D and 3D generative models. GPRM refines the relative pose under joint geometric and physical guidance, and a VLM verifier selects the candidate that best matches the structured specification. We further construct a benchmark spanning eight representative contact-geometry classes and compare with state-of-the-art generators; GIF improves both asset quality and relation matching, while reducing collision rate to below 1%. Finally, we synthesize data for policy learning, revealing diversity scaling in both simulation and real-world deployment.",
+      "authors": [
+        "Long Xu",
+        "Zhiqi Zhang",
+        "Mi Yan",
+        "Shengliang Deng",
+        "Chong Xia",
+        "Mingyu Dong",
+        "Jiayi Chen",
+        "Jiangran Lyu",
+        "Fei Gao",
+        "Zhizheng Zhang",
+        "He Wang"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-09-05T06:36:20+00:00",
+      "link": "https://arxiv.org/pdf/2609.05927v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "agentic generation of interactive and functional object compositions for robot learning; addresses scalable data generation in simulation for robot dataset construction",
+      "llm_evidence_cn": "代理式生成交互与功能性物体组合用于机器人学习数据生成，与机器人数据集构建相关",
+      "llm_evidence": "代理式生成交互与功能性物体组合用于机器人学习数据生成，与机器人数据集构建相关",
+      "canonical_evidence": "代理式生成交互与功能性物体组合用于机器人学习数据生成，与机器人数据集构建相关",
+      "llm_tldr_en": "Proposes GIF, an agentic framework combining CoGen and GPRM to generate instance-disentangled interactive object scenes and refine relative poses, enabling scalable evaluation and data generation for robot manipulation foundation models.",
+      "llm_tldr_cn": "机器人操作基础模型需要在仿真中评估并生成多样化场景数据，但以往自动场景生成多侧重粗粒度布局，缺乏功能交互。该论文提出GIF框架，将问题分解为解耦重建与相对位姿恢复：CoGen利用二维和三维生成模型的互补优势产出实例级网格与初始位姿，GPRM进一步精化物体间相对位姿，从而构建可交互和功能合理的物体组合。这为机器人学习提供了自动化、可扩展的仿真数据生成途径，属于机器人数据集构建的一种重要补充。",
+      "llm_tldr": "机器人操作基础模型需要在仿真中评估并生成多样化场景数据，但以往自动场景生成多侧重粗粒度布局，缺乏功能交互。该论文提出GIF框架，将问题分解为解耦重建与相对位姿恢复：CoGen利用二维和三维生成模型的互补优势产出实例级网格与初始位姿，GPRM进一步精化物体间相对位姿，从而构建可交互和功能合理的物体组合。这为机器人学习提供了自动化、可扩展的仿真数据生成途径，属于机器人数据集构建的一种重要补充。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2609.06114v1",
+      "source": "arxiv",
+      "title": "Where Success Breaks: Failure-Boundary Learning for Robust Vision-Language-Action Models",
+      "abstract": "Vision-language-action (VLA) models adapted through supervised fine-tuning (SFT) inherit a structural asymmetry: expert demonstrations teach the policy where success behavior lies, but provide no signal about where it ceases to be reliable. We argue that robust VLA adaptation should therefore be viewed not as further demonstration fitting, but as **Failure-Boundary Learning**---the problem of *Discovering*, *Localizing*, and *Shaping* the boundary between recoverable deviations and task failure. To instantiate this view, we propose **DLS**: built on a **real-grounded behavioral prior** from few real demonstrations and simulated co-training, DLS *discovers* failure boundaries at scale through on-policy digital twin rollouts. Rather than reducing each rollout to a binary label, **semantic progress localization** uses privileged simulator states to assign progress-aware signals that capture *where* the failure boundary is crossed, not merely *whether*. These signals drive **directional boundary shaping** in the flow dynamics---reinforcing success-producing denoising directions and suppressing failure-producing ones, without action likelihoods or auxiliary critics. Across real-robot manipulation tasks, DLS improves robustness over SFT and online RL baselines, especially under randomized initial states and unseen visual conditions.",
+      "authors": [
+        "Yanzhe Chen",
+        "Zhijun Cao",
+        "Mike Zheng Shou"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-09-05T14:24:16+00:00",
+      "link": "https://arxiv.org/pdf/2609.06114v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "failure-boundary learning localizes where policies fail, relevant to OOD/safe robot operation and error analysis",
+      "llm_evidence_cn": "失败边界学习定位策略失效区域，与安全运行中的OOD/误差分析相关",
+      "llm_evidence": "失败边界学习定位策略失效区域，与安全运行中的OOD/误差分析相关",
+      "canonical_evidence": "失败边界学习定位策略失效区域，与安全运行中的OOD/误差分析相关",
+      "llm_tldr_en": "Expert demonstrations show VLA policies where success lies but not where it breaks. DLS formulates failure-boundary learning, discovering and shaping success-failure boundaries via real-grounded priors and digital-twin rollouts, improving robustness and supporting safe OOD/failure analysis in robot operation.",
+      "llm_tldr_cn": "演示驱动的VLA模型存在结构不对称：示范告诉策略成功在哪里，却没有提示成功何时不再可靠。本文将鲁棒适应重新定义为失败边界学习，提出DLS，基于少量真实演示和仿真协同构建行为先验，再通过数字孪生滚动大规模发现、定位并塑造可恢复偏差与任务失败之间的边界。实验表明该方法能提高VLA模型在边界附近的鲁棒性。其定位失效边界的思想可直接服务于机器人的安全运行与误差分析，对OOD检测也有参考价值。",
+      "llm_tldr": "演示驱动的VLA模型存在结构不对称：示范告诉策略成功在哪里，却没有提示成功何时不再可靠。本文将鲁棒适应重新定义为失败边界学习，提出DLS，基于少量真实演示和仿真协同构建行为先验，再通过数字孪生滚动大规模发现、定位并塑造可恢复偏差与任务失败之间的边界。实验表明该方法能提高VLA模型在边界附近的鲁棒性。其定位失效边界的思想可直接服务于机器人的安全运行与误差分析，对OOD检测也有参考价值。",
+      "llm_tags": [
+        "query:humanoid-ood"
+      ],
+      "matched_query_tag": "query:humanoid-ood",
+      "matched_query_text": "out-of-distribution detection for safe robot operation",
+      "matched_requirement_id": "req-11",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2609.06279v1",
+      "source": "arxiv",
+      "title": "IM-ENGINE: Image Editing for Embodied Data Generation",
+      "abstract": "Learning-based manipulation requires supervision that is both semantically meaningful and physically executable, but current data pipelines often provide only one of these properties. Human demonstrations capture intent but are costly to collect and constrained by the human-robot embodiment gap, while simulation can scale data generation but often under-specifies functional behavior. We present IM-ENGINE, a simulator-grounded pipeline that uses image editing as an intermediate representation for embodied data generation. Given a rendered scene with known geometry, depth, segmentation, and camera parameters, IM-ENGINE edits the image to inject task-relevant semantics, recovers explicit 3D state using simulator priors and an unchanged anchor object, refines the state in physics, and converts it into robot-executable supervision. We instantiate the pipeline for dexterous grasp synthesis and goal-state generation. For grasping, IM-ENGINE generates a human grasp in image space, recovers the hand-object interaction, retargets it to a robot hand, and refines it into physically validated robot grasps. For goal generation, it edits a rendered scene into a desired outcome, recovers the target-object pose, and refines it into physically valid, semantically meaningful goals and trajectories. This combination of generative semantic priors and simulator grounding enables scalable task-relevant supervision for robot learning.",
+      "authors": [
+        "Yian Wang",
+        "Junyi Cao",
+        "Xiaowen Qiu",
+        "Chuang Gan"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.CV"
+      ],
+      "published": "2026-09-05T22:21:34+00:00",
+      "link": "https://arxiv.org/pdf/2609.06279v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "Embodied data generation via image editing and simulator grounding for robot learning datasets",
+      "llm_evidence_cn": "基于图像编辑与仿真器接地构建机器人学习数据的数据生成管线",
+      "llm_evidence": "基于图像编辑与仿真器接地构建机器人学习数据的数据生成管线",
+      "canonical_evidence": "基于图像编辑与仿真器接地构建机器人学习数据的数据生成管线",
+      "llm_tldr_en": "IM-ENGINE generates rich embodied robot data by editing rendered images to inject task semantics, then recovering explicit 3D states with simulator priors and refining them. It bridges semantic richness and physical executability, enabling scalable training-data construction without costly human demos.",
+      "llm_tldr_cn": "当前机器人学习数据管线难以兼得语义丰富性与物理可执行性，人工演示成本高且受人类-机器人形态差异限制，仿真数据又常忽略功能行为。本文提出IM-ENGINE，以图像编辑作为中间表示，利用渲染场景的几何、深度、分割与相机参数注入任务相关语义，再借助仿真器先验恢复显式3D状态并加以精炼。该方法可扩展地生成语义与物理一致的操作数据，为机器人数据集的规模化构建提供了新路径。",
+      "llm_tldr": "当前机器人学习数据管线难以兼得语义丰富性与物理可执行性，人工演示成本高且受人类-机器人形态差异限制，仿真数据又常忽略功能行为。本文提出IM-ENGINE，以图像编辑作为中间表示，利用渲染场景的几何、深度、分割与相机参数注入任务相关语义，再借助仿真器先验恢复显式3D状态并加以精炼。该方法可扩展地生成语义与物理一致的操作数据，为机器人数据集的规模化构建提供了新路径。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2609.07440v1",
+      "source": "arxiv",
+      "title": "Open-Set Ego-Noise Separation for Legged-Robot Audition via Annotation-Free Adaptation and Pretrained-Model Transfer",
+      "abstract": "This paper proposes an open-set ego-noise separation framework for legged-robot audition via annotation-free adaptation and pretrained-model transfer. The framework removes robot-specific ego-noise while preserving environmental sounds whose classes are not specified in advance. Acoustic sensing provides cues about a robot's surroundings beyond the visual field, but walking-induced ego-noise from footstep impacts, joint-backlash rattling, and motor noise severely contaminates the recordings. The framework first uses RecurGraph to select ego-noise-dominant clips from the unlabeled recordings by aggregating clip embeddings into an embedding centroid and propagating scores over an audio-embedding graph. The selected clips are mixed with diverse environmental sounds from a large-scale sound-event dataset to provide paired mixture--target supervision for open-set separation. Transfer-DiT then adapts a general-purpose zero-shot neural separator to achieve high-fidelity open-set ego-noise separation for the target robot. Experiments with bipedal and quadrupedal robots show reliable clip selection and improvements in separation quality and downstream task performance over baseline separators. These results demonstrate the feasibility of annotation-free adaptation without separately recorded ego-noise-only data or manual clip-level annotations.",
+      "authors": [
+        "Koki Shoda",
+        "Jun Younes Louhi Kasahara",
+        "Aoba Koyanagi",
+        "Qi An",
+        "Atsushi Yamashita"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-09-07T12:49:36+00:00",
+      "link": "https://arxiv.org/pdf/2609.07440v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "open-set ego-noise separation for legged-robot audition; relates to open-set recognition in robotics for safety and anomaly detection",
+      "llm_evidence_cn": "面向腿式机器人听觉的开放集自我噪声分离，关联机器人开放集识别与安全异常检测",
+      "llm_evidence": "面向腿式机器人听觉的开放集自我噪声分离，关联机器人开放集识别与安全异常检测",
+      "canonical_evidence": "面向腿式机器人听觉的开放集自我噪声分离，关联机器人开放集识别与安全异常检测",
+      "llm_tldr_en": "Proposes an annotation-free open-set framework for legged-robot audition that separates robot ego-noise from unknown environmental sounds using RecurGraph selection and pretrained-model transfer, supporting robot safety beyond known audio classes.",
+      "llm_tldr_cn": "腿式机器人行走时产生的脚步冲击、关节抖动和电机噪声会严重污染环境声音采集。该论文提出开放集自我噪声分离框架，通过RecurGraph在无标注音频中筛选自我噪声主导片段，并利用预训练模型迁移实现无标注适配。它能够去除机器人特有的自我噪声，同时保留类别未预先指定的环境声音，使机器人在开放世界中仍保持听觉安全。该研究为机器人开放集感知与未知异常检测提供了可借鉴的方法。",
+      "llm_tldr": "腿式机器人行走时产生的脚步冲击、关节抖动和电机噪声会严重污染环境声音采集。该论文提出开放集自我噪声分离框架，通过RecurGraph在无标注音频中筛选自我噪声主导片段，并利用预训练模型迁移实现无标注适配。它能够去除机器人特有的自我噪声，同时保留类别未预先指定的环境声音，使机器人在开放世界中仍保持听觉安全。该研究为机器人开放集感知与未知异常检测提供了可借鉴的方法。",
+      "llm_tags": [
+        "query:humanoid-ood"
+      ],
+      "matched_query_tag": "query:humanoid-ood",
+      "matched_query_text": "Open set recognition in robotics for safety and anomaly detection",
+      "matched_requirement_id": "req-17",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2609.07838v1",
+      "source": "arxiv",
+      "title": "ComVLA: Communication-Aware Split Inference for VLA Models in 6G-Connected Robotics",
+      "abstract": "Connected robotics is an emerging 6G application where mobile robots follow natural-language instructions to manipulate physical objects. The Vision-Language-Action (VLA) models that enable this are too large to run on the robot; a common trend is to offload inference to the cloud. The wireless link, however, limits how much sensing data the edge can transmit per control step. Two recent lines address this constraint: semantic communication codecs compress sensor data but require channel-specific retraining, and VLA token pruners select tokens from image but ignore the channel. Our insight is that the dense semantic information contained in the language already indicates which visual tokens matter. We propose ComVLA, a framework that uses this language guidance to adapt the VLA token budget to the channel capacity. Transmitting 32 tokens instead of 512 on the LIBERO benchmark, ComVLA cuts inference compute by 74% and inference latency by 22% versus the original OpenVLA-OFT baseline, at a cost of 1.5 pp in average task success (95.4% vs. 96.9%), and it stays within the capacity budget under Rayleigh and Rician fading. These results demonstrate that co-designing VLA inference and wireless communication is a practical direction for 6G-connected robotics.",
+      "authors": [
+        "Boliang Liu",
+        "Wint Yi Poe",
+        "Jingyun Di",
+        "Riccardo Trivisonno",
+        "Giuseppe Caire"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-09-07T18:00:14+00:00",
+      "link": "https://arxiv.org/pdf/2609.07838v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "split inference for edge/cloud deployment of VLA models in connected robotics; robots too large to run on-device",
+      "llm_evidence_cn": "面向互联机器人将VLA模型拆分为边缘/云部署，解决机器人端算力不足与无线带宽限制",
+      "llm_evidence": "面向互联机器人将VLA模型拆分为边缘/云部署，解决机器人端算力不足与无线带宽限制",
+      "canonical_evidence": "面向互联机器人将VLA模型拆分为边缘/云部署，解决机器人端算力不足与无线带宽限制",
+      "llm_tldr_en": "Large VLA models cannot run fully on robots and wireless channels limit per-step sensory upload. ComVLA uses language semantics to identify important visual tokens, enabling communication-aware split inference over edge/cloud and advancing practical edge deployment in connected robotics.",
+      "llm_tldr_cn": "6G互联机器人需要用VLA模型按自然语言指令操作，但模型太大难以在机器人上运行，而无线链路又限制了每控制步向云边传输的数据量。ComVLA提出由语言指令自身的语义信息来决定哪些视觉token是关键，并据此在通信约束下做拆分推理，无需针对每个信道重新训练语义编解码器。实验表明该方法在有限带宽下能更高效地完成VLA推理。这种边缘/云端协同部署思路可用于机器人边缘计算场景，但与轻量时序异常检测和本体感受故障诊断并不直接对应。",
+      "llm_tldr": "6G互联机器人需要用VLA模型按自然语言指令操作，但模型太大难以在机器人上运行，而无线链路又限制了每控制步向云边传输的数据量。ComVLA提出由语言指令自身的语义信息来决定哪些视觉token是关键，并据此在通信约束下做拆分推理，无需针对每个信道重新训练语义编解码器。实验表明该方法在有限带宽下能更高效地完成VLA推理。这种边缘/云端协同部署思路可用于机器人边缘计算场景，但与轻量时序异常检测和本体感受故障诊断并不直接对应。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "edge deployment for humanoid robots",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    }
+  ]
+}
