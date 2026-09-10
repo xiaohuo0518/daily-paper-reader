@@ -1,0 +1,24 @@
+{
+  "label": "2026-09-10",
+  "date": "2026-09-10",
+  "generated_at": "2026-09-10T21:43:19",
+  "count": 1,
+  "papers": [
+    {
+      "paper_id": "202609/10/2609.06508v1-vla-corrector-stage-aware-observable-state-understanding-for-prompt-based-closed-loop-recovery-of-vision-language-action-policies",
+      "section": "quick",
+      "title_en": "VLA-Corrector: Stage-Aware Observable State Understanding for Prompt-Based Closed-Loop Recovery of Vision-Language-Action Policies",
+      "authors": "Chang Song, Bin Qian, Yan Feng, Zhijie Song",
+      "date": "2026-09-06",
+      "pdf": "https://arxiv.org/pdf/2609.06508v1",
+      "score": "6.0",
+      "evidence": "阶段感知失败验证与机器人操作错误诊断",
+      "tldr": "长程机器人操作中，VLA 策略易受执行偏差影响，而最终成败难以诊断失败原因。本文提出阶段感知的失败校验与提示恢复框架，用基于可观测历史的 Learned Verifier 联合估计操作进度与执行风险，并在检测异常时生成阶段条件恢复提示，让冻结的 VLA 策略输出纠正动作。在 LIBERO 与 LIBERO Plus 上多轮评测显著提升闭环可靠性，无需特权状态即可接近特权规则校验器。",
+      "tags": "query:ur",
+      "abstract_en": "Long-horizon robot manipulation with Vision-Language-Action (VLA) policies remains vulnerable to execution-time deviations, as final task success provides little information for diagnosing and correcting failures caused by action noise, object displacement, or goal misalignment. We introduce a stage-aware failure verification and Prompt Recovery framework that enables closed-loop correction of a fixed VLA policy without parameter updates or privileged simulator states. The framework introduces an observable-history-based Learned Verifier that jointly estimates manipulation progress and execution risk by temporally modeling multi-view visual observations, proprioceptive states, and executed actions. To provide interpretable task understanding, we represent manipulation execution through semantic progress stages, including approach, alignment, grasp, transport, and placement, and identify stage-specific failure patterns. Upon detecting abnormal execution, the framework preserves the original instruction and generates a stage-conditioned recovery prompt, allowing the same frozen VLA policy to produce corrective actions. Extensive multi-round evaluations on LIBERO and LIBERO Plus demonstrate that the proposed approach substantially improves closed-loop reliability under diverse perturbations. Without access to privileged object or goal coordinates, the Learned Verifier achieves recovery performance close to that of the privileged rule-based verifier in the evaluated settings. These results show that observable visual-proprioceptive-action history is sufficient to infer latent task states and enable practical failure recovery for existing VLA policies.",
+      "source": "arxiv",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "errors": []
+}
