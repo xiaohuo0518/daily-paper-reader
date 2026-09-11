@@ -1,0 +1,153 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-09-11T21:37:21.601929+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 2,
+    "deep_divecandidates": 0,
+    "deep_cap": 7,
+    "deep_selected": 0,
+    "quick_candidates": 3,
+    "quick_skim_target": 12,
+    "quick_selected": 3
+  },
+  "deep_dive": [],
+  "quick_skim": [
+    {
+      "id": "2609.11445v1",
+      "source": "arxiv",
+      "title": "FARM: Reading Failure Signals from the Internal Predictive States of a Frozen Robotic World Model",
+      "abstract": "Reliable robot deployment requires online failure monitoring, yet existing monitors mainly derive risk from proxy signals or train dedicated monitoring components. We ask whether the internal predictive states of a frozen pretrained robotic world model already contain directly decodable failure information. Failure-Aware Readout from World Models (FARM) trains only a 33,985-parameter supervised readout over frozen VLA-JEPA predictive states, producing step-wise failure scores and causal trajectory risk. Five-fold out-of-fold evaluation across seven source tasks reaches 85.68/88.59 pooled AUROC/AUPRC, and FARM gives the best Seen performance among 15 matched baselines on the 10-task benchmark. Across four real-robot populations on PIPER X, SO-101, and Franka, fixed-readout transfer and readout-only adaptation test deployment shifts without updating the predictive backbone. FARM also discriminates failures from partial causal histories and adds 0.2256 ms mean CUDA latency once the frozen state is available. These results support frozen predictive world-model states as reusable features for causal, transferable, and low-overhead execution monitoring.",
+      "authors": [
+        "Haoran Pei",
+        "Mingrui Luo",
+        "Senbao Wang",
+        "Haoran Lv",
+        "Jie Guo",
+        "Sheng Zhong",
+        "Ruixi Ci"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-09-10T12:14:37+00:00",
+      "link": "https://arxiv.org/pdf/2609.11445v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "online robot failure monitoring via lightweight readout over frozen world model states",
+      "llm_evidence_cn": "基于冻结世界模型状态的轻量在线机器人故障监测",
+      "llm_evidence": "基于冻结世界模型状态的轻量在线机器人故障监测",
+      "canonical_evidence": "基于冻结世界模型状态的轻量在线机器人故障监测",
+      "llm_tldr_en": "Reliable robot deployment needs online failure monitoring, but existing monitors rely on proxy signals or dedicated training. FARM trains only a 33,985-parameter readout over frozen VLA-JEPA predictive states to output step-wise failure scores, reaching 85.68/88.59 AUROC/AUPRC.",
+      "llm_tldr_cn": "可靠部署机器人需要在线故障监测，但现有监测器多依赖代理信号或额外训练专用组件。本文提出FARM，仅在冻结的机器人世界模型（VLA-JEPA）内部预测状态上训练约3.4万参数的监督读出层，输出逐步失败分数与因果轨迹风险。在七个源任务上五折评估达到85.68/88.59的AUROC/AUPRC，并在十任务基准上优于15个匹配基线。该工作表明预训练世界模型的内部状态已蕴含可直接解码的故障信号，为轻量在线故障诊断提供了新思路。",
+      "llm_tldr": "可靠部署机器人需要在线故障监测，但现有监测器多依赖代理信号或额外训练专用组件。本文提出FARM，仅在冻结的机器人世界模型（VLA-JEPA）内部预测状态上训练约3.4万参数的监督读出层，输出逐步失败分数与因果轨迹风险。在七个源任务上五折评估达到85.68/88.59的AUROC/AUPRC，并在十任务基准上优于15个匹配基线。该工作表明预训练世界模型的内部状态已蕴含可直接解码的故障信号，为轻量在线故障诊断提供了新思路。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "fault detection in humanoid robots",
+      "matched_requirement_id": "req-6",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2609.08511v2",
+      "source": "arxiv",
+      "title": "PGMT: Perceptive General Motion Tracking for Humanoid Robots",
+      "abstract": "Humanoid motion trackers can reproduce diverse whole-body motions, but their performance degrades on complex terrain where terrain-agnostic references become physically infeasible. We present PGMT, a Perceptive General Motion Tracking pipeline for humanoid robots that learns terrain adaptation from independently selected motion references and terrains. PGMT first learns a general tracking and recovery prior, then incorporates terrain perception through motion-conditioned terrain glimpses that selectively encode regions relevant to the current motion. Terrain-aware tracking relaxation allows necessary deviations from the reference while preserving its motion intent. Zero-shot deployment on a Unitree G1 demonstrates robust terrain-adaptive locomotion and whole-body motion execution over real-world terrain with obstacles up to 37 cm high, while supporting teleoperation, dynamic motion tracking, and fall recovery. PGMT extends general humanoid motion tracking beyond flat ground, providing a unified policy for terrain-adaptive locomotion, diverse whole-body behaviors, and teleoperation in complex environments. Project homepage: https://luyili.github.io/pgmt/",
+      "authors": [
+        "Hongyi Li",
+        "Li Peizhuo",
+        "Yucheng Tao",
+        "Ze Wang",
+        "Fangzhou Xu",
+        "Jinyi Chen",
+        "Yanyan Yuan",
+        "Dapeng Jia",
+        "Yongbin Jin",
+        "Mingfeng Fan",
+        "Guillaume Sartoretti",
+        "Hongtao Wang"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-09-08T09:57:32+00:00",
+      "link": "https://arxiv.org/pdf/2609.08511v2",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "zero-shot deployment on a Unitree G1 humanoid",
+      "llm_evidence_cn": "在宇树G1人形机器人上零样本部署",
+      "llm_evidence": "在宇树G1人形机器人上零样本部署",
+      "canonical_evidence": "在宇树G1人形机器人上零样本部署",
+      "llm_tldr_en": "PGMT learns terrain-adaptive humanoid motion tracking by first acquiring a general tracking-and-recovery prior, then injecting terrain perception via motion-conditioned glimpses, deployed zero-shot on a Unitree G1.",
+      "llm_tldr_cn": "针对人形运动跟踪器在复杂地形上性能退化、地形无关参考动作物理上不可行的问题，本文提出PGMT感知式通用运动跟踪流程。方法先学习通用跟踪与恢复先验，再通过运动条件地形线索选择性编码与当前动作相关的区域，并采用地形感知的跟踪松弛。结果在宇树G1上零样本部署实现稳健的地形自适应运动与全身跟踪，验证了感知式跟踪在人形机器人部署中的有效性。",
+      "llm_tldr": "针对人形运动跟踪器在复杂地形上性能退化、地形无关参考动作物理上不可行的问题，本文提出PGMT感知式通用运动跟踪流程。方法先学习通用跟踪与恢复先验，再通过运动条件地形线索选择性编码与当前动作相关的区域，并采用地形感知的跟踪松弛。结果在宇树G1上零样本部署实现稳健的地形自适应运动与全身跟踪，验证了感知式跟踪在人形机器人部署中的有效性。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "edge deployment of Unitree robots research",
+      "matched_requirement_id": "req-8",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2609.10706v1",
+      "source": "arxiv",
+      "title": "HuRo: Robotizing Human Videos for Scalable VLA Pretraining",
+      "abstract": "Human video datasets have emerged as a compelling alternative to expensive real-robot data, offering rich diversity at scale. To bridge the human-to-robot embodiment gap, existing approaches either robotize videos in task-matched settings or address observation and action alignment separately at scale. In this work, we systematically examine whether robotized human videos can provide effective and scalable supervision for pretraining vision-language-action (VLA) policies. To this end, we develop a robotization pipeline that converts heterogeneous human videos into robot-aligned observations and action trajectories while inferring missing intermediate signals across annotation levels. Using this pipeline, we construct the HuRo dataset, comprising about 630K robotized episodes and 142M processed frames from five human-video sources. Across four real-world manipulation tasks, increasing robotized pretraining scale improves overall completion from 51.5% to 80.3% and OOD completion under spatial and visual shifts from 34.9% to 72.2%. Ablations further show that visual robotization improves OOD robustness and that end-to-end pretraining with retargeted actions outperforms visual-only transfer. Code and data are released on our website: https://3587jjh.github.io/HuRo.",
+      "authors": [
+        "Jinho Jeong",
+        "Se June Joo",
+        "Jaehyun Kang",
+        "Dongyun Kim",
+        "Yena Kim",
+        "Hanjung Kim",
+        "Seon Joo Kim"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.CV",
+        "cs.LG"
+      ],
+      "published": "2026-09-09T18:02:05+00:00",
+      "link": "https://arxiv.org/pdf/2609.10706v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "Constructs HuRo robotized dataset for scalable VLA pretraining",
+      "llm_evidence_cn": "构建HuRo机器人化数据集用于可扩展VLA预训练",
+      "llm_evidence": "构建HuRo机器人化数据集用于可扩展VLA预训练",
+      "canonical_evidence": "构建HuRo机器人化数据集用于可扩展VLA预训练",
+      "llm_tldr_en": "HuRo addresses the human-to-robot embodiment gap by robotizing heterogeneous human videos into robot-aligned observations and action trajectories, constructing a 630K-sample dataset that enables scalable VLA pretraining.",
+      "llm_tldr_cn": "该工作针对真实机器人数据昂贵、人类视频与机器人本体存在具身鸿沟的问题，提出机器人化流水线，将异构人类视频转换为机器人对齐的观测与动作轨迹，并推断缺失的中间信号。基于该流水线构建了约63万条样本的HuRo数据集，用于视觉-语言-动作策略预训练，验证了机器人化人类视频可作为可扩展监督信号，为机器人数据集构建提供了新途径。",
+      "llm_tldr": "该工作针对真实机器人数据昂贵、人类视频与机器人本体存在具身鸿沟的问题，提出机器人化流水线，将异构人类视频转换为机器人对齐的观测与动作轨迹，并推断缺失的中间信号。基于该流水线构建了约63万条样本的HuRo数据集，用于视觉-语言-动作策略预训练，验证了机器人化人类视频可作为可扩展监督信号，为机器人数据集构建提供了新途径。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    }
+  ]
+}
