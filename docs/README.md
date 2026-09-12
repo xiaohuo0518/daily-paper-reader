@@ -6,30 +6,26 @@
 </div>
 
 ## 每次日报
-- 最新运行日期：2026-09-11
-- 运行时间：2026-09-11 21:38:55 UTC
+- 最新运行日期：2026-09-12
+- 运行时间：2026-09-12 21:26:51 UTC
 - 运行状态：成功
-- 本次总论文数：3
+- 本次总论文数：1
 - 精读区：0
-- 速读区：3
+- 速读区：1
 
 ### 今日简报（AI）
-2026-09-11 日报速读 3 篇机器人世界模型与 VLA 预训练新作，最高分 FARM 拿下 7.0。最值得看的是 FARM 用冻结世界模型的内部预测状态读取失败信号，以及 HuRo 把人类视频机器人化以扩展 VLA 预训练数据。普通读者可优先从 FARM 入手，理解机器人如何"预知"自己即将失败。
-- 详情：[/202609/11/README](/202609/11/README)
+今日速读 1 篇、精读挂零，焦点落在机器人 VLA 后训练数据筛选：RoboDrop 用局部梯度兼容性挑数据（6.0/10）。
+值得看的方向是“数据质量优先于数据数量”——用梯度兼容性判断哪些样本值得进入后训练，属于数据策展而非模型改结构。
+普通读者可先把它当作筛选思路参考，小规模复现对比一下不加筛选的效果，再决定是否深入。
+- 详情：[/202609/12/README](/202609/12/README)
 
 ### 精读区论文标签
 - 本次无精读推荐。
 
 ### 速读区论文标签
-1. [FARM: Reading Failure Signals from the Internal Predictive States of a Frozen Robotic World Model](/202609/11/2609.11445v1-farm-reading-failure-signals-from-the-internal-predictive-states-of-a-frozen-robotic-world-model)  
-   标签：评分：7.0/10、query:ur
-   evidence：基于冻结世界模型状态的轻量在线机器人故障监测
-2. [PGMT: Perceptive General Motion Tracking for Humanoid Robots](/202609/11/2609.08511v2-pgmt-perceptive-general-motion-tracking-for-humanoid-robots)  
+1. [RoboDrop: Curating VLA Post-Training Data via Local Gradient Compatibility](/202609/12/2609.10021v1-robodrop-curating-vla-post-training-data-via-local-gradient-compatibility)  
    标签：评分：6.0/10、query:ur
-   evidence：在宇树G1人形机器人上零样本部署
-3. [HuRo: Robotizing Human Videos for Scalable VLA Pretraining](/202609/11/2609.10706v1-huro-robotizing-human-videos-for-scalable-vla-pretraining)  
-   标签：评分：6.0/10、query:ur
-   evidence：构建HuRo机器人化数据集用于可扩展VLA预训练
+   evidence：通过检测执行错误与传感器漂移来筛选机器人数据集
 
 
 <div class="dpr-home-promo-card">

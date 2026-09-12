@@ -1,0 +1,60 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-09-12T21:25:51.376503+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 2,
+    "deep_divecandidates": 0,
+    "deep_cap": 7,
+    "deep_selected": 0,
+    "quick_candidates": 1,
+    "quick_skim_target": 12,
+    "quick_selected": 1
+  },
+  "deep_dive": [],
+  "quick_skim": [
+    {
+      "id": "2609.10021v1",
+      "source": "arxiv",
+      "title": "RoboDrop: Curating VLA Post-Training Data via Local Gradient Compatibility",
+      "abstract": "Vision--language--action (VLA) models acquire broad generalization through large-scale pretraining, yet adapting them to a new task and robot embodiment still requires post-training on newly collected data. Unlike pretraining, post-training targets task- and embodiment-specific adaptation, making it particularly sensitive to data quality. In practice, collected robot datasets often contain heterogeneous errors, including execution mistakes, sensor drift, and timestamp misalignment, which can impair post-training and policy performance. Manual inspection is costly, while existing data-cleaning methods are typically tailored to particular corruption types. To address these challenges, we introduce \\textsc{RoboDrop}, a data-curation framework that audits supervision using local gradient compatibility measured along the training trajectory as a proxy for its effect on post-training performance. During a one-epoch warm-up run, RoboDrop scores each candidate sample online by comparing its gradient with those of task-semantic and visually matched validation samples. The resulting sample scores are aggregated at the episode level, and a simple automatic post-processing rule converts them into filtering decisions. We evaluate RoboDrop on controlled observation--action corruptions, naturally suboptimal demonstrations in simulation, and real-robot datasets containing non-expert collection errors. Across these settings, RoboDrop more accurately distinguishes unreliable demonstrations than prior methods, while post-training on the curated data consistently yields stronger downstream policies, with average real-robot rollout success rising from $35.0\\%$ to $67.5\\%$. These results establish training-trajectory-aware, context-conditioned supervision auditing as an effective approach to robust VLA post-training.",
+      "authors": [
+        "Runze Xu",
+        "Yuanfan Xu",
+        "Cuijie Xu",
+        "Shuang Dai",
+        "Yining Li",
+        "Yu Wang",
+        "Jincheng Yu"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-09-09T10:55:10+00:00",
+      "link": "https://arxiv.org/pdf/2609.10021v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "curates robot datasets by detecting execution mistakes and sensor drift errors",
+      "llm_evidence_cn": "通过检测执行错误与传感器漂移来筛选机器人数据集",
+      "llm_evidence": "通过检测执行错误与传感器漂移来筛选机器人数据集",
+      "canonical_evidence": "通过检测执行错误与传感器漂移来筛选机器人数据集",
+      "llm_tldr_en": "RoboDrop curates VLA post-training robot data by scoring local gradient compatibility to automatically detect heterogeneous errors such as execution mistakes, sensor drift and timestamp misalignment.",
+      "llm_tldr_cn": "针对机器人后训练数据常含执行错误、传感器漂移与时间戳错位等异构错误、而人工检查昂贵且现有清洗方法只针对特定损坏类型的问题，本文提出RoboDrop数据筛选框架，基于局部梯度兼容性自动识别并剔除低质量样本。该工作提升了VLA后训练数据质量与策略性能，与机器人数据集构建及错误分析需求高度契合，但未涉及故障诊断或边缘部署。",
+      "llm_tldr": "针对机器人后训练数据常含执行错误、传感器漂移与时间戳错位等异构错误、而人工检查昂贵且现有清洗方法只针对特定损坏类型的问题，本文提出RoboDrop数据筛选框架，基于局部梯度兼容性自动识别并剔除低质量样本。该工作提升了VLA后训练数据质量与策略性能，与机器人数据集构建及错误分析需求高度契合，但未涉及故障诊断或边缘部署。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    }
+  ]
+}
