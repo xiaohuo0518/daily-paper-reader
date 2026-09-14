@@ -1,0 +1,183 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-09-14T22:17:20.112414+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 2,
+    "deep_divecandidates": 0,
+    "deep_cap": 7,
+    "deep_selected": 0,
+    "quick_candidates": 4,
+    "quick_skim_target": 12,
+    "quick_selected": 4
+  },
+  "deep_dive": [],
+  "quick_skim": [
+    {
+      "id": "2609.09564v1",
+      "source": "arxiv",
+      "title": "Robust Industrial Cyber Physical Classification Using Neuromorphic Temporal Embeddings and Hybrid SNN XGBoost Under Machine Unlearning Attacks",
+      "abstract": "The digitalisation of electrical distribution networks has increased the exposure of power-grid infrastructure to cyber attacks. Existing intrusion detection systems (IDSs), however, often rely on computationally expensive deep learning models that are difficult to deploy at the edge. Periodic retraining also exposes these systems to machine unlearning attacks, where selective data removal can degrade detection performance. We propose a hybrid Spiking Neural Network (SNN) and XGBoost architecture that combines efficient temporal encoding with a lightweight classifier and provides structural resilience to such attacks. The SNN is trained once on clean data and used as a fixed feature extractor, while only the XGBoost classifier is retrained during model updates. Evaluated on two real-world public power-system datasets, the proposed method achieves 99.9\\% accuracy (F1-macro 0.999) on the Synchrophasor dataset and 95.0\\% accuracy (F1-macro 0.943) on the MSU/ORNL dataset, outperforming standalone baselines. Under selective label-flipping attacks, the hybrid model loses only 0.9\\% F1-macro at 10\\% poisoning and delays target-class collapse from 60\\% to 70\\% poisoning compared with raw models. These results demonstrate that neuromorphic temporal encoding can provide both accurate cyber-attack detection and improved resilience to data poisoning in cyber-physical systems.",
+      "authors": [
+        "Ammar Kamoona",
+        "Sajad Koushkbaghi",
+        "Mahdi Jalili",
+        "Peter McTaggart",
+        "Xinghuo Yu"
+      ],
+      "primary_category": "cs.LG",
+      "categories": [
+        "cs.LG",
+        "cs.CR",
+        "cs.NE"
+      ],
+      "published": "2026-09-09T00:43:44+00:00",
+      "link": "https://arxiv.org/pdf/2609.09564v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "lightweight edge-deployable model for temporal anomaly/intrusion detection",
+      "llm_evidence_cn": "面向边缘部署的轻量级时序异常/入侵检测模型",
+      "llm_evidence": "面向边缘部署的轻量级时序异常/入侵检测模型",
+      "canonical_evidence": "面向边缘部署的轻量级时序异常/入侵检测模型",
+      "llm_tldr_en": "This paper addresses costly deep-learning IDS that are hard to deploy at the edge, proposing a hybrid SNN-XGBoost with lightweight temporal encoding and resilience to machine unlearning attacks.",
+      "llm_tldr_cn": "针对现有工业信息物理系统入侵检测依赖计算昂贵的深度学习模型、难以在边缘部署，且周期性重训练易受机器遗忘攻击的问题，本文提出一种混合脉冲神经网络与XGBoost的架构。该架构用SNN进行高效时序编码并作为固定特征提取器，配合轻量级分类器，对选择性数据移除具有结构韧性。实验表明该方法在保持检测性能的同时便于边缘部署，对轻量化时序异常检测具有借鉴意义。",
+      "llm_tldr": "针对现有工业信息物理系统入侵检测依赖计算昂贵的深度学习模型、难以在边缘部署，且周期性重训练易受机器遗忘攻击的问题，本文提出一种混合脉冲神经网络与XGBoost的架构。该架构用SNN进行高效时序编码并作为固定特征提取器，配合轻量级分类器，对选择性数据移除具有结构韧性。实验表明该方法在保持检测性能的同时便于边缘部署，对轻量化时序异常检测具有借鉴意义。",
+      "llm_tags": [
+        "query:humanoid-ood"
+      ],
+      "matched_query_tag": "query:humanoid-ood",
+      "matched_query_text": "lightweight LSTM or GRU models deployed on embedded platforms for anomaly detection",
+      "matched_requirement_id": "req-12",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2609.10706v2",
+      "source": "arxiv",
+      "title": "HuRo: Robotizing Human Videos for Scalable VLA Pretraining",
+      "abstract": "Human video datasets have emerged as a compelling alternative to expensive real-robot data, offering rich diversity at scale. To bridge the human-to-robot embodiment gap, existing approaches either robotize videos in task-matched settings or address observation and action alignment separately at scale. In this work, we systematically examine whether robotized human videos can provide effective and scalable supervision for pretraining vision-language-action (VLA) policies. To this end, we develop a robotization pipeline that converts heterogeneous human videos into robot-aligned observations and action trajectories while inferring missing intermediate signals across annotation levels. Using this pipeline, we construct the HuRo dataset, comprising about 630K robotized episodes and 142M processed frames from five human-video sources. Across four real-world manipulation tasks, increasing robotized pretraining scale improves overall completion from 51.5% to 80.3% and OOD completion under spatial and visual shifts from 34.9% to 72.2%. Ablations further show that visual robotization improves OOD robustness and that end-to-end pretraining with retargeted actions outperforms visual-only transfer. Project website: https://3587jjh.github.io/HuRo.",
+      "authors": [
+        "Jinho Jeong",
+        "Se June Joo",
+        "Jaehyun Kang",
+        "Dongyun Kim",
+        "Yena Kim",
+        "Hanjung Kim",
+        "Seon Joo Kim"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.CV",
+        "cs.LG"
+      ],
+      "published": "2026-09-09T18:02:05+00:00",
+      "link": "https://arxiv.org/pdf/2609.10706v2",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "constructs HuRo dataset of 630K robotized videos for robot learning",
+      "llm_evidence_cn": "构建约63万条机器人化视频数据集用于机器人学习",
+      "llm_evidence": "构建约63万条机器人化视频数据集用于机器人学习",
+      "canonical_evidence": "构建约63万条机器人化视频数据集用于机器人学习",
+      "llm_tldr_en": "To cut costly real-robot data collection, this work asks whether robotized human videos can pretrain VLA policies; it builds a robotization pipeline and the ~630K-sample HuRo dataset, showing scalable supervision works.",
+      "llm_tldr_cn": "针对真实机器人数据采集成本高昂的问题，本文系统研究将人类视频机器人化后能否为视觉-语言-动作策略预训练提供可扩展监督。作者提出转换流水线，把异构人类视频转为机器人对齐的观测与动作轨迹并推断缺失的中间信号，据此构建约63万条规模的HuRo数据集。实验验证该数据集可有效支撑VLA预训练，为低成本大规模机器人数据构建提供了新途径。",
+      "llm_tldr": "针对真实机器人数据采集成本高昂的问题，本文系统研究将人类视频机器人化后能否为视觉-语言-动作策略预训练提供可扩展监督。作者提出转换流水线，把异构人类视频转为机器人对齐的观测与动作轨迹并推断缺失的中间信号，据此构建约63万条规模的HuRo数据集。实验验证该数据集可有效支撑VLA预训练，为低成本大规模机器人数据构建提供了新途径。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2609.12287v1",
+      "source": "arxiv",
+      "title": "Robust Prototypical Networks for Few-Shot Sensor Fault Diagnosis",
+      "abstract": "Industrial fault diagnosis often operates with only a handful of labeled fault examples, making few-shot learning attractive for sensor monitoring. Standard prototypical networks are simple and effective; however, their class prototypes may become unstable in the very-low-shot regime because each decision relies on a small support set. We propose \\emph{Multi-Episode Prototypical Networks} (MEPN), which aggregate prototypes from multiple disjoint support episodes and use their mean as the final class representative, reducing prototype variance without changing the encoder architecture. We evaluate MEPN on the DeFACTO sensor dataset using five-way fault classification with synthetic bias, drift, spike, and noise faults injected into real industrial measurements. Over 100 independent runs, MEPN reaches \\textbf{\\SensorOneShotGcpn\\%} in the per-episode one-shot setting ($K\\!=\\!1$ shot, aggregated over $N_{\\text{agg}}\\!=\\!10$ support episodes), substantially above single-episode baselines. Under an equal 10-sample support budget, MEPN and ProtoNet at $K\\!=\\!10$ are statistically indistinguishable, confirming prototype accumulation as the mechanism rather than superior fixed-budget learning.",
+      "authors": [
+        "Mohammed Ayalew Belay",
+        "Amirshayan Haghipour",
+        "Pierluigi Salvo Rossi"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI",
+        "cs.LG"
+      ],
+      "published": "2026-09-10T23:36:05+00:00",
+      "link": "https://arxiv.org/pdf/2609.12287v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "Few-shot sensor fault diagnosis with synthetic fault injection",
+      "llm_evidence_cn": "少样本传感器故障诊断并注入合成故障",
+      "llm_evidence": "少样本传感器故障诊断并注入合成故障",
+      "canonical_evidence": "少样本传感器故障诊断并注入合成故障",
+      "llm_tldr_en": "Proposes Multi-Episode Prototypical Networks for few-shot sensor fault diagnosis, aggregating prototypes from multiple disjoint support episodes to reduce variance, evaluated on DeFACTO with injected bias, drift, spike and noise faults.",
+      "llm_tldr_cn": "该文针对工业故障诊断中仅有少量标注故障样本、标准原型网络在极低样本下原型不稳定导致决策方差大的问题，提出多回合原型网络MEPN。方法在不改变编码器结构的前提下，聚合多个互不相交支持集回合的原型并取均值作为最终类别代表，从而降低原型方差。作者在DeFACTO传感器数据集上以五类故障分类任务，注入偏置、漂移、尖峰与噪声等合成故障进行验证，结果表明该方法提升了极低样本下的诊断鲁棒性。",
+      "llm_tldr": "该文针对工业故障诊断中仅有少量标注故障样本、标准原型网络在极低样本下原型不稳定导致决策方差大的问题，提出多回合原型网络MEPN。方法在不改变编码器结构的前提下，聚合多个互不相交支持集回合的原型并取均值作为最终类别代表，从而降低原型方差。作者在DeFACTO传感器数据集上以五类故障分类任务，注入偏置、漂移、尖峰与噪声等合成故障进行验证，结果表明该方法提升了极低样本下的诊断鲁棒性。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "fault diagnosis for humanoid robots",
+      "matched_requirement_id": "req-3",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2609.12316v1",
+      "source": "arxiv",
+      "title": "DATAFARM: Distribution-Aligned Task and Motion Planning for Fine-Tuning Vision-Language-Action Models",
+      "abstract": "Collecting high-quality robot data remains a fundamental challenge for training robot foundation models. Task and motion planning (TAMP) offers a scalable way to generate demonstrations, but our experiments show that raw TAMP trajectories provide surprisingly little benefit when used to fine-tune pretrained vision-language-action (VLA) models, despite successfully solving the target tasks. We hypothesize that this failure arises from a behavioral distribution mismatch between planner-generated trajectories and the data used to pretrain the VLA. To address this mismatch, we introduce DATAFARM: Distribution-Aligned Task And motion planning for Fine-tuning A Robot foundation Model, an approach that incorporates the pretraining distribution directly into TAMP trajectory generation. DATAFARM aligns generated trajectories with the pretraining data in robot joint configurations, motion style, and temporal execution profiles. We evaluate DATAFARM on three tabletop manipulation tasks that TAMP can perform and a cloth-folding task beyond the capability of TAMP. DATAFARM achieves an average success rate of 56.7%, substantially outperforming raw TAMP (8.3%) while approaching human teleoperation (61.7%). On Deformable Object Manipulation, which is outside the fine-tuning distribution, the fine-tuned model retains 85% success, compared with 90% for the pretrained model. These results show that aligning planner-generated demonstrations with the pretraining distribution can make TAMP an effective source of data for VLA fine-tuning. Website and code: https://prpl-group.com/datafarm/",
+      "authors": [
+        "Samrat Sahoo",
+        "Yixuan Huang",
+        "Tom Silver"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-09-11T00:45:02+00:00",
+      "link": "https://arxiv.org/pdf/2609.12316v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "Scalable robot demonstration data generation for training foundation models",
+      "llm_evidence_cn": "面向基础模型训练的可扩展机器人数据生成",
+      "llm_evidence": "面向基础模型训练的可扩展机器人数据生成",
+      "canonical_evidence": "面向基础模型训练的可扩展机器人数据生成",
+      "llm_tldr_en": "Raw TAMP trajectories fail to help fine-tune VLA models due to distribution mismatch; DATAFARM aligns generated demonstrations with pretraining distributions to produce useful robot data.",
+      "llm_tldr_cn": "该文针对机器人基础模型训练中高质量数据难以收集的问题，发现直接使用任务与运动规划生成的轨迹微调VLA模型收益甚微。作者提出DATAFARM方法，通过对齐规划轨迹与预训练数据的行为分布来改造演示数据。实验表明该方法能显著提升微调效果，为可扩展的机器人数据集构建提供了新思路。",
+      "llm_tldr": "该文针对机器人基础模型训练中高质量数据难以收集的问题，发现直接使用任务与运动规划生成的轨迹微调VLA模型收益甚微。作者提出DATAFARM方法，通过对齐规划轨迹与预训练数据的行为分布来改造演示数据。实验表明该方法能显著提升微调效果，为可扩展的机器人数据集构建提供了新思路。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    }
+  ]
+}

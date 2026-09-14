@@ -1,0 +1,223 @@
+Title: Robust Prototypical Networks for Few-Shot Sensor Fault Diagnosis
+
+URL Source: https://arxiv.org/pdf/2609.12287v1
+
+Published Time: Mon, 14 Sep 2026 00:20:46 GMT
+
+Number of Pages: 4
+
+Markdown Content:
+# Robust Prototypical Networks for Few-Shot Sensor Fault Diagnosis 
+
+Mohammed Ayalew Belay ∗‡ , Amirshayan Haghipour †‡ , Pierluigi Salvo Rossi †§ ∗Simula UiB, Bergen, Norway †Dept. of Electronic Systems, NTNU, Trondheim, Norway 
+
+§Dept. of Gas Technology, SINTEF Energy Research, Trondheim, Norway Emails: ayalew@simula.no, amirshayan.haghipour@ntnu.no, salvorossi@ieee.org 
+
+Abstract —Industrial fault diagnosis often operates with only a handful of labeled fault examples, making few-shot learning attractive for sensor monitoring. Standard prototypical networks are simple and effective; however, their class prototypes may become unstable in the very-low-shot regime because each decision relies on a small support set. We propose Multi-Episode Prototypical Networks (MEPN), which aggregate prototypes from multiple disjoint support episodes and use their mean as the final class representative, reducing prototype variance without changing the encoder architecture. We evaluate MEPN on the DeFACTO sensor dataset using five-way fault classification with synthetic bias, drift, spike, and noise faults injected into real industrial measurements. Over 100 independent runs, MEPN reaches 93.1% in the per-episode one-shot setting (K = 1
+
+shot, aggregated over Nagg = 10 support episodes), substantially above single-episode baselines. Under an equal 10-sample support budget, MEPN and ProtoNet at K = 10 are statistically indistin-guishable, confirming prototype accumulation as the mechanism rather than superior fixed-budget learning. 
+
+Index Terms —Few-shot learning, prototypical networks, vari-ance reduction, sensor fault detection, time series classification, industrial monitoring 
+
+I. I NTRODUCTION 
+
+Reliable fault detection in industrial sensor networks is difficult when labeled fault examples are scarce and arrive gradually over time. Sensor fault diagnosis has traditionally relied on model-based residual analysis, statistical process monitoring, and PCA; deep learning improves performance through convolutional, recurrent, and autoencoder architec-tures [1], but these assume large labeled fault libraries that are rarely available in practice. Few-shot learning provides a natural alternative [2], [3]. Metric-based methods such as prototypical networks [4], Matching Networks [5], and Re-lation Networks [6] classify new classes without retraining by reasoning in an embedding space. Memory-augmented and optimization-based meta-learners pursue fast adaptation through learned initializations [7]–[9]. More expressive back-bones further add variational autoencoders, adversarial genera-tors, transformers, and graph networks [10]–[13]; yet stronger feature extractors do not remove the statistical instability of estimating a class representative from one or two examples. Closer to our approach, Kalman Prototypical Networks [14] stabilize the prototype itself by modeling it as a latent state 
+
+‡These authors contributed equally to this work. 
+
+updated via Kalman filtering, improving few-shot fault detec-tion in combined-cycle gas turbines; MEPN pursues a simpler, filter-free alternative, stabilizing the prototype purely through multi-episode resampling at inference without any additional dynamical model. The key limitation is prototype variance : if the support set is noisy or unrepresentative, the class center shifts and all query decisions inherit that error. This is especially acute for subtle sensor faults with weak class boundaries. We address it with Multi-Episode Prototypical Networks (MEPN), which collect prototypes across multiple disjoint support episodes and average them into a more stable representative. Our main contributions are: (i) MEPN substantially improves per-episode one-shot accuracy on the DeFACTO sensor bench-mark; (ii) under the same total support budget it matches single-episode ProtoNet at K = 10 ; (iii) an ablation over the aggregation count Nagg and a mean-vs-medoid comparison confirm variance reduction as the operative mechanism. II. P ROPOSED METHOD 
+
+MEPN retains the encoder and distance-based classifier of the standard prototypical network [4] and modifies only the class estimator. Consider an nway episode with class set Y′
+
+and embedding network fθ : X → RD . For class c and support episode j with K labeled examples S(j) 
+
+> c
+
+, the per-episode prototype is the support centroid in embedding space, 
+
+p(j) 
+
+> c
+
+= 1
+
+K
+
+X
+
+> x∈S (j)
+> c
+
+fθ (x). (1) Standard ProtoNet keeps a single prototype per class. MEPN instead draws Nagg episodes with disjoint support sets and averages their per-class prototypes, 
+
+ˆpc = 1
+
+Nagg 
+
+> Nagg
+
+X
+
+> j=1
+
+p(j) 
+
+> c
+
+, (2) then classifies queries with the unchanged nearest-prototype rule, 
+
+ˆy(x′) = arg min  
+
+> c
+
+fθ (x′) − ˆpc
+
+> 22
+
+. (3) At Nagg = 1 MEPN coincides with ProtoNet. arXiv:2609.12287v1 [cs.AI] 10 Sep 2026 A. Variance analysis 
+
+Modeling class-c support embeddings as i.i.d. (independent and identically distributed) draws from a distribution with mean μc and covariance Σc, the aggregated prototype (2) is unbiased with 
+
+Cov[ˆ pc] = Σc
+
+K N agg 
+
+. (4) MEPN therefore achieves the same prototype covariance as a ProtoNet using KN agg shots in a single episode, without requiring all labeled samples to be available simultaneously. Sensor segments are extracted from overlapping windows of correlated time series, so the i.i.d. assumption is only approxi-mate. Modeling the M = KN agg pooled support embeddings as equicorrelated with variance σ2 
+
+> c
+
+and mean pairwise correlation 
+
+¯ρ,
+
+Var[ˆ pc] = σ2
+
+> c
+
+M
+
+1 + ( M − 1)¯ ρ −−−−−→  
+
+> M→∞
+
+σ2 
+
+> c
+
+¯ρ. (5) Aggregation still reduces variance monotonically, but toward a floor σ2 
+
+> c
+
+¯ρ rather than zero, predicting the diminishing returns observed beyond Nagg = 10 (Sec. IV-B). For two closely sep-arated classes a, b the relative misorientation of the estimated decision boundary normal is tr(Σ a+Σ b) / [KN agg ∥μa−μb∥22];small inter-class separation makes this ratio large at low 
+
+KN agg , precisely where increasing Nagg removes the most boundary noise. 
+
+B. Training and inference 
+
+During meta-training each update samples one disjoint sup-port/query episode pair with Nagg = 1 ; aggregation is applied only at inference and changes neither the training objective nor the network parameters. At inference MEPN collects Nagg 
+
+support-only episodes, computes one aggregated prototype per class via (2), and evaluates on disjoint query episodes. Enforcing support/query disjointness is essential in the sensor setting, where overlap between nearby, strongly correlated windows would otherwise inflate accuracy. Concretely, for each evaluation episode all Nagg K +Q segment indices needed for its Nagg support rounds and query set are drawn once, without replacement, from the class’s segment pool, so no segment index repeats across support rounds or the query set within that episode. This guarantees disjointness in segment 
+
+identity but not in temporal adjacency, since two distinct, disjointly-indexed windows can still start only a few samples apart and remain strongly correlated – precisely the residual correlation ¯ρ modeled in (5). As a robustness alternative, the aggregated representative can be set to the medoid of the collected per-episode prototypes; on the sensor benchmark the lower-variance mean is preferable and is used as the default throughout. III. E XPERIMENTAL SETUP 
+
+We evaluate on DeFACTO (Demonstration of Flow Assur-ance for CO 2 Transport Operations) [1], a SINTEF Energy Research facility circulating CO 2 through a 90 m deep U-tube loop instrumented with over 100 sensors; we use real industrial temperature measurements from this facility ( 68 
+
+channels, 24 ,988 time steps at 2/3 Hz). An 80/20 contiguous train/test split avoids temporal leakage; normalization statistics are computed on the training split only. We extract 1D seg-ments of length L = 128 by sampling random start positions independently within each partition (segments may overlap, but no segment crosses the split boundary). Each segment belongs to one of five classes. Faults are injected onto clean standardized segments s ∈ RL as follows: 
+
+x =
+
+
+
+s, Normal ,
+
+s + b 1, Bias ,
+
+s + d, di = i−1 
+
+> L−1
+
+dmax , Drift ,
+
+s + aP
+
+> i∈M
+
+ei, |M| = m, Spike ,
+
+s + ε, ε ∼ N (0, σ 2I), Noise ,
+
+(6) with parameters b = 1 .5, dmax = 1 .5, m = 2 , a = 0 .6,
+
+σ = 0 .06 , chosen to be conservative relative to the fault severities typically considered detectable in industrial sensor-validation practice [1]. The deliberately small magnitudes produce close class centres in embedding space; by (4) this is exactly the regime where prototype variance dominates one-shot error, and where a weaker, harder-to-catch synthetic fault is the more realistic diagnostic target. We sample 10 ,000 
+
+training and 5,000 test segments. All methods share the same 1D-CNN encoder (four con-volutional blocks, 64-dim embedding) and episodic training protocol [4], [15]. Training uses Adam with learning rate 
+
+10 −3. Each model is meta-trained for 200 episodic iterations using 5-way episodes with 15 query examples per class; no learning-rate schedule, weight decay, or early stopping is used, and no method-specific hyperparameter search was performed, so all baselines share this configuration. Training and inference use PyTorch on a single GPU when available (CPU otherwise). MEPN uses Nagg = 10 at inference. Each of the 100 independent runs uses a fresh random seed that reseeds segment sampling (new 10 ,000 /5,000 train/test draws), model initialization, and training; results are averaged over these 100 runs, with tables reporting mean accuracy and 95% confidence intervals computed as 1.96 ˆ σ/ √100 .IV. R ESULTS AND DISCUSSION 
+
+Accuracy vs. shots. Fig. 1 reports mean five-way accuracy as K varies from 1 to 10. MEPN is consistently stronger in the low-shot regime: at K = 1 it reaches 93.1%, versus the single-episode ProtoNet baseline of 73.5% (a gain of 19.6 percentage points). Performance saturates around five shots, where both methods become more stable and the gap narrows, consistent with (4). 
+
+Comparison with competing methods. Table I compares MEPN with ProtoNet, Matching Networks, and Relation Net-works under the same encoder and protocol. MEPN is best at both K = 1 and K = 5 , with the largest margin at K = 1 
+
+where prototype instability is most severe. Matching Networks employ instance-level attention, which reduces the sensitivity associated with one-shot learning and improves performance 1 2 3 4 5 6 7 8 9 10 Shots per class (K) 0.0 0.2 0.4 0.6 0.8 1.0 Accuracy 
+
+> MEPN ProtoNet
+
+Fig. 1. Mean five-way classification accuracy (vertical axis in [0 , 1] , i.e., fraction correct) vs. support examples per class (K = 1. . . 10 ) on the DeFACTO dataset, averaged over 100 runs. Shaded regions: mean ± 95% CI. TABLE I FIVE -WAY K-SHOT FAULT CLASSIFICATION ACCURACY (%) ON THE 
+
+DEFACTO SENSOR DATASET . M EAN ± 95% CI OVER 100 INDEPENDENT RUNS . T HE K = 1 AND K = 5 COLUMNS MATCH METHODS BY PER -EPISODE SHOT COUNT ; MEPN ADDITIONALLY AGGREGATES 
+
+NAGG = 10 DISJOINT SUPPORT EPISODES PER CLASS , SO THESE COLUMNS ARE NOT FIXED -BUDGET COMPARISONS . T HE BOTTOM ROW IS THE DIRECT EQUAL -BUDGET REFERENCE . B EST RESULT PER COLUMN IN 
+
+> BOLD
+
+.
+
+Method K = 1 K = 5 
+
+ProtoNet 73.5 ± 1.6 92.2 ± 0.4 Matching Networks 77.8 ± 1.0 81.7 ± 0.9 Relation Networks 48.9 ± 2.5 58.5 ± 2.4 MEPN (proposed) 93.1 ± 0.3 93.8 ± 0.3 ProtoNet (K=10, equal budget) 93.1 ± 0.4 
+
+over the single-episode ProtoNet; however, they still perform below MEPN because they do not explicitly reduce support-side prototype variance. Relation Networks fare worst: alearned relation module alone is insufficient when the support signal is weak and faults are only subtly separated. The bottom row of Table I addresses support-budget fair-ness. MEPN at K = 1 , Nagg = 10 consumes the same total support samples as ProtoNet at K = 10 . Accuracies are 93.1% ± 0.3% and 93.1% ± 0.4% respectively, with fully over-lapping 95% CIs. MEPN therefore does not create information but makes a fixed budget usable incrementally, without waiting for all labels to arrive at once. 
+
+A. Confusion matrix analysis 
+
+Fig. 2 shows the mean row-normalized confusion matrices at K = 1 . The dominant failure mode of the standard baseline is confusion between Normal and Bias, while Spike and Noise remain partially entangled because both manifest as short local disturbances. MEPN improves the true-positive rate for Normal from 73.1% to 85.9% and for Bias from 80.1% to 87.3%, directly reducing the most operationally costly error. Spike and Noise also improve substantially, while Drift remains the easiest class for both methods because its 
+
+Fig. 2. Mean row-normalized confusion matrices at K = 1 , averaged over 100 runs. Left: ProtoNet. Right: MEPN (proposed). Prototype aggregation reduces Normal/Bias confusion and resolves Spike/Noise overlap. TABLE II ABLATION : MEPN ACCURACY (%) VS . NAGG ON DEFACTO, FROM AN INDEPENDENT 100-RUN BATCH (DIFFERENT RANDOM -SEED SEQUENCE THAN TABLE I); THE NAGG = 1 ROW AND THE PROTO NET REFERENCE BELOW THEREFORE DIFFER SLIGHTLY FROM TABLE I ( E.G., 71 .3% VS .
+
+73 .5% AT K = 1 ) BUT AGREE WITHIN THE REPORTED 95% CI S. M EAN ±
+
+95% CI OVER 100 RUNS . P ROTO NET REFERENCE (UNCHANGED BY 
+
+NAGG ): K = 1 : 71 .3 ± 1.6; K = 5 : 91 .8 ± 0.5.
+
+Nagg K = 1 K = 5 
+
+1 73.5 ± 1.7 91.9 ± 0.4 2 89.1 ± 0.7 93.1 ± 0.4 5 92.3 ± 0.3 93.9 ± 0.4 10 93.0 ± 0.3 93.9 ± 0.3 20 93.8 ± 0.3 94.1 ± 0.3 
+
+full-window trend is structurally distinct from all other fault types. 
+
+B. Ablation: Effect of Nagg 
+
+Table II shows MEPN accuracy vs. aggregation count. Moving from Nagg = 1 to 2 already raises K = 1 from 73 .5% 
+
+to 89 .1% ; gains continue through Nagg = 10 then saturate, con-sistent with the variance-floor of (5). The confidence interval shrinks monotonically, so MEPN is both more accurate and more reliable as Nagg grows. 
+
+C. Mean vs. medoid aggregation 
+
+Table III compares mean and medoid aggregation at Nagg =10 . Mean aggregation outperforms the medoid at both shot counts, reaching 93.0% vs. 91.0% at K = 1 and 93.9% vs. 93.6% at K = 5 . The per-episode prototypes cluster tightly enough that the outlier-resistance of the medoid is not needed; the lower-variance mean of (4) is uniformly preferable, con-firming that averaging rather than central-candidate selection drives the improvement. We also validated MEPN on MNIST as an image-domain sanity check, where it improves one-shot accuracy from 91.6% to 93.9% (a gain of 2.3 pp), with the gap narrowing as 
+
+K increases, confirming that the benefit addresses a general weakness of single-episode prototype estimation rather than a peculiarity of DeFACTO. TABLE III MEAN AGGREGATION VS . MEDOID SELECTION ON THE DEFACTO 
+
+> SENSOR DATASET
+
+. M EAN ± 95% CI OVER 100 RUNS (NAGG = 10 ; SAME RERUN BATCH AS TABLE II, HENCE THE PROTO NET BASELINE HERE ALSO DIFFERS SLIGHTLY FROM TABLE I). B OTH MEPN VARIANTS USE THE SAME MULTI -EPISODE SUPPORT COLLECTION ; THE ONLY DIFFERENCE IS THE FINAL AGGREGATION STEP .
+
+Method K = 1 K = 5 
+
+MEPN (medoid variant) 91.0 ± 0.5 93.6 ± 0.3 MEPN (mean, proposed) 93.0 ± 0.3 93.9 ± 0.3 ProtoNet (baseline) 71.3 ± 1.6 91.8 ± 0.4 
+
+V. C ONCLUSIONS 
+
+MEPN improves few-shot sensor fault classification by replacing single-episode prototypes with multi-episode aggre-gated prototypes. On DeFACTO it raises one-shot accuracy to 93.1% and matches a ProtoNet that spends the same total support budget in a single batch; confusion-matrix analysis confirms the gain is operationally meaningful, most promi-nently by reducing Normal/Bias ambiguity. The improvement saturates near Nagg = 10 , with mean aggregation uniformly beating the medoid, in line with (4)–(5). These results indicate that the design of the class estimator is as important as that of the encoder, particularly in safety-critical industrial monitoring applications where prediction stability is essential. REFERENCES [1] A. Haghipour, G. Tabella, J. Stang, and P. S. Rossi, “Sensor validation in carbon capture and storage infrastructures,” IEEE Sensors Letters , 2025, in press. [2] Y. Wang, Q. Yao, J. T. Kwok, and L. M. Ni, “Generalizing from a Few Examples: A Survey on Few-shot Learning,” ACM Computing Surveys (CSUR) , vol. 53, no. 3, 6 2020. [3] Y. Song, T. Wang, P. Cai, S. K. Mondal, and J. P. Sahoo, “A Comprehen-sive Survey of Few-shot Learning: Evolution, Applications, Challenges, and Opportunities,” ACM Computing Surveys , vol. 55, no. 13s, 12 2023. [4] J. Snell, K. Swersky, and R. S. Zemel, “Prototypical Networks for Few-shot Learning,” in Advances in Neural Information Processing Systems ,vol. 30, 2017. [5] O. Vinyals, C. Blundell, T. Lillicrap, K. Kavukcuoglu, and D. Wierstra, “Matching networks for one shot learning,” in Advances in Neural Information Processing Systems , 2016, pp. 3630–3638. [6] F. Sung, Y. Yang, L. Zhang, T. Xiang, P. H. Torr, and T. M. Hospedales, “Learning to compare: Relation network for few-shot learning,” in 
+
+Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition , 2018, pp. 1199–1208. [7] A. Santoro, S. Bartunov, M. Botvinick, D. Wierstra, and T. Lillicrap, “Meta-learning with memory-augmented neural networks,” in Proceed-ings of the 33rd International Conference on International Conference on Machine Learning - Volume 48 , ser. ICML’16. JMLR.org, 2016, pp. 1842–1850. [8] S. Ravi and H. Larochelle, “Optimization as a model for few-shot learn-ing,” in Proceedings of the 5th International Conference on Learning Representations , 2017. [9] C. Finn, P. Abbeel, and S. Levine, “Model-agnostic meta-learning for fast adaptation of deep networks,” in Proceedings of the 34th International Conference on Machine Learning , 2017, pp. 1126–1135. [10] E. Schonfeld, S. Ebrahimi, S. Sinha, T. Darrell, and Z. Akata, “Gen-eralized Zero- and Few-Shot Learning via Aligned Variational Autoen-coders,” 2019 IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR) , vol. 2019-June, pp. 8239–8247, 6 2019. [11] R. ZHANG, T. Che, Z. Ghahramani, Y. Bengio, and Y. Song, “Meta-GAN: An Adversarial Approach to Few-Shot Learning,” Advances in Neural Information Processing Systems , vol. 31, 2018. [12] G. Han, J. Ma, S. Huang, L. Chen, and S. F. Chang, “Few-Shot Object Detection with Fully Cross-Transformer,” Proceedings of the IEEE Computer Society Conference on Computer Vision and Pattern Recognition , vol. 2022-June, pp. 5311–5320, 3 2022. [13] V. Garcia and J. Bruna, “Few-Shot Learning with Graph Neural Net-works,” in International Conference on Learning Representations , 2018. [14] M. A. Belay, L. F. Bernardino, A. Rasheed, R. M. Monta˜ n´ es, and P. S. Rossi, “Kalman prototypical networks for few-shot fault detection in combined cycle gas turbines,” arXiv preprint arXiv:2606.26710 , 2026. [15] W.-Y. Chen, Y.-C. Liu, Z. Kira, Y.-C. Wang, and J.-B. Huang, “A closer look at few-shot classification,” in Proceedings of the 7th International Conference on Learning Representations , 2019.
