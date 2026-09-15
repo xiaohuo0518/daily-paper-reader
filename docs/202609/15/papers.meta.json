@@ -1,0 +1,39 @@
+{
+  "label": "2026-09-15",
+  "date": "2026-09-15",
+  "generated_at": "2026-09-15T22:07:48",
+  "count": 2,
+  "papers": [
+    {
+      "paper_id": "202609/15/2609.13940v1-optimal-transport-for-efficient-unsupervised-anomaly-detection-on-industrial-data",
+      "section": "quick",
+      "title_en": "Optimal Transport for Efficient, Unsupervised Anomaly Detection on Industrial Data",
+      "authors": "Abigail Langbridge, Fearghal O'Donncha, James T Rayfield, Bradley Eck",
+      "date": "2026-09-12",
+      "pdf": "https://arxiv.org/pdf/2609.13940v1",
+      "score": "7.0",
+      "evidence": "无需标注的时间序列无监督异常检测",
+      "tldr": "工业4.0下异常检测常受标注数据稀缺、泛化与扩展性限制。本文提出基于最优传输（OT）的无监督框架，用滑动参考窗口学习正常与观测工况的映射，实时适应时序传感器数据。方法可抵抗短期波动、噪声和数据缺失，并提供反事实解释以增强审计性。在航运、HVAC及公开基准三个工业数据集上，该方法有效识别异常、降低误报，优于传统方法且计算高效、易配置。",
+      "tags": "query:humanoid-ood",
+      "abstract_en": "Effective anomaly detection frameworks are a central pillar of the Industry 4.0 paradigm. In this paper, we introduce an Optimal Transport (OT)-based framework for anomaly detection, designed to detect deviations from normal behaviour in time-series sensor data. The OT-based method requires minimal user input and adapts to real-time data without the need for labelled training data. Our method effectively addresses existing limitations related to data labelling, generalisability, and scalability, demonstrating resilience against short-term fluctuations, noise, and data gaps - common challenges in industrial environments. Additionally, our method provides counterfactual explanations improving the auditability of the approach when deployed in industrial settings. The proposed method learns the mapping between normal and observed operating conditions through a sliding reference window that adapts to the dynamicity of the data. We evaluate our approach on three industrial datasets, from shipping, industrial HVAC systems, and publicly available benchmark data. The method was highly effective in identifying anomalies and reducing false positives, outperforming traditional methods, while maintaining computational efficiency and ease of configuration.",
+      "source": "arxiv",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "paper_id": "202609/15/2609.15483v1-gslad-prototype-regularized-graph-structure-learning-for-multivariate-time-series-anomaly-detection",
+      "section": "quick",
+      "title_en": "GSLAD: Prototype-Regularized Graph Structure Learning for Multivariate Time Series Anomaly Detection",
+      "authors": "Zepeng Zhang, Fuad Khuri, Keivan Faghih Niresi, Olga Fink",
+      "date": "2026-09-14",
+      "pdf": "https://arxiv.org/pdf/2609.15483v1",
+      "score": "7.0",
+      "evidence": "无监督多变量时序异常检测",
+      "tldr": "工业多变量时序异常常先改变变量间结构关系，而单变量轨迹仍接近正常，导致异常信号弱。为此，GSLAD采用原型正则化图结构学习，两阶段训练条件感知图学习器与图预测器，并将正常图聚类为结构原型。推理时融合不确定性归一化结构偏差与预测偏差进行评分。在四个工业基准上取得强整体性能，验证结构偏差对异常检测与诊断的有效性。",
+      "tags": "query:humanoid-ood",
+      "abstract_en": "Unsupervised multivariate time series anomaly detection methods typically identify anomalies through forecasting, reconstruction, or representation discrepancies. However, industrial faults may first alter inter-variable structural patterns while individual trajectories remain close to normal, resulting in weak anomaly signals. In this paper, we propose GSLAD, a prototype-regularized graph structure learning framework that uses structural deviations for anomaly scoring. GSLAD adopts a two-phase training strategy. First, a condition-aware graph learner and a graph-based forecaster are optimized with predictive supervision. The inferred normal graphs are then clustered into multiple structural prototypes representing different normal operating regimes, with edge-wise variability characterizing structural uncertainty. Deviations from these prototypes regularize the graph learner in the second phase, encouraging stable and regime-specific structural patterns. During inference, uncertainty-normalized structural deviation is combined with predictive deviation for anomaly scoring. Experiments on four industrial benchmarks demonstrate strong overall performance of GSLAD and confirm the effectiveness of structural deviation for anomaly detection and diagnosis.",
+      "source": "arxiv",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "errors": []
+}

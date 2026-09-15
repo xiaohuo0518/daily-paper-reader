@@ -6,33 +6,31 @@
 </div>
 
 ## 每次日报
-- 最新运行日期：2026-09-14
-- 运行时间：2026-09-14 22:19:19 UTC
+- 最新运行日期：2026-09-15
+- 运行时间：2026-09-15 22:07:43 UTC
 - 运行状态：成功
-- 本次总论文数：4
+- 本次总论文数：2
 - 精读区：0
-- 速读区：4
+- 速读区：2
 
 ### 今日简报（AI）
-2026-09-14 日报精选 4 篇速读，聚焦工业异常分类、机器人VLA预训练与少样本传感器故障诊断。最值得看的是用神经形态时序嵌入加SNN-XGBoost提升机器遗忘攻击下的工业分类鲁棒性，以及HuRo把人类视频机器人化以扩展VLA预训练。建议普通读者优先翻这两篇的摘要和实验设置，关注鲁棒性与数据效率如何落地。
-- 详情：[/202609/14/README](/202609/14/README)
+今天速读了两篇各7.0分的工业与时间序列异常检测论文，聚焦无监督场景下的效率与结构建模。
+
+最值得关注两个方向：一是用最优传输做工业数据的无监督异常检测，二是用原型正则化图结构学习处理多变量时间序列异常。
+
+建议普通读者先看最优传输那篇的直觉思路，再对比图结构学习如何捕捉变量间关系，理解两类方法各自的适用场景。
+- 详情：[/202609/15/README](/202609/15/README)
 
 ### 精读区论文标签
 - 本次无精读推荐。
 
 ### 速读区论文标签
-1. [Robust Industrial Cyber Physical Classification Using Neuromorphic Temporal Embeddings and Hybrid SNN XGBoost Under Machine Unlearning Attacks](/202609/14/2609.09564v1-robust-industrial-cyber-physical-classification-using-neuromorphic-temporal-embeddings-and-hybrid-snn-xgboost-under-machine-unlearning-attacks)  
-   标签：评分：6.0/10、query:humanoid-ood
-   evidence：面向边缘部署的轻量级时序异常/入侵检测模型
-2. [HuRo: Robotizing Human Videos for Scalable VLA Pretraining](/202609/14/2609.10706v2-huro-robotizing-human-videos-for-scalable-vla-pretraining)  
-   标签：评分：6.0/10、query:ur
-   evidence：构建约63万条机器人化视频数据集用于机器人学习
-3. [Robust Prototypical Networks for Few-Shot Sensor Fault Diagnosis](/202609/14/2609.12287v1-robust-prototypical-networks-for-few-shot-sensor-fault-diagnosis)  
-   标签：评分：6.0/10、query:ur
-   evidence：少样本传感器故障诊断并注入合成故障
-4. [DATAFARM: Distribution-Aligned Task and Motion Planning for Fine-Tuning Vision-Language-Action Models](/202609/14/2609.12316v1-datafarm-distribution-aligned-task-and-motion-planning-for-fine-tuning-vision-language-action-models)  
-   标签：评分：6.0/10、query:ur
-   evidence：面向基础模型训练的可扩展机器人数据生成
+1. [Optimal Transport for Efficient, Unsupervised Anomaly Detection on Industrial Data](/202609/15/2609.13940v1-optimal-transport-for-efficient-unsupervised-anomaly-detection-on-industrial-data)  
+   标签：评分：7.0/10、query:humanoid-ood
+   evidence：无需标注的时间序列无监督异常检测
+2. [GSLAD: Prototype-Regularized Graph Structure Learning for Multivariate Time Series Anomaly Detection](/202609/15/2609.15483v1-gslad-prototype-regularized-graph-structure-learning-for-multivariate-time-series-anomaly-detection)  
+   标签：评分：7.0/10、query:humanoid-ood
+   evidence：无监督多变量时序异常检测
 
 
 <div class="dpr-home-promo-card">

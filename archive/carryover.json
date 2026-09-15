@@ -1,15 +1,15 @@
 {
-  "generated_at": "2026-09-14T22:17:20.113080+00:00",
-  "updated_date": "20260914",
+  "generated_at": "2026-09-15T22:06:29.699562+00:00",
+  "updated_date": "20260915",
   "carryover_days": 9,
   "tag_states": {
     "ur": {
-      "updated_date": "20260914",
+      "updated_date": "20260915",
       "carryover_days": 9,
       "items": []
     },
     "humanoid-ood": {
-      "updated_date": "20260914",
+      "updated_date": "20260915",
       "carryover_days": 9,
       "items": []
     }
