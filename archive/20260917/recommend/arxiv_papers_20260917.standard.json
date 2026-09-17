@@ -1,0 +1,196 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-09-17T22:00:11.126458+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 2,
+    "deep_divecandidates": 2,
+    "deep_cap": 7,
+    "deep_selected": 2,
+    "quick_candidates": 2,
+    "quick_skim_target": 12,
+    "quick_selected": 2
+  },
+  "deep_dive": [
+    {
+      "id": "2609.17404v1",
+      "source": "arxiv",
+      "title": "Residual Fault Adaptation for Dexterous In-Hand Manipulation Under Runtime Joint Faults",
+      "abstract": "Dexterous in-hand manipulation requires coordinated control of multiple actuated joints, and a runtime joint fault can abruptly disrupt the contact configuration required for successful manipulation. In this work, we propose residual fault adaptation (RFA), a teacher-anchored framework for compensating for hidden command-channel faults. RFA retains a frozen healthy teacher to provide nominal behavior and trains a recurrent residual policy to infer corrective actions from proprioceptive and command-response history. During training, fault-injection domain randomization (FIDR) varies the fault mode, affected joint, severity, and onset time, while adaptive sampling increases the frequency of fault modes associated with lower recent performance. A frozen Direct FIDR policy provides a distributional reference only on fault-active training samples and is absent from deployment. The deployed controller receives neither fault labels nor controller-switching signals. Simulation experiments on the dexterous hand indicate that RFA can improve manipulation performance relative to the healthy policy under a fixed mixed-fault protocol. Real-robot experiments with software-injected faults further demonstrate zero-shot deployment of the learned adaptation policy.",
+      "authors": [
+        "Linan Deng",
+        "Xing Liu",
+        "Lin Hong",
+        "Feng Hua",
+        "Guijun Ma",
+        "Zuogong Yue",
+        "Fumin Zhang"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-09-15T16:34:45+00:00",
+      "link": "https://arxiv.org/pdf/2609.17404v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "fault-injection domain randomization and proprioceptive compensation for runtime joint faults",
+      "llm_evidence_cn": "针对运行时关节故障的故障注入域随机化与本体感受补偿",
+      "llm_evidence": "针对运行时关节故障的故障注入域随机化与本体感受补偿",
+      "canonical_evidence": "针对运行时关节故障的故障注入域随机化与本体感受补偿",
+      "llm_tldr_en": "Runtime joint faults abruptly disrupt dexterous in-hand manipulation. RFA keeps a frozen healthy teacher and trains a recurrent residual policy from proprioceptive and command-response history, using fault-injection domain randomization.",
+      "llm_tldr_cn": "灵巧手内操作依赖多关节协同，运行时关节故障会突然破坏接触构型，导致操作失败。本文提出残差故障自适应（RFA），保留冻结的健康教师策略提供标称行为，并训练循环残差策略从本体感受与指令响应历史中推断纠正动作。训练时采用故障注入域随机化，随机化故障模式、关节、严重度与发生时刻。该方法提升了故障下的操作鲁棒性，为基于本体感受的故障诊断与容错提供思路。",
+      "llm_tldr": "灵巧手内操作依赖多关节协同，运行时关节故障会突然破坏接触构型，导致操作失败。本文提出残差故障自适应（RFA），保留冻结的健康教师策略提供标称行为，并训练循环残差策略从本体感受与指令响应历史中推断纠正动作。训练时采用故障注入域随机化，随机化故障模式、关节、严重度与发生时刻。该方法提升了故障下的操作鲁棒性，为基于本体感受的故障诊断与容错提供思路。",
+      "llm_tags": [
+        "query:humanoid-ood"
+      ],
+      "matched_query_tag": "query:humanoid-ood",
+      "matched_query_text": "fault injection simulation for humanoid robots in MuJoCo or similar environments",
+      "matched_requirement_id": "req-14",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2609.16705v1",
+      "source": "arxiv",
+      "title": "The Robot Data Factory",
+      "abstract": "Physical AI requires more than increasingly large robot datasets: intelligent robots acquire knowledge through continuous interaction with the physical world. We argue that the defining scientific resource of Physical AI is therefore not raw robot data alone, but robot experience - physically grounded interaction whose observations, actions, embodiment, context, and outcomes preserve the perception-action-consequence loop. We introduce the Robot Data Factory (RDF), a mission-driven infrastructure and methodology for continuously generating, validating, benchmarking, and reusing such experience. RDF organizes heterogeneous robots and environment-specific training grounds through reproducible missions, skill curricula, synchronized multimodal sensing, external ground truth, an agentic robot network, data pipelines, and living benchmarks. Rather than treating datasets as static end products, RDF implements a closed Deploy-Measure-Learn-Repeat cycle in which validated physical experience supports world models, vision-language-action models, embodied policies, digital twins, and subsequent robot deployment. We further formalize robot experience and its quality, introduce a mission-task-skill-episode-dataset-benchmark-capability hierarchy, and derive quantitative scaling laws and an algorithmic synthesis procedure connecting robot fleet size, sensor rates, storage, learning representations, tokenization, training compute, inference, and latency to Embodied-AI cluster requirements. The framework is instantiated in three complementary physical training grounds for domestic, environmental, and energy applications. RDF thus reframes robot data generation as a continuous scientific production process and provides a pathway toward reproducible, scalable, and eventually federated infrastructure for Physical AI.",
+      "authors": [
+        "Sami Haddadin",
+        "Ivan Laptev",
+        "Ian Reid",
+        "Dezhen Song",
+        "Cesare Stefanini",
+        "Abdalla Swikir",
+        "Xingxing Zuo",
+        "Lyes Saad Saoud",
+        "Mahmoud Hamandi",
+        "Mohamed Heshmat",
+        "Oualid Doukhi",
+        "Abdeldjallil Naceri",
+        "Attique Bashar",
+        "Abdelrahim Mohamed",
+        "Teodor Tomic",
+        "Yue Peng",
+        "Samuel Schneider",
+        "Cheng-Chung Lee",
+        "Janine Guo",
+        "Qinghao Zhang",
+        "Kim Jeffery"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-09-15T06:30:11+00:00",
+      "link": "https://arxiv.org/pdf/2609.16705v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "infrastructure for generating and reusing robot experience datasets",
+      "llm_evidence_cn": "面向机器人经验数据集生成与复用的基础设施",
+      "llm_evidence": "面向机器人经验数据集生成与复用的基础设施",
+      "canonical_evidence": "面向机器人经验数据集生成与复用的基础设施",
+      "llm_tldr_en": "Physical AI needs robot experience, not just raw data. Robot Data Factory is a mission-driven infrastructure that continuously generates, validates, benchmarks and reuses physically grounded interaction experience across heterogeneous robots for reproducible datasets.",
+      "llm_tldr_cn": "针对物理AI仅依赖大规模原始机器人数据不足的问题，本文提出机器人数据工厂（RDF），一种以任务为驱动的数据基础设施与方法论。RDF通过可复现任务、技能课程、多模态同步感知与外部真值，组织异构机器人与训练场持续生成、验证与复用机器人经验数据。该框架为物理AI提供可复现、可基准测试的机器人经验数据集，推动数据集构建与复用。",
+      "llm_tldr": "针对物理AI仅依赖大规模原始机器人数据不足的问题，本文提出机器人数据工厂（RDF），一种以任务为驱动的数据基础设施与方法论。RDF通过可复现任务、技能课程、多模态同步感知与外部真值，组织异构机器人与训练场持续生成、验证与复用机器人经验数据。该框架为物理AI提供可复现、可基准测试的机器人经验数据集，推动数据集构建与复用。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "quick_skim": [
+    {
+      "id": "2609.16314v1",
+      "source": "arxiv",
+      "title": "Robust Fault Detection in Mechanical Multimodal Time Series via Self-Supervised Cross-Modal Reconstruction",
+      "abstract": "Fault detection is essential in industrial systems, enabling early identification of abnormal behaviour and improving safety, reliability, and operational efficiency. Modern systems increasingly rely on heterogeneous sensing modalities that capture complementary aspects of the underlying physical process. However, existing data-driven anomaly detection methods often process each modality independently or use simple feature-level fusion, limiting their ability to exploit cross-modal relationships that characterize normal system behaviour. Their performance also commonly assumes similar training and deployment distributions, whereas real-world operation is affected by changing operating conditions, environmental influences, and system degradation that induce distribution shifts and reduce detection performance, especially in unseen regimes.   In this work, we propose a multimodal anomaly detection framework based on cross-modal reconstruction of heterogeneous time-series sensor data. Rather than modeling each modality independently, the framework learns system dynamics by reconstructing each modality from the others, thereby exploiting complementary information across modalities. This integrates information across sensing channels without requiring explicit temporal alignment or identical sampling rates, while improving robustness to sensor noise, missing measurements, and modality-specific disturbances. To address distribution shifts during real-world deployment, anomalies are identified using cross-modal reconstruction error and an adaptive test-time thresholding mechanism that adjusts to changing operating conditions. Experiments on three industrial case studies show strong fault detection performance and substantially improved robustness under out-of-distribution conditions, with the largest gains observed in the most challenging operating regimes.",
+      "authors": [
+        "Magnus Munk Jensen",
+        "Dorte Hammershøi",
+        "Rafał Wiśniewski",
+        "Olga Fink"
+      ],
+      "primary_category": "cs.LG",
+      "categories": [
+        "cs.LG",
+        "stat.AP"
+      ],
+      "published": "2026-09-14T20:24:53+00:00",
+      "link": "https://arxiv.org/pdf/2609.16314v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "self-supervised cross-modal reconstruction for time-series fault detection",
+      "llm_evidence_cn": "自监督跨模态重建用于时序故障检测",
+      "llm_evidence": "自监督跨模态重建用于时序故障检测",
+      "canonical_evidence": "自监督跨模态重建用于时序故障检测",
+      "llm_tldr_en": "Existing data-driven anomaly detection processes modalities independently or fuses shallowly and assumes matching train/deploy distributions; this work proposes self-supervised cross-modal reconstruction to model normal behavior and detect faults robustly in mechanical multimodal time series.",
+      "llm_tldr_cn": "工业系统故障检测日益依赖异构多模态传感，但现有数据驱动异常检测常独立处理各模态或仅做简单特征融合，且默认训练与部署分布一致，难以应对工况变化。本文提出基于自监督跨模态重建的故障检测方法，通过建模模态间互补关系刻画正常行为，从而识别异常。实验在机械多模态时间序列上验证了该方法对分布变化的鲁棒性，为机器人等多模态时序故障诊断提供了可迁移的自监督思路。",
+      "llm_tldr": "工业系统故障检测日益依赖异构多模态传感，但现有数据驱动异常检测常独立处理各模态或仅做简单特征融合，且默认训练与部署分布一致，难以应对工况变化。本文提出基于自监督跨模态重建的故障检测方法，通过建模模态间互补关系刻画正常行为，从而识别异常。实验在机械多模态时间序列上验证了该方法对分布变化的鲁棒性，为机器人等多模态时序故障诊断提供了可迁移的自监督思路。",
+      "llm_tags": [
+        "query:humanoid-ood"
+      ],
+      "matched_query_tag": "query:humanoid-ood",
+      "matched_query_text": "Self supervised time series anomaly detection for robot fault diagnosis",
+      "matched_requirement_id": "req-16",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2609.18324v1",
+      "source": "arxiv",
+      "title": "RAFAIL: Relationship-Aware Failure Detection for Robotic Manipulation",
+      "abstract": "Detecting failures during execution is essential for reliable robotic manipulation. Vision-language models (VLMs) can assess task outcomes semantically but add runtime computation, whereas out-of-distribution (OOD) detectors may respond to harmless scene variations rather than failure-relevant deviations. We introduce RAFAIL, a framework for detecting execution failures during robotic manipulation. RAFAIL identifies failures by detecting anomalies in task-relevant relationships between entities, such as a gripper and an object or an object and its target. By focusing OOD detection on relevant parts of the observation, RAFAIL reduces sensitivity to task-irrelevant scene variation. Offline, a VLM annotates successful demonstrations with task progress and relationship importance, which are used to learn point-cloud-based relationship representations without relying on policy-internal features. At runtime, relationship-specific OOD detectors evaluate these representations while relationship importance and task progress are predicted without VLM inference. RAFAIL requires no failure data and achieves 73.4% balanced accuracy across three real-world robotic manipulation tasks, outperforming the strongest evaluated OOD- and uncertainty-based baselines.",
+      "authors": [
+        "Loris Schneider",
+        "Edgar Welte",
+        "Rania Rayyes"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-09-16T08:46:02+00:00",
+      "link": "https://arxiv.org/pdf/2609.18324v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "OOD-based failure detection for reliable robot operation",
+      "llm_evidence_cn": "基于OOD的机器人故障检测",
+      "llm_evidence": "基于OOD的机器人故障检测",
+      "canonical_evidence": "基于OOD的机器人故障检测",
+      "llm_tldr_en": "Detecting execution failures is essential for reliable manipulation, but VLMs add runtime cost while OOD detectors react to harmless scene variation. The paper introduces RAFAIL, which detects failures via anomalies in task-relevant relationships between entities, focusing OOD detection on relevant observation parts and reducing sensitivity to irrelevant variation.",
+      "llm_tldr_cn": "机器人操作执行中的故障检测至关重要，但VLM语义评估计算开销大，而OOD检测器常对无关场景变化过度敏感。本文提出RAFAIL框架，通过检测夹爪与物体等实体间任务相关关系中的异常来识别执行故障，将OOD检测聚焦于观测的相关部分。方法降低了对无关变化的敏感性，提升了机器人操作执行故障检测的可靠性。",
+      "llm_tldr": "机器人操作执行中的故障检测至关重要，但VLM语义评估计算开销大，而OOD检测器常对无关场景变化过度敏感。本文提出RAFAIL框架，通过检测夹爪与物体等实体间任务相关关系中的异常来识别执行故障，将OOD检测聚焦于观测的相关部分。方法降低了对无关变化的敏感性，提升了机器人操作执行故障检测的可靠性。",
+      "llm_tags": [
+        "query:humanoid-ood"
+      ],
+      "matched_query_tag": "query:humanoid-ood",
+      "matched_query_text": "out-of-distribution detection for safe robot operation",
+      "matched_requirement_id": "req-11",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    }
+  ]
+}
