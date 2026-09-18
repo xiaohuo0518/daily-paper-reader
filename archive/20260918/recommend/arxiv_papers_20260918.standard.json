@@ -1,0 +1,201 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-09-18T21:28:29.136826+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 2,
+    "deep_divecandidates": 0,
+    "deep_cap": 7,
+    "deep_selected": 0,
+    "quick_candidates": 4,
+    "quick_skim_target": 12,
+    "quick_selected": 4
+  },
+  "deep_dive": [],
+  "quick_skim": [
+    {
+      "id": "2609.14633v2",
+      "source": "arxiv",
+      "title": "REVOLVE: An Automated Closed-Loop Framework for Evolving Robot Manipulation with Minimal Human Intervention",
+      "abstract": "Recent advances in data-driven robot manipulation policies have substantially improved task execution and generalization. However, real-world deployment still relies heavily on humans for failure assessment, correction, and environment reset, while models often fail to continually learn from failures and corrective experience. We present REVOLVE (Robot Evolving via Orchestrated Loops, Verification, and Experience), an automated closed-loop framework for evolving robot manipulation with minimal human intervention. Built on a unified software platform, REVOLVE integrates data collection, policy training and deployment, failure recovery, and continual learning into a single closed-loop workflow. Its Automated Reset and Correction (ARC) architecture automatically resets the environment and intervenes to correct policy failures. Dual-Loop Evolution (DLE) continually improves the manipulation policy and agent by feeding real-world interaction and failure--correction data back into policy learning and using an external mismatch memory to refine agent judgments. Experiments across four real-world manipulation tasks show that, after five iterations, REVOLVE improves average policy success rate by 18.5% and agent judgment accuracy by 8.5%, while reducing human effort in data collection and deployment testing by 94.4% and 95.1%, respectively. These results demonstrate that REVOLVE transforms real-world deployment into a closed-loop learning process that continually accumulates and uses execution experience, enabling continual evolution of both the policy and supervisory model with substantially less human intervention.",
+      "authors": [
+        "Hanyu Liu",
+        "Qian Li",
+        "Yizhu Ding",
+        "Jiayi Wen",
+        "Keqiang Ren",
+        "Yunsheng Ma",
+        "Tao Jian",
+        "Zhihua Wang",
+        "Zhuofan Yu",
+        "Xinran Li",
+        "Zhigong Song"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-09-13T16:08:03+00:00",
+      "link": "https://arxiv.org/pdf/2609.14633v2",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "closed-loop framework integrating data collection, deployment and failure recovery",
+      "llm_evidence_cn": "集成数据采集、部署与故障恢复的闭环框架",
+      "llm_evidence": "集成数据采集、部署与故障恢复的闭环框架",
+      "canonical_evidence": "集成数据采集、部署与故障恢复的闭环框架",
+      "llm_tldr_en": "Robot manipulation deployment still needs humans for failure assessment, correction and reset, and models rarely learn from failures. REVOLVE integrates data collection, policy training, deployment, failure recovery and continual learning into one closed loop. It reduces human intervention while enabling robots to evolve from corrective experience.",
+      "llm_tldr_cn": "机器人操作策略在真实部署中仍高度依赖人工进行故障评估、纠正与环境重置，且模型难以持续从失败中学习。本文提出REVOLVE，一个自动化闭环框架，将数据采集、策略训练与部署、故障恢复和持续学习整合到统一工作流中。该框架在减少人工干预的同时，使机器人能够从纠正性经验中不断进化，为可自主演进的机器人系统提供了完整方案。",
+      "llm_tldr": "机器人操作策略在真实部署中仍高度依赖人工进行故障评估、纠正与环境重置，且模型难以持续从失败中学习。本文提出REVOLVE，一个自动化闭环框架，将数据采集、策略训练与部署、故障恢复和持续学习整合到统一工作流中。该框架在减少人工干预的同时，使机器人能够从纠正性经验中不断进化，为可自主演进的机器人系统提供了完整方案。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "dataset construction for robotics",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2609.15988v1",
+      "source": "arxiv",
+      "title": "ResSafe: Learning Safety Filtering with Residual Reinforcement Learning for Humanoids",
+      "abstract": "Safe control of humanoid robots remains challenging due to their high-dimensional dynamics, contact-rich interactions, and sensitivity to disturbances. Although reinforcement learning has enabled effective locomotion and motion tracking, learned policies can still generate unsafe actions that lead to instability or falls. In this work, we propose residual reinforcement learning as an implicit safety-filtering mechanism for safe humanoid control. Instead of relying on a single nominal policy to simultaneously balance performance, safety, and robustness, we decouple performance and safety. The nominal policy focuses solely on task performance, while a residual policy learns safety corrections. This decoupling leads to a better performance--safety Pareto trade-off and avoids the need for careful tuning of multiple competing reward terms within a single policy training. We show that the residual policy can act as an implicit safety filter.",
+      "authors": [
+        "Gechen Qu",
+        "Tong Zhang",
+        "Bike Zhang",
+        "Yen-Jen Wang",
+        "Koushil Sreenath",
+        "Claire Tomlin",
+        "Jason Jangho Choi"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-09-14T17:59:50+00:00",
+      "link": "https://arxiv.org/pdf/2609.15988v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "safe humanoid control via residual RL, decoupling performance and safety",
+      "llm_evidence_cn": "通过残差强化学习实现人形机器人安全控制，解耦性能与安全",
+      "llm_evidence": "通过残差强化学习实现人形机器人安全控制，解耦性能与安全",
+      "canonical_evidence": "通过残差强化学习实现人形机器人安全控制，解耦性能与安全",
+      "llm_tldr_en": "Safe control of humanoid robots is hard due to high-dimensional dynamics and disturbance sensitivity, and learned policies can still emit unsafe actions. ResSafe uses residual reinforcement learning as an implicit safety filter: a nominal policy handles performance while a residual policy learns safety corrections, improving the performance-safety trade-off.",
+      "llm_tldr_cn": "针对人形机器人高维动力学、接触复杂且易受扰动，学习策略仍可能产生导致失稳或跌倒的不安全动作的问题，本文提出ResSafe，将残差强化学习作为隐式安全滤波器。方法把性能与安全解耦：名义策略专注任务表现，残差策略学习安全修正动作。实验表明该解耦带来更好的性能-安全权衡与鲁棒性，为人形机器人安全控制提供可复用框架。",
+      "llm_tldr": "针对人形机器人高维动力学、接触复杂且易受扰动，学习策略仍可能产生导致失稳或跌倒的不安全动作的问题，本文提出ResSafe，将残差强化学习作为隐式安全滤波器。方法把性能与安全解耦：名义策略专注任务表现，残差策略学习安全修正动作。实验表明该解耦带来更好的性能-安全权衡与鲁棒性，为人形机器人安全控制提供可复用框架。",
+      "llm_tags": [
+        "query:humanoid-ood"
+      ],
+      "matched_query_tag": "query:humanoid-ood",
+      "matched_query_text": "out-of-distribution detection for safe robot operation",
+      "matched_requirement_id": "req-11",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2609.18732v1",
+      "source": "arxiv",
+      "title": "PASSAGE: Scaling Scene-Aligned Motion Learning for Perceptive Humanoid Traversal in Cluttered Environments",
+      "abstract": "Humanoid robots can step over, squeeze past, and duck under obstacles, but learning to select and coordinate these behaviors from onboard perception remains challenging. Many existing approaches rely on task-specific reinforcement-learning objectives or curated motion libraries, making broad behavioral coverage costly. We present PASSAGE, a perception-conditioned planner--tracker framework for humanoid traversal. Using virtual reality and inertial motion capture, we collect 100 h of scene-aligned human motion across 1,500 cluttered scenes. A conditional flow-matching planner generates short-horizon references from motion history, a local destination, and a robot-centric multi-layer elevation map, while a perceptive whole-body tracker executes them at 50 Hz with geometric feedback. Real-time chunking promotes inter-chunk consistency, and planner-side RL post-training under the frozen tracker further improves closed-loop performance. Without skill annotations or obstacle-specific policies, one planner--tracker pair selects and composes traversal behaviors across unseen geometries. In simulation, component ablations quantify the contribution of each stage. Across three independent training seeds, scaling captured data from 6 to 100 h increases mean contact-free success from 48.1% to 68.9% on held-out scenes, while the final model with validated scene augmentation reaches 70.3%. The fully onboard system integrates egocentric 3D LiDAR perception, online occupancy mapping, 6.25 Hz planning, and 50 Hz control on a Jetson AGX Orin; tests across 50 unseen physical layouts demonstrate traversal without prebuilt maps or offboard computation.",
+      "authors": [
+        "Yuxuan Ma",
+        "Zicheng Zeng",
+        "Chunlin Peng",
+        "Zhoujian Li",
+        "Zetong Zhao",
+        "Zhikai Zhang",
+        "Yunrui Lian",
+        "Han Xue",
+        "Sikai Liang",
+        "Weiyi Zhu",
+        "Mulin Chen",
+        "Chenghuai Lin",
+        "Jiayu Zeng",
+        "Yanwei An",
+        "Songan Zhang",
+        "Jiayuan Gu",
+        "Jilong Wang",
+        "Jingbo Wang",
+        "He Wang",
+        "Li Yi"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-09-16T14:30:52+00:00",
+      "link": "https://arxiv.org/pdf/2609.18732v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "collects 100h of scene-aligned human motion for humanoid traversal learning",
+      "llm_evidence_cn": "采集100小时场景对齐人体运动数据用于人形机器人运动学习",
+      "llm_evidence": "采集100小时场景对齐人体运动数据用于人形机器人运动学习",
+      "canonical_evidence": "采集100小时场景对齐人体运动数据用于人形机器人运动学习",
+      "llm_tldr_en": "Humanoid traversal in cluttered scenes is hard to learn from task-specific RL or curated motion libraries. PASSAGE collects 100h of scene-aligned human motion across 1500 scenes and trains a flow-matching planner with a perceptive tracker. This scales behavioral coverage for perception-conditioned humanoid traversal.",
+      "llm_tldr_cn": "人形机器人在杂乱环境中跨越障碍的行为学习，往往依赖任务专用强化学习目标或人工整理的运动库，覆盖面受限且成本高昂。本文提出PASSAGE框架，利用VR与惯性动捕采集1500个场景下100小时场景对齐人体运动数据，并训练条件流匹配规划器与感知跟踪器。该方法以数据驱动方式扩展了感知条件下的行为覆盖，为人形机器人运动数据集构建与复杂地形通行提供了新范式。",
+      "llm_tldr": "人形机器人在杂乱环境中跨越障碍的行为学习，往往依赖任务专用强化学习目标或人工整理的运动库，覆盖面受限且成本高昂。本文提出PASSAGE框架，利用VR与惯性动捕采集1500个场景下100小时场景对齐人体运动数据，并训练条件流匹配规划器与感知跟踪器。该方法以数据驱动方式扩展了感知条件下的行为覆盖，为人形机器人运动数据集构建与复杂地形通行提供了新范式。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "humanoid robot dataset construction",
+      "matched_requirement_id": "req-2",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2609.19512v1",
+      "source": "arxiv",
+      "title": "CoreSense: Traceable Failure Recall and Conflict-Aware Belief Gating for Auditable Robot Decisions",
+      "abstract": "Robots can recall prior failures without knowing whether recalled evidence remains valid, conflicts with current observations, or is sufficient to guide a decision. We present CoreSense, a robot-system integration architecture that combines traceable episodic evidence with a conflict-aware belief gate and bounded, auditable recommendations. The gate checks scope, provenance, time, contradiction, and support before it permits PROCEED, requests re-observation, abstains, or escalates. Evaluation follows three complementary layers without commanding a physical robot: offline public real-robot data, a frozen signal-level simulation, and a live cloud deployment path. On CableTrace-120 and BotFails-200, belief gating reduces protocol-defined unsafe proceeds from 20% and 40% to 0%. A disjointly calibrated raw-video policy also reaches 0% unsafe proceed, but overblocks every nominal episode. On public data, a ViFailback-BotFails visual detector reaches 0.778 AUROC yet remains all-blocking, whereas cycle-disjoint UR3 telemetry for protective stops yields 0% unsafe proceed, 36.1% overblocking, and 61.9% coverage; grip-loss transfer remains a negative result. Controlled physical corroboration yields 3.3%, 0%, and 42.0%, while conflict-aware fusion yields 4.7%, 0%, and 42.8%. Finally, 20/20 cloud recalls validate a CockroachDB Cloud-Amazon Bedrock deployment path. The evidence supports an auditable integration pattern, not autonomous recovery or certified safety.",
+      "authors": [
+        "Zoe Li"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.AI"
+      ],
+      "published": "2026-09-17T00:01:06+00:00",
+      "link": "https://arxiv.org/pdf/2609.19512v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "failure recall and conflict-aware belief gating for auditable robot decisions",
+      "llm_evidence_cn": "可追溯故障回忆与冲突感知信念门控用于机器人决策",
+      "llm_evidence": "可追溯故障回忆与冲突感知信念门控用于机器人决策",
+      "canonical_evidence": "可追溯故障回忆与冲突感知信念门控用于机器人决策",
+      "llm_tldr_en": "Robots recall prior failures without knowing if the evidence is still valid or sufficient. CoreSense adds a conflict-aware belief gate checking scope, provenance, time and support before proceeding or abstaining. On CableTrace-120 and BotFails-200 it reduces improper decisions, supporting auditable robot failure handling.",
+      "llm_tldr_cn": "机器人能够回忆历史故障，却难以判断这些证据是否仍然有效、是否与当前观测冲突。本文提出CoreSense架构，将可追溯的情景证据与冲突感知信念门控相结合，在放行、重观测、弃权或上报前检查作用域、来源、时间与支持度。在CableTrace-120与BotFails-200上，该门控显著减少了不当决策，为可审计的机器人故障处理提供了新思路。",
+      "llm_tldr": "机器人能够回忆历史故障，却难以判断这些证据是否仍然有效、是否与当前观测冲突。本文提出CoreSense架构，将可追溯的情景证据与冲突感知信念门控相结合，在放行、重观测、弃权或上报前检查作用域、来源、时间与支持度。在CableTrace-120与BotFails-200上，该门控显著减少了不当决策，为可审计的机器人故障处理提供了新思路。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "fault diagnosis and error analysis for humanoid robots",
+      "matched_requirement_id": "req-7",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    }
+  ]
+}

@@ -6,34 +6,37 @@
 </div>
 
 ## 每次日报
-- 最新运行日期：2026-09-17
-- 运行时间：2026-09-17 22:05:36 UTC
+- 最新运行日期：2026-09-18
+- 运行时间：2026-09-18 21:30:00 UTC
 - 运行状态：成功
 - 本次总论文数：4
-- 精读区：2
-- 速读区：2
+- 精读区：0
+- 速读区：4
 
 ### 今日简报（AI）
-今日精选4篇机器人论文，2篇精读、2篇速读，主线锁定“机器人数据与故障鲁棒性”。  
-最值得看的是两篇8分精读：《The Robot Data Factory》聚焦机器人数据生产，《Residual Fault Adaptation for Dexterous In-Hand Manipulation Under Runtime Joint Faults》关注运行时关节故障下的灵巧手内操作适应。  
-普通读者可先读这两篇精读，再用《Robust Fault Detection in Mechanical Multimodal Time Series via Self-Supervised Cross-Modal Reconstruction》和《RAFAIL: Relationship-Aware Failure Detection for Robotic Manipulation》补充故障检测思路。
-- 详情：[/202609/17/README](/202609/17/README)
+今天完成4篇速读、0篇精读，主线集中在机器人操作自动进化、人形安全滤波与杂乱环境感知穿越。
+
+若只看方向，优先关注《ResSafe》的人形安全滤波和《PASSAGE》的感知人形穿越，两篇均为6.0分，适合了解复杂场景下安全与移动如何兼顾。
+
+普通读者可先速读这三篇已列论文，抓住
+- 详情：[/202609/18/README](/202609/18/README)
 
 ### 精读区论文标签
-1. [The Robot Data Factory](/202609/17/2609.16705v1-the-robot-data-factory)  
-   标签：评分：8.0/10、query:ur
-   evidence：面向机器人经验数据集生成与复用的基础设施
-2. [Residual Fault Adaptation for Dexterous In-Hand Manipulation Under Runtime Joint Faults](/202609/17/2609.17404v1-residual-fault-adaptation-for-dexterous-in-hand-manipulation-under-runtime-joint-faults)  
-   标签：评分：8.0/10、query:humanoid-ood
-   evidence：针对运行时关节故障的故障注入域随机化与本体感受补偿
+- 本次无精读推荐。
 
 ### 速读区论文标签
-1. [Robust Fault Detection in Mechanical Multimodal Time Series via Self-Supervised Cross-Modal Reconstruction](/202609/17/2609.16314v1-robust-fault-detection-in-mechanical-multimodal-time-series-via-self-supervised-cross-modal-reconstruction)  
-   标签：评分：7.0/10、query:humanoid-ood
-   evidence：自监督跨模态重建用于时序故障检测
-2. [RAFAIL: Relationship-Aware Failure Detection for Robotic Manipulation](/202609/17/2609.18324v1-rafail-relationship-aware-failure-detection-for-robotic-manipulation)  
-   标签：评分：7.0/10、query:humanoid-ood
-   evidence：基于OOD的机器人故障检测
+1. [REVOLVE: An Automated Closed-Loop Framework for Evolving Robot Manipulation with Minimal Human Intervention](/202609/18/2609.14633v2-revolve-an-automated-closed-loop-framework-for-evolving-robot-manipulation-with-minimal-human-intervention)  
+   标签：评分：6.0/10、query:ur
+   evidence：集成数据采集、部署与故障恢复的闭环框架
+2. [ResSafe: Learning Safety Filtering with Residual Reinforcement Learning for Humanoids](/202609/18/2609.15988v1-ressafe-learning-safety-filtering-with-residual-reinforcement-learning-for-humanoids)  
+   标签：评分：6.0/10、query:humanoid-ood
+   evidence：通过残差强化学习实现人形机器人安全控制，解耦性能与安全
+3. [PASSAGE: Scaling Scene-Aligned Motion Learning for Perceptive Humanoid Traversal in Cluttered Environments](/202609/18/2609.18732v1-passage-scaling-scene-aligned-motion-learning-for-perceptive-humanoid-traversal-in-cluttered-environments)  
+   标签：评分：6.0/10、query:ur
+   evidence：采集100小时场景对齐人体运动数据用于人形机器人运动学习
+4. [CoreSense: Traceable Failure Recall and Conflict-Aware Belief Gating for Auditable Robot Decisions](/202609/18/2609.19512v1-coresense-traceable-failure-recall-and-conflict-aware-belief-gating-for-auditable-robot-decisions)  
+   标签：评分：6.0/10、query:ur
+   evidence：可追溯故障回忆与冲突感知信念门控用于机器人决策
 
 
 <div class="dpr-home-promo-card">
