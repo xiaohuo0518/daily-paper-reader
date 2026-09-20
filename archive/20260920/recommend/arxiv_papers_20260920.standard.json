@@ -1,0 +1,106 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-09-20T21:18:08.258285+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 2,
+    "deep_divecandidates": 0,
+    "deep_cap": 7,
+    "deep_selected": 0,
+    "quick_candidates": 2,
+    "quick_skim_target": 12,
+    "quick_selected": 2
+  },
+  "deep_dive": [],
+  "quick_skim": [
+    {
+      "id": "2609.17843v1",
+      "source": "arxiv",
+      "title": "RoboVAD: A Large Cross-Domain Evaluation Benchmark for Anomaly Detection in Robotic Arm Manipulation Videos",
+      "abstract": "Video anomaly detection (VAD) is an actively studied task, having wide applications in typical scenarios such as public surveillance and road traffic safety. The task is also relevant for robotic arm interactions, where it has several downstream applications, including learning better interaction and manipulation abilities, triggering recovery procedures when anomalies occur, etc. Despite its relevance, the exploration of anomaly detection in robotic arm manipulation videos is limited by the low number of available resources. To this end, we introduce RoboVAD, a large-scale benchmark for video anomaly detection that comprises challenging cross-domain evaluation scenarios, where certain actions (tasks executed by a robotic arm) and anomaly types (mistakes that occur while performing certain tasks) remain unseen during training. RoboVAD is designed to benchmark VAD methods in realistic scenarios, where robotic arms can perform unforeseen tasks, and thereby encounter new anomaly types. We train and evaluate several state-of-the-art VAD methods, including a novel method specifically adapted for robotic arm manipulation. While the proposed method outperforms many state-of-the-art competitors, all methods remain below a micro-averaged frame-level AUC threshold of 70% in the most challenging evaluation setup, confirming the difficulty of the proposed benchmark. We publicly release our dataset and code at https://zenodo.org/records/22754659.",
+      "authors": [
+        "Alexandru-Bogdan Dura",
+        "Sebastian Balmus",
+        "Radu Tudor Ionescu"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV",
+        "cs.AI",
+        "cs.LG",
+        "cs.RO"
+      ],
+      "published": "2026-09-15T21:02:38+00:00",
+      "link": "https://arxiv.org/pdf/2609.17843v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "large cross-domain benchmark for anomaly detection in robotic manipulation",
+      "llm_evidence_cn": "机械臂操作异常检测的大规模跨域基准",
+      "llm_evidence": "机械臂操作异常检测的大规模跨域基准",
+      "canonical_evidence": "机械臂操作异常检测的大规模跨域基准",
+      "llm_tldr_en": "RoboVAD is a large-scale cross-domain benchmark for video anomaly detection in robotic arm manipulation, providing standardized challenging evaluation scenarios to support interaction learning and anomaly recovery research.",
+      "llm_tldr_cn": "针对机器人机械臂操作视频异常检测研究资源匮乏、难以支撑交互学习与异常恢复等下游任务的问题，论文提出RoboVAD大规模跨域评测基准。该基准包含机械臂执行多种任务时的异常场景，并设置具有挑战性的跨域评测协议，用以检验现有视频异常检测方法。它为机器人异常检测提供了标准化评测平台，推动安全监控与故障恢复相关研究。",
+      "llm_tldr": "针对机器人机械臂操作视频异常检测研究资源匮乏、难以支撑交互学习与异常恢复等下游任务的问题，论文提出RoboVAD大规模跨域评测基准。该基准包含机械臂执行多种任务时的异常场景，并设置具有挑战性的跨域评测协议，用以检验现有视频异常检测方法。它为机器人异常检测提供了标准化评测平台，推动安全监控与故障恢复相关研究。",
+      "llm_tags": [
+        "query:humanoid-ood"
+      ],
+      "matched_query_tag": "query:humanoid-ood",
+      "matched_query_text": "out-of-distribution detection for safe robot operation",
+      "matched_requirement_id": "req-11",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2609.18197v1",
+      "source": "arxiv",
+      "title": "WholeBodyWAM: Learning Whole-Body World Action Models with Scalable Motion Priors",
+      "abstract": "Humanoid whole-body manipulation requires coordinated whole-body dynamics, yet large-scale trajectories from a target robot are expensive to collect and difficult to scale. In contrast, whole-body motion from human and humanoid sources is abundantly available, although such data cannot be directly used as embodiment-specific robot actions. This work asks whether these scalable motion resources can instead provide a transferable predictive prior for humanoid world-action modeling. We introduce WholeBodyWAM, a humanoid world-action model that learns whole-body dynamics from large-scale heterogeneous motion before target-robot training. We curate UniMotion-4K, a motion corpus spanning more than 4K hours from human videos, native 3D motion datasets, and heterogeneous humanoid platforms, and canonicalize these diverse sources into a unified motion space. A language-conditioned Motion Expert is then pretrained to predict future whole-body motion without target-robot action supervision. During robot post-training, the pretrained Motion Expert is integrated with Video and Action Experts through asymmetric Mixture-of-Transformers (MoT) attention, enabling predictive scene dynamics and whole-body motion to jointly inform embodiment-specific action generation. Experiments show that WholeBodyWAM consistently benefits from increased motion-pretraining scale, improves future-motion prediction and downstream task performance, and transfers effectively to real-world humanoid manipulation. Moreover, the pretrained motion prior substantially improves data efficiency under limited target-robot demonstrations.",
+      "authors": [
+        "Bowei Zhang",
+        "Qiyao Zhang",
+        "Shuanghao Bai",
+        "Xinhua Wang",
+        "Meng Li",
+        "Yilei Wang",
+        "Leiwang Zhang",
+        "Jian Tang",
+        "Lu Zhou",
+        "Lei Sun",
+        "Zhengping Che"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-09-16T06:32:21+00:00",
+      "link": "https://arxiv.org/pdf/2609.18197v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "curates UniMotion-4K motion corpus for humanoid whole-body modeling",
+      "llm_evidence_cn": "构建人形全身运动数据集UniMotion-4K",
+      "llm_evidence": "构建人形全身运动数据集UniMotion-4K",
+      "canonical_evidence": "构建人形全身运动数据集UniMotion-4K",
+      "llm_tldr_en": "Humanoid whole-body manipulation lacks scalable target-robot trajectories. WholeBodyWAM learns a world-action model from large heterogeneous human and humanoid motion, curating the UniMotion-4K corpus of over 4K hours, then transfers the predictive prior to the target robot for whole-body control.",
+      "llm_tldr_cn": "仿人全身操作依赖大量本体轨迹，但目标机器人的数据采集昂贵且难以扩展。本文提出WholeBodyWAM，先从人类视频与多种仿人运动等异构来源学习全身动力学，构建超过4000小时、覆盖多种运动模态的UniMotion-4K运动语料库，再将学到的预测先验迁移到目标机器人进行全身动作建模与训练。该工作表明大规模异构运动资源可作为可迁移先验，缓解人形机器人数据稀缺问题。",
+      "llm_tldr": "仿人全身操作依赖大量本体轨迹，但目标机器人的数据采集昂贵且难以扩展。本文提出WholeBodyWAM，先从人类视频与多种仿人运动等异构来源学习全身动力学，构建超过4000小时、覆盖多种运动模态的UniMotion-4K运动语料库，再将学到的预测先验迁移到目标机器人进行全身动作建模与训练。该工作表明大规模异构运动资源可作为可迁移先验，缓解人形机器人数据稀缺问题。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "humanoid robot dataset construction",
+      "matched_requirement_id": "req-2",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    }
+  ]
+}
