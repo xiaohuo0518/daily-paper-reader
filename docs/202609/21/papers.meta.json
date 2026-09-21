@@ -1,0 +1,54 @@
+{
+  "label": "2026-09-21",
+  "date": "2026-09-21",
+  "generated_at": "2026-09-21T22:23:32",
+  "count": 3,
+  "papers": [
+    {
+      "paper_id": "202609/21/2609.21369v1-protracer-proprioception-guided-failure-diagnosis-in-robot-manipulation",
+      "section": "deep",
+      "title_en": "ProTracer: Proprioception-Guided Failure Diagnosis in Robot Manipulation",
+      "authors": "Chang Dong, Mehdi Hosseinzadeh, King Hang Wong, Lingqiao Liu, Francois Fraysse, Feras Dayoub, Minh Hoai Nguyen",
+      "date": "2026-09-18",
+      "pdf": "https://arxiv.org/pdf/2609.21369v1",
+      "score": "8.0",
+      "evidence": "本体感受引导的机器人故障诊断与错误分析",
+      "tldr": "针对机器人操作失败分析，论文提出免训练的ProTracer框架，利用本体感受信号定位动作边界，并将机器人状态转成结构化文本，与视觉观察共同输入现有VLM。方法覆盖失败检测、分类、解释生成及失败起始定位，并引入同步视觉-本体感受的FailTime基准。实验表明其在常规诊断和新失败起始定位任务上均表现强劲，凸显本体感受推理对细粒度时间分析的价值。",
+      "tags": "query:ur",
+      "abstract_en": "This paper presents a comprehensive framework for robot manipulation failure analysis that includes binary failure detection, failure categorization, explanation generation, and the additional capability of failure onset localization, which aims to identify the earliest moment at which a robot execution deviates from a valid task-completion trajectory and is ultimately followed by task failure. To address these tasks, we propose ProTracer, a training-free framework that leverages existing Vision-Language Models (VLMs) together with proprioceptive signals for failure analysis. Our method uses proprioceptive dynamics to identify temporally informative action boundaries and converts richer robot-state signals into structured natural-language descriptions that can be jointly analyzed together with visual observations by the VLM. This design combines the temporal precision of proprioceptive signals with the multimodal reasoning capabilities of modern VLMs without requiring additional model training. We further introduce FailTime, a benchmark with synchronized visual and proprioceptive observations for evaluating conventional failure diagnosis tasks as well as failure onset localization. Experiments demonstrate that ProTracer achieves strong performance across both conventional failure diagnosis tasks and the newly introduced failure onset localization task, highlighting the importance of proprioceptive reasoning for fine-grained temporal failure analysis.",
+      "source": "arxiv",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "paper_id": "202609/21/2609.14432v1-emog-emotion-modulated-gait-generation-for-expressive-humanoid-locomotion",
+      "section": "quick",
+      "title_en": "EMoG: Emotion-Modulated Gait Generation for Expressive Humanoid Locomotion",
+      "authors": "Yi Lu, Tianhao Jiang, Honglong Tian, Yumeng Zhang, Qingrui Zhao, Zhengtao Wang, Xiao-Xiao Long, Qiu Shen, Xun Cao",
+      "date": "2026-09-13",
+      "pdf": "https://arxiv.org/pdf/2609.14432v1",
+      "score": "6.0",
+      "evidence": "采集大规模情感标注的人形机器人步态数据集",
+      "tldr": "现有类人机器人运动多关注稳定与任务执行，难以在显式控制中融入表现力。EMoG提出情感调制步态生成框架，用连续可调强度的情感风格码和物理指令，经轻量MLP实时生成周期性步态轨迹，并由统一强化学习策略跟踪执行。团队采集专业表演者情感标注步态数据，构建自动提取物理一致步态周期流程，还接入LLM解析自由语言为情感与运动参数。实验显示可连续调制步态风格并保留可感知表达线索，同时维持指令跟踪，为机器人交互提供参数化情感步态方案。",
+      "tags": "query:ur",
+      "abstract_en": "Existing humanoid locomotion systems primarily focus on stability and task execution, while integrating expressiveness with explicit locomotion control remains challenging. We propose EMoG, an emotion-modulated gait generation framework for expressive humanoid locomotion. EMoG introduces an emotional-style code with continuously adjustable intensity. Conditioned on this code and physical commands, a lightweight MLP generates expressive, command-consistent periodic gait trajectories in real time, which are tracked by a unified reinforcement learning policy for physical execution. To support training, we collect a large-scale emotion-annotated gait dataset from professional performers and develop an automated pipeline to extract physically consistent periodic gait cycles. EMoG also integrates an LLM-based parser that converts free-form language into emotional style and motion parameters for interactive control. Experiments demonstrate continuous gait-style modulation with perceptible expressive cues while maintaining command tracking. EMoG provides a practical approach to parameterized emotional-style walking for human-robot interaction.",
+      "source": "arxiv",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "paper_id": "202609/21/2609.21801v1-llm-generated-feature-pools-for-time-series-anomaly-detection",
+      "section": "quick",
+      "title_en": "LLM-Generated Feature Pools for Time Series Anomaly Detection",
+      "authors": "Youssef Attia El Hili, Malik Tiomoko, Corinne Ancourt",
+      "date": "2026-09-18",
+      "pdf": "https://arxiv.org/pdf/2609.21801v1",
+      "score": "6.0",
+      "evidence": "基于窗口统计与鲁棒打分的时序异常检测",
+      "tldr": "该研究探讨在严格特征选择协议下，简单统计流水线能在单变量时间序列异常检测上达到何种效果。方法在滑动窗口上提取少量统计特征，用转导式鲁棒MAD模型对窗口打分，并在留出调优集上按域选择特征子集。在TSB-AD-U基准上取得0.529的VUS-PR，超过最佳神经与统计基线，接近预训练基础模型。消融显示特征池与聚合网格影响有限，说明特征选择策略是关键，为轻量时序异常检测提供了新思路。",
+      "tags": "query:humanoid-ood",
+      "abstract_en": "We study how far a simple statistical pipeline can go on univariate time series anomaly detection under a strict selection protocol. The method extracts a small pool of statistics over sliding windows, scores each window with a transductive robust (MAD) model, and selects a feature subset per domain on a held-out tuning split. On TSB-AD-U it reaches $0.529$ per-series VUS-PR, above the best neural ($0.45$) and statistical ($0.44$) entries on the public leaderboard and within $0.06$ of the strongest pretrained foundation model, several of which use more supervision than ours. Ablations locate the cause: across three selection strategies and a hindsight oracle the score moves by $0.031$, and across the aggregation grid by $0.096$, while changing the candidate pool moves it by $0.226$. The candidate pool sets the ceiling; the search over it is second-order. We therefore generate a pool per domain by prompting a multimodal LLM with in-context example windows from that domain. The generated pools match the hand-crafted one under matched selection, and the two cover different domains: selecting over their union improves on the generated pool in all twelve generator-seed pairs and lifts the pipeline to $0.588$, matching the performance of the best entry on the leaderboard.",
+      "source": "arxiv",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "errors": []
+}

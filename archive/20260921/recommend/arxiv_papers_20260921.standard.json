@@ -1,0 +1,143 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-09-21T22:19:46.787458+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 2,
+    "deep_divecandidates": 1,
+    "deep_cap": 7,
+    "deep_selected": 1,
+    "quick_candidates": 2,
+    "quick_skim_target": 12,
+    "quick_selected": 2
+  },
+  "deep_dive": [
+    {
+      "id": "2609.21369v1",
+      "source": "arxiv",
+      "title": "ProTracer: Proprioception-Guided Failure Diagnosis in Robot Manipulation",
+      "abstract": "This paper presents a comprehensive framework for robot manipulation failure analysis that includes binary failure detection, failure categorization, explanation generation, and the additional capability of failure onset localization, which aims to identify the earliest moment at which a robot execution deviates from a valid task-completion trajectory and is ultimately followed by task failure. To address these tasks, we propose ProTracer, a training-free framework that leverages existing Vision-Language Models (VLMs) together with proprioceptive signals for failure analysis. Our method uses proprioceptive dynamics to identify temporally informative action boundaries and converts richer robot-state signals into structured natural-language descriptions that can be jointly analyzed together with visual observations by the VLM. This design combines the temporal precision of proprioceptive signals with the multimodal reasoning capabilities of modern VLMs without requiring additional model training. We further introduce FailTime, a benchmark with synchronized visual and proprioceptive observations for evaluating conventional failure diagnosis tasks as well as failure onset localization. Experiments demonstrate that ProTracer achieves strong performance across both conventional failure diagnosis tasks and the newly introduced failure onset localization task, highlighting the importance of proprioceptive reasoning for fine-grained temporal failure analysis.",
+      "authors": [
+        "Chang Dong",
+        "Mehdi Hosseinzadeh",
+        "King Hang Wong",
+        "Lingqiao Liu",
+        "Francois Fraysse",
+        "Feras Dayoub",
+        "Minh Hoai Nguyen"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.CV"
+      ],
+      "published": "2026-09-18T06:32:27+00:00",
+      "link": "https://arxiv.org/pdf/2609.21369v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "proprioception-guided failure diagnosis and error analysis in robots",
+      "llm_evidence_cn": "本体感受引导的机器人故障诊断与错误分析",
+      "llm_evidence": "本体感受引导的机器人故障诊断与错误分析",
+      "canonical_evidence": "本体感受引导的机器人故障诊断与错误分析",
+      "llm_tldr_en": "ProTracer is a training-free framework that combines VLMs with proprioceptive signals for robot manipulation failure detection, categorization, explanation, and failure onset localization.",
+      "llm_tldr_cn": "机器人操作失败分析通常需要检测失败、归类失败并给出解释，但难以定位任务最早偏离有效轨迹的时刻。本文提出ProTracer免训练框架，结合现有视觉语言模型与本体感受信号，利用本体动力学识别时间上具信息量的动作边界，并将丰富的机器人状态信号转换为结构化自然语言描述。该框架同时实现二元失败检测、失败归类、解释生成与失败起始定位四项能力，为基于本体感受的机器人故障诊断与错误分析提供了统一方案。",
+      "llm_tldr": "机器人操作失败分析通常需要检测失败、归类失败并给出解释，但难以定位任务最早偏离有效轨迹的时刻。本文提出ProTracer免训练框架，结合现有视觉语言模型与本体感受信号，利用本体动力学识别时间上具信息量的动作边界，并将丰富的机器人状态信号转换为结构化自然语言描述。该框架同时实现二元失败检测、失败归类、解释生成与失败起始定位四项能力，为基于本体感受的机器人故障诊断与错误分析提供了统一方案。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "fault diagnosis and error analysis for humanoid robots",
+      "matched_requirement_id": "req-7",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "quick_skim": [
+    {
+      "id": "2609.14432v1",
+      "source": "arxiv",
+      "title": "EMoG: Emotion-Modulated Gait Generation for Expressive Humanoid Locomotion",
+      "abstract": "Existing humanoid locomotion systems primarily focus on stability and task execution, while integrating expressiveness with explicit locomotion control remains challenging. We propose EMoG, an emotion-modulated gait generation framework for expressive humanoid locomotion. EMoG introduces an emotional-style code with continuously adjustable intensity. Conditioned on this code and physical commands, a lightweight MLP generates expressive, command-consistent periodic gait trajectories in real time, which are tracked by a unified reinforcement learning policy for physical execution. To support training, we collect a large-scale emotion-annotated gait dataset from professional performers and develop an automated pipeline to extract physically consistent periodic gait cycles. EMoG also integrates an LLM-based parser that converts free-form language into emotional style and motion parameters for interactive control. Experiments demonstrate continuous gait-style modulation with perceptible expressive cues while maintaining command tracking. EMoG provides a practical approach to parameterized emotional-style walking for human-robot interaction.",
+      "authors": [
+        "Yi Lu",
+        "Tianhao Jiang",
+        "Honglong Tian",
+        "Yumeng Zhang",
+        "Qingrui Zhao",
+        "Zhengtao Wang",
+        "Xiao-Xiao Long",
+        "Qiu Shen",
+        "Xun Cao"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-09-13T11:14:14+00:00",
+      "link": "https://arxiv.org/pdf/2609.14432v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "keyword:ur",
+        "query:humanoid-ood",
+        "query:ur"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "collecting a large-scale emotion-annotated humanoid gait dataset",
+      "llm_evidence_cn": "采集大规模情感标注的人形机器人步态数据集",
+      "llm_evidence": "采集大规模情感标注的人形机器人步态数据集",
+      "canonical_evidence": "采集大规模情感标注的人形机器人步态数据集",
+      "llm_tldr_en": "Humanoid locomotion systems focus on stability, not expressiveness. EMoG uses a lightweight MLP conditioned on an adjustable emotion-style code to generate real-time expressive gaits tracked by a unified RL policy, supported by a large emotion-annotated gait dataset.",
+      "llm_tldr_cn": "现有人形机器人运动系统主要关注稳定性与任务执行，难以将表现力与显式运动控制相融合。EMoG引入强度可连续调节的情感风格码，用轻量MLP实时生成与指令一致的周期性步态轨迹，并由统一的强化学习策略在物理环境中跟踪执行。为支撑训练，作者从专业表演者采集大规模情感标注步态数据集并构建自动提取流程，实现了富有表现力的人形步态生成。",
+      "llm_tldr": "现有人形机器人运动系统主要关注稳定性与任务执行，难以将表现力与显式运动控制相融合。EMoG引入强度可连续调节的情感风格码，用轻量MLP实时生成与指令一致的周期性步态轨迹，并由统一的强化学习策略在物理环境中跟踪执行。为支撑训练，作者从专业表演者采集大规模情感标注步态数据集并构建自动提取流程，实现了富有表现力的人形步态生成。",
+      "llm_tags": [
+        "query:ur"
+      ],
+      "matched_query_tag": "query:ur",
+      "matched_query_text": "humanoid robot dataset construction",
+      "matched_requirement_id": "req-2",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2609.21801v1",
+      "source": "arxiv",
+      "title": "LLM-Generated Feature Pools for Time Series Anomaly Detection",
+      "abstract": "We study how far a simple statistical pipeline can go on univariate time series anomaly detection under a strict selection protocol. The method extracts a small pool of statistics over sliding windows, scores each window with a transductive robust (MAD) model, and selects a feature subset per domain on a held-out tuning split. On TSB-AD-U it reaches $0.529$ per-series VUS-PR, above the best neural ($0.45$) and statistical ($0.44$) entries on the public leaderboard and within $0.06$ of the strongest pretrained foundation model, several of which use more supervision than ours. Ablations locate the cause: across three selection strategies and a hindsight oracle the score moves by $0.031$, and across the aggregation grid by $0.096$, while changing the candidate pool moves it by $0.226$. The candidate pool sets the ceiling; the search over it is second-order. We therefore generate a pool per domain by prompting a multimodal LLM with in-context example windows from that domain. The generated pools match the hand-crafted one under matched selection, and the two cover different domains: selecting over their union improves on the generated pool in all twelve generator-seed pairs and lifts the pipeline to $0.588$, matching the performance of the best entry on the leaderboard.",
+      "authors": [
+        "Youssef Attia El Hili",
+        "Malik Tiomoko",
+        "Corinne Ancourt"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI"
+      ],
+      "published": "2026-09-18T14:14:21+00:00",
+      "link": "https://arxiv.org/pdf/2609.21801v1",
+      "tags": [
+        "keyword:humanoid-ood",
+        "query:humanoid-ood"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "time series anomaly detection via windowed statistics and robust scoring",
+      "llm_evidence_cn": "基于窗口统计与鲁棒打分的时序异常检测",
+      "llm_evidence": "基于窗口统计与鲁棒打分的时序异常检测",
+      "canonical_evidence": "基于窗口统计与鲁棒打分的时序异常检测",
+      "llm_tldr_en": "A statistical pipeline extracts a small pool of windowed statistics, scores windows with a robust MAD model, and selects per-domain features, reaching 0.529 VUS-PR on TSB-AD-U and beating neural and statistical baselines.",
+      "llm_tldr_cn": "该研究探讨在严格特征选择协议下，简单统计流水线能在单变量时间序列异常检测上达到何种效果。方法在滑动窗口上提取少量统计特征，用转导式鲁棒MAD模型对窗口打分，并在留出调优集上按域选择特征子集。在TSB-AD-U基准上取得0.529的VUS-PR，超过最佳神经与统计基线，接近预训练基础模型。消融显示特征池与聚合网格影响有限，说明特征选择策略是关键，为轻量时序异常检测提供了新思路。",
+      "llm_tldr": "该研究探讨在严格特征选择协议下，简单统计流水线能在单变量时间序列异常检测上达到何种效果。方法在滑动窗口上提取少量统计特征，用转导式鲁棒MAD模型对窗口打分，并在留出调优集上按域选择特征子集。在TSB-AD-U基准上取得0.529的VUS-PR，超过最佳神经与统计基线，接近预训练基础模型。消融显示特征池与聚合网格影响有限，说明特征选择策略是关键，为轻量时序异常检测提供了新思路。",
+      "llm_tags": [
+        "query:humanoid-ood"
+      ],
+      "matched_query_tag": "query:humanoid-ood",
+      "matched_query_text": "Self supervised time series anomaly detection for robot fault diagnosis",
+      "matched_requirement_id": "req-16",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    }
+  ]
+}
